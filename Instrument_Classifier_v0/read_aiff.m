@@ -36,7 +36,7 @@ disp(length(files))
             
 features = 2^14;        % length to crop each audio file
 
-for I = 1:length(files)
+for I = 1:1
     
     filename = files(I).name;   % current file name
     filepath = files(I).folder; % current file path   
@@ -51,15 +51,11 @@ for I = 1:length(files)
         continue                                % skip to next iteration
     end 
     
-    t = 1:length(data(1));
-    tiledlayout(2,1)  
-    % Top plot
-    ax1 = nexttile;
-    plot(ax1,t,data(1))
-    % Bottom plot
-    ax2 = nexttile;
-    plot(ax2,t,data(2))
-
+    disp(size(data))
+    
+    figure
+    t1 = 1:length(data);
+    plot(t1,data)
    
 
     
