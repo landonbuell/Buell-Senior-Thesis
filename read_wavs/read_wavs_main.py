@@ -20,6 +20,7 @@ if __name__ == '__main__':
     wav_dir = 'C:/Users/Landon/Documents/wav_audio'
     paths_dict = readwavs.output_paths()        # create output paths dictionary
     readwavs.make_paths(paths_dict)             # create all of the output paths
+    notefreq = readwavs.notefreq_dict()         # note to freq dictionary
 
     features = (2**14)              # number of input neruons
 

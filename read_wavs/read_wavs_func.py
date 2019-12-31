@@ -23,6 +23,8 @@ class wav_file ():
         """ Initialize Class Object """
         self.dirpath = root                     # intial storage path
         self.filename = file                    # filename
+        self.instrument = file.split('.')[0]    # Instrument name
+        self.
 
     def read_raw_wav(self):
         """ Read Raw data from directory file """      
@@ -86,6 +88,21 @@ def output_paths ():
         key,val = str(path),str(fftpath)+'/'+str(path)      # ket key:val pair
         paths_dict.update({key:val})                        # add to dict
     return paths_dict                                       # return the dictionary
+
+def notefreq_dict ():
+    """ Dictionary of Note Names to Frequency Values """
+    notes = np.array([])                    # array to hold note names
+    for octave in np.arange(0,9):           # iterate through octaves
+        for letter in ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab']:   
+            name = letter+str(octave)       # create note name
+            notes = np.append(notes,name)   # add to array
+    steps = np.arange(-int(12*4),+int(12*5),1,dtype=int)
+    freqs = np.array([440*(2**(n/12)) for n in steps]).round(2)
+    notefreq = {}                           # Dictionary to note
+    for I in range (len(steps)):            # each step
+        notefreq.update({notes[I]:freqs[I]})# update the dictionary
+    return notefreq                         # return the dictionary
+        
     
 
 def make_paths (paths_dict):
