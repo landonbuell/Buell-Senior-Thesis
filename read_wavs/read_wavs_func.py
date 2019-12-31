@@ -24,7 +24,14 @@ class wav_file ():
         self.dirpath = root                     # intial storage path
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
-        self.
+    
+    def pitch_to_freq (self,pitchdict):
+        """ Assign numerical frequency based on pitch label """
+        note = self.filename.split('.')[-3]     # isolate pitch string
+        freq = pitchdict[str(note)]             # find frequency value
+        setattr(self,'note',note)               # set attribute
+        setattr(self,'freq',freq)               # set attribute
+        return note,freq                        # return note name & frequency
 
     def read_raw_wav(self):
         """ Read Raw data from directory file """      
@@ -32,8 +39,8 @@ class wav_file ():
         data = np.transpose(data)               # tranpose
         L = data[0]/np.max(np.abs(data[0]))     # norm. L waveform
         R = data[1]/np.max(np.abs(data[1]))     # norm. R waveform
-        setattr(self,'L_track',L)               # set attrb to self
-        setattr(self,'R_track',R)               # set attrb to self
+        setattr(self,'L_ch',L)                  # set attrb to self
+        setattr(self,'R_ch',R)                  # set attrb to self
         setattr(self,'rate',rate)               # sample rate
         return L,R,rate                         # return values
 
@@ -44,50 +51,57 @@ class wav_file ():
         setattr(self,'time',time)   # set attribute
         return time                 # return the array
 
-    def FFT (self):
-        """ Discrete Fast Fourier Transform """
+    def attack (self,value):
+        """ Find ATTACK section of waveform """
         pass
 
-    def attack (self,value):
-        """ Find attack section of waveform """
+    def decay (self,attr,value):
+        """ Find DECAY section of waveform """
+        pass
 
-    def freqspace(self,npts,rate):
+    def sustain (self,attr,value):
+        """ Find SUSTAIN section of waveform """
+        pass
+
+    def release (self,attr,value):
+        """ Find RELEASE section of waveform """
+        pass
+
+    def freqspace(self,npts=441000,rate=44100):
         """ Create frequency space axis """          
         fspace = fftpack.fftfreq(n=npts,d=rate)     # create f-axis
-        pts = np.where((fspace>=0)&(fspace<=4000))  # isolate 0 - 4000 Hz
+        pts = np.where((fspace>=0))                 # pos freqs
         fspace = fspace[pts]                        # index array
         setattr(self,'fspace',fspace)               # self self attrb
         return fspace                               # return f-axis
 
-    def array_to_CSV (self,attrs,fname):
-        """ Write array of desired attributes to CSV file """
-        output = {}                             # output dictionary
-        for attr in attrs:                      # attrs to write
-            data = self.__getattribute__(attr)  # isolate attribute
-            output.update({attr:data})          # add arr to dictionary
-        frame = pd.DataFrame(data=output,dtype=float)  
-        frame.to_csv(name+'.txt',sep='\t',
-                     float_format='%8.4f',mode='w') # write frame of csv
-        return frame                                # return dataframe  
+    def FFT (self,attr,npts=441000):
+        """ Discrete Fast Fourier Transform """
+        data = self.__getattribute__(attr)      # isolate attribute
+        fftdata = fftpack.fft(x=data,n=npts)    # compute fft
+        power = np.abs(fftdata)**2              # power spectrum
+        power = power/np.max(power)             # normalize amplitude
+        return power                            # return power & freq space
+
+    def freq_band (self,attr,power,space,band):
+        """ Break up FFT spectrum into single frequency band """
+        pts = np.where((space>=band[1])&(space<=band[2]))
+        space = space[pts]                      # isolate section of fspace
+        power = power[pts]                      # corresponding power spect
+        name = self.instrument+'-'+str(self.freq)+'-'+self.note+\
+            '-'+str(attr)+'-'+str(band[0])+'band'   # name for plot & dataframe
+
+        return space,power,name                 # return values
 
         #### FUNCTION DEFINITIONS ####
 
-def output_paths ():
-    """ Create series of Output Paths for data to be included in """
-            #### Parent Directories ####
-    wavepath = 'C:/Users/Landon/Documents/wav_data/waveforms'       # output for waveforms
-    fftpath = 'C:/Users/Landon/Documents/wav_data/frequencies'      # output for FFT spectra
-    spectpath = 'C:/Users/Landon/Documents/wav_data/spectrograms'   # output for spectrograms
-    paths_dict = {'Waveforms':wavepath,
-                'Frequencies':fftpath,'Spectrograms':spectpath}     # dictionary to hold all paths
-            #### Create Sub Directories ####
-    for path in ['attack','decay','sustain','release','full_L','full_R']:      
-        key,val = str(path),str(wavepath)+'/'+str(path)     # ket key:val pair
-        paths_dict.update({key:val})                        # add to dict
-    for path in ['low','midlow','mid','midhigh','high','fft_L','fft_R']:      
-        key,val = str(path),str(fftpath)+'/'+str(path)      # ket key:val pair
-        paths_dict.update({key:val})                        # add to dict
-    return paths_dict                                       # return the dictionary
+def to_CSV (name,data,labs):
+    """ Write array of desired attributes to CSV file """
+    data = np.array(data).round(4)
+    data = np.transpose(data)
+    frame = pd.DataFrame(data=data,columns=labs,dtype=float)
+    frame.to_csv(name+'.txt',sep='\t')      # write CSV
+    return frame                            # return dataframe
 
 def notefreq_dict ():
     """ Dictionary of Note Names to Frequency Values """
@@ -103,7 +117,23 @@ def notefreq_dict ():
         notefreq.update({notes[I]:freqs[I]})# update the dictionary
     return notefreq                         # return the dictionary
         
-    
+def output_paths (bands,parent='wav_data'):
+    """ Create dictionaries of output paths for data to be stored to """
+            #### Parent Directories ####
+    wavepath = 'C:/Users/Landon/Documents/'+parent+'/waveforms'     # output for waveforms
+    fftpath = 'C:/Users/Landon/Documents/'+parent+'/frequencies'    # output for FFT spectra
+    spectpath = 'C:/Users/Landon/Documents/'+parent+'/spectrograms' # output for spectrograms
+    data ={'Waveforms':wavepath,
+            'Frequencies':fftpath,'Spectrograms':spectpath}         # dictionary to hold all paths
+            #### Create Sub Directories ####
+    for path in ['attack','decay','sustain','release','total']:      
+        key,val = str(path),str(wavepath)+'/'+str(path)         # ket key:val pair
+        data.update({key:val})                                  # add to dict
+    for path in bands:                                          # in the frequnecy band tuple 
+        key,val = str(path[0]),str(fftpath)+'/'+ \
+            str(path[0])+'_'+str(path[1])+'-'+str(path[2])      # ket key:val pair
+        data.update({key:val})                                  # add to dict
+    return data                                                 # completed dictionary
 
 def make_paths (paths_dict):
     """ Test if paths exist """
@@ -111,7 +141,7 @@ def make_paths (paths_dict):
         if os.path.exists(path):        # is the path exisits
             continue                    # do nothing
         else:                           # otherwise
-            os.mkdir(path)              # make the path
+            os.makedirs(path)           # make the path
 
 def read_directory(dir):
     """Read all files in given directory path"""
@@ -123,15 +153,17 @@ def read_directory(dir):
                 file_objs.append(wavs)      # add to list 
     return file_objs                        # return the list of files
 
+
+
         #### PLOTTING & VISUALIZATION FUNCTIONS #####
 
-def Plot_Time (obj,title,attrs=[],save=False,show=False):
+def Plot_Time (xdata,ydata,title,save=False,show=False):
     """
     Produce Matplotlib Figure of data in time domain
     --------------------------------
-    obj (class) : object to plot attributes of
+    xdata (arr) : Array of values for x-axis
+    ydata (arr) : Array of values for y-axis
     title (str) : Title for figure to save as
-    attrs (list) : list of attribute strings to plot data of
     save (bool) : indicates to progam to save figure to cwd (False by default)
     show (bool) : indicates to progam to show figure (False by default)
     --------------------------------
@@ -143,12 +175,12 @@ def Plot_Time (obj,title,attrs=[],save=False,show=False):
     plt.xlabel("Time",size=20,weight='bold')
     plt.ylabel("Amplitude",size=20,weight='bold')
 
-    for attr in attrs:
-        try:
-            data = obj.__getattribute__(attr)  # isolate attribute
-            plt.plot(obj.time,data,label=str(attr))
-        except:
-            print("\n\tERROR! - Could not plot attribute:",attr)
+    plt.plot(xdata,ydata,color='blue')
+        
+    plt.hlines(0,xdata[0],xdata[-1],color='black')
+    plt.yticks(np.arange(-1.0,+1.1,0.25))
+    plt.xlim(xdata[0],xdata[-1])
+    plt.grid()
         
     plt.hlines(0,obj.time[0],obj.time[-1],color='black')
     plt.grid()
@@ -160,14 +192,14 @@ def Plot_Time (obj,title,attrs=[],save=False,show=False):
         plt.show()
     plt.close()
 
-def Plot_Freq (obj,title,attrs=[],save=False,show=False):
+def Plot_Freq (xdata,ydata,title,save=False,show=False):
     """
     Produce Matplotlib Figure of data in Frequency Domain
     Note: Must have executed FFT & Freq_Space methods before calling
     --------------------------------
-    obj (class) : object to plot attributes of
+    xdata (arr) : Array of values for x-axis
+    ydata (arr) : Array of values for y-axis
     title (str) : Title for figure to save as
-    attrs (list) : list of attribute strings to plot data of
     save (bool) : indicates to progam to save figure to cwd (False by default)
     show (bool) : indicates to progam to show figure (False by default)
     --------------------------------
@@ -179,19 +211,15 @@ def Plot_Freq (obj,title,attrs=[],save=False,show=False):
     plt.xlabel("Frequency [Hz]",size=20,weight='bold')
     plt.ylabel("Amplitude",size=20,weight='bold')
 
-    for attr in attrs:
-        try:
-            data = obj.__getattribute__(attr)  # isolate attribute
-            plt.plot(obj.freq_space,data,label=str(attr))
-        except:
-            print("\n\tERROR! - Could not plot attribute:",attr)
+    plt.plot(xdata,ydata,color='purple')
         
-    plt.hlines(0,obj.freq_space[0],obj.freq_space[-1],color='black')
+    plt.hlines(0,xdata[0],xdata[-1],color='black')
+    plt.xlim(xdata[0],xdata[-1])
     plt.grid()
-    plt.legend()
+  
     plt.tight_layout()
     if save == True:
-        plt.savefig(title+'.freq.png')
+        plt.savefig(title+'.png')
     if show == True:
         plt.show()
     plt.close()
