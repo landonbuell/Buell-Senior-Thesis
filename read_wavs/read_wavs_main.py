@@ -18,6 +18,9 @@ if __name__ == '__main__':
 
     int_dir = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/read_wavs'
     wav_dir = 'C:/Users/Landon/Documents/wav_audio'
+    paths_dict = readwavs.output_paths()        # create output paths dictionary
+    readwavs.make_paths(paths_dict)             # create all of the output paths
+
     features = (2**14)              # number of input neruons
 
     files = readwavs.read_directory(wav_dir)
@@ -32,5 +35,7 @@ if __name__ == '__main__':
         wavfile.read_raw_wav()          # read raw info
         wavfile.timespace(44100,len(wavfile.L_track))
 
-        readwavs.Plot_Time(wavfile,wavfile.filename,['L_track'],show=True)
 
+
+    os.chdir(int_dir)
+    print("Process time:",time.process_time())

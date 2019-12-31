@@ -23,25 +23,13 @@ class wav_file ():
         """ Initialize Class Object """
         self.dirpath = root                     # intial storage path
         self.filename = file                    # filename
-        self.wavepath = root.replace('wav_audio','wav_waveforms')
-        self.fftpath = root.replace('wav_audio','wav_Spectra')
-        self.spectpath = root.replace('wav_audio','wav_Spectra')
-
-    def make_paths (self):
-        """ Test if paths exist """
-        paths = [self.wavepath,self.fftpath,self.spectpath]
-        for path in paths:          # for each path
-            if os.path.exists(path) == False:
-                os.mkdir(path)
-            else:
-                continue
 
     def read_raw_wav(self):
         """ Read Raw data from directory file """      
         rate,data = sciowav.read(self.filename) # read raw data
         data = np.transpose(data)               # tranpose
-        L = data[0]/np.max(data[0])             # norm. L waveform
-        R = data[1]/np.max(data[1])             # norm. R waveform
+        L = data[0]/np.max(np.abs(data[0]))     # norm. L waveform
+        R = data[1]/np.max(np.abs(data[1]))     # norm. R waveform
         setattr(self,'L_track',L)               # set attrb to self
         setattr(self,'R_track',R)               # set attrb to self
         setattr(self,'rate',rate)               # sample rate
@@ -49,11 +37,17 @@ class wav_file ():
 
     def timespace (self,rate,npts):
         """ Create timespace axis """
-        time = np.arange(0,npts)        # create axis
-        #time = time/rate                # divide by sample rate
-        setattr(self,'time',time)       # set attribute
-        return time
+        time = np.arange(0,npts)    # create axis
+        #time = time/rate            # divide by sample rate
+        setattr(self,'time',time)   # set attribute
+        return time                 # return the array
 
+    def FFT (self):
+        """ Discrete Fast Fourier Transform """
+        pass
+
+    def attack (self,value):
+        """ Find attack section of waveform """
 
     def freqspace(self,npts,rate):
         """ Create frequency space axis """          
@@ -74,8 +68,33 @@ class wav_file ():
                      float_format='%8.4f',mode='w') # write frame of csv
         return frame                                # return dataframe  
 
-
         #### FUNCTION DEFINITIONS ####
+
+def output_paths ():
+    """ Create series of Output Paths for data to be included in """
+            #### Parent Directories ####
+    wavepath = 'C:/Users/Landon/Documents/wav_data/waveforms'       # output for waveforms
+    fftpath = 'C:/Users/Landon/Documents/wav_data/frequencies'      # output for FFT spectra
+    spectpath = 'C:/Users/Landon/Documents/wav_data/spectrograms'   # output for spectrograms
+    paths_dict = {'Waveforms':wavepath,
+                'Frequencies':fftpath,'Spectrograms':spectpath}     # dictionary to hold all paths
+            #### Create Sub Directories ####
+    for path in ['attack','decay','sustain','release','full_L','full_R']:      
+        key,val = str(path),str(wavepath)+'/'+str(path)     # ket key:val pair
+        paths_dict.update({key:val})                        # add to dict
+    for path in ['low','midlow','mid','midhigh','high','fft_L','fft_R']:      
+        key,val = str(path),str(fftpath)+'/'+str(path)      # ket key:val pair
+        paths_dict.update({key:val})                        # add to dict
+    return paths_dict                                       # return the dictionary
+    
+
+def make_paths (paths_dict):
+    """ Test if paths exist """
+    for path in paths_dict.values():    # for each entry
+        if os.path.exists(path):        # is the path exisits
+            continue                    # do nothing
+        else:                           # otherwise
+            os.mkdir(path)              # make the path
 
 def read_directory(dir):
     """Read all files in given directory path"""
