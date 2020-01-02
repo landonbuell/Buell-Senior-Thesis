@@ -16,22 +16,24 @@ if __name__ == '__main__':
             #### INITIALIZING ####
 
     int_dir = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Frequency_Classifier_v0'
-    readdir = 'C:/Users/Landon/Documents/wav_data/frequencies'
-    paths = [roots.replace('\\','/') for roots,dirs,files in os.walk(readdir)][2:]
+    readdir = 'C:/Users/Landon/Documents/wav_data/Frequency_Bands'
     classifiers = []                                # list to hold classifier objs
-    labels = np.loadtxt('Instrument_labels.txt',
+    labels = np.loadtxt('Instrument_labels_double.txt',
                         dtype=int,delimiter='\t',skiprows=1,usecols=-1)
+    filenames = CLF_func.read_directory(readdir,'.txt')
+    print("Number of ")
 
             #### MOVE THROUGH DATASETS ####
+    os.chdir(readdir)                                       # move to directory
+    for file in filenames:                                  # each file
+        clfname = str(file).replace('.txt','')              # clf name
+        print("Classifier name:",clfname)                   # print name
+        xdata = np.loadtxt(file,dtype=str,delimiter='\t',
+                           skiprows=1,unpack=True)          # read data from CSV
+        filenames = xdata[0]                                # instrument names
+        xdata = np.array(xdata[1:],dtype=float)             # xdata 
+
         
-    for dataset in paths:                           # for each directory
-        clfname = dataset.split('/')[-1]            # name for classifier
-        print("SGD Classifier Name:",clfname)       # print out name
-        
-        os.chdir(dataset)                                   # move to specific directory
-        filenames = CLF_func.read_directory(dataset,'.txt') # names of 
-        xdata = CLF_func.assemble_dataset(filenames)        # build X matrix
-        print(np.shape(xdata))
-        A = input("wait:")
+    
         
 

@@ -27,23 +27,6 @@ def read_directory(dir,ext):
                 output = np.append(output,file)
     return output                           # return the list of files
 
-def assemble_dataset (filenames):
-    """
-    Assemble X matrix dataset
-    (must be in valid cwd to work)
-    --------------------------------
-    filenames (list) : list of filenames as strings to read
-    --------------------------------
-    return X matrix
-    """
-    X = np.array([])                # matrix to hold arrays
-    for name in filenames:          # for each file
-        data = np.loadtxt(name,dtype=float,delimiter='\t',skiprows=1,usecols=-1)
-        data = np.transpose(data)   # transpose (to row vector)
-        X = np.append(X,data)       # add to X matrix
-    X = np.reshape(X,(len(filenames),-1))
-    return X
-
 def random_split (xdata,ydata,size=0.1,state=0):
     """
     Split dataset into training and testing data sets based on random seed

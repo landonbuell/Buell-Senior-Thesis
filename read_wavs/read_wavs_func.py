@@ -1,7 +1,7 @@
 """
 Landon Buell
-PHYS 799
-Read wav files - functions
+Read Raw .wav files
+Functions
 28 December 2019
 """
 
@@ -24,6 +24,7 @@ class wav_file ():
         self.dirpath = root                     # intial storage path
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
+        self.rate = 44100                       # sample rate
     
     def pitch_to_freq (self,pitchdict):
         """ Assign numerical frequency based on pitch label """
@@ -37,12 +38,9 @@ class wav_file ():
         """ Read Raw data from directory file """      
         rate,data = sciowav.read(self.filename) # read raw data
         data = np.transpose(data)               # tranpose
-        L = data[0]/np.max(np.abs(data[0]))     # norm. L waveform
-        R = data[1]/np.max(np.abs(data[1]))     # norm. R waveform
-        setattr(self,'L_ch',L)                  # set attrb to self
-        setattr(self,'R_ch',R)                  # set attrb to self
-        setattr(self,'rate',rate)               # sample rate
-        return L,R,rate                         # return values
+        data = data/np.max(np.abs(data))        # normalize
+        setattr(self,'data',data)               # set attrb to self
+        return data,rate                        # return values
 
     def timespace (self,rate,npts):
         """ Create timespace axis """
@@ -83,25 +81,12 @@ class wav_file ():
         power = power/np.max(power)             # normalize amplitude
         return power                            # return power & freq space
 
-    def freq_band (self,attr,power,space,band):
-        """ Break up FFT spectrum into single frequency band """
-        pts = np.where((space>=band[1])&(space<=band[2]))
-        space = space[pts]                      # isolate section of fspace
-        power = power[pts]                      # corresponding power spect
-        name = self.instrument+'-'+str(self.freq)+'-'+self.note+\
-            '-'+str(attr)+'-'+str(band[0])+'band'   # name for plot & dataframe
-
-        return space,power,name                 # return values
+    def freq_band (self,label,power,pts):
+        """ Break up FFT spectrum into single frequency band """   
+        power = power[pts]                                  # isolate power spectrum
+        return power,name                                   # return values
 
         #### FUNCTION DEFINITIONS ####
-
-def to_CSV (name,data,labs):
-    """ Write array of desired attributes to CSV file """
-    data = np.array(data).round(8)
-    data = np.transpose(data)
-    frame = pd.DataFrame(data=data,columns=labs,dtype=float)
-    frame.to_csv(name+'.txt',sep='\t')      # write CSV
-    return frame                            # return dataframe
 
 def notefreq_dict ():
     """ Dictionary of Note Names to Frequency Values """
@@ -117,31 +102,13 @@ def notefreq_dict ():
         notefreq.update({notes[I]:freqs[I]})# update the dictionary
     return notefreq                         # return the dictionary
         
-def output_paths (bands,parent='wav_data'):
-    """ Create dictionaries of output paths for data to be stored to """
-            #### Parent Directories ####
-    wavepath = 'C:/Users/Landon/Documents/'+parent+'/waveforms'     # output for waveforms
-    fftpath = 'C:/Users/Landon/Documents/'+parent+'/frequencies'    # output for FFT spectra
-    spectpath = 'C:/Users/Landon/Documents/'+parent+'/spectrograms' # output for spectrograms
-    data ={'Waveforms':wavepath,
-            'Frequencies':fftpath,'Spectrograms':spectpath}         # dictionary to hold all paths
-            #### Create Sub Directories ####
-    for path in ['attack','decay','sustain','release','total']:      
-        key,val = str(path),str(wavepath)+'/'+str(path)         # ket key:val pair
-        data.update({key:val})                                  # add to dict
-    for path in bands:                                          # in the frequnecy band tuple 
-        key,val = str(path[0]),str(fftpath)+'/'+ \
-            str(path[0])+'_'+str(path[1])+'-'+str(path[2])      # ket key:val pair
-        data.update({key:val})                                  # add to dict
-    return data                                                 # completed dictionary
-
-def make_paths (paths_dict):
+def make_paths (paths):
     """ Test if paths exist """
-    for path in paths_dict.values():    # for each entry
-        if os.path.exists(path):        # is the path exisits
-            continue                    # do nothing
-        else:                           # otherwise
-            os.makedirs(path)           # make the path
+    for path in paths:              # for each entry
+        if os.path.exists(path):    # is the path exisits
+            continue                # do nothing
+        else:                       # otherwise
+            os.makedirs(path)       # make the path
 
 def read_directory(dir):
     """Read all files in given directory path"""
@@ -153,7 +120,14 @@ def read_directory(dir):
                 file_objs.append(wavs)      # add to list 
     return file_objs                        # return the list of files
 
-
+def to_csvfile (name,data,labels,mode='w'):
+    """ Append pos & vel arrays to end of csv """
+    data = np.transpose(data)               # transpose array
+    frame = pd.DataFrame(data=data,columns=labels,dtype=float)
+    frame = frame.transpose()               # re - transpose
+    frame.to_csv(name+'.txt',sep='\t',
+                    header=False,index=True,mode=mode)     # append to CSV 
+    return frame
 
         #### PLOTTING & VISUALIZATION FUNCTIONS #####
 
