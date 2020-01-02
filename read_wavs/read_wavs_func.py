@@ -97,7 +97,7 @@ class wav_file ():
 
 def to_CSV (name,data,labs):
     """ Write array of desired attributes to CSV file """
-    data = np.array(data).round(4)
+    data = np.array(data).round(8)
     data = np.transpose(data)
     frame = pd.DataFrame(data=data,columns=labs,dtype=float)
     frame.to_csv(name+'.txt',sep='\t')      # write CSV
