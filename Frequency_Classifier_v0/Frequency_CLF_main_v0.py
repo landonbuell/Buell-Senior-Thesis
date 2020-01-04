@@ -5,10 +5,14 @@ Main Functions
 1 January 2020
 """
 
+            #### IMPORTS ####
+
 import numpy as np
 import os
 import time
 import Frequency_CLF_func_v0 as CLF_func
+
+            #### MAIN EXECUTABLE ####
 
 if __name__ == '__main__':
 
@@ -32,12 +36,16 @@ if __name__ == '__main__':
         clfname = str(file).replace('.txt','')      # clf name
         print("\nClassifier name:",clfname)           # print name
         
-        X = CLF_func.read_csvfile(file,True)        # read dataframe
+        xdata = CLF_func.read_csvfile(file,True)        # read dataframe
+        """
         datadict = CLF_func.random_split(X,labels,size=0,state=None)
         xtrain,ytrain = datadict['xtrain'],datadict['ytrain']
         classifier = CLF_func.SGD_Classifier(clfname,
                     xtrain,ytrain,state=0)
-        conf_mat = CLF_func.confusion_matrix(classifier,X,labels,True)
+        """
+        classifier = CLF_func.SGD_Classifier(clfname,
+                    xdata,labels,state=0)
+        conf_mat = CLF_func.confusion_matrix(classifier,xdata,labels,True)
 
         clfend = time.process_time()
         print("\tClassifier Time:",clfend-clfstart) # time to run classifier

@@ -108,7 +108,7 @@ def SGD_Classifier (name,xtrain,ytrain,state=None):
     --------------------------------
     Return SGD Classifier
     """
-    clf = SGDClassifier(random_state=state,average=19)       
+    clf = SGDClassifier(random_state=state,max_iter=100)       
     setattr(clf,'name',name)                        # attach name of obj
     clf.fit(xtrain,ytrain)                          # train the classifier
     return clf
@@ -129,7 +129,7 @@ def confusion_matrix (clf,xdata,ydata,disp=True):
     if disp == True:
         axes = np.arange(0,19)          # array for axes
         plt.matshow(conf_mat,cmap=plt.cm.gray)      # disp.matrix
-        title = 'Confusion_Matrix_'+str(clf.name)   # title for figure
+        title = 'Confusion_Matrix2_'+str(clf.name)   # title for figure
         plt.title(title,size=12,weight='bold')      # set title
         plt.xticks(axes)            # set x ticks
         plt.yticks(axes)            # set y ticks
