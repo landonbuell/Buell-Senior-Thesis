@@ -133,7 +133,6 @@ def confusion_matrix (clf,xdata,ydata,disp=True):
         plt.title(title,size=12,weight='bold')      # set title
         plt.xticks(axes)            # set x ticks
         plt.yticks(axes)            # set y ticks
-        plt.tight_layout()          # apply tight layout
         plt.savefig(title+'.png')   # save to directory
         #plt.show()       
     return conf_mat                 # return matrix
