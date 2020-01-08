@@ -45,7 +45,7 @@ if __name__ == '__main__':
         """
         classifier = CLF_func.SGD_Classifier(clfname,
                     xdata,labels,state=0)
-        #conf_mat = CLF_func.confusion_matrix(classifier,xdata,labels,True)
+        conf_mat = CLF_func.confusion_matrix(classifier,xdata,labels,True)
 
         clfend = time.process_time()
         print("\tClassifier Time:",clfend-clfstart) # time to run classifier
