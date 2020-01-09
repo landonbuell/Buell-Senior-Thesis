@@ -129,7 +129,7 @@ def confusion_matrix (clf,xdata,ydata,disp=True):
     if disp == True:
         axes = np.arange(0,19)          # array for axes
         plt.matshow(conf_mat,cmap=plt.cm.gray)      # disp.matrix
-        title = 'Confusion_Matrix3_'+str(clf.name)   # title for figure
+        title = 'Confusion_Matrix1_'+str(clf.name)   # title for figure
         plt.title(title,size=12,weight='bold')      # set title
         plt.xticks(axes)            # set x ticks
         plt.yticks(axes)            # set y ticks
