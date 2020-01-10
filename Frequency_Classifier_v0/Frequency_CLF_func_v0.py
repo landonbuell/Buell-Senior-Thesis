@@ -134,7 +134,7 @@ def confusion_matrix (clf,xdata,ydata,disp=True):
         plt.xticks(axes)            # set x ticks
         plt.yticks(axes)            # set y ticks
         plt.savefig(title+'.png')   # save to directory
-        plt.show()       
+        #plt.show()       
     return conf_mat                 # return matrix
 
 def general_metrics (clf,xdata,ydata,disp=True):
