@@ -1,0 +1,200 @@
+% ================
+% Landon Buell
+% Kevin Short
+% PHYS 799.37
+% 17 January 2020
+% ================
+
+% ================================
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage[style=numeric]{biblatex}
+
+% ================================
+
+\begin{document}
+
+% ================================================================
+
+\title{An Introduction to Fourier Series and Fourier Transformations}
+\author{Landon Buell}
+\date{17 January 2020}
+\maketitle
+
+% ================================================================
+
+\section{Introduction}
+
+\paragraph*{}This paper is designed to serve as an an introduction to the concepts underlying Fourier Analysis. In this paper, we will introduce Fourier's theorem, understand it's motivation and show how it works analytically. Afterwards, I will provide an in depth explanation of the formulation, use, and properties of Numerical Fourier Series. 
+
+% ================================================================
+
+\section{Fourier's Theorem}
+
+\paragraph*{}Jean Baptiste Fourier spent much of his time studying partial differential equations. In solving equations with methods of separation, and then imposing boundary conditions, the function could only be fully solve by including an infinite linear combination of sine or cosine functions \textit{(Haberman,86)}. In some cases, only sine or cosine functions were used, but in other cases, combinations of sines and cosines were used. 
+\paragraph*{}Fourier took this idea and expanded to cover periodic functions in general. For this work, we will define a period function with time, $f(t)$, to be a function that has the property:
+\begin{equation}
+\label{period def}
+f(t) = f(t + nT)
+\end{equation} 
+\textit{(Tolstov,1)}Where $n$ is an integer value and $T$ is some constant value that it takes for the function to complete one cycle, called a \textit{period}.
+Fourier's theorem states that an periodic function (of time, in this case), $f(t)$, with period $T$, over the range $L$ can be expressed as an infinite series of orthogonal trigonometric functions \textit{(Taylor,194)}. This is commonly written as:
+\begin{equation}
+\label{Fourier Theorem Def}
+f(t) = a_0 + \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big)
+\end{equation} 
+\paragraph*{}Here, the index variable $n$ is taken to be only positive integer values. By filling in or solving for the appropriate values of $a_n$ and $b_n$, one can approximate any periodic function by including enough terms in the series. This of course raises the issue of how to find the Fourier coefficients.
+
+% ================================
+
+\subsection{Finding $a_0$}
+\paragraph*{}To find the $a_0$ coefficient, also called the \textit{zero-th Fourier Coefficient}, we begin with the series definition, as given in equation (\ref{Fourier Theorem Def}). Both sides of this whole function can be integrated with respect to time, from the bounds $0$ to $L$.
+\begin{equation}
+\label{step1}
+\int_0^L f(t) dt = \int_0^L a_0 dt + 
+\int_0^L \Bigg[ \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + 
+b_n \sin\Big(\frac{n\pi t}{L}\Big) \Bigg] dt
+\end{equation} 
+\paragraph*{}Because of the linearity of the integral operator, the operation is effectively 'distributed' to every term in the infinite series. Furthermore, by dividing the argument of each trig function by $L$, we have forced each term by itself to fit exactly an integer amount of periods $nT$ into this region from $0$ to $L$. Sine and cosine functions also have a property where when integrated over an integer multiple of a full period, $nT$, the integral becomes identically $0$.
+\begin{equation}
+\int_0^{nT}\cos\Big(\frac{n\pi t}{L}\Big) dt = 
+\int_0^{nT}\sin\Big(\frac{n\pi t}{L}\Big) = 0 
+\end{equation}
+\paragraph*{}Thus, the entire right-most integral in equation (\ref{step1}) evalute to $0$. Only the two left most integrals remain:
+\begin{equation}
+\int_0^L f(t) dt = a_0 \int_0^L dt 
+\end{equation}
+This equation can be evaluated, and then algebraically rearranged to solve for $a_0$:
+\begin{equation}
+\label{a_0}
+a_0 = \frac{1}{L}\int_0^L f(t) dt
+\end{equation}
+\paragraph*{}Notice that (\ref{a_0}) is just the average of the function $f(t)$ over the time span $L$. Thus, every other term in the infinite sum of functions oscillates about that scalar value.
+
+% ================================
+
+\subsection{Finding $a_n$}
+\paragraph*{}Finding the $n$-th cosine coefficient follows from a similar manner. We begin with equation (\ref{Fourier Theorem Def}). Before we integrate the full series again, we multiple the entire equation through by a $\cos(\frac{m\pi t}{L})$ term, where $m$ is an arbitrary integer value. Thus when integrated over the same bounds again, the new series becomes:
+\begin{multline}
+\label{step2}
+\int_0^L f(t)\cos\Big(\frac{m\pi t}{L}\Big) dt = 
+\int_0^L a_0\cos\Big(\frac{m\pi t}{L}\Big) dt +  \\
+\int_0^L \Bigg[ \sum_{n=1}^{\infty} 
+a_n \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) + 
+b_n \sin\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) \Bigg] dt
+\end{multline}
+\paragraph*{}Just line before, we turn our attention to the rightmost integral, the infinite sum. Sine and cosine functions also have the property of orthogonality, which is where their dot products (or integrals in our case) evaluate to zero if the functions have different argumnets for $n$ and $m$. Thus mathematically,
+\begin{equation}
+\label{othog1}
+\int \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) dt = \delta_{n,m}
+\end{equation}
+Where $\delta_{n,m}$ is the Kronecker Delta which has the property that it becomes $0$ is $m \neq n$ and $1$ if $m = n$.
+\paragraph*{}So, in the entire infinite series, every single term goes to $0$ (again the integral is applied to every term in the series), except for the one where the arbitrary integer $m$ is equal to $n$. Thus the surviving term becomes:
+\begin{equation}
+\int \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) dt =
+\int \cos^2\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+Therefore, the remaining terms in the equation become:
+\begin{equation}
+\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt = 
+a_n \int_0^L \cos^2\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+Recall that the term with $a_0$ again evaluates to $0$ and $m$ becomes $n$ because they are equal.
+\paragraph*{}The integral on the right side of the equation can be evaluated with an identity, and once again, we can solve for the $n$-th $a$ coefficient. The result is:
+\begin{equation}
+\label{a_n}
+a_n = \frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+
+% ================================
+
+\subsection{Finding $b_n$}
+\paragraph*{}Finally, to find the $n$-th sine coefficient, we use the exact same set of rules as before. We start with the series definition and multiply through every term by $\sin(\frac{m\pi t}{L})$ and then integrate from $0$ to $L$. The new series is now:
+\begin{multline}
+\label{step3}
+\int_0^L f(t)\sin\Big(\frac{m\pi t}{L}\Big) dt = 
+\int_0^L a_0\sin\Big(\frac{m\pi t}{L}\Big) dt +  \\
+\int_0^L \Bigg[ \sum_{n=1}^{\infty} 
+a_n \cos\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) + 
+b_n \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) \Bigg] dt
+\end{multline}
+\paragraph*{}Once again, the orthogonality of trig functions steps into play. Just line cosine, sine has the property:
+\begin{equation}
+\label{othog1}
+\int \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) dt = \delta_{n,m}
+\end{equation}
+And just as before, this forces every term in the entire infinite series to evalue to $0$, except for the sole case where $m = n$. Thus the surviving terms in the series becomes:
+\begin{equation}
+\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt = 
+a_n \int_0^L \sin^2\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+\paragraph*{}Which can the right integral can again be evaluated and the coefficient $b_n$ can be solved for:
+\begin{equation}
+\label{b_n}
+b_n = \frac{2}{L}\int_0^L f(t) \sin\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+
+% ================================
+
+\subsection{Results}
+\paragraph*{}Recall again that the Fourier Series expansion of a periodic function $f(t)$ with period $T$, over region $L$ is given by equation (\ref{Fourier Theorem Def})
+\begin{equation}
+f(t) = a_0 + \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big)
+\end{equation} 
+Where the values of $a_0$, $a_n$ and $b_n$ are given by (\ref{a_0}), (\ref{a_n}), and (\ref{b_n}) respectively:
+\begin{equation}
+a_0 = \frac{1}{L}\int_0^L f(t) dt
+\end{equation}
+\begin{equation}
+a_n = \frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+\begin{equation}
+b_n = \frac{2}{L}\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt
+\end{equation}
+\paragraph*{}Also note, that regardless of the exact bounds of the integral, as long as the difference between the bounds is $L$, there relations hold. For example, $-L/2$ to $+L/2$ is a value bound for this function. Additionally, if the bounds change to some arbitrary time, $\tau_0$ to $\tau_1$, then the constant $L$ in each coefficient gets replaced with $(\tau_1 - \tau_0)$.
+ 
+% ================================================================
+
+\section{Complex Fourier Series}
+\paragraph*{}The concept of Fourier Series is very useful, but often difficult in practice. In many cases the integrals cannot be evaluated exactly, especially for more complicated functions of time. Even when done with a computer, only a finite amount of coefficients can be computed, and it comes with gret computational costs. For example, to compute the first $N$ terms in the series, $2N + 1$ definite integrals mist be numerically evaluated.
+\paragraph*{}In addition to Fourier series expansions, the \textit{Fourier Transform} is a more common tool to use. To build the Fourier transform, we are going to express the original series expansion definition as a complex exponential, rather than a sum of trigonometric functions. Recall Euler's formula which states that for some angle $\phi$, trig functions are related to a complex exponential such that:
+\begin{equation}
+\label{euler}
+\cos(\phi) + i\sin(\phi) = e^{i\phi}
+\end{equation}
+Which allows for the relations:
+\begin{equation}
+\cos(\phi) = \frac{e^{i\phi}+e^{-i\phi}}{2}
+\end{equation}
+and:
+\begin{equation}
+\sin(\phi) = \frac{e^{i\phi}-e^{-i\phi}}{2i}
+\end{equation}
+\paragraph*{}Thus, we can rewrite our original expansion with these complex exponentials such that:
+\begin{equation}
+f(t) = a_0 + \frac{1}{2} \sum_{n=1}^{\infty} (a_n - ib_n)e^{i\pi\frac{n}{L}t} +
+\frac{1}{2} \sum_{n=1}^{\infty} (a_n + ib_n)e^{-i\pi\frac{n}{L}t}
+\end{equation}
+Now the coefficients $a_n$ and $b_n$ are combined to form a complex number, 
+$(a_n + ib_n)/2$ often shortened to $c_n$. We also want to include only the exponential sum that includes the $e^{-i\pi\frac{n}{L}t}$ term. To do this, we index the first sum to go from $n = -1$ to $n = -\infty$.
+This now allows us to express this sum in a more condensed form:
+\begin{equation}
+\label{complex series def}
+f(t) = \sum_{n=-\infty}^{+\infty} c_n e^{i\pi\frac{n}{L}t}
+\end{equation}
+This is known as the complex Fourier Series Definition.
+
+
+% ================================================================
+
+% ================================================================
+
+
+\end{document}
+
