@@ -14,7 +14,6 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{multicol}
-\usepackage[style=numeric]{biblatex}
 
 % ================================
 
@@ -37,14 +36,14 @@
 
 \section{Fourier's Theorem}
 
-\paragraph*{}Jean Baptiste Fourier spent much of his time studying partial differential equations. In solving equations with methods of separation, and then imposing boundary conditions, the function could only be fully solve by including an infinite linear combination of sine or cosine functions \textit{(Haberman,86)}. In some cases, only sine or cosine functions were used, but in other cases, combinations of sines and cosines were used. 
+\paragraph*{}Jean Baptiste Fourier spent much of his time studying partial differential equations. In solving equations with methods of separation, and then imposing boundary conditions, the function could only be fully solved by including an infinite linear combination of sine or cosine functions \cite{Haberman}. In some cases, only sine or cosine functions were used, but in other cases, combinations of sines and cosines were used. 
 \paragraph*{}Fourier took this idea and expanded to cover periodic functions in general. For this work, we will define a period function with time, $f(t)$, to be a function that has the property:
 \begin{equation}
 \label{period def}
 f(t) = f(t + nT)
 \end{equation} 
-\textit{(Tolstov,1)}Where $n$ is an integer value and $T$ is some constant value that it takes for the function to complete one cycle, called a \textit{period}.
-Fourier's theorem states that an periodic function (of time, in this case), $f(t)$, with period $T$, over the range $L$ can be expressed as an infinite series of orthogonal trigonometric functions \textit{(Taylor,194)}. This is commonly written as:
+Where $n$ is an integer value and $T$ is some constant value that it takes for the function to complete one cycle, called a \textit{period} \cite{Tolstov}.
+Fourier's theorem states that any periodic function (of time, in this case), $f(t)$, with period $T$, over the range $L$, (where $L = nT$) can be expressed as an infinite series of orthogonal trigonometric functions \cite{Taylor}. This is commonly written as:
 \begin{equation}
 \label{Fourier Theorem Def}
 f(t) = a_0 + \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big)
@@ -89,9 +88,9 @@ a_0 = \frac{1}{L}\int_0^L f(t) dt
 a_n \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) + 
 b_n \sin\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) \Bigg] dt
 \end{multline}
-\paragraph*{}Just line before, we turn our attention to the rightmost integral, the infinite sum. Sine and cosine functions also have the property of orthogonality, which is where their dot products (or integrals in our case) evaluate to zero if the functions have different argumnets for $n$ and $m$. Thus mathematically,
+\paragraph*{}Just line before, we turn our attention to the rightmost integral, the infinite sum. Sine and cosine functions also have the property of orthogonality, which is where their dot products (or integrals in our case) evaluate to zero if the functions have different arguments for $n$ and $m$. Thus mathematically,
 \begin{equation}
-\label{othog1}
+\label{orthog1}
 \int \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) dt = \delta_{n,m}
 \end{equation}
 Where $\delta_{n,m}$ is the Kronecker Delta which has the property that it becomes $0$ is $m \neq n$ and $1$ if $m = n$.
@@ -126,15 +125,15 @@ b_n \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) \Bigg] dt
 \end{multline}
 \paragraph*{}Once again, the orthogonality of trig functions steps into play. Just line cosine, sine has the property:
 \begin{equation}
-\label{othog1}
+\label{orthog2}
 \int \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) dt = \delta_{n,m}
 \end{equation}
 And just as before, this forces every term in the entire infinite series to evalue to $0$, except for the sole case where $m = n$. Thus the surviving terms in the series becomes:
 \begin{equation}
 \int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt = 
-a_n \int_0^L \sin^2\Big(\frac{n\pi t}{L}\Big) dt
+b_n \int_0^L \sin^2\Big(\frac{n\pi t}{L}\Big) dt
 \end{equation}
-\paragraph*{}Which can the right integral can again be evaluated and the coefficient $b_n$ can be solved for:
+Which then the right integral can again be evaluated and the coefficient $b_n$ can be solved for:
 \begin{equation}
 \label{b_n}
 b_n = \frac{2}{L}\int_0^L f(t) \sin\Big(\frac{n\pi t}{L}\Big) dt
@@ -158,12 +157,12 @@ a_n = \frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt
 b_n = \frac{2}{L}\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt
 \end{equation}
 \paragraph*{}Also note, that regardless of the exact bounds of the integral, as long as the difference between the bounds is $L$, there relations hold. For example, $-L/2$ to $+L/2$ is a value bound for this function. Additionally, if the bounds change to some arbitrary time, $\tau_0$ to $\tau_1$, then the constant $L$ in each coefficient gets replaced with $(\tau_1 - \tau_0)$.
+\paragraph*{}All we have done with this series expansion of $f(t)$ is use rules of orthogonality to produce coefficients. All these coefficients do is control the amplitude of each respective integer angular frequency. In some cases, the values of $a_n$ or $b_n$ might be zero, in some cases it may be very strong compared to it's neighboring frequency.
  
 % ================================================================
 
 \section{Complex Fourier Series}
-\paragraph*{}The concept of Fourier Series is very useful, but often difficult in practice. In many cases the integrals cannot be evaluated exactly, especially for more complicated functions of time. Even when done with a computer, only a finite amount of coefficients can be computed, and it comes with gret computational costs. For example, to compute the first $N$ terms in the series, $2N + 1$ definite integrals mist be numerically evaluated.
-\paragraph*{}In addition to Fourier series expansions, the \textit{Fourier Transform} is a more common tool to use. To build the Fourier transform, we are going to express the original series expansion definition as a complex exponential, rather than a sum of trigonometric functions. Recall Euler's formula which states that for some angle $\phi$, trig functions are related to a complex exponential such that:
+\paragraph*{}In addition to use sine and cosine functions to expand $f(t)$, we can also use another mathematical too - complex exponential functions. Recall Euler's formula which states that for some angle $\phi$, trig functions are related to a complex exponential such that:
 \begin{equation}
 \label{euler}
 \cos(\phi) + i\sin(\phi) = e^{i\phi}
@@ -188,10 +187,71 @@ This now allows us to express this sum in a more condensed form:
 \label{complex series def}
 f(t) = \sum_{n=-\infty}^{+\infty} c_n e^{i\pi\frac{n}{L}t}
 \end{equation}
-This is known as the complex Fourier Series Definition.
+This is known as the complex Fourier Series Definition \cite{Haberman}. Since we have defined $c_n$ to be equivalent to: $(a_n + ib_n)/2$, and we know how to find both $a_n$ and $b_n$, we can say that each coefficient, $c_n$ is given:
+\begin{equation}
+c_n = \frac{1}{2}(a_n + ib_n) = \frac{1}{2}\Bigg(
+\frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt +
+\frac{2i}{L}\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt \Bigg)
+\end{equation}
+Which can be conveniently simplified to:
+\begin{equation}
+\label{c_n}
+c_n = \frac{1}{L}\int_0^L f(t) e^{i\pi\frac{n}{L}t} dt
+\end{equation}
 
 
 % ================================================================
+
+\section{The Fourier Transform}
+\paragraph*{}The concept of Fourier Series is very useful, but often difficult in practice. In many cases the integrals cannot be evaluated exactly, especially for more complicated functions of time or space. Even when done with a computer, only a finite amount of coefficients can be computed, and it comes with great computational costs. For example, to compute the first $N$ terms in the series, $2N + 1$ definite integrals must be numerically evaluated.
+\paragraph*{}In addition to Fourier series expansions, the \textit{Fourier Transform} is a very common tool to use. To build the Fourier transform, we are going to begin with the complex  definition of the Fourier Series expansion from equation (\ref{complex series def}), where the $c_n$ coefficients are given by equation (\ref{c_n}). 
+\paragraph*{}Suppose we have a signal function of time, $g(t)$ and we want to transform it into it's frequency domain. The resulting function will be of frequency, $g(f)$, not time. Suppose we want to transform with over the domain 
+$-L < t < +L$. Thus our Fourier series representation is given by:
+\begin{equation}
+g(t) = \sum_{n=-\infty}^{\infty} c_n e^{i\pi\frac{n}{L}t}
+\end{equation}
+with the $c_n$ coefficients given by:
+\begin{equation}
+c_n = \frac{1}{2L}\int_{-L}^{+L} g(t) e^{i\pi\frac{n}{L}t} dt
+\end{equation}
+\paragraph*{}Now we can define a discrete index variable, $\xi$ to be:
+\begin{equation}
+\xi = \frac{n\pi}{L} 
+\end{equation}
+\begin{flushright}
+Where $n = 0, \pm 1, \pm 2, \pm3, ...$
+\end{flushright}
+And also the difference between adjacent values of $\xi$ is given by:
+\begin{equation}
+\Delta \xi = \xi_{n+1} - \xi_{n} = \frac{\pi}{L}
+\end{equation}
+The partial Fourier transform of $g(t)$ on the interval $-L < t < +L$ is then given by:
+\begin{equation}
+F_L(\xi) = \frac{1}{2L} \int_{-L}^{+L} g(t) e^{-i\xi t} dt =
+\frac{1}{2L} \int_{-L}^{+L} g(t) e^{-i\frac{\pi}{L}t} dt
+\end{equation}
+\paragraph*{}
+
+% ================================================================
+
+% ================================================================
+
+\begin{thebibliography}{9}
+\bibliographystyle{apalike}
+
+\bibitem{Haberman}
+Haberman, Richard. \textit{Applied Partial Differential Equations: with Fourier Series and Boundary Value Problems}. 5th ed., Pearson Education, 2014.
+
+\bibitem{Pinsky}
+Pinsky, Mark A. \textit{Partial Differential Equations and Boundary-Value Problems with Applications}. 3rd ed., American Mathematical Society, 2011.
+
+\bibitem{Taylor}
+Taylor, John R. \textit{Classical Mechanics}. Univ. Science Books, 2005.
+
+\bibitem{Tolstov}
+Tolstov, Georgy Pavlovich. \textit{Fourier Series}. Translated by Richard Allan. Silverman, London; Printed in U.S.A., 1962.
+
+\end{thebibliography}
 
 % ================================================================
 
