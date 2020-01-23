@@ -204,35 +204,68 @@ c_n = \frac{1}{L}\int_0^L f(t) e^{i\pi\frac{n}{L}t} dt
 
 \section{The Fourier Transform}
 \paragraph*{}The concept of Fourier Series is very useful, but often difficult in practice. In many cases the integrals cannot be evaluated exactly, especially for more complicated functions of time or space. Even when done with a computer, only a finite amount of coefficients can be computed, and it comes with great computational costs. For example, to compute the first $N$ terms in the series, $2N + 1$ definite integrals must be numerically evaluated.
-\paragraph*{}In addition to Fourier series expansions, the \textit{Fourier Transform} is a very common tool to use. To build the Fourier transform, we are going to begin with the complex  definition of the Fourier Series expansion from equation (\ref{complex series def}), where the $c_n$ coefficients are given by equation (\ref{c_n}). 
-\paragraph*{}Suppose we have a signal function of time, $g(t)$ and we want to transform it into it's frequency domain. The resulting function will be of frequency, $g(f)$, not time. Suppose we want to transform with over the domain 
-$-L < t < +L$. Thus our Fourier series representation is given by:
+\paragraph*{}In addition to Fourier series expansions, the \textit{Fourier Transform} is a very common tool to use. To build the Fourier transform, let us consider just the complex exponential function in the form:
 \begin{equation}
-g(t) = \sum_{n=-\infty}^{\infty} c_n e^{i\pi\frac{n}{L}t}
+\label{comp exp}
+F(t) = e^{it}
 \end{equation}
-with the $c_n$ coefficients given by:
+Physically, the variable $t$ gives the arclength distance traverse by the tip of a rotating vector within a unit circle. So if we have $t=2$, then the tip of this rotating vector has traversed $2$ radians of arc around the circle. If we wanted to describe a vector that then rotates around this unit circle once per second, we would then multiply the exponent in equation (\ref{comp exp}) by the constant $2\pi$. Thus at $t=0$ and $t=1$, the expression evaluates to the same complex value: $(1 + 0i)$.
+\paragraph*{}We can also extend this idea to allow the vector to rotate with an arbitrary frequency, $\nu$. It is also convention to use a negative value in the exponent. Thus the complex exponential becomes:
 \begin{equation}
-c_n = \frac{1}{2L}\int_{-L}^{+L} g(t) e^{i\pi\frac{n}{L}t} dt
+\label{comp exp 2}
+F(t) = e^{-2\pi i\nu t}
 \end{equation}
-\paragraph*{}Now we can define a discrete index variable, $\xi$ to be:
+Now, the value of $t$ has to increase to $\frac{1}{\nu}$ for the full exponent to take the form $2\pi i$ again (one full revolution). This, the rotating vector return to the point $(1 + 0i)$ at integer multiples of $1/\nu$.
+\paragraph*{}Now suppose we have some perfectly continuous, periodic function of time, given by $f(t)$, with period $T$. We want to use build the Fourier transform to move ths function from a time domain, into a frequency domain, $f(\nu)$. We can actually multiply this $f(t)$ function by equation (\ref{comp exp 2}) and arrive at the equation:
 \begin{equation}
-\xi = \frac{n\pi}{L} 
+f(t) e^{-2\pi i\nu t}
 \end{equation}
-\begin{flushright}
-Where $n = 0, \pm 1, \pm 2, \pm3, ...$
-\end{flushright}
-And also the difference between adjacent values of $\xi$ is given by:
+\paragraph*{}Now instead of our complex exponential function rotating about a simple unit circle of radius $1$, the rotating vector's magnitude is now scaled by this function $f(t)$. So not only is the vector rotating around the origin with some arbitrary frequency , $\nu$, it's length is also begin scaled with respect to \textit{time}, according to $f(t)$. Conceptually, this is like taking the function $f(t)$ and winding it up in a circular fashion about the origin. The tip of this vector still lies within complex space.
+\paragraph*{}We can now integrate this function with respect to time, from 
+$\tau_1$ to $\tau_2$m and scale it by the inverse of that interval.
 \begin{equation}
-\Delta \xi = \xi_{n+1} - \xi_{n} = \frac{\pi}{L}
+\frac{1}{\tau_2 - \tau_1}\int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
 \end{equation}
-The partial Fourier transform of $g(t)$ on the interval $-L < t < +L$ is then given by:
+This whole function is very analogous to finding the center of mass of this wound up graph \cite{Sanderson}. This "center - of - mass" idea will result in a vector, once again in complex space. Finally, we can just remove this $\frac{1}{\tau_2 - \tau_1}$ coefficient And the result is the canonical Fourier Transform. So our new function of linear frequency becomes:
 \begin{equation}
-F_L(\xi) = \frac{1}{2L} \int_{-L}^{+L} g(t) e^{-i\xi t} dt =
-\frac{1}{2L} \int_{-L}^{+L} g(t) e^{-i\frac{\pi}{L}t} dt
+\label{Fourier Transform}
+f(\nu) = \int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
 \end{equation}
-\paragraph*{}
+Similarly, to recover the original function of time, we can apply the \textit{inverse} Fourier Transform:
+\begin{equation}
+\label{Inv Fourier Transform}
+f(t) = \int_{\tau_1}^{\tau_2} f(\nu) e^{+2\pi i\nu t} d\nu
+\end{equation}
+\paragraph*{}These transform pairs are a bit tough to reason through, but we can rewrite equation (\ref{Fourier Transform}) use the help of Euler's identity (\ref{euler}) again:
+\begin{equation}
+\label{Fourier Transform}
+f(\nu) = 
+\int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt =
+\int_{\tau_1}^{\tau_2} f(t) \Big[\cos(2\pi\nu t) - i\sin(2\pi\nu t)\Big] dt
+\end{equation}
+We can distribute the $f(t)$ function to each term, and then divide it into two separate integrals:
+\begin{equation}
+f(\nu) = 
+\int_{\tau_1}^{\tau_2} f(t)\cos(2\pi\nu t)dt -
+i\int_{\tau_1}^{\tau_2} f(t)\sin(2\pi\nu t)dt
+\end{equation}
+\paragraph*{}Now, this equation tells use to scale our $f(t)$ function with either a sine or cosine containing an arbitrary frequency, $\nu$, and then integrate over the bounds. Each respective area represents the real and imaginary components of some number in complex space. The magnitude of that number is the magnitude of the Fourier transform at that particular frequency, $\nu$. Thus the larger the value of the integrals, the more prevalent that angular frequency is in the signal $f(t)$.
 
 % ================================================================
+
+\section{Numerical Fourier Transform}
+\paragraph*{}In reality, a well defined signal $f(t)$ already has a set of known 
+constituent frequencies. In most cases, signals from the real world are not defined by some perfect and smooth function. Furthermore, actually evaluating the integrals in the transforms completely may prove to even be impossible. 
+\paragraph*{}With this comes the need to use computers to evaluate Fourier Transforms numerically. Furthermore, this allows for us not not have a function, $f(t)$, but rather some array full of arbitrary amplitude values. So we return to our transform definition, (\ref{Fourier Transform}):
+\begin{equation}
+f(\nu) = \int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
+\end{equation}
+Firstly, $f(t)$ is no longer a continuous function, but an array discrete entries. Similarly, $f(\nu)$ will also become an array of discrete points as well. We then name them: $f(t) \rightarrow x$ and $f(\nu) \rightarrow y$. For this derivation I will be using syntax and concepts (such as libraries) from Python 3. 
+\paragraph*{}Now suppose that we want our output array, $y$ to be an array containing $n$ discrete entries in it:
+\begin{equation}
+y = [y_0 , y_1 , y_2 , y_3 , ... , y _{n-2} , y_{n-1} ]
+\end{equation}
+This will determine the number of frequency values, $\nu$ that we have to test. 
 
 % ================================================================
 
@@ -244,6 +277,9 @@ Haberman, Richard. \textit{Applied Partial Differential Equations: with Fourier 
 
 \bibitem{Pinsky}
 Pinsky, Mark A. \textit{Partial Differential Equations and Boundary-Value Problems with Applications}. 3rd ed., American Mathematical Society, 2011.
+
+\bibitem{Sanderson}
+Sanderson, Grant. \textit{But What Is the Fourier Transform? A Visual Introduction}. YouTube, 26 Jan. 2018.
 
 \bibitem{Taylor}
 Taylor, John R. \textit{Classical Mechanics}. Univ. Science Books, 2005.
