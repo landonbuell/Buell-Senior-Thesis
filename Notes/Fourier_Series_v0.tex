@@ -238,7 +238,6 @@ f(t) = \int_{\tau_1}^{\tau_2} f(\nu) e^{+2\pi i\nu t} d\nu
 \end{equation}
 \paragraph*{}These transform pairs are a bit tough to reason through, but we can rewrite equation (\ref{Fourier Transform}) use the help of Euler's identity (\ref{euler}) again:
 \begin{equation}
-\label{Fourier Transform}
 f(\nu) = 
 \int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt =
 \int_{\tau_1}^{\tau_2} f(t) \Big[\cos(2\pi\nu t) - i\sin(2\pi\nu t)\Big] dt
@@ -256,16 +255,52 @@ i\int_{\tau_1}^{\tau_2} f(t)\sin(2\pi\nu t)dt
 \section{Numerical Fourier Transform}
 \paragraph*{}In reality, a well defined signal $f(t)$ already has a set of known 
 constituent frequencies. In most cases, signals from the real world are not defined by some perfect and smooth function. Furthermore, actually evaluating the integrals in the transforms completely may prove to even be impossible. 
-\paragraph*{}With this comes the need to use computers to evaluate Fourier Transforms numerically. Furthermore, this allows for us not not have a function, $f(t)$, but rather some array full of arbitrary amplitude values. So we return to our transform definition, (\ref{Fourier Transform}):
+\paragraph*{}With this comes the need to use computers to evaluate Fourier Transforms numerically. This allows for us not not have a function, $f(t)$, but rather some array full of arbitrary amplitude values. So we return to our transform definition, (\ref{Fourier Transform}):
 \begin{equation}
 f(\nu) = \int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
 \end{equation}
-Firstly, $f(t)$ is no longer a continuous function, but an array discrete entries. Similarly, $f(\nu)$ will also become an array of discrete points as well. We then name them: $f(t) \rightarrow x$ and $f(\nu) \rightarrow y$. For this derivation I will be using syntax and concepts (such as libraries) from Python 3. 
-\paragraph*{}Now suppose that we want our output array, $y$ to be an array containing $n$ discrete entries in it:
+Firstly, $f(t)$ is no longer a continuous function, but an array discrete entries. Similarly, $f(\nu)$ will also become an array of discrete points as well. We then name them: $f(t) \rightarrow \vec{x}$ and $f(\nu) \rightarrow \vec{y}$. For this derivation I will be using syntax and concepts (such as libraries) from Python 3. 
+\paragraph*{}Now suppose that we want our output array, $\vec{y}$ to be an array containing $n$ discrete entries in it:
 \begin{equation}
-y = [y_0 , y_1 , y_2 , y_3 , ... , y _{n-2} , y_{n-1} ]
+\vec{y} = [y_0 , y_1 , y_2 , y_3 , ... , y _{n-2} , y_{n-1} ]
 \end{equation}
-This will determine the number of frequency values, $\nu$ that we have to test. 
+And suppose the input array, $\vec{x}$ has $N$ discrete components in it:
+\begin{equation}
+\vec{x} = [x_0 , x_1 , x_2 , x_3 , ... , x _{N-2} , x_{N-1} ]
+\end{equation}
+\paragraph*{}Each entry in this $\vec{y}$ array will correspond to a particular linear frequency value.  In we use a sort of dimensional ambiguity, and normalize each frequency values such that $y_0$ represents $0$ cycles per unit time, and $y_{n-1}$ represents 1 cycle per unit time. After we compute the full $y$ array, we can then go back a multiply the full array by a constant to account for the particular unit.
+\paragraph*{}Now, for each index, $y_k$, we need to evaluate the full Fourier transform (\ref{Fourier Transform}) for a particular frequency, $\nu$. So we need to set the particular frequency value, and evaluate equation (\ref{Fourier Transform}) for that value. Thus, no using these discrete variables, we can write our Discrete Fourier Transform as:
+\begin{equation}
+\label{Discrete Fourier Transform}
+\vec{y} = \sum_{j=0}^{N-1} \vec{x}_j e^{-2\pi i \vec{\nu}}
+\end{equation}
+Thus each individual entry in the the $\vec{y}$ vector is given:
+\begin{equation}
+\label{kth DFT}
+\vec{y}_k = \sum_{j=0}^{N-1} \vec{x}_j e^{-2\pi ik \vec{\nu}}
+\end{equation}
+\paragraph*{}Lastly, we mist choose the elements of the linear frequency array $\vec{\nu}$ such that they are dimensionless. Since we want our output vector $\vec{y}$ to contain $n$ points, the array $\vec{\nu}$ must also contain $n$ points, even spaced between $0$ and $1$. Thus now, when we multiply $\vec{\nu}$ by the index $k$ in (\ref{kth DFT}), we have the effect of evaluating the transform for that particular, normalized frequency value. 
+\paragraph*{}So if we wanted, to code this transform "from scratch" in python, we would start by creating a time axis, $t$, the number of point in our output transform, $n$, and a signal $x$ to transform, with the help of numpy:
+\begin{verbatim}
+>>> import numpy as np
+>>> n = 1024
+>>> t = np.arrange(0,5,0.01)
+>>> x = 2*np.sin(2*np.pi*4*t) + 3*np.cos(2*np.pi*3*t)
+
+\end{verbatim}
+\paragraph*{}We also need to create the frequency vector, $\vec{\nu}$, and an empty array, $y$, to hold our output:
+\begin{verbatim}
+>>> nu = np.arange(n)/n
+>>> y = np.array([])
+\end{verbatim}
+\paragraph*{}Now, we need to create a loop that indexes from the $0$-th to the $n-1$-th element in the output array. Each element is them given by equation (\ref{kth DFT})Note that $x$ must be truncated to have $n$ points.
+\begin{verbatim}
+>>> x1 = x[0:n]
+>>> for k in range (0,len(n),1):
+>>>     y_k = np.sum(x1 * np.exp(2*np.pi*-1j*k*nu))
+>>>     y = np.append(y,y_k)  
+\end{verbatim}
+\paragraph*{}When this loop completes, there will be an array $y$ that is filled with $n$ entries. Each entry is given by the discrete Fourier Transform in equation (\ref{kth DFT}). To dimensional the frequencies, we simply need to create the frequency spectrum axis. If our original $\vec{x}$ array is sampled at some frequency, $f_0$, then the highest and lowest frequency that we can sample is $\pm\frac{f_0}{2}$. This means that the sampled frequencies are from $-\frac{f_0}{2}$ to $+\frac{f_0}{2}$ evenly spaced such that there are $n$ points.
 
 % ================================================================
 
