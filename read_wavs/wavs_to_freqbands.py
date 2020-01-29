@@ -1,9 +1,11 @@
 """
 Landon Buell
 Wav file to Frequency Bands
-Main
+PHYS 799
 28 December 2019
 """
+
+        #### IMPORTS ####
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,7 +13,6 @@ import pandas as pd
 import os
 import time
 import read_wavs_func as readwavs
-
 
 if __name__ == '__main__':
 
@@ -22,7 +23,6 @@ if __name__ == '__main__':
     csv_dir = 'C:/Users/Landon/Documents/wav_data/Frequency_Bands'
     
     readwavs.make_paths([csv_dir])
-    #notefreq = readwavs.notefreq_dict()             # note to freq dictionary
     rate = 44100
 
             #### BUILDING FREQUENCY BANDS ####

@@ -25,14 +25,6 @@ class wav_file ():
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
         self.rate = 44100                       # sample rate
-    
-    def pitch_to_freq (self,pitchdict):
-        """ Assign numerical frequency based on pitch label """
-        note = self.filename.split('.')[-3]     # isolate pitch string
-        freq = pitchdict[str(note)]             # find frequency value
-        setattr(self,'note',note)               # set attribute
-        setattr(self,'freq',freq)               # set attribute
-        return note,freq                        # return note name & frequency
 
     def read_raw_wav(self):
         """ Read Raw data from directory file """      
@@ -40,70 +32,26 @@ class wav_file ():
         data = np.transpose(data)               # tranpose
         data = data/np.max(np.abs(data))        # normalize
         setattr(self,'data',data)               # set attrb to self
-        return data,rate                        # return values
+        return data                             # return waveform
 
-    def timespace (self,rate,npts):
-        """ Create timespace axis """
-        time = np.arange(0,npts)    # create axis
-        #time = time/rate            # divide by sample rate
-        setattr(self,'time',time)   # set attribute
-        return time                 # return the array
-
-    def attack (self,value):
-        """ Find ATTACK section of waveform """
-        pass
-
-    def decay (self,attr,value):
-        """ Find DECAY section of waveform """
-        pass
-
-    def sustain (self,attr,value):
-        """ Find SUSTAIN section of waveform """
-        pass
-
-    def release (self,attr,value):
-        """ Find RELEASE section of waveform """
-        pass
-
-    def freqspace(self,npts=441000,rate=44100):
-        """ Create frequency space axis """          
-        fspace = fftpack.fftfreq(n=npts,d=rate)     # create f-axis
-        pts = np.where((fspace>=0))                 # pos freqs
-        fspace = fspace[pts]                        # index array
-        setattr(self,'fspace',fspace)               # self self attrb
-        return fspace                               # return f-axis
-
-    def FFT (self,attr,npts=441000):
-        """ Discrete Fast Fourier Transform """
-        data = self.__getattribute__(attr)      # isolate attribute
-        fftdata = fftpack.fft(x=data,n=npts)    # compute fft
-        power = np.abs(fftdata)**2              # power spectrum
-        power = power/np.max(power)             # normalize amplitude
-        return power                            # return power & freq space
-
-    def freq_band (self,label,power,pts):
-        """ Break up FFT spectrum into single frequency band """   
-        power = power[pts]                                  # isolate power spectrum
-        return power,name                                   # return values
+    def split_timeseries (self,N):
+        """ Split time series data into M samples by N features """
+        rem = len(self.data) % N                # number of pts left over
+        M = len(self.data) - rem                # number of samples
+        setattr(self,'data',data[:rem])         # crop waveform & reset attrb
+        newdata = np.reshape(self.data,(M,N))   # reshape to M x N ???
+        return newdata , M
 
         #### FUNCTION DEFINITIONS ####
 
-def notefreq_dict ():
-    """ Dictionary of Note Names to Frequency Values """
-    notes = np.array([])                    # array to hold note names
-    for octave in np.arange(0,9):           # iterate through octaves
-        for letter in ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab']:   
-            name = letter+str(octave)       # create note name
-            notes = np.append(notes,name)   # add to array
-    steps = np.arange(-int(12*4),+int(12*5),1,dtype=int)
-    freqs = np.array([440*(2**(n/12)) for n in steps]).round(2)
-    notefreq = {}                           # Dictionary to note
-    for I in range (len(steps)):            # each step
-        notefreq.update({notes[I]:freqs[I]})# update the dictionary
-    return notefreq                         # return the dictionary
-        
 def make_paths (paths):
-    """ Test if paths exist """
+    """
+    Make designated directory paths
+    --------------------------------
+    paths (list) : List of directory paths to create
+    --------------------------------
+    return None
+    """
     for path in paths:              # for each entry
         if os.path.exists(path):    # is the path exisits
             continue                # do nothing
@@ -111,7 +59,13 @@ def make_paths (paths):
             os.makedirs(path)       # make the path
 
 def read_directory(dir):
-    """Read all files in given directory path"""
+    """
+    Read all files in given directory path
+    --------------------------------
+    dir (str) : Parent directory path to read raw .wav files from
+    --------------------------------
+    return list of "wav_file" class object instances
+    """
     file_objs = []                          # list to '.wav' hold files objs
     for roots,dirs,files in os.walk(dir):   # all objects in parent path
         for file in files:                  # files in list of files
