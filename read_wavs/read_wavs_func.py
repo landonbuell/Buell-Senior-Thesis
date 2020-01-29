@@ -36,13 +36,31 @@ class wav_file ():
 
     def split_timeseries (self,N):
         """ Split time series data into M samples by N features """
-        rem = len(self.data) % N                # number of pts left over
-        M = len(self.data) - rem                # number of samples
-        setattr(self,'data',data[:rem])         # crop waveform & reset attrb
-        newdata = np.reshape(self.data,(M,N))   # reshape to M x N ???
-        return newdata , M
+        ext = len(self.data) % N        # extra idxs
+        X = self.data[ext:]             # remove extra points
+        X = np.round(X,4)               # round to 4 decimals
+        M = int(len(X)/N)               # compute number of rows
+        X = X.reshape(M,N)              # reshape the X matrix
+        return X,M                      # return data 
+
+
 
         #### FUNCTION DEFINITIONS ####
+
+def hanning_window (data,N):
+    """ 
+    Apply a Hanning Window Taper to each sample 
+    --------------------------------
+    data (array) : M x N array of floating point time series data
+    N (int) : Number of rows of matrix, length of Hanning Window
+    --------------------------------
+    Return a matrix with a Hanning taper applied to each row
+    """
+    taper = signal.hanning(M=N,sym=True)        # hanning window Taper
+    for x in data:                              # for each row
+        x *= taper                              # apply window
+    return data                                 # return new matrix
+
 
 def make_paths (paths):
     """
@@ -74,13 +92,11 @@ def read_directory(dir):
                 file_objs.append(wavs)      # add to list 
     return file_objs                        # return the list of files
 
-def to_csvfile (name,data,labels,mode='w'):
+def to_csvfile (name,data,mode='w'):
     """ Append pos & vel arrays to end of csv """
-    data = np.transpose(data)               # transpose array
-    frame = pd.DataFrame(data=data,columns=labels,dtype=float)
-    frame = frame.transpose()               # re - transpose
+    frame = pd.DataFrame(data=data,dtype=float)
     frame.to_csv(name+'.txt',sep='\t',
-                    header=False,index=True,mode=mode)     # append to CSV 
+                    header=False,index=False,mode=mode)     # append to CSV 
     return frame
 
         #### PLOTTING & VISUALIZATION FUNCTIONS #####
