@@ -23,35 +23,31 @@ if __name__ == '__main__':
     readwavs.make_paths([out_dir])              # create the output tpath if needed
     wavfiles = readwavs.read_directory(wav_dir) # create all class instances
     print("Number of .wav files:",len(wavfiles))
-    N = 2**10                                   # number of features
+    M = 2**12                                   # number of features
 
     class_dict = {}                         # dictionary to hold class values
     class_num = 0                           # class indentifier
     targets = np.array([])                  # array to hold target labels
 
-    for file in wavfiles:                       # for each class instance
-        print("\tFilename:",file.filename)    
-        os.chdir(file.dirpath)                  # move to the directory path
-        waveform = file.read_raw_wav()          # extract waveform
-        X,M = file.split_timeseries(N)          # split into M samples
-        X = readwavs.hanning_window(X,N)        # apply hanning window to each rows`
+    for wav in wavfiles:                        # for each class instance
+        print("\tFilename:",wav.filename)    
+        os.chdir(wav.dirpath)                   # move to the directory path
+        waveform = wav.read_raw_wav()           # extract waveform
+        X,N = wav.split_timeseries(M)           # split into N samples
+        X = readwavs.hanning_window(X,M)        # apply hanning window to each rows`
         
-        if file.instrument not in class_dict:           # if not in dictionary
-            class_dict.update({str(file.instrument):class_num})
+        if wav.instrument not in class_dict.keys():     # if not in dictionary
+            class_dict.update({str(wav.instrument):class_num})
             class_num += 1
+            print("\t\tClass Counter:",class_num)
 
-        """
-        To impliment:
-        Each instrument gets it's own .txt file
-        The target data array will stil include all sample labels in a single vector
-        """
-
-        labs = np.arange(0,M,1)*class_num       # create M labels
-        targets = np.append(targets,labs)       # add labels to tagrets
-
+        labs = np.ones(shape=(1,N),dtype=int)*class_num     # create N labels
+        targets = np.append(targets,labs)                   # add labels to tagrets
+        
+        outname = str(wav.filename)+'.'+str('time') # name for output file
         os.chdir(out_dir)
-
-        del(file)                           # remove class obj from RAM
+        X.tofile(outname+'.bin',sep="")
+        del(wav)                           # remove class obj from RAM
 
     os.chdir(int_dir)
     targets = readwavs.to_csvfile('timeseries_targets',targets,mode='w')

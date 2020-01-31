@@ -24,6 +24,8 @@ class wav_file ():
         self.dirpath = root                     # intial storage path
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
+        self.note = file.split('.')[-2]         # note name
+        self.channel = file.split('.')[-1]      # L or Rchannel
         self.rate = 44100                       # sample rate
 
     def read_raw_wav(self):
@@ -34,29 +36,29 @@ class wav_file ():
         setattr(self,'data',data)               # set attrb to self
         return data                             # return waveform
 
-    def split_timeseries (self,N):
-        """ Split time series data into M samples by N features """
-        ext = len(self.data) % N        # extra idxs
+    def split_timeseries (self,M):
+        """ Split time series data into N samples by M features """
+        ext = len(self.data) % M        # extra idxs
         X = self.data[ext:]             # remove extra points
         X = np.round(X,4)               # round to 4 decimals
-        M = int(len(X)/N)               # compute number of rows
-        X = X.reshape(M,N)              # reshape the X matrix
-        return X,M                      # return data 
+        N = int(len(X)/M)               # compute number of rows
+        X = X.reshape(N,M)              # reshape the X matrix
+        return X,N                      # return data 
 
 
 
         #### FUNCTION DEFINITIONS ####
 
-def hanning_window (data,N):
+def hanning_window (data,M):
     """ 
     Apply a Hanning Window Taper to each sample 
     --------------------------------
-    data (array) : M x N array of floating point time series data
-    N (int) : Number of rows of matrix, length of Hanning Window
+    data (array) : N x M array of floating point time series data
+    M (int) : Number of rows of matrix, length of Hanning Window
     --------------------------------
     Return a matrix with a Hanning taper applied to each row
     """
-    taper = signal.hanning(M=N,sym=True)        # hanning window Taper
+    taper = signal.hanning(M=M,sym=True)        # hanning window Taper
     for x in data:                              # for each row
         x *= taper                              # apply window
     return data                                 # return new matrix
