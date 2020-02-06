@@ -34,7 +34,6 @@ class wavfile ():
     --------------------------------
     Create and return wavfile class object instance
     """
-
     def __init__(self,file):
         """ Initialize Class Object """
         self.filename = file                    # filename
@@ -112,7 +111,7 @@ def Plot_Time (xdata,ydata,title,save=False,show=False):
     plt.xlabel("Time",size=20,weight='bold')
     plt.ylabel("Amplitude",size=20,weight='bold')
         #### Plotting ####
-    if np.shape(ydata)[0] > 1:         
+    if ydata.ndim > 1:   
         for I in range (len(ydata)):
             plt.plot(xdata,ydata[I],color='blue')
     else:
@@ -147,7 +146,7 @@ def Plot_Freq (xdata,ydata,title,save=False,show=False):
     plt.xlabel("Frequency",size=20,weight='bold')
     plt.ylabel("Amplitude",size=20,weight='bold')
         #### Plotting ####
-    if np.shape(ydata)[0] > 1:         
+    if ydata.ndim > 1:       
         for I in range (len(ydata)):
             plt.plot(xdata,ydata[I],color='blue')
     else:

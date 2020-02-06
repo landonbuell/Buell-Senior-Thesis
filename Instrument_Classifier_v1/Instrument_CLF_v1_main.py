@@ -17,7 +17,7 @@ import Instrument_CLF_v1_func as func
 import Instrument_CLF_v1_features as features
 import Instrument_CLF_v1_timeseries as timeseries
 import Instrument_CLF_v1_freqseries as freqseries
-import Instrument_CLF_v1_MLfunc as ML_func
+import Instrument_CLF_v1_MLfunc as MLfunc
 
 """
 INSTRUMENT CLASSIFIER V1 - MAIN EXECUTABLE
@@ -43,25 +43,32 @@ if __name__ == '__main__':
     func.make_paths([out_dir])                      # create output path if non-existant
     wavfiles = func.read_directory(wav_dir)         # make all wav file instances
     tt_ratio = 0.01                                 # train/test size ratio
+    M = 2**12                                       # features in time series
     trainpts,testpts = ML_func.split_train_test(len(wavfiles),tt_ratio)
     trainwavs = [wavfiles[I] for I in trainpts]     # wavs to train CLFs
+
+    SGD_CLF_dict = MLfunc.SGD_CLFs(['time_clf','freq_clf',
+                                    'form_clf','spect_clf'])
 
     """ Read Through Each File in the TRAINING Data Set
         Produce Array of Features for each file
         Something like:
-            for 'trainingfile' in 'traingwavs'
+            for 'trainingfile' in 'trainingwavs'
                 # take single file
                 # produce features matrix & labels
                 # Return features & label matrix       
     """
 
     """ Train the Time Space Features Classifier """
+    
+
+
     for wav in trainwavs:               # for each bit of training data:
-        os.chdir(wav_dir)               # change to path with .wav files
-        wav.read_raw_wav()              # read .wav file from path
-        os.chdir(int_dir)               # move back to intial path
-
-
+        
+        # take single wav obj
+        # pass it to features script
+        # uses obj to train time, FFT and Spectrogram classifiers
+        pass
         
 
 

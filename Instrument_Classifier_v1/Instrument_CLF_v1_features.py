@@ -24,15 +24,3 @@ INSTRUMENT CLASSIFIER V1 - FEATURE PRODUCTION
 
 """
 
-def waveform_features (wavobj,M=2**12):
-    """
-    Produce time series features for 'data' attribute on wavobj instance
-        Must have already run "read_raw_wav() method for this to work!
-    --------------------------------
-    wavobj (class) : Instance of particular wavfile object
-    M (int) : number of features per file obj (recc. 2^N w/ N and int)
-    --------------------------------
-    Returns (N x M) array of features amd (M x 1) array of labels
-    """
-    ext = len(wavobj.data) % M          # remaining idx left over
-    X = wavobj.data[:ext]               # 
