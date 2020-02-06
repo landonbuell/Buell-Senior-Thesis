@@ -55,6 +55,7 @@ if __name__ == '__main__':
                 # Return features & label matrix       
     """
 
+    """ Train the Time Space Features Classifier """
     for wav in trainwavs:               # for each bit of training data:
         os.chdir(wav_dir)               # change to path with .wav files
         wav.read_raw_wav()              # read .wav file from path

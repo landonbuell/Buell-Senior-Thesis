@@ -50,5 +50,5 @@ def SGD_CLF (name,seed):
     returns SGD Object w/ name
     """
     CLF = SGDClassifier(random_state=seed)  # create classifier
-    setattr(Clf,'name',name)                # attach to name
+    setattr(CLF,'name',name)                # attach name tp classifier
     return CLF                              # return classifier obj
