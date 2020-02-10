@@ -65,9 +65,9 @@ def make_paths (paths):
     """
     Make designated directory paths
     --------------------------------
-    paths (list) : List of directory paths to create
+    paths (list) : List of directory paths strings to create
     --------------------------------
-    return None
+    returns None
     """
     for path in paths:              # for each entry
         if os.path.exists(path):    # is the path exisits

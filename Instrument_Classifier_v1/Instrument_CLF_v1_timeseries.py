@@ -31,22 +31,21 @@ def time_axis (N,rate=44100):
     """
     return np.arange(N)/rate
 
-def waveform_features (wavobj,M=(2**12),class_cntr=0):
+def waveform_features (wavobj,M=(2**12)):
     """
     Produce time series features for 'data' attribute on wavobj instance
         Must have already run 'read_raw_wav()' method for this to work!
     --------------------------------
     wavobj (class) : Instance of particular wavfile object
-    M (int) : number of features per file obj (recc. 2^N w/ N and int)
-    class_cntr (int) : Counter for class number of instrument
+    M (int) : number of features per file obj (recc. 2^N w/ N as int)
     --------------------------------
     Returns (N x M) array of features amd (M x 1) array of labels
     """
-    ext = len(wavobj.data) % M      # remaining idx left over
-    X = wavobj.data[ext:]           # crop waveform
-    N = int(len(X)/M)                    # n rows
-    X = X.reshape(N,M)              # reshape 
-    y = np.ones((N,1))*class_cntr   # target labels
-    return X,y                      # return matrix & targets
+    ext = len(wavobj.data) % M          # remaining idx left over
+    X = wavobj.data[ext:]               # crop waveform
+    N = int(len(X)/M)                   # n rows
+    X = X.reshape(N,M)                  # reshape 
+    y = np.ones((1,N))*wavobj.class_num # target labels
+    return X,y                          # return matrix & targets
 
 

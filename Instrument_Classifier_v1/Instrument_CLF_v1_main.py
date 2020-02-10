@@ -42,34 +42,24 @@ if __name__ == '__main__':
 
     func.make_paths([out_dir])                      # create output path if non-existant
     wavfiles = func.read_directory(wav_dir)         # make all wav file instances
+    MLfunc.label_encoder(wavfiles)                  # make numerical labels
     tt_ratio = 0.01                                 # train/test size ratio
-    M = 2**12                                       # features in time series
-    trainpts,testpts = ML_func.split_train_test(len(wavfiles),tt_ratio)
+    trainpts,testpts = MLfunc.split_train_test(len(wavfiles),tt_ratio)
+    
     trainwavs = [wavfiles[I] for I in trainpts]     # wavs to train CLFs
-
+    testwavs = [wavfiles[I] for I in testpts]       # wavs to test CLFs
+    os.chdir(wav_dir)           # change to wav directory
+    for wav in trainwavs:       # each training file
+        wav.read_raw_wav()      # read waveform
+    os.chdir(int_dir)           # intial dir
     SGD_CLF_dict = MLfunc.SGD_CLFs(['time_clf','freq_clf',
                                     'form_clf','spect_clf'])
 
-    """ Read Through Each File in the TRAINING Data Set
-        Produce Array of Features for each file
-        Something like:
-            for 'trainingfile' in 'trainingwavs'
-                # take single file
-                # produce features matrix & labels
-                # Return features & label matrix       
-    """
+    """ Train Time-Domain Classifier On Each .wav file """ 
+    print("Training Time Series:")
+    features.time_domain_features(trainwavs,SGD_CLF_dict['time_clf'])
 
-    """ Train the Time Space Features Classifier """
-    
-
-
-    for wav in trainwavs:               # for each bit of training data:
-        
-        # take single wav obj
-        # pass it to features script
-        # uses obj to train time, FFT and Spectrogram classifiers
-        pass
-        
+    print(time.process_time())
 
 
 
