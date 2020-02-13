@@ -25,12 +25,13 @@ INSTRUMENT CLASSIFIER V1 - FEATURE PRODUCTION
 
 """
 
-def time_domain_features(training_wavfiles,clf,test=False):
+def time_domain_features(training_wavfiles,clf,classes,test=False):
     """
     Extract features and train 
     --------------------------------
     training_wavfiles (list) : : List of all instances of .wav file objects
     clf (obj) : Classifier Object to fit w/ training data
+    test (bool) : Determines wether or not method trains of test a .wav file
     --------------------------------
 
     """    
@@ -38,10 +39,11 @@ def time_domain_features(training_wavfiles,clf,test=False):
         X,y = timeseries.waveform_features(wav) # produce features and labels
         data = X.flatten()              # flatten the time array
         setattr(wav,'data',data)        # overwrite waveform attrb
-        if test == False:               # if not testinf data
-            clf.partial_fit(X,y)        # fit the data set
-        else:
-            pass
+        if test == False:               # if not testing data
+            clf.partial_fit(X,y,classes=classes)        # fit the data set
+        if test == True:                # if testing data set
+            clf.predict(X)              # predict the outcomes
+    return clf,y                        # return the fitted classifier & labels
         
 
 

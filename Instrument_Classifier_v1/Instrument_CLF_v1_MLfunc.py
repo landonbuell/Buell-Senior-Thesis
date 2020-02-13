@@ -55,7 +55,8 @@ def SGD_CLFs (names,seed=None):
     """
     classifier_dictionary = {}                  # empty dictionary
     for I in range(len(names)):                 # for each desired classifier
-        CLF = SGDClassifier(random_state=seed)  # create classifier
+        CLF = SGDClassifier(random_state=seed,
+                max_iter=1000,tol=1e-3)         # create classifier
         setattr(CLF,'name',str(names[I]))       # attach name tp classifier
         pair = {str(names[I]):CLF}              # name calls to specific clf inst
         classifier_dictionary.update(pair)      # add to dictionary
@@ -88,3 +89,18 @@ def Train_CLF (classifier,X,y):
     Returns trained Classifier object
     """
     pass
+
+            #### METRICS ####
+
+def confusion_matrix (CLF,ytest,ypred,labs,show=False):
+    """ Produce sklearn confusion matrix for classifier predictions """
+    matrix = metrics.confusion_matrix(ytest,ypred)
+    if show == True:
+        plt.title(str(CLF.name),size=40,weight='bold')
+        plt.imshow(matrix,cmap=plt.cm.binary)
+        plt.xticks(labs)
+        plt.yticks(labs)
+        plt.xlabel('Actual Class',size=20,weight='bold')
+        plt.ylabel('Predicted Class',size=20,weight='bold')
+        plt.show()
+    return matrix

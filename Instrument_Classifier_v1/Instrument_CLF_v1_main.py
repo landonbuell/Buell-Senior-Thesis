@@ -39,17 +39,18 @@ if __name__ == '__main__':
     int_dir = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Instrument_Classifier_v1'
     wav_dir = 'C:/Users/Landon/Documents/wav_audio'
     out_dir = int_dir + '/wavdata'
-
+    
+    print("Initializing:")
     func.make_paths([out_dir])                      # create output path if non-existant
     wavfiles = func.read_directory(wav_dir)         # make all wav file instances
-    MLfunc.label_encoder(wavfiles)                  # make numerical labels
+    classes = MLfunc.label_encoder(wavfiles)        # make numerical labels
     tt_ratio = 0.01                                 # train/test size ratio
     trainpts,testpts = MLfunc.split_train_test(len(wavfiles),tt_ratio)
     
     trainwavs = [wavfiles[I] for I in trainpts]     # wavs to train CLFs
     testwavs = [wavfiles[I] for I in testpts]       # wavs to test CLFs
     os.chdir(wav_dir)           # change to wav directory
-    for wav in trainwavs:       # each training file
+    for wav in wavfiles:        # each file
         wav.read_raw_wav()      # read waveform
     os.chdir(int_dir)           # intial dir
     SGD_CLF_dict = MLfunc.SGD_CLFs(['time_clf','freq_clf',
@@ -57,8 +58,15 @@ if __name__ == '__main__':
 
     """ Train Time-Domain Classifier On Each .wav file """ 
     print("Training Time Series:")
-    features.time_domain_features(trainwavs,SGD_CLF_dict['time_clf'])
-
+    time_series_clf,y = features.time_domain_features(
+        trainwavs,SGD_CLF_dict['time_clf'],classes,test=False)
+    ytrue = np.array([x.class_num for x in trainwavs])
+    time_series_clf,ypred = features.time_domain_features(
+        testwavs,time_series_clf,classes,test=True)
+    print(np.shape(ytrue))
+    print(np.shape(ypred))
+    confmat = MLfunc.confusion_matrix(time_series_clf,
+                    ytrue,ypred,classes,show=True)
     print(time.process_time())
 
 
