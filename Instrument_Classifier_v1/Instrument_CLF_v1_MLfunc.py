@@ -8,6 +8,7 @@ Machine Learning Functions
             #### IMPORTS ####
 
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 
 from sklearn.linear_model import SGDClassifier
@@ -78,25 +79,37 @@ def split_train_test (nsamps,ratio):
     test = shuffled[:test_size]                 # set testing idxs
     return train,test                           # return data pts
 
-def Train_CLF (classifier,X,y):
-    """
-    Train a classier object with features and labels
+def prediction_function (CLF,X):
+    """ 
+    Make predictions about input data X
     --------------------------------
-    classifier (obj) : Classifier instance to train
-    X (array) : Matrix of training data, (N x M)
-    y (array) : vector of training labels (N x 1)
+    CLF (class) : Trained classifier model instance to test on
+    X (array) : feature matrix to make prediction on
     --------------------------------
-    Returns trained Classifier object
+    return final prediction of data X on CLF
     """
-    pass
+    confidence = CLF.decision_function(X)   # conficidence scores on X matrix
+    # conf is (n_samps x n_classes)         
+    scores = np.sum(confidence,axis=0,dtype=int)
+    prediction = np.argmax(scores)          # prediction for X matrix 
+    return prediction                       # return vals
 
             #### METRICS ####
 
-def confusion_matrix (CLF,ytest,ypred,labs,show=False):
-    """ Produce sklearn confusion matrix for classifier predictions """
-    matrix = metrics.confusion_matrix(ytest,ypred)
+def confusion_matrix (title,ytrue,ypred,labs,show=False):
+    """ 
+    Produce sklearn confusion matrix for classifier predictions 
+    --------------------------------
+    title (str) : Title for confusion matrix plot
+    ytrue (arr) : (1 x N) size array of actual instance labels
+    ypred (arr) : (1 x N) size array of classifier predictions
+    labs (arr) : (1 x M) array of class labels
+    --------------------------------
+    Return (n_classes x n_classes) confusion matrix
+    """
+    matrix = metrics.confusion_matrix(ytrue,ypred)
     if show == True:
-        plt.title(str(CLF.name),size=40,weight='bold')
+        plt.title(str(title),size=40,weight='bold')
         plt.imshow(matrix,cmap=plt.cm.binary)
         plt.xticks(labs)
         plt.yticks(labs)

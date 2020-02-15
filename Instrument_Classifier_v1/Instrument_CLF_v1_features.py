@@ -25,26 +25,38 @@ INSTRUMENT CLASSIFIER V1 - FEATURE PRODUCTION
 
 """
 
-def time_domain_features(training_wavfiles,clf,classes,test=False):
+def train_wavfile (wavfile,clf_dict,classes):
     """
-    Extract features and train 
+    Train single wav file on classifiers 
     --------------------------------
-    training_wavfiles (list) : : List of all instances of .wav file objects
-    clf (obj) : Classifier Object to fit w/ training data
-    test (bool) : Determines wether or not method trains of test a .wav file
+    wavfile (inst) : instance of .wav file to train on classifiers
+    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
+    classes (array) : array of class labels
     --------------------------------
+    Returns classifier dictionary w/ trained models
+    """   
+    
+    X,y = timeseries.waveform_features(wavfile,M=2**12)     # get waveform features
+    setattr(wavfile,'data',X.flatten())                     # flatten, set attrb
+    clf_dict['time_clf'].partial_fit(X,y,classes=classes)   # partial fit data set
 
-    """    
-    for wav in training_wavfiles:       # for each bit of training data:    
-        X,y = timeseries.waveform_features(wav) # produce features and labels
-        data = X.flatten()              # flatten the time array
-        setattr(wav,'data',data)        # overwrite waveform attrb
-        if test == False:               # if not testing data
-            clf.partial_fit(X,y,classes=classes)        # fit the data set
-        if test == True:                # if testing data set
-            clf.predict(X)              # predict the outcomes
-    return clf,y                        # return the fitted classifier & labels
-        
+    #hann = freqseries.hanning_window(X,M=2**12)             # Hann window to waveform
+    #X,y = freqseries.freqspec_features(wavfile,hann)        # get FFT features
+    #clf_dict['freq_clf'].partial_fit(X,y,classes=classes)   # partial fit data set
 
+    return clf_dict
 
-        
+def test_wavfile (wavfile,clf_dict,classes):
+    """
+    Test single wav file on classifiers 
+    --------------------------------
+    wavfile (inst) : instance of .wav file to train on classifiers
+    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
+    classes (array) : array of class labels
+    --------------------------------
+    Returns prediction on wavfile
+    """  
+    actual = wavfile.class_num                              # actual class
+    X,y = timeseries.waveform_features(wavfile,M=2**12)     # get waveform features
+    time_pred = MLfunc.prediction_function(clf_dict['time_clf'],X)  # predict case X
+    return actual,time_pred

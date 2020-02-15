@@ -36,3 +36,27 @@ def hanning_window(X,M=(2**12)):
         Z = np.append(Z,row)    # add to Z matrix
     Z = Z.reshape(np.shape(X))
     return Z                    # return the new matrix
+
+def freqspec_features (wavobj,X,M=(2**12)):
+    """
+    Produce frequency series features for 'data' attribute on wavobj instance
+        Must have already run 'read_raw_wav()' method for this to work!
+    --------------------------------
+    wavobj (class) : Instance of particular wavfile object
+    X (array) : 
+    M (int) number of points in array
+    --------------------------------
+    Returns (N x M) array of features amd (M x 1) array of labels
+    """
+    #fspace = np.fftfreq(n=M,d=1/44100)  # frequency space axis
+    #pts = np.where((fspace>=0)&(fspace<=6000))
+    xshape = np.shape(X)            # shape of input array
+    Z = fftpack.fft(x=X,n=M,axis=-1)# compute fft of each row
+    Z = np.real(Z)**2               # compute power spectrum
+    N = np.shape(Z)[0]                  # number of rows 
+    y = np.ones((N,1))*wavobj.class_num # target labels
+    y = y.ravel()                       # flatten 
+    return Z,y                      # return features & labels
+
+    
+

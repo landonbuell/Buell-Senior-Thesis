@@ -46,7 +46,7 @@ def waveform_features (wavobj,M=(2**12)):
     N = int(len(X)/M)                   # n rows
     X = X.reshape(N,M)                  # reshape 
     y = np.ones((N,1))*wavobj.class_num # target labels
-    #y = np.transpose(y)
+    y = y.ravel()                       # flatten 
     return X,y                          # return matrix & targets
 
 
