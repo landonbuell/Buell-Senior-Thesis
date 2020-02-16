@@ -16,6 +16,7 @@ from sklearn.preprocessing import LabelEncoder
 import sklearn.metrics as metrics
 
 import Instrument_CLF_v1_func as func
+import Instrument_CLF_v1_features as features
 
 """
 INSTRUMENT CLASSIFIER V1 - MACHINE LEARNING ALGORITHM RELATED FUNCTIONS
@@ -93,6 +94,51 @@ def prediction_function (CLF,X):
     scores = np.sum(confidence,axis=0,dtype=int)
     prediction = np.argmax(scores)          # prediction for X matrix 
     return prediction                       # return vals
+
+def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
+    """
+    Train Classifiers on set of file obejct instances
+    --------------------------------
+    wavfiles (inst) : instance of .wav file to train on classifiers
+    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
+    read_dir (str) : local directory path where raw .wav files are
+    home_dir (str) : local directory path where program is based
+    classes (array) : array of class labels
+    --------------------------------
+    Returns classifier dictionary object
+    """
+    for wavfile in wavfiles:               # each training instance 
+        print("\t\t",wavfile.filename)      # print filename
+        os.chdir(read_dir)                  # change to wav directory
+        wavfile.read_raw_wav()              # read waveform (add attrb)
+        os.chdir(home_dir)                  # intial dir
+        clf_dict = features.train_wavfile(wavfile,clf_dict,classes)  
+        del(wavfile.data)                   # delete waveform
+    return clf_dict                         # return the classifier dictionary
+
+def test_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
+    """
+    test Classifiers on set of file obejct instances
+    --------------------------------
+    wavfiles (inst) : instance of .wav file to train on classifiers
+    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
+    read_dir (str) : local directory path where raw .wav files are
+    home_dir (str) : local directory path where program is based
+    classes (array) : array of class labels
+    --------------------------------
+    Returns array of actual values & predicted values
+    """
+    ytrue,ypred = np.array([]),np.array([])
+    for wavfile in wavfiles:                # each testing instance
+        print("\t\t",wavfile.filename)      # print filename
+        os.chdir(read_dir)                  # change to wav directory
+        wavfile.read_raw_wav()              # read waveform (add attrb)
+        os.chdir(home_dir)                  # intial dir
+        actl,pred = features.test_wavfile(wavfile,clf_dict,classes)
+        del(wavfile.data)                   # delete waveform
+        ytrue = np.append(ytrue,actl)       # add actual class
+        ypred = np.append(ypred,pred)       # add predicted value
+    return ytrue,ypred
 
             #### METRICS ####
 

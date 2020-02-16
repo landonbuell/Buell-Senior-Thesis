@@ -44,7 +44,7 @@ if __name__ == '__main__':
     func.make_paths([out_dir])                      # create output path if non-existant
     wavfiles = func.read_directory(wav_dir)         # make all wav file instances
     classes = MLfunc.label_encoder(wavfiles)        # make numerical labels
-    tt_ratio = 0.3                                  # train/test size ratio
+    tt_ratio = 0.1                                  # train/test size ratio
     trainpts,testpts = MLfunc.split_train_test(len(wavfiles),tt_ratio)
     
     trainwavs = [wavfiles[I] for I in trainpts] # wavs to train CLFs
@@ -52,38 +52,26 @@ if __name__ == '__main__':
     print("Number of Training Files:",len(trainpts))
     print("Number of Testing Files:",len(testpts))
     
-    SGD_CLF_dict = MLfunc.SGD_CLFs(['time_clf','freq_clf',
+    SGD_CLFs = MLfunc.SGD_CLFs(['time_clf','freq_clf',
                                     'form_clf','spect_clf'])
 
-    t_0 = time.process_time()
     """ Train All Classifiers """ 
+    t_0 = time.process_time()
     print("Training Classifiers:")
-    for wavfile in trainwavs:               # each training instance 
-        print("\t\t",wavfile.filename)      # print filename
-        os.chdir(wav_dir)                   # change to wav directory
-        wavfile.read_raw_wav()              # read waveform (add attrb)
-        os.chdir(int_dir)                   # intial dir
-        SGD_CLF_dict = features.train_wavfile(wavfile,SGD_CLF_dict,classes)  
-        del(wavfile.data)                   # delete waveform
+    SGD_CLFs = MLfunc.train_classifiers(trainwavs,SGD_CLFs,
+                             wav_dir,int_dir,classes)
     t_1 = time.process_time()
     print("\tTraining Time:",np.round(t_1-t_0,4),"secs.\n")
 
-    t_2 = time.process_time()
     """ Test All Classifiers """
+    t_2 = time.process_time()
     print("Testing Classisifers:")
-    ytrue,ypred = np.array([]),np.array([])
-    for wavfile in testwavs:                # each testing instance
-        print("\t\t",wavfile.filename)      # print filename
-        os.chdir(wav_dir)                   # change to wav directory
-        wavfile.read_raw_wav()              # read waveform (add attrb)
-        os.chdir(int_dir)                   # intial dir
-        actl,pred = features.test_wavfile(wavfile,SGD_CLF_dict,classes)
-        del(wavfile.data)                   # delete waveform
-        ytrue = np.append(ytrue,actl)        # add actual class
-        ypred = np.append(ypred,pred)       # add predicted value
+    ytrue,ypred = MLfunc.test_classifiers(testwavs,SGD_CLFs,
+                             wav_dir,int_dir,classes)
     t_3 = time.process_time()
     print("\tTestingTime:",np.round(t_3-t_2,4),"secs.\n")
 
+    
     MLfunc.confusion_matrix('Testy',ytrue,ypred,classes,show=True)
 
     print(time.process_time())
