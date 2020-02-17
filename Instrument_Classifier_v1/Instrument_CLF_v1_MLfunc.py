@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import os
 
 from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import LogistcRegression
 from sklearn.preprocessing import LabelEncoder
 import sklearn.metrics as metrics
 
@@ -46,24 +47,6 @@ def label_encoder (wavobjs):
         setattr(wavobjs[I],'class_num',class_labels[I])
     return class_labels                 # return the list for good measure
 
-def SGD_CLFs (names,seed=None):
-    """
-    Create dictionary of SGD Classifier Object
-    --------------------------------
-    name (list) : name to attach to each SGD object
-    seed (int) : seed nunber to use for reproduceable results (None by default)
-    --------------------------------
-    returns SGD Object w/ name
-    """
-    classifier_dictionary = {}                  # empty dictionary
-    for I in range(len(names)):                 # for each desired classifier
-        CLF = SGDClassifier(random_state=seed,
-                max_iter=1000,tol=1e-3)         # create classifier
-        setattr(CLF,'name',str(names[I]))       # attach name tp classifier
-        pair = {str(names[I]):CLF}              # name calls to specific clf inst
-        classifier_dictionary.update(pair)      # add to dictionary
-    return classifier_dictionary                # return the dictionary
-
 def split_train_test (nsamps,ratio):
     """
     generate a series of indicies for training & testing data
@@ -95,6 +78,46 @@ def prediction_function (CLF,X):
     prediction = np.argmax(scores)          # prediction for X matrix 
     return prediction                       # return vals
 
+#### CLASSIFIER OBJECTS ####
+
+def SGD_CLFs (names,seed=None):
+    """
+    Create dictionary of SGD Classifier Object
+    --------------------------------
+    name (list) : name to attach to each SGD object
+    seed (int) : seed nunber to use for reproduceable results (None by default)
+    --------------------------------
+    returns SGD Object w/ name
+    """
+    classifier_dictionary = {}                  # empty dictionary
+    for name in names:                          # for each desired classifier
+        CLF = SGDClassifier(random_state=seed,
+                max_iter=1000,tol=1e-3)         # create classifier
+        setattr(CLF,'name',str(name))           # attach name tp classifier
+        pair = {str(name):CLF}                  # name calls to specific clf inst
+        classifier_dictionary.update(pair)      # add to dictionary
+    return classifier_dictionary                # return the dictionary
+
+def LogReg_CLFs (names,seed=None):
+    """
+    Create dictionary of Logisitc Regression Classifier Objects
+    --------------------------------
+    name (list) : name to attach to each SGD object
+    seed (int) : seed nunber to use for reproduceable results (None by default)
+    --------------------------------
+    returns SGD Object w/ name
+    """  
+    classifier_dictionary = {}                  # empty dictionary
+    for name in names:                          # for each desired classifier 
+        CLF = LogistcRegression(random_state=None,
+                max_iter=100,tol=1e-4)
+        setattr(CLF, 'name', name)              # attatch name to classifier
+        pair = {str(name):CLF}                  # create dict pair
+        classifier_dictionary.update(pair)      # add to dictionary
+    return classifier_dictionary                # return dictionary
+        
+        
+
 def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     """
     Train Classifiers on set of file obejct instances
@@ -108,7 +131,7 @@ def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     Returns classifier dictionary object
     """
     for wavfile in wavfiles:               # each training instance 
-        print("\t\t",wavfile.filename)      # print filename
+        #print("\t\t",wavfile.filename)      # print filename
         os.chdir(read_dir)                  # change to wav directory
         wavfile.read_raw_wav()              # read waveform (add attrb)
         os.chdir(home_dir)                  # intial dir
@@ -130,7 +153,7 @@ def test_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     """
     ytrue,ypred = np.array([]),np.array([])
     for wavfile in wavfiles:                # each testing instance
-        print("\t\t",wavfile.filename)      # print filename
+        #print("\t\t",wavfile.filename)      # print filename
         os.chdir(read_dir)                  # change to wav directory
         wavfile.read_raw_wav()              # read waveform (add attrb)
         os.chdir(home_dir)                  # intial dir
@@ -142,9 +165,10 @@ def test_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
 
             #### METRICS ####
 
-def confusion_matrix (title,ytrue,ypred,labs,show=False):
+def confusion_matrix (title,ytrue,ypred,labs,save=False,show=False):
     """ 
     Produce sklearn confusion matrix for classifier predictions 
+    Can plot to console or save to current local path
     --------------------------------
     title (str) : Title for confusion matrix plot
     ytrue (arr) : (1 x N) size array of actual instance labels
@@ -154,12 +178,15 @@ def confusion_matrix (title,ytrue,ypred,labs,show=False):
     Return (n_classes x n_classes) confusion matrix
     """
     matrix = metrics.confusion_matrix(ytrue,ypred)
-    if show == True:
+    if show == True or save == True:
         plt.title(str(title),size=40,weight='bold')
         plt.imshow(matrix,cmap=plt.cm.binary)
         plt.xticks(labs)
         plt.yticks(labs)
         plt.xlabel('Actual Class',size=20,weight='bold')
         plt.ylabel('Predicted Class',size=20,weight='bold')
-        plt.show()
+        if save == True:
+            plt.savefig(str(title)+'.png')
+        if show == True:
+            plt.show()
     return matrix
