@@ -16,6 +16,8 @@ import Instrument_CLF_v1_func as func
 
 """
 INSTRUMENT CLASSIFIER V1 - FREQUENCY SERIES FUNCTIONS   
+    - Creating time axes
+    - organizing waveform
 
 """
 

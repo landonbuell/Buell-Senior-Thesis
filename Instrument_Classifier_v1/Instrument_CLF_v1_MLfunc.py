@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import os
 
 from sklearn.linear_model import SGDClassifier
-from sklearn.linear_model import LogistcRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 import sklearn.metrics as metrics
 
@@ -78,7 +78,7 @@ def prediction_function (CLF,X):
     prediction = np.argmax(scores)          # prediction for X matrix 
     return prediction                       # return vals
 
-#### CLASSIFIER OBJECTS ####
+            #### CLASSIFIER OBJECTS ####
 
 def SGD_CLFs (names,seed=None):
     """
@@ -109,15 +109,13 @@ def LogReg_CLFs (names,seed=None):
     """  
     classifier_dictionary = {}                  # empty dictionary
     for name in names:                          # for each desired classifier 
-        CLF = LogistcRegression(random_state=None,
+        CLF = LogisticRegression(random_state=None,
                 max_iter=100,tol=1e-4)
         setattr(CLF, 'name', name)              # attatch name to classifier
         pair = {str(name):CLF}                  # create dict pair
         classifier_dictionary.update(pair)      # add to dictionary
     return classifier_dictionary                # return dictionary
-        
-        
-
+    
 def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     """
     Train Classifiers on set of file obejct instances
