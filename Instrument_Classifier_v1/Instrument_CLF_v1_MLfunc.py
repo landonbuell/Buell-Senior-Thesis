@@ -8,11 +8,13 @@ Machine Learning Functions
             #### IMPORTS ####
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
 from sklearn.linear_model import SGDClassifier
 from sklearn.linear_model import LogisticRegression
+
 from sklearn.preprocessing import LabelEncoder
 import sklearn.metrics as metrics
 
@@ -128,13 +130,21 @@ def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     --------------------------------
     Returns classifier dictionary object
     """
-    for wavfile in wavfiles:               # each training instance 
-        #print("\t\t",wavfile.filename)      # print filename
+    n_samples = len(wavfiles)               # number of samples
+    X,y = np.array([]),np.array([])         # X matrix & target vector
+    for wavfile in wavfiles:                # each training instance 
+        sample_features = np.array([])      # row of features for instance
         os.chdir(read_dir)                  # change to wav directory
         wavfile.read_raw_wav()              # read waveform (add attrb)
         os.chdir(home_dir)                  # intial dir
-        clf_dict = features.train_wavfile(wavfile,clf_dict,classes)  
+        # FUNCTION TO PULL OUT N FEATURES FROM TIME SERIES SINGLE WAV FILE INSTANCE    
+        x = features.timeseries_features(wavfile)
+        # FUNCTION TO PULL OUT N FEATURES FROM FREQ SERIES SINGLE WAV FILE INSTANCE 
+        x = None
+
+        y = np.append(y,wavfile.class_num)  # add to target vector
         del(wavfile.data)                   # delete waveform
+    X = X.reshape(n_samples,-1)             # reshape n_samps x n_features
     return clf_dict                         # return the classifier dictionary
 
 def test_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):

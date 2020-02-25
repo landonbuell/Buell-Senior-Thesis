@@ -52,22 +52,24 @@ if __name__ == '__main__':
     print("Number of Training Files:",len(trainpts))
     print("Number of Testing Files:",len(testpts))
     
-    SGD_CLFs = MLfunc.SGD_CLFs(['time_clf','freq_clf',
-                                    'form_clf','spect_clf'])
+    
 
     """ Train All Classifiers """ 
     t_0 = time.process_time()
     print("Training Classifiers:")
-    SGD_CLFs = MLfunc.train_classifiers(trainwavs,SGD_CLFs,
-                             wav_dir,int_dir,classes)
+    
+    CLF_dict = MLfunc.train_classifiers(trainwavs,CLF_dict,
+                                        wav_dir,int_dir,classes)
+
     t_1 = time.process_time()
     print("\tTraining Time:",np.round(t_1-t_0,4),"secs.\n")
 
     """ Test All Classifiers """
     t_2 = time.process_time()
     print("Testing Classisifers:")
-    ytrue,ypred = MLfunc.test_classifiers(testwavs,SGD_CLFs,
-                             wav_dir,int_dir,classes)
+   
+
+
     t_3 = time.process_time()
     print("\tTestingTime:",np.round(t_3-t_2,4),"secs.\n")
 

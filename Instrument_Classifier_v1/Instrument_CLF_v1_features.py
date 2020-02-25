@@ -19,32 +19,40 @@ import Instrument_CLF_v1_MLfunc as MLfunc
 INSTRUMENT CLASSIFIER V1 - FEATURE PRODUCTION
     This program contains functions and methods that will be used to oversee
     the generation of features for each wavfile class instance
-    - Calls to 'timeseries' and 'freqseries' to produce matrices (X by convention)
+    - Calls to 'timeseries' and 'freqseries' to produce rows for X matrix
     - Each row of each X matrix is a particular sample case
     - Each column of each X matrix is a particular feature
 
 """
 
-def train_wavfile (wavfile,clf_dict,classes):
+def timeseries_features(wavfile):
     """
-    Train single wav file on classifiers 
+    Use features from each wavfile instance
     --------------------------------
     wavfile (inst) : instance of .wav file to train on classifiers
     clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
     classes (array) : array of class labels
     --------------------------------
-    Returns classifier dictionary w/ trained models
+    Returns array of time series features for classification
     """   
-    
-    X,y = timeseries.waveform_features(wavfile,M=2**12)     # get waveform features
-    setattr(wavfile,'data',X.flatten())                     # flatten, set attrb
-    clf_dict['time_clf'].partial_fit(X,y,classes=classes)   # partial fit data set
+    attack = timeseries.attack_frac(wavfile,start=0.1,stop=0.9) 
+    release = timeseries.release_frac(wavfile,start=0.1,stop=0.7)
 
-    #hann = freqseries.hanning_window(X,M=2**12)             # Hann window to waveform
-    #X,y = freqseries.freqspec_features(wavfile,hann)        # get FFT features
-    #clf_dict['freq_clf'].partial_fit(X,y,classes=classes)   # partial fit data set
+    # assemble into a vector
+    feature_array = np.array([attack,release])
+    return feature_array 
 
-    return clf_dict
+def freqseries_features(wavfile):
+    """
+    Use features from each wavfile instance
+    --------------------------------
+    wavfile (inst) : instance of .wav file to train on classifiers
+    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
+    classes (array) : array of class labels
+    --------------------------------
+    Returns array of freqency series features for classification
+    """
+    n_peaks = None
 
 def test_wavfile (wavfile,clf_dict,classes):
     """
