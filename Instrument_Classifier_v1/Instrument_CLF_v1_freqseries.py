@@ -49,11 +49,11 @@ def freqspec_features (wavobj,X,M=(2**12)):
     Returns (N x M) 
     """
     fspace = np.fftfreq(n=M,d=1/44100)      # frequency space axis
-    pts = np.where((fspace>=0)&(fspace<=6000))
+    pts = np.where((fspace>=0)&(fspace<=10000))
     xshape = np.shape(X)                    # shape of input array
     Z = fftpack.fft(x=X,n=M,axis=-1)        # compute fft of each row
     Z = np.abs(Z)**2                        # compute power spectrum
-    return Z                                # return features & labels
+    return Z                                # return features
 
     
 

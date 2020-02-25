@@ -44,7 +44,7 @@ if __name__ == '__main__':
     func.make_paths([out_dir])                      # create output path if non-existant
     wavfiles = func.read_directory(wav_dir)         # make all wav file instances
     classes = MLfunc.label_encoder(wavfiles)        # make numerical labels
-    tt_ratio = 0.1                                  # train/test size ratio
+    tt_ratio = 0.7                                  # train/test size ratio
     trainpts,testpts = MLfunc.split_train_test(len(wavfiles),tt_ratio)
     
     trainwavs = [wavfiles[I] for I in trainpts] # wavs to train CLFs
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     print("Number of Training Files:",len(trainpts))
     print("Number of Testing Files:",len(testpts))
     
-    
+    CLF_dict = MLfunc.LogReg_CLFs(['LogReg'],seed=None)
 
     """ Train All Classifiers """ 
     t_0 = time.process_time()
@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
     t_1 = time.process_time()
     print("\tTraining Time:",np.round(t_1-t_0,4),"secs.\n")
+
 
     """ Test All Classifiers """
     t_2 = time.process_time()

@@ -30,16 +30,15 @@ def timeseries_features(wavfile):
     Use features from each wavfile instance
     --------------------------------
     wavfile (inst) : instance of .wav file to train on classifiers
-    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
-    classes (array) : array of class labels
     --------------------------------
     Returns array of time series features for classification
     """   
     attack = timeseries.attack_frac(wavfile,start=0.1,stop=0.9) 
     release = timeseries.release_frac(wavfile,start=0.1,stop=0.7)
+    srt_to_max,max_to_stp = timeseries.max_amp(wavfile,ref=0.1)
 
     # assemble into a vector
-    feature_array = np.array([attack,release])
+    feature_array = np.array([attack,release,srt_to_max,max_to_stp])
     return feature_array 
 
 def freqseries_features(wavfile):
@@ -47,12 +46,16 @@ def freqseries_features(wavfile):
     Use features from each wavfile instance
     --------------------------------
     wavfile (inst) : instance of .wav file to train on classifiers
-    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
-    classes (array) : array of class labels
     --------------------------------
     Returns array of freqency series features for classification
     """
-    n_peaks = None
+    timeseries.reshape_waveform(wavfile)    # make npts % M = 0
+
+
+    # assemble into vector
+    feature_array = np.array([])
+    #return feature_array
+    return None
 
 def test_wavfile (wavfile,clf_dict,classes):
     """

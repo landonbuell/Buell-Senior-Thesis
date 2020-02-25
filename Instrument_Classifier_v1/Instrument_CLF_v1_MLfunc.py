@@ -80,7 +80,7 @@ def prediction_function (CLF,X):
     prediction = np.argmax(scores)          # prediction for X matrix 
     return prediction                       # return vals
 
-            #### CLASSIFIER OBJECTS ####
+            #### CREATE CLASSIFIER OBJECTS ####
 
 def SGD_CLFs (names,seed=None):
     """
@@ -117,6 +117,11 @@ def LogReg_CLFs (names,seed=None):
         pair = {str(name):CLF}                  # create dict pair
         classifier_dictionary.update(pair)      # add to dictionary
     return classifier_dictionary                # return dictionary
+
+def SVM_CLFs (names,seeds=None):
+    pass
+
+            #### TRAINING AND TESTING DEFINITIONS ####
     
 def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     """
@@ -132,19 +137,24 @@ def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     """
     n_samples = len(wavfiles)               # number of samples
     X,y = np.array([]),np.array([])         # X matrix & target vector
-    for wavfile in wavfiles:                # each training instance 
-        sample_features = np.array([])      # row of features for instance
+    for wavfile in wavfiles:                # each training instance
+        print("\t\t",wavfile.filename)
         os.chdir(read_dir)                  # change to wav directory
         wavfile.read_raw_wav()              # read waveform (add attrb)
         os.chdir(home_dir)                  # intial dir
         # FUNCTION TO PULL OUT N FEATURES FROM TIME SERIES SINGLE WAV FILE INSTANCE    
-        x = features.timeseries_features(wavfile)
+        x1 = features.timeseries_features(wavfile)
         # FUNCTION TO PULL OUT N FEATURES FROM FREQ SERIES SINGLE WAV FILE INSTANCE 
-        x = None
-
+        x2 = features.freqseries_features(wavfile)
+        # row of features for instance
+        sample_features = np.array(x1).flatten()   
         y = np.append(y,wavfile.class_num)  # add to target vector
-        del(wavfile.data)                   # delete waveform
+        del(wavfile.data)                   # delete waveform (save RAM)
+        X = np.append(X,sample_features)    # add row to matrix
     X = X.reshape(n_samples,-1)             # reshape n_samps x n_features
+    print("X shape:",X.shape)
+    print("y shape:",y.shape)
+    clf_dict['LogReg'].fit(X,y)
     return clf_dict                         # return the classifier dictionary
 
 def test_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):

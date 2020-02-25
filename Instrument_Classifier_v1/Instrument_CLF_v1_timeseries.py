@@ -43,17 +43,15 @@ def reshape_waveform (wavobj,M=(2**12)):
     --------------------------------
     Returns (N x M) array of features amd (M x 1) array of labels
     """
-    ext = len(wavobj.data) % M          # remaining idx left over
-    X = wavobj.data[ext:]               # crop waveform
-    N = int(len(X)/M)                   # n rows
-    X = X.reshape(N,M)                  # reshape 
-    y = np.ones((N,1))*wavobj.class_num # target labels
-    y = y.ravel()                       # flatten 
-    return X,y                          # return matrix & targets
+    ext = len(wavobj.data) % M  # remaining idx left over
+    X = wavobj.data[ext:]       # crop waveform
+    setattr(wavobj,'data',X)    # rest attribute
+    return X                    # return matrix & targets
 
 def attack_frac (wavobj,start=0.1,stop=0.9):
     """
-    Compute attack time of waveform as fraction of full file lenght
+    Compute attack time of waveform as fraction of full file length
+        Amplitude of waveform must be normalize to max(waveform) == 1
     --------------------------------
     wavobj (inst) : Instance of .wav file exact feature from
     start (float) : statring ampltiude threshold to test, bounded by (0,1) 
@@ -61,7 +59,7 @@ def attack_frac (wavobj,start=0.1,stop=0.9):
     --------------------------------
     returns fraction of total file for rise time (i.e. bounded by (0,1])
     """
-    waveform = wavobj.data          # extract waveform from instance
+    waveform = np.abs(wavobj.data)  # extract waveform from instance
     n_pts = len(waveform)           # number of points in waveform
     start_idx = 0                   # set index counter 
     while waveform[start_idx] <= start:     # while less than my val
@@ -76,6 +74,7 @@ def attack_frac (wavobj,start=0.1,stop=0.9):
 def release_frac (wavobj,start=0.1,stop=0.9):
     """
     Compute decay time as fraction of full file length
+        Amplitude of waveform must be normalize to max(waveform) == 1
     --------------------------------
     wavobj (inst) : Instance of .wav file exact feature from
     start (float) : statring ampltiude threshold to test, bounded by (0,1) 
@@ -83,7 +82,7 @@ def release_frac (wavobj,start=0.1,stop=0.9):
     --------------------------------
     returns fraction of total file for rise time (i.e. bounded by (0,1])
     """
-    waveform = wavobj.data          # extract waveform from instance
+    waveform = np.abs(wavobj.data)  # extract waveform from instance
     n_pts = len(waveform)           # number of points in waveform
     start_idx = -1                  # set index counter 
     while waveform[start_idx] <= start:     # while less than my val
@@ -95,5 +94,20 @@ def release_frac (wavobj,start=0.1,stop=0.9):
     risetime = idx_diff / n_pts     # fraction of total file
     return risetime                 # return that value
 
-def 
-
+def max_amp (wavobj,ref=0.1):
+    """
+    Compute fraction of time to reach ref pt to max amp
+        Amplitude of waveform must be normalize to max(waveform) == 1
+    --------------------------------
+    wavobj (inst) : Instance of .wav file exact feature from
+    ref (float) : refrence ampltide to use as bounds
+    --------------------------------
+    """
+    waveform = wavobj.data          # extract waveform from instance
+    n_pts = len(waveform)           # number of points in waveform
+    max_idx = np.argmax(waveform)   # index of max of waveform
+    above_ref = np.where((waveform>=ref))           # find pts where waveform >= ref
+    start_idx,stop_idx = above_ref[0],above_ref[-1] # isolate end pts
+    start_to_max = np.abs(max_idx-start_idx)/n_pts  # % of time to reach max
+    max_to_stop = np.abs(max_idx-stop_idx)/n_pts    # % of time to reach ref
+    return start_to_max,max_to_stop                 # return values
