@@ -38,7 +38,8 @@ def timeseries_features(wavfile):
     srt_to_max,max_to_stp = timeseries.max_amp(wavfile,ref=0.1)
 
     # assemble into a vector
-    feature_array = np.array([attack,release,srt_to_max,max_to_stp])
+    feature_array = np.array([attack,release,srt_to_max,max_to_stp],
+                             dtype=float)
     return feature_array 
 
 def freqseries_features(wavfile):
@@ -53,21 +54,19 @@ def freqseries_features(wavfile):
 
 
     # assemble into vector
-    feature_array = np.array([])
-    #return feature_array
-    return None
+    feature_array = np.array([],
+                             dtype=float)
+    return feature_array
 
-def test_wavfile (wavfile,clf_dict,classes):
+def concatenate_features(wavfile):
     """
-    Test single wav file on classifiers 
+    Concatenate all features into  array for single sample instance
     --------------------------------
     wavfile (inst) : instance of .wav file to train on classifiers
-    clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
-    classes (array) : array of class labels
     --------------------------------
-    Returns prediction on wavfile
-    """  
-    actual = wavfile.class_num                              # actual class
-    X,y = timeseries.waveform_features(wavfile,M=2**12)     # get waveform features
-    time_pred = MLfunc.prediction_function(clf_dict['time_clf'],X)  # predict case X
-    return actual,time_pred
+    Returns array of (1 x N) containing all features 
+    """
+    sample_row = np.array([timeseries_features(wavfile)],
+                          dtype=float)
+    sample_row = sample_row.ravel()         # flatten array
+    return sample_row                   # return the row

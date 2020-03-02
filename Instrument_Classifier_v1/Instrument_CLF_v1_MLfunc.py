@@ -12,6 +12,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import SGDClassifier
 from sklearn.linear_model import LogisticRegression
 
@@ -30,23 +31,25 @@ INSTRUMENT CLASSIFIER V1 - MACHINE LEARNING ALGORITHM RELATED FUNCTIONS
 
             #### FUNCTIONS DEFINTIONS ####
 
-def label_encoder (wavobjs):
+def label_encoder (objs,attr):
     """
     Convert instrument name strings into 0-idx class number
         Uses sklearn.preprocessing.LabelEncoder
     --------------------------------
-    wavobjs (list) : List of all instances of .wav file objects
+    objs (list) : List of all instances of object to apply encoder to
+    attr (str) : Instance attribute to use for encoding key
     --------------------------------
     Returns list of all instances of .wav file
     """
     instruments = np.array([])          # array for inst names
-    for wav in wavobjs:                 # for each instance
-        instruments = np.append(instruments,wav.instrument)
+    for wav in objs:                    # for each instance
+        instruments = np.append(instruments,\
+            wav.__getattribute__(attr)) # get attribute value
     enc = LabelEncoder()                # instance of encoder
     class_labels = enc.fit_transform(instruments)   
     for I in range (len(class_labels)): # for each new label
         # attach each class num to each instance
-        setattr(wavobjs[I],'class_num',class_labels[I])
+        setattr(objs[I],str(attr)+'_num',class_labels[I])
     return class_labels                 # return the list for good measure
 
 def split_train_test (nsamps,ratio):
@@ -121,6 +124,23 @@ def LogReg_CLFs (names,seed=None):
 def SVM_CLFs (names,seeds=None):
     pass
 
+def MLP_CLF (name,layers,seed=None):
+    """
+    Create a single instance of Multilayer Perceptron Classifier object
+    --------------------------------
+    name (list) : name to attach to each SGD object
+    layers (tuple) : I-th element is number of neurons in I-th layer
+    seed (int) : seed nunber to use for reproduceable results (None by default)
+    --------------------------------
+    returns MLP Object w/ name as dictionary entry
+    """  
+    MLP = MLPClassifier(hidden_layer_sizes=layers,activation='relu',
+                        solver='sgd',max_iter=1000,tol=1e-3,
+                        random_state=seed)      # create instance
+    setattr(MLP,'name',name)                    # attach name attribute
+    return {name:MLP}                           # return as dictionary
+
+
             #### TRAINING AND TESTING DEFINITIONS ####
     
 def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
@@ -137,48 +157,48 @@ def train_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
     """
     n_samples = len(wavfiles)               # number of samples
     X,y = np.array([]),np.array([])         # X matrix & target vector
+    """ Read through each .wav file and collect features in matrix """
     for wavfile in wavfiles:                # each training instance
-        print("\t\t",wavfile.filename)
+        #print("\t\t",wavfile.filename)
         os.chdir(read_dir)                  # change to wav directory
         wavfile.read_raw_wav()              # read waveform (add attrb)
         os.chdir(home_dir)                  # intial dir
-        # FUNCTION TO PULL OUT N FEATURES FROM TIME SERIES SINGLE WAV FILE INSTANCE    
-        x1 = features.timeseries_features(wavfile)
-        # FUNCTION TO PULL OUT N FEATURES FROM FREQ SERIES SINGLE WAV FILE INSTANCE 
-        x2 = features.freqseries_features(wavfile)
-        # row of features for instance
-        sample_features = np.array(x1).flatten()   
-        y = np.append(y,wavfile.class_num)  # add to target vector
+        x = features.concatenate_features(wavfile)          
+        y = np.append(y,wavfile.family_num)  # add to target vector
         del(wavfile.data)                   # delete waveform (save RAM)
-        X = np.append(X,sample_features)    # add row to matrix
-    X = X.reshape(n_samples,-1)             # reshape n_samps x n_features
-    print("X shape:",X.shape)
-    print("y shape:",y.shape)
-    clf_dict['LogReg'].fit(X,y)
+        X = np.append(X,x)                  # add row to matrix
+    """ Reshape matrix and Train Classifier Instances """
+    X = X.reshape(n_samples,-1)             # reshape n_samps x n_features   
+    clf_dict['MLP_1'].fit(X,y)
     return clf_dict                         # return the classifier dictionary
 
-def test_classifiers (wavfiles,clf_dict,read_dir,home_dir,classes):
+def test_classifiers (wavfiles,clf_dict,read_dir,home_dir):
     """
     test Classifiers on set of file obejct instances
     --------------------------------
     wavfiles (inst) : instance of .wav file to train on classifiers
     clf_dict (dict) : Dictionary of classifiers to be partially fit w. data
     read_dir (str) : local directory path where raw .wav files are
-    home_dir (str) : local directory path where program is based
-    classes (array) : array of class labels
+    home_dir (str) : local directory path where program is based    
     --------------------------------
     Returns array of actual values & predicted values
     """
-    ytrue,ypred = np.array([]),np.array([])
-    for wavfile in wavfiles:                # each testing instance
-        #print("\t\t",wavfile.filename)      # print filename
+    n_samples = len(wavfiles)               # number of samples
+    X,y = np.array([]),np.array([])         # X matrix & target vector
+    """ Read through each .wav file and collect features in matrix """
+    for wavfile in wavfiles:                # each training instance
+        #print("\t\t",wavfile.filename)
         os.chdir(read_dir)                  # change to wav directory
         wavfile.read_raw_wav()              # read waveform (add attrb)
         os.chdir(home_dir)                  # intial dir
-        actl,pred = features.test_wavfile(wavfile,clf_dict,classes)
-        del(wavfile.data)                   # delete waveform
-        ytrue = np.append(ytrue,actl)       # add actual class
-        ypred = np.append(ypred,pred)       # add predicted value
+        x = features.concatenate_features(wavfile)          
+        y = np.append(y,wavfile.family_num) # add to target vector
+        del(wavfile.data)                   # delete waveform (save RAM)
+        X = np.append(X,x)                  # add row to matrix
+    """ Reshape matrix and Train Classifier Instances """
+    X = X.reshape(n_samples,-1)             # reshape n_samps x n_features
+    ypred = clf_dict['MLP_1'].predict(X)    # make prediction on set
+    ytrue = y                               # correct values
     return ytrue,ypred
 
             #### METRICS ####

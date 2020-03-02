@@ -24,6 +24,24 @@ INSTRUMENT CLASSIFIER V1 - MISC FUNCTIONS SCRIPT
     
 """
 
+            #### DICTIONARY OBJECTS ####
+
+highwind = ['AltoFlute','AltoSax','BbClarinet','EbClarinet',
+                    'Flute','Oboe','SopSax',]
+lowwind = ['BassClarinet','BassFlute','Bassoon']
+brass = ['BassTrombone','Horn','TenorTrombone','Trumpet','Tuba']
+perc = []
+string = ['Bass','Cello','Viola','Violin']
+
+families = {'AltoFlute':'highwind','AltoSax':'highwind','BbClarinet':'highwind',
+            'EbClarinet':'highwind','Flute':'highwind','Oboe':'highwind',
+            'SopSax':'highwind',
+            'BassClarinet':'lowwind','BassFlute':'lowwind',
+            'Bassoon':'lowwind',
+            'BassTrombone':'brass','Horn':'brass','TenorTrombone':'brass',
+            'Trumpet':'brass','Tuba':'brass',
+            'Bass':'string','Cello':'string','Viola':'string','Violin':'string'}
+
             #### CLASS OBJECTS ####
 
 class wavfile ():
@@ -38,6 +56,7 @@ class wavfile ():
         """ Initialize Class Object """
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
+        self.family = self.set_family(families) # Instrument family
         self.note = file.split('.')[-2]         # note name
         self.channel = file.split('.')[-1]      # L or Rchannel
         self.rate = 44100                       # sample rate
@@ -54,10 +73,15 @@ class wavfile ():
         """ Split time series data into N samples by M features """
         ext = len(self.data) % M    # extra idxs
         Y = self.data[ext:]         # remove extra points
-        Y = np.round(Y,4)           # round to 4 decimals
-        N = int(len(Y)/M)           # compute number of rows
-        Y = Y.reshape(N,M)          # reshape the X matrix
-        return Y,N                  # return data 
+        Y = Y.reshape(-1,M)         # reshape the X matrix
+        return Y                    # return cropped waveform
+
+    def set_family(self,dict):
+        """ Place each instrument into family """
+        try:
+            return dict[self.instrument]  # find family in dictionary
+        except:
+            return 'NONE'  
 
         #### READ, WRITE & ORGANIZE FUNCTIONS ####
 

@@ -43,24 +43,24 @@ if __name__ == '__main__':
     print("Initializing:")
     func.make_paths([out_dir])                      # create output path if non-existant
     wavfiles = func.read_directory(wav_dir)         # make all wav file instances
-    classes = MLfunc.label_encoder(wavfiles)        # make numerical labels
-    tt_ratio = 0.7                                  # train/test size ratio
+    instr_labels = MLfunc.label_encoder(wavfiles,'instrument')  # label encode instruments
+    family_labels = MLfunc.label_encoder(wavfiles,'family')
+    classes = np.unique(family_labels)              # unique classes
+    tt_ratio = 0.2                                  # train/test size ratio
     trainpts,testpts = MLfunc.split_train_test(len(wavfiles),tt_ratio)
     
     trainwavs = [wavfiles[I] for I in trainpts] # wavs to train CLFs
     testwavs = [wavfiles[I] for I in testpts]   # wavs to test CLFs
-    print("Number of Training Files:",len(trainpts))
-    print("Number of Testing Files:",len(testpts))
+    print("\tNumber of Training Files:",len(trainpts))
+    print("\tNumber of Testing Files:",len(testpts))
     
-    CLF_dict = MLfunc.LogReg_CLFs(['LogReg'],seed=None)
+    CLF_dict = MLfunc.MLP_CLF('MLP_1',(20,20,20),seed=0)
 
     """ Train All Classifiers """ 
     t_0 = time.process_time()
     print("Training Classifiers:")
-    
     CLF_dict = MLfunc.train_classifiers(trainwavs,CLF_dict,
-                                        wav_dir,int_dir,classes)
-
+                    wav_dir,int_dir,classes)
     t_1 = time.process_time()
     print("\tTraining Time:",np.round(t_1-t_0,4),"secs.\n")
 
@@ -68,14 +68,13 @@ if __name__ == '__main__':
     """ Test All Classifiers """
     t_2 = time.process_time()
     print("Testing Classisifers:")
-   
-
-
+    ytrue,ypred = MLfunc.test_classifiers(testwavs,CLF_dict,
+                        wav_dir,int_dir)
     t_3 = time.process_time()
     print("\tTestingTime:",np.round(t_3-t_2,4),"secs.\n")
 
     
-    MLfunc.confusion_matrix('Testy',ytrue,ypred,classes,show=True)
+    MLfunc.confusion_matrix('Testy1',ytrue,ypred,classes,show=True)
 
     print(time.process_time())
 

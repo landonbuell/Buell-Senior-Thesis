@@ -106,7 +106,8 @@ def max_amp (wavobj,ref=0.1):
     waveform = wavobj.data          # extract waveform from instance
     n_pts = len(waveform)           # number of points in waveform
     max_idx = np.argmax(waveform)   # index of max of waveform
-    above_ref = np.where((waveform>=ref))           # find pts where waveform >= ref
+    # find pts where waveform >is above a refrence value
+    above_ref = np.array(np.where(waveform>=ref)).ravel()
     start_idx,stop_idx = above_ref[0],above_ref[-1] # isolate end pts
     start_to_max = np.abs(max_idx-start_idx)/n_pts  # % of time to reach max
     max_to_stop = np.abs(max_idx-stop_idx)/n_pts    # % of time to reach ref
