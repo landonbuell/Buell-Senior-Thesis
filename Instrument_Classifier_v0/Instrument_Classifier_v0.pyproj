@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7b166590-1582-4fef-8948-54df5a1c4d25</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>INST_CLF_v0_main.py</StartupFile>
+    <StartupFile>INST_CLF_v0_MAIN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,14 +21,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="INST_CLF_v0_main.py" />
+    <Compile Include="INST_CLF_v0_MAIN.py" />
     <Compile Include="INST_CLF_v0_base_utilities.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="INST_CLF_v0_machine_learning_utilities.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="INST_CLF_v0_feature_extraction.py">
+    <Compile Include="INST_CLF_v0_feature_utilities.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

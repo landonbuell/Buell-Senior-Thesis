@@ -9,12 +9,13 @@ Main Script
 
 import numpy as np
 import pandas as pd
+import sys
 import os
 import time
 
 import INST_CLF_v0_base_utilities as base_utils
 import INST_CLF_v0_machine_learning_utilities as ML_utils
-import INST_CLF_v0_feature_extraction as features
+import INST_CLF_v0_feature_utilities as feat_utils
 
 """
 INSTRUMENT CLASSIFIER V0 - MAIN EXECUTABLE
@@ -31,20 +32,23 @@ Directory paths:
 
 if __name__ == '__main__':
 
-    # These paths for are Landon's Computer 
-    # see documentation above to set for you particular machine
-
-    #int_dir = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Instrument_Classifier_v0'
-    int_dir = os.getcwd()
-    wav_dir = 'C:/Users/Landon/Documents/wav_audio'
-    out_dir = int_dir + '/wavdata'
-
-    # Initialize Program
-    print("Initializing...\n")
+    # INITIALIZE DIRECTORIES
+    int_dir = os.getcwd()           # home path is CWD
+    out_dir = int_dir + '/wavdata'  # path to store extra data
     base_utils.make_paths(paths=[out_dir])
-    WAVFILE_OBJECTS = base_utils.read_directory(wav_dir,ext='.wav')
+
+    #wav_dir = base_utils.argument_parser()          # for command line 
+    wav_dir = 'C:/Users/Landon/Documents/wav_audio' # for development
+    if os.path.exists(wav_dir) == False:
+       sys.exit()
     
-    X,y = features.Xy_matrices(WAVFILE_OBJECTS)
+
+    # COLLECT .WAV FILE INSTANCES
+    WAVFILE_OBJECTS = base_utils.read_directory(wav_dir,ext='.wav')
+    print("Number of Files Found:",len(WAVFILE_OBJECTS))
+
+    # COLLECT FEATURES FROM ALL FILES
+    X,y = ML_utils.Xy_matrices(WAVFILE_OBJECTS,wav_dir,int_dir)
     
 
     

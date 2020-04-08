@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import os
 import sys
+import argparse
 
 import scipy.io.wavfile as sciowav
 
@@ -41,25 +42,26 @@ class wavfile():
         rate,data = sciowav.read(self.filename) # read raw waveform
         data = np.transpose(data)               # transpose
         data = data/np.max(np.abs(data))        # normalize
-        setattr(self,'waveform',data)           # set attrb to self
-        return data                             # return waveform
-
-    def split_timeseries (self,M):
-        """ Split time series data into N samples by M features """
-        ext = len(self.data) % M    # extra idxs
-        Y = self.data[ext:]         # remove extra points
-        Y = Y.reshape(-1,M)         # reshape the X matrix
-        return Y                    # return cropped waveform
-
-    def set_family(self,dict):
-        """ Place each instrument into family """
-        try:
-            return dict[self.instrument]  # find family in dictionary
-        except:
-            return 'NONE'  
+        setattr(self,'waveform',data)           # set waveform to self
+        setattr(self,'n_pts',len(data))         # set length of wave to self
+        return self                             # return instance
 
 
             #### DIRECTORY AND OS FUNCTIONS ####
+
+def argument_parser():
+    """
+    Create argument parper object for main executable
+    --------------------------------
+    *no argumnets*
+    --------------------------------
+    Return completetd argument parser class instance
+    """
+    parser = argparse.ArgumentParser(prog='Instrument Classifier v0')
+    parser.add_argument('wav_audio',type=str,
+                        help='Local path where raw audio is stored')
+    args = parser.parse_args()
+    return args.wav_audio 
 
 def make_paths(paths=[]):
     """
