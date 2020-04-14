@@ -116,3 +116,4 @@ def Create_MLP_Model (name,layers,seed=None):
                         solver='sgd',batchsize=10,max_iter=400,
                         tol=1e-4,random_state=seed)
     setattr(model,'name',name)      # attach name attribute
+    return model                    # return initialized model

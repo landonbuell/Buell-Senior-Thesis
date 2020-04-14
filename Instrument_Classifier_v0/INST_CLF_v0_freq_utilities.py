@@ -25,7 +25,7 @@ def Hanning_Window (waveform):
     """
     return waveform*signal.hanning(M=len(waveform))
 
-def frequency_space (n_pts,rate=44100):
+def Frequency_Space (n_pts,rate=44100):
     """
     Build frequency space axis for waveform
     --------------------------------
@@ -38,7 +38,28 @@ def frequency_space (n_pts,rate=44100):
     frequency_space = frequency_space[pts]                  # truncate 0 - 6kHz
     return frequency_space , pts                            # return axis & idxs
 
-def Fast_Fourier_Transform (waveform):
+def Power_Spectrum (waveform,pts):
     """
+    Compute power spectrum of waveform using frequnecy space
+    --------------------------------
+    waveform (array) : 1 x N waveform from file with normalized amplitude
+    pts (list) : list of pts to keep in FFT spectrum
+    --------------------------------
+    Return power spectrum of shape (1  x len(pts)) size
+    """
+    fftdata = fftpack.fft(waveform,n=len(waveform),axis=-1)
+    power = np.abs(fftdata)**2                  # compute power spect
+    power /= np.max(power)                      # normalize
+    return power[pts]                           # return specific idx of pwr
 
+def Find_Peaks (spectrum,height):
     """
+    Find Number of peaks above certain value in a given spectrum
+    --------------------------------
+    spectrum (arr) : 1 x N power spectrum to find peaks in 
+    height (float) : minimum tolerance of height of spike
+    --------------------------------
+    Return number of peaks in spectrum
+    """
+    peaks = np.where((spectrum >= height)&(spectrum <= 1))[0]
+    print(len(peaks),'\n')

@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # COLLECT FEATURES FROM ALL FILES
     X,y = ML_utils.Xy_matrices(WAVFILE_OBJECTS,wav_dir,int_dir)
 
-    base_utils.plot_features_2D(X.transpose()[0],X.transpose()[1],
+    base_utils.Plot_Features_2D(X.transpose()[0],X.transpose()[1],
                                 classes=y,title='Rise Time vs. Decay Time',
                                 labels=['Rise','Decay'])
 

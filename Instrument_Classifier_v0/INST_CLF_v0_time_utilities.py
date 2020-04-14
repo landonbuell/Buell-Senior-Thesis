@@ -12,14 +12,13 @@ import pandas as pd
 
             #### FUNCTION DEFINITIONS ####
 
-def rise_decay_time (waveform,start=0.1,stop=0.9,rate=44100):
+def rise_decay_time (waveform,start=0.1,stop=0.9):
     """
     Find portion of waveform to reach 'start' value to 'stop' value
     --------------------------------
     waveform (array) : 1 x N waveform from file with normalized amplitude
     start (float) : value (0,1) to indicate where to begin (0.1 by default)
     stop (float) : value (0,1) to indicate where to end (0.9 by default)
-    rate (int) : Sample rate in Hz, 44.1k by default
     --------------------------------
     Return rise  time parameter (0,1)
     """

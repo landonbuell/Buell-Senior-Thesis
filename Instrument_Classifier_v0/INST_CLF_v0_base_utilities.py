@@ -50,7 +50,6 @@ class wavfile():
         setattr(self,'n_pts',len(data))         # set length of wave to self
         return self                             # return instance
 
-
             #### DIRECTORY AND OS FUNCTIONS ####
 
 def argument_parser():
@@ -110,7 +109,73 @@ def normalize_X (X):
 
             #### PLOTTING FUNCTIONS ####
 
-def plot_features_2D (X1,X2,classes,labels,title='',show=True):
+def Plot_Time_Spectrum (xdata,ydata,labels,title='',show=True):
+    """
+    Create 2D visualization Comparing features
+    --------------------------------
+    xdata (arr) : (1 x N) array of data to plot on x-axis
+    ydata (arr) : (M x N) array of data to plot on y-axis ( can be multiple arrays)
+    labels (iter) : (1 x 2) iterable containing labels for x & y axes
+    title (str) : Title for plot
+    --------------------------------
+    return None
+    """
+    plt.figure(figsize=(12,8))
+    plt.title(title,size=40,weight='bold')
+    plt.xlabel('Time',size=20,weight='bold')
+    plt.ylabel('Amplitude',size=20,weight='bold')
+
+    if ydata.ndim > 1:
+        for I in len(ydata):
+            plt.plot(xdata,ydata[I],label=str(labels[I]))
+        plt.legend()
+
+    else:
+        plt.plot(xdata,ydata)
+
+    plt.xticks(np.arange(0,1.1,0.1))
+    plt.yticks(np.arange(0,1.1,0.1))
+    #plt.hlines(0,0,xdata[-1],color='black')
+    
+    plt.grid()
+    plt.tight_layout()
+    if show == True:
+        plt.show()
+
+def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
+    """
+    Create 2D visualization Comparing features
+    --------------------------------
+    xdata (arr) : (1 x N) array of data to plot on x-axis
+    ydata (arr) : (M x N) array of data to plot on y-axis ( can be multiple arrays)
+    labels (iter) : (1 x 2) iterable containing labels for x & y axes
+    title (str) : Title for plot
+    --------------------------------
+    return None
+    """
+    plt.figure(figsize=(12,8))
+    plt.title(title,size=40,weight='bold')
+    plt.xlabel('Frequency',size=20,weight='bold')
+    plt.ylabel('Amplitude',size=20,weight='bold')
+
+    if ydata.ndim > 1:
+        for I in len(ydata):
+            plt.plot(xdata,ydata[I],label=str(labels[I]))
+        plt.legend()
+
+    else:
+        plt.plot(xdata,ydata)
+
+    plt.xticks(np.arange(0,1.1,0.1))
+    plt.yticks(np.arange(0,1.1,0.1))
+    plt.hlines(0,0,xdata[-1],color='black')
+    
+    plt.grid()
+    plt.tight_layout()
+    if show == True:
+        plt.show()
+
+def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     """
     Create 2D visualization Comparing features
     --------------------------------

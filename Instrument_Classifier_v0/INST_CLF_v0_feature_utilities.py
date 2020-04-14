@@ -14,6 +14,9 @@ import INST_CLF_v0_time_utilities as time_utils
 import INST_CLF_v0_freq_utilities as freq_utils
 import INST_CLF_v0_machine_learning_utilities as ML_utils
 
+
+            #### FUNCTIONS DEFINITIONS ####
+
 def timeseries (wavfile):
     """
     Collect all training features for audio file based on
@@ -23,9 +26,9 @@ def timeseries (wavfile):
     --------------------------------
     Return array of time series features
     """
-    features = np.array([])
+    features = np.array([])     # array to hold time series features
     features = np.append(features,time_utils.rise_decay_time(wavfile.waveform))
-    return features
+    return features             # return the feature array
 
 def freqseries (wavfile):
     """
@@ -37,7 +40,13 @@ def freqseries (wavfile):
     Return array of frequency series features
     """
     features = np.array([])
-    
+    hann_wave = freq_utils.Hanning_Window(wavfile.waveform)     # apply hann window
+    fspace , pts = freq_utils.Frequency_Space(wavfile.n_pts)    # create freq sp. axis
+    power_spect = freq_utils.Power_Spectrum(hann_wave,pts)      # compute power spectrum
 
+    base_utils.Plot_Freq_Spectrum(fspace,power_spect,
+                                  labels=[],title=wavfile.filename)
     
+    freq_utils.Find_Peaks(power_spect,height=0.1)
+
     return features
