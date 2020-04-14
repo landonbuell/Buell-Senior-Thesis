@@ -8,9 +8,11 @@ Machine Learning Utility Functions
             #### IMPORTS ####
 
 import numpy as np
+import os
 
 from sklearn.neural_network import MLPClassifier
 
+import INST_CLF_v0_base_utilities as base_utils
 import INST_CLF_v0_feature_utilities as feat_utils
  
 
@@ -76,7 +78,7 @@ def Xy_matrices(wavfile_objects,wav_path,int_path):
 
     # Create target vector, 'y'
     y = np.array([x.instrument for x in wavfile_objects])   # target vector
-    ENCODE_DICTIONARY = ML_utils.target_label_encoder(y)
+    ENCODE_DICTIONARY = target_label_encoder(y)
     y = np.array([ENCODE_DICTIONARY[x] for x in y])
 
     # Build Feature Matrix
@@ -88,7 +90,7 @@ def Xy_matrices(wavfile_objects,wav_path,int_path):
         os.chdir(int_path)                  # change to home directory
 
         timeseries_features = feat_utils.timeseries(WAVFILE)     # collect time features
-        freqseries_features = feat_utils.freqeries(WAVFILE)      # colelct freq features
+        freqseries_features = feat_utils.freqseries(WAVFILE)      # colelct freq features
 
         row = np.array([])          # feature vector for sample
         row = np.append(row,timeseries_features)    # add time features

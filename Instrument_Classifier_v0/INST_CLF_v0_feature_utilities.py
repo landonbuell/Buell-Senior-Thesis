@@ -8,9 +8,10 @@ Feature Extraction
             #### IMPORTS ####
 
 import numpy as np
-import pandas as pd
 
 import INST_CLF_v0_base_utilities as base_utils
+import INST_CLF_v0_time_utilities as time_utils
+import INST_CLF_v0_freq_utilities as freq_utils
 import INST_CLF_v0_machine_learning_utilities as ML_utils
 
 def timeseries (wavfile):
@@ -23,7 +24,7 @@ def timeseries (wavfile):
     Return array of time series features
     """
     features = np.array([])
-    
+    features = np.append(features,time_utils.rise_decay_time(wavfile.waveform))
     return features
 
 def freqseries (wavfile):
@@ -36,5 +37,7 @@ def freqseries (wavfile):
     Return array of frequency series features
     """
     features = np.array([])
+    
+
     
     return features
