@@ -166,7 +166,6 @@ def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
     else:
         plt.plot(xdata,ydata)
 
-    plt.xticks(np.arange(0,1.1,0.1))
     plt.yticks(np.arange(0,1.1,0.1))
     plt.hlines(0,0,xdata[-1],color='black')
     
@@ -194,7 +193,6 @@ def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
 
     plt.scatter(X1,X2,c=classes)
 
-    plt.xticks(np.arange(0,1.1,0.1))
     plt.yticks(np.arange(0,1.1,0.1))
     plt.hlines(0,0,1,color='black')
     plt.vlines(0,0,1,color='black')

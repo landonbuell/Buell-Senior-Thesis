@@ -40,13 +40,13 @@ def freqseries (wavfile):
     Return array of frequency series features
     """
     features = np.array([])
-    hann_wave = freq_utils.Hanning_Window(wavfile.waveform)     # apply hann window
-    fspace , pts = freq_utils.Frequency_Space(wavfile.n_pts)    # create freq sp. axis
-    power_spect = freq_utils.Power_Spectrum(hann_wave,pts)      # compute power spectrum
+    hann_wave = freq_utils.Hanning_Window(wavfile.waveform)         # apply hann window
+    f_space,pts,f_resol = freq_utils.Frequency_Space(wavfile.n_pts) # create freq sp. axis
+    power_spect = freq_utils.Power_Spectrum(hann_wave,pts)          # compute power spectrum
 
-    base_utils.Plot_Freq_Spectrum(fspace,power_spect,
+    base_utils.Plot_Freq_Spectrum(f_space,power_spect,
                                   labels=[],title=wavfile.filename)
     
-    freq_utils.Find_Peaks(power_spect,height=0.1)
+    freq_utils.Find_Peaks(power_spect,height=0.01)
 
     return features
