@@ -41,13 +41,14 @@ class wavfile():
         self.channel = file.split('.')[-1]      # L or R channel
         self.rate = 44100                       # sample rate
 
-    def read_raw_wav(self):
+    def read_raw_wav(self,normalize=True):
         """ Read Raw data from directory file """      
         rate,data = sciowav.read(self.filename) # read raw waveform
         data = np.transpose(data)               # transpose
-        data = data/np.max(np.abs(data))        # normalize
-        setattr(self,'waveform',data)           # set waveform to self
-        setattr(self,'n_pts',len(data))         # set length of wave to self
+        if normalize == True:
+            data = data/np.max(np.abs(data))    # normalize
+        self.waveform = data                    # attach waveform
+        self.n_pts = len(data)                  # attach num samples
         return self                             # return instance
 
             #### DIRECTORY AND OS FUNCTIONS ####
@@ -76,6 +77,7 @@ def make_paths(paths=[]):
     """
     for path in paths:
         os.makedirs(path,exist_ok=True)
+    return paths
 
 def read_directory (path,ext='.wav'):
     """

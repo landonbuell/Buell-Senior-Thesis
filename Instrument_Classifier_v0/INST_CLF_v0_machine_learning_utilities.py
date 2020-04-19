@@ -85,12 +85,12 @@ def Xy_matrices(wavfile_objects,wav_path,int_path):
     X = np.array([])                        # feature matrix
     
     for WAVFILE in wavfile_objects:         # through each .wav file
-        os.chdir(wav_path)                  # change to directoru
+        os.chdir(wav_path)                  # change to directory
         WAVFILE = WAVFILE.read_raw_wav()    # read waveform as np array
         os.chdir(int_path)                  # change to home directory
 
         timeseries_features = feat_utils.timeseries(WAVFILE)     # collect time features
-        freqseries_features = feat_utils.freqseries(WAVFILE)      # colelct freq features
+        freqseries_features = feat_utils.freqseries(WAVFILE)     # colelct freq features
 
         row = np.array([])          # feature vector for sample
         row = np.append(row,timeseries_features)    # add time features
