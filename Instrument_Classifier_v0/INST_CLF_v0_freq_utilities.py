@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 import matlab
 
+import INST_CLF_v0_base_utilities as base_utils
+
 import scipy.fftpack as fftpack
 import scipy.signal as signal
 
@@ -41,7 +43,7 @@ def Frequency_Space (n_pts,rate=44100):
     frequency_space = frequency_space[pts]                  # truncate 0 - 6kHz    
     return frequency_space,pts,resolution                   # axis,idx,res
 
-def Power_Spectrum (waveform,pts):
+def Power_Spectrum (waveform,pts=None):
     """
     Compute power spectrum of waveform using frequnecy space
     --------------------------------
@@ -51,13 +53,43 @@ def Power_Spectrum (waveform,pts):
     Return power spectrum of shape (1  x len(pts)) size
     """
     fftdata = fftpack.fft(waveform,n=len(waveform),axis=-1)
-    power = np.abs(fftdata)**2                  # compute power spect
-    power /= np.max(power)                      # normalize
-    return power[pts]                           # return specific idx of pwr
+    power = np.abs(fftdata)**2      # compute power spect
+    power /= np.max(power)          # normalize
+    if pts == None:                 # idxs not specified
+        return power                # return full FFT
+    else:                           # otherwise
+        return power[pts]           # return specific idx of pwr
+
+def Spectrogram (waveform,pts,N=2**10):
+    """
+    Compute spectrogram of audio file data
+        (N x M) Frequency vs. Time matrix
+    --------------------------------
+    waveform (array) : 1 x M waveform from file with normalized amplitude
+    pts (list) : list of pts to keep in FFT spectrum (num of rows in Spectrogram)
+    N (int) : Number of points to use in each FFT (recc. 2^p where p is int)
+    --------------------------------
+    Return spectrogram of signal
+    """
+    step = int(N/4)             # step between frames (overlap)   
+    Sxx = np.array([])          # init spectrogram
+    cntr = 0                    # number of FFT's computed
+
+    for I in range (0,len(waveform)-N,step):    # iter throught waveform
+        frame = waveform[I:I+N]                 # audio segment - 'frame'
+        frame = Hanning_Window(frame)           # apply Hann window
+        pwr = Power_Spectrum(frame,pts)         # pwr spectrum for sample
+        Sxx = np.append(Sxx,pwr)                # add pwr spectrum
+        cntr +=1 
+
+    Sxx = Sxx.reshape(cntr,len(pts[0])).transpose()   # reshape   
+    return Sxx
+
+
 
 def CSPE_MATLAB(waveform,n_pts):
     """
-    Compute "Complex-Spectral-Phase-Evolution of signal 
+    Compute "Complex-Spectral-Phase-Evolution" of signal 
         See 'CSPE.m matlab' script for more details
     --------------------------------
     waveform (array) : 1 x N waveform from file with normalized amplitude
@@ -68,6 +100,7 @@ def CSPE_MATLAB(waveform,n_pts):
     MATLAB_ENG = matlab.engine.start_matlab()   # start MATLAB engine
     Xout,Yout = MATLAB_ENG.CSPE(indat=waveform,
                     varargin=['windowed'])
+    return None
     
 
 def Find_Peaks (spectrum,hgt,res):

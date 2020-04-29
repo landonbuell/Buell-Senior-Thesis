@@ -59,27 +59,21 @@ def target_label_encoder(target_vector):
         key,val = instrument,class_counter
         enc_dict.update({key:val})      # update the dictionary
         class_counter += 1              # incriment class counter
-    return enc_dict                     # return the encofing dictionary
+    dec_dict = {value:key for key,value in enc_dict.items()}
+    return enc_dict,dec_dict            # return the encoding/decoding dictionary
 
-def Xy_matrices(wavfile_objects,wav_path,int_path):
+def Design_Matrix (wavfile_objects,wav_path,int_path):
     """
-    Construct feature matrix "X" (n_samples x n_features) and
-        target vector "y" (n_samples x 1)
+    Construct feature matrix "X" (n_samples x n_features) 
     --------------------------------
     wavfile_objects (list) : List of wavfile object instances to read
     wav_path (str) : Full directory path where training .wav files are stored
     int_path (str) : Full directory path where program is stored
     --------------------------------
-    Return  -feature matrix "X" (n_samples x n_features) 
-            -target vector "y" (n_samples x 1)
+    Return feature matrix "X" (n_samples x n_features) 
     """
     # Setup & intialize
     n_samples = len(wavfile_objects)        # number of samples
-
-    # Create target vector, 'y'
-    y = np.array([x.instrument for x in wavfile_objects])   # target vector
-    ENCODE_DICTIONARY = target_label_encoder(y)
-    y = np.array([ENCODE_DICTIONARY[x] for x in y])
 
     # Build Feature Matrix
     X = np.array([])                        # feature matrix
@@ -97,8 +91,8 @@ def Xy_matrices(wavfile_objects,wav_path,int_path):
         row = np.append(row,freqseries_features)    # add freq features
         X = np.append(X,row)        # add to feature matrix
 
-    X = X.reshape(n_samples,-1)     # rehape feature matrix
-    return X,y                      # return features & target
+    return X.reshape(n_samples,-1)     # rehape feature matrix
+
 
             #### CREATE MODEL INSTANCES ####
 
