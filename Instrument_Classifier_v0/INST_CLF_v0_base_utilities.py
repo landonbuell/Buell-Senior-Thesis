@@ -23,6 +23,10 @@ Script contains lowest level function and class defintions
     - Supports higher end functions 
 """
 
+            #### VARIABLE & OBJECT DECLARATIONS ####   
+
+INSTRUMENT_FAMILIES = {}
+
             #### CLASS OBJECT DEFINITIONS ####
 
 class wavfile():
@@ -40,6 +44,11 @@ class wavfile():
         self.note = file.split('.')[-2]         # note name
         self.channel = file.split('.')[-1]      # L or R channel
         self.rate = 44100                       # sample rate
+
+    def set_target (self,target):
+        """ Set integer target value based on instrument """
+        self.target = target
+        return self
 
     def read_raw_wav(self,normalize=True):
         """ Read Raw data from directory file """      
@@ -176,6 +185,30 @@ def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
     if show == True:
         plt.show()
 
+
+def Plot_Spectrogram (t,f,spect,title,show=True):
+    """
+    Create visualization of soundwave as frequency vs. time vs. power
+    --------------------------------
+    spect ((arr) : (N x M) matrix representing file's spectrogram
+    title (str) : Title for plot
+    --------------------------------
+    return None
+    """
+    #plt.figure(figsize=(20,8))
+    #plt.title(title,size=40,weight='bold')
+    #plt.xlabel('Time',size=20,weight='bold')
+    #plt.ylabel('Frequnecy',size=20,weight='bold')
+
+    plt.pcolormesh(t,f,spect,cmap=plt.cm.binary)
+
+    plt.grid()
+    plt.tight_layout()
+    if show == True:
+        plt.show()
+
+
+
 def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     """
     Create 2D visualization Comparing features
@@ -203,3 +236,4 @@ def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     plt.tight_layout()
     if show == True:
         plt.show()
+

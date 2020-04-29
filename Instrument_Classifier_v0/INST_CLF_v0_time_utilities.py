@@ -35,3 +35,14 @@ def rise_decay_time (waveform,start=0.1,stop=0.9):
     rise_frac = (rise_dt/n_pts)
     decay_frac = (decay_dt/n_pts)
     return rise_frac,decay_frac             # the return the two features
+
+def Low_energy_Frames (waveform,bnd=0.5):
+    """
+    Compute percentage of "frames" with RMS power less than
+    given threshold.
+    --------------------------------
+     waveform (array) : 1 x N waveform from file with normalized amplitude
+
+    --------------------------------
+    return (int) number for frames with RMS power below
+    """

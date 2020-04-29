@@ -47,8 +47,14 @@ if __name__ == '__main__':
     WAVFILE_OBJECTS = base_utils.read_directory(wav_dir,ext='.wav')
     print("\t",len(WAVFILE_OBJECTS),"files found")
 
+    # BUILD TARGET VECTOR
+    y = np.array([x.instrument for x in WAVFILE_OBJECTS])   # target vector
+    ENCODE_DICTIONARY,DECODE_DICTIONARY = \
+        ML_utils.target_label_encoder(y)                    # build dict
+    y = np.array([ENCODE_DICTIONARY[x] for x in y])         # convert str to int
+
     # COLLECT FEATURES FROM ALL FILES
-    X,y = ML_utils.Xy_matrices(WAVFILE_OBJECTS,wav_dir,int_dir)
+    X = ML_utils.Design_Matrix(WAVFILE_OBJECTS,wav_dir,int_dir)
 
     base_utils.Plot_Features_2D(X.transpose()[0],X.transpose()[1],
                                 classes=y,title='Rise Time vs. Decay Time',

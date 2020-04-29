@@ -27,7 +27,11 @@ def timeseries (wavfile):
     Return array of time series features
     """
     features = np.array([])     # array to hold time series features
-    features = np.append(features,time_utils.rise_decay_time(wavfile.waveform))
+    
+    rise,decay = time_utils.rise_decay_time(wavfile.waveform)
+    features = np.append(features,[rise,decay])
+
+
     return features             # return the feature array
 
 def freqseries (wavfile):
@@ -41,12 +45,12 @@ def freqseries (wavfile):
     """
     features = np.array([])
     hann_wave = freq_utils.Hanning_Window(wavfile.waveform)         # apply hann window
-    f_space,pts,f_resol = freq_utils.Frequency_Space(wavfile.n_pts) # create freq sp. axis
+
+    f_space,pts,f_resol = freq_utils.Frequency_Space(1024)          # create freq sp. axis
     power_spect = freq_utils.Power_Spectrum(hann_wave,pts)          # compute power spectrum
 
-    base_utils.Plot_Freq_Spectrum(f_space,power_spect,
-                                  labels=[],title=wavfile.filename)
-    
-    freq_utils.Find_Peaks(power_spect,height=0.01)
+    t,f,Sxx = freq_utils.Spectrogram(wavfile.waveform,pts,N=2**10)
+
+    base_utils.Plot_Spectrogram(t,f,Sxx,'Test Spectrogram')
 
     return features
