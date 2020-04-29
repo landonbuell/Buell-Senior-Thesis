@@ -195,10 +195,10 @@ def Plot_Spectrogram (t,f,spect,title,show=True):
     --------------------------------
     return None
     """
-    #plt.figure(figsize=(20,8))
-    #plt.title(title,size=40,weight='bold')
-    #plt.xlabel('Time',size=20,weight='bold')
-    #plt.ylabel('Frequnecy',size=20,weight='bold')
+    plt.figure(figsize=(12,8))
+    plt.title(title,size=40,weight='bold')
+    plt.xlabel('Time',size=20,weight='bold')
+    plt.ylabel('Frequnecy',size=20,weight='bold')
 
     plt.pcolormesh(t,f,spect,cmap=plt.cm.binary)
 

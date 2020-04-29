@@ -46,11 +46,13 @@ def freqseries (wavfile):
     features = np.array([])
     hann_wave = freq_utils.Hanning_Window(wavfile.waveform)         # apply hann window
 
-    f_space,pts,f_resol = freq_utils.Frequency_Space(1024)          # create freq sp. axis
+    f_space,pts,f_resol = freq_utils.Frequency_Space(wavfile.n_pts) # create freq sp. axis
     power_spect = freq_utils.Power_Spectrum(hann_wave,pts)          # compute power spectrum
 
-    t,f,Sxx = freq_utils.Spectrogram(wavfile.waveform,pts,N=2**10)
-
-    base_utils.Plot_Spectrogram(t,f,Sxx,'Test Spectrogram')
+    # SPECTROGRAM
+    spect_N = 2**12                                                 # N_pts in Sxx FFT
+    f_space,pts,f_resol = freq_utils.Frequency_Space(spect_N)       # create freq sp. axis
+    Sxx = freq_utils.Spectrogram(wavfile.waveform,pts,N=spect_N)    # creat spectrogram
+    t = np.arange(0,Sxx.shape[1])                                   # create time sp. axis
 
     return features

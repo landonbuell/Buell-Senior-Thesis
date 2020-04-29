@@ -10,6 +10,8 @@ Time series Utility Functions
 import numpy as np
 import pandas as pd
 
+import INST_CLF_v0_base_utilities as base_utils
+
             #### FUNCTION DEFINITIONS ####
 
 def rise_decay_time (waveform,start=0.1,stop=0.9):
