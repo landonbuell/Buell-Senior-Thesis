@@ -10,6 +10,8 @@ Time series Utility Functions
 import numpy as np
 import pandas as pd
 
+import scipy.integrate as integrate
+
 import INST_CLF_v0_base_utilities as base_utils
 
             #### FUNCTION DEFINITIONS ####
@@ -38,13 +40,26 @@ def rise_decay_time (waveform,start=0.1,stop=0.9):
     decay_frac = (decay_dt/n_pts)
     return rise_frac,decay_frac             # the return the two features
 
-def Low_energy_Frames (waveform,bnd=0.5):
+def Low_energy_Frames (waveform,n_samples=256,rate=44100):
     """
     Compute percentage of "frames" with RMS power less than
     given threshold.
     --------------------------------
-     waveform (array) : 1 x N waveform from file with normalized amplitude
-
+    waveform (array) : 1 x N waveform from file with normalized amplitude
+    n_samples (int) : Number of samples in single frame
+    rate (int) : Audio sample rate in samples/sec
     --------------------------------
-    return (int) number for frames with RMS power below
+    return (int) number for frames with RMS power below 50% of 
     """
+    ext_pts = len(waveform) % n_samples     # number of extra pts
+    waveform = waveform[ext_pts:]           # truncate waveform
+    waveform = waveform.reshape(-1,n_samples)   # reshape
+    # Iterate through frames, collect energy for each
+    frame_energies = np.array([])           # energy of each frame 
+    for frame in waveform:                  
+        frame = frame**2                    
+        energy = integrate.trapz(y=frame,x=None,
+                    dx=1/rate,axis=-1)      
+        frame_energies = np.append(frame_energies,energy)
+
+

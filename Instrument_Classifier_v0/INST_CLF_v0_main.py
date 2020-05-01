@@ -37,10 +37,10 @@ if __name__ == '__main__':
     out_dir = int_dir + '/extdata'  # path to store extra data
     base_utils.make_paths(paths=[out_dir])
 
-    #wav_dir = base_utils.argument_parser()          # for command line 
+    #wav_dir = base_utils.argument_parser()         # for command line 
     wav_dir = 'C:/Users/Landon/Documents/wav_audio' # for development
     if os.path.exists(wav_dir) == False:
-       sys.exit()
+       sys.exit("\n\tERROR - Local Path Does not Exist")
     print("Searching for .wav files in:\n\t",wav_dir)
 
     # COLLECT .WAV FILE INSTANCES

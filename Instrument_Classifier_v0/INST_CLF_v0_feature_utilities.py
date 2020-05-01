@@ -28,8 +28,12 @@ def timeseries (wavfile):
     """
     features = np.array([])     # array to hold time series features
     
+    # rise & decay times
     rise,decay = time_utils.rise_decay_time(wavfile.waveform)
     features = np.append(features,[rise,decay])
+
+    # Low energy frames 
+    time_utils.Low_energy_Frames(wavfile.waveform)
 
 
     return features             # return the feature array
