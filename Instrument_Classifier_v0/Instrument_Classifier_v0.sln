@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Instrument_Classifier_v0", "Instrument_Classifier_v0.pyproj", "{7B166590-1582-4FEF-8948-54DF5A1C4D25}"
-EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Feature_Analysis", "Feature_Analysis\Feature_Analysis.pyproj", "{E874B214-99B2-4B35-9737-EE1904DE8E8A}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "INST_CLF_v0", "INST_CLF_v0\INST_CLF_v0.pyproj", "{7B166590-1582-4FEF-8948-54DF5A1C4D25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B166590-1582-4FEF-8948-54DF5A1C4D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B166590-1582-4FEF-8948-54DF5A1C4D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E874B214-99B2-4B35-9737-EE1904DE8E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E874B214-99B2-4B35-9737-EE1904DE8E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B166590-1582-4FEF-8948-54DF5A1C4D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B166590-1582-4FEF-8948-54DF5A1C4D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
