@@ -32,11 +32,21 @@ def timeseries (wavfile):
     rise,decay = time_utils.rise_decay_time(wavfile.waveform)
     features = np.append(features,[rise,decay])
 
-    # Low energy frames 
-    time_utils.Low_energy_Frames(wavfile.waveform)
+    # RMS Energy from frames
+    energies,RMS = time_utils.Energy_Frames(wavfile.waveform,512)
+    features = np.append(features,RMS)
+    
+    # RMS below values
+    values = time_utils.RMS_Below_Val(energies,RMS,[0.1,0.25,0.5,0.75])
+    features = np.append(features,values)
 
+    # Compute Average Spectral Flux
+    TSF = time_utils.Time_Spectrum_Flux(energies)
+    avg_TSF = np.mean(TSF)
+    features = np.append(features,avg_TSF)
 
-    return features             # return the feature array
+    features = np.ravel(features)   # flatten to 1D
+    return features                 # return the feature array
 
 def freqseries (wavfile):
     """

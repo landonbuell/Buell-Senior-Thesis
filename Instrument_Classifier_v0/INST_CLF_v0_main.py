@@ -48,18 +48,21 @@ if __name__ == '__main__':
     print("\t",len(WAVFILE_OBJECTS),"files found")
 
     # BUILD TARGET VECTOR
-    y = np.array([x.instrument for x in WAVFILE_OBJECTS])   # target vector
+    y = np.array([x.target for x in WAVFILE_OBJECTS])   # target vector
     ENCODE_DICTIONARY,DECODE_DICTIONARY = \
         ML_utils.target_label_encoder(y)                    # build dict
     y = np.array([ENCODE_DICTIONARY[x] for x in y])         # convert str to int
 
+    print(ENCODE_DICTIONARY)
+
     # COLLECT FEATURES FROM ALL FILES
     X = ML_utils.Design_Matrix(WAVFILE_OBJECTS,wav_dir,int_dir)
 
-    base_utils.Plot_Features_2D(X.transpose()[0],X.transpose()[1],
-                                classes=y,title='Rise Time vs. Decay Time',
-                                labels=['Rise','Decay'])
+
+    # Export arrays
+    X = pd.DataFrame(X)
+    y = pd.DataFrame(y,columns=['target'])
+    Xy = pd.concat([X,y],axis=1)
+    Xy.to_csv(out_dir+'/Output.csv')
 
     print("Program Time:",time.process_time())
-
-    

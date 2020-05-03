@@ -25,7 +25,19 @@ Script contains lowest level function and class defintions
 
             #### VARIABLE & OBJECT DECLARATIONS ####   
 
-INSTRUMENT_FAMILIES = {}
+INSTRUMENT_FAMILIES = {
+    # HIGH WOODWINDS
+    'AltoFlute':'high_wind','AltoSax':'high_wind','BbClarinet':'high_wind',
+    'EbClarinet':'high_wind','Flute':'high_wind','Oboe':'high_wind',
+    'SopSax':'high_wind',
+    # LOW WOODWINDS
+    'BassClarinet':'low_wind','BassFlute':'low_wind','Bassoon':'low_wind',  
+    # STRINGS
+    'Bass':'String','Cello':'String','Viola':'String','Violin':'String',
+    # BRASS
+    'BassTrombone':'Brass','Horn':'Brass','TenorTrombone':'Brass',
+    'Trumpet':'Brass','Tuba':'Brass'
+                       }
 
             #### CLASS OBJECT DEFINITIONS ####
 
@@ -41,12 +53,15 @@ class wavfile():
         """ Initialize Class Object """
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
-        self.note = file.split('.')[-2]         # note name
-        self.channel = file.split('.')[-1]      # L or R channel
+        self.note = file.split('.')[-3]         # note name
+        self.channel = file.split('.')[-2]      # L or R channel
+        self.ext = file.split('.')[-1]          # file ext type (wav)
         self.rate = 44100                       # sample rate
+        # Set target based on family
+        self.set_target(INSTRUMENT_FAMILIES[self.instrument])
 
-    def set_target (self,target):
-        """ Set integer target value based on instrument """
+    def set_target (self,target,dictionary=None):
+        """ Set integer target value based on instrument/family """
         self.target = target
         return self
 
@@ -126,7 +141,7 @@ def Plot_Time_Spectrum (xdata,ydata,labels,title='',show=True):
     --------------------------------
     xdata (arr) : (1 x N) array of data to plot on x-axis
     ydata (arr) : (M x N) array of data to plot on y-axis ( can be multiple arrays)
-    labels (iter) : (1 x 2) iterable containing labels for x & y axes
+    labels (iter) : (1 x M) iterable containing labels for y arrays
     title (str) : Title for plot
     --------------------------------
     return None
@@ -144,8 +159,6 @@ def Plot_Time_Spectrum (xdata,ydata,labels,title='',show=True):
     else:
         plt.plot(xdata,ydata)
 
-    plt.xticks(np.arange(0,1.1,0.1))
-    plt.yticks(np.arange(0,1.1,0.1))
     #plt.hlines(0,0,xdata[-1],color='black')
     
     plt.grid()
@@ -159,7 +172,7 @@ def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
     --------------------------------
     xdata (arr) : (1 x N) array of data to plot on x-axis
     ydata (arr) : (M x N) array of data to plot on y-axis ( can be multiple arrays)
-    labels (iter) : (1 x 2) iterable containing labels for x & y axes
+    labels (iter) : (1 x M) iterable containing labels for y arrays
     title (str) : Title for plot
     --------------------------------
     return None
@@ -177,7 +190,6 @@ def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
     else:
         plt.plot(xdata,ydata)
 
-    plt.yticks(np.arange(0,1.1,0.1))
     plt.hlines(0,0,xdata[-1],color='black')
     
     plt.grid()

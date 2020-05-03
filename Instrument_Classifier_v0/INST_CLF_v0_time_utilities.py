@@ -40,7 +40,7 @@ def rise_decay_time (waveform,start=0.1,stop=0.9):
     decay_frac = (decay_dt/n_pts)
     return rise_frac,decay_frac             # the return the two features
 
-def Low_energy_Frames (waveform,n_samples=256,rate=44100):
+def Energy_Frames (waveform,n_samples=256,rate=44100):
     """
     Compute percentage of "frames" with RMS power less than
     given threshold.
@@ -61,5 +61,48 @@ def Low_energy_Frames (waveform,n_samples=256,rate=44100):
         energy = integrate.trapz(y=frame,x=None,
                     dx=1/rate,axis=-1)      
         frame_energies = np.append(frame_energies,energy)
+    # nroamlzie enrgies & compute RMS
+    frame_energies /= np.max(frame_energies)
+    RMS_energy = np.sqrt(np.sum(frame_energies**2)/len(frame_energies))
+    return frame_energies,RMS_energy
 
+def RMS_Below_Val (frame_energies,RMS,vals=[0.5]):
+    """
+    Find number of frames in waveform with RMS below given value
+    --------------------------------
+    frame_energies (arr) : 1 x M array containing normalize energies 
+        of frame from waveforms
+    RMS (float) : Root-Mean-Squared Energy Value of frames in waveform
+    vals (iter) : (1 x k) arr containing fraction of RMS to beat as threshsold
+    --------------------------------
+    Return (1 x k) array, where i-th element is number of frames in waveform,
+        with energy >= i-th val * RMS
+    """
+    n_frames = np.array([])         # output array
+    for val in vals:                # each value to be greater than
+        threshold = RMS*val         # threshold to beat:
+        cntr = 0                    # n frame with more energy
+        for frame in frame_energies:      
+            if frame >= threshold:  # more energy
+                cntr += 1           # increment counter
+        n_frames = np.append(n_frames,cntr)
+    # return number of frames w/ energy above each value
+    return n_frames                 # 
+                                    
+def Time_Spectrum_Flux (X,dt=1):
+    """
+    Compute Spectral Flux in Time-Domain (Kahn,Wasfi,2006)
+    --------------------------------
+    X (arr) : 1 x M array containing time-series based data
+    dt (float) : step in time (1 by default)
+    --------------------------------
+    Return array (1 x M-1) of TSF 
+    """
+    TSF = np.array([])          # time spectral flux output array
+    for I in range (len(X)-1):  # in the X array
+        dx = X[I+1] - X[I] 
+        TSF = np.append(TSF,dx) # add to arr
+    TSF /= dt                   # divide by int
+    TSF /= np.max(np.abs(TSF))  # normalize
+    return TSF                  # Return TSF
 
