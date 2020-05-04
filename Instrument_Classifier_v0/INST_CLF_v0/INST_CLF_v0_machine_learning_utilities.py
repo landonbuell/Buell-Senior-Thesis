@@ -11,6 +11,7 @@ import numpy as np
 import os
 
 from sklearn.neural_network import MLPClassifier
+from sklearn.processing import StandardScaler
 
 import INST_CLF_v0_base_utilities as base_utils
 import INST_CLF_v0_feature_utilities as feat_utils
@@ -61,6 +62,18 @@ def target_label_encoder(target_vector):
         class_counter += 1              # incriment class counter
     dec_dict = {value:key for key,value in enc_dict.items()}
     return enc_dict,dec_dict            # return the encoding/decoding dictionary
+
+def Design_Matrix_Scaler (X):
+    """
+    Scale design matrix to have 0 mean, & unit variance
+    --------------------------------
+    X (arr) : (n_samples x n_features) standard Design matrix to scale
+    --------------------------------
+    Return scaled design matrix
+    """
+    scalar = StandardScaler()
+    return X
+
 
 def Design_Matrix (wavfile_objects,wav_path,int_path):
     """
