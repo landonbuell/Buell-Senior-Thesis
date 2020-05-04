@@ -85,7 +85,7 @@ def RMS_Below_Val (frame_energies,RMS,vals=[0.5]):
         for frame in frame_energies:      
             if frame >= threshold:  # more energy
                 cntr += 1           # increment counter
-        n_frames = np.append(n_frames,cntr)
+        n_frames = np.append(n_frames,cntr/len(frame_energies))
     # return number of frames w/ energy above each value
     return n_frames                 # 
                                     
