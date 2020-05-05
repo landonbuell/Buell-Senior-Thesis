@@ -1,331 +1,137 @@
 % ================
 % Landon Buell
 % Kevin Short
-% PHYS 799.37
-% 17 January 2020
+% PHYS 799 
+% 5 May 2020
 % ================
-
-% ================================
 
 \documentclass[12pt,letterpaper]{article}
 
-\usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{multicol}
-
-% ================================
-
-\begin{document}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
 
 % ================================================================
 
-\title{An Introduction to Fourier Series and Fourier Transformations}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{An Introduction to Fourier Analysis}
+\rhead{Landon Buell}
+\cfoot{\thepage}
+
+% ================================================================
+
+\begin{document}
+
+\title{An Introduction to Fourier Analysis}
 \author{Landon Buell}
-\date{17 January 2020}
+\date{5 May 2020}
 \maketitle
 
 % ================================================================
 
-\section{Introduction}
-
-\paragraph*{}This paper is designed to serve as an an introduction to the concepts underlying Fourier Analysis. In this paper, we will introduce Fourier's theorem, understand it's motivation and show how it works analytically. Afterwards, I will provide an in depth explanation of the formulation, use, and properties of Numerical Fourier Series. 
+\section*{Introduction}
+\paragraph*{}Just after the turn of the 18-th century French Mathematician Jean Baptiste Fourier had spent a great deal of his time in the subjects of various partial differential equations and boundary value problems. In particular, he found that analytical solutions to \textit{The Heat Transfer Equation} involved an infinite series of orthogonal trigonometric functions \cite{Pinsky,Olver}. This lead Fourier to extent his findings and propose that \textit{any} function that was periodic with space or time could similarly be expressed as this series of sine and cosine functions. For this work, we will take explore time-domain related derivation, behavior, and analysis of the properties of and related to Fourier Series, Analysis and Transforms, both analytically and computationally.
 
 % ================================================================
 
-\section{Fourier's Theorem}
 
-\paragraph*{}Jean Baptiste Fourier spent much of his time studying partial differential equations. In solving equations with methods of separation, and then imposing boundary conditions, the function could only be fully solved by including an infinite linear combination of sine or cosine functions \cite{Haberman}. In some cases, only sine or cosine functions were used, but in other cases, combinations of sines and cosines were used. 
-\paragraph*{}Fourier took this idea and expanded to cover periodic functions in general. For this work, we will define a period function with time, $f(t)$, to be a function that has the property:
+\section*{Fourier Series Definition}
+\paragraph{}Since the series revolves around the idea of converging around approximations of period functions, let us define a continuous function, 
+$f$, that is periodic in time-space, to have the property \cite{Tolstov}:
 \begin{equation}
-\label{period def}
+\label{periodic definition}
 f(t) = f(t + nT)
-\end{equation} 
-Where $n$ is an integer value and $T$ is some constant value that it takes for the function to complete one cycle, called a \textit{period} \cite{Tolstov}.
-Fourier's theorem states that any periodic function (of time, in this case), $f(t)$, with period $T$, over the range $L$, (where $L = nT$) can be expressed as an infinite series of orthogonal trigonometric functions \cite{Taylor}. This is commonly written as:
+\end{equation}
+Where $T$ is the \textit{period} of the function with units of time ($T \neq 0$), and $n$ is an integer to indicate that the function repeats for any integer $n$. More intuitively, this is function when evaluated at time $t$ takes on some value, and then will return to that same value when progressing forward or backward in time, by some integer multiple of the period. 
+\paragraph*{}With this distinction made, we can examine Fourier's claim that we can approximate this function, over some length of time, $L$, as a sum of sine and cosine functions \cite{Pinsky,Tolstov}. Mathematically:
 \begin{equation}
-\label{Fourier Theorem Def}
-f(t) = a_0 + \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big)
-\end{equation} 
-\paragraph*{}Here, the index variable $n$ is taken to be only positive integer values. By filling in or solving for the appropriate values of $a_n$ and $b_n$, one can approximate any periodic function by including enough terms in the series. This of course raises the issue of how to find the Fourier coefficients.
+\label{Series Def}
+f(t) = a_0 + \sum_{n=1}^{+\infty} \Bigg[ a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big) \Bigg]
+\end{equation}
+Were $a_0$ , $a_n$ and $b_n$ are coefficients $L$ is the bound of time which we are concerned with and $n$ is an integer that indicates that we want our analysis to include integer multiples of unit frequencies.
+\paragraph*{}This serves as a sort of starting point or baseline for most of Fourier Analysis. If we can accept, or at least humor this, idea, we can use this foundation to break some sort of function, $f(t)$ down into a collection of functions of a single frequency. To do this more practically, we need to derive an expression for each of the infinitely many $a_n$ and $b_n$ coefficients. In order to construct expression for them, we require three very important properties of trigonometric functions:
 
-% ================================
-
-\subsection{Finding $a_0$}
-\paragraph*{}To find the $a_0$ coefficient, also called the \textit{zero-th Fourier Coefficient}, we begin with the series definition, as given in equation (\ref{Fourier Theorem Def}). Both sides of this whole function can be integrated with respect to time, from the bounds $0$ to $L$.
+\begin{enumerate}
+\item[•]\textbf{Orthogonality of Cosine}
 \begin{equation}
-\label{step1}
-\int_0^L f(t) dt = \int_0^L a_0 dt + 
-\int_0^L \Bigg[ \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + 
-b_n \sin\Big(\frac{n\pi t}{L}\Big) \Bigg] dt
-\end{equation} 
-\paragraph*{}Because of the linearity of the integral operator, the operation is effectively 'distributed' to every term in the infinite series. Furthermore, by dividing the argument of each trig function by $L$, we have forced each term by itself to fit exactly an integer amount of periods $nT$ into this region from $0$ to $L$. Sine and cosine functions also have a property where when integrated over an integer multiple of a full period, $nT$, the integral becomes identically $0$.
-\begin{equation}
-\int_0^{nT}\cos\Big(\frac{n\pi t}{L}\Big) dt = 
-\int_0^{nT}\sin\Big(\frac{n\pi t}{L}\Big) = 0 
+\label{cos orth}
+\int_{0}^{L} \cos\Big(\frac{n\pi t}{L}\Big) \cos\Big(\frac{m\pi t}{L}\Big) dt = 
+	\left\{
+        \begin{array}{ll}
+            0 	&, n \neq m \\
+            2/L	&, n = m \neq 0 \\
+            L 	&, n = m = 0\\
+        \end{array}
+    \right.
 \end{equation}
-\paragraph*{}Thus, the entire right-most integral in equation (\ref{step1}) evalute to $0$. Only the two left most integrals remain:
+\item[•]\textbf{Orthogonality of Sine}
 \begin{equation}
-\int_0^L f(t) dt = a_0 \int_0^L dt 
+\label{sin orth}
+\int_{0}^{L} \sin\Big(\frac{n\pi t}{L}\Big) \sin\Big(\frac{m\pi t}{L}\Big) dt = 
+	\left\{
+        \begin{array}{ll}
+            0 	&, n \neq m \\
+            2/L	&, n = m \neq 0 \\
+            L 	&, n = m = 0\\
+        \end{array}
+    \right.
 \end{equation}
-This equation can be evaluated, and then algebraically rearranged to solve for $a_0$:
+\item[•]\textbf{Mutual Orthogonality}
 \begin{equation}
-\label{a_0}
-a_0 = \frac{1}{L}\int_0^L f(t) dt
+\label{mutual orth}
+\int_{0}^{L} \cos\Big(\frac{n\pi t}{L}\Big) \sin\Big(\frac{m\pi t}{L}\Big) dt = 0 ,
+\hspace*{1cm} \forall m,n
 \end{equation}
-\paragraph*{}Notice that (\ref{a_0}) is just the average of the function $f(t)$ over the time span $L$. Thus, every other term in the infinite sum of functions oscillates about that scalar value.
-
-% ================================
-
-\subsection{Finding $a_n$}
-\paragraph*{}Finding the $n$-th cosine coefficient follows from a similar manner. We begin with equation (\ref{Fourier Theorem Def}). Before we integrate the full series again, we multiple the entire equation through by a $\cos(\frac{m\pi t}{L})$ term, where $m$ is an arbitrary integer value. Thus when integrated over the same bounds again, the new series becomes:
-\begin{multline}
-\label{step2}
-\int_0^L f(t)\cos\Big(\frac{m\pi t}{L}\Big) dt = 
-\int_0^L a_0\cos\Big(\frac{m\pi t}{L}\Big) dt +  \\
-\int_0^L \Bigg[ \sum_{n=1}^{\infty} 
-a_n \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) + 
-b_n \sin\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) \Bigg] dt
-\end{multline}
-\paragraph*{}Just line before, we turn our attention to the rightmost integral, the infinite sum. Sine and cosine functions also have the property of orthogonality, which is where their dot products (or integrals in our case) evaluate to zero if the functions have different arguments for $n$ and $m$. Thus mathematically,
-\begin{equation}
-\label{orthog1}
-\int \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) dt = \delta_{n,m}
-\end{equation}
-Where $\delta_{n,m}$ is the Kronecker Delta which has the property that it becomes $0$ is $m \neq n$ and $1$ if $m = n$.
-\paragraph*{}So, in the entire infinite series, every single term goes to $0$ (again the integral is applied to every term in the series), except for the one where the arbitrary integer $m$ is equal to $n$. Thus the surviving term becomes:
-\begin{equation}
-\int \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) dt =
-\int \cos^2\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-Therefore, the remaining terms in the equation become:
-\begin{equation}
-\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt = 
-a_n \int_0^L \cos^2\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-Recall that the term with $a_0$ again evaluates to $0$ and $m$ becomes $n$ because they are equal.
-\paragraph*{}The integral on the right side of the equation can be evaluated with an identity, and once again, we can solve for the $n$-th $a$ coefficient. The result is:
-\begin{equation}
-\label{a_n}
-a_n = \frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-
-% ================================
-
-\subsection{Finding $b_n$}
-\paragraph*{}Finally, to find the $n$-th sine coefficient, we use the exact same set of rules as before. We start with the series definition and multiply through every term by $\sin(\frac{m\pi t}{L})$ and then integrate from $0$ to $L$. The new series is now:
-\begin{multline}
-\label{step3}
-\int_0^L f(t)\sin\Big(\frac{m\pi t}{L}\Big) dt = 
-\int_0^L a_0\sin\Big(\frac{m\pi t}{L}\Big) dt +  \\
-\int_0^L \Bigg[ \sum_{n=1}^{\infty} 
-a_n \cos\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) + 
-b_n \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) \Bigg] dt
-\end{multline}
-\paragraph*{}Once again, the orthogonality of trig functions steps into play. Just line cosine, sine has the property:
-\begin{equation}
-\label{orthog2}
-\int \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) dt = \delta_{n,m}
-\end{equation}
-And just as before, this forces every term in the entire infinite series to evalue to $0$, except for the sole case where $m = n$. Thus the surviving terms in the series becomes:
-\begin{equation}
-\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt = 
-b_n \int_0^L \sin^2\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-Which then the right integral can again be evaluated and the coefficient $b_n$ can be solved for:
-\begin{equation}
-\label{b_n}
-b_n = \frac{2}{L}\int_0^L f(t) \sin\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-
-% ================================
-
-\subsection{Results}
-\paragraph*{}Recall again that the Fourier Series expansion of a periodic function $f(t)$ with period $T$, over region $L$ is given by equation (\ref{Fourier Theorem Def})
-\begin{equation}
-f(t) = a_0 + \sum_{n=1}^{\infty} a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big)
-\end{equation} 
-Where the values of $a_0$, $a_n$ and $b_n$ are given by (\ref{a_0}), (\ref{a_n}), and (\ref{b_n}) respectively:
-\begin{equation}
-a_0 = \frac{1}{L}\int_0^L f(t) dt
-\end{equation}
-\begin{equation}
-a_n = \frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-\begin{equation}
-b_n = \frac{2}{L}\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt
-\end{equation}
-\paragraph*{}Also note, that regardless of the exact bounds of the integral, as long as the difference between the bounds is $L$, there relations hold. For example, $-L/2$ to $+L/2$ is a value bound for this function. Additionally, if the bounds change to some arbitrary time, $\tau_0$ to $\tau_1$, then the constant $L$ in each coefficient gets replaced with $(\tau_1 - \tau_0)$.
-\paragraph*{}All we have done with this series expansion of $f(t)$ is use rules of orthogonality to produce coefficients. All these coefficients do is control the amplitude of each respective integer angular frequency. In some cases, the values of $a_n$ or $b_n$ might be zero, in some cases it may be very strong compared to it's neighboring frequency.
- 
-% ================================================================
-
-\section{Complex Fourier Series}
-\paragraph*{}In addition to use sine and cosine functions to expand $f(t)$, we can also use another mathematical too - complex exponential functions. Recall Euler's formula which states that for some angle $\phi$, trig functions are related to a complex exponential such that:
-\begin{equation}
-\label{euler}
-\cos(\phi) + i\sin(\phi) = e^{i\phi}
-\end{equation}
-Which allows for the relations:
-\begin{equation}
-\cos(\phi) = \frac{e^{i\phi}+e^{-i\phi}}{2}
-\end{equation}
-and:
-\begin{equation}
-\sin(\phi) = \frac{e^{i\phi}-e^{-i\phi}}{2i}
-\end{equation}
-\paragraph*{}Thus, we can rewrite our original expansion with these complex exponentials such that:
-\begin{equation}
-f(t) = a_0 + \frac{1}{2} \sum_{n=1}^{\infty} (a_n - ib_n)e^{i\pi\frac{n}{L}t} +
-\frac{1}{2} \sum_{n=1}^{\infty} (a_n + ib_n)e^{-i\pi\frac{n}{L}t}
-\end{equation}
-Now the coefficients $a_n$ and $b_n$ are combined to form a complex number, 
-$(a_n + ib_n)/2$ often shortened to $c_n$. We also want to include only the exponential sum that includes the $e^{-i\pi\frac{n}{L}t}$ term. To do this, we index the first sum to go from $n = -1$ to $n = -\infty$.
-This now allows us to express this sum in a more condensed form:
-\begin{equation}
-\label{complex series def}
-f(t) = \sum_{n=-\infty}^{+\infty} c_n e^{i\pi\frac{n}{L}t}
-\end{equation}
-This is known as the complex Fourier Series Definition \cite{Haberman}. Since we have defined $c_n$ to be equivalent to: $(a_n + ib_n)/2$, and we know how to find both $a_n$ and $b_n$, we can say that each coefficient, $c_n$ is given:
-\begin{equation}
-c_n = \frac{1}{2}(a_n + ib_n) = \frac{1}{2}\Bigg(
-\frac{2}{L}\int_0^L f(t)\cos\Big(\frac{n\pi t}{L}\Big) dt +
-\frac{2i}{L}\int_0^L f(t)\sin\Big(\frac{n\pi t}{L}\Big) dt \Bigg)
-\end{equation}
-Which can be conveniently simplified to:
-\begin{equation}
-\label{c_n}
-c_n = \frac{1}{L}\int_0^L f(t) e^{i\pi\frac{n}{L}t} dt
-\end{equation}
+Note that is last property holds in $m$ or $n$ are $0$, which causes that function to oscillate with $0$ frequency, this remain constant.
+\end{enumerate}
+\paragraph*{}Using these three identities, we can show uncover the coefficients.
 
 
 % ================================================================
 
-\section{The Fourier Transform}
-\paragraph*{}The concept of Fourier Series is very useful, but often difficult in practice. In many cases the integrals cannot be evaluated exactly, especially for more complicated functions of time or space. Even when done with a computer, only a finite amount of coefficients can be computed, and it comes with great computational costs. For example, to compute the first $N$ terms in the series, $2N + 1$ definite integrals must be numerically evaluated.
-\paragraph*{}In addition to Fourier series expansions, the \textit{Fourier Transform} is a very common tool to use. To build the Fourier transform, let us consider just the complex exponential function in the form:
-\begin{equation}
-\label{comp exp}
-F(t) = e^{it}
-\end{equation}
-Physically, the variable $t$ gives the arclength distance traverse by the tip of a rotating vector within a unit circle. So if we have $t=2$, then the tip of this rotating vector has traversed $2$ radians of arc around the circle. If we wanted to describe a vector that then rotates around this unit circle once per second, we would then multiply the exponent in equation (\ref{comp exp}) by the constant $2\pi$. Thus at $t=0$ and $t=1$, the expression evaluates to the same complex value: $(1 + 0i)$.
-\paragraph*{}We can also extend this idea to allow the vector to rotate with an arbitrary frequency, $\nu$. It is also convention to use a negative value in the exponent. Thus the complex exponential becomes:
-\begin{equation}
-\label{comp exp 2}
-F(t) = e^{-2\pi i\nu t}
-\end{equation}
-Now, the value of $t$ has to increase to $\frac{1}{\nu}$ for the full exponent to take the form $2\pi i$ again (one full revolution). This, the rotating vector return to the point $(1 + 0i)$ at integer multiples of $1/\nu$.
-\paragraph*{}Now suppose we have some perfectly continuous, periodic function of time, given by $f(t)$, with period $T$. We want to use build the Fourier transform to move ths function from a time domain, into a frequency domain, $f(\nu)$. We can actually multiply this $f(t)$ function by equation (\ref{comp exp 2}) and arrive at the equation:
-\begin{equation}
-f(t) e^{-2\pi i\nu t}
-\end{equation}
-\paragraph*{}Now instead of our complex exponential function rotating about a simple unit circle of radius $1$, the rotating vector's magnitude is now scaled by this function $f(t)$. So not only is the vector rotating around the origin with some arbitrary frequency , $\nu$, it's length is also begin scaled with respect to \textit{time}, according to $f(t)$. Conceptually, this is like taking the function $f(t)$ and winding it up in a circular fashion about the origin. The tip of this vector still lies within complex space.
-\paragraph*{}We can now integrate this function with respect to time, from 
-$\tau_1$ to $\tau_2$m and scale it by the inverse of that interval.
-\begin{equation}
-\frac{1}{\tau_2 - \tau_1}\int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
-\end{equation}
-This whole function is very analogous to finding the center of mass of this wound up graph \cite{Sanderson}. This "center - of - mass" idea will result in a vector, once again in complex space. Finally, we can just remove this $\frac{1}{\tau_2 - \tau_1}$ coefficient And the result is the canonical Fourier Transform. So our new function of linear frequency becomes:
-\begin{equation}
-\label{Fourier Transform}
-f(\nu) = \int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
-\end{equation}
-Similarly, to recover the original function of time, we can apply the \textit{inverse} Fourier Transform:
-\begin{equation}
-\label{Inv Fourier Transform}
-f(t) = \int_{\tau_1}^{\tau_2} f(\nu) e^{+2\pi i\nu t} d\nu
-\end{equation}
-\paragraph*{}These transform pairs are a bit tough to reason through, but we can rewrite equation (\ref{Fourier Transform}) use the help of Euler's identity (\ref{euler}) again:
-\begin{equation}
-f(\nu) = 
-\int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt =
-\int_{\tau_1}^{\tau_2} f(t) \Big[\cos(2\pi\nu t) - i\sin(2\pi\nu t)\Big] dt
-\end{equation}
-We can distribute the $f(t)$ function to each term, and then divide it into two separate integrals:
-\begin{equation}
-f(\nu) = 
-\int_{\tau_1}^{\tau_2} f(t)\cos(2\pi\nu t)dt -
-i\int_{\tau_1}^{\tau_2} f(t)\sin(2\pi\nu t)dt
-\end{equation}
-\paragraph*{}Now, this equation tells use to scale our $f(t)$ function with either a sine or cosine containing an arbitrary frequency, $\nu$, and then integrate over the bounds. Each respective area represents the real and imaginary components of some number in complex space. The magnitude of that number is the magnitude of the Fourier transform at that particular frequency, $\nu$. Thus the larger the value of the integrals, the more prevalent that angular frequency is in the signal $f(t)$.
+% ================================================================
+
 
 % ================================================================
 
-\section{Numerical Fourier Transform}
-\paragraph*{}In reality, a well defined signal $f(t)$ already has a set of known 
-constituent frequencies. In most cases, signals from the real world are not defined by some perfect and smooth function. Furthermore, actually evaluating the integrals in the transforms completely may prove to even be impossible. 
-\paragraph*{}With this comes the need to use computers to evaluate Fourier Transforms numerically. This allows for us not not have a function, $f(t)$, but rather some array full of arbitrary amplitude values. So we return to our transform definition, (\ref{Fourier Transform}):
-\begin{equation}
-f(\nu) = \int_{\tau_1}^{\tau_2} f(t) e^{-2\pi i\nu t} dt
-\end{equation}
-Firstly, $f(t)$ is no longer a continuous function, but an array discrete entries. Similarly, $f(\nu)$ will also become an array of discrete points as well. We then name them: $f(t) \rightarrow \vec{x}$ and $f(\nu) \rightarrow \vec{y}$. For this derivation I will be using syntax and concepts (such as libraries) from Python 3. 
-\paragraph*{}Now suppose that we want our output array, $\vec{y}$ to be an array containing $n$ discrete entries in it:
-\begin{equation}
-\vec{y} = [y_0 , y_1 , y_2 , y_3 , ... , y _{n-2} , y_{n-1} ]
-\end{equation}
-And suppose the input array, $\vec{x}$ has $N$ discrete components in it:
-\begin{equation}
-\vec{x} = [x_0 , x_1 , x_2 , x_3 , ... , x _{N-2} , x_{N-1} ]
-\end{equation}
-\paragraph*{}Each entry in this $\vec{y}$ array will correspond to a particular linear frequency value.  In we use a sort of dimensional ambiguity, and normalize each frequency values such that $y_0$ represents $0$ cycles per unit time, and $y_{n-1}$ represents 1 cycle per unit time. After we compute the full $y$ array, we can then go back a multiply the full array by a constant to account for the particular unit.
-\paragraph*{}Now, for each index, $y_k$, we need to evaluate the full Fourier transform (\ref{Fourier Transform}) for a particular frequency, $\nu$. So we need to set the particular frequency value, and evaluate equation (\ref{Fourier Transform}) for that value. Thus, no using these discrete variables, we can write our Discrete Fourier Transform as:
-\begin{equation}
-\label{Discrete Fourier Transform}
-\vec{y} = \sum_{j=0}^{N-1} \vec{x}_j e^{-2\pi i \vec{\nu}}
-\end{equation}
-Thus each individual entry in the the $\vec{y}$ vector is given:
-\begin{equation}
-\label{kth DFT}
-\vec{y}_k = \sum_{j=0}^{N-1} \vec{x}_j e^{-2\pi ik \vec{\nu}}
-\end{equation}
-\paragraph*{}Lastly, we mist choose the elements of the linear frequency array $\vec{\nu}$ such that they are dimensionless. Since we want our output vector $\vec{y}$ to contain $n$ points, the array $\vec{\nu}$ must also contain $n$ points, even spaced between $0$ and $1$. Thus now, when we multiply $\vec{\nu}$ by the index $k$ in (\ref{kth DFT}), we have the effect of evaluating the transform for that particular, normalized frequency value. 
-\paragraph*{}So if we wanted, to code this transform "from scratch" in python, we would start by creating a time axis, $t$, the number of point in our output transform, $n$, and a signal $x$ to transform, with the help of numpy:
-\begin{verbatim}
->>> import numpy as np
->>> n = 1024
->>> t = np.arrange(0,5,0.01)
->>> x = 2*np.sin(2*np.pi*4*t) + 3*np.cos(2*np.pi*3*t)
 
-\end{verbatim}
-\paragraph*{}We also need to create the frequency vector, $\vec{\nu}$, and an empty array, $y$, to hold our output:
-\begin{verbatim}
->>> nu = np.arange(n)/n
->>> y = np.array([])
-\end{verbatim}
-\paragraph*{}Now, we need to create a loop that indexes from the $0$-th to the $n-1$-th element in the output array. Each element is them given by equation (\ref{kth DFT})Note that $x$ must be truncated to have $n$ points.
-\begin{verbatim}
->>> x1 = x[0:n]
->>> for k in range (0,len(n),1):
->>>     y_k = np.sum(x1 * np.exp(2*np.pi*-1j*k*nu))
->>>     y = np.append(y,y_k)  
-\end{verbatim}
-\paragraph*{}When this loop completes, there will be an array $y$ that is filled with $n$ entries. Each entry is given by the discrete Fourier Transform in equation (\ref{kth DFT}). To dimensional the frequencies, we simply need to create the frequency spectrum axis. If our original $\vec{x}$ array is sampled at some frequency, $f_0$, then the highest and lowest frequency that we can sample is $\pm\frac{f_0}{2}$. This means that the sampled frequencies are from $-\frac{f_0}{2}$ to $+\frac{f_0}{2}$ evenly spaced such that there are $n$ points.
+% ================================================================
+
 
 % ================================================================
 
 \begin{thebibliography}{9}
-\bibliographystyle{apalike}
+
+\bibitem{Debnath}
+Debnath, Lokenath, and Dambaru Bhatta. \textit{Integral Transforms and Their Applications}. CRC Press/Taylor \& Francis Group, 2015.
 
 \bibitem{Haberman}
 Haberman, Richard. \textit{Applied Partial Differential Equations: with Fourier Series and Boundary Value Problems}. 5th ed., Pearson Education, 2014.
 
+\bibitem{Olver}
+Olver, Peter J. Introduction to Partial Differential Equations. Springer International, 2016.
+
+\bibitem{Oppenheim}
+Oppenheim, Alan S., et al. \textit{Signals and Systems}. Prentice-Hall, 1983.
+
+\bibitem{Peatross}
+Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics}. Brigham Young University, Department of Physics, 2015.
+
 \bibitem{Pinsky}
-Pinsky, Mark A. \textit{Partial Differential Equations and Boundary-Value Problems with Applications}. 3rd ed., American Mathematical Society, 2011.
-
-\bibitem{Sanderson}
-Sanderson, Grant. \textit{But What Is the Fourier Transform? A Visual Introduction}. YouTube, 26 Jan. 2018.
-
-\bibitem{Taylor}
-Taylor, John R. \textit{Classical Mechanics}. Univ. Science Books, 2005.
+Pinsky, Mark A. \textit{Partial Differential Equations with Boundary-Value Problems with Applications}. 3rd ed., American Mathematical Society, 2010.
 
 \bibitem{Tolstov}
 Tolstov, Georgy Pavlovich. \textit{Fourier Series}. Translated by Richard Allan. Silverman, London; Printed in U.S.A., 1962.
 
 \end{thebibliography}
 
+
 % ================================================================
 
 
 \end{document}
-
