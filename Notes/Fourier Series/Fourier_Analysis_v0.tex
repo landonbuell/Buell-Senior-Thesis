@@ -1,0 +1,247 @@
+% ================
+% Landon Buell
+% Kevin Short
+% PHYS 799 
+% 5 May 2020
+% ================
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+% ================================================================
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{An Introduction to Fourier Analysis}
+\rhead{Landon Buell}
+\cfoot{\thepage}
+
+% ================================================================
+
+\begin{document}
+
+\title{An Introduction to Fourier Analysis}
+\author{Landon Buell}
+\date{5 May 2020}
+\maketitle
+
+% ================================================================
+
+\section*{Introduction}
+\paragraph*{}Just after the turn of the 18-th century French Mathematician Jean Baptiste Fourier had spent a great deal of his time in the subjects of various partial differential equations and boundary value problems. In particular, he found that analytical solutions to \textit{The Heat Transfer Equation} involved an infinite series of orthogonal trigonometric functions \cite{Pinsky,Olver}. This lead Fourier to extent his findings and propose that \textit{any} function that was periodic with space or time could similarly be expressed as this series of sine and cosine functions. For this work, we will take explore time-domain related derivation, behavior, and analysis of the properties of and related to Fourier Series, Analysis and Transforms, both analytically and computationally.
+
+% ================================================================
+
+
+\section*{Trigonometric Fourier Series}
+\paragraph{}Since the series revolves around the idea of converging around approximations of period functions, let us define a continuous function or signal, $S$, that is periodic in time-space, to have the property \cite{Tolstov}:
+\begin{equation}
+\label{periodic definition}
+S(t) = S(t + nT)
+\end{equation}
+Where $T$ is the \textit{period} of the function with units of time ($T \neq 0$), and $n$ is an integer to indicate that the function repeats for any integer $n$. More intuitively, this is function when evaluated at time $t$ takes on some value, and then will return to that same value when progressing forward or backward in time, by some integer multiple of the period. 
+\paragraph*{}With this distinction made, we can examine Fourier's claim that we can approximate this function, over some length of time, $L$, as a sum of sine and cosine functions \cite{Pinsky,Tolstov}, hence this section being \textit{trigonometric} Fourier Series . Mathematically:
+\begin{equation}
+\label{Series Def}
+S(t) = a_0 + \sum_{n=1}^{+\infty} \Bigg[ a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big) \Bigg]
+\end{equation}
+Were $a_0$ , $a_n$ and $b_n$ are coefficients $L$ is the bound of time which we are concerned with and $n$ is an integer that indicates that we want our analysis to include integer multiples of unit frequencies.
+\paragraph*{}This serves as a sort of starting point or baseline for most of Fourier Analysis. If we can accept, or at least humor this, idea, we can use this foundation to break some sort of function, $S(t)$ down into a collection of functions of a single frequency. To do this more practically, we need to derive an expression for each of the infinitely many $a_n$ and $b_n$ coefficients. In order to construct expression for them, we require three very important properties of trigonometric functions:
+
+\begin{enumerate}
+\item[•]\textbf{Orthogonality of Cosine}
+\begin{equation}
+\label{cos orth}
+\int_{0}^{L} \cos\Big(\frac{n\pi t}{L}\Big) \cos\Big(\frac{m\pi t}{L}\Big) dt = 
+	\left\{
+        \begin{array}{ll}
+            0 	&, n \neq m \\
+            L/2	&, n = m \neq 0 \\
+            L 	&, n = m = 0\\
+        \end{array}
+    \right.
+\end{equation}
+\item[•]\textbf{Orthogonality of Sine}
+\begin{equation}
+\label{sin orth}
+\int_{0}^{L} \sin\Big(\frac{n\pi t}{L}\Big) \sin\Big(\frac{m\pi t}{L}\Big) dt = 
+	\left\{
+        \begin{array}{ll}
+            0 	&, n \neq m \\
+            L/2	&, n = m \neq 0 \\
+            L 	&, n = m = 0\\
+        \end{array}
+    \right.
+\end{equation}
+\item[•]\textbf{Mutual Orthogonality}
+\begin{equation}
+\label{mutual orth}
+\int_{0}^{L} \cos\Big(\frac{n\pi t}{L}\Big) \sin\Big(\frac{m\pi t}{L}\Big) dt = 0 ,
+\hspace*{1cm} \forall m,n
+\end{equation}
+\end{enumerate}
+Note that each of these hold in the case that either $m$ or $n$ are $0$, which causes that function to oscillate with $0$ frequency, thus remains constant \cite{Tolstov}. With these three identities, we can now derive the coefficients. 
+
+% ================================
+
+\subsection*{Finding $a_0$}
+\paragraph*{}To find $a_0$, we integrate both sides of the equation (\ref{Series Def}) from $0$ to $L$ with respect to time:
+\begin{equation}
+\int_{0}^{L}S(t)dt = \int_{0}^{L}a_0dt + \int_{0}^{L}\sum_{n=1}^{+\infty} 
+\Bigg[ a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big) \Bigg] dt
+\end{equation}
+Because of the linearity of the integral operator, the integration can be distributed identically to every term in the infinite sum. We can now recognize that each term inside the sum resembles equation (\ref{cos orth}) or (\ref{sin orth}), for sequential $n$ and $m = 0$. This causes every single one of those terms to vanish to $0$. Thus the remaining equation becomes:
+\begin{equation}
+\int_{0}^{L}S(t)dt = a_0\int_{0}^{L}dt
+\end{equation}
+Where $a_0$ is factored out due to it being a constant. We can then evaluate the right-hand integral and then solve for $a_0$ \cite{Haberman}:
+\begin{equation}
+\label{a_0}
+a_0 = \frac{1}{L}\int_{0}^{L}S(t)dt
+\end{equation}
+\paragraph*{}Physically, we can actually interpret the constant $a_0$ as the \textit{average} value of the function $S(t)$ over the range $0$ to $L$. This makes sense, as it's the only constant value in the series, thus serving as the basis for all other functions to oscillate about. 
+
+% ================================
+
+\subsection*{Finding $a_n$ and $b_n$}
+\paragraph*{}Due to the similar properties of sine and cosine as outline above, the process for finding the $a_n$ and $b_n$ coefficients are almost identical. For practical purposes, we will derive just $a_n$ and then show how it also applies the the $b_n$ coefficients. For the cosine function coefficients, we start again with equation (\ref{Series Def}). To start, we multiply both sides of the function with $\cos(m\pi t/L)$. Again, this distributes to every term in the infinite series as well.
+\begin{equation}
+\label{S(t)cos(t)}
+\begin{split}
+S(t)\cos\Big(\frac{m\pi t}{L}\Big) = &  a_0\cos\Big(\frac{m\pi t}{L}\Big) + \\
+\sum_{n=1}^{+\infty} & \Bigg[ a_n \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) \Bigg] +  
+\sum_{n=1}^{+\infty} \Bigg[ b_n \sin\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) \Bigg]
+\end{split}
+\end{equation}
+Note that I have split the infinite sum into two separate (but still infinite) sums, the first containing only cosine terms and the 2nd containing both cosine and sine.
+\paragraph*{}Just as before, we will integrate every term in equation (\ref{S(t)cos(t)}) with respect to time from $0$ to $L$. In the 2nd sum, with the sines and cosines together, we can use equation (\ref{mutual orth}) to show that every term in the sum vanishes to $0$, when integrating over our chosen bounds. Furthermore, the $a_0$ term also goes to $0$ for the same reason, This means that we now have:
+\begin{equation}
+\int_{0}^{L}S(t)\cos\Big(\frac{m\pi t}{L}\Big)dt = 
+\int_{0}^{L}\sum_{n=1}^{+\infty} \Bigg[ a_n \cos\Big(\frac{n\pi t}{L}\Big)\cos\Big(\frac{m\pi t}{L}\Big) \Bigg]dt
+\end{equation}
+Once again, we exploit the linear property of the integral, and distribute it to each term in the infinite sum. Every single term in that infnite sum then integrates to $0$ due to identity (\ref{cos orth}), except for the single case where $m = n$. The result is a much cleaner expression:
+\begin{equation}
+\int_{0}^{L}S(t)\cos\Big(\frac{n\pi t}{L}\Big)dt = 
+a_n\int_{0}^{L} \cos^2\Big(\frac{n\pi t}{L}\Big)dt
+\end{equation}
+I have replaced all $m$'s with $n$'s due to their equivalence. Finally, the integral on the right side can be evaluated, and then we solve for $a_n$ and reveal:
+\begin{equation}
+\label{a_n}
+a_n = \frac{2}{L}\int_{0}^{L}S(t)\cos\Big(\frac{n\pi t}{L}\Big)dt
+\end{equation}
+\paragraph*{}To derive the $b_n$ coefficients, we need only to repeat the process, this time replace the inserted cosine functions in equatiion (\ref{S(t)cos(t)}) with sine functions. Following all of the same steps and similar rules brings us to:
+\begin{equation}
+\int_{0}^{L}S(t)\sin\Big(\frac{m\pi t}{L}\Big)dt = 
+\int_{0}^{L}\sum_{n=1}^{+\infty} \Bigg[ b_n \sin\Big(\frac{n\pi t}{L}\Big)\sin\Big(\frac{m\pi t}{L}\Big) \Bigg]dt
+\end{equation}And finally given the rules of orthogonality in equation (\ref{sin orth}), we can again remove all terms in this sum, except for where $m = n$, and then solve for $b_n$ to show:
+\begin{equation}
+\label{b_n}
+b_n = \frac{2}{L}\int_{0}^{L}S(t)\sin\Big(\frac{n\pi t}{L}\Big)dt
+\end{equation}
+
+% ================================
+
+\subsection*{Summary of trigonometric Fourier Series}
+\paragraph*{}Beginning with Fourier's assertion that a continuous function of time, $S(t)$, can be expanded as an infinite linear combination of orthogonal trigonometric functions, we have shown to use the properties of the sine and cosine functions to generate the coefficients in the combination. Thus, we arrive at the expressions, very compactly:
+\begin{equation}
+S(t) = a_0 + \sum_{n=1}^{+\infty} \Bigg[ a_n \cos\Big(\frac{n\pi t}{L}\Big) + b_n \sin\Big(\frac{n\pi t}{L}\Big) \Bigg]
+\end{equation}
+Where \cite{Pinsky,Tolstov,Peatross}:
+\begin{equation}
+\begin{split}
+a_0 =& \frac{1}{L}\int_{0}^{L}S(t)dt \\
+a_n =& \frac{2}{L}\int_{0}^{L}S(t)\cos\Big(\frac{n\pi t}{L}\Big)dt \\
+b_n =& \frac{2}{L}\int_{0}^{L}S(t)\sin\Big(\frac{n\pi t}{L}\Big)dt \\
+\end{split}
+\end{equation}
+This may leave us with more questions that answers. What happens when we want to change the bounds of the integral? What happens if the period of the signal is a non-integer or is much greater than the bounds? If we have a well-defined function, why would be want to approximate it anyways?
+\paragraph*{}We'll, because of many of these concerns, trigonometric series expansions are not commonly used to break down a function, especially in digital signal processing, it just isn't reasonable do, especialy when signals like $S(t)$ are not continuous functions, but rather composed of discrete floating-point entries. Ideally, what we want it a \textit{transform} that allows us to take a function of time $S(t)$ and convert it into an equivalent function of frequency, $S(f)$ without getting bogged down in trigonometry. For this, we need to use \textit{Complex} Fourier Series to derive the \textit{Fourier Transform}.
+
+% ================================================================
+
+\section*{Fourier Transform}
+\paragraph*{}To build the transform, we need to eliminate the sine and cosine expansion in favor of a complex exponential function. Thanks to German mathematician, Leonard Euler, and his work with complex-space and the complex unit circle, we have the infamous Euler's Identity:
+\begin{equation}
+\label{Euler}
+e^{i\varphi} = \cos(\varphi) + i\sin(\varphi)
+\end{equation}
+As a direct consequence, we can also show the two following very important relations:
+\begin{equation}
+\cos(\varphi) = \frac{e^{i\varphi} + e^{-i\varphi}}{2}
+\end{equation}
+\begin{equation}
+\sin(\varphi) = \frac{e^{i\varphi} - e^{-i\varphi}}{2i}
+\end{equation}
+\paragraph*{}With these in our back pocket, we can now take Fourier's original claim aout decomposing it into sine and cosine function, (\ref{Series Def}) and instead decompose it into a sum of complex exponential functions:
+\begin{equation}
+S(t) = a_0 +  \sum_{n=1}^{+\infty} \Bigg[
+\frac{a_n}{2} \Big( e^{i\big(\frac{n\pi t}{L}\big)} + e^{-i\big(\frac{n\pi t}{L}\big)} \Big)+
+\frac{b_n}{2i}\Big( e^{i\big(\frac{n\pi t}{L}\big)} - e^{-i\big(\frac{n\pi t}{L}\big)} \Big)\Bigg]
+\end{equation}
+\paragraph*{}We can now rearrange the terms with the sum, and combine like-exponentials. We will also split the single sum into two sums, all still infinite in length:
+\begin{equation}
+S(t) =  a_0 +
+\sum_{n=0}^{+\infty} \Big(\frac{a_n - ib_n}{2}\Big) e^{+i\big(\frac{n\pi t}{L}\big)} +
+\sum_{n=0}^{+\infty} \Big(\frac{a_n + ib_n}{2}\Big) e^{-i\big(\frac{n\pi t}{L}\big)}
+\end{equation}
+Next, lets create new variables $c_n^+$ and $c_n^-$ to replace the coefficients inside each sum respectively. Since the complex exponential evaluates to $1$ when $n=0$, we will absorb it into the same, and change the index to include $n = 0$. Now, when all said is done, we can simply state:
+\begin{equation}
+S(t) = \sum_{n = -\infty}^{+\infty} c_n e^{+i\big(\frac{n\pi t}{L}\big)}
+\end{equation}
+Where:
+\begin{equation}
+\begin{split}
+c_n^+ = & c_{n>0} = \frac{a_n - ib_n}{2} \\
+c_n^- = & c_{n<0} = \frac{a_n + ib_n}{2} \\
+c_0   = & a_n
+\end{split}
+\end{equation}
+
+% ================================================================
+
+
+% ================================================================
+
+
+% ================================================================
+
+
+% ================================================================
+
+\begin{thebibliography}{9}
+
+\bibitem{Debnath}
+Debnath, Lokenath, and Dambaru Bhatta. \textit{Integral Transforms and Their Applications}. CRC Press/Taylor \& Francis Group, 2015.
+
+\bibitem{Haberman}
+Haberman, Richard. \textit{Applied Partial Differential Equations: with Fourier Series and Boundary Value Problems}. 5th ed., Pearson Education, 2014.
+
+\bibitem{Olver}
+Olver, Peter J. Introduction to Partial Differential Equations. Springer International, 2016.
+
+\bibitem{Oppenheim}
+Oppenheim, Alan S., et al. \textit{Signals and Systems}. Prentice-Hall, 1983.
+
+\bibitem{Peatross}
+Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics}. Brigham Young University, Department of Physics, 2015.
+
+\bibitem{Pinsky}
+Pinsky, Mark A. \textit{Partial Differential Equations with Boundary-Value Problems with Applications}. 3rd ed., American Mathematical Society, 2010.
+
+\bibitem{Tolstov}
+Tolstov, Georgy Pavlovich. \textit{Fourier Series}. Translated by Richard Allan. Silverman, London; Printed in U.S.A., 1962.
+
+\end{thebibliography}
+
+
+% ================================================================
+
+
+\end{document}

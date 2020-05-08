@@ -71,7 +71,9 @@ def Design_Matrix_Scaler (X):
     --------------------------------
     Return scaled design matrix
     """
-    scalar = StandardScaler()
+    scaler = StandardScaler()       # scaler obj inst
+    scaler = scaler.fit(X)
+    X = scaler.transform(X)
     return X
 
 
