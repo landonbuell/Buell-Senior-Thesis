@@ -11,7 +11,9 @@ import numpy as np
 import os
 
 from sklearn.neural_network import MLPClassifier
-from sklearn.processing import StandardScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import sklearn.metrics as metrics
 
 import INST_CLF_v0_base_utilities as base_utils
 import INST_CLF_v0_feature_utilities as feat_utils
@@ -19,32 +21,31 @@ import INST_CLF_v0_feature_utilities as feat_utils
 
 """
 INSTRUMENT CLASSIFIER V0 - MACHINE LEARNING UTILITIES
-
+    - split_train_test
+    - target_label_encoder
+    - Design_Matric_Scaler
+    - Design_Matrix
+    - Create_MLP_Model
+    - Confusion_Matrix
 
 """
 
             #### PREPROCESSING FUNCTIONS ####
 
-def split_train_test (data,tt_ratio=0.6):
+def split_train_test (X,y,test=0.25,seed=None):
     """
     generate a series of indicies for training & testing data
         Adapted from (Geron, 49) (Note: numpy is Psuedo-Random)
     --------------------------------
-    data (iterable) : list or collection of data to split
-    ratio (float) : ratio of train: test data on the bound (0,1)
+    X (arr) : Design matrix, (n_samples x n_features)
+    y (arr) : Target vector, (n_samples x 1)
+    test (float) : ratio of testing data size on the bound (0,1)
+    seed (int) : Random state for split
     --------------------------------
     return lists of training obj instances & testing obj instances 
     """
-    n_samples = len(data)                       # number of samples in data
-    shuffled = np.random.permutation(n_samples) # permute idxs
-    train_size = int(n_samples*tt_ratio)        # test dataset size
-    # create lists of indexes for training/testing
-    train_pts = shuffled[:train_size].tolist()      
-    test_pts = shuffled[train_size:].tolist()
-    # breaking into list of training & testing data
-    training_data = [data[x] for x in train_pts]
-    testing_data = [data[x] for x in test_pts]
-    return training_data,testing_data           # return the two lists
+    return train_test_split(X,y,test_size=test,random_state=seed)
+
 
 def target_label_encoder(target_vector):
     """
@@ -52,7 +53,7 @@ def target_label_encoder(target_vector):
     --------------------------------
     target_vector (arr) : array of target classes as strings
     --------------------------------
-    Return encoding dictionary
+    Return encoding & decoding dictionary
     """
     enc_dict = {}                       # output dictionary
     class_counter = 0                   # class counter
@@ -71,9 +72,8 @@ def Design_Matrix_Scaler (X):
     --------------------------------
     Return scaled design matrix
     """
-    scaler = StandardScaler()       # scaler obj inst
-    scaler = scaler.fit(X)
-    X = scaler.transform(X)
+    scaler = StandardScaler()   # obj inst
+    X = scaler.fit_transform(X) # fit the inst & tranf X
     return X
 
 
@@ -100,15 +100,14 @@ def Design_Matrix (wavfile_objects,wav_path,int_path):
         os.chdir(int_path)                  # change to home directory
 
         timeseries_features = feat_utils.timeseries(WAVFILE)     # collect time features
-        #freqseries_features = feat_utils.freqseries(WAVFILE)     # colelct freq features
+        freqseries_features = feat_utils.freqseries(WAVFILE)     # colelct freq features
 
         row = np.array([])          # feature vector for sample
         row = np.append(row,timeseries_features)    # add time features
-        #row = np.append(row,freqseries_features)    # add freq features
+        row = np.append(row,freqseries_features)    # add freq features
         X = np.append(X,row)        # add to feature matrix
 
     return X.reshape(n_samples,-1)     # rehape feature matrix
-
 
             #### CREATE MODEL INSTANCES ####
 
@@ -120,10 +119,36 @@ def Create_MLP_Model (name,layers,seed=None):
     layers (tuple) : Hidden layer sizes
     seed (int) : Random state for classifier model (default=None)
     --------------------------------
-
+    Return initialized MLP model instance
     """
     model = MLPClassifier(hidden_layer_sizes=layers,activation='relu',
-                        solver='sgd',batchsize=100,max_iter=400,
+                        solver='sgd',batch_size=100,max_iter=500,
                         tol=1e-4,random_state=seed)
     setattr(model,'name',name)      # attach name attribute
     return model                    # return initialized model
+
+            #### EVALUATION & METRICS ####
+
+def Evaluate_Classifier (model,X_test,y_test):
+    """
+    Evaluate the performance of a classifier w/ confusion matrix,
+        precision score & recall score
+    --------------------------------
+    model (inst) : Instance of trained MLP classifer model
+    X_test (arr) : Subset of design matrix for testing model
+    y_test (arr) : Corresponding labels for design matrix
+    --------------------------------
+    Return model instances w/ metric values attached as attrbs
+    """
+    y_pred = model.predict(X_test)      # run prediction on model
+    # Compute & Attatch Confusion matrix
+    confmat = metrics.confusion_matrix(y_test,y_pred)   # confmat
+    setattr(model,'confusion',confmat)  # attatch
+    # Compute & Attatch Precision scores
+    precision = metrics.precision_score(y_test,y_pred,average=None)
+    setattr(model,'precision',precision)
+    # Compute & Attatch Recall scores
+    recall = metrics.recall_score(y_test,y_pred,average=None)
+    setattr(model,'recall',recall)
+    # Return model w/ attatched attrbs
+    return model

@@ -61,7 +61,7 @@ def Energy_Frames (waveform,n_samples=256,rate=44100):
         energy = integrate.trapz(y=frame,x=None,
                     dx=1/rate,axis=-1)      
         frame_energies = np.append(frame_energies,energy)
-    # nroamlzie enrgies & compute RMS
+    # normalize energies & compute RMS
     frame_energies /= np.max(frame_energies)
     RMS_energy = np.sqrt(np.sum(frame_energies**2)/len(frame_energies))
     return frame_energies,RMS_energy

@@ -198,11 +198,13 @@ def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
         plt.show()
 
 
-def Plot_Spectrogram (t,f,spect,title,show=True):
+def Plot_Spectrogram (f,t,Sxx,title,show=True):
     """
     Create visualization of soundwave as frequency vs. time vs. power
     --------------------------------
-    spect ((arr) : (N x M) matrix representing file's spectrogram
+    f (arr) : (1 x N) frequency space axis
+    t (arr) : (1 x M) time space axis
+    Sxx ((arr) : (N x M) matrix representing file's spectrogram
     title (str) : Title for plot
     --------------------------------
     return None
@@ -212,14 +214,12 @@ def Plot_Spectrogram (t,f,spect,title,show=True):
     plt.xlabel('Time',size=20,weight='bold')
     plt.ylabel('Frequnecy',size=20,weight='bold')
 
-    plt.pcolormesh(t,f,spect,cmap=plt.cm.binary)
+    plt.pcolormesh(t,f,Sxx,cmap=plt.cm.viridis)
 
     plt.grid()
     plt.tight_layout()
     if show == True:
         plt.show()
-
-
 
 def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     """
@@ -249,3 +249,8 @@ def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     if show == True:
         plt.show()
 
+def Plot_Confusion_Matrix (model,show=True):
+    """
+    Visualize Confusion Matrix
+    """
+    pass

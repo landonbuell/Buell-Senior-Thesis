@@ -40,11 +40,6 @@ def timeseries (wavfile):
     values = time_utils.RMS_Below_Val(energies,RMS,[0.1,0.25,0.5,0.75])
     features = np.append(features,values)
 
-    # Compute Average Spectral Flux
-    TSF = time_utils.Time_Spectrum_Flux(energies)
-    avg_TSF = np.mean(TSF)
-    features = np.append(features,avg_TSF)
-
     features = np.ravel(features)   # flatten to 1D
     return features                 # return the feature array
 
@@ -58,15 +53,15 @@ def freqseries (wavfile):
     Return array of frequency series features
     """
     features = np.array([])
-    hann_wave = freq_utils.Hanning_Window(wavfile.waveform)         # apply hann window
-
-    f_space,pts,f_resol = freq_utils.Frequency_Space(wavfile.n_pts) # create freq sp. axis
-    power_spect = freq_utils.Power_Spectrum(hann_wave,pts)          # compute power spectrum
-
+    
     # SPECTROGRAM
-    spect_N = 2**12                                                 # N_pts in Sxx FFT
-    f_space,pts,f_resol = freq_utils.Frequency_Space(spect_N)       # create freq sp. axis
-    Sxx = freq_utils.Spectrogram(wavfile.waveform,pts,N=spect_N)    # creat spectrogram
-    t = np.arange(0,Sxx.shape[1])                                   # create time sp. axis
+    N_pts = 2**10                # pts in FFT
+    f,t,Sxx = freq_utils.Spectrogram(wavfile.waveform,N=N_pts)
+    #base_utils.Plot_Spectrogram(f,t,Sxx,str(wavfile.filename),show=True)
+
+    # ENERGY / FREQUENCY BAND
+    banks = np.array([0,32,64,128,256,512,1024,2048,6000])
+    pwr_per_bank = freq_utils.Frequency_Banks(f,t,Sxx,cutoffs=banks)
+    features = np.append(features,pwr_per_bank)
 
     return features

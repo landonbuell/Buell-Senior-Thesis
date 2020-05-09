@@ -15,6 +15,7 @@ import INST_CLF_v0_base_utilities as base_utils
 
 import scipy.fftpack as fftpack
 import scipy.signal as signal
+import scipy.integrate as integrate
 
             #### FUNCTION DEFINITIONS ####
            
@@ -43,49 +44,58 @@ def Frequency_Space (n_pts,rate=44100):
     frequency_space = frequency_space[pts]                  # truncate 0 - 6kHz    
     return frequency_space,pts,resolution                   # axis,idx,res
 
-def Power_Spectrum (waveform,pts=None):
+def Power_Spectrum (waveform,norm=False,pts=[]):
     """
     Compute power spectrum of waveform using frequnecy space
     --------------------------------
     waveform (array) : 1 x N waveform from file with normalized amplitude
+    norm (Bool)
     pts (list) : list of pts to keep in FFT spectrum
+    
     --------------------------------
     Return power spectrum of shape (1  x len(pts)) size
     """
     fftdata = fftpack.fft(waveform,n=len(waveform),axis=-1)
     power = np.abs(fftdata)**2      # compute power spect
-    power /= np.max(power)          # normalize
-    if pts == None:                 # idxs not specified
-        return power                # return full FFT
-    else:                           # otherwise
-        return power[pts]           # return specific idx of pwr
+    if norm == True:                # if normalize req.
+        power /= np.max(power)      # normalize
+    return power[pts]               # return specific idx of pwr
 
-def Spectrogram (waveform,pts,N=2**10):
+def Spectrogram (waveform,rate=44100,N=2**10,overlap=0.75,
+                 start_frame=0,end_frame=-1):
     """
     Compute spectrogram of audio file data
         (N x M) Frequency vs. Time matrix
     --------------------------------
     waveform (array) : 1 x M waveform from file with normalized amplitude
-    pts (list) : list of pts to keep in FFT spectrum (num of rows in Spectrogram)
-    N (int) : Number of points to use in each FFT (recc. 2^p where p is int)
+    rate(int) : Inverse of sampling frequency
+    N (int) : Number of samples per frame used to compute FFT (recc 2^p)
+    overlap (float) : percentage of overlap between adjacent frames (0,1)
     --------------------------------
     Return spectrogram of signal
     """
-    step = int(N/4)             # step between frames (overlap)   
+    # Initialize
+    step = int(overlap*N)       # step between frames 
     Sxx = np.array([])          # init spectrogram
     cntr = 0                    # number of FFT's computed
 
+    # Compute frequency axis
+    f,f_pts,f_resol = Frequency_Space(N,rate=rate)
+
+    # Build Spectrogram
     for I in range (0,len(waveform)-N,step):    # iter throught waveform
         frame = waveform[I:I+N]                 # audio segment - 'frame'
         frame = Hanning_Window(frame)           # apply Hann window
-        pwr = Power_Spectrum(frame,pts)         # pwr spectrum for sample
-        Sxx = np.append(Sxx,pwr)                # add pwr spectrum
-        cntr +=1 
-
-    Sxx = Sxx.reshape(cntr,len(pts[0])).transpose()   # reshape   
-    return Sxx
-
-
+        pwr = Power_Spectrum(frame,False,f_pts) # pwr spectrum for sample
+        Sxx = np.append(Sxx,pwr)                # add pwr spectrum to matrix
+        cntr +=1                                # increment counter
+    Sxx = Sxx.reshape(cntr,-1).transpose()      # reshape
+    
+    # Compute time-axis
+    t = np.arange(0,cntr,1)
+    
+    # Return time-axis, freq-axis and Sxx matrix
+    return f,t,Sxx
 
 def CSPE_MATLAB(waveform,n_pts):
     """
@@ -102,16 +112,34 @@ def CSPE_MATLAB(waveform,n_pts):
                     varargin=['windowed'])
     return None
     
+def Frequency_Banks(f,t,Sxx,cutoffs=[0,6000]):
+    """
+    Compute power within a set of bands of the frequency spectrum
+    --------------------------------
+    f (arr) : (1 x N) frequency space axis
+    t (arr) : (1 x M) time space axis
+    Sxx (arr) : (N x M) matrix representing file's spectrogram
+    cutoffs (iter) : iterable of bounds of frequnecy bands
+    --------------------------------
+    Return arr of powers in each frequency band
+    """
+    n_banks = len(cutoffs) - 1      # number of banks to use
+    n_frames = t.shape[0]           # number of frames in file
+    Sxx = Sxx.transpose()               # transp spectrogram
+    bank_pwrs = np.zeros((1,n_banks))   # arr to hold power/banks
 
-def Find_Peaks (spectrum,hgt,res):
-    """
-    Find Number of peaks above certain value in a given spectrum
-    --------------------------------
-    spectrum (arr) : 1 x N power spectrum to find peaks in 
-    hgt (float) : minimum tolerance of height of spike
-    res (float) : frequncy resolution in Hz
-    --------------------------------
-    Return number of peaks in spectrum
-    """
-    peaks = np.where((spectrum >= height)&(spectrum <= 1))[0]
-    print(len(peaks),'\n')
+    # Build Frequency Bank Array
+    for frame in Sxx:                       # iterate through time
+        frame_pwrs = np.array([])           # bank pwrs for frame
+
+        for I in range (0,len(cutoffs)-1,1):            # each banks
+            low_bnd,high_bnd = cutoffs[I],cutoffs[I+1]  # establish bnds
+            pts = np.where((f>=low_bnd)&(f<=high_bnd))  # find idxs of bands
+            bank = frame[pts]                           # isolate band
+            pwr = integrate.trapz(bank)                 # compute def integral
+            frame_pwrs = np.append(frame_pwrs,pwr)      # add to arr
+    
+        bank_pwrs += frame_pwrs             # add frame power to bank
+
+    bank_pwrs /= n_frames           # average over number of frames
+    return bank_pwrs.ravel()        # return bank powers as arr of floats        

@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     # COLLECT .WAV FILE INSTANCES
     WAVFILE_OBJECTS = base_utils.read_directory(wav_dir,ext='.wav')
-    print("\t",len(WAVFILE_OBJECTS),"files found")
+    print("\t",len(WAVFILE_OBJECTS),"files found\n")
 
     # BUILD TARGET VECTOR
     y = np.array([x.target for x in WAVFILE_OBJECTS])   # target vector
@@ -53,16 +53,22 @@ if __name__ == '__main__':
         ML_utils.target_label_encoder(y)                    # build dict
     y = np.array([ENCODE_DICTIONARY[x] for x in y])         # convert str to int
 
-    print(ENCODE_DICTIONARY)
-
-    # COLLECT FEATURES FROM ALL FILES
+    # BUILD DESIGN MATRIC W/ FEATURES FROM ALL FILES
+    print("Constructing Design Matrix...")
     X = ML_utils.Design_Matrix(WAVFILE_OBJECTS,wav_dir,int_dir)
+    X = ML_utils.Design_Matrix_Scaler(X)
+    print("Design Matrix Shape:",X.shape)
 
+    # SPLIT TRAIN / TEST
+    X_train,X_test,y_train,y_test = \
+        ML_utils.split_train_test(X,y,test=0.3,seed=0)
 
-    # Export arrays
-    X = pd.DataFrame(X)
-    y = pd.DataFrame(y,columns=['target'])
-    Xy = pd.concat([X,y],axis=1)
-    Xy.to_csv(out_dir+'/Output.csv')
+    # Create & MLP
+    layers = (20,20)
+    CLF_MODEL = ML_utils.Create_MLP_Model('JARVIS',layers,seed=0)
+    CLF_MODEL.fit(X_train,y_train)      # Fit Data
 
+    # EVALUATE MODEL
+    CLF_MODEL = ML_utils.Evaluate_Classifier(CLF_MODEL,X_test,y_test)
+    print(CLF_MODEL.confusion)
     print("Program Time:",time.process_time())
