@@ -12,7 +12,17 @@ import pandas as pd
 
 import scipy.integrate as integrate
 
-import INST_CLF_v0_base_utilities as base_utils
+import INST_FTRS_v0_base_utilities as base_utils
+
+"""
+INSTRUMENT FEATURES V0 - TIME UTILITIES
+        Functions related to producing and returning features for 
+        design matrix in time domain
+    - rise_decay_time
+    - Energy_Frames
+    - RMS_Above_Val
+    - Time_Spectrum_Flux
+"""
 
             #### FUNCTION DEFINITIONS ####
 
@@ -66,12 +76,12 @@ def Energy_Frames (waveform,n_samples=256,rate=44100):
     RMS_energy = np.sqrt(np.sum(frame_energies**2)/len(frame_energies))
     return frame_energies,RMS_energy
 
-def RMS_Below_Val (frame_energies,RMS,vals=[0.5]):
+def RMS_Above_Val (frame_energies,RMS,vals=[0.5]):
     """
-    Find number of frames in waveform with RMS below given value
+    Find number of frames in waveform with energy above given value
     --------------------------------
     frame_energies (arr) : 1 x M array containing normalize energies 
-        of frame from waveforms
+        of frame from single waveforms
     RMS (float) : Root-Mean-Squared Energy Value of frames in waveform
     vals (iter) : (1 x k) arr containing fraction of RMS to beat as threshsold
     --------------------------------
@@ -85,9 +95,9 @@ def RMS_Below_Val (frame_energies,RMS,vals=[0.5]):
         for frame in frame_energies:      
             if frame >= threshold:  # more energy
                 cntr += 1           # increment counter
-        n_frames = np.append(n_frames,cntr/len(frame_energies))
+        n_frames = np.append(n_frames,cntr)
     # return number of frames w/ energy above each value
-    return n_frames                 # 
+    return n_frames / len(frame_energies)        
                                     
 def Time_Spectrum_Flux (X,dt=1):
     """

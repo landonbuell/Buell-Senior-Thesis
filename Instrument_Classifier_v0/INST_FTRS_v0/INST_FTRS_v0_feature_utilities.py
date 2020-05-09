@@ -9,10 +9,17 @@ Feature Extraction
 
 import numpy as np
 
-import INST_CLF_v0_base_utilities as base_utils
-import INST_CLF_v0_time_utilities as time_utils
-import INST_CLF_v0_freq_utilities as freq_utils
-import INST_CLF_v0_machine_learning_utilities as ML_utils
+import INST_FTRS_v0_base_utilities as base_utils
+import INST_FTRS_v0_time_utilities as time_utils
+import INST_FTRS_v0_freq_utilities as freq_utils
+import INST_FTRS_v0_machine_learning_utilities as ML_utils
+
+"""
+INSTRUMENT FEATURES V0 - FEATURE UTILITIES
+        Functions related to collecting features for design matrix
+    - timeseries - Collect all features related to sample's time domain
+    - freqseries - Collect all features related to sample's frequency domain
+"""
 
 
             #### FUNCTIONS DEFINITIONS ####
@@ -37,7 +44,7 @@ def timeseries (wavfile):
     features = np.append(features,RMS)
     
     # RMS below values
-    values = time_utils.RMS_Below_Val(energies,RMS,[0.1,0.25,0.5,0.75])
+    values = time_utils.RMS_Above_Val(energies,RMS,[0.1,0.25,0.5,0.75])
     features = np.append(features,values)
 
     features = np.ravel(features)   # flatten to 1D

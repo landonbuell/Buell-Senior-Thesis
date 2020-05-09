@@ -15,19 +15,19 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 import sklearn.metrics as metrics
 
-import INST_CLF_v0_base_utilities as base_utils
-import INST_CLF_v0_feature_utilities as feat_utils
+import INST_FTRS_v0_base_utilities as base_utils
+import INST_FTRS_v0_feature_utilities as feat_utils
  
 
 """
-INSTRUMENT CLASSIFIER V0 - MACHINE LEARNING UTILITIES
+INSTRUMENT FEATURES V0 - MACHINE LEARNING UTILITIES
+        Functions related to machine learning structure & workflow
     - split_train_test
     - target_label_encoder
     - Design_Matric_Scaler
     - Design_Matrix
     - Create_MLP_Model
     - Confusion_Matrix
-
 """
 
             #### PREPROCESSING FUNCTIONS ####

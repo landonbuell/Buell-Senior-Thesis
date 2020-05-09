@@ -13,19 +13,13 @@ import sys
 import os
 import time
 
-import INST_CLF_v0_base_utilities as base_utils
-import INST_CLF_v0_machine_learning_utilities as ML_utils
-import INST_CLF_v0_feature_utilities as feat_utils
+import INST_FTRS_v0_base_utilities as base_utils
+import INST_FTRS_v0_machine_learning_utilities as ML_utils
+import INST_FTRS_v0_feature_utilities as feat_utils
 
 """
-INSTRUMENT CLASSIFIER V0 - MAIN EXECUTABLE
-
-Directory paths:
-    - 'int_dir' is the initial directory for this program
-            where it is saved locally on the HDD or SSD
-            also use "int_dir = os.getcwd()" as well
-    - 'wav_dir' is the directory path where all raw .wav audio files are stored
-    - 'out_dir' is a misc directory use to dump temporary files (created by program if nonexisitant)
+INSTRUMENT FEATURES V0 - MAIN EXECUTABLE
+    Startup file for feature extraction Program
 """
 
             #### MAIN EXECUTABLE ####

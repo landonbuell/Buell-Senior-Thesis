@@ -11,11 +11,23 @@ import numpy as np
 import pandas as pd
 import matlab
 
-import INST_CLF_v0_base_utilities as base_utils
+import INST_FTRS_v0_base_utilities as base_utils
 
 import scipy.fftpack as fftpack
 import scipy.signal as signal
 import scipy.integrate as integrate
+
+"""
+INSTRUMENT FEATURES V0 - FREQUENCY UTILITIES
+        Functions related to producing and returning features for 
+        design matrix in frequency domain
+    - Hanning_Window
+    - Frequency_Space
+    - Power_Spectrum
+    - Spectrogram
+    - CSPE_MATLAB
+    - Frequency_Banks
+"""
 
             #### FUNCTION DEFINITIONS ####
            

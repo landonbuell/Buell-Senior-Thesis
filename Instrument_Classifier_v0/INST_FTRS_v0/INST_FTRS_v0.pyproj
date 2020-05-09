@@ -3,13 +3,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7b166590-1582-4fef-8948-54df5a1c4d25</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>INST_CLF_v0_MAIN.py</StartupFile>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>INST_FTRS_v0_main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>Instrument_Classifier_v0</Name>
+    <Name>INST_FTRS_v0</Name>
     <RootNamespace>Instrument_Classifier_v0</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -21,22 +22,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="INST_CLF_v0_MAIN.py" />
-    <Compile Include="INST_CLF_v0_base_utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="INST_CLF_v0_machine_learning_utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="INST_CLF_v0_feature_utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="INST_CLF_v0_time_utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="INST_CLF_v0_freq_utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="INST_FTRS_v0_base_utilities.py" />
+    <Compile Include="INST_FTRS_v0_feature_utilities.py" />
+    <Compile Include="INST_FTRS_v0_freq_utilities.py" />
+    <Compile Include="INST_FTRS_v0_machine_learning_utilities.py" />
+    <Compile Include="INST_FTRS_v0_main.py" />
+    <Compile Include="INST_FTRS_v0_time_utilities.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

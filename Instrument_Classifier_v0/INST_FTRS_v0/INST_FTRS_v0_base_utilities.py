@@ -17,10 +17,19 @@ import matplotlib.pyplot as plt
 import scipy.io.wavfile as sciowav
 
 """
-INSTRUMENT CLASSIFIER V0 - BASE LEVEL UTILITIES
-
-Script contains lowest level function and class defintions
-    - Supports higher end functions 
+INSTRUMENT FEATURES V0 - BASE LEVEL UTILITIES
+            Script contains lowest level function and class defintions that 
+            supports higher end functions 
+        - Instrument Families (dict)
+        - wavfile (class)
+        - argumer_parser
+        - make_paths
+        - read_directory
+        - Plot_Time_Spectrum
+        - Plot_Frequency_Spectrum
+        - Plot_Spectrogram
+        - Plot_Feature_Space
+        - Plot_Features_2D
 """
 
             #### VARIABLE & OBJECT DECLARATIONS ####   
@@ -120,18 +129,6 @@ def read_directory (path,ext='.wav'):
     return file_objs                            # return list of instances
 
             #### MECHANICAL FUNCTIONS ###
-
-def normalize_X (X):
-    """
-    Normalize design matrix by each feature column
-    --------------------------------
-    X (arr) : (n_samples x n_features) array to normalize
-    --------------------------------
-    Return X normalized by column
-    """
-    for row in X.transpose():       # each feature
-        row /= np.max(np.abs(row))  # normalize
-    return X                        # return new matrix
 
             #### PLOTTING FUNCTIONS ####
 
