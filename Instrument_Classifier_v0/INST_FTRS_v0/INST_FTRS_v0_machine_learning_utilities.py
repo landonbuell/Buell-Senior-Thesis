@@ -8,6 +8,7 @@ Machine Learning Utility Functions
             #### IMPORTS ####
 
 import numpy as np
+import pandas as pd
 import os
 
 from sklearn.neural_network import MLPClassifier
@@ -75,6 +76,24 @@ def Design_Matrix_Scaler (X):
     scaler = StandardScaler()   # obj inst
     X = scaler.fit_transform(X) # fit the inst & tranf X
     return X
+
+def Design_Matrix_Labeler (X,inc_cols=True):
+    """
+    Clean and label columns of design matrix
+    --------------------------------
+    X (arr) : Standard format design matrix (n_samples x n_features)
+    inc_cols (bool) : Attatch hardcoded list of column names to frame if True
+    --------------------------------
+    Return design matrix as pandas DataFrame
+    """
+    cols = ['Rise Time','Decay Time','RMS Energy',
+            '>10% RMS','>25% RMS','>50% RMS','>75% RMS',
+            'Band 1 Energy','Band 2 Energy','Band 3 Energy','Band 4 Energy',
+            'Band 5 Energy','Band 6 Energy','Band 7 Energy','Band 8 Energy',]
+    if cols == True:
+        return pd.DataFrame(data=X,columns=cols)
+    else:
+        return pd.DataFrame(data=X)
 
 
 def Design_Matrix (wavfile_objects,wav_path,int_path):

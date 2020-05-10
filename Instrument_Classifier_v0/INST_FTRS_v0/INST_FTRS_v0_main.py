@@ -50,19 +50,11 @@ if __name__ == '__main__':
     # BUILD DESIGN MATRIC W/ FEATURES FROM ALL FILES
     print("Constructing Design Matrix...")
     X = ML_utils.Design_Matrix(WAVFILE_OBJECTS,wav_dir,int_dir)
-    X = ML_utils.Design_Matrix_Scaler(X)
-    print("Design Matrix Shape:",X.shape)
+    X = ML_utils.Design_Matrix_Labeler(X,True)
 
-    # SPLIT TRAIN / TEST
-    X_train,X_test,y_train,y_test = \
-        ML_utils.split_train_test(X,y,test=0.3,seed=0)
-
-    # Create & MLP
-    layers = (20,20)
-    CLF_MODEL = ML_utils.Create_MLP_Model('JARVIS',layers,seed=0)
-    CLF_MODEL.fit(X_train,y_train)      # Fit Data
-
-    # EVALUATE MODEL
-    CLF_MODEL = ML_utils.Evaluate_Classifier(CLF_MODEL,X_test,y_test)
-    print(CLF_MODEL.confusion)
-    print("Program Time:",time.process_time())
+    # EXPORT X & Y
+    y = pd.DataFrame(data=y,columns=['Target'])
+    X.to_csv(out_dir+'/X.csv')
+    y.to_csv(out_dir+'/y.csv')
+   
+    

@@ -50,16 +50,26 @@ def rise_decay_time (waveform,start=0.1,stop=0.9):
     decay_frac = (decay_dt/n_pts)
     return rise_frac,decay_frac             # the return the two features
 
-def Energy_Frames (waveform,n_samples=256,rate=44100):
+def Root_Mean_Square (X):
     """
-    Compute percentage of "frames" with RMS power less than
-    given threshold.
+    Compute Root-Mean-Square (RMS) of entries in an array
+    --------------------------------
+    X (arr) : (1 x M) array of ints/floats to compute RMS of
+    --------------------------------
+    Return RMS of input X
+    """
+    X = X.ravel()
+    return np.sqrt(np.sum(X**2)/len(X))
+
+def Frame_Energy (waveform,n_samples=256,rate=44100):
+    """
+    Compute Energy in each time-frames given a fixed sample length
     --------------------------------
     waveform (array) : 1 x N waveform from file with normalized amplitude
     n_samples (int) : Number of samples in single frame
     rate (int) : Audio sample rate in samples/sec
     --------------------------------
-    return (int) number for frames with RMS power below 50% of 
+    return energy in each frame
     """
     ext_pts = len(waveform) % n_samples     # number of extra pts
     waveform = waveform[ext_pts:]           # truncate waveform
@@ -73,8 +83,7 @@ def Energy_Frames (waveform,n_samples=256,rate=44100):
         frame_energies = np.append(frame_energies,energy)
     # normalize energies & compute RMS
     frame_energies /= np.max(frame_energies)
-    RMS_energy = np.sqrt(np.sum(frame_energies**2)/len(frame_energies))
-    return frame_energies,RMS_energy
+    return frame_energies
 
 def RMS_Above_Val (frame_energies,RMS,vals=[0.5]):
     """

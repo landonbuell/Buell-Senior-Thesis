@@ -40,11 +40,13 @@ def timeseries (wavfile):
     features = np.append(features,[rise,decay])
 
     # RMS Energy from frames
-    energies,RMS = time_utils.Energy_Frames(wavfile.waveform,512)
-    features = np.append(features,RMS)
+    energies = time_utils.Frame_Energy(wavfile.waveform,512)
+    RMS_energy = time_utils.Root_Mean_Square(energies)
+    features = np.append(features,RMS_energy)
     
     # RMS below values
-    values = time_utils.RMS_Above_Val(energies,RMS,[0.1,0.25,0.5,0.75])
+    values = time_utils.RMS_Above_Val(energies,RMS_energy,
+                                      [0.1,0.25,0.5,0.75])
     features = np.append(features,values)
 
     features = np.ravel(features)   # flatten to 1D
@@ -71,4 +73,5 @@ def freqseries (wavfile):
     pwr_per_bank = freq_utils.Frequency_Banks(f,t,Sxx,cutoffs=banks)
     features = np.append(features,pwr_per_bank)
 
+    features = np.ravel(features)   # flatten to 1D
     return features
