@@ -3,13 +3,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e874b214-99b2-4b35-9737-ee1904de8e8a</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>Feature_Analysis.py</StartupFile>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>INST_CLF_v0_main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>Feature_Analysis</Name>
+    <Name>INST_CLF_v0</Name>
     <RootNamespace>Feature_Analysis</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -21,7 +22,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Feature_Analysis.py" />
+    <Compile Include="INST_CLF_v0_main.py" />
+    <Compile Include="INST_CLF_v0_base_utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="INST_CLF_v0_machine_learning_utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -28,7 +28,6 @@ INSTRUMENT FEATURES V0 - BASE LEVEL UTILITIES
         - Plot_Time_Spectrum
         - Plot_Frequency_Spectrum
         - Plot_Spectrogram
-        - Plot_Feature_Space
         - Plot_Features_2D
 """
 
@@ -127,8 +126,6 @@ def read_directory (path,ext='.wav'):
             if file.endswith(ext):              # matching extension
                 file_objs.append(wavfile(file)) # add instance to list 
     return file_objs                            # return list of instances
-
-            #### MECHANICAL FUNCTIONS ###
 
             #### PLOTTING FUNCTIONS ####
 
@@ -245,9 +242,3 @@ def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     plt.tight_layout()
     if show == True:
         plt.show()
-
-def Plot_Confusion_Matrix (model,show=True):
-    """
-    Visualize Confusion Matrix
-    """
-    pass
