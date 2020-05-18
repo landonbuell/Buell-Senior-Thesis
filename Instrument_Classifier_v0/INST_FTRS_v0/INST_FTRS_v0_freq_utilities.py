@@ -87,7 +87,7 @@ def Spectrogram (waveform,rate=44100,N=2**10,overlap=0.75,
     Return spectrogram of signal
     """
     # Initialize
-    step = int(overlap*N)       # step between frames 
+    step = N - int(overlap*N)   # step between frames 
     Sxx = np.array([])          # init spectrogram
     cntr = 0                    # number of FFT's computed
 
@@ -124,18 +124,19 @@ def CSPE_MATLAB(waveform,n_pts):
                     varargin=['windowed'])
     return None
     
-def Frequency_Banks(f,t,Sxx,cutoffs=[0,6000]):
+def Frequency_Banks(f,t,Sxx,bnd_pairs=[(0,6000)]):
     """
     Compute power within a set of bands of the frequency spectrum
     --------------------------------
     f (arr) : (1 x N) frequency space axis
     t (arr) : (1 x M) time space axis
     Sxx (arr) : (N x M) matrix representing file's spectrogram
-    cutoffs (iter) : iterable of bounds of frequnecy bands
+    bnd_pairs (iter) : iterable of bounds of frequnecy bands
+        recc shape: [(a,b),(b,c),(c,d),...,(x,y),(y,z)]
     --------------------------------
     Return arr of powers in each frequency band
     """
-    n_banks = len(cutoffs) - 1      # number of banks to use
+    n_banks = len(bnd_pairs)        # number of banks to use
     n_frames = t.shape[0]           # number of frames in file
     Sxx = Sxx.transpose()               # transp spectrogram
     bank_pwrs = np.zeros((1,n_banks))   # arr to hold power/banks
@@ -144,8 +145,8 @@ def Frequency_Banks(f,t,Sxx,cutoffs=[0,6000]):
     for frame in Sxx:                       # iterate through time
         frame_pwrs = np.array([])           # bank pwrs for frame
 
-        for I in range (0,len(cutoffs)-1,1):            # each banks
-            low_bnd,high_bnd = cutoffs[I],cutoffs[I+1]  # establish bnds
+        for pair in bnd_pairs:                          # each pair of bnds
+            low_bnd,high_bnd = pair[0],pair[1]          # establish bnds
             pts = np.where((f>=low_bnd)&(f<=high_bnd))  # find idxs of bands
             bank = frame[pts]                           # isolate band
             pwr = integrate.trapz(bank)                 # compute def integral

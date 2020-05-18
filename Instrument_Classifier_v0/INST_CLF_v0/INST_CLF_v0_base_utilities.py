@@ -55,4 +55,10 @@ def Plot_Confusion_Matrix (model,show=True):
     """
     Visualize Confusion Matrix
     """
-    pass
+    plt.figure(figsize=(16,12))
+    plt.title(model.name,size=40,weight='bold')
+    plt.xlabel("Actual Classes",size=20,weight='bold')
+    plt.ylabel("Predicted Classes",size=20,weight='bold')
+    plt.imshow(model.confusion,plt.cm.binary)
+    plt.tight_layout()
+    plt.show()

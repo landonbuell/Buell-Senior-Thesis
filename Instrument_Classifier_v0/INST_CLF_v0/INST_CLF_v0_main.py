@@ -32,7 +32,7 @@ if __name__ == '__main__':
     
     # LOAD DESIGN MATRIX & TARGET VECTORS
     X = pd.read_csv(data_dir+'/X.csv',header=0,index_col=0)
-    y = pd.read_csv(data_dir+'/y.csv',header=0,index_col=0)
+    y = pd.read_csv(data_dir+'/y1.csv',header=0,index_col=0)
    
     X = ML_utils.Design_Matrix_Scaler(X)
     X = ML_utils.Design_Matrix_Labeler(X,True)
@@ -40,26 +40,13 @@ if __name__ == '__main__':
 
     # SPLIT TRAIN-TEST DATA
     X_train,X_test,y_train,y_test = \
-        ML_utils.split_train_test(X,y,test=0.3)
+        ML_utils.split_train_test(X,y,test=0.5)
 
     # NEURAL NETWORK
     NETWORK = ML_utils.Create_MLP_Model('All Features',(20,20),
                                         seed=None)
     NETWORK = NETWORK.fit(X_train,y_train)
     NETWORK = ML_utils.Evaluate_Classifier(NETWORK,X_test,y_test)
-    print(NETWORK.confusion)
-
-    """
-    # SELECT K-BEST
-    X1 = ML_utils.K_Best_Features(X,y,K=10)
-    print(X1.shape)
-    X_train,X_test,y_train,y_test = \
-        ML_utils.split_train_test(X1,y,test=0.3)
-
-    # NEURAL NETWORK
-    NETWORK = ML_utils.Create_MLP_Model('K-Best Features',(20,20),
-                                        seed=0)
-    NETWORK = NETWORK.fit(X_train,y_train)
-    NETWORK = ML_utils.Evaluate_Classifier(NETWORK,X_test,y_test)
-    print(NETWORK.confusion)
-    """
+    #print(NETWORK.confusion)
+    
+    base_utils.Plot_Confusion_Matrix(NETWORK,True)

@@ -55,6 +55,6 @@ if __name__ == '__main__':
     # EXPORT X & Y
     y = pd.DataFrame(data=y,columns=['Target'])
     X.to_csv(out_dir+'/X.csv')
-    y.to_csv(out_dir+'/y.csv')
+    y.to_csv(out_dir+'/y1.csv')
    
     

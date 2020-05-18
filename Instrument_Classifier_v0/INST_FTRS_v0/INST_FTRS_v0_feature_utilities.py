@@ -64,13 +64,14 @@ def freqseries (wavfile):
     features = np.array([])
     
     # SPECTROGRAM
-    N_pts = 2**10                # pts in FFT
-    f,t,Sxx = freq_utils.Spectrogram(wavfile.waveform,N=N_pts)
+    N_pts = 2**12               # pts in FFT
+    f,t,Sxx = freq_utils.Spectrogram(wavfile.waveform,N=N_pts,overlap=0.9)
     #base_utils.Plot_Spectrogram(f,t,Sxx,str(wavfile.filename),show=True)
 
     # ENERGY / FREQUENCY BAND
-    banks = np.array([0,32,64,128,256,512,1024,2048,6000])
-    pwr_per_bank = freq_utils.Frequency_Banks(f,t,Sxx,cutoffs=banks)
+    banks = np.array([(0,32),(32,64),(64,128),(128,256),
+                      (256,512),(512,1024),(1024,2048),(2048,6000)])
+    pwr_per_bank = freq_utils.Frequency_Banks(f,t,Sxx,bnd_pairs=banks)
     features = np.append(features,pwr_per_bank)
 
     features = np.ravel(features)   # flatten to 1D

@@ -65,13 +65,8 @@ class wavfile():
         self.channel = file.split('.')[-2]      # L or R channel
         self.ext = file.split('.')[-1]          # file ext type (wav)
         self.rate = 44100                       # sample rate
-        # Set target based on family
-        self.set_target(INSTRUMENT_FAMILIES[self.instrument])
-
-    def set_target (self,target,dictionary=None):
-        """ Set integer target value based on instrument/family """
-        self.target = target
-        return self
+        #self.target = INSTRUMENT_FAMILIES[self.instrument]
+        self.target = self.instrument           # instrument as target
 
     def read_raw_wav(self,normalize=True):
         """ Read Raw data from directory file """      
