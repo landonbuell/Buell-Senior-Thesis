@@ -1,0 +1,116 @@
+% ================
+% Landon Buell
+% Kevin Short
+% PHYS 799
+% 18 May 2020
+% ================
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm]{geometry}
+
+\begin{document}
+
+
+% ================================
+
+\title{On the Functionality of the Multilayer Perceptron Classifiers}
+\date{18 May 2020}
+\author{Landon Buell}
+\maketitle
+
+% ================================================================
+
+\section*{Introduction}
+
+\paragraph*{}In 1943, neurophysiologist Warren McCulloch and mathematician Walter Pitts published \textit{A Logical Calculus of the Ideas Immanent in Nervous Activity} \cite{McCulloch}, which paved the way for the fields of computational neuroscience and early mathematical models of the brain. McCulloch and Pitts proposed that one could loosely mimic the behavior of a brain as a series of mathematical calculations. They realized that the smallest known element of the brain, a \textit{neuron}, acts as a simple on/off switch, much like computers have been designed to. Furthermore, single neurons by themselves do very little, but instead it is the organization of these cells into collections that make up functional networks \cite{Geron,Levine,McCulloch}. 
+
+\paragraph*{}The mathematical model could be augmented by trading the simple Boolean (T/F) value, with a continuously ranging number referred to as an \textit{activation}. By producing different types of artificial neurons and establishing a series of synapses, it then became apparent that different organization of these elements could produce networks of solving increasingly advanced problems \cite{Goodfellow}. To further expand upon this, in 1957, Frank Rosenblatt created a neural network architecture called a Multilayer Perceptron (MLP), which uses layers of interacting neurons to create a single mathematical model \cite{Geron,Petrik}. This gives it a simple feed-forward design which has experimentally shown to perform well with tasks related to image and speech recognition \cite{Goodfellow,Loy}.
+
+\paragraph*{}In general, the goal of an classification MLP is to produce some approximation function, $F^*$ that maps an array or vector of inputs, 
+$\vec{x}$ to a set of discrete classes: $0,1,2,...,k-1$, using a set of parameters $\hat{\theta}$ \cite{Geron,Goodfellow,Petrik}. For a \textit{k-bins} classifier, we notate this as:
+\begin{equation}
+\label{approx}
+F^* : \big\{ \vec{x},\hat{\theta}\big\} \rightarrow \big\{ 0,1,2,...,k-2,k-1 \big\}
+\end{equation}
+This function is in turn composed of layers of smaller repeating functions, which is what gives rise to the \textit{network} concept of the model. It is the chains of these smaller functions that allow for the producing of the approximate function $F^*$ to be created and solve a vast range of problems.
+
+
+% ================================================================
+
+\section*{Architecture}
+\paragraph*{}To build a Multilayer Perceptron (MLP), artificial neurons need to be grouped into multiple structures, each called a \textit{layer}. A single layer is modeled mathematically as a column vector, $\vec{x}$ by convention:
+\begin{equation}
+\label{layer}
+\vec{x}^{(l)} = \big[ x_0 , x_1 , x_2 , ... , x_{n-2} , x_{n-1} \big]^T
+\end{equation}
+The superscript $(l)$ is used to indicate the layer number of which this vector represents. Each element inside this vector is a neuron in the MLP model, and the value of that element is the neuron's \textit{activation} \cite{Geron}. In term of numerical handling, this structure is an array of floating-point numbers. A neural network can have any number of these layers in them, with any number of neurons in each layer. The number of these hidden layers is often referred to as the \textit{network depth} and the number of neurons in each layer is often called the \textit{neuron density} or \textit{network width}.
+
+\paragraph*{}In addition to these layers, called \textit{hidden layers}, a neural network also requires an \textit{input layer} and an \textit{output layer}\cite{Goodfellow}. As the name implies, the input layer is where initial arrays of data are passed into the network. This array is often called a \textit{feature vector} as each element is a feature derived from a potentially larger data set. Typically, this feature vector is denoted by 
+$\vec{x}^{(0)}$ is also the $\vec{x}$ object in equation (\ref{approx}). 
+
+\paragraph*{}In a network with $L$ layers, the output array is also a vector, 
+$\vec{x}^{(L-1)}$ which encodes the final decision made by the network model. In a k-bins classifier, there are $k$ neurons, each one corresponding to a different class. The neuron with the highest activation value corresponds to the networks prediction for what class the particular sample, 
+$\vec{x}^{(0)}$ belongs to. If the output, $\vec{x}^{(L-1)}$ is appropriately normalized, then then activations can be interpreted percentage probabilities of which class the sample belongs to:
+\begin{equation}
+\label{probability}
+P \big( \vec{x}^{(L-1)} \big) = \frac{1}{||\vec{x}^{(L-1)}||} \big[ x_0 , x_1 , x_2 , ... , x_{k-2} , x_{k-1} \big]^T
+\end{equation}
+
+\paragraph*{}In this network of $L$ layers, there are $L-2$ hidden layers whose activations are given by the entries in $\vec{x}^{(1)}$, 
+$\vec{x}^{(2)}$ , ... , $\vec{x}^{(L-3)}$ , $\vec{x}^{(L-2)}$. And again, the input layers and output layers are given by $\vec{x}^{(0)}$ and 
+$\vec{x}^{(L-1)}$ respectively. Throughout the duration of the model's construction, training and evaluation, these objects remain as column vectors / arrays of real floating point values.
+
+\pagebreak
+
+% ================================================================
+
+\section*{Feed-Forward System}
+
+\paragraph*{}Just by having systems of discrete layers, there is no way for the network to behave as`	
+
+% ================================================================
+
+\section*{Back Propagation System}
+
+
+% ================================================================
+
+\section*{Conclusion}
+
+
+% ================================================================
+
+\begin{thebibliography}{9}
+\bibliographystyle{apalike}
+
+\bibitem{Geron}
+Géron Aurélien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. O'Reilly, 2017.
+
+\bibitem{Goodfellow}
+Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
+
+\bibitem{James}
+James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.
+
+\bibitem{Levine}
+Levine, Daniel S. \textit{Introduction to Neural and Cognitive Modeling}. 3rd ed., Routledge, 2019.
+
+\bibitem{Loy}
+Loy, James , \textit{Neural Network Projects with Python}. Packt Publishing, 2019
+
+\bibitem{McCulloch}
+McCulloch, Warren S., and Walter Pitts. “A Logical Calculus of the Ideas Immanent in Nervous Activity.” \textit{The Bulletin of Mathematical Biophysics}, vol. 5, no. 4, 1943, pp. 115–133.
+
+\bibitem{Petrik}
+Petrik, Marek. “Introduction to Deep Learning.” Machine Learning. 20 April. 2020, Durham, New Hampshire.
+
+\end{thebibliography}
+
+% ================================================================
+
+\end{document}
