@@ -44,6 +44,23 @@ def split_train_test (X,y,test=0.25,seed=None):
     """
     return train_test_split(X,y,test_size=test,random_state=seed)
 
+def target_label_decoder(path,filename='DECODE.csv'):
+    """
+    Create encoding dictiory of strings to classes
+    --------------------------------
+    path (str) : Local path were decoding dictionary is stored
+    filename (str) : Name of Local file path
+    --------------------------------
+    Return encoding & decoding dictionary
+    """
+    frame = pd.read_csv(path+'/'+filename,index_col=0).to_numpy()
+    frame = frame.transpose()           # transp
+    decode = {}                         # empty decode dict
+    for key,val in zip(frame[0],frame[1]):
+        decode.update({key:val})          # add pair
+    return decode                       # return dictionary
+
+
 def K_Best_Features (X,y,K):
     """
     Run K-best features selection algorithm
@@ -80,13 +97,16 @@ def Design_Matrix_Labeler (X,inc_cols=True):
     Return design matrix as pandas DataFrame
     """
     cols = ['Rise Time','Decay Time','RMS Energy',
-            '>10% RMS','>25% RMS','>50% RMS','>75% RMS',
+            '>10% RMS','>20% RMS','>30% RMS','>40% RMS','>50% RMS',
+            '>60% RMS','>70% RMS','>80% RMS','>90% RMS',
             'Band 1 Energy','Band 2 Energy','Band 3 Energy','Band 4 Energy',
             'Band 5 Energy','Band 6 Energy','Band 7 Energy','Band 8 Energy',]
-    if inc_cols == True:
+    if cols == True:
         return pd.DataFrame(data=X,columns=cols)
     else:
         return pd.DataFrame(data=X)
+
+            #### MODEL CONTRUCTION FUNCTIONS ####
 
 def Create_MLP_Model (name,layers,seed=None):
     """
@@ -106,7 +126,7 @@ def Create_MLP_Model (name,layers,seed=None):
 
             #### EVALUATION & METRICS ####
 
-def Evaluate_Classifier (model,X_test,y_test):
+def Evaluate_Classifier (model,X_test,y_test,report=False):
     """
     Evaluate the performance of a classifier w/ confusion matrix,
         precision score & recall score
@@ -127,5 +147,11 @@ def Evaluate_Classifier (model,X_test,y_test):
     # Compute & Attatch Recall scores
     recall = metrics.recall_score(y_test,y_pred,average=None)
     setattr(model,'recall',recall)
+
+    # Classification Report
+    if report == True:
+        clf_rpt = metrics.classification_report(y_test,y_pred)
+        print(clf_rpt)
+
     # Return model w/ attatched attrbs
     return model

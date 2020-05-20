@@ -15,11 +15,27 @@ import argparse
 import matplotlib.pyplot as plt
 
 """
-INSTRUMENT FEATURES V0 - BASE LEVEL UTILITIES
+INSTRUMENT CLASSIFIER V0 - BASE LEVEL UTILITIES
             Script contains lowest level function and class defintions that 
             supports higher end functions 
         - Plot_Features_2D
 """
+
+            #### DIRECTORY AND OS FUNCTIONS ####
+
+def argument_parser():
+    """
+    Create argument parser object for main executable
+    --------------------------------
+    *no argumnets*
+    --------------------------------
+    Return completetd argument parser class instance
+    """
+    parser = argparse.ArgumentParser(prog='Instrument Classifier v0')
+    parser.add_argument('wav_features ',type=str,
+                        help='Local path where raw audio is stored')
+    args = parser.parse_args()
+    return args.wav_features 
 
             #### PLOTTING FUNCTIONS ####
 
@@ -51,7 +67,7 @@ def Plot_Features_2D (X1,X2,classes,labels,title='',show=True):
     if show == True:
         plt.show()
 
-def Plot_Confusion_Matrix (model,show=True):
+def Plot_Confusion_Matrix (model,ticks,show=True):
     """
     Visualize Confusion Matrix
     """
@@ -60,5 +76,7 @@ def Plot_Confusion_Matrix (model,show=True):
     plt.xlabel("Actual Classes",size=20,weight='bold')
     plt.ylabel("Predicted Classes",size=20,weight='bold')
     plt.imshow(model.confusion,plt.cm.binary)
+    plt.xticks(ticks)
+    plt.yticks(ticks)
     plt.tight_layout()
     plt.show()

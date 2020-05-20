@@ -46,7 +46,7 @@ def timeseries (wavfile):
     
     # RMS below values
     values = time_utils.RMS_Above_Val(energies,RMS_energy,
-                                      [0.1,0.25,0.5,0.75])
+                                        vals=np.arange(0,1,0.1))
     features = np.append(features,values)
 
     features = np.ravel(features)   # flatten to 1D

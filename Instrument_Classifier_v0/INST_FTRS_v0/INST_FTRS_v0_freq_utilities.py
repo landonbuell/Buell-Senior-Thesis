@@ -86,8 +86,8 @@ def Spectrogram (waveform,rate=44100,N=2**10,overlap=0.75,
     --------------------------------
     Return spectrogram of signal
     """
-    # Initialize
-    step = N - int(overlap*N)   # step between frames 
+    # Initialize 
+    step = int(N*(1 - overlap)) # step between frames 
     Sxx = np.array([])          # init spectrogram
     cntr = 0                    # number of FFT's computed
 

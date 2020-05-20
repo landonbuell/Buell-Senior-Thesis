@@ -88,7 +88,7 @@ def argument_parser():
     --------------------------------
     Return completetd argument parser class instance
     """
-    parser = argparse.ArgumentParser(prog='Instrument Classifier v0')
+    parser = argparse.ArgumentParser(prog='Instrument Features v0')
     parser.add_argument('wav_audio',type=str,
                         help='Local path where raw audio is stored')
     args = parser.parse_args()

@@ -48,11 +48,12 @@ def split_train_test (X,y,test=0.25,seed=None):
     return train_test_split(X,y,test_size=test,random_state=seed)
 
 
-def target_label_encoder(target_vector):
+def target_label_encoder(target_vector,write=False):
     """
     Create encoding dictiory of strings to classes
     --------------------------------
     target_vector (arr) : array of target classes as strings
+    write (bool/str) : If not False, str is path write out dict 
     --------------------------------
     Return encoding & decoding dictionary
     """
@@ -63,6 +64,13 @@ def target_label_encoder(target_vector):
         enc_dict.update({key:val})      # update the dictionary
         class_counter += 1              # incriment class counter
     dec_dict = {value:key for key,value in enc_dict.items()}
+
+    if write != False:                   # if write out dictionary
+        decode = pd.DataFrame(data=np.array(list(dec_dict.items())),
+                              index=np.arange(0,class_counter,1),
+                              columns=['Target','Instrument'])
+        decode.to_csv(write+'/DECODE.csv')
+
     return enc_dict,dec_dict            # return the encoding/decoding dictionary
 
 def Design_Matrix_Scaler (X):
@@ -87,7 +95,8 @@ def Design_Matrix_Labeler (X,inc_cols=True):
     Return design matrix as pandas DataFrame
     """
     cols = ['Rise Time','Decay Time','RMS Energy',
-            '>10% RMS','>25% RMS','>50% RMS','>75% RMS',
+            '>10% RMS','>20% RMS','>30% RMS','>40% RMS','>50% RMS',
+            '>60% RMS','>70% RMS','>80% RMS','>90% RMS',
             'Band 1 Energy','Band 2 Energy','Band 3 Energy','Band 4 Energy',
             'Band 5 Energy','Band 6 Energy','Band 7 Energy','Band 8 Energy',]
     if cols == True:
@@ -128,46 +137,3 @@ def Design_Matrix (wavfile_objects,wav_path,int_path):
 
     return X.reshape(n_samples,-1)     # rehape feature matrix
 
-            #### CREATE MODEL INSTANCES ####
-
-def Create_MLP_Model (name,layers,seed=None):
-    """
-    Create sklearn Multilayer Percepton model instance
-    --------------------------------
-    name (str) : name to attach to instance
-    layers (tuple) : Hidden layer sizes
-    seed (int) : Random state for classifier model (default=None)
-    --------------------------------
-    Return initialized MLP model instance
-    """
-    model = MLPClassifier(hidden_layer_sizes=layers,activation='relu',
-                        solver='sgd',batch_size=100,max_iter=500,
-                        tol=1e-4,random_state=seed)
-    setattr(model,'name',name)      # attach name attribute
-    return model                    # return initialized model
-
-            #### EVALUATION & METRICS ####
-
-def Evaluate_Classifier (model,X_test,y_test):
-    """
-    Evaluate the performance of a classifier w/ confusion matrix,
-        precision score & recall score
-    --------------------------------
-    model (inst) : Instance of trained MLP classifer model
-    X_test (arr) : Subset of design matrix for testing model
-    y_test (arr) : Corresponding labels for design matrix
-    --------------------------------
-    Return model instances w/ metric values attached as attrbs
-    """
-    y_pred = model.predict(X_test)      # run prediction on model
-    # Compute & Attatch Confusion matrix
-    confmat = metrics.confusion_matrix(y_test,y_pred)   # confmat
-    setattr(model,'confusion',confmat)  # attatch
-    # Compute & Attatch Precision scores
-    precision = metrics.precision_score(y_test,y_pred,average=None)
-    setattr(model,'precision',precision)
-    # Compute & Attatch Recall scores
-    recall = metrics.recall_score(y_test,y_pred,average=None)
-    setattr(model,'recall',recall)
-    # Return model w/ attatched attrbs
-    return model

@@ -44,14 +44,15 @@ if __name__ == '__main__':
     # BUILD TARGET VECTOR
     y = np.array([x.target for x in WAVFILE_OBJECTS])   # target vector
     ENCODE_DICTIONARY,DECODE_DICTIONARY = \
-        ML_utils.target_label_encoder(y)                    # build dict
-    y = np.array([ENCODE_DICTIONARY[x] for x in y])         # convert str to int
+        ML_utils.target_label_encoder(y,out_dir)        # build dict
+    y = np.array([ENCODE_DICTIONARY[x] for x in y])     # convert str to int
 
-    # BUILD DESIGN MATRIC W/ FEATURES FROM ALL FILES
+    # BUILD DESIGN MATRIX W/ FEATURES FROM ALL FILES
     print("Constructing Design Matrix...")
     X = ML_utils.Design_Matrix(WAVFILE_OBJECTS,wav_dir,int_dir)
+    X = ML_utils.Design_Matrix_Scaler(X)
     X = ML_utils.Design_Matrix_Labeler(X,True)
-
+    
     # EXPORT X & Y
     y = pd.DataFrame(data=y,columns=['Target'])
     X.to_csv(out_dir+'/X.csv')
