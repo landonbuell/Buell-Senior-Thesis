@@ -159,10 +159,12 @@ $L$-layered network, information from the feature vector $\vec{x}^{(0)}$ can be 
 
 \begin{equation}
 \label{cost func}
-J : \big\{ \vec{x}^{L-1} , \hat{\theta} \big\} \rightarrow \big\{ \mathbb{R} \big\}
+J : \big\{ \vec{x}^{(L-1)} , \hat{\theta} \big\} \rightarrow \big\{ \mathbb{R} \big\}
 \end{equation}	
 
 \paragraph*{}The larger the value outputted from this function $J$, the further the models prediction differed from the expected value. Thus, this function can be through of as a measurement of how \textit{poor} the network's predict was. It then becomes appropriate to make the goal of the model to \textit{optimize} $J$, with respect the parameters $\hat{\theta}$ to allow for a generally low cost value for a given input.
+
+\paragraph*{}There are many ways for optimize the parameters in a neural network
 
 % ================================================================
 
