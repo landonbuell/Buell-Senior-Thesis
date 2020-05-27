@@ -11,7 +11,7 @@ clc;
 
             %%%% Establish All directory Paths %%%%
 rootdir = 'C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\read_wavs'; 
-readdir = 'C:\Users\Landon\Documents\aiff_audio';          
+readdir = 'C:\Users\Landon\Documents\aiff_audio_zip';          
 outpath = 'C:\Users\Landon\Documents\wav_audio';
 
 try                         % attempt to change dir
@@ -21,7 +21,8 @@ catch                       % if failure,
 end     
 
 chdir(readdir);                 % change to reading directory
-files = dir('**\*.aif');        % all files in subfolder
+all_objs = dir(fullfile(readdir,'**\*.*'));    % all files in subfolder
+files = all_objs();
 
 for i = 1:length(files)                 % in each file:
     

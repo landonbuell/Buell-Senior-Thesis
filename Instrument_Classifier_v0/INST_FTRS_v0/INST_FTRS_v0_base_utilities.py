@@ -59,6 +59,7 @@ class wavfile():
     """
     def __init__(self,file):
         """ Initialize Class Object """
+        file = file.replace('-','.')
         self.filename = file                    # filename
         self.instrument = file.split('.')[0]    # Instrument name
         self.note = file.split('.')[-3]         # note name
