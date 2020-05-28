@@ -33,19 +33,25 @@ INSTRUMENT FEATURES V0 - BASE LEVEL UTILITIES
 
             #### VARIABLE & OBJECT DECLARATIONS ####   
 
-INSTRUMENT_FAMILIES = {
-    # HIGH WOODWINDS
-    'AltoFlute':'high_wind','AltoSax':'high_wind','BbClarinet':'high_wind',
-    'EbClarinet':'high_wind','Flute':'high_wind','Oboe':'high_wind',
-    'SopSax':'high_wind',
-    # LOW WOODWINDS
-    'BassClarinet':'low_wind','BassFlute':'low_wind','Bassoon':'low_wind',  
-    # STRINGS
-    'Bass':'String','Cello':'String','Viola':'String','Violin':'String',
-    # BRASS
-    'BassTrombone':'Brass','Horn':'Brass','TenorTrombone':'Brass',
-    'Trumpet':'Brass','Tuba':'Brass'
-                       }
+accepted_instruments = [
+                # Woodwinds
+                'AltoFlute','AltoSax','BbClarinet','EbClarinet','Flute',
+                'Oboe','SopSax','EbClarinet','BassClarinet','BassFlute',
+                'Bassoon',
+                # Strings
+                'Bass','Cello','Viola','Violin',
+                # Brass
+                'BassTrombone','Horn','TenorTrombone','Trumpet','Tuba',
+                # Percussion
+                'bells','Marimba','Vibraphone','Xylophone']
+
+percussion = ['woodblock','triangle','castanet','clave',
+              'crotale','tambourine']
+
+cymbals = ['crash','chinese','orchcrash','windgong','ride',
+           'hihat','splash','thaigong',]
+    
+                       
 
             #### CLASS OBJECT DEFINITIONS ####
 
@@ -60,18 +66,30 @@ class wavfile():
     def __init__(self,file):
         """ Initialize Class Object """
         file = file.replace('-','.')
-        self.filename = file                    # filename
-        self.instrument = file.split('.')[0]    # Instrument name
-        self.note = file.split('.')[-3]         # note name
-        self.channel = file.split('.')[-2]      # L or R channel
-        self.ext = file.split('.')[-1]          # file ext type (wav)
-        self.rate = 44100                       # sample rate
+        self.filename = file                # filename
+        self.ext = file.split('.')[-1]      # file ext type (wav)
+        
+        self.instrument = self.assign_instrument()
         #self.target = INSTRUMENT_FAMILIES[self.instrument]
         self.target = self.instrument           # instrument as target
+
+    def assign_instrument (self):
+        """ Assign Instrument Attribute to Instance """
+        string = self.filename.split('.')[0]    # 0-th element in name
+        if string in accepted_instruments:      # in valid instruments
+            return string.upper()   # set instrument
+        elif string in percussion:      # percussion?
+            return 'PERCUSSION'      # set
+        elif string in cymbals:         # cymbals?
+            return 'CYMBAL'          # set
+        else:                           # not in lists?
+            return 'OTHER'           # set other
+
 
     def read_raw_wav(self,normalize=True):
         """ Read Raw data from directory file """      
         rate,data = sciowav.read(self.filename) # read raw waveform
+        self.rate = rate                        # sample rate
         data = np.transpose(data)               # transpose
         if normalize == True:
             data = data/np.max(np.abs(data))    # normalize

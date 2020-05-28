@@ -11,11 +11,13 @@ import numpy as np
 import pandas as pd
 import os
 
-from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SelectKBest
 import sklearn.metrics as metrics
+
+import tensorflow
+from tensorflow import keras
 
 import INST_CLF_v0_base_utilities as base_utils
  
@@ -44,6 +46,18 @@ def split_train_test (X,y,test=0.25,seed=None):
     """
     return train_test_split(X,y,test_size=test,random_state=seed)
 
+def One_Hot_Encoder (y):
+    """
+    Convert target vector y into one-hot-encoded matrix
+    --------------------------------
+    y (arr) : target vector for design matrix
+    --------------------------------
+    return one-hot-encoded matrix Y, with number of unique classes
+    """
+    n_classes = np.unique(y).shape[0]   # unqiue classes
+    Y = keras.utils.to_categorical(y,n_classes,dtype='uint')
+    return Y,n_classes                  # return Y & num classes
+
 def target_label_decoder(path,filename='DECODE.csv'):
     """
     Create encoding dictiory of strings to classes
@@ -59,21 +73,6 @@ def target_label_decoder(path,filename='DECODE.csv'):
     for key,val in zip(frame[0],frame[1]):
         decode.update({key:val})          # add pair
     return decode                       # return dictionary
-
-
-def K_Best_Features (X,y,K):
-    """
-    Run K-best features selection algorithm
-    --------------------------------
-
-    --------------------------------
-    Return subset of X containing K best features
-    """
-    best = SelectKBest(k=K)
-    best = best.fit(X,y)
-    X_new = best.transform(X)
-    print("Kept:",best.get_support())
-    return X_new
 
 def Design_Matrix_Scaler (X):
     """
@@ -124,6 +123,30 @@ def Create_MLP_Model (name,layers,seed=None):
     setattr(model,'name',name)      # attach name attribute
     return model                    # return initialized model
 
+def Create_Sequential_Model (name,n_features,n_classes,summary=False):
+    """
+    Create & Return constructed Keras Sequential Model
+    --------------------------------
+    name (str) : Name to attach to model at attribute
+    --------------------------------
+    Return Untrained model instance
+    """
+    # Initialize & Add input layer
+    MODEL = keras.models.Sequential(name=str(name)) 
+    MODEL.add(keras.layers.Input(shape=(n_features,),name='INPUT'))
+    # Hidden layers
+    MODEL.add(keras.layers.Dense(units=40,activation='relu'))
+    MODEL.add(keras.layers.Dense(units=40,activation='relu'))
+    # Output layers
+    MODEL.add(keras.layers.Dense(units=n_classes,activation='softmax'))
+    MODEL.compile(optimizer='sgd',loss='categorical_crossentropy')
+
+    # Summary:
+    if summary == True:
+        print(MODEL.summary())
+
+    return MODEL
+
             #### EVALUATION & METRICS ####
 
 def Evaluate_Classifier (model,X_test,y_test,report=False):
@@ -137,7 +160,7 @@ def Evaluate_Classifier (model,X_test,y_test,report=False):
     --------------------------------
     Return model instances w/ metric values attached as attrbs
     """
-    y_pred = model.predict(X_test)      # run prediction on model
+    y_pred = np.argmax(model.predict(X_test),axis=-1)   # run prediction on model 
     # Compute & Attatch Confusion matrix
     confmat = metrics.confusion_matrix(y_test,y_pred)   # confmat
     setattr(model,'confusion',confmat)  # attatch
