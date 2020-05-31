@@ -159,12 +159,15 @@ $L$-layered network, information from the feature vector $\vec{x}^{(0)}$ can be 
 
 \begin{equation}
 \label{cost func}
-J : \big\{ \vec{x}^{(L-1)} , \hat{\theta} \big\} \rightarrow \big\{ \mathbb{R} \big\}
+J : \big\{ \vec{x}^{(L-1)}} \rightarrow \big\{ \mathbb{R} \big\}
 \end{equation}	
 
-\paragraph*{}The larger the value outputted from this function $J$, the further the models prediction differed from the expected value. Thus, this function can be through of as a measurement of how \textit{poor} the network's predict was. It then becomes appropriate to make the goal of the model to \textit{optimize} $J$, with respect the parameters $\hat{\theta}$ to allow for a generally low cost value for a given input.
+\paragraph*{}The larger the value outputted from this function $J$, the further the models prediction differed from the expected value. Thus, this function can be through of as a measurement of how \textit{poor} the network's prediction was. It then becomes appropriate to make the goal of the model to \textit{optimize} $J$, with respect the parameters $\hat{\theta}$ to allow for a generally low cost value for a given input.
 
-\paragraph*{}There are many ways for optimize the parameters in a neural network
+\paragraph*{}There are many ways to optimize the parameters in a neural network,for this work, we will examine an optimizer algorithm called \textit{Stochastic Gradient Descent} (SGD). This is an iterative method that uses repeated a passes over a data set to slowly push the cost function to a smaller and smaller value. As the name implies, we compute the gradient of the cost function, which its the partial derivative of each element that makes up the function, at a given step. 
+
+\paragraph*{}To compute the gradient of the cost function, we have to examine it's composition.
+
 
 % ================================================================
 
