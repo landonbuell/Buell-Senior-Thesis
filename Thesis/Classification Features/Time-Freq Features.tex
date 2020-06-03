@@ -1,0 +1,177 @@
+% ================
+% Landon Buell
+% Kevin Short
+% PHYS 799
+% 3 June 2020
+% ================
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm]{geometry}
+\usepackage{fancyhdr}
+
+% ================================================================
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MLP Classifier Neural Network}
+\rhead{Landon Buell}
+\cfoot{\thepage}
+
+\begin{document}
+
+% ================================
+
+\title{Time-Series and Frequency-Series Features for Musical Instrument Classification}
+\date{3 June 2020}
+\author{Landon Buell}
+\maketitle
+
+% ================================================================
+
+\section{Introduction}
+
+
+% ================================================================
+
+\section{Time Series Features}
+
+\paragraph*{}Time series features (also called time-domain or time-space features) are pieces of information that can be extracted, derived, or otherwise originate from a signal that in expressed with a dependence on time. This can include weather forecasts, year-to-year population of a given demographic, audio information, or economic stock data. In the context of audio data, this is generally referred to as a \textit{waveform}
+
+
+% ================================
+
+
+\subsection{Rise and Decay Time}
+
+\paragraph*{}Signal \textit{rise time} measures the amount of time it takes for a time-domain signal, $S(t)$, to leave it's steady-state condition and \textit{rise} to a given maximum $\max\big[|S(t)|\big]$. Signal \textit{decay time} measures the amount of time it takes for a time-domain signal, $S(t)$, to \textit{decay} from a given maximum value and return to it's steady-state value. Due to the nature of digitally stored audio in both time and amplitude, it may be impossible to find entries in the signal that satisfy exact equilibrium values (usually, $0$).
+
+\paragraph*{}To account for this, we employ a function within our feature-extraction program that measures the $10\%$ to $90\%$ amplitude rise time, and the subsequent $90\%$ to $10\%$ amplitude decay time. This means that we build a function within our feature-extraction program that isolates the produces two array-like objects for each signal. The first array will hold the position (or index) of all points that have a value that exceeds $90\%$ of the waveform maximum (counting for negative amplitudes as well). The second array contains similarly index of values that exceed $10\%$ of the maximum, but not $90\%$.
+
+\paragraph*{}If we take the difference between the $0$-th entry of each array, this is the number of samples that it took for the signal to reach (roughly) $10\%$ of it's maximum amplitude to (roughly) $90\%$ - this \textit{rise time}, $\Delta t_{R}$. Similarly, if we take the difference between the final entry in each array, this gives the \textit{decay time}, $\Delta t_{D}$. Both measurements are in units of the \textit{number of samples}; to convert into more traditional units of time (e.g. seconds), one can multiply by the spacing between samples or divide by the sample rate.
+
+
+\begin{algorithm}
+\label{Rise-Decay Time}
+\caption{Compute amplitude rise and decay time of a discrete time-domain signal $S(t)$ for aa give lower bound percentage and upper bound percentage.}
+
+\begin{algorithmic}
+
+\REQUIRE Discrete time series signal: $S$ 
+\REQUIRE Value to consider lower bound percentage (0,1): \textit{low\_bnd}
+\REQUIRE Value to consider upper bound percentage (0,1): \textit{high\_bnd}
+\ENSURE low\_bnd $<$ high\_bnd \\
+
+n\_samples $\leftarrow$ length($S$) \\
+$S \leftarrow |S|$ \\
+max\_amp $\leftarrow$ maximum($S$) \\
+
+
+\end{algorithmic}
+\end{algorithm}
+
+
+% ================================
+
+
+\subsection{Root-Mean-Square Energy of all Frames}
+
+\paragraph*{}The Root-Mean-Square energy (RMS energy) of a frame is rough approximation of the energy contained within a slice of time of a waveform. We refer to a slice of time as a \textit{frame} \cite{Kahn}; where each frame is a subset of sequential samples grouped together. When a sequence of frames as concatenated in order that they are produced, they recreate the origina; waveform in it's entirety.`
+
+ Using Hooke's Law, we know that the instantaneous energy of an oscillation is proportional to the square of it's amplitude.
+
+\begin{algorithm}
+\label{RMS Energy of Frames}
+\caption{Compute the RMS energy of a collection of frames ith}
+
+\begin{algorithmic}
+
+\REQUIRE Discrete time series signal: $S$ 
+\REQUIRE Value to consider lower bound percentage (0,1): \textit{low\_bnd}
+\REQUIRE Value to consider upper bound percentage (0,1): \textit{high\_bnd}
+\ENSURE low\_bnd $<$ high\_bnd \\
+
+n\_samples $\leftarrow$ length($S$) \\
+$S \leftarrow |S|$ \\
+max\_amp $\leftarrow$ maximum($S$) \\
+
+
+\end{algorithmic}
+\end{algorithm}
+
+% ================================
+
+\subsection{Percentage of Frames with RMS Energy above value}
+
+
+% ================================
+
+\subsection{Time Spectral Flux}
+
+
+% ================================
+
+
+% ================================================================
+
+\section{Frequency Series Features}
+
+% ================================
+
+\subsection{Number of Unique, Isolated Peak}
+
+% ================================
+
+\subsection{Energy of Signal in Select Frequency Bands}
+
+
+% ================================
+
+% ================================
+
+% ================================================================
+
+\section{Combined Series Features}
+
+% ================================
+
+\subsection{Spectrogram Matrix}
+
+% ================================
+
+\subsection{Phase-Space Matrix}
+
+% ================================
+
+
+
+% ================================================================
+
+\section{Additional Features}
+
+
+% ================================================================
+
+\section*{Summary}
+
+% ================================================================
+
+\begin{thebibliography}{9}
+\bibliographystyle{apalike}
+
+\bibitem{Kahn}
+Khan, M. Kashif Saeed, and Wasfi G. Al-Khatib. “Machine-Learning Based Classification of Speech and Music.” Multimedia Systems, vol. 12, no. 1, 2006, pp. 55–67., doi:10.1007/s00530-006-0034-0.
+
+\bibitem{Short}
+Short, Garcia, “Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method”. Journal of the Audio Engineering Society.
+
+
+\end{thebibliography}
+
+% ================================================================
+
+\end{document}

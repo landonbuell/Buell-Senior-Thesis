@@ -33,7 +33,7 @@
 
 % ================================================================
 
-\section*{Introduction}
+\section{Introduction}
 
 \paragraph*{}In 1943, neurophysiologist Warren McCulloch and mathematician Walter Pitts published \textit{A Logical Calculus of the Ideas Immanent in Nervous Activity} \cite{McCulloch}, which paved the way for the fields of computational neuroscience and early mathematical models of the brain. McCulloch and Pitts proposed that one could loosely mimic the behavior of a brain as a series of mathematical calculations. They realized that the smallest known element of the brain, a \textit{neuron}, acts as a simple on/off switch, much like computers have been designed to. Furthermore, single neurons by themselves do very little, but instead it is the organization of these cells into collections that make up functional networks \cite{Geron,Levine,McCulloch}. 
 
@@ -52,7 +52,7 @@ This function is in turn composed of layers of smaller repeating functions, whic
 
 % ================================================================
 
-\section*{Architectural Considerations}
+\section{Architectural Considerations}
 \paragraph*{}To build a Multilayer Perceptron (MLP), artificial neurons need to be grouped into multiple structures, each called a \textit{layer}. A single layer is modeled mathematically as a column vector, $\vec{x}$ by convention:
 
 \begin{equation}
@@ -82,7 +82,7 @@ $\vec{x}^{(L-1)}$ respectively. Throughout the duration of the model's construct
 
 % ================================================================
 
-\section*{Feed-Forward System}
+\section{Feed-Forward System}
 
 \paragraph*{}Just by having systems of discrete layers, there is no way for the network to behave as a single model. Thus, we need to connect adjacent layers with synapses. These synapses, also called \textit{weights} allow each activation in any given layer to be a linear combination of the activation in the previous layer, with an addition \textit{bais} constant added \cite{Geron,Loy}. Keeping in mind the mathematical equivalent to vectors: we can then say that the $i$-th element in some layer $(l+1)$ is given by:
 
@@ -206,7 +206,7 @@ $x^{(0)} \leftarrow \vec{a}$ 		\\
 
 % ================================================================
 
-\section*{Back Propagation System}
+\section{Back Propagation System}
 
 \paragraph*{}The logic of using and input $\vec{x}^{(0)}$ and set of parameters $\hat{\theta}$ to produce an output into a set of discrete bins $0$ thorough $k-1$ becomes worrisome when one considers the amount of parameters that make up the object $\hat{\theta}$, and furthermore how to produce these parameters such that the resulting approximation $F^*$ shows experimental validity. To remedy this, the model needs some way of using inputs, with known outputs, to find the elements of $\hat{\theta}$ that allow similar, but non-identical inputs to be mapped to correct outputs. 
 
@@ -290,7 +290,7 @@ These three equations allow for the model to work backwards through the layers a
 
 % ================================================================
 
-\section*{Summary}
+\section{Summary}
 
 
 
