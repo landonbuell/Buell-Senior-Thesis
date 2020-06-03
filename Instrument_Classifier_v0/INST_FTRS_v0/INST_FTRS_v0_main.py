@@ -27,12 +27,11 @@ INSTRUMENT FEATURES V0 - MAIN EXECUTABLE
 if __name__ == '__main__':
 
     # INITIALIZE DIRECTORIES
-    int_dir = os.getcwd()           # home path is CWD
-    out_dir = int_dir + '/extdata'  # path to store extra data
+    int_dir = os.getcwd()           # home path is CWD   
+    wav_dir = 'C:/Users/Landon/Documents/wav_audio'     # for development
+    out_dir = 'C:/Users/Landon/Documents/GitHub/Buell=Senior-Thesis/Instrument_Classifier_v0' 
+    #wav_dir,out_dir = base_utils.argument_parser()     # for command line
     base_utils.make_paths(paths=[out_dir])
-
-    #wav_dir = base_utils.argument_parser()         # for command line 
-    wav_dir = 'C:/Users/Landon/Documents/wav_audio' # for development
     if os.path.exists(wav_dir) == False:
        sys.exit("\n\tERROR - Local Path Does not Exist")
     print("Searching for .wav files in:\n\t",wav_dir)

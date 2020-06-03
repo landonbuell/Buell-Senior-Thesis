@@ -1,0 +1,327 @@
+% ================
+% Landon Buell
+% Kevin Short
+% PHYS 799
+% 18 May 2020
+% ================
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm]{geometry}
+\usepackage{fancyhdr}
+
+% ================================================================
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MLP Classifier Neural Network}
+\rhead{Landon Buell}
+\cfoot{\thepage}
+
+\begin{document}
+
+% ================================
+
+\title{On the Functionality of the Multilayer Perceptron Classifier Neural Network Architecture}
+\date{18 May 2020}
+\author{Landon Buell}
+\maketitle
+
+% ================================================================
+
+\section*{Introduction}
+
+\paragraph*{}In 1943, neurophysiologist Warren McCulloch and mathematician Walter Pitts published \textit{A Logical Calculus of the Ideas Immanent in Nervous Activity} \cite{McCulloch}, which paved the way for the fields of computational neuroscience and early mathematical models of the brain. McCulloch and Pitts proposed that one could loosely mimic the behavior of a brain as a series of mathematical calculations. They realized that the smallest known element of the brain, a \textit{neuron}, acts as a simple on/off switch, much like computers have been designed to. Furthermore, single neurons by themselves do very little, but instead it is the organization of these cells into collections that make up functional networks \cite{Geron,Levine,McCulloch}. 
+
+\paragraph*{}The mathematical model could be augmented by trading the simple Boolean (T/F) value, with a continuously ranging number referred to as an \textit{activation}. By producing different types of artificial neurons and establishing a series of synapses, it then became apparent that different organization of these elements could produce networks of solving increasingly advanced problems \cite{Goodfellow}. To further expand upon this, in 1957, Frank Rosenblatt created a neural network architecture called a Multilayer Perceptron (MLP), which uses layers of interacting neurons to create a single mathematical model \cite{Geron,Petrik}. This gives it a simple feed-forward design which has experimentally shown to perform well with tasks related to image and speech recognition \cite{Goodfellow,Loy}.
+
+\paragraph*{}In general, the goal of an classification MLP is to produce some approximation function, $F^*$ that maps an array or vector of inputs, 
+$\vec{x}$ to a set of discrete classes: $0,1,2,...,k-1$, using a set of parameters $\hat{\theta}$ \cite{Geron,Goodfellow,Petrik}. For a \textit{k-bins} classifier, we notate this as:
+
+\begin{equation}
+\label{approx}
+F^* : \big\{ \vec{x},\hat{\theta}\big\} \rightarrow \big\{ 0,1,2,...,k-2,k-1 \big\}
+\end{equation}
+
+This function is in turn composed of layers of smaller repeating functions, which is what gives rise to the \textit{network} concept of the model. It is the chains of these smaller functions that allow for the producing of the approximate function $F^*$ to be created and solve a vast range of problems.
+
+
+% ================================================================
+
+\section*{Architectural Considerations}
+\paragraph*{}To build a Multilayer Perceptron (MLP), artificial neurons need to be grouped into multiple structures, each called a \textit{layer}. A single layer is modeled mathematically as a column vector, $\vec{x}$ by convention:
+
+\begin{equation}
+\label{layer}
+\vec{x}^{(l)} = \big[ x_0 , x_1 , x_2 , ... , x_{n-2} , x_{n-1} \big]^T
+\end{equation}
+
+The superscript $(l)$ is used to indicate the layer number of which this vector represents. Each element inside this vector is a neuron in the MLP model, and the value of that element is the neuron's \textit{activation} \cite{Geron}. In term of numerical handling, this structure is an array of floating-point numbers. A neural network can have any number of these layers in them, with any number of neurons in each layer. The number of these hidden layers is often referred to as the \textit{network depth} and the number of neurons in each layer is often called the \textit{neuron density} or \textit{network width}.
+
+\paragraph*{}In addition to these layers, called \textit{hidden layers}, a neural network also requires an \textit{input layer} and an \textit{output layer}\cite{Goodfellow}. As the name implies, the input layer is where initial arrays of data are passed into the network. This array is often called a \textit{feature vector} as each element is a feature derived from a potentially larger data set. Typically, this feature vector is denoted by 
+$\vec{x}^{(0)}$ is also the $\vec{x}$ object in equation (\ref{approx}). 
+
+\paragraph*{}In a network with $L$ layers, the output array is also a vector, 
+$\vec{x}^{(L-1)}$ which encodes the final decision made by the network model. In a k-bins classifier, there are $k$ neurons, each one corresponding to a different class. The neuron with the highest activation value corresponds to the networks prediction for what class the particular sample, 
+$\vec{x}^{(0)}$ belongs to. If the output, $\vec{x}^{(L-1)}$ is appropriately normalized, then then activations can be interpreted percentage probabilities of which class the sample belongs to:
+
+\begin{equation}
+\label{probability}
+P \big( \vec{x}^{(L-1)} \big) = \frac{1}{||\vec{x}^{(L-1)}||_2} \big[ x_0 , x_1 , x_2 , ... , x_{k-2} , x_{k-1} \big]^T
+\end{equation}
+
+\paragraph*{}In this network of $L$ layers, there are $L-2$ hidden layers whose activations are given by the entries in $\vec{x}^{(1)}$, 
+$\vec{x}^{(2)}$ , ... , $\vec{x}^{(L-3)}$ , $\vec{x}^{(L-2)}$. And again, the input layers and output layers are given by $\vec{x}^{(0)}$ and 
+$\vec{x}^{(L-1)}$ respectively. Throughout the duration of the model's construction, training and evaluation, these objects remain as column vectors / arrays of real floating point values.
+
+\pagebreak
+
+% ================================================================
+
+\section*{Feed-Forward System}
+
+\paragraph*{}Just by having systems of discrete layers, there is no way for the network to behave as a single model. Thus, we need to connect adjacent layers with synapses. These synapses, also called \textit{weights} allow each activation in any given layer to be a linear combination of the activation in the previous layer, with an addition \textit{bais} constant added \cite{Geron,Loy}. Keeping in mind the mathematical equivalent to vectors: we can then say that the $i$-th element in some layer $(l+1)$ is given by:
+
+\begin{equation}
+\label{single element}
+x^{(l+1)}_i = b^{(l)}_i + \sum_{j} w^{(l)}_{ij} x^{(l)}_j
+\end{equation}
+
+Where $b^{(l)}_i$ is the bias entry, $w^{(l)}_{ij}$ is the weight coefficient that joins neuron $x_j$ to neuron $x_i$, and $x_j$ is the activation of the $j$-th neuron.  Notice how the combination of elements in layer $(l)$, given by the upper index, combine to produce the $i$-th neuron activation in layer $(l+1)$. 
+
+\paragraph*{}Suppose there are $m$ elements in layer $(l)$ and $n$ elements in layer $(l+1)$. We can then express all activations in layer $(l+1)$ by expanding out the sum into a system of linear combinations:
+\begin{equation}
+\begin{split}
+\label{system elements}
+x^{(l+1)}_0 &= b^{(l)}_0 + w^{(l)}_{0,0} x^{(l)}_0 + w^{(l)}_{0,1} x^{(l)}_1 + \hdots + w^{(l)}_{0,m-1} x^{(l)}_{m-1}  \\
+x^{(l+1)}_1 &= b^{(l)}_1 + w^{(l)}_{1,0} x^{(l)}_1 + w^{(l)}_{1,1} x^{(l)}_1 + \hdots + w^{(l)}_{1,m-1} x^{(l)}_{m-1}  \\
+\vdots & \text{\hspace{2cm}} \vdots \\
+x^{(l+1)}_{n-1} &= b^{(l)}_{n-1} + w^{(l)}_{1,0} x^{(l)}_{n-1} + w^{(l)}_{n-1,1} x^{(l)}_{n-1} + \hdots + w^{(l)}_{n-1,m-1} x^{(l)}_{m-1}  \\
+\end{split}
+\end{equation}
+
+\paragraph*{}To make this more convenient to read and express mathematically, the entirety of the system (\ref{system elements}) can be expressed as a single matrix vector product. The elements $x^{(l)}_j$ and $x^{(l+1)}_i$ can be concatenated in column vectors, $\vec{x}^{(l)}$ and  $\vec{x}^{(l+1)}$ respectively:
+
+\begin{equation}
+\label{2 layers}
+\begin{split}
+\vec{x}^{(l)} 	&= \big[ x^{(l)}_0 , x^{(l)}_1 , x^{(l)}_2 , ... , x^{(l)}_{m-2} , x^{(l)}_{m-1} \big]^T \\
+\vec{x}^{(l+1)} &= \big[ x^{(l+1)}_0 , x^{(l+1)}_1 , x^{(l+1)}_2 , ... , x^{(l+1)}_{n-2} , x^{(l+1)}_{n-1} \big]^T 
+\end{split}
+\end{equation}
+
+Similarly, we can take all elements $w^{(l)}_{ij}$ and organize them into a single matrix object, which we call $\hat{W}^{(l)}$, defined as:
+
+\begin{equation}
+\label{weights}
+\hat{W}^{(l)} = 
+\begin{bmatrix}
+w^{(l)}_{0,0} & w^{(l)}_{0,1} & w^{(l)}_{0,2} & \hdots & w^{(l)}_{0,m-2} & w^{(l)}_{0,m-1} \\
+w^{(l)}_{1,0} & w^{(l)}_{1,1} & w^{(l)}_{1,2} & \hdots & w^{(l)}_{1,m-2} & w^{(l)}_{1,m-1} \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+w^{(l)}_{n-2,0} & w^{(l)}_{n-2,1} & w^{(l)}_{n-2,2} & \hdots & w^{(l)}_{n-2,m-2} & w^{(l)}_{n-2,m-1} \\
+w^{(l)}_{n-1,0} & w^{(l)}_{n-1,1} & w^{(l)}_{n-1,2} & \hdots & w^{(l)}_{n-1,m-2} & w^{(l)}_{n-1,m-1} \\
+\end{bmatrix}
+\end{equation}
+
+And finally, we define a bias vector, $\vec{b}^{(l)}$ for layer $(l)$, such that:
+
+\begin{equation}
+\label{bias}
+\vec{b}^{(l)} = \big[ b^{(l)}_0 , b^{(l)}_1 , b^{(l)}_2 , ... , b^{(l)}_{n-2} , b^{(l)}_{n-1} \big]^T \\
+\end{equation}
+
+With these conventions established, we can then express the system (\ref{system elements}) as a matrix-vector product:
+
+\begin{equation}
+\label{mat-vec}
+\vec{x}^{(l+1)} = \vec{b}^{(l)} + \hat{W}^{(l)} \vec{x}^{(l)}
+\end{equation}
+
+This linear equation is again, a compact way of expressing of expressing the linear relationship between activations in layer $(l)$ and layer $(l+1)$. However, this relationship only allows for a linear model as all activations are made of linear combinations. This is part of the justification as to why we have chosen to model layers of neuron activations as elements in column vectors in equation (\ref{layer}). 
+
+\paragraph*{}Often, in many-real world problems, models confined to provide linear descriptions or create linear decision boundaries are often insufficient descriptions of solutions \cite{James}. To combat this, a \textit{non-linear activation function}, $f$, is added to the matrix vector product in equation (\ref{mat-vec}). This changes equation (\ref{mat-vec}) to become \cite{Goodfellow,Loy,Petrik} :
+
+\begin{equation}
+\label{mat-vec + act}
+\vec{x}^{(l+1)} = f^{(l)} \Big( \hat{W}^{(l)} \vec{x}^{(l)} + \vec{b}^{(l)} \Big)
+\end{equation}
+For conventional reasons, the bias vector has been moved to the other side of the matrix-vector product. This is also often represented as two separate processes:
+
+\begin{itemize}
+\item[•] The \textit{Pre-activation} linear portion:
+\begin{equation}
+\label{pre-act}
+\vec{z}^{(l)} = \hat{W}^{(l)} \vec{x}^{(l)} + \vec{b}^{(l)}
+\end{equation}
+\item[•] The \textit{final-activation} portion:
+\begin{equation}
+\label{fin-act}
+\vec{x}^{(l+1)} = f^{(l)} \Big( \vec{z}^{(l)} \Big)
+\end{equation}
+\end{itemize}
+
+Where $f^{(l)}$ is the activation function for the $l$-th layer. $\vec{x}^{(l+1)}$ has shape $n \times 1$ , $\hat{W}^{(l)}$ has shape $n \times m$, $\vec{x}^{(l)}$ has shape $m \times 1$ and $\vec{b}^{(l)}$ has shape $n \times 1$.  Note that the inclusion of an activation function by layer, $f^{(l)}$ in eqn. (\ref{mat-vec + act}) changes the linear combination in eqn. (\ref{single element}) to instead become:
+
+\begin{equation}
+\label{single element + act}
+x^{(l+1)}_i = f^{(l)} \Big( b^{(l)}_i + \sum_{j} w^{(l)}_{ij} x^{(l)}_j \Big)
+\end{equation}
+
+\paragraph*{}As the upper indexes imply, this is how the activations in the \textit{next} sequential layer are produced. By repeating this equation $L-1$ times in an $L$-layered network, information from the feature vector $\vec{x}^{(0)}$ can be successively transformed into the final decision output of the network $\vec{x}^{(L-1)}$. Each application of equation (\ref{mat-vec + act}) produces activations in each of the hidden layers. Note that in this $L$-layer network, there are $L-1$ weight matrices and $L-1$ bias vectors as well. Every single element in all of these arrays can be concatenated to form a larger object, $\hat{\theta}$. It is the combination of the elements in $\hat{\theta}$ that allow the network to map an input vector to an output vector as expressed in equation (\ref{approx}).
+
+\paragraph*{}For a fully connected multilayer perceptron model with $L$ layers, we can construct an algorithm to execute the forward pass process. The algorithm returns two array-like object containing all final activations (\ref{mat-vec + act}), and pre-activation function (\ref{mat-vec}) values. The final object in the list of the output of the network $\vec{x}^{(L-1)}$ (also referred to as $y^*$). For a pseudo-code execution, see alg.(\ref{forward-pass}) \cite{Goodfellow}. Note that this algorithm uses features from a single training samples, a practical implementation should include batches of samples.
+
+\begin{algorithm}
+\label{forward-pass}
+\caption{Feed-Forward System in a fully-connected Multilayer perceptron model for a single sample.}
+\begin{algorithmic}
+
+\REQUIRE Network depth of $L$ layers
+\REQUIRE Object of weighting matrices: $\hat{W}^{(i)}$ with $i \in [0,1,...,L-3,L-2]$
+\REQUIRE Object of bias vectors: $\vec{b}^{(i)}$ with $i \in [0,1,...,L-3,L-2]$
+\REQUIRE Object of activation functions: $\vec{f}^{(i)}$ with $i \in [0,1,...,L-3,L-2]$
+\REQUIRE Raw input to network: $\vec{a}$
+
+final-activations $\leftarrow \{\}$ \\
+pre-activation $\leftarrow \{\}$	\\
+$x^{(0)} \leftarrow \vec{a}$ 		\\
+
+\FOR{$l = 0,1,2,...,L-2,L-1$} 
+\item $\vec{z}^{(l)} \leftarrow \vec{b}^{(l)} + \hat{W}^{(l)} \vec{a}^{(l)}$
+\item $\vec{x}^{(l+1)} \leftarrow f^{(l)} \big( \vec{z}^{(l)} \big)$
+\item pre-activations.insert($\vec{z}^{(l)}$)
+\item final-activations.insert($\vec{x}^{(l+1)}$)
+\ENDFOR
+\RETURN pre-activations
+\RETURN final-activations
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph*{}Both arrays  that are returned by the alg. (\ref{forward-pass}) contain $L-1$ elements. The $j$-th element in the \textit{final-activations} array is the element produced by applying an activation function to the $j$-th element of the \textit{pre-activations} array. These correspond to layers $l+1$ and $l$ respectively.
+
+% ================================================================
+
+\section*{Back Propagation System}
+
+\paragraph*{}The logic of using and input $\vec{x}^{(0)}$ and set of parameters $\hat{\theta}$ to produce an output into a set of discrete bins $0$ thorough $k-1$ becomes worrisome when one considers the amount of parameters that make up the object $\hat{\theta}$, and furthermore how to produce these parameters such that the resulting approximation $F^*$ shows experimental validity. To remedy this, the model needs some way of using inputs, with known outputs, to find the elements of $\hat{\theta}$ that allow similar, but non-identical inputs to be mapped to correct outputs. 
+
+\paragraph*{}We construct the object $\hat{\theta}$ to be some multidimensional array-like object that contains all of the parameters in the model. very generally, it can be thought of as a concatenation of all weighting and bias elements for all of the layers. 
+
+\begin{equation}
+\label{theta}
+\hat{\theta} \equiv \big[ \hat{W}^{(0)} , \vec{b}^{(0)} , \hat{W}^{(1)} , \vec{b}^{(1)} ,
+							... , \hat{W}^{(L-2)} , \vec{b}^{(L-2)} 	\big]
+\end{equation}
+
+Where $\hat{W}^{(l)}$ and $\vec{b}^{(l)}$ are given in eqns. (\ref{weights}) and (\ref{bias}) respectively. For smaller networks, $\hat{\theta}$ may contain several hundred or thousand elements, and for larger deep-learning networks, may contain tens to hundreds of thousands of elements \cite{Goodfellow,Loy}. It is the combinations of these elements that allow for some input given $\vec{x}^{(0)}$ to be transformed into an output $\vec{x}^{(L-1)}$.
+
+\paragraph*{}To do this, we treat the behavior of a neural network as a multidimensional optimization problem. The goal of this would then be to find the set of parameters $\hat{\theta}$ that produces the smallest possible output of some \textit{error function}, \cite{Goodfellow,James,Petrik}. This may also be called a \textit{cost function} or \textit{loss function} as well. This function , $J$, takes the output of the network $\vec{x}^{(L-1)}$ (which we will refer to as $y^*$) to represent a predicted or approximated output) on a given training sample, and compares it to the expected output for that sample $\vec{y}$, and maps it to a real number, which then measures the \textit{cost} of that particular sample such that:
+
+\begin{equation}
+\label{cost func}
+J : \big\{ y^* , y  \big\} \rightarrow \big\{ \mathbb{R} \big\}
+\end{equation}	
+
+\paragraph*{}The larger the value outputted from this function $J$, the further the model's prediction differs from the expected value. Thus, this function can be through of as a measurement of how \textit{poor} the network's prediction was. It then becomes appropriate to make the goal of the neural network to \textit{optimize} $J$, with respect the parameters $\hat{\theta}$ to allow for a generally low cost value for a given input.
+
+\paragraph*{}There are many ways to optimize the parameters in a neural network,for this work, we will examine an optimizer algorithm called \textit{Stochastic Gradient Descent} (SGD). This is an iterative method that uses repeated a passes over a data set to slowly push the cost function to a smaller and smaller value \cite{Geron,Goodfellow,Loy}. As the name implies, we compute the gradient of the cost function with respect to all of the parameters in the model to produce a vector. The components of this vector give the direction to which a small change the elements of $\hat{\theta}$ will result in a small reduction of the value of the loss function. Recall the gradient vector of some function $h$ of variables $x_0$ , $x_1$ , ... ,$x_{n-2}$ , $x_{n-1}$ is given by:
+
+\begin{equation}
+\label{gradient}
+\nabla_{\vec{x}}\Big[ h(x_0,x_1,...,x_{n-2},x_{n-1}) \Big] 
+			= \Big[ \frac{\partial h}{\partial x_0} , \frac{\partial h}{\partial x_1} , ...\
+					\frac{\partial h}{\partial x_{n-2}} , \frac{\partial h}{\partial x_{n-1}} \Big]^T
+\end{equation}
+
+\paragraph*{}To build this vector, we need to use the chain rule of multivariate calculus to work \textit{backwards} through the layers of the network to differentiate by layers, hence why the procedure is called \textit{backwards} propagation. To ease mathematical notation, we will redefine the forward pass equation (\ref{mat-vec + act}) into two separate procedures:
+
+\begin{equation}
+\label{linear}
+\vec{z}^{(l)} = \hat{W}^{(l)} \vec{x}^{(l)} + \vec{b}^{(l)}
+\end{equation}
+\begin{equation}
+\label{activation}
+\vec{x}^{(l+1)} = f^{(l)} \big( \vec{z}^{(l)} \big)
+\end{equation}
+
+\paragraph*{}We start by differentiating the cost function $J$ with respect to last layer of weights and biases, $\hat{W}^{(L-2})$ and $\vec{b}^{(L-2)}$. The cost, $J$, is a function of the output activations, $\vec{x}^{(L-1)}$ which is in turn a function of $\vec{z}^{L-2}$ in eqn. (\ref{activation}) which is in turn a function of both $\hat{W}^{(L-2})$ and $\vec{b}^{(L-2)}$ in eqn. (\ref{linear}). To account for this layered composition, we multiply each partial derivatives in succession to produce the gradient components that correspond to the needed change in those parameters.
+
+\begin{equation}
+\nabla_{W^{(L-2)}} \Big[ J \Big] = 
+\frac{\partial J}{\partial x^{(L-1)}} \frac{\partial f^{(L-2)}}{\partial z^{(L-2)}} \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
+\end{equation}
+\begin{equation}
+\nabla_{b^{(L-2)}} \Big[ J \Big] = 
+\frac{\partial J}{\partial x^{(L-1)}} \frac{\partial f^{(L-2)}}{\partial z^{(L-2)}} \frac{\partial z^{(L-2)}}{\partial b^{(L-2)}}
+\end{equation}
+
+Additionally, we compute the gradient with respect to the $L-2$ layer of activations, which will allows for us to move down the to previous sequential layer $L-3$.
+
+\begin{equation}
+\nabla_{x^{(L-2)}} \Big[ J \Big] = 
+\frac{\partial J}{\partial x^{(L-1)}} \frac{\partial f^{(L-2)}}{\partial z^{(L-2)}} \frac{\partial z^{(L-2)}}{\partial x^{(L-2)}}
+\end{equation} 
+
+These three equations allow for the model to work backwards through the layers and compute the gradient of the cost function with respect to every paramater in the network. The above equations can be generalized for any layer $l$:
+
+\begin{equation}
+\label{dW}
+\nabla_{W^{(l)}} \Big[ J \Big] = 
+\frac{\partial J}{\partial x^{(l+1)}} \frac{\partial f^{(l)}}{\partial z^{(l)}} \frac{\partial z^{(l)}}{\partial W^{(l)}}
+\end{equation}
+\begin{equation}
+\label{db}
+\nabla_{b^{(l)}} \Big[ J \Big] = 
+\frac{\partial J}{\partial x^{(l+1)}} \frac{\partial f^{(l)}}{\partial z^{(l)}} \frac{\partial z^{(l)}}{\partial b^{(l)}}
+\end{equation}
+\begin{equation}
+\label{dx}
+\nabla_{x^{(l)}} \Big[ J \Big] = 
+\frac{\partial J}{\partial x^{(l+1)}} \frac{\partial f^{(l)}}{\partial z^{(l)}} \frac{\partial z^{(l)}}{\partial x^{(l)}}
+\end{equation}
+
+\paragraph*{}It is important to know that due to numerical condiderations, this operation is very computationally expensive, and fine details for improving efficiency not considered in the equations above. Additionally, the results from eqns. (\ref{dW}), (\ref{db}), and (\ref{dx}).
+
+
+% ================================================================
+
+\section*{Summary}
+
+
+
+% ================================================================
+
+\begin{thebibliography}{9}
+\bibliographystyle{apalike}
+
+\bibitem{Geron}
+Géron Aurélien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. O'Reilly, 2017.
+
+\bibitem{Goodfellow}
+Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
+
+\bibitem{James}
+James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.
+
+\bibitem{Levine}
+Levine, Daniel S. \textit{Introduction to Neural and Cognitive Modeling}. 3rd ed., Routledge, 2019.
+
+\bibitem{Loy}
+Loy, James , \textit{Neural Network Projects with Python}. Packt Publishing, 2019
+
+\bibitem{McCulloch}
+McCulloch, Warren S., and Walter Pitts. “A Logical Calculus of the Ideas Immanent in Nervous Activity.” \textit{The Bulletin of Mathematical Biophysics}, vol. 5, no. 4, 1943, pp. 115–133.
+
+\bibitem{Petrik}
+Petrik, Marek. “Introduction to Deep Learning.” Machine Learning. 20 April. 2020, Durham, New Hampshire.
+
+\end{thebibliography}
+
+% ================================================================
+
+\end{document}

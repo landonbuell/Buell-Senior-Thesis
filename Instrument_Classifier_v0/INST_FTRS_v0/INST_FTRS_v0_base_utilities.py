@@ -34,16 +34,16 @@ INSTRUMENT FEATURES V0 - BASE LEVEL UTILITIES
             #### VARIABLE & OBJECT DECLARATIONS ####   
 
 accepted_instruments = [
-                # Woodwinds
-                'AltoFlute','AltoSax','BbClarinet','EbClarinet','Flute',
-                'Oboe','SopSax','EbClarinet','BassClarinet','BassFlute',
-                'Bassoon',
-                # Strings
-                'Bass','Cello','Viola','Violin',
-                # Brass
-                'BassTrombone','Horn','TenorTrombone','Trumpet','Tuba',
-                # Percussion
-                'bells','Marimba','Vibraphone','Xylophone']
+        # Woodwinds
+        'AltoFlute','AltoSax','BbClarinet','EbClarinet','Flute',
+        'Oboe','SopSax','EbClarinet','BassClarinet','BassFlute',
+        'Bassoon',
+        # Strings
+        'Bass','Cello','Viola','Violin',
+        # Brass
+        'BassTrombone','Horn','TenorTrombone','Trumpet','Tuba',
+        # Percussion
+        'bells','Marimba','Vibraphone','Xylophone']
 
 percussion = ['woodblock','triangle','castanet','clave',
               'crotale','tambourine']
@@ -75,15 +75,15 @@ class wavfile():
 
     def assign_instrument (self):
         """ Assign Instrument Attribute to Instance """
-        string = self.filename.split('.')[0]    # 0-th element in name
-        if string in accepted_instruments:      # in valid instruments
+        name = self.filename.split('.')[0]    # 0-th element in name
+        if name in accepted_instruments:      # in valid instruments
             return string.upper()   # set instrument
-        elif string in percussion:      # percussion?
-            return 'PERCUSSION'      # set
-        elif string in cymbals:         # cymbals?
-            return 'CYMBAL'          # set
-        else:                           # not in lists?
-            return 'OTHER'           # set other
+        elif name in percussion:    # percussion?
+            return 'PERCUSSION'     # set
+        elif name in cymbals:       # cymbals?
+            return 'CYMBAL'         # set
+        else:                       # not in lists?
+            return 'OTHER'          # set other
 
 
     def read_raw_wav(self,normalize=True):
@@ -105,13 +105,15 @@ def argument_parser():
     --------------------------------
     *no argumnets*
     --------------------------------
-    Return completetd argument parser class instance
+    Return complete argument parser class instance
     """
     parser = argparse.ArgumentParser(prog='Instrument Features v0')
     parser.add_argument('wav_audio',type=str,
-                        help='Local path where raw audio is stored')
+                        help='Local path where raw audio files are stored')
+    parser.add_argument('ext_data',type=str,
+                        help='Local path to exprt design matrix & target vector')
     args = parser.parse_args()
-    return args.wav_audio 
+    return args.wav_audio , args.ext_data
 
 def make_paths(paths=[]):
     """
