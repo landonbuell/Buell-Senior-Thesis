@@ -52,5 +52,5 @@ if __name__ == '__main__':
     X = ML_utils.Design_Matrix_Labeler(X,True)
 
     # EXPORT X AND y
-    X.to_csv(exp_path+'/X.csv')
-    y.to_csv(exp_path+'/y.csv')
+    X.to_csv(out_path+'/X.csv')
+    y.to_csv(out_path+'/y.csv')

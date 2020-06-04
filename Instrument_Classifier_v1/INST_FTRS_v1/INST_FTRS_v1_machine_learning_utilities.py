@@ -26,8 +26,6 @@ INSTRUMENT CLASSIFIER v1 - MACHINE LEARNING UTILITIES
     - target_label_encoder
     - Design_Matric_Scaler
     - Design_Matrix
-    - Create_MLP_Model
-    - Confusion_Matrix
 """
 
             #### PREPROCESSING FUNCTIONS ####
@@ -125,8 +123,8 @@ def Design_Matrix (wavfile_objects,wav_path,int_path,exp_path):
         X = np.append(X,[timeseries_features,freqseries_features])# add to feature matrix
 
         # Export Spectrogram for Single File
-        Spectrogram = pd.DataFrame(data=Spectrogram)           
-        Spectrogram.to_csv(exp_path+'/spectrograms/'+WAVFILE.name+'.csv')
+        #Spectrogram = pd.DataFrame(data=Spectrogram)           
+        #Spectrogram.to_csv(exp_path+'/spectrograms/'+WAVFILE.name+'.csv')
 
     os.chdir(int_path)          # return home
 

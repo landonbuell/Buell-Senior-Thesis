@@ -67,7 +67,8 @@ class wavfile():
         """ Initialize Class Object """
         file = file.replace('-','.')
         self.filename = file                # filename
-        self.name = file.replace('.wav','') # name w/o ext
+        self.name = file.replace('.wav','') 
+        # name w/o ext
         self.ext = file.split('.')[-1]      # file ext type (wav)
         
         self.instrument = self.assign_instrument()

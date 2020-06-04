@@ -62,8 +62,7 @@ def Power_Spectrum (waveform,norm=False,pts=[]):
     --------------------------------
     waveform (array) : 1 x N waveform from file with normalized amplitude
     norm (Bool)
-    pts (list) : list of pts to keep in FFT spectrum
-    
+    pts (iter) : sequence of pts to keep in FFT spectrum
     --------------------------------
     Return power spectrum of shape (1  x len(pts)) size
     """
