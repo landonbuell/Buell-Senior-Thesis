@@ -45,6 +45,8 @@ if __name__ == '__main__':
     ENCODE_DICTIONARY,DECODE_DICTIONARY,N_CLASSES = \
         ML_utils.target_label_encoder(y,out_dir)        # build dict
     y = np.array([ENCODE_DICTIONARY[x] for x in y])     # convert str to int
+    y = pd.DataFrame(data=y)
+    y.to_csv(out_dir+'/y.csv')
 
     # BUILD DESIGN MATRIX W/ FEATURES FROM ALL FILES
     print("Constructing Design Matrix...")
@@ -52,5 +54,5 @@ if __name__ == '__main__':
     X = ML_utils.Design_Matrix_Labeler(X,True)
 
     # EXPORT X AND y
-    X.to_csv(out_path+'/X.csv')
-    y.to_csv(out_path+'/y.csv')
+    X.to_csv(out_dir+'/X.csv')
+    y.to_csv(out_dir+'/y.csv')

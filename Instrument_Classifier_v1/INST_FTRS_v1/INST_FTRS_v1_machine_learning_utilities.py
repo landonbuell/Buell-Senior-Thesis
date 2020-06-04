@@ -82,12 +82,13 @@ def Design_Matrix_Labeler (X,inc_cols=True):
     --------------------------------
     Return design matrix as pandas DataFrame
     """
-    cols = ['Rise Time','Decay Time','RMS Energy',
+    cols = ['Rise Time','Decay Time',
             '>10% RMS','>20% RMS','>30% RMS','>40% RMS','>50% RMS',
             '>60% RMS','>70% RMS','>80% RMS','>90% RMS',
             'Band 1 Energy','Band 2 Energy','Band 3 Energy','Band 4 Energy',
-            'Band 5 Energy','Band 6 Energy','Band 7 Energy','Band 8 Energy',]
-    if cols == True:
+            'Band 5 Energy','Band 6 Energy','Band 7 Energy','Band 8 Energy',
+            'Band 9 Energy']
+    if inc_cols == True:
         return pd.DataFrame(data=X,columns=cols)
     else:
         return pd.DataFrame(data=X)
@@ -110,7 +111,7 @@ def Design_Matrix (wavfile_objects,wav_path,int_path,exp_path):
     
     os.chdir(wav_path)                  # change to directory
     
-    for WAVFILE in wavfile_objects:         # through each .wav file
+    for cntr,WAVFILE in enumerate(wavfile_objects): # through each .wav file
         # Load raw .wav audio
         print('\t',WAVFILE.filename)      
         WAVFILE = WAVFILE.read_raw_wav()    # read waveform as np array
@@ -120,13 +121,16 @@ def Design_Matrix (wavfile_objects,wav_path,int_path,exp_path):
             feat_utils.timeseries(WAVFILE)     # collect time features
         freqseries_features,Spectrogram = \
             feat_utils.freqseries(WAVFILE)     # collect freq features
-        X = np.append(X,[timeseries_features,freqseries_features])# add to feature matrix
+                           
+        row = np.array([])                          # create sample row
+        row = np.append(row,timeseries_features)    # add to row
+        row = np.append(row,freqseries_features)    # add to row
+        X = np.append(X,row)                        # add to design 
 
         # Export Spectrogram for Single File
         #Spectrogram = pd.DataFrame(data=Spectrogram)           
         #Spectrogram.to_csv(exp_path+'/spectrograms/'+WAVFILE.name+'.csv')
 
     os.chdir(int_path)          # return home
-
     return X.reshape(n_samples,-1)     # rehape feature matrix
 

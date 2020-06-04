@@ -42,7 +42,6 @@ def timeseries (wavfile):
     # RMS Energy from frames
     energies = time_utils.Frame_Energy(wavfile.waveform,512)
     RMS_energy = time_utils.Root_Mean_Square(energies)
-    features = np.append(features,RMS_energy)
     
     # RMS above values
     values = time_utils.RMS_Above_Val(energies,RMS_energy,
