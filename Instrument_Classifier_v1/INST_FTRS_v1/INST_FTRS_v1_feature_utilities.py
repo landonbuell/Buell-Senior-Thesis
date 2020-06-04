@@ -2,17 +2,17 @@
 Landon Buell
 Instrument Classifier v0
 Feature Extraction
-6 April 2020
+1 June 2020
 """
 
             #### IMPORTS ####
 
 import numpy as np
 
-import INST_CLF_v1_base_utilities as base_utils
-import INST_CLF_v1_time_utilities as time_utils
-import INST_CLF_v1_freq_utilities as freq_utils
-import INST_CLF_v1_machine_learning_utilities as ML_utils
+import INST_FTRS_v1_base_utilities as base_utils
+import INST_FTRS_v1_time_utilities as time_utils
+import INST_FTRS_v1_freq_utilities as freq_utils
+import INST_FTRS_v1_machine_learning_utilities as ML_utils
 
 """
 INSTRUMENT CLASSIFIER v1 - FEATURE UTILITIES
@@ -44,7 +44,7 @@ def timeseries (wavfile):
     RMS_energy = time_utils.Root_Mean_Square(energies)
     features = np.append(features,RMS_energy)
     
-    # RMS below values
+    # RMS above values
     values = time_utils.RMS_Above_Val(energies,RMS_energy,
                                         vals=np.arange(0,1,0.1))
     features = np.append(features,values)
@@ -75,4 +75,4 @@ def freqseries (wavfile):
     features = np.append(features,pwr_per_bank)
 
     features = np.ravel(features)   # flatten to 1D
-    return features
+    return features,Sxx

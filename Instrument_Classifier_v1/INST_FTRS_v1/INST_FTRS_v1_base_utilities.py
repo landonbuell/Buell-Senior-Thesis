@@ -2,7 +2,7 @@
 Landon Buell
 Instrument Classifier v0
 Base Level Utility Functions
-6 April 2020
+1 June 2020
 """
 
             #### IMPORTS ####
@@ -67,9 +67,11 @@ class wavfile():
         """ Initialize Class Object """
         file = file.replace('-','.')
         self.filename = file                # filename
+        self.name = file.replace('.wav','') # name w/o ext
         self.ext = file.split('.')[-1]      # file ext type (wav)
         
         self.instrument = self.assign_instrument()
+        self.family = self.assign_family
         #self.target = INSTRUMENT_FAMILIES[self.instrument]
         self.target = self.instrument           # instrument as target
 
@@ -77,7 +79,7 @@ class wavfile():
         """ Assign Instrument Attribute to Instance """
         name = self.filename.split('.')[0]    # 0-th element in name
         if name in accepted_instruments:      # in valid instruments
-            return string.upper()   # set instrument
+            return name.upper()   # set instrument
         elif name in percussion:    # percussion?
             return 'PERCUSSION'     # set
         elif name in cymbals:       # cymbals?
@@ -85,10 +87,14 @@ class wavfile():
         else:                       # not in lists?
             return 'OTHER'          # set other
 
+    def assign_family (self):
+        """ Assign Family Attribute to Instance """
+        return None
+
     def read_raw_wav(self,normalize=True):
-        """ Read Raw data from directory file """      
+        """ Read Raw data from directory file """
         rate,data = sciowav.read(self.filename) # read raw waveform
-        self.rate = rate                        # sample rate
+        self.rate = rate                        # set sample rate
         data = np.transpose(data)               # transpose
         if normalize == True:
             data = data/np.max(np.abs(data))    # normalize
@@ -142,12 +148,6 @@ def read_directory (path,ext='.wav'):
                 file_objs.append(wavfile(file)) # add instance to list 
     return file_objs                            # return list of instances
 
-def load_keras_model ():
-    """
-
-
-    """
-    return None
 
             #### PLOTTING FUNCTIONS ####
 
@@ -212,7 +212,6 @@ def Plot_Freq_Spectrum (xdata,ydata,labels,title='',show=True):
     plt.tight_layout()
     if show == True:
         plt.show()
-
 
 def Plot_Spectrogram (f,t,Sxx,title,show=True):
     """

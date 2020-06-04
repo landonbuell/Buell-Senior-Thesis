@@ -2,7 +2,7 @@
 Landon Buell
 Instrument Classifier v0
 Time series Utility Functions
-6 April 2020
+1 June 2020
 """
 
             #### IMPORTS ####
@@ -12,7 +12,7 @@ import pandas as pd
 
 import scipy.integrate as integrate
 
-import INST_CLF_v1_base_utilities as base_utils
+import INST_FTRS_v1_base_utilities as base_utils
 
 """
 INSTRUMENT CLASSIFIER v1 - TIME UTILITIES

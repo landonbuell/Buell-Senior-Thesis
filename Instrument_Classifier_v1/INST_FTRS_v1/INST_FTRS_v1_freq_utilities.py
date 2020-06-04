@@ -2,7 +2,7 @@
 Landon Buell
 Instrument Classifier v0
 Frequency series Utility Functions
-6 April 2020
+1 June 2020
 """
 
             #### IMPORTS ####
@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import matlab
 
-import INST_CLF_v1_base_utilities as base_utils
+import INST_FTRS_v1_base_utilities as base_utils
 
 import scipy.fftpack as fftpack
 import scipy.signal as signal
