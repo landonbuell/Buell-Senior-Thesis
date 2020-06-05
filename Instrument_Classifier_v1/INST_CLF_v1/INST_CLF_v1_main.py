@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # PRE-PROCESSING
     X = ML_utils.Scale_Design_Matrix(X) 
     X_train,X_test,y_train,y_test = \
-        ML_utils.split_train_test(X,y,test=0.4)
+        ML_utils.split_train_test(X,y,test=0.4,seed=0)
     Y_train,n_classes = ML_utils.one_hot_encoder(y_train)
     n_samples,n_features = X.shape
 
