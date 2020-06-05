@@ -12,32 +12,6 @@ import os
 import tensorflow as tf
 import tensorflow.keras as keras
 
-            #### PREPROCESSING FUNCTIONS ####
-
-def Design_Matrix_Scaler (X):
-    """
-    Scale design matrix to have 0 mean, & unit variance
-    --------------------------------
-    X (arr) : (n_samples x n_features) standard Design matrix to scale
-    --------------------------------
-    Return scaled design matrix
-    """
-    scaler = StandardScaler()   # obj inst
-    X = scaler.fit_transform(X) # fit the inst & tranf X
-    return X
-
-def one_hot_encoder (y,n_classes):
-    """
-    One-Hot-Encode array y
-    --------------------------------
-    y (arr) : (n_samples x 1) sample target array
-    n_classes (int) : number of target classes
-    --------------------------------
-    Return matrix Y, (n_samples x n_classes)
-    """
-    y = np.array(y).ravel()     # make into arr & flatten
-    Y = keras.utils.to_categorical(y,n_classes,dtype='int')
-
             #### NEURAL NETWORK MODELS ####
 
 def CNN_2D_Classifier(name,n_classes,path=None,metrics=None): 
@@ -62,11 +36,11 @@ def CNN_2D_Classifier(name,n_classes,path=None,metrics=None):
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(units=40,activation='relu'))
     # Output
-    model.add(keras.layers.Dense(unitss=n_classes,activation='softmax'))
+    model.add(keras.layers.Dense(units=n_classes,activation='softmax'))
     model.compile(optimizer=keras.optimizers.SGD(),
                   loss='categorical_crossentropy',
                   metrics=metrics)
-
+    print(model.summary())
     # Save Locally?
     if path != None:
         filepath = path + '/' + model.name
@@ -91,20 +65,20 @@ def MLP_Classifier (name,n_features,n_classes,path=None,metrics=None):
     """
     # Create Model & add Input Layer
     model = keras.models.Sequential(name=name)
-    model.add(keras.layers.InputLayer(input_shape=(n_features,1)))
+    model.add(keras.layers.InputLayer(input_shape=(n_features,)))
     # Dense Layers
-    model.add(keras.layers.Dense(units=20,activation='relu'))
-    model.add(keras.layers.Dense(units=20,activation='relu'))
+    model.add(keras.layers.Dense(units=40,activation='relu'))
+    model.add(keras.layers.Dense(units=40,activation='relu'))
     # Output
-    model.add(keras.layers.Dense(unitss=n_classes,activation='softmax'))
+    model.add(keras.layers.Dense(units=n_classes,activation='softmax'))
     model.compile(optimizer=keras.optimizers.SGD(),
                   loss='categorical_crossentropy',
                   metrics=metrics)
-
+    print(model.summary())
     # Save Locally?
     if path != None:
         filepath = path + '/' + model.name
-        model.save(filepath=filepath,saveformat='tf')
+        model.save(filepath=filepath,save_format='tf')
         setattr(model,'filepath',filepath)
 
     # return model instance

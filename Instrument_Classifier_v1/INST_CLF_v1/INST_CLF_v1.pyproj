@@ -26,6 +26,12 @@
     <Compile Include="INST_CLF_v1_Network_Models.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="INST_CLF_v1_base_utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="INST_CLF_v1__Machine_Learning_Utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

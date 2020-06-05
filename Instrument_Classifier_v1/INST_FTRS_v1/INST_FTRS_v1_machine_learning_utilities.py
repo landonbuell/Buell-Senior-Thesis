@@ -130,6 +130,7 @@ def Design_Matrix (wavfile_objects,wav_path,int_path,exp_path):
         # Export Spectrogram for Single File
         #Spectrogram = pd.DataFrame(data=Spectrogram)           
         #Spectrogram.to_csv(exp_path+'/spectrograms/'+WAVFILE.name+'.csv')
+        #del(Spectrogram)
 
     os.chdir(int_path)          # return home
     return X.reshape(n_samples,-1)     # rehape feature matrix
