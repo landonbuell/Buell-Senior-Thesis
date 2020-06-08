@@ -43,7 +43,7 @@ def plot_history (hist,model,show=False):
 
 if __name__ == '__main__':
     
-    # JARVIS is stored ehre
+    # JARVIS is stored here
     JARVIS_path = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Instrument_Classifier_v1/INST_CLF_v1/JARVIS'
     JARVIS = keras.models.load_model(filepath=JARVIS_path)
     print(JARVIS.summary())    
