@@ -46,16 +46,17 @@ if __name__ == '__main__':
     Y_train,n_classes = ML_utils.one_hot_encoder(y_train)
     n_samples,n_features = X.shape
 
-    MLP = False
+    MLP = True
     if MLP == True:
         # MLP MODEL
         MLP_MODEL = NN_Models.MLP_Classifier('JARVIS',n_features,n_classes,
                                              path=int_dir,metrics=['Precision','Recall'])
         MLP_MODEL.fit(x=X_train,y=Y_train,batch_size=128,epochs=200,verbose=2)
         MLP_MODEL = ML_utils.Evaluate_Model(MLP_MODEL,X_test,y_test)
+        base_utils.Plot_Confusion(MLP_MODEL,show=True)
         MLP_MODEL.save(int_dir,save_format='tf')
 
-    CNN = True
+    CNN = False
     if CNN == True:
         CNN_MODEL = NN_Models.CNN_2D_Classifier('VISION',n_classes,
                                                 path=int_dir,metrics=['Precision','Recall'])

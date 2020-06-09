@@ -94,6 +94,7 @@ x^{(l+1)}_i = b^{(l)}_i + \sum_{j} w^{(l)}_{ij} x^{(l)}_j
 Where $b^{(l)}_i$ is the bias entry, $w^{(l)}_{ij}$ is the weight coefficient that joins neuron $x_j$ to neuron $x_i$, and $x_j$ is the activation of the $j$-th neuron.  Notice how the combination of elements in layer $(l)$, given by the upper index, combine to produce the $i$-th neuron activation in layer $(l+1)$. 
 
 \paragraph*{}Suppose there are $m$ elements in layer $(l)$ and $n$ elements in layer $(l+1)$. We can then express all activations in layer $(l+1)$ by expanding out the sum into a system of linear combinations:
+
 \begin{equation}
 \begin{split}
 \label{system elements}
@@ -197,8 +198,8 @@ $x^{(0)} \leftarrow \vec{a}$ 		\\
 \item pre-activations.insert($\vec{z}^{(l)}$)
 \item final-activations.insert($\vec{x}^{(l+1)}$)
 \ENDFOR
-\RETURN pre-activations
-\RETURN final-activations
+\RETURN pre-activations: $\big\{ \vec{z}^{(0)} , \vec{z}^{(1)} , ... , \vec{z}^{(L-2)}  \big\}$
+\RETURN final-activations: $\big\{ \vec{x}^{(1)} , \vec{x}^{(2)} , ... , \vec{x}^{(L-1)}  \big\}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -249,7 +250,7 @@ J : \big\{ y^* , y  \big\} \rightarrow \big\{ \mathbb{R} \big\}
 \vec{x}^{(l+1)} = f^{(l)} \big( \vec{z}^{(l)} \big)
 \end{equation}
 
-\paragraph*{}We start by differentiating the cost function $J$ with respect to last layer of weights and biases, $\hat{W}^{(L-2})$ and $\vec{b}^{(L-2)}$. The cost, $J$, is a function of the output activations, $\vec{x}^{(L-1)}$ which is in turn a function of $\vec{z}^{L-2}$ in eqn. (\ref{activation}) which is in turn a function of both $\hat{W}^{(L-2})$ and $\vec{b}^{(L-2)}$ in eqn. (\ref{linear}). To account for this layered composition, we multiply each partial derivatives in succession to produce the gradient components that correspond to the needed change in those parameters.
+\paragraph*{}We start by differentiating the cost function $J$ with respect to last layer of weights and biases, $\hat{W}^{(L-2})$ and $\vec{b}^{(L-2)}$. The cost, $J$, is a function of the output activations, $\vec{x}^{(L-1)}$ which is in turn a function of $\vec{z}^{L-2}$ in eqn. (\ref{activation}) which is in turn a function of both $\hat{W}^{(L-2)}$ and $\vec{b}^{(L-2)}$ in eqn. (\ref{linear}). To account for this layered composition, we multiply each partial derivatives in succession to produce the gradient components that correspond to the needed change in those parameters.
 
 \begin{equation}
 \nabla_{W^{(L-2)}} \Big[ J \Big] = 
@@ -271,22 +272,75 @@ These three equations allow for the model to work backwards through the layers a
 
 \begin{equation}
 \label{dW}
-\nabla_{W^{(l)}} \Big[ J \Big] = 
+\nabla_{W^{(l)}} \big[ J \big] = 
 \frac{\partial J}{\partial x^{(l+1)}} \frac{\partial f^{(l)}}{\partial z^{(l)}} \frac{\partial z^{(l)}}{\partial W^{(l)}}
 \end{equation}
 \begin{equation}
 \label{db}
-\nabla_{b^{(l)}} \Big[ J \Big] = 
+\nabla_{b^{(l)}} \big[ J \big] = 
 \frac{\partial J}{\partial x^{(l+1)}} \frac{\partial f^{(l)}}{\partial z^{(l)}} \frac{\partial z^{(l)}}{\partial b^{(l)}}
 \end{equation}
 \begin{equation}
 \label{dx}
-\nabla_{x^{(l)}} \Big[ J \Big] = 
+\nabla_{x^{(l)}} \big[ J \big] = 
 \frac{\partial J}{\partial x^{(l+1)}} \frac{\partial f^{(l)}}{\partial z^{(l)}} \frac{\partial z^{(l)}}{\partial x^{(l)}}
 \end{equation}
 
-\paragraph*{}It is important to know that due to numerical condiderations, this operation is very computationally expensive, and fine details for improving efficiency not considered in the equations above. Additionally, the results from eqns. (\ref{dW}), (\ref{db}), and (\ref{dx}).
+\paragraph*{}It is important to know that due to numerical condiderations, this operation is very computationally expensive, and fine details for improving efficiency not considered in the equations above. Additionally, the results from eqns. (\ref{dW}), (\ref{db}), and (\ref{dx}) are all array-like objects. Each element is the direction and value of the small change needed to push $J$ to a successively lower value. after each element of the gradient vector is computed, we simply add the change given by the gradient to the current value of that entry. For all parameters in any layer $l$:
 
+\begin{equation}
+\label{update params}
+\begin{split}
+\hat{W}^{(l)} &= \hat{W}^{(l)} + \alpha \nabla_{W^{(1)}} \big[ J \big] \\
+\vec{b}^{(l)} &= \vec{b}^{(l)} + \alpha \nabla_{b^{(1)}} \big[ J \big] \\
+\end{split}
+\end{equation}
+
+\paragraph*{}Where $\alpha$ is a scalar called the \textit{learning rate}, typically $\alpha \in (0,1)$ \cite{Geron,Petrik}. It can be intuitively through of as a step size taken by the model at each back-propagation iteration. Larger values of $\alpha$ may cause the model to reach a minimum faster, but also cause a possible \textit{overshoot} or missing the target minimum, while smaller values of $\alpha$ may cause the model to reach a more suitable minimum, at the cost of must greater computational time and resources. Often, $\alpha$ can be set to have a dynamic value, allowing for the step size at each iteration for a compromise between computation time and selection of a suitable value. The act details on the choice of the learning rate is topic of a different study on \textit{model regularization} techniques \cite{Goodfellow,James}.
+
+\paragraph*{}We can express the back-propagation process with an algorithm that executes the Stochastic Gradient Descent algorithm outlined about. Note that this algorithm uses the loss from a single training sample, a practical implementation should include batches of samples. This algorithm can only be executable after a forward pass prediction is made.
+
+\begin{algorithm}
+\label{back-prop}
+\caption{Back Propagation System in a fully-connected Multilayer perceptron model for a single sample.}
+\begin{algorithmic}
+
+\REQUIRE Network depth of $L$ layers ,  cost function $J$ , learning rate $\alpha$
+\REQUIRE Objects: $\hat{W}^{(i)}$, $\vec{b}^{(i)}$ from previous feed-forward.
+\REQUIRE Object of activation function derivatices: $\partial\vec{f}^{(i)}$ 
+\REQUIRE Object of final activations by layer: $\vec{x}^{(i)}$ with $i \in [1,1,...,L-2,L-1]$
+\REQUIRE Object of pre-actications by layer: $\vec{z}^{(i)}$ with $i \in [0,1,...,L-3,L-2]$
+\REQUIRE Sample target output $y$ (usually one-hot-encoded)
+
+Array to hold weight updates: $dW \leftarrow \big\{ \big\}$ (\ref{dW}) \\
+Array to hold bias updates: $db \leftarrow \big\{ \big\}$ (\ref{db}) \\
+Compute gradient of $J$ w.r.t output layer $\vec{x}^{(0)}$: \\
+
+$dx \leftarrow \nabla_{y^*} \big[ J(y^*,y) \big]$ \\
+
+\FOR {$l = L-2 , L-3 , ... ,1,0$}
+\item $db^{(l)} \leftarrow dx \odot \partial f^{(l)}\big(z^{(l)}\big)$
+\item $dW^{(l)} \leftarrow db^{(l)} \cdot x^{(l)}$
+\item dW.insert($dW^{(l)}$)
+\item db.insert($db^{(l)}$)
+\item $dx \leftarrow dW^{(l)} db^({l})$
+\ENDFOR
+
+ASSERT: $dW^{(i)}$ has same dimension as $W^{(i)}$ for $i \in [0,1,...,L-3,L-2]$ \\
+ASSERT: $db^{(i)}$ has same dimension as $b^{(i)}$ for $i \in [0,1,...,L-3,L-2]$ \\
+
+\FOR {$l = 0,1,...,L-3,L-2$}
+\item $W^{(i)} \leftarrow W^{(i)} + (\alpha) dW^{(i)}$
+\item $b^{(i)} \leftarrow b^{(i)} + (\alpha) db^{(i)}$
+\ENDFOR
+
+\RETURN Object containing updated weights: $\hat{W}^{(i)}$ with $i \in [1,1,...,L-2,L-1]$
+\RETURN Object containing updated biases: $\hat{b}^{(i)}$ with $i \in [1,1,...,L-2,L-1]$
+
+\end{algorithmic}
+\end{algorithm}
+
+\pagebreak
 
 % ================================================================
 
