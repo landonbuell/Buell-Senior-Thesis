@@ -42,9 +42,6 @@
 
 \paragraph*{}Time series features (also called time-domain or time-space features) are pieces of information that can be extracted, derived, or otherwise originate from a signal that in expressed with a dependence on time. This can include weather forecasts, year-to-year population of a given demographic, audio information, or economic stock data. In the context of audio data, this is generally referred to as a \textit{waveform}. Given that time-series data (and all data) stored digitally must contain evenly-spaced, discrete samples, $S$ is used to indicate a signal stored in an array-like object with it's elements $S_i$ (where $i \in \{ 0,1,2,...,N-2,N-1\}$) make up the waveform.
 
-\paragraph*{}Additiona
-
-
 % ================================
 
 
@@ -196,7 +193,7 @@ Where $F$ is an array Similarly, we recover the original time-basis signal $S$ w
 
 \begin{equation}
 \label{IDFT}
-S_{k} =  \frac{1}{N}\sum_{n=0}^{N-1} F_{n} \cdot e^{-2\pi i\frac{kn}{N}}
+S_{k} =  \frac{1}{N}\sum_{n=0}^{N-1} F_{n} \cdot e^{+2\pi i\frac{kn}{N}}
 \end{equation}
 
 \paragraph*{}Equations (\ref{DFT}) and (\ref{IDFT}) create a \textit{transform pair}.
@@ -204,6 +201,8 @@ S_{k} =  \frac{1}{N}\sum_{n=0}^{N-1} F_{n} \cdot e^{-2\pi i\frac{kn}{N}}
 % ================================
 
 \subsection{Number of Unique, Isolated Peak}
+
+\paragraph*{}Due to the physical properties of various musical instruments, there are often times when overtones from a pitch are not present in a waveform or the presence is very minuscule when producing the frequency spectrum.
 
 % ================================
 
@@ -226,7 +225,7 @@ To improve numerical accuracy,this direct Reimann Summation can be replaced with
 \REQUIRE Discrete frequency series signal: $F$ of length $N$
 \REQUIRE Array-like object: $x$, length $N$, maps each index of $F$ to a real-valued frequency bin.
 \REQUIRE Array-like object: $P$, containing $k$ upper bound / lower bound pairs.
-\REQUIRE Integration function, method or operation: \textit{INTG}
+\REQUIRE Integration or summation function, method, or operation for array of discrete points: \textit{INTG}
 
 \ENSURE $P$ array-object has shape $(k \times 2)$, with format resembling: \\
 $P = \Big[ \{P_{(0,0)},P_{(0,1)}\} , \{P_{(1,0)},P_{(1 ,1)}\} ,  ... , \{P_{(k-1,0)},P{(k-1,1)}\} \Big]$\\
@@ -244,10 +243,22 @@ Bin\_ESDs $\leftarrow \{\}$
 \ENDFOR
 
 \RETURN Bin\_ESDs
-
-
 \end{algorithmic}
 \end{algorithm}
+
+\paragraph*{}The resulting array of floating-point numbers gives the energy spectral density distribution of the waveform in that frame of time. By choosing frames boundaries:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Bounds} & 	\textbf{Bank 1} & \textbf{Bank 2} & \textbf{Bank 3} & \textbf{Bank 4} & 
+					\textbf{Bank 5} & \textbf{Bank 6} & \textbf{Bank 7} & \textbf{Bank 8}  \\ \hline
+\textbf{Low [Hz]}	& 0		& 32	& 64 & 128 & 256 & 512 & 1024 & 2048  		\\ 	\hline
+\textbf{High [Hz]}	& 32	& 64	& 128 & 256 & 512 & 1024 &  2048 & 6000 	\\	\hline
+\end{tabular}
+\end{center}
+
+These set of banks allow for a reasonable range such that every instrument contains at least one overtone in the frequency-spectrum for any given pitch played. This ESD distribution shows to be a valuable set of features for classification. Since this is largely what shapes human understanding of timbre, it is reasonable to use emphasise the importance of these features.
 
 % ================================
 
