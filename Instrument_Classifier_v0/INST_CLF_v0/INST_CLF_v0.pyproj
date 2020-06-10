@@ -2,16 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>e874b214-99b2-4b35-9737-ee1904de8e8a</ProjectGuid>
-    <ProjectHome>
-    </ProjectHome>
-    <StartupFile>INST_CLF_v0_main.py</StartupFile>
+    <ProjectGuid>00e45cd9-f4c0-42c4-9217-91b95258762e</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>INST_CLF_MAIN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>INST_CLF_v0</Name>
-    <RootNamespace>Feature_Analysis</RootNamespace>
+    <RootNamespace>INST_CLF_v0</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,11 +21,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="INST_CLF_v0_main.py" />
-    <Compile Include="INST_CLF_v0_base_utilities.py">
+    <Compile Include="INST_CLF_MAIN.py" />
+    <Compile Include="module1.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="INST_CLF_v0_machine_learning_utilities.py">
+    <Compile Include="Program_Utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plotting_Utilities.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
