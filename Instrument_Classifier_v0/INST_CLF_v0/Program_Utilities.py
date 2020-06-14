@@ -53,14 +53,18 @@ class file_object ():
         self.n_samples = len(self.waveform)
         return self             # return self
 
-    def add_feature (self,x):
-        """ Add object x to feature vector instance """
+    def add_features (self,x):
+        """ Add object x to feature vector attribute"""
         self.features = np.append(self.features,x)
         return self             # return self
 
     def __getfeatures__ (self):
         """ Assemble all features into single vector """
         return self.features    # return feature vector
+
+    def __delfeatures__ (self):
+        """ Delete all features (Save RAM) """
+        pass
 
             #### FUNCTION DEFINITIONS ####
 

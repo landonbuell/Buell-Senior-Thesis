@@ -8,7 +8,22 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import numpy as np
-import Feature_Utilities as feat_utils
+import Timespace_Features as time_feats
+import Freqspace_Features as freq_feats
+
+            #### FUNCTION DEFINITIONS ####
+
+def Assemble_Features (FILE):
+    """
+    Create & Collect all classification features
+    --------------------------------
+    FILE (inst) : file_object instance with file.waveform attribute
+    --------------------------------
+    Return (1 x N) array of features
+    """
+    FILE = time_feats.rise_decay_time(FILE) # rise & decay 
+    
+    return FILE                    # return file with feature vector
 
 def Design_Matrix (FILE_OBJECTS):
     """
@@ -27,11 +42,10 @@ def Design_Matrix (FILE_OBJECTS):
         FILE = FILE.read_audio()            # read .WAV file
         
         # Assign features to object instance
-        FILE = feat_utils.Assemble_Features(FILE)
+        FILE = Assemble_Features(FILE)
 
         # Extract feature vector from sample
         X = np.append(X,FILE.__getfeatures__())     # add row to design matrix
-        del(FILE)                                   # delete file instance
 
     X = X.reshape(n_samples,-1)     # reshape
     return X                        # return design matrix    

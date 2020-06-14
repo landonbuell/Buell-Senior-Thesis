@@ -22,7 +22,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="INST_CLF_MAIN.py" />
-    <Compile Include="Feature_Utilities.py">
+    <Compile Include="Freqspace_Features.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Timespace_Features.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine_Learning_Utilities.py">
