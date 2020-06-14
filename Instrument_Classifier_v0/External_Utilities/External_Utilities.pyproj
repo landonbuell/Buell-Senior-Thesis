@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>00e45cd9-f4c0-42c4-9217-91b95258762e</ProjectGuid>
+    <ProjectGuid>fd03e40e-548d-41df-88a5-237323a14377</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>INST_CLF_MAIN.py</StartupFile>
+    <StartupFile>Target_Encoder.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>INST_CLF_v0</Name>
-    <RootNamespace>INST_CLF_v0</RootNamespace>
+    <Name>External_Utilities</Name>
+    <RootNamespace>External_Utilities</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,25 +21,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="INST_CLF_MAIN.py" />
-    <Compile Include="Feature_Utilities.py">
+    <Compile Include="Utilities.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine_Learning_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Preprocessing_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Neural_Network_Models.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Program_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plotting_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Target_Encoder.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
