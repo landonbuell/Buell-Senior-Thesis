@@ -13,7 +13,6 @@ import sys
 
 import Program_Utilities as prog_utils
 import Plotting_Utilities as plot_utils
-import Preprocessing_Utilities as prep_utils
 import Machine_Learning_Utilities as ML_utils
 import Neural_Network_Models as NN_models
 
@@ -30,8 +29,9 @@ if __name__ == '__main__':
     FILEOBJS = prog_utils.create_fileobjs(trgt_path+'/TARGETS.csv')
 
     # Build X & Y
-    Y,n_classes = prep_utils.construct_targets(FILEOBJS)
-    X = ML_utils.Design_Matrix(FILEOBJS)
+    print("Contructing Design Matrix:")
+    Y,n_classes = ML_utils.construct_targets(FILEOBJS)
+    X = ML_utils.Design_Matrix(FILEOBJS[0:1000:100])
     n_samples,n_features = X.shape
 
     # BUILD NEURAL NETWORK MODELS

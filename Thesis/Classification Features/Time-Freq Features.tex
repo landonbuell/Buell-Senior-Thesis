@@ -110,16 +110,16 @@ Where a single entry $s_i$ contains a subset of samples from the greater signal 
 \REQUIRE Discrete time series signal: $S$ of length $N$
 \REQUIRE Number of samples per frame: $k$. Recc. $\log_2(k) \in \mathbb{Z}$
 \REQUIRE Percentage of frame overlap: $L$ with $L \in [0,1)$
-\ENSURE $N/k \in \mathbb{Z}$ - Use zero-padding or truncation. This ensures that no frames are partially filled \\
 dt $\leftarrow k * (1 - L)$ - integer step size \\
 X $\leftarrow \{\}$ - array to hold all frame arrays \\
 
-\FOR {$i = 0$ \textbf{to} $i = (N-k-1)$ \textbf{step} dt}
+\FOR {$i = 0$ \textbf{to} $i = (N-1)$ \textbf{step} dt}
 	\item Create frame using index $i$ to $i+k$ from signal $S$
 	\STATE frame $\leftarrow \big{\{} S[i:i+k] \big{\}}$ 
+	\item If $i+k$ out of range, pad with row of zeroes
 	\STATE X.insert(frame)
 \ENDFOR
-
+\ENSURE $X$ has shape: number of frames $\times$ samples per frame, $k$
 \RETURN X
 
 \end{algorithmic}
@@ -131,12 +131,14 @@ X $\leftarrow \{\}$ - array to hold all frame arrays \\
 
 \subsection{Waveform RMS Energy}
 
-\paragraph*{}The Root-mean-squared energy (RMS)of a waveform can be used to approximate the average power in a waveform using Hooke's Law. The RMS of some discrete function $S$ with $N$ samples is given by:
+\paragraph*{}The Root-mean-squared energy (RMS)of a waveform can be used to approximate the energy in a waveform either by frame of by the full signal. The RMS of some discrete function $S$ with $N$ samples is given by:
 
 \begin{equation}
 \label{RMS}
 S_{RMS} = \sqrt{\frac{1}{N}\sum_{i=0}^{N-1}S_i^2}
 \end{equation}
+
+
 
 
 % ================================
@@ -182,7 +184,7 @@ Optional: Apply additional functions or scaling. Normalization, scaling, absolut
 
 \section{Frequency Series Features}
 
-\paragraph*{}Frequency series features (also called frequency-domain or frequency-space features) are peices of information that can be extracted, derived or otherwise originate from a signal that is expressed with a dependence on frequency. This is commonly done when needing to break down a give signal into it's simplest possible constituent frequency \cite{Peatross 2015}. We move a discrete signal of length $N$ that is a function of time, $S$, into a signal that is a function of frequency $F$, by applying the \textit{Discrete Fourier Transform} (DFT). This produces an array of $N$ complex-values numbers, the $k$-th element is given by:
+\paragraph*{}Frequency series features (also called frequency-domain or frequency-space features) are pieces of information that can be extracted, derived or otherwise originate from a signal that is expressed with a dependence on frequency. This is commonly done when needing to break down a give signal into it's simplest possible constituent frequency \cite{Peatross 2015}. We move a discrete signal of length $N$ that is a function of time, $S$, into a signal that is a function of frequency $F$, by applying the \textit{Discrete Fourier Transform} (DFT). This produces an array of $N$ complex-values numbers, the $k$-th element is given by:
 
 \begin{equation}
 \label{DFT}
@@ -200,9 +202,11 @@ S_{k} =  \frac{1}{N}\sum_{n=0}^{N-1} F_{n} \cdot e^{+2\pi i\frac{kn}{N}}
 
 % ================================
 
-\subsection{Number of Unique, Isolated Peak}
+\subsection{Strength Successive Overtones}
 
-\paragraph*{}Due to the physical properties of various musical instruments, there are often times when overtones from a pitch are not present in a waveform or the presence is very minuscule when producing the frequency spectrum.
+\paragraph*{}Because of the physical properties of many instruments and the behavior of the harmonic series, many instruments exhibit overtones several octaves above it's fundamental frequency. Often, these over tones are missing
+
+
 
 % ================================
 
@@ -216,7 +220,7 @@ S_{k} =  \frac{1}{N}\sum_{n=0}^{N-1} F_{n} \cdot e^{+2\pi i\frac{kn}{N}}
 \mathbb{E} = \sum_{i=f'_a}^{f'_b} |F_i|^2 df
 \end{equation}
 
-To improve numerical accuracy,this direct Reimann Summation can be replaced with a different integration method if desired. The resulting real floating-point number is the energy density of that signal in that given frequency band. We show an algorithm for computing the energy spectral density in of a frequency-space signal $F$.
+To improve numerical accuracy,this direct Reimann Summation can be replaced with a different integration method if desired. The resulting real floating-point number is the energy density of that signal in that given frequency band. We show an algorithm for computing the energy spectral density in of a frequency-space signal $F$. practical implementations should include averages over a set of arrays $F$, such as a spectrogram-like object.
 
 \begin{algorithm}
 \label{ESD}
@@ -258,7 +262,7 @@ Bin\_ESDs $\leftarrow \{\}$
 \end{tabular}
 \end{center}
 
-These set of banks allow for a reasonable range such that every instrument contains at least one overtone in the frequency-spectrum for any given pitch played. This ESD distribution shows to be a valuable set of features for classification. Since this is largely what shapes human understanding of timbre, it is reasonable to use emphasise the importance of these features.
+\paragraph*{}These set of banks allow for a reasonable range such that almost every instrument contains at least one overtone in the frequency-spectrum for any given pitch played.Higher pitched instruments such as many woodwinds do not show contain much energy in the lowester three bands, and lower instruments like brass and bass do not show much energy in the higher bands.  This ESD distribution shows to be a valuable set of features for classification. Since this is largely what shapes human understanding of timbre, it is reasonable to emphasize the importance of these features.
 
 % ================================
 
@@ -272,17 +276,20 @@ These set of banks allow for a reasonable range such that every instrument conta
 
 \subsection{Spectrogram Matrix}
 
+\paragraph*{}The spectrogram matrix is a common tool use in signal processing. It is a 2D array object where the $x$-axis tracks progression through time, and the $y$-axis tracks progression through frequency. It provides a user with information of the instantaneous frequency or frequencies of a signal how those values may evolve with time. We can produce an spectrogram by taking repeated Fourier transformations of overlapping frames in time. The result is then transposed to match axes equivalently.
+
+
+\paragraph*{}Once constructed, we treat the spectrogram matrix as a single image, with a label corresponding to it's target value. The gray-scale image can be use in conjunction with a convolutional neural network classifier model. Since each file may have different number of frames, each image may have a difference width. In all cases, the height of each image is identical to preserve the frequency space range chosen. The convolution layer operation can handel this accordingly.
+
 % ================================
 
 \subsection{Phase-Space Matrix}
 
+\paragraph*{}Phase-Space is an $n$-dimension real vector space where each basis vector is given by some function $f$ and it's first $n-1$ derivatives. In the case of a 2D phase space, we have the function $f$ providing the $0$-th basis vector and the function's first derivative $f'$ providing the $1$-st basis vector. In the case of a waveform or signal $S$ and it's discrete derivative $S'$, Plotting the two against each other provides a 2D visualization of the relationship between instantaneous waveform amplitude and change in amplitude.
+
+\paragraph*{}If the a time-frame of a waveform is used as the function $S$ containing, $N$ samples, then we must compute the derivative of 
+
 % ================================
-
-
-
-% ================================================================
-
-\section{Additional Features}
 
 
 % ================================================================
@@ -302,6 +309,9 @@ Liu, Zhu, et al. “Audio Feature Extraction and Analysis for Scene Classificati
 
 \bibitem{Peatross 2015}
 Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics}. Brigham Young University, Department of Physics, 2015.
+
+\bibitem{Sauer 2012}
+Sauer, Timothy. Numerical Analysis. 2nd ed., Pearson, 2012.
 
 \bibitem{Short 2006}
 Short, Garcia, “Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method”. Journal of the Audio Engineering Society.

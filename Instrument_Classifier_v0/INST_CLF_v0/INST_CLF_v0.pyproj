@@ -25,13 +25,13 @@
     <Compile Include="Freqspace_Features.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Math_Utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Timespace_Features.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine_Learning_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Preprocessing_Utilities.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Neural_Network_Models.py">

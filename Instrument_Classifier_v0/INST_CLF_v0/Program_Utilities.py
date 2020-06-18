@@ -35,10 +35,10 @@ class file_object ():
         self.target_str = datarow[2]    # target as str
         dir_tree = self.fullpath.split('/')
         self.filename = dir_tree[-1]    # filename
+        # assign target for design matrix   
+        self.target = self.target_int   # set target value
         self.features = np.array([])    # feature vector
-        # assign target for design matrix
-        self.target = self.assign_target(self.target_int)
-        
+
     def assign_target (self,target):
         """ Assign Target value to instance """
         self.target = target    # set y
@@ -48,7 +48,7 @@ class file_object ():
         """ Read raw data from local path """
         rate,data = sciowav.read(self.fullpath)
         self.rate = rate            # set sample rate
-        data = data.reshape(1,-1)   # flatten waveform
+        data = data.reshape(1,-1).ravel()   # flatten waveform
         self.waveform = data/np.abs(np.max(data))
         self.n_samples = len(self.waveform)
         return self             # return self
@@ -64,7 +64,8 @@ class file_object ():
 
     def __delfeatures__ (self):
         """ Delete all features (Save RAM) """
-        pass
+        del(self.features)      # delete all features from array
+        return self             # return new self
 
             #### FUNCTION DEFINITIONS ####
 
