@@ -23,15 +23,24 @@ if __name__ == '__main__':
     # ESTABLISH NECESSARY LOCAL PATHS
     init_path = os.getcwd()
     trgt_path = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Instrument_Classifier_v0'
-    itmd_path = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Instrument_Classifier_v0'
+    itmd_path = 'C:/Users/Landon/Documents/GitHub/Buell-Senior-Thesis/Instrument_Classifier_v0/Wav_Data'
     #trgt_path,itmd_path = prog_utils.Argument_Parser()
     prog_utils.Validate_Directories(trgt_path,itmd_path) 
-    FILEOBJS = prog_utils.create_fileobjs(trgt_path+'/TARGETS.csv')
+    FILEOBJS = prog_utils.Create_Fileobjs(trgt_path+'/TARGETS.csv')
+
+    # PROGRAM PARAMETERS
+    batch_size = 1024       # samples/ batch
+    FILEOBJS = np.random.permutation(FILEOBJS)
+    FILEOBJS = FILEOBJS[0:1000:10]
+    print("Files Found:",len(FILEOBJS))
 
     # Build X & Y
     print("Contructing Design Matrix:")
     Y,n_classes = ML_utils.construct_targets(FILEOBJS)
-    X = ML_utils.Design_Matrix(FILEOBJS[0:1000:100])
+    X = ML_utils.Design_Matrix(FILEOBJS)
     n_samples,n_features = X.shape
 
     # BUILD NEURAL NETWORK MODELS
+    MLP_MODEL = NN_models.Multilayer_Perceptron('JARVIS',n_features,n_classes)
+    history = MLP_MODEL.fit(X,Y,batch_size=64,epochs=10,verbose=2)
+    plot_utils.Plot_History(history,ML_Model)

@@ -37,7 +37,6 @@ class file_object ():
         self.filename = dir_tree[-1]    # filename
         # assign target for design matrix   
         self.target = self.target_int   # set target value
-        self.features = np.array([])    # feature vector
 
     def assign_target (self,target):
         """ Assign Target value to instance """
@@ -53,6 +52,20 @@ class file_object ():
         self.n_samples = len(self.waveform)
         return self             # return self
 
+class feature_vector ():
+    """
+    Create Feature vector object
+    --------------------------------
+    target (int) : Integer target value
+    --------------------------------
+    Return instantiated feature_vector instance
+    """
+
+    def __init__(self,target):
+        """ Initialize Object Instance """
+        self.target = target            # set target
+        self.features = np.array([])    # arr to hold features
+
     def add_features (self,x):
         """ Add object x to feature vector attribute"""
         self.features = np.append(self.features,x)
@@ -66,6 +79,39 @@ class file_object ():
         """ Delete all features (Save RAM) """
         del(self.features)      # delete all features from array
         return self             # return new self
+
+class phase_array ():
+    """
+    Create phase array object
+    --------------------------------
+    target (int) : Integer target value
+    X (arr) : Array-like of time-frame arrays
+    --------------------------------
+    Return instantiated feature_vector instance
+    """
+
+    def __init__(self,target,X,dX):
+        """ Initialize Object Instance """
+        self.target = target
+        self.X = X      # raw signal
+        self.dX = dX    # signal derivative
+        self.n_frames, self.N = X.shape
+
+class spectrogram ():
+    """ 
+    Create Spectrogram Object
+    --------------------------------
+
+    --------------------------------
+    Return instantiated spectrogram instance
+    """
+
+    def __init__(self,target,f,t,spect):
+        """ Initialize Class instance """
+        self.target = target
+        self.f = f          # frequency axis
+        self.t = t          # time axis
+        self.Sxx = spect    # spectrogram
 
             #### FUNCTION DEFINITIONS ####
 
@@ -98,7 +144,7 @@ def Argument_Parser():
     args = parser.parse_args()
     return args.trgt_path,args.extr_path
 
-def create_fileobjs (filepath):
+def Create_Fileobjs (filepath):
     """
     Load in locally stored target CSV as dataframe
     --------------------------------
@@ -111,7 +157,7 @@ def create_fileobjs (filepath):
     frame = pd.read_csv(filepath,index_col=0)   # load in CSV
     frame = frame.to_numpy()                    # make np arr
     fileobjects = []                            # ist of all files
-    for row in frame:
+    for row in frame:                           # each row
         fileobjects.append(file_object(row))    
     del(frame)                          # del frame
     return fileobjects                  # return list of insts
@@ -141,7 +187,7 @@ def Validate_Directories (trgt_path,extr_path):
     --------------------------------
     Return True, Terminate if fail ir
     """
-    if os.path.isdir(trgt_path) == False:    # not not dir:
+    if os.path.isdir(trgt_path) == False:   # not not dir:
         print("\n\tERROR! - Cannot Locate:\n\t\t",trgt_path)
     os.makedirs(extr_path,exist_ok=True)    # create path for intermediate data
     return True                             # exist
