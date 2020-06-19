@@ -17,7 +17,7 @@ import scipy.io.wavfile as sciowav
 
             #### CLASS OBJECT DEFINITIONS ####
 
-class file_object ():
+class File_Object ():
     """
     Create File 
     --------------------------------
@@ -52,13 +52,56 @@ class file_object ():
         self.n_samples = len(self.waveform)
         return self             # return self
 
-class feature_vector ():
+class Design_Matrix ():
+    """
+    Construct design-matrix-like object
+    --------------------------------
+    target (int) : Integer target value
+    ndim (int) : Number of dimensions in this array
+        2 - 2D matrix, used for MLP classifier 
+            (n_samples x n_features)
+        3 - 3D matrix, used for Spectrogram 
+            (n_samples x n_rows x n_cols)
+        4 - 4D matrix, used for phase-space
+            (n_samples x n_rows x r_cols x n_
+    --------------------------------
+    Return instantiated feature_array instance
+    """
+
+    def __init__(self,ndim=2):
+        """ Initialize Object Instance """
+        self.X = []         # empty data structure
+
+    def set_targets (self,y):
+        """ Create 1D target array corresponding to sample class """
+        self.targets = np.array(y)  
+        return self
+
+    def add_sample (self,sample):
+        """ Add sample entry to design matrix, preserve shape """
+        self.X.append(sample)
+        return self
+
+    def assert_shape(self,shape):
+        """ change of of X to match 'shape' """
+        try:
+            self.X = np.array(self.X).reshape(shape)
+        except Exception:
+            pass
+        return self
+
+    def __get_X__(self):
+        """ return design matrix as rect. np array """
+        return np.array(self.X)
+
+
+class Feature_Array ():
     """
     Create Feature vector object
     --------------------------------
     target (int) : Integer target value
     --------------------------------
-    Return instantiated feature_vector instance
+    Return instantiated feature_array instance
     """
 
     def __init__(self,target):
@@ -66,10 +109,21 @@ class feature_vector ():
         self.target = target            # set target
         self.features = np.array([])    # arr to hold features
 
-    def add_features (self,x):
+    def add_features (self,x,keepshape=False):
         """ Add object x to feature vector attribute"""
+        #x_shape = x.shape               # track shape
         self.features = np.append(self.features,x)
         return self             # return self
+
+    def set_attributes (self,names=[],attrbs=[]):
+        """ Set additional attributes """
+        for i,j in zip(names,attrbs):
+            setattr(self,str(i),j)  
+        return self
+
+    def __getshape__(self):
+        """ Return shape of feature attrb as tuple """
+        return self.features.shape
 
     def __getfeatures__ (self):
         """ Assemble all features into single vector """
@@ -79,39 +133,6 @@ class feature_vector ():
         """ Delete all features (Save RAM) """
         del(self.features)      # delete all features from array
         return self             # return new self
-
-class phase_array ():
-    """
-    Create phase array object
-    --------------------------------
-    target (int) : Integer target value
-    X (arr) : Array-like of time-frame arrays
-    --------------------------------
-    Return instantiated feature_vector instance
-    """
-
-    def __init__(self,target,X,dX):
-        """ Initialize Object Instance """
-        self.target = target
-        self.X = X      # raw signal
-        self.dX = dX    # signal derivative
-        self.n_frames, self.N = X.shape
-
-class spectrogram ():
-    """ 
-    Create Spectrogram Object
-    --------------------------------
-
-    --------------------------------
-    Return instantiated spectrogram instance
-    """
-
-    def __init__(self,target,f,t,spect):
-        """ Initialize Class instance """
-        self.target = target
-        self.f = f          # frequency axis
-        self.t = t          # time axis
-        self.Sxx = spect    # spectrogram
 
             #### FUNCTION DEFINITIONS ####
 
@@ -158,7 +179,7 @@ def Create_Fileobjs (filepath):
     frame = frame.to_numpy()                    # make np arr
     fileobjects = []                            # ist of all files
     for row in frame:                           # each row
-        fileobjects.append(file_object(row))    
+        fileobjects.append(File_Object(row))    
     del(frame)                          # del frame
     return fileobjects                  # return list of insts
 

@@ -27,7 +27,9 @@ def Assemble_Features (FILE):
     --------------------------------
     FILE (inst) : file_object instance with file.waveform attribute
     --------------------------------
-    Return (1 x N) array of features
+    Return: v_sample 3D array of features for phase-CNN
+            w_sample 2D array of features for spect-CNN
+            x_sample 1D array of features for class-MLP
     """   
 
     # Features Pre-processing
@@ -39,13 +41,19 @@ def Assemble_Features (FILE):
                 bands=[(0,32),(32,64),(64,128),(128,256),
             (256,512),(512,1024),(2048,4096),(4096,6000)])      # Energy in bands
       
-    # Create Feature vector object
-    FEATURES = prog_utils.feature_vector(FILE.target)
-    FEATURES = FEATURES.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
-    FEATURES = FEATURES.add_features(math_utils.RMS_Energy(FILE.waveform))
-    FEATURES = FEATURES.add_features(ESDs)
+    # Feature vector x for MLP model
+    x_sample = prog_utils.Feature_Array(FILE.target)
+    x_sample = x_sample.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
+    x_sample = x_sample.add_features(math_utils.RMS_Energy(FILE.waveform))
+    x_sample = x_sample.add_features(ESDs)
 
-    return FEATURES
+    # Create Spectrogram feature object
+    w_sample = prog_utils.Feature_Array(FILE.target)
+    
+    # Create Phase-Space Feature object
+    v_sample = prog_utils.Feature_Array(FILE.target)
+
+    return v_sample,w_sample,x_sample
 
 def construct_targets (objs,matrix=True):
     """
@@ -59,11 +67,12 @@ def construct_targets (objs,matrix=True):
     """
     y = np.array([x.target for x in objs])      # use target attribute
     n_classes = len(np.unique(y))               # number of classes
+    n_classes = 25
     if matrix == True:                          # if one-hot-enc  
-        y = keras.utils.to_categorical(y,24)
+        y = keras.utils.to_categorical(y,n_classes)
     return y,n_classes                          # return target & classes
 
-def Design_Matrix (FILE_OBJECTS):
+def Design_Matrices (FILE_OBJECTS):
     """
     Construct Standard Machine-Learning Design Matrix
         (n_samples x n_features)
@@ -72,15 +81,24 @@ def Design_Matrix (FILE_OBJECTS):
     --------------------------------
     Return design matrix, X
     """
-    X = np.array([])                # empty design matrix
-    n_samples = len(FILE_OBJECTS)   # number of file samples
+    n_samples = len(FILE_OBJECTS)           # number of file samples
+    V = prog_utils.Design_Matrix(ndim=4)    # design matrix for Phase-space
+    W = prog_utils.Design_Matrix(ndim=3)    # design matrix for spectrograms
+    X = prog_utils.Design_Matrix(ndim=2)    # design matrix for perceptron
 
-    for I,FILE in enumerate(FILE_OBJECTS):  # iterate through samples
-        print("\t("+str(I)+"/"+str(n_samples)+")",FILE.filename)      # Current file
-        FILE = FILE.read_audio()            # read .WAV file       
-        FEATURES = Assemble_Features(FILE)          # gather features
-        X = np.append(X,FEATURES.__getfeatures__()) # add row to design matrix
-        del(FILE)
-    X = X.reshape(n_samples,-1)     # reshape
-    return X                        # return design matrix    
+    for I,FILE in enumerate(FILE_OBJECTS):  # iterate through files
+        print('\t('+str(I)+'/'+str(n_samples)+')',FILE.filename)
+        FILE = FILE.read_audio()            # read .WAV file
+
+        v,w,x = Assemble_Features(FILE)     # collect feature objects
+        del(FILE)                           # delete file instance
+
+        V = V.add_sample(v.__getfeatures__())   # add sample to phase design-matrix
+        W = W.add_sample(w.__getfeatures__())   # add sample to spectrogram design-matrix
+        X = X.add_sample(x.__getfeatures__())   # add sample to perceptron design-matrix
+        
+    X = X.assert_shape((n_samples,-1))
+
+    return V,W,X                # return design matricies
+    
         
