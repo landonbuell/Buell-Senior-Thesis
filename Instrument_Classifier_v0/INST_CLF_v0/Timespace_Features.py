@@ -66,14 +66,15 @@ def Phase_Space (X,dt=1):
     --------------------------------
     Return sparse matrix representation of phase-space
     """
-    n_samples = X.shape[0]
     dX = np.gradient(X,dt,axis=-1)
+    return dX
 
-def Rise_Decay_Time (X,low=0.1,high=0.9):
+def Rise_Decay_Time (X,rate=44100,low=0.1,high=0.9):
     """
     Extract rise/decay time parameter
     --------------------------------
     X (arr) : time-series waveform (1 x n_frames)
+    rate (int) : waveform sample rate in Hz (44.1k by default)
     low (float) : low band amplitude threshold
     hgih (float) : high bound amplitude threshold
     --------------------------------
@@ -84,7 +85,7 @@ def Rise_Decay_Time (X,low=0.1,high=0.9):
     above_high = np.where((y >= high))[0]     
     rise = np.abs(above_high[0] - above_low[0])     # rise in samples
     decay = np.abs(above_high[-1] - above_low[-1])  # decay in samples
-    return rise,decay                               # return rise & decay samples
+    return np.array([rise,decay])/rate
 
 def RMS_above (X,RMS,vals=[(0,10),(10,25),(25,50),(50,75),(75,90)]):
     """

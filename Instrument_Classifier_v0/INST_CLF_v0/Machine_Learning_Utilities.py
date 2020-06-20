@@ -35,6 +35,7 @@ def Assemble_Features (FILE):
     # Features Pre-processing
     frames = time_feats.Frames_fixed_length(FILE.waveform)      # create frames    
     waveform_RMS = math_utils.RMS_Energy(FILE.waveform)         # waveform RMS
+    frames_RMS = math_utils.RMS_Energy(frames)                  # frames RMS
     f,pts = freq_feats.Frequency_Axis(rate=FILE.rate)           # frequency axis
     f,t,Sxx = freq_feats.Spectrogram(frames,f,pts)              # build spectrogram
     ESDs = freq_feats.Energy_Spectral_Density(f,t,Sxx,
@@ -42,17 +43,25 @@ def Assemble_Features (FILE):
             (256,512),(512,1024),(2048,4096),(4096,6000)])      # Energy in bands
       
     # Feature vector x for MLP model
-    x_sample = prog_utils.Feature_Array(FILE.target)
+    x_sample = prog_utils.Feature_Array(FILE.target)    # create instance
     x_sample = x_sample.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
-    x_sample = x_sample.add_features(math_utils.RMS_Energy(FILE.waveform))
+    x_sample = x_sample.add_features(waveform_RMS)      
+    x_sample = x_sample.add_features(math_utils.Distribution_features(frames_RMS))
     x_sample = x_sample.add_features(ESDs)
 
     # Create Spectrogram feature object
-    w_sample = prog_utils.Feature_Array(FILE.target)
+    w_sample = prog_utils.Feature_Array(FILE.target)    # create instance
+    w_sample = w_sample.set_features(Sxx.toarray().transpose())               
     
     # Create Phase-Space Feature object
     v_sample = prog_utils.Feature_Array(FILE.target)
-
+    d1_frames = time_feats.Phase_Space(frames)
+    d2_frames = time_feats.Phase_Space(d1_frames)
+    v_features = np.array([frames,d1_frames,d2_frames])
+    v_features = np.moveaxis(v_features,0,-1)
+    v_sample.set_features(v_features)
+    
+    # return feature objects
     return v_sample,w_sample,x_sample
 
 def construct_targets (objs,matrix=True):

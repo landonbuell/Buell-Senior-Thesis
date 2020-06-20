@@ -8,9 +8,25 @@ Instrument Classifier v0
             #### IMPORTS ####
               
 import numpy as np
+import scipy.stats as stats
 from sklearn.preprocessing import StandardScaler
 
             #### FUNCTION DEFINITIONS ####
+
+def Distribution_features (X):
+    """
+    Analyze properties of an array of FP values
+    --------------------------------
+    X (arr) : Array of FP number to analyze as distribution
+    --------------------------------
+    Return array of [mean,median,mode,variance]
+    """
+    X = X.ravel()           # flatten
+    mean = np.mean(X)       # avg
+    median = np.median(X)   # median
+    mode,cnts = stats.mode(X)    # mode
+    var = np.var(X)         # variance
+    return np.array([mean,median,mode[-1],var])
 
 def RMS_Energy (X):
     """

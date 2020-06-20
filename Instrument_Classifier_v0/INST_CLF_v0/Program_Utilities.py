@@ -71,6 +71,8 @@ class Design_Matrix ():
     def __init__(self,ndim=2):
         """ Initialize Object Instance """
         self.X = []         # empty data structure
+        self.shapes = []    # store explicit shapes of each samples
+        self.ndim = ndim
 
     def set_targets (self,y):
         """ Create 1D target array corresponding to sample class """
@@ -79,7 +81,8 @@ class Design_Matrix ():
 
     def add_sample (self,sample):
         """ Add sample entry to design matrix, preserve shape """
-        self.X.append(sample)
+        self.X.append(sample)       # add sample to design matrix
+        self.shapes = sample.shape  # store shape       
         return self
 
     def assert_shape(self,shape):
@@ -93,7 +96,6 @@ class Design_Matrix ():
     def __get_X__(self):
         """ return design matrix as rect. np array """
         return np.array(self.X)
-
 
 class Feature_Array ():
     """
@@ -109,11 +111,20 @@ class Feature_Array ():
         self.target = target            # set target
         self.features = np.array([])    # arr to hold features
 
-    def add_features (self,x,keepshape=False):
+    def add_features (self,x,axis=None):
         """ Add object x to feature vector attribute"""
-        #x_shape = x.shape               # track shape
-        self.features = np.append(self.features,x)
+        self.features = np.append(self.features,x,axis=axis)
         return self             # return self
+
+    def set_features (self,x):
+        """ Clear feature array, reset to object 'x' - preserve shape """
+        self.features = x
+        return self
+
+    def reshape_arr (self,new_shape=(1,-1)):
+        """ Reshape feature array to 'new_shape' """
+        self.features = self.features.reshape(new_shape)
+        return self
 
     def set_attributes (self,names=[],attrbs=[]):
         """ Set additional attributes """
@@ -212,4 +223,3 @@ def Validate_Directories (trgt_path,extr_path):
         print("\n\tERROR! - Cannot Locate:\n\t\t",trgt_path)
     os.makedirs(extr_path,exist_ok=True)    # create path for intermediate data
     return True                             # exist
-
