@@ -31,6 +31,7 @@ if __name__ == '__main__':
     # PROGRAM PARAMETERS
     batch_size = 1024       # samples/ batch
     FILEOBJS = np.random.permutation(FILEOBJS)
+    FILEOBJS = FILEOBJS[0:10]
     print("Files Found:",len(FILEOBJS))
 
     # Build X & Y

@@ -16,6 +16,7 @@ import scipy.signal as signal
 import scipy.sparse as sparse
 
 import Timespace_Features as time_feats
+import Plotting_Utilities as plot_utils
 
             #### TIME SERIES FEATURES ####
 
@@ -78,8 +79,8 @@ def Spectrogram (X,f,pts):
     n_frames,n_samples = X.shape    # input shape
     X = Hanning_Window(X)           # apply Hann window
     Sxx = Power_Spectrum(X,pts)     # compute FFT of each row
-    t = np.arange(0,n_frames)       # time axis
     Sxx = Sxx.transpose()           # transpose
+    t = np.arange(0,n_frames)       # time axis  
     Sxx = sparse.coo_matrix(Sxx)    # make into spmatrix
     return f,t,Sxx
 

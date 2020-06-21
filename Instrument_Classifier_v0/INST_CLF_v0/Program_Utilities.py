@@ -72,26 +72,26 @@ class Design_Matrix ():
         """ Initialize Object Instance """
         self.X = []         # empty data structure
         self.shapes = []    # store explicit shapes of each samples
-        self.ndim = ndim
+        self.ndim = ndim    # number of dimensions in array
 
     def set_targets (self,y):
         """ Create 1D target array corresponding to sample class """
         self.targets = np.array(y)  
         return self
 
-    def add_sample (self,sample):
-        """ Add sample entry to design matrix, preserve shape """
-        self.X.append(sample)       # add sample to design matrix
-        self.shapes = sample.shape  # store shape       
+    def add_sample (self,x):
+        """ Add features 'x' to design matrix, preserve shape """
+        self.X.append(x.__getfeatures__())      # add sample to design matrix
+        self.shapes.append(x.__getshape__())    # store shape       
         return self
 
     def assert_shape(self,shape):
-        """ change of of X to match 'shape' """
-        try:
-            self.X = np.array(self.X).reshape(shape)
-        except Exception:
-            pass
-        return self
+        """ change shape of X to match 'shape' """
+        pass
+
+    def ensure_shape (self,shape):
+        """ Ensure all samples have the same dimesnionality """
+        return None
 
     def __get_X__(self):
         """ return design matrix as rect. np array """

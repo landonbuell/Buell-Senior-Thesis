@@ -102,11 +102,9 @@ def Design_Matrices (FILE_OBJECTS):
         v,w,x = Assemble_Features(FILE)     # collect feature objects
         del(FILE)                           # delete file instance
 
-        V = V.add_sample(v.__getfeatures__())   # add sample to phase design-matrix
-        W = W.add_sample(w.__getfeatures__())   # add sample to spectrogram design-matrix
-        X = X.add_sample(x.__getfeatures__())   # add sample to perceptron design-matrix
-        
-    X = X.assert_shape((n_samples,-1))
+        V = V.add_sample(v)   # add sample to phase design-matrix
+        W = W.add_sample(w)   # add sample to spectrogram design-matrix
+        X = X.add_sample(x)   # add sample to perceptron design-matrix
 
     return V,W,X                # return design matricies
     
