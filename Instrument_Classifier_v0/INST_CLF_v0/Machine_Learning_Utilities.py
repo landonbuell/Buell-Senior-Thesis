@@ -75,7 +75,7 @@ def construct_targets (objs,matrix=True):
     Return target object and nmber of unique classes
     """
     y = np.array([x.target for x in objs])      # use target attribute
-    n_classes = len(np.unique(y))               # number of classes
+    n_classes = np.amax(y)                      # number of classes
     n_classes = 25
     if matrix == True:                          # if one-hot-enc  
         y = keras.utils.to_categorical(y,n_classes)

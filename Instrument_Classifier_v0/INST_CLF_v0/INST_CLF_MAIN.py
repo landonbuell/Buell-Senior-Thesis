@@ -31,17 +31,24 @@ if __name__ == '__main__':
     # PROGRAM PARAMETERS
     batch_size = 1024       # samples/ batch
     FILEOBJS = np.random.permutation(FILEOBJS)
-    FILEOBJS = FILEOBJS[0:10]
+    FILEOBJS = FILEOBJS[0:100]
     print("Files Found:",len(FILEOBJS))
 
     # Build X & Y
     print("Contructing Design Matrix:")   
     V,W,X = ML_utils.Design_Matrices(FILEOBJS)
     Y,n_classes = ML_utils.construct_targets(FILEOBJS)
-    X = X.__get_X__()
-    n_samples,n_features = X.shape
 
-    # BUILD NEURAL NETWORK MODELS
-    MLP_MODEL = NN_models.Multilayer_Perceptron('JARVIS',n_features,n_classes)
-    history = MLP_MODEL.fit(X,Y,batch_size=64,epochs=10,verbose=2)
-    plot_utils.Plot_History(history,MLP_MODEL)
+    V = V.__getmatrix__()
+    W = W.__getmatrix__()
+    X = X.__getmatrix__()
+
+    # BUILD & TRAIN MULTILAYER PERCEPTRON
+    #MLP_MODEL = NN_models.Multilayer_Perceptron('JARVIS',n_features,n_classes)
+    #MLP_HIST = MLP_MODEL.fit(X,Y,batch_size=64,epochs=10,verbose=2)
+    #plot_utils.Plot_History(MLP_HIST,MLP_MODEL)
+
+    # BUILD & TRAIN SPECTROGRAM
+    SXX_MODEL = NN_models.Convolutional_Neural_Network('VISION',(None,None,1),n_classes)
+    SXX_HIST = SXX_MODEL.fit(X,Y,batch_size=64,epochs=100,verbose=2)
+    plot_utils.Plot_History(SXX_HIST,SXX_MODEL)

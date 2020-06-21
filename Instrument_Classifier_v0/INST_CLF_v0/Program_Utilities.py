@@ -48,7 +48,7 @@ class File_Object ():
         rate,data = sciowav.read(self.fullpath)
         self.rate = rate            # set sample rate
         data = data.reshape(1,-1).ravel()   # flatten waveform
-        self.waveform = data/np.abs(np.max(data))
+        self.waveform = data/np.abs(np.amax(data))
         self.n_samples = len(self.waveform)
         return self             # return self
 
@@ -85,15 +85,24 @@ class Design_Matrix ():
         self.shapes.append(x.__getshape__())    # store shape       
         return self
 
-    def assert_shape(self,shape):
-        """ change shape of X to match 'shape' """
-        pass
+    def n_samples (self):
+        """ Get number of samples in design matrix """
+        return len(self.X)  
 
-    def ensure_shape (self,shape):
-        """ Ensure all samples have the same dimesnionality """
-        return None
+    def get_dims (self):
+        """ get number of dimesnesion in this design matrix """
+        return self.ndim
 
-    def __get_X__(self):
+    def pad_samples (self):
+        """ Zero pad samples to Make Matrix rectangular """
+        max_dims = np.amax(self.shapes,axis=0)  # maxima of each dimesnion
+        for I in range(self.n_samples()):       # each sample
+            self.X[I] = self.X[I]
+            self.shapes[I] = self.shapes[I]
+        return self
+
+            
+    def __getmatrix__(self):
         """ return design matrix as rect. np array """
         return np.array(self.X)
 

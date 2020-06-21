@@ -62,9 +62,9 @@ def Convolutional_Neural_Network (name,in_shape,n_classes,layer_units=[40,40],
     model = keras.models.Sequential(name=name) 
     model.add(keras.layers.Input(shape=in_shape,name='Input_Layer'))
     # Add convolution & pooling
-    model.add(keras.layers.Conv2D(filters=1,kernel_size=(6,6),strides=(3,3),
+    model.add(keras.layers.Conv2D(filters=128,kernel_size=(6,6),strides=(3,3),
                                   name='Convolution_1'))
-    model.add(keras.layers.AveragePooling2D(pool_size=(2,2),name='Pooling_1'))
+    model.add(keras.layers.MaxPooling2D(pool_size=(2,2),name='Pooling_1'))
     # Add hidden layers
     model.add(keras.layers.Flatten())       # flatten for dense layers
     for L,N in enumerate(layer_units):
