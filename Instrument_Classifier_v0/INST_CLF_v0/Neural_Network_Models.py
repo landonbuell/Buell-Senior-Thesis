@@ -30,7 +30,7 @@ def Multilayer_Perceptron (name,n_features,n_classes,layer_units=[40,40],
     Retrun compiled, untrained Keras MLP Sequential Model Object
     """
     model = keras.models.Sequential(name=name) 
-    model.add(keras.layers.Input(shape=n_features,name='Input_Layer'))
+    model.add(keras.layers.InputLayer(input_shape=n_features,name='Input_Layer'))
     # Add hidden layers
     for L,N in enumerate(layer_units):
         model.add(keras.layers.Dense(units=N,activation='relu',
@@ -60,20 +60,23 @@ def Convolutional_Neural_Network (name,in_shape,n_classes,layer_units=[40,40],
     Retrun compiled, untrained Keras CNN Sequential Model Object
     """
     model = keras.models.Sequential(name=name) 
-    model.add(keras.layers.Input(shape=in_shape,name='Input_Layer'))
+    model.add(keras.layers.InputLayer(input_shape=in_shape,name='Input'))
     # Add convolution & pooling
-    model.add(keras.layers.Conv2D(filters=128,kernel_size=(6,6),strides=(3,3),
-                                  name='Convolution_1'))
-    model.add(keras.layers.MaxPooling2D(pool_size=(2,2),name='Pooling_1'))
-    # Add hidden layers
+    model.add(keras.layers.Conv2D(filters=4,kernel_size=(3,3),strides=(1,1),
+                                  activation='relu',name='C1'))
+    model.add(keras.layers.MaxPooling2D(pool_size=(2,2),name='P1'))
+    model.add(keras.layers.Conv2D(filters=2,kernel_size=(3,3),strides=(1,1),
+                                  activation='relu',name='C2'))
+    model.add(keras.layers.MaxPooling2D(pool_size=(8,8),name='P2'))
+    # Add Dense Layers
     model.add(keras.layers.Flatten())       # flatten for dense layers
     for L,N in enumerate(layer_units):
         model.add(keras.layers.Dense(units=N,activation='relu',
-                                     name='Hidden_'+str(L+1)))
+                                     name='D'+str(L+1)))
     # ouput layer & compile
-    model.add(keras.layer.Dense(units=n_classes,activation='softmax',
-                                name='Output_Layer'))
-    model.compile(optimizer=keras.optimizers.SGD,
+    model.add(keras.layers.Dense(units=n_classes,activation='softmax',
+                                name='Output'))
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.1),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=metrics)
     # Summary & return

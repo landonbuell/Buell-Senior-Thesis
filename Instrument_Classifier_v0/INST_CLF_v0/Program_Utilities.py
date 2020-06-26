@@ -15,6 +15,8 @@ import argparse
 
 import scipy.io.wavfile as sciowav
 
+import Plotting_Utilities as plot_utils
+
             #### CLASS OBJECT DEFINITIONS ####
 
 class File_Object ():
@@ -93,15 +95,19 @@ class Design_Matrix ():
         """ get number of dimesnesion in this design matrix """
         return self.ndim
 
-    def pad_samples (self):
+    def pad_2Dsamples (self):
         """ Zero pad samples to Make Matrix rectangular """
         max_dims = np.amax(self.shapes,axis=0)  # maxima of each dimesnion
-        for I in range(self.n_samples()):       # each sample
-            self.X[I] = self.X[I]
-            self.shapes[I] = self.shapes[I]
+        assert len(max_dims) == (self.ndim-1)   # same dims
+        for i in range(self.n_samples()):       # each sample
+            sample = self.X[i]                  # isolate same
+            current_shape = self.shapes[i]      # current sample shape
+            N_zeroes = max_dims - np.array(current_shape)
+            sample = np.pad(sample,((0,N_zeroes[0]),(0,N_zeroes[1])),'constant')            
+            self.X[i] = sample
+            self.shapes[i] = sample.shape       # get new shape
         return self
-
-            
+           
     def __getmatrix__(self):
         """ return design matrix as rect. np array """
         return np.array(self.X)

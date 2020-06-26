@@ -106,6 +106,8 @@ def Design_Matrices (FILE_OBJECTS):
         W = W.add_sample(w)   # add sample to spectrogram design-matrix
         X = X.add_sample(x)   # add sample to perceptron design-matrix
 
+    W = W.pad_2Dsamples()
+
     return V,W,X                # return design matricies
     
         
