@@ -18,6 +18,7 @@ import Math_Utilities as math_utils
 import Timespace_Features as time_feats
 import Freqspace_Features as freq_feats
 import Plotting_Utilities as plot_utils
+import Neural_Network_Models
 
             #### FUNCTION DEFINITIONS ####
 
@@ -47,11 +48,13 @@ def Assemble_Features (FILE):
     x_sample = x_sample.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
     x_sample = x_sample.add_features(waveform_RMS)      
     x_sample = x_sample.add_features(math_utils.Distribution_features(frames_RMS))
-    x_sample = x_sample.add_features(ESDs)
+    x_sample = x_sample.add_features(ESDs)              # all features added
+    assert len(x_sample.features) == Neural_Network_Models.n_features 
 
     # Create Spectrogram feature object
     w_sample = prog_utils.Feature_Array(FILE.target)    # create instance
-    w_sample = w_sample.set_features(Sxx.toarray().transpose())               
+    w_sample = w_sample.set_features(Sxx.toarray().transpose())       
+    w_sample = w_sample.pad_2D(new_shape=Neural_Network_Models.Sxx_shape)
     
     # Create Phase-Space Feature object
     v_sample = prog_utils.Feature_Array(FILE.target)
@@ -107,6 +110,11 @@ def Design_Matrices (FILE_OBJECTS):
         X = X.add_sample(x)   # add sample to perceptron design-matrix
 
     W = W.pad_2Dsamples()
+
+    # Extract Design matrix
+    V = V.__getmatrix__()
+    W = W.__getmatrix__()
+    X = X.__getmatrix__()
 
     return V,W,X                # return design matricies
     

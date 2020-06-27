@@ -16,6 +16,7 @@ import argparse
 import scipy.io.wavfile as sciowav
 
 import Plotting_Utilities as plot_utils
+import Neural_Network_Models
 
             #### CLASS OBJECT DEFINITIONS ####
 
@@ -94,19 +95,6 @@ class Design_Matrix ():
     def get_dims (self):
         """ get number of dimesnesion in this design matrix """
         return self.ndim
-
-    def pad_2Dsamples (self):
-        """ Zero pad samples to Make Matrix rectangular """
-        max_dims = np.amax(self.shapes,axis=0)  # maxima of each dimesnion
-        assert len(max_dims) == (self.ndim-1)   # same dims
-        for i in range(self.n_samples()):       # each sample
-            sample = self.X[i]                  # isolate same
-            current_shape = self.shapes[i]      # current sample shape
-            N_zeroes = max_dims - np.array(current_shape)
-            sample = np.pad(sample,((0,N_zeroes[0]),(0,N_zeroes[1])),'constant')            
-            self.X[i] = sample
-            self.shapes[i] = sample.shape       # get new shape
-        return self
            
     def __getmatrix__(self):
         """ return design matrix as rect. np array """
@@ -141,6 +129,18 @@ class Feature_Array ():
         self.features = self.features.reshape(new_shape)
         return self
 
+    def pad_2D (self,new_shape):
+        """ Pad or truncate sample data """
+        cur_shape = self.features.shape
+        shape_diff = np.array(new_shape) - np.array(cur_shape)
+
+        """
+        Finish this!
+        Need to be able to assert shape of features
+            Truncate or Zero-pad if necessary!
+        """
+        return self
+        
     def set_attributes (self,names=[],attrbs=[]):
         """ Set additional attributes """
         for i,j in zip(names,attrbs):

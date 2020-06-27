@@ -13,6 +13,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
 import tensorflow.keras as keras
 
+            #### VARIABLE ASSIGNMENTS ####
+
+n_features = 15         # features for multilayer perceptron
+Sxx_shape = (200,560,1) # shape of spectrgram input
+
             #### FUNCTION DEFINITIONS ####
 
 def Multilayer_Perceptron (name,n_features,n_classes,layer_units=[40,40],
@@ -27,18 +32,19 @@ def Multilayer_Perceptron (name,n_features,n_classes,layer_units=[40,40],
         in i-th hidden layer
     metrics (iter) : Array-like of strs contraining metrics to track
     --------------------------------
-    Retrun compiled, untrained Keras MLP Sequential Model Object
+    Return compiled, untrained Keras MLP Sequential Model Object
     """
     model = keras.models.Sequential(name=name) 
     model.add(keras.layers.InputLayer(input_shape=n_features,name='Input_Layer'))
     # Add hidden layers
     for L,N in enumerate(layer_units):
-        model.add(keras.layers.Dense(units=N,activation='relu',
+        model.add(keras.layers.Dense(units=N,activation='elu',
                                      name='Hidden_'+str(L+1)))
     # ouput layer & compile
-    model.add(keras.layers.Dense(units=n_classes,activation='softmax',
-                                name='Output_Layer'))
-    model.compile(optimizer=keras.optimizers.SGD(),
+    model.add(keras.layers.Dense(units=n_classes,activation='relu',
+                                name='Pre-Output'))
+    model.add(keras.layers.Activation(activation='softmax',name='Output'))
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.1),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=metrics)
     # Summary & return
@@ -63,19 +69,21 @@ def Convolutional_Neural_Network (name,in_shape,n_classes,layer_units=[40,40],
     model.add(keras.layers.InputLayer(input_shape=in_shape,name='Input'))
     # Add convolution & pooling
     model.add(keras.layers.Conv2D(filters=4,kernel_size=(3,3),strides=(1,1),
-                                  activation='relu',name='C1'))
+                                  activation='elu',name='C1'))
     model.add(keras.layers.MaxPooling2D(pool_size=(2,2),name='P1'))
     model.add(keras.layers.Conv2D(filters=2,kernel_size=(3,3),strides=(1,1),
-                                  activation='relu',name='C2'))
+                                  activation='elu',name='C2'))
     model.add(keras.layers.MaxPooling2D(pool_size=(8,8),name='P2'))
-    # Add Dense Layers
+    # Prepare Dense Layers
     model.add(keras.layers.Flatten())       # flatten for dense layers
+    # Add Dense Layers
     for L,N in enumerate(layer_units):
-        model.add(keras.layers.Dense(units=N,activation='relu',
+        model.add(keras.layers.Dense(units=N,activation='elu',
                                      name='D'+str(L+1)))
     # ouput layer & compile
-    model.add(keras.layers.Dense(units=n_classes,activation='softmax',
-                                name='Output'))
+    model.add(keras.layers.Dense(units=n_classes,activation='relu',
+                                name='Pre-Output'))
+    model.add(keras.layers.Activation(activation='softmax',name='Output'))
     model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.1),
                   loss=keras.losses.categorical_crossentropy,
                   metrics=metrics)
