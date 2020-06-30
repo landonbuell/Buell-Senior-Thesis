@@ -29,31 +29,48 @@ if __name__ == '__main__':
     FILEOBJS = prog_utils.Create_Fileobjs(trgt_path+'/TARGETS.csv')
 
     # PROGRAM PARAMETERS
-    batch_size = 1024       # samples/ batch
+    batch_step = 8     # samples/ batch
     FILEOBJS = np.random.permutation(FILEOBJS)
-    FILEOBJS = FILEOBJS[0:1000]
+    FILEOBJS = FILEOBJS[0:1024]
     print("Files Found:",len(FILEOBJS))
 
+    # Build Netwotk Models
+    MLPname = 'JARVIS'
+    MLP_MODEL = NN_models.Multilayer_Perceptron(MLPname,15,n_classes=25,layerunits=[40,40],
+                                                metrics=['Precision','Recall'])
+    MLPpath = os.path.join(itmd_path,MLPname)
+    MLP_MODEL.save(MLPpath,overwrite=True)
+    
+    CNNname = 'VISION'
+    CNN_MODEL = NN_models.Convolutional_Neural_Network(CNNname,in_shape=NN_models.sepectrogram_shape,
+                       n_classes=25,kernelsizes=(3,3),layerunits=[128],metrics=['Precision','Recall'])
+    CNNpath = os.path.join(itmd_path,CNNname)
+    CNN_MODEL.save(CNNpath,overwrite=True)
+
     # Build X & Y
-    print("Contructing Design Matrix:")   
-    V,W,X = ML_utils.Design_Matrices(FILEOBJS)
-    Y,n_classes = ML_utils.construct_targets(FILEOBJS)
+    print("Contructing Design Matrix:") 
+    for I in range (0,len(FILEOBJS),batch_step):
+        print("\tBatch Slice Size:",batch_step)
+        FILEOBJ_BATCH = FILEOBJS[I:I+batch_step]
+        V,W,X = ML_utils.Design_Matrices(FILEOBJ_BATCH)
+        Y,n_classes = ML_utils.construct_targets(FILEOBJ_BATCH)
 
-    V = V.__getmatrix__()
-    W = W.__getmatrix__()
-    X = X.__getmatrix__()
+        # DATA FOR PHASE-SPACE
+        V = V.__getmatrix__()
 
-    # BUILD & TRAIN MULTILAYER PERCEPTRON
-    print("Contructing and Training Perceptron Model...")
-    n_samples,n_features = X.shape
-    MLP_MODEL = NN_models.Multilayer_Perceptron('JARVIS',n_features,n_classes)
-    MLP_HIST = MLP_MODEL.fit(X,Y,batch_size=64,epochs=100,verbose=2)
-    plot_utils.Plot_History(MLP_HIST,MLP_MODEL)
+        # DATA FOR SPECTROGRAM
+        W = W.__getmatrix__()
+        MODEL = NN_models.keras.models.load_model(CNNpath)
+        MODEL.fit(x=W,y=Y,batch_size=8,epochs=20,verbose=2)
+        MODEL.save(CNNpath,overwrite=True)
 
-    # BUILD & TRAIN SPECTROGRAM
-    print("Constructing and Training Convolutional Model...")
-    n_samples,n_rows,n_cols = W.shape
-    W = W.reshape(n_samples,n_rows,n_cols,1)
-    SXX_MODEL = NN_models.Convolutional_Neural_Network('VISION',(n_rows,n_cols,1),n_classes)
-    SXX_HIST = SXX_MODEL.fit(W,Y,batch_size=64,epochs=100,verbose=2)
-    plot_utils.Plot_History(SXX_HIST,SXX_MODEL)
+        # DATA FOR MLP
+        X = X.__getmatrix__()
+        MODEL = NN_models.keras.models.load_model(MLPpath)
+        MODEL.fit(x=X,y=Y,batch_size=8,epochs=20,verbose=2)
+        MODEL.save(MLPpath,overwrite=True)
+
+
+
+
+        

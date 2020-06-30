@@ -63,7 +63,7 @@ def Power_Spectrum (x,pts=[]):
     z = fftpack.fft(x,axis=-1)  
     Z = np.abs(z)**2    # compute power:
     if len(pts) != 0:   # selection of points:
-        Z = Z[:,pts]   # subset of points
+        Z = Z[:,pts]    # subset of points
     return Z            # return DFT matrix
 
 def Spectrogram (X,f,pts):
@@ -81,7 +81,10 @@ def Spectrogram (X,f,pts):
     Sxx = Power_Spectrum(X,pts)     # compute FFT of each row
     Sxx = Sxx.transpose()           # transpose
     t = np.arange(0,n_frames)       # time axis  
-    Sxx = sparse.coo_matrix(Sxx)    # make into spmatrix
+    Sxx_shape = Sxx.shape           # original shape
+    Sxx = np.array([0 if x<1 else x for x in Sxx.ravel()])
+    Sxx = Sxx.reshape(Sxx_shape)
+    #plot_utils.Plot_Spectrogram(f,t,Sxx)
     return f,t,Sxx
 
 def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
@@ -97,7 +100,7 @@ def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
     Reuturn
     """ 
     energy = np.array([])               # arr to hold energy
-    Sxx = Sxx.toarray()                       # sparse into np arr
+    #Sxx = Sxx.toarray()                       # sparse into np arr
     for i,pair in enumerate(bands):     # each pair of bounds
         idxs = np.where((f>=pair[0])&(f<=pair[1]))[0]   # find f-axis idxs
         E = integrate.trapz(Sxx[idxs],dx=rate,axis=-1)  # integrate

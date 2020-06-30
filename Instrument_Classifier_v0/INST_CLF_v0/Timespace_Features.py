@@ -20,7 +20,7 @@ import Plotting_Utilities as plot_utils
 
             #### TIME SERIES FEATURES ####
 
-def Frames_fixed_length (X,N=4096,overlap=0.75):
+def Frames_fixed_length (X,npts=4096,overlap=0.75):
     """
     Divide waveforms into frames of fixed length
         Waveform in tail-zero padded to adjust length
@@ -32,16 +32,16 @@ def Frames_fixed_length (X,N=4096,overlap=0.75):
     --------------------------------
     Return [risetime,decaytime] feature set
     """
-    frames = np.array([])           # array to hold time frames
-    step = int(N*(1-overlap))       # steps between frames
+    frames = np.array([])               # array to hold time frames
+    step = int(npts*(1-overlap))        # steps between frames
     for I in range(0,X.shape[0],step):  # iter through wave form
-        x = X[I:I+N]    # create single frame
-        if x.shape[0] != N:         # frame w/o N samples
-            pad = N - x.shape[0]    # number of zeroes to pad
+        x = X[I:I+npts]                 # create single frame
+        if x.shape[0] != npts:          # frame w/o N samples
+            pad = npts - x.shape[0]     # number of zeroes to pad
             x = np.append(x,np.zeros(shape=(1,pad)))  
         frames = np.append(frames,x)    # add single frame
-    frames = frames.reshape(-1,N)   # reshape (each row is frame)
-    return frames                   # return frames
+    frames = frames.reshape(-1,npts)    # reshape (each row is frame)
+    return frames                       # return frames
 
 def Frames_fixed_number (FILE,N=10,overlap=0.75):
     """

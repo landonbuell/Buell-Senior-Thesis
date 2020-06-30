@@ -17,6 +17,9 @@ import scipy.io.wavfile as sciowav
 
 import Plotting_Utilities as plot_utils
 
+            #### VARIABLE DECLARATIONS ####
+
+
             #### CLASS OBJECT DEFINITIONS ####
 
 class File_Object ():
@@ -75,6 +78,7 @@ class Design_Matrix ():
         self.X = []         # empty data structure
         self.shapes = []    # store explicit shapes of each samples
         self.ndim = ndim    # number of dimensions in array
+        self.n_samples = 0  # no samples in design matrix
 
     def set_targets (self,y):
         """ Create 1D target array corresponding to sample class """
@@ -85,28 +89,27 @@ class Design_Matrix ():
         """ Add features 'x' to design matrix, preserve shape """
         self.X.append(x.__getfeatures__())      # add sample to design matrix
         self.shapes.append(x.__getshape__())    # store shape       
+        self.n_samples += 1                     # current number of samples
         return self
-
-    def n_samples (self):
-        """ Get number of samples in design matrix """
-        return len(self.X)  
+ 
+    def pad_2D (self,new_shape,offsets=(0,0)):
+        """ Zero-Pad 2D samples to meet shape """
+        for i in range(self.n_samples):     # iterate by sample
+            A = np.zeros(shape=new_shape)   # arr of 0's in shape
+            dx,dy = offsets[0],offsets[1]   # align upper left     
+            try:                            # attempt pad
+                A[ dx:dx+self.X[i].shape[0] , dy:dy+self.X[i].shape[1]] += self.X[i]
+            except:                         # too big to pad
+                A = self.X[i][:new_shape[0],:new_shape[1]]   # crop
+            self.X[i] = A                   # reset sample
+            self.shapes[i] = new_shape      # reset shape
+        self.X = np.array(self.X).reshape(1,-1)
+        self.X = self.X.reshape(self.n_samples,new_shape[0],new_shape[1],1)
+        return self                         # return new instance
 
     def get_dims (self):
         """ get number of dimesnesion in this design matrix """
         return self.ndim
-
-    def pad_2Dsamples (self):
-        """ Zero pad samples to Make Matrix rectangular """
-        max_dims = np.amax(self.shapes,axis=0)  # maxima of each dimesnion
-        assert len(max_dims) == (self.ndim-1)   # same dims
-        for i in range(self.n_samples()):       # each sample
-            sample = self.X[i]                  # isolate same
-            current_shape = self.shapes[i]      # current sample shape
-            N_zeroes = max_dims - np.array(current_shape)
-            sample = np.pad(sample,((0,N_zeroes[0]),(0,N_zeroes[1])),'constant')            
-            self.X[i] = sample
-            self.shapes[i] = sample.shape       # get new shape
-        return self
            
     def __getmatrix__(self):
         """ return design matrix as rect. np array """
@@ -140,6 +143,8 @@ class Feature_Array ():
         """ Reshape feature array to 'new_shape' """
         self.features = self.features.reshape(new_shape)
         return self
+
+    
 
     def set_attributes (self,names=[],attrbs=[]):
         """ Set additional attributes """
