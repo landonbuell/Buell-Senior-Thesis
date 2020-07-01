@@ -94,18 +94,28 @@ class Design_Matrix ():
  
     def pad_2D (self,new_shape,offsets=(0,0)):
         """ Zero-Pad 2D samples to meet shape """
+        new_X = np.zeros(shape=(self.n_samples,new_shape[0],new_shape[1]))   # create new design matrix
         for i in range(self.n_samples):     # iterate by sample
-            A = np.zeros(shape=new_shape)   # arr of 0's in shape
             dx,dy = offsets[0],offsets[1]   # align upper left     
-            try:                            # attempt pad
-                A[ dx:dx+self.X[i].shape[0] , dy:dy+self.X[i].shape[1]] += self.X[i]
-            except:                         # too big to pad
-                A = self.X[i][:new_shape[0],:new_shape[1]]   # crop
-            self.X[i] = A                   # reset sample
+            try: 
+                new_X[i][dx:dx+self.X[i].shape[0],dy:dy+self.X[i].shape[1]] += self.X[i] 
+            except:
+                slice = self.X[i][:new_shape[0],:new_shape[1]]
+                shape_diff = np.array(new_shape) - slice.shape      # needed padding
+                slice = np.pad(slice,[[0,shape_diff[0]],[0,shape_diff[1]]])
+                new_X[i] += slice
             self.shapes[i] = new_shape      # reset shape
-        self.X = np.array(self.X).reshape(1,-1)
+        self.X = new_X              # overwrite
         self.X = self.X.reshape(self.n_samples,new_shape[0],new_shape[1],1)
         return self                         # return new instance
+
+    def shape_by_sample (self,shape=None):
+        """ Reshape design matrix by number of samples """
+        if shape:
+            self.X = self.X.reshape(shape)
+        else:
+            self.X = np.array(self.X).reshape(self.n_samples,-1)
+        return self
 
     def get_dims (self):
         """ get number of dimesnesion in this design matrix """
@@ -113,7 +123,7 @@ class Design_Matrix ():
            
     def __getmatrix__(self):
         """ return design matrix as rect. np array """
-        return np.array(self.X)
+        return self.X
 
 class Feature_Array ():
     """
@@ -143,8 +153,6 @@ class Feature_Array ():
         """ Reshape feature array to 'new_shape' """
         self.features = self.features.reshape(new_shape)
         return self
-
-    
 
     def set_attributes (self,names=[],attrbs=[]):
         """ Set additional attributes """

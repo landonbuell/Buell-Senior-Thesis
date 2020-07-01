@@ -13,7 +13,7 @@ from sklearn.preprocessing import StandardScaler
 
             #### FUNCTION DEFINITIONS ####
 
-def Distribution_features (X):
+def Distribution_Features (X):
     """
     Analyze properties of an array of FP values
     --------------------------------

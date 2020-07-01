@@ -41,14 +41,14 @@ def Multilayer_Perceptron (name,n_features,n_classes,layerunits=[40,40],
     # ouput layer & compile
     model.add(keras.layers.Dense(units=n_classes,activation='softmax',
                                 name='Output_Layer'))
-    model.compile(optimizer=keras.optimizers.SGD(),
-                  loss=keras.losses.CategoricalCrossentropy(from_logits=True),
+    model.compile(optimizer=keras.optimizers.Adam(),
+                  loss=keras.losses.CategoricalCrossentropy(),
                   metrics=metrics)
     # Summary & return
     #print(model.summary())
     return model
 
-def Convolutional_Neural_Network (name,in_shape,n_classes,kernelsizes=[2,2],
+def Convolutional_Neural_Network_2D (name,in_shape,n_classes,kernelsizes=[2,2],
                                 layerunits=[40,40],metrics=['Precision','Recall']):
     """
     Create Tensorflow Convolutional Neural Network Model
@@ -81,8 +81,8 @@ def Convolutional_Neural_Network (name,in_shape,n_classes,kernelsizes=[2,2],
     # ouput layer & compile
     model.add(keras.layers.Dense(units=n_classes,activation='softmax',
                                 name='Output'))
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.1),
-                    loss=keras.losses.CategoricalCrossentropy(from_logits=True),
+    model.compile(optimizer=keras.optimizers.Adam(),
+                    loss=keras.losses.CategoricalCrossentropy(),
                     metrics=metrics)
     # Summary & return
     #print(model.summary())

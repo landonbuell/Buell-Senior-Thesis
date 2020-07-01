@@ -47,7 +47,7 @@ def Assemble_Features (FILE):
     x_sample = prog_utils.Feature_Array(FILE.target)    # create instance
     x_sample = x_sample.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
     x_sample = x_sample.add_features(waveform_RMS)      
-    x_sample = x_sample.add_features(math_utils.Distribution_features(frames_RMS))
+    x_sample = x_sample.add_features(math_utils.Distribution_Features(frames_RMS))
     x_sample = x_sample.add_features(ESDs)
 
     # Create Spectrogram feature object
@@ -97,7 +97,7 @@ def Design_Matrices (FILE_OBJECTS):
     X = prog_utils.Design_Matrix(ndim=2)    # design matrix for perceptron
 
     for I,FILE in enumerate(FILE_OBJECTS):  # iterate through files
-        print('\t\t('+str(I)+'/'+str(n_samples)+')',FILE.filename)
+        print('\t\t\t('+str(I)+'/'+str(n_samples)+')',FILE.filename)
         FILE = FILE.read_audio()            # read .WAV file
 
         v,w,x = Assemble_Features(FILE)     # collect feature objects
@@ -108,6 +108,7 @@ def Design_Matrices (FILE_OBJECTS):
         X = X.add_sample(x)   # add sample to perceptron design-matrix
 
     W = W.pad_2D(new_shape=(560,256))
+    X = X.shape_by_sample()
 
     return V,W,X                # return design matricies
     
