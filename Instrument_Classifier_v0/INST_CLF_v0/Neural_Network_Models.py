@@ -22,6 +22,7 @@ Neural_Network_Models.py - "Neural Network Models"
             #### VARIABLE DECLARATIONS ####
     
 sepectrogram_shape = (560,256,1)
+phasespace_shape = (2,4096,1)
 
             #### FUNCTION DEFINITIONS ####
 
@@ -51,33 +52,39 @@ def Multilayer_Perceptron (name,n_features,n_classes,layerunits=[40,40],
                   loss=keras.losses.CategoricalCrossentropy(),
                   metrics=metrics)
     # Summary & return
-    #print(model.summary())
+    print(model.summary())
     return model
 
-def Convolutional_Neural_Network_2D (name,in_shape,n_classes,kernelsizes=[2,2],
-                                layerunits=[40,40],metrics=['Precision','Recall']):
+def Convolutional_Neural_Network_2D (name,in_shape,n_classes,kernelsizes=[(3,3),(3,3)],
+        poolsizes=[(2,2),(2,2)],layerunits=[40,40],metrics=['Precision','Recall']):
     """
     Create Tensorflow Convolutional Neural Network Model
     --------------------------------
     name (str) : Name to attatch to Network Model
     in_shape (int) : Iter of ints (n_rows x n_cols) of input images
     n_classes (int) : Number of classes in data set (output neurons)
+    kernelsizes (iter) : Array-like of ints or tuples where i-th obj is
+        shape of 2D kernel in each layer group
+    poolsizes (iter) : Array-like of ints where i-th obj is
+        shape of 2D pool size in each layer group
     layerunits (iter) : Array-like of ints where i-th int is 
         number of units in i-th hidden layer
     metrics (iter) : Array-like of strs contraining metrics to track
     --------------------------------
     Retrun compiled, untrained Keras CNN Sequential Model Object
     """
+    assert len(kernelsizes) == len(poolsizes)
+
     model = keras.models.Sequential(name=name) 
     model.add(keras.layers.InputLayer(input_shape=in_shape,name='Input'))
 
     # Add Convolution & Pooling
-    for i,size in enumerate(kernelsizes):              # each group of layers
-        model.add(keras.layers.Conv2D(filters=16,kernel_size=size,strides=(1,1),
+    for i,(kernel,pool) in enumerate(zip(kernelsizes,poolsizes)):
+        model.add(keras.layers.Conv2D(filters=16,kernel_size=kernel,strides=(1,1),
             padding='same',activation='relu',name='C'+str(i+1)+'A'))            # Conv Layer A
-        model.add(keras.layers.Conv2D(filters=16,kernel_size=size,strides=(1,1),
+        model.add(keras.layers.Conv2D(filters=16,kernel_size=kernel,strides=(1,1),
             padding='same',activation='relu',name='C'+str(i+1)+'B'))            # Conv Layer B
-        model.add(keras.layers.MaxPool2D(pool_size=(8,8),strides=(4,4),name='P'+str(i+1)))
+        model.add(keras.layers.MaxPool2D(pool_size=pool,strides=(4,4),name='P'+str(i+1)))
 
     # Add Dense Layers
     model.add(keras.layers.Flatten())       # flatten for dense layers
@@ -91,5 +98,5 @@ def Convolutional_Neural_Network_2D (name,in_shape,n_classes,kernelsizes=[2,2],
                     loss=keras.losses.CategoricalCrossentropy(),
                     metrics=metrics)
     # Summary & return
-    #print(model.summary())
+    print(model.summary())
     return model

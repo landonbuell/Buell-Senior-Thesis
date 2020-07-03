@@ -62,27 +62,45 @@ def MODELS_FILEOBJS (MAP,names,new_models=True,permute=True):
         FILEOBJS = np.random.permutation(FILEOBJS)  # permute!
     Y,n_classes = ML_utils.construct_targets(FILEOBJS)
 
+    # Create Spectrogram Classifier Model
+    model = Neural_Network_Models.Convolutional_Neural_Network_2D(names[1],
+        in_shape=Neural_Network_Models.sepectrogram_shape,n_classes=n_classes,
+        kernelsizes=[(3,3),(3,3)],poolsizes=[(2,2),(2,2)],layerunits=[128])
+    save_path = os.path.join(MAP['MODELS'],'SPECTROGRAM')
+    MAP.update({'SPECTROGRAM':save_path})
+    model.save(save_path,overwrite=True)   
+
     # Create Multilayer Perceptron Model
     model = Neural_Network_Models.Multilayer_Perceptron(names[0],
             n_features=15,n_classes=n_classes,layerunits=[40,40])
-    save_path = os.path.join(MAP['MODELS'],str(names[0]))
-    MAP.update({names[0]:save_path})
-    model.save(save_path,overwrite=True)        
-
-    # Create Spectrogram Classifier Model
-    model = Neural_Network_Models.Convolutional_Neural_Network_2D(names[1],
-            inshape=Neural_Network_Models.sepectrogram_shape,n_classes=n_classes,
-            kernelsizes=[(3,3),(3,3)],layerunits=[128])
-    save_path = os.path.join(MAP['MODELS'],str(names[1]))
-    MAP.update({names[1]:save_path})
-    model.save(save_path,overwrite=True)   
+    save_path = os.path.join(MAP['MODELS'],'PERCEPTRON')
+    MAP.update({'PERCEPTRON':save_path})
+    model.save(save_path,overwrite=True)
     
-    # Create Phase-Space Classifier Model
-    model = Neural_Network_Models.Convolutional_Neural_Network_2D(names[2],
-            inshape=Neural_Network_Models.sepectrogram_shape,n_classes=n_classes,
-            kernelsizes=[(3,3),],layerunits=[128])
-    save_path = os.path.join(MAP['MODELS'],str(names[2]))
-    MAP.update({names[2]:save_path})
-    model.save(save_path,overwrite=True)   
-
     return MAP,FILEOBJS,Y
+
+def TRAIN_on_SET (BATCH,Y,MAP):
+    """
+    Collect all features from a Subset of fileobjects and train models
+    --------------------------------
+    BATCH (iter) : Subset of file objects to train on (1 x n_samples)
+    Y (arr) : One-hot target vector for samples (n_samples x n_classes)
+    MAP (dict) : dictionary containing important local path variables
+    --------------------------------
+    Return None
+    """
+    print("\t\tProcessing Batch")
+    DESIGN_MATRICIES = ML_utils.Design_Matrices(BATCH) # List of Design Matrix objs
+    # 'X' is in order: [Phase-Space Clf, Spectrogram Clf, MLP Clf]
+    MODELS = [MAP['SPECTROGRAM'],
+              MAP['PERCEPTRON']]
+
+    print("\t\tTraining Batch Set")
+    for X,path in zip(DESIGN_MATRICIES,MODELS):
+        # Load Model into RAM & Train
+        model = Neural_Network_Models.keras.models.load_model(path)
+        X = X.__getmatrix__()
+        model.fit(x=X,y=Y,batch_size=32,epochs=20,verbose=2)
+        model.save(path)
+
+    return None

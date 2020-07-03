@@ -110,6 +110,6 @@ def Design_Matrices (FILE_OBJECTS):
     W = W.pad_2D(new_shape=(560,256))
     X = X.shape_by_sample()
 
-    return V,W,X                # return design matricies
+    return [W,X]                # return design matrix objs
     
       

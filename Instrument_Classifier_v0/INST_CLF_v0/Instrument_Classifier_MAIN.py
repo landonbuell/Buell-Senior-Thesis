@@ -24,27 +24,19 @@ if __name__ == '__main__':
     
     # ESTABLISH NECESSARY LOCAL PATHS
     PATH_MAP = comp_utils.PATHS()
-    PATH_MAP,FILEOBJS,Y = comp_utils.MODELS_FILEOBJS(PATH_MAP,names = ['JARVIS','VISION','ULTRON'])
-    batch_step = 32      # samples/ batch
+    PATH_MAP,FILEOBJS,TARGETS = \
+       comp_utils.MODELS_FILEOBJS(PATH_MAP,names=['ULTRON','VISION','JARVIS'])
+    batch_step = 64      # samples / batch
     print("Files Found:",len(FILEOBJS))
 
     # ITERATE THROUGH DATA SET BY BATCH
-    for I in range(0,len(FILEOBJS),batch_step):          
-        BATCH = FILEOBJS[I:I+batch_step]        # file in batch
-        TRGTS = Y[I:I+batch_step]               # target vector
-        V,W,X = ML_utils.Design_Matrices(BATCH)
+    cntr = 1
+    for I in range(0,len(FILEOBJS),batch_step):  
+        print("\tBatch Set:",cntr)
+        BATCH = FILEOBJS[I:I+batch_step]    # file objs in batch
+        Y = TARGETS[I:I+batch_step]         # Target vector
+        comp_utils.TRAIN_on_SET(BATCH,Y,PATH_MAP)
+        cntr += 1
 
-        # DATA FOR PHASE-SPACE
-
-        # DATA FOR SPECTROGRAM
-        W = W.__getmatrix__()
-        MODEL = Neural_Network_Models.keras.models.load_model(CNN_path)
-        MODEL.fit(x=W,y=TRGTS,batch_size=16,epochs=20,verbose=2)
-        MODEL.save(CNN_path)
-
-        # DATA FOR MLP
-        X = X.__getmatrix__()
-        MODEL = Neural_Network_Models.keras.models.load_model(MLP_path)
-        MODEL.fit(x=X,y=TRGTS,batch_size=16,epochs=20,verbose=2)
-        MODEL.save(MLP_path)
+        
     
