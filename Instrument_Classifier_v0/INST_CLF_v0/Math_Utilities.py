@@ -11,6 +11,11 @@ import numpy as np
 import scipy.stats as stats
 from sklearn.preprocessing import StandardScaler
 
+"""
+Math_Utilities.py - "Math Utilities"
+    Contains Definitions for general mathematical functions
+"""
+
             #### FUNCTION DEFINITIONS ####
 
 def Distribution_Features (X):

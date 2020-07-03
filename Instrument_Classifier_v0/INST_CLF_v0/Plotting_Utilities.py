@@ -10,6 +10,12 @@ Instrument Classifier v0
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""
+Plotting_Utilities.py - "Plotting Utilities"
+    Contains Definitions to visualize spectral data in
+    time-space, frequency-space, and feature-space
+"""
+
             #### PLOTTING FUNCTIONS ####
 
 def Plot_Features_2D (X1,X2,classes,labels,title='',
@@ -173,5 +179,3 @@ def Plot_Spectrum (xdata,ydata,labels=[''],title='',
         plt.savefig(title+'.png')
     if show == True:
         plt.show()
-
-

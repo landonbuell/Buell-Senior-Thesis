@@ -18,7 +18,36 @@ import scipy.sparse as sparse
 import Timespace_Features as time_feats
 import Plotting_Utilities as plot_utils
 
+"""
+Freqspace_Features.py - "Frequency-space Features"
+    Contains Definitions to extract features and data from
+    frequency-domain representations of a signal
+"""
+
             #### TIME SERIES FEATURES ####
+
+def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
+    """
+    Compute Energy Spectral density Distribution 
+    --------------------------------
+    f (arr) : Axis to map pts to frequency space (1 x n_bins)
+    t (arr) : Axis to map pts to time space (1 x n_frames)
+    Sxx (arr) : 2D Spectrogram (n_bins x n_frames) time vs. frequency vs. amplitude
+    rate (int) : waveform sample rate in Hz (44.1k by default)
+    bands (arr) : Iterable containing bounds of frequency bands (n_pairs x 2)
+    --------------------------------
+    Return array of sides (1 x n_pairs) for ESD in each pair
+    """ 
+    energy = np.array([])               # arr to hold energy
+    #Sxx = Sxx.toarray()                       # sparse into np arr
+    for i,pair in enumerate(bands):     # each pair of bounds
+        idxs = np.where((f>=pair[0])&(f<=pair[1]))[0]   # find f-axis idxs
+        E = integrate.trapz(Sxx[idxs],dx=rate,axis=-1)  # integrate
+        E = np.sum(E)                   # sum elements
+        energy = np.append(energy,E)    # add to array
+    energy /= len(t)                    # avg energy/frame
+    energy /= np.max(energy)            # scale by max
+    return energy                       # return
 
 def Frequency_Axis (npts=4096,rate=44100,low=0,high=6000):
     """
@@ -49,6 +78,18 @@ def Hanning_Window (X):
     for x in X:         # each row in X
         x *= w          # apply window
     return X            # return new window
+
+def Mel_Filter_Banks (f,Sxx,n_filters,):
+    """
+    Compute Mel Filter Banks Spectral Energies
+    --------------------------------
+    f (arr) Array corresponding to frequency axis
+    Sxx (arr) : 2D Spectrogram (n_bins x n_frames) time vs. frequency vs. amplitude
+    n_filters (int) : Number of Mel filter banks in output
+    --------------------------------
+    Return Energy Approximation for each Mel Bank
+    """
+    mel = 1125 * np.log(1 + f/700)  # convert Hz to Mels
            
 def Power_Spectrum (x,pts=[]):
     """
@@ -60,11 +101,12 @@ def Power_Spectrum (x,pts=[]):
     --------------------------------
     Return Z, array
     """
+    ncols = x.shape[1]  # number of pts in DFT
     z = fftpack.fft(x,axis=-1)  
     Z = np.abs(z)**2    # compute power:
     if len(pts) != 0:   # selection of points:
         Z = Z[:,pts]    # subset of points
-    return Z            # return DFT matrix
+    return Z/ncols      # return DFT matrix
 
 def Spectrogram (X,f,pts):
     """
@@ -86,31 +128,3 @@ def Spectrogram (X,f,pts):
     Sxx = Sxx.reshape(Sxx_shape)
     #plot_utils.Plot_Spectrogram(f,t,Sxx)
     return f,t,Sxx
-
-def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
-    """
-    Compute Energy Spectral density Distribution 
-    --------------------------------
-    f (arr) : Axis to map pts to frequency space (1 x n_bins)
-    t (arr) : Axis to map pts to time space (1 x n_frames)
-    Sxx (arr) : 2D Spectrogram (n_bins x n_frames) time vs. frequency vs. amplitude
-    rate (int) : waveform sample rate in Hz (44.1k by default)
-    bands (arr) : Iterable containing bounds of frequency bands (n_pairs x 2)
-    --------------------------------
-    Reuturn
-    """ 
-    energy = np.array([])               # arr to hold energy
-    #Sxx = Sxx.toarray()                       # sparse into np arr
-    for i,pair in enumerate(bands):     # each pair of bounds
-        idxs = np.where((f>=pair[0])&(f<=pair[1]))[0]   # find f-axis idxs
-        E = integrate.trapz(Sxx[idxs],dx=rate,axis=-1)  # integrate
-        E = np.sum(E)                   # sum elements
-        energy = np.append(energy,E)    # add to array
-    energy /= len(t)                    # avg energy/frame
-    energy /= np.max(energy)            # scale by max
-    return energy                       # return
-
-
-
-    
-

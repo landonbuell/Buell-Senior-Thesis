@@ -17,6 +17,13 @@ import scipy.io.wavfile as sciowav
 
 import Plotting_Utilities as plot_utils
 
+"""
+Program_Utilities.py - "Program Utilities"
+    Contains Variables, Classes, and Definitions for Lower program functions
+    Backends, Data structure objects, os & directory organization and validations
+
+"""
+
             #### VARIABLE DECLARATIONS ####
 
 
@@ -125,6 +132,7 @@ class Design_Matrix ():
         """ return design matrix as rect. np array """
         return self.X
 
+
 class Feature_Array ():
     """
     Create Feature vector object
@@ -222,6 +230,35 @@ def Create_Fileobjs (filepath):
     del(frame)                          # del frame
     return fileobjects                  # return list of insts
 
+def Directory_Map (keys,vals):
+    """
+    Create map (dictionary) of all local paths needed.
+    --------------------------------
+    keys (iter) : Iterable containing keys for dictionary (1 x M)
+    vals (iter) : Iterable containing valus for dictionary (1 x M)
+    --------------------------------
+    """
+    assert len(keys) == len(vals)   # must have same num pts
+    map = {}                        # empty dictionary
+    for key,val in zip(keys,vals):  # each key-val pair
+        map.update({key:val})       # update dict
+    return map                      # return the map
+
+def Generate_Network (model,name,params,path):
+    """
+    Wrapper to Generate Tensorflow Sequenatial Model
+        Handels args, local save path, and general housekeeping
+    --------------------------------
+    model (func) : Callable model from this script indicating model type to use
+    name (str) : name to attatch to the model
+    params (misc) : Misc. params to pass to 'model' function type
+    path (str) : Local parent path to store model data
+    --------------------------------
+
+    """
+    name = name.upper()                     # make name uppercase if not
+    return None
+
 def Read_Directory_Tree (path,ext):
     """
     Read through directory and create instance of every file with matching extension
@@ -247,7 +284,7 @@ def Validate_Directories (trgt_path,extr_path):
     --------------------------------
     Return True, Terminate if fail ir
     """
-    if os.path.isdir(trgt_path) == False:   # not not dir:
+    if os.path.isfile(trgt_path) == False:   # not not dir:
         print("\n\tERROR! - Cannot Locate:\n\t\t",trgt_path)
     os.makedirs(extr_path,exist_ok=True)    # create path for intermediate data
     return True                             # exist

@@ -33,11 +33,11 @@ def Assemble_Features (FILE):
     """   
 
     # Features Pre-processing
-    N = int(2**12)
+    N = int(2**12)                                              # length of audio frame
     frames = time_feats.Frames_fixed_length(FILE.waveform,npts=N)  # create frames    
     waveform_RMS = math_utils.RMS_Energy(FILE.waveform)         # waveform RMS
     frames_RMS = math_utils.RMS_Energy(frames)                  # frames RMS
-    f,pts = freq_feats.Frequency_Axis(rate=FILE.rate,npts=N)       # frequency axis
+    f,pts = freq_feats.Frequency_Axis(rate=FILE.rate,npts=N)    # frequency axis
     f,t,Sxx = freq_feats.Spectrogram(frames,f,pts)              # build spectrogram
     ESDs = freq_feats.Energy_Spectral_Density(f,t,Sxx,
                 bands=[(0,32),(32,64),(64,128),(128,256),
@@ -93,7 +93,7 @@ def Design_Matrices (FILE_OBJECTS):
     """
     n_samples = len(FILE_OBJECTS)           # number of file samples
     V = prog_utils.Design_Matrix(ndim=4)    # design matrix for Phase-space
-    W = prog_utils.Design_Matrix(ndim=3)    # design matrix for spectrograms
+    W = prog_utils.Design_Matrix(ndim=4)    # design matrix for spectrograms
     X = prog_utils.Design_Matrix(ndim=2)    # design matrix for perceptron
 
     for I,FILE in enumerate(FILE_OBJECTS):  # iterate through files
@@ -112,4 +112,4 @@ def Design_Matrices (FILE_OBJECTS):
 
     return V,W,X                # return design matricies
     
-        
+      

@@ -13,6 +13,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
 import tensorflow.keras as keras
 
+"""
+Neural_Network_Models.py - "Neural Network Models"
+    Contains Definitions to wrap and contain creation of
+    Tensorflow/Keras Sequential Neural Network Models
+"""
+
             #### VARIABLE DECLARATIONS ####
     
 sepectrogram_shape = (560,256,1)
