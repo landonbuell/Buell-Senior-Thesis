@@ -26,11 +26,13 @@ if __name__ == '__main__':
     PATH_MAP = comp_utils.PATHS()
     PATH_MAP,FILEOBJS,TARGETS = \
        comp_utils.MODELS_FILEOBJS(PATH_MAP,names=['ULTRON','VISION','JARVIS'])
-    batch_step = 64      # samples / batch
+    batch_step = 128      # samples / batch
     print("Files Found:",len(FILEOBJS))
 
     # ITERATE THROUGH DATA SET BY BATCH
     cntr = 1
+    Train = True
+    Eval = False
     for I in range(0,len(FILEOBJS),batch_step):  
         print("\tBatch Set:",cntr)
         BATCH = FILEOBJS[I:I+batch_step]    # file objs in batch

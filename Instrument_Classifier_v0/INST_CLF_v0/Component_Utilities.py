@@ -12,6 +12,7 @@ import sys
 import os
 
 import Program_Utilities as prog_utils
+import Plotting_Utilities as plot_utils
 import Machine_Learning_Utilities as ML_utils
 import Neural_Network_Models 
 
@@ -60,7 +61,7 @@ def MODELS_FILEOBJS (MAP,names,new_models=True,permute=True):
     FILEOBJS = prog_utils.Create_Fileobjs(MAP['TARGET'])
     if permute == True:                             # if permute...
         FILEOBJS = np.random.permutation(FILEOBJS)  # permute!
-    Y,n_classes = ML_utils.construct_targets(FILEOBJS)
+    TARGETS,n_classes = ML_utils.construct_targets(FILEOBJS)
 
     # Create Spectrogram Classifier Model
     model = Neural_Network_Models.Convolutional_Neural_Network_2D(names[1],
@@ -71,13 +72,13 @@ def MODELS_FILEOBJS (MAP,names,new_models=True,permute=True):
     model.save(save_path,overwrite=True)   
 
     # Create Multilayer Perceptron Model
-    model = Neural_Network_Models.Multilayer_Perceptron(names[0],
-            n_features=15,n_classes=n_classes,layerunits=[40,40])
+    model = Neural_Network_Models.Multilayer_Perceptron(names[2],
+            n_features=15,n_classes=n_classes,layerunits=[80,80])
     save_path = os.path.join(MAP['MODELS'],'PERCEPTRON')
     MAP.update({'PERCEPTRON':save_path})
     model.save(save_path,overwrite=True)
     
-    return MAP,FILEOBJS,Y
+    return MAP,FILEOBJS,TARGETS
 
 def TRAIN_on_SET (BATCH,Y,MAP):
     """
@@ -99,8 +100,12 @@ def TRAIN_on_SET (BATCH,Y,MAP):
     for X,path in zip(DESIGN_MATRICIES,MODELS):
         # Load Model into RAM & Train
         model = Neural_Network_Models.keras.models.load_model(path)
+        print("\t\t\tTraining Model:",model.name)
         X = X.__getmatrix__()
-        model.fit(x=X,y=Y,batch_size=32,epochs=20,verbose=2)
+        history = model.fit(x=X,y=Y,batch_size=32,epochs=10,verbose=2)
+        print("\t\t\tSaving Model:",model.name)
         model.save(path)
+        plot_utils.Plot_History(history,model)
 
     return None
+

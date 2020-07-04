@@ -124,6 +124,11 @@ class Design_Matrix ():
             self.X = np.array(self.X).reshape(self.n_samples,-1)
         return self
 
+    def scale_X (self,scaler):
+        """ Apply standard preprocessing scaling to self.X """
+        assert type(self.X) == np.ndarray
+        return self
+
     def get_dims (self):
         """ get number of dimesnesion in this design matrix """
         return self.ndim
