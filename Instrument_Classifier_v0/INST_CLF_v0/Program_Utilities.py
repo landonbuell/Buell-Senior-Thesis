@@ -197,25 +197,22 @@ def Argument_Parser():
     Return argument parser object
     """
     parser = argparse.ArgumentParser(prog='Instrument Classifier v0',
-                                     usage='Classify .WAV files by instrument.',
+                                     usage='Classify .WAV files by using pre-exisiting classifiered samples.',
                                      description="\n\t CLI Help for Instrument Classifier Program:",
                                      add_help=True)
     #parser.add_argument('-data_path',type=str,
     #                    help="Full Local Data Directory Path. Should have form \n\t \
     #                            C:/Users/yourname/.../my_data")
-    parser.add_argument('-trgt_path',type=str,
+    parser.add_argument('data_path',type=str,
                         help="Full Local Directory Path of file(s) containing \
-                                rows of of data formatted: \
-                                | Index | Fullpath  | Target Int    | Target Str |. \
-                                Should have form \n\t  \
-                                C:/Users/yourname/.../answers")
-    parser.add_argument('-extr_path',type=str,
+                                rows of of answer-key-like data; formatted: \
+                                | Index | Fullpath  | Target Int    | Target Str |")
+    parser.add_argument('model_path',type=str,
                         help="Full Local Data Directory Path to store intermediate \
-                                file data. Reccommend using empty/new path.  Should have form \n\t \
-                                C:/Users/yourname/.../answers/42.csv")
+                                file data. Reccommend using empty/new path.")
     # Parse and return args
     args = parser.parse_args()
-    return args.trgt_path,args.extr_path
+    return args.data_path,args.model_path
 
 def Create_Fileobjs (filepath):
     """
@@ -280,16 +277,18 @@ def Read_Directory_Tree (path,ext):
                 file_objs.append(wavfile(file)) # add instance to list 
     return file_objs                            # return list of instances
 
-def Validate_Directories (trgt_path,extr_path):
+def Validate_Directories (must_exist=[],must_create=[]):
     """
     Check in passed directories are valid for program execution
     --------------------------------
-    trgt_path (str) : Path and name of file containing rows of {name,target} pairs.
+    must (str) : Path and name of file containing rows of {name,target} pairs.
     extr_path (str) :  Path to store intermediate file data
     --------------------------------
     Return True, Terminate if fail ir
     """
-    if os.path.isfile(trgt_path) == False:   # not not dir:
-        print("\n\tERROR! - Cannot Locate:\n\t\t",trgt_path)
-    os.makedirs(extr_path,exist_ok=True)    # create path for intermediate data
-    return True                             # exist
+    for path in must_exist:                 # paths that must exisit
+        if os.path.isdir(path) == False:    # not not dir:
+            print("\n\tERROR! - Cannot Locate:\n\t\t",path)
+    for path in must_create:                # path that must create
+        os.makedirs(path,exist_ok=True)     # create path
+    return None
