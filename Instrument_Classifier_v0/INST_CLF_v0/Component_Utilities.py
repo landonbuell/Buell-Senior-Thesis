@@ -26,7 +26,7 @@ Component_Utilities.py - 'Component Utilities'
 
 def organize_paths (model_names):
     """
-    Initialize all local directory path variables and create Neural Network Models
+    Initialize all local directory path variable
     --------------------------------
     model_names (iter) : Iterable containing names for 3 classifier models
     --------------------------------
@@ -34,7 +34,7 @@ def organize_paths (model_names):
     """
     assert len(model_names) == 3                            # one name per model
     init_path = os.getcwd()         # current path
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classfier_v0'
+    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
     data_path = os.path.join(parent,'Target-Data')  # target vectors are stored here
     model_path = os.path.join(parent,'Model-Data')   # Saved models are stored here
     #data_path,model_path = prog_utils.Argument_Parser()
@@ -50,5 +50,60 @@ def organize_paths (model_names):
 
     return directory_map 
 
-def 
+def create_models (model_names,map,n_classes,overwrite=[True,True,True]):
+    """
+    Initialize three Neural Network models
+    --------------------------------
+    model_names (iter) : Iterable containing names for 3 classifier models
+    map (dict) : Directory Dictionary map, containin important local paths
+    n_classes (int) : Number of unique target classes for classification
+    overwrite (iter/bool) : Iterable of booleans or booleans indicating to overwrite
+    --------------------------------
+    Return None
+    """
+    assert len(model_names) == 3            # one name per model
+    model_names = [name.upper() for name in model_names]
 
+    # Create Multilayer Perceptron Model
+    model = Neural_Network_Models.Multilayer_Perceptron(name=model_names[0],
+                n_features=Neural_Network_Models.n_features,n_classes=n_classes,
+               layerunits=[64,64])          # Create keras Model instance
+    model.save(filepath=map[model_names[0]],overwrite=overwrite[0])   # Save instance locally
+    del(model)                              # delete from RAM
+    
+    # Create Spectrogram Classifier Conv Network Model
+    model = Neural_Network_Models.Convolutional_Neural_Network_2D(name=model_names[1],
+            in_shape=Neural_Network_Models.sepectrogram_shape,n_classes=n_classes,filtersizes=[16,8],
+           kernelsizes=[(3,3),(3,3)],poolsizes=[(2,2),(2,2)],layerunits=[64,64]) 
+    model.save(filepath=map[model_names[1]],overwrite=overwrite[1])   # Save instance locally
+    del(model)                              # delete from RAM
+
+
+    # Create Phase-Space Classifier Conv Network Model
+    model = Neural_Network_Models.Convolutional_Neural_Network_2D(name=model_names[2],
+            in_shape=Neural_Network_Models.phasespace_shape,n_classes=n_classes,filtersizes=[8,8],
+            kernelsizes=[3,3],poolsizes=[4,4],layerunits=[64])
+    model.save(filepath=map[model_names[2]],overwrite=overwrite[2])   # Save instance locally
+    del(model)                              # delete from RAM
+
+    return None
+    
+def Act_on_Batch (FILE_BATCH,model_names,map,n_classes,mode='train'):
+    """
+    Extract features and train/test models from a batch of audio files
+    --------------------------------
+    FILE_BATCH (list) : List of file object instace to extract features from
+    model_names (iter) : Iterable containing names for 3 classifier models
+    map (dict) : Directory Dictionary map, containin important local paths
+    n_classes (int) : Number of unique target classes for classification
+    mode (str) : Indicates if batch is use to [train/test/predict]
+    --------------------------------
+    Return None
+    """
+    assert mode in ['train','test','predict']
+    if mode != 'predict':           # not predicting (there is answer-key)
+        Y = ML_utils.target_array(FILE_BATCH,n_classes,matrix=True)
+        
+    # Extract Design Matrices for each Model
+
+    return None

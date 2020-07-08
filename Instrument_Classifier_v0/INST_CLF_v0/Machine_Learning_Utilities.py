@@ -14,10 +14,11 @@ import tensorflow.keras as keras
 import time
 
 import Program_Utilities as prog_utils
-import Math_Utilities as math_utils
 import Timespace_Features as time_feats
 import Freqspace_Features as freq_feats
 import Plotting_Utilities as plot_utils
+import Math_Utilities as math_utils
+import Neural_Network_Models
 
             #### FUNCTION DEFINITIONS ####
 
@@ -43,44 +44,25 @@ def Assemble_Features (FILE):
                 bands=[(0,32),(32,64),(64,128),(128,256),
             (256,512),(512,1024),(2048,4096),(4096,6000)])      # Energy in bands
       
-    # Feature vector x for MLP model
-    x_sample = prog_utils.Feature_Array(FILE.target)    # create instance
-    x_sample = x_sample.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
-    x_sample = x_sample.add_features(waveform_RMS)      
-    x_sample = x_sample.add_features(math_utils.Distribution_Features(frames_RMS))
-    x_sample = x_sample.add_features(ESDs)
+    # Feature vector for Perceptron model
+    MLP_feats = prog_utils.Feature_Array(FILE.target)    # create instance
+    MLP_feats = MLP_feats.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
+    MLP_feats = MLP_feats.add_features(waveform_RMS)      
+    MLP_feats = MLP_feats.add_features(math_utils.Distribution_Features(frames_RMS))
+    MLP_feats = MLP_feats.add_features(ESDs)
 
-    # Create Spectrogram feature object
-    w_sample = prog_utils.Feature_Array(FILE.target)    # create instance
-    w_sample = w_sample.set_features(Sxx)     
+    # Feature vector for Spectrogram_Classifier
+    Sxx_feats = prog_utils.Feature_Array(FILE.target)    # create instance
+    Sxx_feats = w_sample.set_features(Sxx)     
     
-    # Create Phase-Space Feature object
-    v_sample = prog_utils.Feature_Array(FILE.target)
-    d1_frames = time_feats.Phase_Space(frames)
-    d2_frames = time_feats.Phase_Space(d1_frames)
-    v_features = np.array([frames,d1_frames,d2_frames])
-    v_features = np.moveaxis(v_features,0,-1)
-    v_sample.set_features(v_features)
-    
+    # Feature vector for Phase-Space Classifier
+    PSC_feats = prog_utils.Feature_Array(FILE.target)    # create instance
+    """
+    Need to finish Phase-Space Features design process
+        Maybe used 3D convolution? May be worth looking into...
+    """ 
     # return feature objects
-    return v_sample,w_sample,x_sample
-
-def construct_targets (objs,matrix=True):
-    """
-    Construct target array object 
-    --------------------------------
-    objs (iter) : List of object instances w/ 'target' attribute
-    matrix (bool) : If true, targets are one-hot-encoded into matrix,
-        else a vector is returned
-    --------------------------------
-    Return target object and nmber of unique classes
-    """
-    y = np.array([x.target for x in objs])      # use target attribute
-    n_classes = np.amax(y)                      # number of classes
-    n_classes = 25
-    if matrix == True:                          # if one-hot-enc  
-        y = keras.utils.to_categorical(y,n_classes)
-    return y,n_classes                          # return target & classes
+    return MLP_feats,Sxx_feats,PSC_feats
 
 def Design_Matrices (FILE_OBJECTS):
     """
@@ -92,9 +74,9 @@ def Design_Matrices (FILE_OBJECTS):
     Return design matrix, X
     """
     n_samples = len(FILE_OBJECTS)           # number of file samples
-    V = prog_utils.Design_Matrix(ndim=4)    # design matrix for Phase-space
-    W = prog_utils.Design_Matrix(ndim=4)    # design matrix for spectrograms
-    X = prog_utils.Design_Matrix(ndim=2)    # design matrix for perceptron
+    MLP_matrix = prog_utils.Design_Matrix(ndim=2)   # design matrix for perceptron
+    SXX_matrix = prog_utils.Design_Matrix(ndim=3)   # design matrix for spectrogram
+    PSC_matrix = prog_utils.Design_Matrix(ndim=3)   # design matrix for phase-space
 
     for I,FILE in enumerate(FILE_OBJECTS):  # iterate through files
         print('\t\t\t('+str(I)+'/'+str(n_samples)+')',FILE.filename)
@@ -107,9 +89,25 @@ def Design_Matrices (FILE_OBJECTS):
         W = W.add_sample(w)   # add sample to spectrogram design-matrix
         X = X.add_sample(x)   # add sample to perceptron design-matrix
 
-    W = W.pad_2D(new_shape=(560,256))
+    W = W.pad_2D(new_shape=Neural_Network_Models.spectrogram_shape)
     X = X.shape_by_sample()
 
     return [W,X]                # return design matrix objs
+
+def target_array (fileobjs,n_classes,matrix=True):
+    """
+    Construct target matrix or target vector
+    --------------------------------
+    fileobjs (inst) : File Object instances with 'target' attribute
+    n_classes (int) : Number of unique classification classes
+    matrix (bool) : If true (default), target array is one-hot-encoded matrix
+    --------------------------------
+    Return matrix/vector of target arr
+    """
+    y = np.array([x.target for x in fileobjs])      # target attrb
+    if matrix == True:                              # if matrix...
+        y = keras.utils.to_categorical(y,n_classes) # one-hot-enc
+    return y                                        # return targets
+
     
       

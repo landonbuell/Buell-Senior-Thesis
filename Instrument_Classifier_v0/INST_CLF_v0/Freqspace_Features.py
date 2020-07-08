@@ -125,6 +125,6 @@ def Spectrogram (X,f,pts):
     t = np.arange(0,n_frames)       # time axis  
     Sxx_shape = Sxx.shape           # original shape
     Sxx = np.array([0 if x<1 else x for x in Sxx.ravel()])
-    Sxx = Sxx.reshape(Sxx_shape)
-    #plot_utils.Plot_Spectrogram(f,t,Sxx)
+    Sxx = Sxx.reshape(Sxx_shape)    # Reshape
+    Sxx = sparse.coo_matrix(Sxx,shape=Sxx_shape,dtype=np.float32)
     return f,t,Sxx

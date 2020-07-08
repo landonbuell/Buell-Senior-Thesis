@@ -12,7 +12,7 @@ import numpy as np
 import scipy.fftpack as fftpack
 import scipy.integrate as integ
 import scipy.signal as signal
-import scipy.sparse
+import scipy.sparse as sparse
 
 import Math_Utilities as math_utils
 import Freqspace_Features as freq_feats
@@ -72,8 +72,13 @@ def Phase_Space (X,dt=1):
     --------------------------------
     Return sparse matrix representation of phase-space
     """
-    dX = np.gradient(X,dt,axis=-1)
-    return dX
+    n_samples = X.shape[0]          # sample in space
+    dX = np.gradient(X,dt,axis=-1)  # 1st derivative
+
+    phase = sparse.coo_matrix((np.ones(shape=n_samples),(X,dX)),
+                              shape=(n_samples,n_samples),dtype=np.int8)
+    
+    return phase
 
 def Rise_Decay_Time (X,rate=44100,low=0.1,high=0.9):
     """
@@ -91,7 +96,7 @@ def Rise_Decay_Time (X,rate=44100,low=0.1,high=0.9):
     above_high = np.where((y >= high))[0]     
     rise = np.abs(above_high[0] - above_low[0])     # rise in samples
     decay = np.abs(above_high[-1] - above_low[-1])  # decay in samples
-    return np.array([rise,decay])/rate
+    return np.array([rise,decay])/rate              # scale by sample rate
 
 def RMS_above (X,RMS,vals=[(0,10),(10,25),(25,50),(50,75),(75,90)]):
     """
@@ -113,6 +118,3 @@ def RMS_above (X,RMS,vals=[(0,10),(10,25),(25,50),(50,75),(75,90)]):
         counters = np.append(counters,len(x))   # add number of frames
     counters /= n_frames                # normalize by number of frames
     return counters                     # return list of counter
-
-
-

@@ -14,6 +14,7 @@ import sys
 import argparse
 
 import scipy.io.wavfile as sciowav
+from sklearn.model_selection import train_test_split
 
 import Plotting_Utilities as plot_utils
 
@@ -224,13 +225,16 @@ def Create_Fileobjs (filepath):
     --------------------------------
     Return list of initialize class instances
     """
-    frame = pd.read_csv(filepath,index_col=0)   # load in CSV
-    frame = frame.to_numpy()                    # make np arr
-    fileobjects = []                            # ist of all files
-    for row in frame:                           # each row
-        fileobjects.append(File_Object(row))    
-    del(frame)                          # del frame
-    return fileobjects                  # return list of insts
+    fileobjects = []                                # list of all files
+    for file in Read_Directory_Tree(filepath,ext='.csv'):   # collect .csv files
+        fullpath = os.path.join(filepath,file)      # make full path str
+        frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
+        frame = frame.to_numpy()                    # make np arr   
+        for row in frame:                           # each row
+            fileobjects.append(File_Object(row))    # add row to obj list
+        del(frame)                          # del frame  
+    fileobjects = np.random.permutation(fileobjects)# permute
+    return fileobjects                      # return list of insts
 
 def Directory_Map (keys,vals):
     """
@@ -246,36 +250,33 @@ def Directory_Map (keys,vals):
         map.update({key:val})       # update dict
     return map                      # return the map
 
-def Generate_Network (model,name,params,path):
-    """
-    Wrapper to Generate Tensorflow Sequenatial Model
-        Handels args, local save path, and general housekeeping
-    --------------------------------
-    model (func) : Callable model from this script indicating model type to use
-    name (str) : name to attatch to the model
-    params (misc) : Misc. params to pass to 'model' function type
-    path (str) : Local parent path to store model data
-    --------------------------------
-
-    """
-    name = name.upper()                     # make name uppercase if not
-    return None
-
 def Read_Directory_Tree (path,ext):
     """
     Read through directory and create instance of every file with matching extension
+        CURRENTLY UNUSED
     --------------------------------
     path (str) : file path to read data from
     ext (str) : extension for appropriate file types
     --------------------------------
     Return list of wavfile class instances
     """
-    file_objs = []                              # list to hold valid file
-    for roots,dirs,files in os.walk(path):      # walk through the tree
-        for file in files:                      # for each file
-            if file.endswith(ext):              # matching extension
-                file_objs.append(wavfile(file)) # add instance to list 
-    return file_objs                            # return list of instances
+    file_exts = []                         # list to hold valid files
+    for roots,dirs,files in os.walk(path):  # walk through the tree
+        for file in files:                  # for each file
+            if file.endswith(ext):          # matching extension
+                file_exts.append(file)      # add instance to list 
+    return file_exts                       # return list of instances
+
+def split_X (X,testsize=0.1):
+    """
+    Split array X into training and testing arrays
+    --------------------------------
+    X (iter) : Array-like to split
+    testsize (float) : indicates size of test data on iterval (0,1)
+    --------------------------------
+    Return training/testing arrays
+    """
+    return 
 
 def Validate_Directories (must_exist=[],must_create=[]):
     """
