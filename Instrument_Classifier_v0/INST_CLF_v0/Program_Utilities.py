@@ -228,7 +228,7 @@ def Create_Fileobjs (filepath,ext='.csv'):
     """
     fileobjects = []                        # list of all file objects
     file_exts = []                          # list to hold valid files
-    for roots,dirs,files in os.walk(filepathpath):  # walk through the tree
+    for roots,dirs,files in os.walk(filepath):  # walk through the tree
         for file in files:                  # for each file
             if file.endswith(ext):          # matching extension
                 file_exts.append(file)      # add instance to list 
@@ -265,7 +265,7 @@ def split_X (X,testsize=0.1):
     --------------------------------
     Return training/testing arrays
     """
-    return 
+    return train_test_split(X,test_size=testsize)
 
 def Validate_Directories (must_exist=[],must_create=[]):
     """

@@ -74,10 +74,12 @@ def Phase_Space (X,dt=1):
     """
     n_samples = X.shape[0]          # sample in space
     dX = np.gradient(X,dt,axis=-1)  # 1st derivative
-
-    phase = sparse.coo_matrix((np.ones(shape=n_samples),(X,dX)),
+    phase_sparse_matrices = []      # hold each sparse matrix
+    for x,dx in zip(X,dx):          # in each frame...
+        # Make sparse matrix
+        phase = sparse.coo_matrix((np.ones(shape=n_samples),(x,dx)),
                               shape=(n_samples,n_samples),dtype=np.int8)
-    
+    phase_sparse_matrices.append(phase)
     return phase
 
 def Rise_Decay_Time (X,rate=44100,low=0.1,high=0.9):

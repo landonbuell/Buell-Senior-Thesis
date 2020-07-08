@@ -82,7 +82,7 @@ def create_models (model_names,map,n_classes,overwrite=[True,True,True]):
     # Create Phase-Space Classifier Conv Network Model
     model = Neural_Network_Models.Convolutional_Neural_Network_2D(name=model_names[2],
             in_shape=Neural_Network_Models.phasespace_shape,n_classes=n_classes,filtersizes=[8,8],
-            kernelsizes=[3,3],poolsizes=[4,4],layerunits=[64])
+            kernelsizes=[6,6],poolsizes=[8,16],layerunits=[32])
     model.save(filepath=map[model_names[2]],overwrite=overwrite[2])   # Save instance locally
     del(model)                              # delete from RAM
 
@@ -103,7 +103,8 @@ def Act_on_Batch (FILE_BATCH,model_names,map,n_classes,mode='train'):
     assert mode in ['train','test','predict']
     if mode != 'predict':           # not predicting (there is answer-key)
         Y = ML_utils.target_array(FILE_BATCH,n_classes,matrix=True)
-        
-    # Extract Design Matrices for each Model
+
+    # Collect three design matrices for each classifier model
+    matricies = ML_utils.Design_Matrices(FILE_BATCH)  
 
     return None

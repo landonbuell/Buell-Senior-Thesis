@@ -39,7 +39,10 @@ def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
     Return array of sides (1 x n_pairs) for ESD in each pair
     """ 
     energy = np.array([])               # arr to hold energy
-    #Sxx = Sxx.toarray()                       # sparse into np arr
+    try:                                # attempt
+        Sxx = Sxx.toarray()             # sparse into np arr
+    except:                             # if failure...
+        pass                            # do nothing
     for i,pair in enumerate(bands):     # each pair of bounds
         idxs = np.where((f>=pair[0])&(f<=pair[1]))[0]   # find f-axis idxs
         E = integrate.trapz(Sxx[idxs],dx=rate,axis=-1)  # integrate

@@ -53,16 +53,18 @@ def Assemble_Features (FILE):
 
     # Feature vector for Spectrogram_Classifier
     Sxx_feats = prog_utils.Feature_Array(FILE.target)    # create instance
-    Sxx_feats = w_sample.set_features(Sxx)     
+    Sxx_feats = Sxx_feats.set_features(Sxx)     
     
     # Feature vector for Phase-Space Classifier
+    PSC_feat_set = []                   # set of feature objects
+    phase_matrices = time_feats.Phase_Space(frames)
     PSC_feats = prog_utils.Feature_Array(FILE.target)    # create instance
     """
     Need to finish Phase-Space Features design process
         Maybe used 3D convolution? May be worth looking into...
     """ 
     # return feature objects
-    return MLP_feats,Sxx_feats,PSC_feats
+    return MLP_feats,Sxx_feats,PSC_feat_set
 
 def Design_Matrices (FILE_OBJECTS):
     """
@@ -82,17 +84,19 @@ def Design_Matrices (FILE_OBJECTS):
         print('\t\t\t('+str(I)+'/'+str(n_samples)+')',FILE.filename)
         FILE = FILE.read_audio()            # read .WAV file
 
-        v,w,x = Assemble_Features(FILE)     # collect feature objects
-        del(FILE)                           # delete file instance
+        MLP_feats,Sxx_feats,PSC_feat_set = \
+            Assemble_Features(FILE)         # asssmble features from file
 
-        V = V.add_sample(v)   # add sample to phase design-matrix
-        W = W.add_sample(w)   # add sample to spectrogram design-matrix
-        X = X.add_sample(x)   # add sample to perceptron design-matrix
+        MLP_matrix.add_sample(MLP_feats)    # add features to MLP matrix
+        SXX_matrix.add_sample(Sxx_feats)    # add features to Sxx matrix
+        for PSC_feats in PSC_feats_set:     
+            PSC_matrix.add_sample(PSC_feats)# add features to PSC matrix
 
-    W = W.pad_2D(new_shape=Neural_Network_Models.spectrogram_shape)
-    X = X.shape_by_sample()
+    MLP_matrix = MLP_Matrix.shape_by_sample()
+    SXX_matrix = SXX_matrix.pad_2D(new_shape=Neural_Network_Models.spectrogram_shape)
+    PSC_matrix = PSC_matrix.pad_2D(newshape=Neural_Network_Models.phasespace_shape)
 
-    return [W,X]                # return design matrix objs
+    return [MLP_matrix,SXX_matrix,PSC_matrix]   # return design matrix objs
 
 def target_array (fileobjs,n_classes,matrix=True):
     """
