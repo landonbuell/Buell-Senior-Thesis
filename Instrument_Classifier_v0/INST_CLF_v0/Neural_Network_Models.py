@@ -106,7 +106,7 @@ def Convolutional_Neural_Network_2D (name,in_shape,n_classes,filtersizes=[16,16]
     print(model.summary())
     return model
 
-def Convolutional_Neural_Network_1D (name,in_shape,n_classes,filtersizes=[16,16],
+def Convolutional_Neural_Network_3D (name,in_shape,n_classes,filtersizes=[16,16],
         kernelsizes=[(4,),(4,)],poolsizes=[(2,),(2,)],layerunits=[128],
         metrics=['Precision','Recall']):
     """

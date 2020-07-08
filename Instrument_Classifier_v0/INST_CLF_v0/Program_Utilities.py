@@ -215,18 +215,24 @@ def Argument_Parser():
     args = parser.parse_args()
     return args.data_path,args.model_path
 
-def Create_Fileobjs (filepath):
+def Create_Fileobjs (filepath,ext='.csv'):
     """
     Load in locally stored target CSV as dataframe
     --------------------------------
     filepath (str) : Fill local directory path + filename
         Expected format:
             | Index | Fullpath  | Target Int    | Target Str |
+    ext (str) : extension for appropriate file types
     --------------------------------
     Return list of initialize class instances
     """
-    fileobjects = []                                # list of all files
-    for file in Read_Directory_Tree(filepath,ext='.csv'):   # collect .csv files
+    fileobjects = []                        # list of all file objects
+    file_exts = []                          # list to hold valid files
+    for roots,dirs,files in os.walk(filepathpath):  # walk through the tree
+        for file in files:                  # for each file
+            if file.endswith(ext):          # matching extension
+                file_exts.append(file)      # add instance to list 
+    for file in file_exts:                  # each valid file
         fullpath = os.path.join(filepath,file)      # make full path str
         frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
         frame = frame.to_numpy()                    # make np arr   
@@ -249,24 +255,7 @@ def Directory_Map (keys,vals):
     for key,val in zip(keys,vals):  # each key-val pair
         map.update({key:val})       # update dict
     return map                      # return the map
-
-def Read_Directory_Tree (path,ext):
-    """
-    Read through directory and create instance of every file with matching extension
-        CURRENTLY UNUSED
-    --------------------------------
-    path (str) : file path to read data from
-    ext (str) : extension for appropriate file types
-    --------------------------------
-    Return list of wavfile class instances
-    """
-    file_exts = []                         # list to hold valid files
-    for roots,dirs,files in os.walk(path):  # walk through the tree
-        for file in files:                  # for each file
-            if file.endswith(ext):          # matching extension
-                file_exts.append(file)      # add instance to list 
-    return file_exts                       # return list of instances
-
+    
 def split_X (X,testsize=0.1):
     """
     Split array X into training and testing arrays
