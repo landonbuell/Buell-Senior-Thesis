@@ -31,6 +31,9 @@
     <Compile Include="Component_Utilities.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Feature_Utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Timespace_Features.py">
       <SubType>Code</SubType>
     </Compile>

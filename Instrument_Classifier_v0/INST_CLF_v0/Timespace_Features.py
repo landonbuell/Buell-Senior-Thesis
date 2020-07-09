@@ -10,19 +10,14 @@ Instrument Classifier v0
 import numpy as np
 
 import scipy.fftpack as fftpack
-import scipy.integrate as integ
+import scipy.integrate as integrate
 import scipy.signal as signal
 import scipy.sparse as sparse
 
 import Math_Utilities as math_utils
-import Freqspace_Features as freq_feats
 import Plotting_Utilities as plot_utils
 
-"""
-Timespace_Features.py - "Timespace Features"
-    Contains Definitions to extract features and data from
-    time-domain representations of a signal
-"""
+
 
             #### TIME SERIES FEATURES ####
 

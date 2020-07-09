@@ -14,6 +14,7 @@ import tensorflow.keras as keras
 import time
 
 import Program_Utilities as prog_utils
+import Feature_Utilities as feat_utils
 import Timespace_Features as time_feats
 import Freqspace_Features as freq_feats
 import Plotting_Utilities as plot_utils
@@ -44,26 +45,7 @@ def Assemble_Features (FILE):
                 bands=[(0,32),(32,64),(64,128),(128,256),
             (256,512),(512,1024),(2048,4096),(4096,6000)])      # Energy in bands
       
-    # Feature vector for Perceptron model
-    MLP_feats = prog_utils.Feature_Array(FILE.target)    # create instance
-    MLP_feats = MLP_feats.add_features(time_feats.Rise_Decay_Time(FILE.waveform))
-    MLP_feats = MLP_feats.add_features(waveform_RMS)      
-    MLP_feats = MLP_feats.add_features(math_utils.Distribution_Features(frames_RMS))
-    MLP_feats = MLP_feats.add_features(ESDs)
 
-    # Feature vector for Spectrogram_Classifier
-    Sxx_feats = prog_utils.Feature_Array(FILE.target)    # create instance
-    Sxx_feats = Sxx_feats.set_features(Sxx)     
-    
-    # Feature vector for Phase-Space Classifier
-    PSC_feat_set = []                   # set of feature objects
-    phase_matrices = time_feats.Phase_Space(frames)
-    PSC_feats = prog_utils.Feature_Array(FILE.target)    # create instance
-    """
-    Need to finish Phase-Space Features design process
-        Maybe used 3D convolution? May be worth looking into...
-    """ 
-    # return feature objects
     return MLP_feats,Sxx_feats,PSC_feat_set
 
 def Design_Matrices (FILE_OBJECTS):
