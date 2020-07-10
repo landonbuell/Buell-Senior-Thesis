@@ -20,88 +20,122 @@ Neural_Network_Models.py - "Neural Network Models"
 """
 
             #### VARIABLE DECLARATIONS ####
-    
+
+model_names = ['JARVIS','VISION','ULTRON']                  # names for models
+
+perceptron_shape = 15
 sepectrogram_shape = (560,256,1)
-phasespace_shape = (4096,4096,1)
-n_features = 15
+phasespace_shape = (512,512,1)
 
-            #### FUNCTION DEFINITIONS ####
-
-def Multilayer_Perceptron (name,n_features,n_classes,layerunits=[40,40],
-                           metrics=['Precision','Recall']):
+class Neural_Network_Models ():
     """
-    Create Tensorflow Multilayer Perceptron Model
+    Object that creates and contains 
     --------------------------------
-    name (str) : Name to attatch to Network Model
-    n_features (int) : Number of features in data set (input neurons)
-    n_classes (int) : Number of classes in data set (output neurons)
-    layerunits (iter) : Array-like of ints where i-th int is 
-        number of units in i-th hidden layer
-    metrics (iter) : Array-like of strs contraining metrics to track
+
     --------------------------------
-    Retrun compiled, untrained Keras MLP Sequential Model Object
+    Return Instantiated Neural Network Model Object
     """
-    model = keras.models.Sequential(name=name) 
-    model.add(keras.layers.InputLayer(input_shape=n_features,name='Input_Layer'))
-    # Add hidden layers
-    for i,nodes in enumerate(layerunits):
-        model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
-    # ouput layer & compile
-    model.add(keras.layers.Dense(units=n_classes,activation='softmax',
-                                name='Output_Layer'))
-    model.compile(optimizer=keras.optimizers.Adam(),
-                  loss=keras.losses.CategoricalCrossentropy(),
-                  metrics=metrics)
-    # Summary & return
-    print(model.summary())
-    return model
+    def __init__(self,model_names,input_shapes,n_classes,):
+        """ Instantiate Class Object """
+        assert len(model_names) == 3
+        assert len(input_shapes) == 3
 
-def Convolutional_Neural_Network_2D (name,in_shape,n_classes,filtersizes=[16,16],
-        kernelsizes=[(3,3),(3,3)],poolsizes=[(2,2),(2,2)],layerunits=[128],
-        metrics=['Precision','Recall']):
-    """
-    Create Tensorflow Convolutional Neural Network Model
-    --------------------------------
-    name (str) : Name to attatch to Network Model
-    in_shape (int) : Iter of ints (n_rows x n_cols) of input images
-    n_classes (int) : Number of classes in data set (output neurons)
-    filtersizes (iter) : Array-like of ints indicate number of feature maps
-        in i-th conv layer-group
-    kernelsizes (iter) : Array-like of ints or tuples where i-th obj is
-        shape of 2D kernel in each layer group
-    poolsizes (iter) : Array-like of ints where i-th obj is
-        shape of 2D pool size in each layer group
-    layerunits (iter) : Array-like of ints where i-th int is 
-        number of units in i-th hidden layer
-    metrics (iter) : Array-like of strs contraining metrics to track
-    --------------------------------
-    Retrun compiled, untrained Keras CNN Sequential Model Object
-    """
-    assert len(kernelsizes) == len(poolsizes)   # same number of layer groups
-    assert len(kernelsizes) == len(filtersizes) # same number of layer groups
+        self.MLP_name = model_names[0]      # Perceptron
+        self.Sxx_name = model_names[1]      # Spectrogram
+        self.Psc_name = model_names[2]      # Phase-Space
 
-    model = keras.models.Sequential(name=name) 
-    model.add(keras.layers.InputLayer(input_shape=in_shape,name='Input'))
+        self.MLP_inputshape = input_shapes[0]   # perceptron input shape
+        self.Sxx_inputshape = input_shapes[1]   # Spectrogram input shape
+        self.Psc_inputshape = input_shapes[2]   # Phase-Space input shape
 
-    # Add Convolution & Pooling
-    for i,(kernel,pool) in enumerate(zip(kernelsizes,poolsizes)):
-        model.add(keras.layers.Conv2D(filters=filtersizes[i],kernel_size=kernel,strides=(1,1),
-            padding='same',activation='relu',name='C'+str(i+1)+'A'))            # Conv Layer A
-        model.add(keras.layers.Conv2D(filters=filtersizes[i],kernel_size=kernel,strides=(1,1),
-            padding='same',activation='relu',name='C'+str(i+1)+'B'))            # Conv Layer B
-        model.add(keras.layers.MaxPool2D(pool_size=pool,strides=(4,4),name='P'+str(i+1)))
+        self.n_classes = n_classes      # number of output classes
 
-    # Add Dense Layers
-    model.add(keras.layers.Flatten())       # flatten for dense layers
-    for i,nodes in enumerate(layerunits):   # each Dense Layer
-        model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
+    def __createmodels__(self):
+        """ Create & name Neural Network Models """
+        self.MLP_Classifier = self.Multilayer_Perceptron(name=self.MLP_name,
+                                n_features=self.MLP_inputshape)
+        self.SXX_Classifier = self.Conv2D_Network(name=self.Sxx_name,
+                                    inputshape=self.Sxx_inputshape)
+        self.PSC_Classifier = self.Conv2D_Network(name=self.Psc_name,
+                                    inputshape=self.Psc_inputshape)
 
-    # ouput layer & compile
-    model.add(keras.layers.Dense(units=n_classes,activation='softmax',
-                                name='Output'))
-    model.compile(optimizer=keras.optimizers.Adam(),
-                    loss=keras.losses.CategoricalCrossentropy(),
-                    metrics=metrics)
-    # Summary & return
-    print(model.summary())
-    return model
+    def __loadmodel__(self):
+        """ Load Local model Parameter into RAM """
+        pass
+
+    def __savemodel__(self):
+        """ Save model to Local Disk """
+        pass
+
+    def update_pathmap (self,map):
+        """ Update paths-dictionary to include paths to models """
+        pass
+
+    def Multilayer_Perceptron (self,name,n_features,layerunits=[40,40],
+                               metrics=['Precision','Recall']):
+        """
+        Create Mutlilayer Perceptron and set object as attribute
+        --------------------------------
+        name (str) : Name to attatch to Network Model
+        n_features (int) : Number of input features into Network
+        layerunits (iter) : List-like of ints. I-th element is nodes in I-th hiddenlayer
+        metrics (iter) : Array-like of strs contraining metrics to track
+        --------------------------------
+        Return Compiled, unfit model instance
+        """
+        model = keras.models.Sequential(name=name)      # create instance & attactch name
+        model.add(keras.layers.InputLayer(input_shape=n_features),name='Input') # input layer
+        
+        # Add Hidden Dense Layers
+        for i,nodes in enumerate(layerunits):           # Each hidden layer
+            model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
+
+        # Add Output Layer
+        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax'),name='Output')
+
+        # Compile, Summary & Return
+        model.compile(optimizier=keras.optimizers.Adam(learning_rate=0.01),
+                      loss=keras.losses.CategoricalCrossentropy(),
+                      metrics=metrics)
+        print(model.summary())
+        return model
+
+    def Conv2D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
+                        kernelstrides=[(1,1),(1,1)],poolsizes=[(2,2),(2,2)],
+                        layerunits=[128],metrics=['Precision','Recall']):
+        """
+        Create Tensorflow Convolutional Neural Network Model
+        --------------------------------
+        name (str) : Name to attatch to Network Model
+        inputshape (iter) : List-like of ints, indicating dimensionality of input figures
+        filtersizes (iter) : List-like of ints.
+            i-th element is number of filters in i-th layer group
+        kernelsizes (iter) : List-like of tups of ints.
+            i-th element is shape of kernel in i-th layer group
+         kernelsizes (iter) : List-like of tups of ints.
+            i-th element is shape of kernel in i-th layer group
+        layerunits (iter) : List-like of ints. I-th element is nodes in I-th hiddenlayer
+        metrics (iter) : Array-like of strs contraining metrics to track
+        --------------------------------
+        """
+        pass
+
+    def Conv3D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
+                        kernelstrides=[(1,1),(1,1)],poolsizes=[(2,2),(2,2)],
+                        layerunits=[128],metrics=['Precision','Recall']):
+        """
+        Create Tensorflow Convolutional Neural Network Model
+        --------------------------------
+        name (str) : Name to attatch to Network Model
+        inputshape (iter) : List-like of ints, indicating dimensionality of input figures
+        filtersizes (iter) : List-like of ints.
+            i-th element is number of filters in i-th layer group
+        kernelsizes (iter) : List-like of tups of ints.
+            i-th element is shape of kernel in i-th layer group
+         kernelsizes (iter) : List-like of tups of ints.
+            i-th element is shape of kernel in i-th layer group
+        layerunits (iter) : List-like of ints. I-th element is nodes in I-th hiddenlayer
+        metrics (iter) : Array-like of strs contraining metrics to track
+        --------------------------------
+        """
+        pass

@@ -28,7 +28,7 @@ Program_Utilities.py - "Program Utilities"
             #### VARIABLE DECLARATIONS ####
 
 
-            #### CLASS OBJECT DEFINITIONS ####
+            #### DATA STRUCTURE CLASSES ####
 
 class File_Object ():
     """
@@ -138,7 +138,6 @@ class Design_Matrix ():
         """ return design matrix as rect. np array """
         return self.X
 
-
 class Feature_Array ():
     """
     Create Feature vector object
@@ -187,75 +186,116 @@ class Feature_Array ():
         del(self.features)      # delete all features from array
         return self             # return new self
 
-            #### FUNCTION DEFINITIONS ####
+            #### PROGRAM PROCESSING CLASSES ####
 
-def Argument_Parser():
+class Program_Start:
     """
-    Create Argumnet Parser object or CLI
-    --------------------------------
-    *no args
-    --------------------------------
-    Return argument parser object
-    """
-    parser = argparse.ArgumentParser(prog='Instrument Classifier v0',
-                                     usage='Classify .WAV files by using pre-exisiting classifiered samples.',
-                                     description="\n\t CLI Help for Instrument Classifier Program:",
-                                     add_help=True)
-    #parser.add_argument('-data_path',type=str,
-    #                    help="Full Local Data Directory Path. Should have form \n\t \
-    #                            C:/Users/yourname/.../my_data")
-    parser.add_argument('data_path',type=str,
-                        help="Full Local Directory Path of file(s) containing \
-                                rows of of answer-key-like data; formatted: \
-                                | Index | Fullpath  | Target Int    | Target Str |")
-    parser.add_argument('model_path',type=str,
-                        help="Full Local Data Directory Path to store intermediate \
-                                file data. Reccommend using empty/new path.")
-    # Parse and return args
-    args = parser.parse_args()
-    return args.data_path,args.model_path
+    Handel all pre-processing for program
+        - Command line Arguments
+        - Setup Directory paths
 
-def Create_Fileobjs (filepath,ext='.csv'):
     """
-    Load in locally stored target CSV as dataframe
-    --------------------------------
-    filepath (str) : Fill local directory path + filename
-        Expected format:
-            | Index | Fullpath  | Target Int    | Target Str |
-    ext (str) : extension for appropriate file types
-    --------------------------------
-    Return list of initialize class instances
-    """
-    fileobjects = []                        # list of all file objects
-    file_exts = []                          # list to hold valid files
-    for roots,dirs,files in os.walk(filepath):  # walk through the tree
-        for file in files:                  # for each file
-            if file.endswith(ext):          # matching extension
-                file_exts.append(file)      # add instance to list 
-    for file in file_exts:                  # each valid file
-        fullpath = os.path.join(filepath,file)      # make full path str
-        frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
-        frame = frame.to_numpy()                    # make np arr   
-        for row in frame:                           # each row
-            fileobjects.append(File_Object(row))    # add row to obj list
-        del(frame)                          # del frame  
-    fileobjects = np.random.permutation(fileobjects)# permute
-    return fileobjects                      # return list of insts
 
-def Directory_Map (keys,vals):
+    def __init__(self,readpath=None,modelpath=None,mode=None):
+        """ Inititalize Program Attributes """
+        # If arguments given:
+        if readpath:
+            self.readpath = readpath
+        if modelpath: 
+            self.modelpath = modelpath
+        if mode:
+            self.program_mode = mode
+        else:                   # If ANY fail....
+            input_args = self.Argument_Parser()     # Parse Input args
+            self.readpath  = input_args[0]          # Data files kept here 
+            self.modelpath = input_args[1]          # store Network Model data
+            self.program_mode = input_args[2]       # set program mode
+        assert self.program_mode in ['train','train-test','predict']
+
+    def __startup__(self):
+        """ Run Program Start Up Processes """
+        self.files = self.Collect_CSVs()        # find CSV files
+        directory_map = Update_Map()
+
+        if self.program_mode in ['train','train-test']:
+            fileobjects = self.Create_Fileobjs()    #
+
+        return fileobjects,directory_map
+
+    def Argument_Parser():
+        """ Process Command Line Arguments """
+        parser = argparse.ArgumentParser(prog='Instrument Classifier v0',
+                                         usage='Classify .WAV files by using pre-exisiting classifiered samples.',
+                                         description="\n\t CLI Help for Instrument Classifier Program:",
+                                         add_help=True)
+
+        parser.add_argument('data_path',type=str,
+                            help="Full Local Directory Path of file(s) containing \
+                                    rows of of answer-key-like data; formatted: \
+                                    | Index | Fullpath  | Target Int    | Target Str |")
+        parser.add_argument('model_path',type=str,
+                            help="Full Local Data Directory Path to store intermediate \
+                                    file data. Reccommend using empty/new path.")
+        parser.add_argument('program_mode',type=str,
+                            help="Mode for program execution. Must be in \
+                                    ['train','train-test','predict']")
+        # Parse and return args
+        args = parser.parse_args()
+        return [args.data_path , args.model_path , args.program_mode]
+
+    def Collect_CSVs (self,exts='.csv'):
+        """ Walk through Local Path and File all files w/ extension """
+        csv_files = []
+        for roots,dirs,files in os.walk(self.readpath):  
+            for file in files:                  
+                if file.endswith(exts):       
+                    csv_files.append(file)
+        return csv_files
+
+    def Create_Fileobjs (self):
+        """ Create list of File Objects """
+        fileobjects = []                        # list of all file objects
+        for file in self.files:                 # each CSV file
+            fullpath = os.path.join(self.readpath,file) # make full path str
+            frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
+            frame = frame.to_numpy()                    # make np arr   
+            for row in frame:                           # each row
+                fileobjects.append(File_Object(row))    # add row to obj list
+            del(frame)                          # del frame  
+        fileobjects = np.random.permutation(fileobjects)# permute
+        return fileobjects                      # return list of insts
+
+    def Validate_Directories (must_exist=[],must_create=[]):
+        """
+        Check in passed directories are valid for program execution
+        --------------------------------
+        must (str) : Path and name of file containing rows of {name,target} pairs.
+        extr_path (str) :  Path to store intermediate file data
+        --------------------------------
+        Return True, Terminate if fail ir
+        """
+        for path in must_exist:                 # paths that must exisit
+            if os.path.isdir(path) == False:    # not not dir:
+                print("\n\tERROR! - Cannot Locate:\n\t\t",path)
+        for path in must_create:                # path that must create
+            os.makedirs(path,exist_ok=True)     # create path
+        return None
+
+def Update_Map (map={},keys=[],vals=[]):
     """
-    Create map (dictionary) of all local paths needed.
+    Update any map (dictionary) with keys and values
+        New dictionary is create dif one is not provided
     --------------------------------
+    map (dict) : Empty or existing dictionary object to populate
     keys (iter) : Iterable containing keys for dictionary (1 x M)
     vals (iter) : Iterable containing valus for dictionary (1 x M)
     --------------------------------
     """
     assert len(keys) == len(vals)   # must have same num pts
-    map = {}                        # empty dictionary
     for key,val in zip(keys,vals):  # each key-val pair
         map.update({key:val})       # update dict
     return map                      # return the map
-    
+
 def split_X (X,testsize=0.1):
     """
     Split array X into training and testing arrays
@@ -266,19 +306,3 @@ def split_X (X,testsize=0.1):
     Return training/testing arrays
     """
     return train_test_split(X,test_size=testsize)
-
-def Validate_Directories (must_exist=[],must_create=[]):
-    """
-    Check in passed directories are valid for program execution
-    --------------------------------
-    must (str) : Path and name of file containing rows of {name,target} pairs.
-    extr_path (str) :  Path to store intermediate file data
-    --------------------------------
-    Return True, Terminate if fail ir
-    """
-    for path in must_exist:                 # paths that must exisit
-        if os.path.isdir(path) == False:    # not not dir:
-            print("\n\tERROR! - Cannot Locate:\n\t\t",path)
-    for path in must_create:                # path that must create
-        os.makedirs(path,exist_ok=True)     # create path
-    return None
