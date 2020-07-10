@@ -45,15 +45,11 @@ class File_Object ():
         """ Initialize Object Instance """
         self.fullpath = datarow[0]      # set full file path
         try:
-            self.target_int = datarow[1]# target as int
-            self.target_str = datarow[2]# target as str
+            self.target = int(datarow[1])   # target as int           
         except:
-            self.target_int = None
-            self.target_str = None
+            self.target = None              # no label
         dir_tree = self.fullpath.split('/')
         self.filename = dir_tree[-1]    # filename
-        # assign target for design matrix   
-        self.target = self.target_int   # set target value
 
     def assign_target (self,target):
         """ Assign Target value to instance """
@@ -69,127 +65,6 @@ class File_Object ():
         self.n_samples = len(self.waveform)
         return self             # return self
 
-class Design_Matrix ():
-    """
-    Construct design-matrix-like object
-    --------------------------------
-    target (int) : Integer target value
-    ndim (int) : Number of dimensions in this array
-        2 - 2D matrix, used for MLP classifier 
-            (n_samples x n_features)
-        3 - 3D matrix, used for Spectrogram 
-            (n_samples x n_rows x n_cols)
-        4 - 4D matrix, used for phase-space
-            (n_samples x n_rows x r_cols x n_
-    --------------------------------
-    Return instantiated feature_array instance
-    """
-
-    def __init__(self,ndim=2):
-        """ Initialize Object Instance """
-        self.X = []         # empty data structure
-        self.shapes = []    # store explicit shapes of each samples
-        self.ndim = ndim    # number of dimensions in array
-        self.n_samples = 0  # no samples in design matrix
-
-    def set_targets (self,y):
-        """ Create 1D target array corresponding to sample class """
-        self.targets = np.array(y)  
-        return self
-
-    def add_sample (self,x):
-        """ Add features 'x' to design matrix, preserve shape """
-        self.X.append(x.__getfeatures__())      # add sample to design matrix
-        self.shapes.append(x.__getshape__())    # store shape       
-        self.n_samples += 1                     # current number of samples
-        return self
- 
-    def pad_2D (self,new_shape,offsets=(0,0)):
-        """ Zero-Pad 2D samples to meet shape """
-        new_X = np.zeros(shape=(self.n_samples,new_shape[0],new_shape[1]))   # create new design matrix
-        for i in range(self.n_samples):     # iterate by sample
-            dx,dy = offsets[0],offsets[1]   # align upper left     
-            try: 
-                new_X[i][dx:dx+self.X[i].shape[0],dy:dy+self.X[i].shape[1]] += self.X[i] 
-            except:
-                slice = self.X[i][:new_shape[0],:new_shape[1]]
-                shape_diff = np.array(new_shape) - slice.shape      # needed padding
-                slice = np.pad(slice,[[0,shape_diff[0]],[0,shape_diff[1]]])
-                new_X[i] += slice
-            self.shapes[i] = new_shape      # reset shape
-        self.X = new_X              # overwrite
-        self.X = self.X.reshape(self.n_samples,new_shape[0],new_shape[1],1)
-        return self                         # return new instance
-
-    def shape_by_sample (self,shape=None):
-        """ Reshape design matrix by number of samples """
-        if shape:
-            self.X = self.X.reshape(shape)
-        else:
-            self.X = np.array(self.X).reshape(self.n_samples,-1)
-        return self
-
-    def scale_X (self,scaler):
-        """ Apply standard preprocessing scaling to self.X """
-        assert type(self.X) == np.ndarray
-        return self
-
-    def get_dims (self):
-        """ get number of dimesnesion in this design matrix """
-        return self.ndim
-           
-    def __getmatrix__(self):
-        """ return design matrix as rect. np array """
-        return self.X
-
-class Feature_Array ():
-    """
-    Create Feature vector object
-    --------------------------------
-    target (int) : Integer target value
-    --------------------------------
-    Return instantiated feature_array instance
-    """
-
-    def __init__(self,target):
-        """ Initialize Object Instance """
-        self.target = target            # set target
-        self.features = np.array([])    # arr to hold features
-
-    def add_features (self,x,axis=None):
-        """ Add object x to feature vector attribute"""
-        self.features = np.append(self.features,x,axis=axis)
-        return self             # return self
-
-    def set_features (self,x):
-        """ Clear feature array, reset to object 'x' - preserve shape """
-        self.features = x
-        return self
-
-    def reshape_arr (self,new_shape=(1,-1)):
-        """ Reshape feature array to 'new_shape' """
-        self.features = self.features.reshape(new_shape)
-        return self
-
-    def set_attributes (self,names=[],attrbs=[]):
-        """ Set additional attributes """
-        for i,j in zip(names,attrbs):
-            setattr(self,str(i),j)  
-        return self
-
-    def __getshape__(self):
-        """ Return shape of feature attrb as tuple """
-        return self.features.shape
-
-    def __getfeatures__ (self):
-        """ Assemble all features into single vector """
-        return self.features    # return feature vector
-
-    def __delfeatures__ (self):
-        """ Delete all features (Save RAM) """
-        del(self.features)      # delete all features from array
-        return self             # return new self
-
             #### PROGRAM PROCESSING CLASSES ####
 
 class Program_Start:
@@ -200,7 +75,7 @@ class Program_Start:
 
     """
 
-    def __init__(self,readpath=None,modelpath=None,mode=None):
+    def __init__(self,readpath=None,modelpath=None,mode=None,newmodels=None):
         """ Inititalize Program Attributes """
         # If arguments given:
         if readpath:
@@ -209,22 +84,34 @@ class Program_Start:
             self.modelpath = modelpath
         if mode:
             self.program_mode = mode
+        if newmodels:
+            self.new_models = newmodels
         else:                   # If ANY fail....
             input_args = self.Argument_Parser()     # Parse Input args
             self.readpath  = input_args[0]          # Data files kept here 
             self.modelpath = input_args[1]          # store Network Model data
             self.program_mode = input_args[2]       # set program mode
+            self.new_models = input_args[3]         # create new models?
         assert self.program_mode in ['train','train-test','predict']
+
+        if self.program_mode == 'predict' and self.new_models == True:
+            print("\n\tERROR! -  Cannot run predictions on New, Untrained Models!")
+            sys.exit()
 
     def __startup__(self):
         """ Run Program Start Up Processes """
         self.files = self.Collect_CSVs()        # find CSV files
-        directory_map = Update_Map()
+        fileobjects = self.Create_Fileobjs()    # file all files
+        self.n_files = len(fileobjects)
+        print("\tFound",self.n_files,"files")
 
         if self.program_mode in ['train','train-test']:
-            fileobjects = self.Create_Fileobjs()    #
-
-        return fileobjects,directory_map
+            self.n_classes = self.get_nclasses()
+            print("\tFound",self.n_classes,"classes")
+        else:
+            n_classes = None
+            
+        return fileobjects,n_classes
 
     def Argument_Parser():
         """ Process Command Line Arguments """
@@ -243,9 +130,12 @@ class Program_Start:
         parser.add_argument('program_mode',type=str,
                             help="Mode for program execution. Must be in \
                                     ['train','train-test','predict']")
+        parser.add_argument('new_models',type=bool,
+                            help="If True, Networks sharing the same name are overwritten, \
+                                and new models are created in place")
         # Parse and return args
         args = parser.parse_args()
-        return [args.data_path , args.model_path , args.program_mode]
+        return [args.data_path,args.model_path,args.program_mode,args.new_models]
 
     def Collect_CSVs (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
@@ -268,6 +158,12 @@ class Program_Start:
             del(frame)                          # del frame  
         fileobjects = np.random.permutation(fileobjects)# permute
         return fileobjects                      # return list of insts
+
+    def get_nclasses (self):
+        """ Find Number of classes in target vector """
+        y = [x.target for x in self.FILEOBJS]   # collect target from each file
+        n_classes = np.amax(y)          # maximum value is number of classes
+        return n_classes + 1            # account for zero-index
 
     def Validate_Directories (must_exist=[],must_create=[]):
         """
@@ -299,14 +195,3 @@ def Update_Map (map={},keys=[],vals=[]):
     for key,val in zip(keys,vals):  # each key-val pair
         map.update({key:val})       # update dict
     return map                      # return the map
-
-def split_X (X,testsize=0.1):
-    """
-    Split array X into training and testing arrays
-    --------------------------------
-    X (iter) : Array-like to split
-    testsize (float) : indicates size of test data on iterval (0,1)
-    --------------------------------
-    Return training/testing arrays
-    """
-    return train_test_split(X,test_size=testsize)

@@ -24,7 +24,7 @@ Component_Utilities.py - 'Component Utilities'
 
             #### FUNCTION DEFINITIONS ####  
 
-class Base_Program_Mode :
+class Program_Mode :
     """
     Program Modes Inherit From here
     """
@@ -33,12 +33,17 @@ class Base_Program_Mode :
         self.FILEOBJS = FILEOBJS
         self.n_files = len(self.FILEOBJS)
 
-    def __collectfeatures__(self,FILES=None):
+    def collectfeatures (self,FILES=None):
         """ Collect Features from all given File Objects """
 
-class TrainTest_Mode (Base_Program_Mode):
+        return [X1,X2,X3]
+
+
+
+
+class Train_Mode (Program_Mode):
     """
-    Run Program in Train-Test Mode
+    Run Program in Train Mode
         Inherits from 'Base_Program_Mode'
     """
     def __init__(self,FILEOBJS):
@@ -50,3 +55,16 @@ class TrainTest_Mode (Base_Program_Mode):
         """ Split objects into training.testing subsets """
         pass
 
+    def __call__():
+        """ Call this Instance to Execute Training and Testing """
+
+
+class Test_Mode (Program_Mode):
+    """
+    Run Program in Test Mode
+        Inherits from 'Base_Program_Mode'
+    """
+    def __init__(self, FILEOBJS,labels=False):
+        super().__init__(FILEOBJS)
+        self.labels = labels        # labels for the trainign set?
+       

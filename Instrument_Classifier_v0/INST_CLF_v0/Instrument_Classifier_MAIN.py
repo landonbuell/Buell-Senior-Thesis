@@ -12,6 +12,7 @@ import sys
 
 import Mode_Utilities as mode_utils
 import System_Utilities as sys_utils
+import Neural_Network_Models
 
             #### MAIN EXECUTABLE ####
 
@@ -22,12 +23,16 @@ if __name__ == '__main__':
     model = os.path.join(parent,'Model-Data')
 
     # PRE-PROCESSING FOR PROGRAM
-    Program_Initializer = sys_utils.Program_Start(read,model,mode='train-test')
+    Program_Initializer = sys_utils.Program_Start(read,model,'train-test',True)
     MODE = Program_Initializer.program_mode
-    FILEOBJECTS,PATH_MAP = Program_Initializer.__startup__()
+    FILEOBJECTS,N_classes = Program_Initializer.__startup__()
+
+    # SETUP NEURAL NETWORK MODELS
+    Neural_Networks = Neural_Network_Models.Network_Models(\)
 
     if mode == 'train-test':
-        Program_Mode = mode_utils.TrainTest_Mode(FILEOBJECTS)
+        
+        Program_Mode = mode_utils.Train_Mode(FILEOBJECTS)
 
     else:
         print("\n\tError! - Unsupported mode type")

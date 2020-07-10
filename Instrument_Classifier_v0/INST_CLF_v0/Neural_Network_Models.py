@@ -24,52 +24,67 @@ Neural_Network_Models.py - "Neural Network Models"
 model_names = ['JARVIS','VISION','ULTRON']                  # names for models
 
 perceptron_shape = 15
-sepectrogram_shape = (560,256,1)
+spectrogram_shape = (560,256,1)
 phasespace_shape = (512,512,1)
 
-class Neural_Network_Models ():
+input_shapes = [perceptron_shape,spectrogram_shape,phasespace_shape]
+
+class Network_Models ():
     """
     Object that creates and contains Neural Network Model objects
     --------------------------------
+    model_names (iter) : list-like of 3 strings indicating names for models
+    input_shapes (iter) : list-like of 3 tuples indicating input shape of modles
+    n_classes (int) : number of discrete classes for models
+    path (str) : Local parent path object where models are stored
 
     --------------------------------
     Return Instantiated Neural Network Model Object
     """
-    def __init__(self,model_names,input_shapes,n_classes,):
+    def __init__(self,model_names,n_classes,path,new=True):
         """ Instantiate Class Object """
         assert len(model_names) == 3
         assert len(input_shapes) == 3
 
         self.MLP_name = model_names[0]      # Perceptron
-        self.Sxx_name = model_names[1]      # Spectrogram
-        self.Psc_name = model_names[2]      # Phase-Space
+        self.SXX_name = model_names[1]      # Spectrogram
+        self.PSC_name = model_names[2]      # Phase-Space
 
-        self.MLP_inputshape = input_shapes[0]   # perceptron input shape
-        self.Sxx_inputshape = input_shapes[1]   # Spectrogram input shape
-        self.Psc_inputshape = input_shapes[2]   # Phase-Space input shape
+        self.MLP_savepath = os.path.join(path,self.MLP_name)    # where to save model
+        self.SXX_savepath = os.path.join(path,self.SXX_name)    # where to save model
+        self.PSC_savepath = os.path.join(path,self.PSC_name)    # where to save model
 
         self.n_classes = n_classes      # number of output classes
+        self.new_models = new           # create new models
+
+        if self.new_models == True:     # create new networks?
+            self.__createmodels__()     # create them
+            self.__savemodels__()       # save them locally, and erase from ram
 
     def __createmodels__(self):
         """ Create & name Neural Network Models """
         self.MLP_Classifier = self.Multilayer_Perceptron(name=self.MLP_name,
-                                n_features=self.MLP_inputshape)
-        self.SXX_Classifier = self.Conv2D_Network(name=self.Sxx_name,
-                                    inputshape=self.Sxx_inputshape)
-        self.PSC_Classifier = self.Conv2D_Network(name=self.Psc_name,
-                                    inputshape=self.Psc_inputshape)
+                                n_features=input_shapes[0])
+        self.SXX_Classifier = self.Conv2D_Network(name=self.SXX_name,
+                                    inputshape=input_shapes[1])
+        self.PSC_Classifier = self.Conv2D_Network(name=self.PSC_name,
+                                    inputshape=input_shapes[2])
+        # NOTE: 'input_shape' (list) is a global variable in this namespace
+        return self
 
-    def __loadmodel__(self,models=[]):
+    def __loadmodel__(self,model):
         """ Load Local model Parameter into RAM """
-        pass
+        return model
 
-    def __savemodel__(self,models=[]):
+    def __savemodel__(self):
         """ Save model to Local Disk """
-        pass
+        self.MLP_Classifier.save(self.path)
+        retuen self
 
     def update_pathmap (self,map):
         """ Update paths-dictionary to include paths to models """
-        pass
+        map.update({str(self.MLP_name),self,})
+        return map
 
     def Multilayer_Perceptron (self,name,n_features,layerunits=[40,40],
                                metrics=['Precision','Recall']):
