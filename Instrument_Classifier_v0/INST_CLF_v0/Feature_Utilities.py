@@ -214,6 +214,8 @@ class Frequency_Series_Features (Base_Features):
         Z = np.transpose(Z)/ncols
         return Z
 
+
+
     def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
         """
         Compute Energy Spectral density Distribution 

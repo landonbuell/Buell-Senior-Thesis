@@ -106,8 +106,8 @@ class Program_Start:
         print("\tFound",self.n_files,"files")
 
         if self.program_mode in ['train','train-test']:
-            self.n_classes = self.get_nclasses()
-            print("\tFound",self.n_classes,"classes")
+            n_classes = self.get_nclasses(fileobjects)
+            print("\tFound",n_classes,"classes")
         else:
             n_classes = None
             
@@ -159,11 +159,14 @@ class Program_Start:
         fileobjects = np.random.permutation(fileobjects)# permute
         return fileobjects                      # return list of insts
 
-    def get_nclasses (self):
+    def get_nclasses (self,fileobjects):
         """ Find Number of classes in target vector """
-        y = [x.target for x in self.FILEOBJS]   # collect target from each file
-        n_classes = np.amax(y)          # maximum value is number of classes
-        return n_classes + 1            # account for zero-index
+        y = [x.target for x in fileobjects]   # collect target from each file
+        try:                        # Attempt
+            n_classes = np.amax(y)  # maximum value is number of classes
+            return n_classes + 1    # account for zero-index
+        except Exception:           # failure?
+            return None             # no classes?
 
     def Validate_Directories (must_exist=[],must_create=[]):
         """

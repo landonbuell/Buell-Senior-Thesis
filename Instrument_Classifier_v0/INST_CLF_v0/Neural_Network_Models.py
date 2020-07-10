@@ -25,7 +25,7 @@ model_names = ['JARVIS','VISION','ULTRON']                  # names for models
 
 perceptron_shape = 15
 spectrogram_shape = (560,256,1)
-phasespace_shape = (512,512,1)
+phasespace_shape = (2,4096,1)
 
 input_shapes = [perceptron_shape,spectrogram_shape,phasespace_shape]
 
@@ -58,28 +58,44 @@ class Network_Models ():
         self.new_models = new           # create new models
 
         if self.new_models == True:     # create new networks?
-            self.__createmodels__()     # create them
-            self.__savemodels__()       # save them locally, and erase from ram
+            networks = self.__createmodels__()  # create 3 models
+            for network in networks:            # for each model
+                self.__savemodel__(network)     # save them locally, and erase from ram
+
+        else: 
+            pass
 
     def __createmodels__(self):
         """ Create & name Neural Network Models """
-        self.MLP_Classifier = self.Multilayer_Perceptron(name=self.MLP_name,
-                                n_features=input_shapes[0])
-        self.SXX_Classifier = self.Conv2D_Network(name=self.SXX_name,
-                                    inputshape=input_shapes[1])
-        self.PSC_Classifier = self.Conv2D_Network(name=self.PSC_name,
-                                    inputshape=input_shapes[2])
-        # NOTE: 'input_shape' (list) is a global variable in this namespace
-        return self
+        # Create multilayer Perceptron, and set local savepath
+        MLP_Classifier = self.Multilayer_Perceptron(self.MLP_name,input_shapes[0])
+        setattr(MLP_Classifier,'savepath',self.MLP_savepath)
 
-    def __loadmodel__(self,model):
+        # Create Spectrogram 2D Conv Network and set local save path
+        SXX_Classifier = self.Conv2D_Network(self.SXX_name,input_shapes[1])
+        setattr(SXX_Classifier,'savepath',self.SXX_savepath)
+
+        # Create Phase Space 1D Conv Network and set loca save path
+        PSC_Classifier = self.Conv1D_Network(self.PSC_name,input_shapes[2])
+        setattr(PSC_Classifier,'savepath',self.PSC_savepath)
+
+        # NOTE: 'input_shape' (list) is a global variable in this namespace
+        return [MLP_Classifier,SXX_Classifier,PSC_Classifier]
+
+    def __getlocalpaths__(self):
+        """ Get local paths where network models are stored """
+        return [self.MLP_savepath,SXX_savepath,PSC_savepath]
+
+    def __loadmodel__(self):
         """ Load Local model Parameter into RAM """
         return model
 
-    def __savemodel__(self):
+    def __savemodel__(self,model):
         """ Save model to Local Disk """
-        self.MLP_Classifier.save(self.path)
-        retuen self
+        assert type(model) == keras.models.Sequential
+        model.save(model.savepath,overwrite=True)   # save locally
+        del(model)                                  # delete from RAM
+        return self                                 # return itself!
 
     def update_pathmap (self,map):
         """ Update paths-dictionary to include paths to models """
@@ -99,17 +115,16 @@ class Network_Models ():
         Return Compiled, unfit model instance
         """
         model = keras.models.Sequential(name=name)      # create instance & attactch name
-        model.add(keras.layers.InputLayer(input_shape=n_features),name='Input') # input layer
+        model.add(keras.layers.InputLayer(input_shape=n_features,name='Input')) # input layer
         
         # Add Hidden Dense Layers
         for i,nodes in enumerate(layerunits):           # Each hidden layer
             model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
-
         # Add Output Layer
-        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax'),name='Output')
+        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
 
         # Compile, Summary & Return
-        model.compile(optimizier=keras.optimizers.Adam(learning_rate=0.01),
+        model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
                       loss=keras.losses.CategoricalCrossentropy(),
                       metrics=metrics)
         print(model.summary())
@@ -119,7 +134,7 @@ class Network_Models ():
                         kernelsizes=[(3,3),(3,3)],kernelstrides=[(1,1),(1,1)],
                         poolsizes=[(2,2),(2,2)],layerunits=[128],metrics=['Precision','Recall']):
         """
-        Create Tensorflow Convolutional Neural Network Model
+        Create Tensorflow 2D Convolutional Neural Network Model
         --------------------------------
         name (str) : Name to attatch to Network Model
         inputshape (iter) : List-like of ints, indicating dimensionality of input figures
@@ -134,36 +149,35 @@ class Network_Models ():
         --------------------------------
         """
         model = keras.models.Sequential(name=name)      # create instance & attactch name
-        model.add(keras.layers.InputLayer(input_shape=inputshape),name='Input') # input layer
+        model.add(keras.layers.InputLayer(input_shape=inputshape,name='Input')) # input layer
 
         # Convolution Layer Groups
         n_layergroups = len(filtersizes)
-        for i in range (len(N_layer_groups)):       # each layer group
+        for i in range (n_layergroups):       # each layer group
             model.add(keras.layers.Conv2D(filtersizes[i][0],kernelsizes[i],kernelstrides[i],
                                          activation='relu',name='C'+str(i+1)+'A'))
             model.add(keras.layers.Conv2D(filtersizes[i][1],kernelsizes[i],kernelstrides[i],
                                          activation='relu',name='C'+str(i+1)+'B'))
-            model.add(keras.layers.MaxPool2D(poolsizes[i],name='P'+str(I+1)))
+            model.add(keras.layers.MaxPool2D(poolsizes[i],name='P'+str(i+1)))
 
         # Prepare Dense layers
         model.add(keras.layers.Flatten(name='F1'))
         for i,nodes in enumerate(layerunits):       # each dense layer
             model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
-
         model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
         
         # Compile, Summary & Return
-        model.compile(optimizier=keras.optimizers.Adam(learning_rate=0.01),
+        model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
                       loss=keras.losses.CategoricalCrossentropy(),
                       metrics=metrics)
         print(model.summary())
         return model 
 
-    def Conv3D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
+    def Conv1D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
                         kernelstrides=[(1,1),(1,1)],poolsizes=[(2,2),(2,2)],
                         layerunits=[128],metrics=['Precision','Recall']):
         """
-        Create Tensorflow Convolutional Neural Network Model
+        Create Tensorflow 1D Convolutional Neural Network Model
         --------------------------------
         name (str) : Name to attatch to Network Model
         inputshape (iter) : List-like of ints, indicating dimensionality of input figures
@@ -177,4 +191,20 @@ class Network_Models ():
         metrics (iter) : Array-like of strs contraining metrics to track
         --------------------------------
         """
-        pass
+        model = keras.models.Sequential(name=name)
+        model.add(keras.layers.InputLayer(input_shape=inputshape,name='Input'))
+
+        # Need to add 1D Convolution here!
+
+        # Prepare Dense Layers
+        model.add(keras.layers.Flatten(name='F1'))
+        for i,nodes in enumerate(layerunits):       # each dense layer
+            model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
+        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
+        
+        # Compile, Summary & Return
+        model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
+                      loss=keras.losses.CategoricalCrossentropy(),
+                      metrics=metrics)
+        print(model.summary())
+        return model
