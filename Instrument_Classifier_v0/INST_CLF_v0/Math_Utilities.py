@@ -18,7 +18,7 @@ Math_Utilities.py - "Math Utilities"
 
             #### FUNCTION DEFINITIONS ####
 
-def Distribution_Features (X):
+def Distribution_Data (X):
     """
     Analyze properties of an array of FP values
     --------------------------------

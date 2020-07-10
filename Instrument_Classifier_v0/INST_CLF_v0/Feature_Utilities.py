@@ -26,6 +26,12 @@ Feature_Utilities.py - "Feature Extraction Utils"
         #### CLASS DEFINITIONS ####
 
 class Base_Features:
+    """
+    Basic Feature Extraction Class
+        'Time_Series_Features' and 'Frequency_Series_Features' inherit from here
+    Assigns waveform attribute, sample rate, number of samples,
+    divides into time-frames
+    """
 
     def __init__(self,waveform,npts=4096,overlap=0.75):
         """ Instantiate Class Object """
@@ -70,15 +76,10 @@ class Time_Series_Features (Base_Features):
     """
 
     def __init__(self,waveform,npts=4096,overlap=0.75):
-        """
-        Instantiate Class Object 
-        --------------------------------
-        --------------------------------
-        Return None
-        """
-        super()
+        """ Initialize Class Object Instance """
+        super.__init__(waveform=waveform,
+                       npts=npts,overlap=overlap)
 
-    
     def Phase_Space (self,dt=1):
         """
         Construct phase space representation of signal X
@@ -143,11 +144,17 @@ class Frequency_Series_Features (Base_Features):
     Return Instantiated Frequency Series Feature Object
     """
 
-    def __init__():
+    def __init__(self,waveform,npts=4096,overlap=0.75):
         """ Instantiated Class Object """
-        pass
+        super.__init__(waveform=waveform,
+                       npts=npts,overlap=overlap)
 
-    def Frequency_Axis (npts=4096,rate=44100,low=0,high=6000):
+        # Time Axis, Frequency Axis, Spectrogram
+        self.f,self.f_pts = self.Frequency_Axis(low=0,high=6000)
+        self.t = np.arange(0,self.npts,1)          
+        self.Sxx = self.Power_Spectrum(self.f_pts)
+
+    def Frequency_Axis (self,low=0,high=6000):
         """
         Compute Frequenxy Axis
         --------------------------------
@@ -159,7 +166,7 @@ class Frequency_Series_Features (Base_Features):
         Return frequency axis array between bounds, f
             and appropriate index, pts
         """
-        f_space = fftpack.fftfreq(n=npts,d=1/rate)     # comput freq space
+        f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)# comput freq space
         pts = np.where((f_space>=low)&(f_space<=high))[0]   # get slices
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
@@ -189,7 +196,7 @@ class Frequency_Series_Features (Base_Features):
         """
         mel = 1125 * np.log(1 + f/700)  # convert Hz to Mels
 
-    def Power_Spectrum (x,pts=[]):
+    def Power_Spectrum (self,pts=[]):
         """
         Compute Discrete Fourier Transform of arrays in X
         --------------------------------
@@ -200,11 +207,12 @@ class Frequency_Series_Features (Base_Features):
         Return Z, array
         """
         ncols = x.shape[1]  # number of pts in DFT
-        z = fftpack.fft(x,axis=-1)  
-        Z = np.abs(z)**2    # compute power:
-        if len(pts) != 0:   # selection of points:
-            Z = Z[:,pts]    # subset of points
-        return Z/ncols      # return DFT matrix
+        Z = fftpack.fft(self.frames,axis=-1)  
+        Z = np.abs(Z)**2    # compute power:
+        if pts:             # selection of pts
+            Z = Z[:,pts]    # slice
+        Z = np.transpose(Z)/ncols
+        return Z
 
     def Energy_Spectral_Density (f,t,Sxx,rate=44100,bands=[(0,6000)]):
         """
@@ -252,4 +260,3 @@ class Frequency_Series_Features (Base_Features):
         Sxx = Sxx.reshape(Sxx_shape)    # Reshape
         Sxx = sparse.coo_matrix(Sxx,shape=Sxx_shape,dtype=np.float32)
         return f,t,Sxx
-

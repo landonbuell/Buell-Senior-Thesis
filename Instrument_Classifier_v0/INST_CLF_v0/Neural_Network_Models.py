@@ -29,7 +29,7 @@ phasespace_shape = (512,512,1)
 
 class Neural_Network_Models ():
     """
-    Object that creates and contains 
+    Object that creates and contains Neural Network Model objects
     --------------------------------
 
     --------------------------------
@@ -59,11 +59,11 @@ class Neural_Network_Models ():
         self.PSC_Classifier = self.Conv2D_Network(name=self.Psc_name,
                                     inputshape=self.Psc_inputshape)
 
-    def __loadmodel__(self):
+    def __loadmodel__(self,models=[]):
         """ Load Local model Parameter into RAM """
         pass
 
-    def __savemodel__(self):
+    def __savemodel__(self,models=[]):
         """ Save model to Local Disk """
         pass
 
@@ -100,9 +100,9 @@ class Neural_Network_Models ():
         print(model.summary())
         return model
 
-    def Conv2D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
-                        kernelstrides=[(1,1),(1,1)],poolsizes=[(2,2),(2,2)],
-                        layerunits=[128],metrics=['Precision','Recall']):
+    def Conv2D_Network (self,name,inputshape,filtersizes=[(32,32),(32,32)],
+                        kernelsizes=[(3,3),(3,3)],kernelstrides=[(1,1),(1,1)],
+                        poolsizes=[(2,2),(2,2)],layerunits=[128],metrics=['Precision','Recall']):
         """
         Create Tensorflow Convolutional Neural Network Model
         --------------------------------
@@ -118,7 +118,31 @@ class Neural_Network_Models ():
         metrics (iter) : Array-like of strs contraining metrics to track
         --------------------------------
         """
-        pass
+        model = keras.models.Sequential(name=name)      # create instance & attactch name
+        model.add(keras.layers.InputLayer(input_shape=inputshape),name='Input') # input layer
+
+        # Convolution Layer Groups
+        n_layergroups = len(filtersizes)
+        for i in range (len(N_layer_groups)):       # each layer group
+            model.add(keras.layers.Conv2D(filtersizes[i][0],kernelsizes[i],kernelstrides[i],
+                                         activation='relu',name='C'+str(i+1)+'A'))
+            model.add(keras.layers.Conv2D(filtersizes[i][1],kernelsizes[i],kernelstrides[i],
+                                         activation='relu',name='C'+str(i+1)+'B'))
+            model.add(keras.layers.MaxPool2D(poolsizes[i],name='P'+str(I+1)))
+
+        # Prepare Dense layers
+        model.add(keras.layers.Flatten(name='F1'))
+        for i,nodes in enumerate(layerunits):       # each dense layer
+            model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
+
+        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
+        
+        # Compile, Summary & Return
+        model.compile(optimizier=keras.optimizers.Adam(learning_rate=0.01),
+                      loss=keras.losses.CategoricalCrossentropy(),
+                      metrics=metrics)
+        print(model.summary())
+        return model 
 
     def Conv3D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
                         kernelstrides=[(1,1),(1,1)],poolsizes=[(2,2),(2,2)],

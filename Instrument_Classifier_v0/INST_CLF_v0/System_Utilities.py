@@ -44,8 +44,12 @@ class File_Object ():
     def __init__(self,datarow):
         """ Initialize Object Instance """
         self.fullpath = datarow[0]      # set full file path
-        self.target_int = datarow[1]    # target as int  
-        self.target_str = datarow[2]    # target as str
+        try:
+            self.target_int = datarow[1]# target as int
+            self.target_str = datarow[2]# target as str
+        except:
+            self.target_int = None
+            self.target_str = None
         dir_tree = self.fullpath.split('/')
         self.filename = dir_tree[-1]    # filename
         # assign target for design matrix   

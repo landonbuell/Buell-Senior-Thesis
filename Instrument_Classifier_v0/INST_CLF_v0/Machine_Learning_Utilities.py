@@ -13,72 +13,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow.keras as keras
 import time
 
-import Program_Utilities as prog_utils
+import System_Utilities as sys_utils
 import Feature_Utilities as feat_utils
-import Timespace_Features as time_feats
-import Freqspace_Features as freq_feats
 import Plotting_Utilities as plot_utils
 import Math_Utilities as math_utils
 import Neural_Network_Models
 
-            #### FUNCTION DEFINITIONS ####
-
-def Assemble_Features (FILE):
-    """
-    Create & Collect all classification features
-    --------------------------------
-    FILE (inst) : file_object instance with file.waveform attribute
-    --------------------------------
-    Return: v_sample 3D array of features for phase-CNN
-            w_sample 2D array of features for spect-CNN
-            x_sample 1D array of features for class-MLP
-    """   
-
-    # Features Pre-processing
-    N = int(2**12)                                              # length of audio frame
-    frames = time_feats.Frames_fixed_length(FILE.waveform,npts=N)  # create frames    
-    waveform_RMS = math_utils.RMS_Energy(FILE.waveform)         # waveform RMS
-    frames_RMS = math_utils.RMS_Energy(frames)                  # frames RMS
-    f,pts = freq_feats.Frequency_Axis(rate=FILE.rate,npts=N)    # frequency axis
-    f,t,Sxx = freq_feats.Spectrogram(frames,f,pts)              # build spectrogram
-    ESDs = freq_feats.Energy_Spectral_Density(f,t,Sxx,
-                bands=[(0,32),(32,64),(64,128),(128,256),
-            (256,512),(512,1024),(2048,4096),(4096,6000)])      # Energy in bands
-      
-
-    return MLP_feats,Sxx_feats,PSC_feat_set
-
-def Design_Matrices (FILE_OBJECTS):
-    """
-    Construct Standard Machine-Learning Design Matrix
-        (n_samples x n_features)
-    --------------------------------
-    FILE_OBJECTS (iter) : Iterable of all file objects to use
-    --------------------------------
-    Return design matrix, X
-    """
-    n_samples = len(FILE_OBJECTS)           # number of file samples
-    MLP_matrix = prog_utils.Design_Matrix(ndim=2)   # design matrix for perceptron
-    SXX_matrix = prog_utils.Design_Matrix(ndim=3)   # design matrix for spectrogram
-    PSC_matrix = prog_utils.Design_Matrix(ndim=3)   # design matrix for phase-space
-
-    for I,FILE in enumerate(FILE_OBJECTS):  # iterate through files
-        print('\t\t\t('+str(I)+'/'+str(n_samples)+')',FILE.filename)
-        FILE = FILE.read_audio()            # read .WAV file
-
-        MLP_feats,Sxx_feats,PSC_feat_set = \
-            Assemble_Features(FILE)         # asssmble features from file
-
-        MLP_matrix.add_sample(MLP_feats)    # add features to MLP matrix
-        SXX_matrix.add_sample(Sxx_feats)    # add features to Sxx matrix
-        for PSC_feats in PSC_feats_set:     
-            PSC_matrix.add_sample(PSC_feats)# add features to PSC matrix
-
-    MLP_matrix = MLP_Matrix.shape_by_sample()
-    SXX_matrix = SXX_matrix.pad_2D(new_shape=Neural_Network_Models.spectrogram_shape)
-    PSC_matrix = PSC_matrix.pad_2D(newshape=Neural_Network_Models.phasespace_shape)
-
-    return [MLP_matrix,SXX_matrix,PSC_matrix]   # return design matrix objs
 
 def target_array (fileobjs,n_classes,matrix=True):
     """
