@@ -115,7 +115,7 @@ class Network_Container:
             model.save(model.savepath,overwrite=True)   # save locally
         except:                                         # if failure ...
             model.save(os.path.join(self.parent_path,
-                        model.name,overwrite=True))     # save locally
+                        model.name),overwrite=True)     # save locally
         del(model)                                  # delete from RAM
         return self                                 # return itself!
 

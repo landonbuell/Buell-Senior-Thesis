@@ -85,6 +85,7 @@ class Program_Mode:
 
         X1 = X1.shape_by_sample()
         X2 = X2.pad_2D(new_shape=Neural_Network_Utilities.spectrogram_shape)
+        X3 = X3.pad_2D(new_shape=Neural_Network_Utilities.phasespace_shape)
         
         return [X1,X2,X3]
 
@@ -104,20 +105,24 @@ class Train_Mode (Program_Mode):
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\n")
+        group_cntr = 0
         for I in range (0,self.n_files,self.group_size):    # In a given group
-            print("\tGroup Number:",I)
+            print("\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            epcs = 8                                        # trainign epochs
+            epcs = 16                                        # trainign epochs
 
             for dataset,modelpath in zip(Design_Matrices,Networks.__getlocalpaths__):
                 X = dataset.__get_X__()                     # Features
                 Y = dataset.__get_Y__(Networks.n_classes)   # Labels
                 MODEL = Networks.__loadmodel__(modelpath)   # Load network
                 # Fit the model!
+                print("\tFitting Model:",MODEL.name)
                 history = MODEL.fit(x=X,y=Y,batch_size=32,epochs=epcs,verbose=2,
-                            view_metrics=True,initial_epoch=(I*epcs))
+                                    initial_epoch=(group_cntr*epcs))
+                # Save locally, remove from RAM
                 Networks.__savemodel__(MODEL)               # save model
+            group_cntr += 1
 
         print("\tTraining Completed! =)")
         return self
@@ -139,11 +144,12 @@ class Test_Mode (Program_Mode):
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\n")
+        group_cntr = 0
         for I in range (0,self.n_files,self.group_size):    # In a given group
-            print("\tGroup Number:",I)
+            print("\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            epcs = 8                                        # trainign epochs
+            epcs = 16                                       # trainign epochs
 
             for dataset,modelpath in zip(Design_Matrices,Networks.__getlocalpaths__):
                 X = dataset.__get_X__()                     # Features
@@ -151,8 +157,8 @@ class Test_Mode (Program_Mode):
                 MODEL = Networks.__loadmodel__(modelpath)   # Load network
                 # Make Predictions on Data
                 Z = MODEL.predict(x=X,batch_size=32)
-
                 Networks.__savemodel__(MODEL)               # save model
+            group_cntr += 1
 
         print("\tTraining Completed! =)")
         return self
