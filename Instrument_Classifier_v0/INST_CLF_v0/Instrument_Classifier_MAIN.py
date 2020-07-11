@@ -12,7 +12,7 @@ import sys
 
 import Mode_Utilities as mode_utils
 import System_Utilities as sys_utils
-import Neural_Network_Models
+import Neural_Network_Utilities as NN_utils
 
             #### MAIN EXECUTABLE ####
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     FILEOBJECTS,N_classes = Program_Initializer.__startup__()
 
     # SETUP NEURAL NETWORK MODELS
-    Neural_Networks = Neural_Network_Models.Network_Models(Neural_Network_Models.model_names,
+    Neural_Networks = NN_utils.Network_Container(NN_utils.model_names,
                             N_classes,Program_Initializer.modelpath,Program_Initializer.new_models)
 
     if Program_Initializer.program_mode == 'train':

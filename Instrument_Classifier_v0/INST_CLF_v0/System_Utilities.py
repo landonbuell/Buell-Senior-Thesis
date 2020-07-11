@@ -14,7 +14,6 @@ import sys
 import argparse
 
 import scipy.io.wavfile as sciowav
-from sklearn.model_selection import train_test_split
 
 import Plotting_Utilities as plot_utils
 
@@ -69,9 +68,10 @@ class File_Object ():
 
 class Program_Start:
     """
-    Handel all pre-processing for program
-        - Command line Arguments
-        - Setup Directory paths
+    Object to handle all program preprocessing
+    --------------------------------
+
+    --------------------------------
 
     """
 
@@ -98,19 +98,26 @@ class Program_Start:
             print("\n\tERROR! -  Cannot run predictions on New, Untrained Models!")
             sys.exit()
 
+    def startup_messeges (self,nfiles,nclasses):
+        """ Print out Start up messeges to Console """
+        print("Running Main Program.....")
+        print("\tCollecting data from:",self.readpath)
+        print("\tStoring/Loading models from:",self.modelpath)
+        print("\tCreating new models?",self.new_models)
+        print("\t\tFound",nfiles,"files to read")
+        print("\t\tFound",nclasses,"classes to sort")
+        print("\n")
+
     def __startup__(self):
-        """ Run Program Start Up Processes """
+        """ Run Program Start Up Processes """        
         self.files = self.Collect_CSVs()        # find CSV files
         fileobjects = self.Create_Fileobjs()    # file all files
-        self.n_files = len(fileobjects)
-        print("\tFound",self.n_files,"files")
-
+        n_files = len(fileobjects)        
         if self.program_mode in ['train','train-test']:
             n_classes = self.get_nclasses(fileobjects)
-            print("\tFound",n_classes,"classes")
         else:
-            n_classes = None
-            
+            n_classes = 'Undetermined'
+        self.startup_messeges (n_files,n_classes)         
         return fileobjects,n_classes
 
     def Argument_Parser():
@@ -154,6 +161,7 @@ class Program_Start:
             frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
             frame = frame.to_numpy()                    # make np arr   
             for row in frame:                           # each row
+                # 'File_Object' class is defined above
                 fileobjects.append(File_Object(row))    # add row to obj list
             del(frame)                          # del frame  
         fileobjects = np.random.permutation(fileobjects)# permute
@@ -184,17 +192,18 @@ class Program_Start:
             os.makedirs(path,exist_ok=True)     # create path
         return None
 
-def Update_Map (map={},keys=[],vals=[]):
-    """
-    Update any map (dictionary) with keys and values
-        New dictionary is create dif one is not provided
-    --------------------------------
-    map (dict) : Empty or existing dictionary object to populate
-    keys (iter) : Iterable containing keys for dictionary (1 x M)
-    vals (iter) : Iterable containing valus for dictionary (1 x M)
-    --------------------------------
-    """
-    assert len(keys) == len(vals)   # must have same num pts
-    for key,val in zip(keys,vals):  # each key-val pair
-        map.update({key:val})       # update dict
-    return map                      # return the map
+    @staticmethod
+    def Update_Map (map={},keys=[],vals=[]):
+        """
+        Update any map (dictionary) with keys and values
+            New dictionary is create dif one is not provided
+        --------------------------------
+        map (dict) : Empty or existing dictionary object to populate
+        keys (iter) : Iterable containing keys for dictionary (1 x M)
+        vals (iter) : Iterable containing valus for dictionary (1 x M)
+        --------------------------------
+        """
+        assert len(keys) == len(vals)   # must have same num pts
+        for key,val in zip(keys,vals):  # each key-val pair
+            map.update({key:val})       # update dict
+        return map                      # return the map

@@ -34,7 +34,7 @@
     <Compile Include="Machine_Learning_Utilities.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Neural_Network_Models.py">
+    <Compile Include="Neural_Network_Utilities.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="System_Utilities.py">

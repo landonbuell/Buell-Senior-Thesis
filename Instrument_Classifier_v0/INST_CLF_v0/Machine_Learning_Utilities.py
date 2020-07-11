@@ -17,53 +17,44 @@ import System_Utilities as sys_utils
 import Feature_Utilities as feat_utils
 import Plotting_Utilities as plot_utils
 import Math_Utilities as math_utils
-import Neural_Network_Models
+import Neural_Network_Utilities
 
             #### Dat Structrue 
 
-class Design_Matrix :
+class Design_Matrix:
     """
     Construct design-matrix-like object
     --------------------------------
     target (int) : Integer target value
     ndim (int) : Number of dimensions in this array
-        2 - 2D matrix, used for MLP classifier 
-            (n_samples x n_features)
-        3 - 3D matrix, used for Spectrogram 
-            (n_samples x n_rows x n_cols)
-        4 - 4D matrix, used for phase-space
-            (n_samples x n_rows x r_cols x n_
+    n_classes (int) : Number of unique classes 
     --------------------------------
     Return instantiated feature_array instance
     """
 
-    def __init__(self,ndim=2):
+    def __init__(self,ndim):
         """ Initialize Object Instance """
         self.X = []         # empty data structure
         self.shapes = []    # store explicit shapes of each samples
         self.targets = []   # target for each sample
-        self.ndim = ndim    # number of dimensions in array
         self.n_samples = 0  # no samples in design matrix
-
-    def set_targets (self,y):
-        """ Create 1D target array corresponding to sample class """
-        self.targets = np.array(y)  
-        return self
+        self.ndim = ndim    # number of dimensions in array
 
     def add_sample (self,x):
         """ Add features 'x' to design matrix, preserve shape """
         self.X.append(x.__getfeatures__())      # add sample to design matrix
         self.shapes.append(x.__getshape__())    # store shape       
         self.n_samples += 1                     # current number of samples
-        if x.target:                            # if has target
+        try:
             self.targets.append(x.target)       # add the target
-        else:                                   # otherwise
-            self.tagrets.append(None)           # add None-type
+        except:                                 # otherwise
+            self.targets.append(None)           # add None-type
         return self
  
     def pad_2D (self,new_shape,offsets=(0,0)):
         """ Zero-Pad 2D samples to meet shape """
         new_X = np.zeros(shape=(self.n_samples,new_shape[0],new_shape[1]))   # create new design matrix
+        new_shape = (new_shape[0],new_shape[1])
         for i in range(self.n_samples):     # iterate by sample
             dx,dy = offsets[0],offsets[1]   # align upper left     
             try: 
@@ -94,16 +85,21 @@ class Design_Matrix :
     def get_dims (self):
         """ get number of dimesnesion in this design matrix """
         return self.ndim
+
+    def __get_Y__(self,n_classes):
+        """ treturn target matrix as One-hot-enc matrix """
+        self.Y = keras.utils.to_categorical(self.targets,n_classes)
+        return self.Y
            
-    def __getmatrix__(self):
+    def __get_X__(self):
         """ return design matrix as rect. np array """
         return self.X
 
-class Feature_Array ():
+class Feature_Array:
     """
     Create Feature vector object
     --------------------------------
-    target (int) : Integer target value
+    target (int) : Integer target value for this sample
     --------------------------------
     Return instantiated feature_array instance
     """

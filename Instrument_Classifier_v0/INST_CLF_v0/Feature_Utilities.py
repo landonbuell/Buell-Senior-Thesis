@@ -33,14 +33,18 @@ class Base_Features:
     divides into time-frames
     """
 
-    def __init__(self,waveform,npts=4096,overlap=0.75):
-        """ Instantiate Class Object """
-        self.X = waveform                       # set waveform to self
-        self.n_samples = self.X.shape[0]        # sample in waveform
-        self.npts = npts                        # points per frame
-        self.overlap = overlap                  # overlap between frames
-        self.frames = self.time_frames()        # create time-frames
-        self.n_frames = self.frames.shape[0]    # number of frames
+    def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
+        """ Initialize Class Object """
+        self.X = waveform                   # set waveform to self
+        self.n_samples = self.X.shape[0]    # samples in waveform
+        self.rate = rate                    # sample rate
+        self.npts = npts                    # points per frame
+        self.overlap = overlap              # overlap between frames
+        if frames is None:                  # if not givenframes
+            self.frames = self.time_frames()# set create the frames
+        else:                               # otherwise
+            self.frames = frames            # set the framnes
+        self.n_frames = self.frames.shape[0]# number of frames
 
     def time_frames (self):
         """
@@ -53,14 +57,14 @@ class Base_Features:
         Return frames object (n_frames = 
         """
         frames = np.array([])               # array to hold time frames
-        step = int(self.npts*(1-self.overlap))   # steps between frames
+        step = int(self.npts*(1-self.overlap))  # steps between frames
         for I in range(0,self.n_samples,step):  # iter through wave form
-            x = X[I:I+npts]                 # create single frame
-            if x.shape[0] != self.npts:          # frame w/o N samples
-                pad = npts - x.shape[0]     # number of zeroes to pad
+            x = self.X[I:I+self.npts]           # create single frame
+            if x.shape[0] != self.npts:         # frame w/o N samples
+                pad = self.npts - x.shape[0]    # number of zeroes to pad
                 x = np.append(x,np.zeros(shape=(1,pad)))  
             frames = np.append(frames,x)    # add single frame
-        frames = frames.reshape(-1,npts)    # reshape (each row is frame)
+        frames = frames.reshape(-1,self.npts)    # reshape (each row is frame)
         return frames                       # return frames
 
 
@@ -74,11 +78,10 @@ class Time_Series_Features (Base_Features):
     --------------------------------
     Return Instantiated Time Series Feature Object
     """
-
-    def __init__(self,waveform,npts=4096,overlap=0.75):
+    def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
         """ Initialize Class Object Instance """
-        super.__init__(waveform=waveform,
-                       npts=npts,overlap=overlap)
+        super().__init__(waveform=waveform,rate=rate,
+                frames=frames,npts=npts,overlap=overlap)
 
     def Phase_Space (self,dt=1):
         """
@@ -144,14 +147,14 @@ class Frequency_Series_Features (Base_Features):
     Return Instantiated Frequency Series Feature Object
     """
 
-    def __init__(self,waveform,npts=4096,overlap=0.75):
-        """ Instantiated Class Object """
-        super.__init__(waveform=waveform,
-                       npts=npts,overlap=overlap)
+    def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
+        """ Initialize Class Object Instance """
+        super().__init__(waveform=waveform,rate=rate,
+                frames=frames,npts=npts,overlap=overlap)
 
         # Time Axis, Frequency Axis, Spectrogram
         self.f,self.f_pts = self.Frequency_Axis(low=0,high=6000)
-        self.t = np.arange(0,self.npts,1)          
+        self.t = np.arange(0,self.n_frames,1)          
         self.Sxx = self.Power_Spectrum(self.f_pts)
 
     def Frequency_Axis (self,low=0,high=6000):
@@ -205,13 +208,12 @@ class Frequency_Series_Features (Base_Features):
         pts (iter) : int index values to keep in array 
         --------------------------------
         Return Z, array
-        """
-        ncols = x.shape[1]  # number of pts in DFT
+        """        
         Z = fftpack.fft(self.frames,axis=-1)  
-        Z = np.abs(Z)**2    # compute power:
-        if pts:             # selection of pts
-            Z = Z[:,pts]    # slice
-        Z = np.transpose(Z)/ncols
+        Z = np.abs(Z)**2        # compute power:
+        if pts is not None:     # selection of pts
+            Z = Z[:,pts]        # slice
+        Z = np.transpose(Z)/self.npts   # pts in FFT
         return Z
 
 
