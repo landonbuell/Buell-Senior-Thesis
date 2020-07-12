@@ -124,11 +124,6 @@ class Feature_Array:
         self.features = self.features.reshape(new_shape)
         return self
 
-    def set_attributes (self,names=[],attrbs=[]):
-        """ Set additional attributes """
-        for i,j in zip(names,attrbs):
-            setattr(self,str(i),j)  
-        return self
 
     def __getshape__(self):
         """ Return shape of feature attrb as tuple """
@@ -140,17 +135,6 @@ class Feature_Array:
 
     def __delfeatures__ (self):
         """ Delete all features (Save RAM) """
-        del(self.features)      # delete all features from array
+        self.features = np.array([])    # arr to hold features
         return self             # return new self
 
-class Performance_Evaluator :
-    """
-    Class used to Evaluate Performance of Neural network Models
-
-
-    """
-    def __init__(self):
-        """ Initialize Class Object Instance """
-
-        pass
-      

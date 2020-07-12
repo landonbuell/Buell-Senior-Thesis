@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import os
 import sys
+import time
 import argparse
 
 import scipy.io.wavfile as sciowav
@@ -70,13 +71,15 @@ class Program_Start:
     """
     Object to handle all program preprocessing
     --------------------------------
-
+    readpath (str) : Local path nagivating to where data is stored
+    modelpath (str) : Local path to store
     --------------------------------
 
     """
 
     def __init__(self,readpath=None,modelpath=None,mode=None,newmodels=None):
         """ Inititalize Program Attributes """
+        self.start_time = time.
         # If arguments given:
         if readpath:
             self.readpath = readpath
