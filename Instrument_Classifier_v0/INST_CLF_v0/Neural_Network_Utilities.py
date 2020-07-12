@@ -25,7 +25,7 @@ model_names = ['JARVIS','VISION','ULTRON']                  # names for models
 
 perceptron_shape = 15
 spectrogram_shape = (560,256,1)
-phasespace_shape = (2,4096,1)
+phasespace_shape = (64,64,1)
 
 input_shapes = [perceptron_shape,spectrogram_shape,phasespace_shape]
 
@@ -57,7 +57,7 @@ class Network_Container:
         self.parent_path = path         # set parent path for models
         self.n_classes = n_classes      # number of output classes
         self.new_models = new           # create new models
-
+        
         if self.new_models == True:             # create new networks?
             networks = self.__createmodels__()  # create 3 models
             for network in networks:            # for each model
@@ -97,16 +97,16 @@ class Network_Container:
         """ Return list of models names as strings """
         return [self.MLP_name,self.SXX_name,self.PSC_name]
 
-    def __loadmodel__(self,path):
+    def __loadmodel__(self,name):
         """ Load Local model Parameter into RAM """
-        if os.path.isdir(path) == False:     # is a path ?
-            path = os.path.join(self.parent_path,path)  # try joining
-        try:                        # try this:              
-            model = tf.keras.models.load_model(path)    # load local model
-        except:                     # failure ...
-            print("\n\tERROR! - Could not load model from path\n\t",path)
-            model = None
-        return model             # return none-type
+        try:                # attempt this
+            filepath = os.path.join(self.parent_path,name)   # full path
+            model = keras.models.load_model(filepath)   # load model 
+        except:             # if failure, try this:
+            #model = keras.models.load_model(name)       # load by just str
+            print("\n\tERROR! - Could not load model from path\n\t\t",name)
+            model = None            
+        return model
 
     def __savemodel__(self,model):
         """ Save model to Local Disk """

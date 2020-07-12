@@ -143,5 +143,14 @@ class Feature_Array:
         del(self.features)      # delete all features from array
         return self             # return new self
 
-    
+class Performance_Evaluator :
+    """
+    Class used to Evaluate Performance of Neural network Models
+
+
+    """
+    def __init__(self):
+        """ Initialize Class Object Instance """
+
+        pass
       

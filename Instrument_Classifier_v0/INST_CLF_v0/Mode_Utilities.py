@@ -32,13 +32,15 @@ class Program_Mode:
     Base Program mode object from which all programs inhereit from
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
+    model_names (iter) : List-like of strings calling Network models by name
     group_size (int) : number of file samples in each design matrix
     --------------------------------
     Execute MAIN program in perscribed mode
     """
-    def __init__(self,FILEOBJS,group_size=256):
+    def __init__(self,FILEOBJS,model_names,group_size=32):
         """ Inititialize Class Object Instance """
         self.FILEOBJS = FILEOBJS
+        self.model_names = model_names
         self.n_files = len(self.FILEOBJS)
         self.group_size = group_size
 
@@ -89,22 +91,28 @@ class Program_Mode:
         
         return [X1,X2,X3]
 
+
 class Train_Mode (Program_Mode):
     """
     Run Program in 'Train Mode'
         Inherits from 'Program_Mode' parent class
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
+    model_names (iter) : List-like of strings calling Network models by name
     --------------------------------
     Creates Program Train Mode Object
     """
-    def __init__(self,FILEOBJS):
+    def __init__(self,FILEOBJS,model_names):
         """ Instantiate Class Method """
-        super().__init__(FILEOBJS)
+        super().__init__(FILEOBJS,model_names)
+
+        # For each model store a list of history objs
+        for model in self.model_names:              
+            setattr(self,str(model)+'_history',[])
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
-        print("\n")
+        print("\nBegining Training process....")
         group_cntr = 0
         for I in range (0,self.n_files,self.group_size):    # In a given group
             print("\tGroup Number:",group_cntr)
@@ -112,20 +120,33 @@ class Train_Mode (Program_Mode):
             Design_Matrices = super().construct_design_matrices(FILES)
             epcs = 16                                        # trainign epochs
 
-            for dataset,modelpath in zip(Design_Matrices,Networks.__getlocalpaths__):
+            for dataset,modelpath in zip(Design_Matrices,self.model_names):
+                print("\tLoading & Fitting Model:",modelpath)
                 X = dataset.__get_X__()                     # Features
                 Y = dataset.__get_Y__(Networks.n_classes)   # Labels
                 MODEL = Networks.__loadmodel__(modelpath)   # Load network
                 # Fit the model!
-                print("\tFitting Model:",MODEL.name)
                 history = MODEL.fit(x=X,y=Y,batch_size=32,epochs=epcs,verbose=2,
                                     initial_epoch=(group_cntr*epcs))
-                # Save locally, remove from RAM
+                # Save the Model, Store the history
                 Networks.__savemodel__(MODEL)               # save model
+                self.store_history(history,modelpath)       # store data
             group_cntr += 1
 
         print("\tTraining Completed! =)")
         return self
+
+    def store_history (self,history_object,model):
+        """ Store Keras History Object in lists """
+        assert model in self.model_names    # must be a known model
+        # Get the list and add the object
+        model_history = self.__getattribute__(str(model)+'_history') 
+        model_history.append(history_object)
+        return self
+
+    def aggregate_history (self):
+        """ Aggregate history objects by model type & metric type """
+        pass
 
 class Test_Mode (Program_Mode):
     """
@@ -133,17 +154,24 @@ class Test_Mode (Program_Mode):
         Inherits from 'Program_Mode' parent class
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
+    model_names (iter) : List-like of strings calling Network models by name
     labels (bool) : If True, labels are used to test, If False, Predictions are make
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self, FILEOBJS,labels=False):
-        super().__init__(FILEOBJS)
+    def __init__(self, FILEOBJS,model_names,labels=False):
+        super().__init__(FILEOBJS,model_names)
         self.labels = labels        # labels for the trainign set?
+        if self.labels == True:     # we have labels!
+            self.Y = []             # hold them in list
+
+        # For each model store a list of prediction arrays
+        for model in self.model_names:              
+            setattr(self,str(model)+'_predicitons',[])
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
-        print("\n")
+        print("\nBegining Testing Process...")
         group_cntr = 0
         for I in range (0,self.n_files,self.group_size):    # In a given group
             print("\tGroup Number:",group_cntr)
@@ -151,23 +179,38 @@ class Test_Mode (Program_Mode):
             Design_Matrices = super().construct_design_matrices(FILES)
             epcs = 16                                       # trainign epochs
 
-            for dataset,modelpath in zip(Design_Matrices,Networks.__getlocalpaths__):
+            for dataset,modelpath in zip(Design_Matrices,self.model_names):
                 X = dataset.__get_X__()                     # Features
-                Y = dataset.__get_Y__(Networks.n_classes)   # Labels
+                if self.labels == True:         # if we have labels
+                    self.store_labels(Y)        # store labels as well!
+                    Y = dataset.__get_Y__(Networks.n_classes)   # Labels
                 MODEL = Networks.__loadmodel__(modelpath)   # Load network
                 # Make Predictions on Data
                 Z = MODEL.predict(x=X,batch_size=32)
-                Networks.__savemodel__(MODEL)               # save model
+                # Save the Model, Store the history
+                Networks.__savemodel__(MODEL)           # save model
+                self.store_predictions(Z,modelpath)     # store predictions               
             group_cntr += 1
-
         print("\tTraining Completed! =)")
         return self
 
-    def export_predictions (self):
+    def store_predictions (self,predictions,model):
         """ Export Predicitions Made by Models to Humna-readable format """
+        assert model in self.model_names    # must be a known model
+        # Get the array and add the object
+        model_predicitons = self.__getattribute__(str(model)+'_predicitons') 
+        model_history.append(predictions)
+        return self
+
+    def store_labels (self,y):
+        """ If Labels are present, store for each sample """
+        self.Y.append(y)
+
+    def aggregate_predictions (self):
+        """ aggregate predictions by model type """
         pass
 
-class TrainTest_Mode (Train_Mode,Test_Mode):
+class TrainTest_Mode (Program_Mode):
     """
     Run Program in 'Train_Mode' and 'Test Mode' sequentially
         Inherits from 'Train_Mode' and 'Test Mode' parent classes
@@ -177,31 +220,32 @@ class TrainTest_Mode (Train_Mode,Test_Mode):
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self, FILEOBJS,testsize=0.1,labels=False):
-        super().__init__(FILEOBJS)  # Inst. parent class
-        self.labels = labels        # labels for the training set?
-        self.testsize = testsize    # size of data to test with
+    def __init__(self, FILEOBJS,model_names,testsize=0.1,labels=True):
+        """ Initialize Class oject instance """
+        super().__init__(FILEOBJS,model_names)
+        self.testsize=testsize  # train/test size
+        self.labels = labels    # labels?
+        self.Split_Objs()       # split objs
+        
        
     def Split_Objs (self):
         """ Split objects into training.testing subsets """
         train,test = train_test_split(self.FILEOBJS,test_size=self.testsize)
-        delattr(self,'FILEOBJS')      # delete attribute
         self.TRAIN_FILEOBJS = train
+        self.n_train_files = len(self.TRAIN_FILEOBJS)
         self.TEST_FILEOBJS = test
+        self.n_test_files = len(self.TEST_FILEOBJS)
         return self
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
 
-        self.Split_Objs()
-        
-        Training = Train_Mode(self.TRAIN_FILEOBJS)
+        Training = Train_Mode(self.TRAIN_FILEOBJS,self.model_names)
         Training.__call__(Networks)
 
-        Testing = Test_Mode(self.TEST_FILEOBS,labels=True)
+        Testing = Test_Mode(self.TEST_FILEOBJS,self.model_names,labels)
         Testing.__call__(Networks)
-
-
+            
         return self
 
 

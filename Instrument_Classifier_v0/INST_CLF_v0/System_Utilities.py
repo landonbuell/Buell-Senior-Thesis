@@ -192,18 +192,3 @@ class Program_Start:
             os.makedirs(path,exist_ok=True)     # create path
         return None
 
-    @staticmethod
-    def Update_Map (map={},keys=[],vals=[]):
-        """
-        Update any map (dictionary) with keys and values
-            New dictionary is create dif one is not provided
-        --------------------------------
-        map (dict) : Empty or existing dictionary object to populate
-        keys (iter) : Iterable containing keys for dictionary (1 x M)
-        vals (iter) : Iterable containing valus for dictionary (1 x M)
-        --------------------------------
-        """
-        assert len(keys) == len(vals)   # must have same num pts
-        for key,val in zip(keys,vals):  # each key-val pair
-            map.update({key:val})       # update dict
-        return map                      # return the map
