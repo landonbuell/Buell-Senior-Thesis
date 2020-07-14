@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import os
 import sys
-import time
+import datetime
 import argparse
 
 import scipy.io.wavfile as sciowav
@@ -79,15 +79,17 @@ class Program_Start:
 
     def __init__(self,readpath=None,modelpath=None,mode=None,newmodels=None):
         """ Inititalize Program Attributes """
-        self.start_time = time.
+        dt_obj = datetime.datetime.now()
+        starttime = dt_obj.isoformat(sep='_',timespec='auto')
+        print("Time Stamp:",starttime)
         # If arguments given:
-        if readpath:
+        if readpath is not None:
             self.readpath = readpath
-        if modelpath: 
+        if modelpath is not None: 
             self.modelpath = modelpath
-        if mode:
+        if mode is not None:
             self.program_mode = mode
-        if newmodels:
+        if newmodels is not None:
             self.new_models = newmodels
         else:                   # If ANY fail....
             input_args = self.Argument_Parser()     # Parse Input args
@@ -98,7 +100,7 @@ class Program_Start:
         assert self.program_mode in ['train','train-test','predict']
 
         if self.program_mode == 'predict' and self.new_models == True:
-            print("\n\tERROR! -  Cannot run predictions on New, Untrained Models!")
+            print("\n\tERROR! -  Cannot run predictions on Untrained Models!")
             sys.exit()
 
     def startup_messeges (self,nfiles,nclasses):
@@ -119,11 +121,12 @@ class Program_Start:
         if self.program_mode in ['train','train-test']:
             n_classes = self.get_nclasses(fileobjects)
         else:
-            n_classes = 'Undetermined'
-        self.startup_messeges (n_files,n_classes)         
+            n_classes = None
+        self.startup_messeges (n_files,n_classes) 
+        fileobjects = np.random.permutation(fileobjects)    # permute
         return fileobjects,n_classes
 
-    def Argument_Parser():
+    def Argument_Parser(self):
         """ Process Command Line Arguments """
         parser = argparse.ArgumentParser(prog='Instrument Classifier v0',
                                          usage='Classify .WAV files by using pre-exisiting classifiered samples.',
@@ -167,7 +170,6 @@ class Program_Start:
                 # 'File_Object' class is defined above
                 fileobjects.append(File_Object(row))    # add row to obj list
             del(frame)                          # del frame  
-        fileobjects = np.random.permutation(fileobjects)# permute
         return fileobjects                      # return list of insts
 
     def get_nclasses (self,fileobjects):

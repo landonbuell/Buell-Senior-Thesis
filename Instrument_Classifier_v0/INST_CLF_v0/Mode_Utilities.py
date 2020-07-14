@@ -11,6 +11,7 @@ import numpy as np
 import sys
 import os
 from sklearn.model_selection import train_test_split
+import tensorflow as tf
 
 import System_Utilities as sys_utils
 import Feature_Utilities as feat_utils
@@ -29,19 +30,21 @@ Mode_Utilities.py - 'Mode Utilities'
 
 class Program_Mode:
     """
-    Base Program mode object from which all programs inhereit from
+    Base Program mode object from which all programs objects inherit from
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
+    n_classes (int) : number of discrete classes for models
     show_summary (bool) : If True, result are displayed to user
     group_size (int) : number of file samples in each design matrix
     --------------------------------
     Execute MAIN program in perscribed mode
     """
-    def __init__(self,FILEOBJS,model_names,show_summary=True,group_size=32):
+    def __init__(self,FILEOBJS,model_names,n_classes,show_summary=True,group_size=256):
         """ Inititialize Class Object Instance """
         self.FILEOBJS = FILEOBJS
         self.model_names = model_names
+        self.n_classes = n_classes
         self.show_summary = show_summary    # show results of stages
         self.n_files = len(self.FILEOBJS)
         self.group_size = group_size
@@ -71,13 +74,13 @@ class Program_Mode:
 
     def construct_design_matrices (self,FILES):
         """ Collect Features from a subset File Objects """
-        X1 = ML_utils.Design_Matrix(ndim=2)     # Design matrix for MLP
-        X2 = ML_utils.Design_Matrix(ndim=4)     # Design matrix for Spectrogram
-        X3 = ML_utils.Design_Matrix(ndim=4)     # Design matrix for Phase-Space
+        X1 = ML_utils.Design_Matrix(ndim=2,self.n_classes)  # Design matrix for MLP
+        X2 = ML_utils.Design_Matrix(ndim=4,self.n_classes)  # Design matrix for Spectrogram
+        X3 = ML_utils.Design_Matrix(ndim=4,self.n_classes)  # Design matrix for Phase-Space
 
         for i,FILEOBJ in enumerate(FILES):
-            self.loop_counter(i,self.group_size,FILEOBJ.filename)   # print messege
-            x1,x2,x3 = self.collect_features(FILEOBJ)               # collect features
+            self.loop_counter(i,len(FILES),FILEOBJ.filename)    # print messege
+            x1,x2,x3 = self.collect_features(FILEOBJ)           # collect features
             X1.add_sample(x1)   # Add sample to MLP
             X2.add_sample(x2)   # Add sample to Sxx
             X3.add_sample(x3)   # add sample to Psc
@@ -95,38 +98,41 @@ class Train_Mode (Program_Mode):
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
+    n_classes (int) : number of discrete classes for models
     show_summary (bool) : If True, result are displayed to user
+    n_iters (int) : Indicats how may iterations to do over the full data 
     --------------------------------
     Creates Program Train Mode Object
     """
-    def __init__(self,FILEOBJS,model_names,show_summary=True):
+    def __init__(self,FILEOBJS,model_names,n_classes,show_summary=True,n_iters=2):
         """ Instantiate Class Method """
         super().__init__(FILEOBJS,model_names,show_summary)
+        self.n_iters = n_iters
 
         # For each model store a list of history objs
-        model_histories = {self.model_names[0]:[],
-                           self.model_names[1]:[],
-                           self.model_names[2]:[]}
+        self.model_histories = {self.model_names[0]:[],
+                                self.model_names[1]:[],
+                                self.model_names[2]:[]}
 
     def __TRAIN__(self,Networks):
         """ Train Netorks on data from FILEOBJS """
         group_cntr = 0
+        epcs = 4       # training epochs on subset
         for I in range (0,self.n_files,self.group_size):    # In a given group
-            print("\tGroup Number:",group_cntr)
+            print("\t\t\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
-            Design_Matrices = super().construct_design_matrices(FILES)
-            epcs = 16                                        # trainign epochs
+            Design_Matrices = super().construct_design_matrices(FILES)                                                   
             for dataset,model in zip(Design_Matrices,self.model_names):
-                print("\tLoading & Fitting Model:",modelpath)
-                X = dataset.__get_X__()                     # Features
-                Y = dataset.__get_Y__(Networks.n_classes)   # Labels
-                MODEL = Networks.__loadmodel__(model)       # Load network
+                print("\t\t\tLoading & Fitting Model:",model)
+                MODEL = Networks.__loadmodel__(model)   # Load network
+                X = dataset.__get_X__()                 # Features
+                Y = dataset.__get_Y__()                 # Labels          
                 history = MODEL.fit(x=X,y=Y,batch_size=32,epochs=epcs,verbose=2,
                                     initial_epoch=(group_cntr*epcs))
-                Networks.__savemodel__(MODEL)               # save model
-                self.store_history(history,model)           # store data
-            group_cntr += 1
-        return self
+                Networks.__savemodel__(MODEL)           # save model
+                self.store_history(history,model)       # store data
+            group_cntr += 1                     # incr coutner
+        return self                             # self
 
     def store_history (self,history_object,model):
         """ Store Keras History Object in lists """
@@ -137,7 +143,10 @@ class Train_Mode (Program_Mode):
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Training process....")
-        self.__TRAIN__(Networks)
+        for I in range (0,self.n_iters):
+            print("\tIteration:",I)
+            self.__TRAIN__(Networks)
+            self.FILEOBJS = np.random.permutation(self.FILEOBJS)
         print("\tTraining Completed! =)")
         self.export_results()
         return self
@@ -157,23 +166,25 @@ class Test_Mode (Program_Mode):
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
+    n_classes (int) : number of discrete classes for models
     show_summary (bool) : If True, result are displayed to user
     labels_present (bool) : If True, evaluation labels are given
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self, FILEOBJS,model_names,show_summary=True,
-                 labels_present=False):
+    def __init__(self, FILEOBJS,model_names,n_classes,show_summary=True,
+                 labels_present=False,prediction_threshold=0.5):
         """ Initialize Class Object Instance """
         super().__init__(FILEOBJS,model_names)
-        self.labels = labels        # labels for the trainign set?
-        if self.labels_present == True: # we have labels!
-            self.labels = []            # hold them in list!
+        self.labels_present = labels_present        # labels for the trainign set?
+        self.prediction_threshold = prediction_threshold
+        if self.labels_present == True:     # we have labels!
+            self.labels = np.array([])      # hold them in list!
 
         # For each model store a list of history objs
-        model_predictions = {self.model_names[0]:[],
-                            self.model_names[1]:[],
-                            self.model_names[2]:[]}
+        self.model_predictions = {  self.model_names[0]:np.array([]),
+                                    self.model_names[1]:np.array([]),
+                                    self.model_names[2]:np.array([])}
 
     def __TEST__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
@@ -184,56 +195,37 @@ class Test_Mode (Program_Mode):
             Design_Matrices = super().construct_design_matrices(FILES)
             epcs = 16                                   # trainign epochs
             for dataset,model in zip(Design_Matrices,self.model_names):
+                print("\t\t\tLoading & Testing Model:",model)
+                MODEL = Networks.__loadmodel__(model)   # Load network
                 X = dataset.__get_X__()                 # Features
                 if self.labels_present == True:         # if we have labels               
-                    Y = dataset.__get_Y__(Networks.n_classes)   # Labels
-                    self.store_labels(Y)                # store labels as well!
-                MODEL = Networks.__loadmodel__(model)   # Load network
-                Z = MODEL.predict(x=X,batch_size=32)    # Make Predictions on Data
-                Networks.__savemodel__(MODEL)           # save model
-                self.store_predictions(Z,model)         # store predictions               
-            group_cntr += 1
+                    Y = dataset.__get_Y__()             # Labels
+                    self.__evaluate__(MODEL,X,Y)        # run evaluation
+                else:                                   # we don't have labels
+                    self.__predict__(MODEL,X)           # run prediction                               
+                Networks.__savemodel__(MODEL)           # save model              
+            group_cntr += 1                 # incr counter
+        return self                         # return self       
+
+    def __predict__(self,model,X):
+        """ Predict Class output from unlabeled sample features """
         return self
 
-    def store_predictions (self,y_pred,model):
-        """ Export Predicitions Made by Models to Humna-readable format """
-        assert model in self.model_names    # must be a known model
-        self.model_predictions[str(model)].append(y_pred)
-        return self
+    def __evaluate__(self,model,X,Y):
+        """ Compute Loss value and metrics from labeled sample features """
+        result = model.predict(x=X,y=Y,batch_size=30,verbose=0)
+        X = np.argmax(X,axis=-1)     # make X 1D
+        Y = np.argmax(Y,axis=-1)     # make Y 1D
 
-    def store_labels (self,y):
-        """ If Labels are present, store for each sample """
-        self.labels.append(y)
+        self.model_predictions[str(model.name)] = \
+            np.append(self.model_predictions[str(model.name)],)
+        return self
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Testing Process...")
         self.__TEST__(Networks)
         print("\tTesting Completed! =)")
-
-        if self.labels_present == True:
-            # Run Evaluation
-            self.__Evaluate__(Networks) 
-        else:            
-            pass
-        self.export_results ():
-        return self
-
-    def Aggregate_Predictions (self,model,onehot=False):
-        """ Aggregate predictions for a model into numpy arrays """
-        y_pred = self.model_predictions[str(model)]     # model prediction as list
-        y_pred = np.reshape(y_pred,(self.n_files,-1))   # make into numpy and reshape
-        if onehot == True:                      # if one-hot-encoding
-            return y_pred                       # return array
-        else:                                   # not one-hot-encoding
-            y_pred = np.argmax(y_pred,axis=-1)  # map by ints
-            return y_pred                       # return  ints
-
-    def __Evaluate__ (self,Networks):
-        """ Evaluate Neurual networks predictions and labels """
-        for model in self.model_names:                  # Each model that we have
-            MODEL = Networks.__loadmodel__(model)       # Load network
-            y_pred = self.Aggregate_Predictions(model)  # Get all predicitions
 
     def export_results (self):
         """ Export Results of training models to a local path """
@@ -246,13 +238,14 @@ class TrainTest_Mode (Program_Mode):
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
+    n_classes (int) : number of discrete classes for models
     show_summary (bool) : If True, result are displayed to user
     labels_present (bool) : If True, evaluation labels are given
     testsize (float) : Value on interval (0,1) indicate fraction of data to test with
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self, FILEOBJS,model_names,show_summary=Truem,
+    def __init__(self, FILEOBJS,model_names,n_classes,show_summary=True   ,
                  labels_present=True,testsize=0.1):
         """ Initialize Class oject instance """
         super().__init__(FILEOBJS,model_names,show_summary)
@@ -263,23 +256,24 @@ class TrainTest_Mode (Program_Mode):
     def Split_Objs (self):
         """ Split objects into training.testing subsets """
         train,test = train_test_split(self.FILEOBJS,test_size=self.testsize)
-        self.TRAIN_FILEOBJS = train
+        delattr(self,'FILEOBJS')        # delete attrb
+        self.TRAIN_FILEOBJS = train     # set attrb
         self.n_train_files = len(self.TRAIN_FILEOBJS)
-        self.TEST_FILEOBJS = test
+        self.TEST_FILEOBJS = test       # set attrbs
         self.n_test_files = len(self.TEST_FILEOBJS)
-        return self
+        return self                     # return self
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
 
         # Run Training Mode
-        Training = Train_Mode(self.TRAIN_FILEOBJS,
-                              self.model_names,self.show_summary)
+        Training = Train_Mode(self.TRAIN_FILEOBJS,self.model_names,
+                              self.n_classes,self.show_summary)
         Training.__call__(Networks)
 
         # Run Testing Mode
         Testing = Test_Mode(self.TEST_FILEOBJS,self.model_names,
-                            self.show_summary,self,labels_present)
+                            self.n_classes,self.show_summary,self,labels_present)
         Testing.__call__(Networks)
             
         return self

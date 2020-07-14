@@ -32,13 +32,14 @@ class Design_Matrix:
     Return instantiated feature_array instance
     """
 
-    def __init__(self,ndim):
+    def __init__(self,ndim,n_classes):
         """ Initialize Object Instance """
         self.X = []         # empty data structure
         self.shapes = []    # store explicit shapes of each samples
         self.targets = []   # target for each sample
         self.n_samples = 0  # no samples in design matrix
         self.ndim = ndim    # number of dimensions in array
+        self.n_classes = n_classes
 
     def add_sample (self,x):
         """ Add features 'x' to design matrix, preserve shape """
@@ -82,13 +83,9 @@ class Design_Matrix:
         assert type(self.X) == np.ndarray
         return self
 
-    def get_dims (self):
-        """ get number of dimesnesion in this design matrix """
-        return self.ndim
-
-    def __get_Y__(self,n_classes):
+    def __get_Y__(self:
         """ treturn target matrix as One-hot-enc matrix """
-        self.Y = keras.utils.to_categorical(self.targets,n_classes)
+        self.Y = keras.utils.to_categorical(self.targets,self.n_classes)
         return self.Y
            
     def __get_X__(self):

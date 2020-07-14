@@ -54,19 +54,22 @@ class Network_Container:
         self.SXX_savepath = os.path.join(path,self.SXX_name)    # where to save model
         self.PSC_savepath = os.path.join(path,self.PSC_name)    # where to save model
 
-        self.parent_path = path         # set parent path for models
-        self.n_classes = n_classes      # number of output classes
-        self.new_models = new           # create new models
+        self.parent_path = path     # Set parent path for models
+        self.n_classes = n_classes  # number of output classes
+        self.new_models = new       # create new models
         
         if self.new_models == True:             # create new networks?
             networks = self.__createmodels__()  # create 3 models
             for network in networks:            # for each model
                 self.__savemodel__(network)     # save them locally, and erase from ram
         else:                                   # load exisitng networks
-            networks = self.__getmodelnames__()
-            for network in networks:                # each model
-                model = self.__loadmodel__(network) # load it into RAM
-                self.__savemodel__(model)           # save Locally
+            networks = self.__getmodelnames__
+            for network in networks:                        # each model
+                model = self.__loadmodel__(network,True)    # load it into RAM
+                self.n_classes = model.output.shape[-1]     # output shape of netowkr
+                self.__savemodel__(model)                   # save Locally
+
+        assert self.n_classes != None           # make sure we know classes
 
     def __createmodels__(self):
         """ Create & name Neural Network Models """
@@ -97,11 +100,13 @@ class Network_Container:
         """ Return list of models names as strings """
         return [self.MLP_name,self.SXX_name,self.PSC_name]
 
-    def __loadmodel__(self,name):
+    def __loadmodel__(self,name,summary=False):
         """ Load Local model Parameter into RAM """
         try:                # attempt this
             filepath = os.path.join(self.parent_path,name)   # full path
             model = keras.models.load_model(filepath)   # load model 
+            if summary == True:
+                print(model.summary())
         except:             # if failure, try this:
             #model = keras.models.load_model(name)       # load by just str
             print("\n\tERROR! - Could not load model from path\n\t\t",name)
