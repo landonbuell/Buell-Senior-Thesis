@@ -74,9 +74,9 @@ class Program_Mode:
 
     def construct_design_matrices (self,FILES):
         """ Collect Features from a subset File Objects """
-        X1 = ML_utils.Design_Matrix(ndim=2,self.n_classes)  # Design matrix for MLP
-        X2 = ML_utils.Design_Matrix(ndim=4,self.n_classes)  # Design matrix for Spectrogram
-        X3 = ML_utils.Design_Matrix(ndim=4,self.n_classes)  # Design matrix for Phase-Space
+        X1 = ML_utils.Design_Matrix(ndim=2,n_classes=self.n_classes)  # Design matrix for MLP
+        X2 = ML_utils.Design_Matrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Spectrogram
+        X3 = ML_utils.Design_Matrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Phase-Space
 
         for i,FILEOBJ in enumerate(FILES):
             self.loop_counter(i,len(FILES),FILEOBJ.filename)    # print messege
@@ -180,6 +180,9 @@ class Test_Mode (Program_Mode):
         self.prediction_threshold = prediction_threshold
         if self.labels_present == True:     # we have labels!
             self.labels = np.array([])      # hold them in list!
+            self.losses = { self.model_names[0]:np.array([]),
+                            self.model_names[1]:np.array([]),
+                            self.model_names[2]:np.array([])}
 
         # For each model store a list of history objs
         self.model_predictions = {  self.model_names[0]:np.array([]),
@@ -198,27 +201,26 @@ class Test_Mode (Program_Mode):
                 print("\t\t\tLoading & Testing Model:",model)
                 MODEL = Networks.__loadmodel__(model)   # Load network
                 X = dataset.__get_X__()                 # Features
+                self.__predict__(MODEL,X)           # run predictions
                 if self.labels_present == True:         # if we have labels               
                     Y = dataset.__get_Y__()             # Labels
                     self.__evaluate__(MODEL,X,Y)        # run evaluation
-                else:                                   # we don't have labels
-                    self.__predict__(MODEL,X)           # run prediction                               
+                                   
                 Networks.__savemodel__(MODEL)           # save model              
             group_cntr += 1                 # incr counter
         return self                         # return self       
 
     def __predict__(self,model,X):
         """ Predict Class output from unlabeled sample features """
-        return self
+        y_pred = model.predict(x=X,verbose=0)   # get network predicitons
+        # store predictions
+        self.model_predictions[str(model.name)] = \
+            np.append(self.model_predictions[str(model.name)],y_pred)
+        return self                             # return itself
 
     def __evaluate__(self,model,X,Y):
         """ Compute Loss value and metrics from labeled sample features """
-        result = model.predict(x=X,y=Y,batch_size=30,verbose=0)
-        X = np.argmax(X,axis=-1)     # make X 1D
-        Y = np.argmax(Y,axis=-1)     # make Y 1D
-
-        self.model_predictions[str(model.name)] = \
-            np.append(self.model_predictions[str(model.name)],)
+        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=False)    # build-in evaluation
         return self
 
     def __call__(self,Networks):
