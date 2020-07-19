@@ -9,17 +9,10 @@ Instrument Classifier v0
 
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow.keras as keras
 import time
 
-import System_Utilities as sys_utils
-import Feature_Utilities as feat_utils
-import Plotting_Utilities as plot_utils
-import Math_Utilities as math_utils
-import Neural_Network_Utilities
-
-            #### Dat Structrue 
+            #### Data Structrue ####
 
 class Design_Matrix:
     """
@@ -83,7 +76,7 @@ class Design_Matrix:
         assert type(self.X) == np.ndarray
         return self
 
-    def __get_Y__(self:
+    def __get_Y__(self):
         """ treturn target matrix as One-hot-enc matrix """
         self.Y = keras.utils.to_categorical(self.targets,self.n_classes)
         return self.Y

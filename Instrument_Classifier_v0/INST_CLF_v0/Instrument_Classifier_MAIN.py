@@ -9,6 +9,7 @@ Instrument Classifier v0
 
 import os
 import sys
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import Mode_Utilities as mode_utils
 import System_Utilities as sys_utils
@@ -21,9 +22,10 @@ if __name__ == '__main__':
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
     read = os.path.join(parent,'Target-Data')
     model = os.path.join(parent,'Model-Data')
+    export = os.path.join(parent,'Export-Data')
 
     # PRE-PROCESSING FOR PROGRAM
-    Program_Initializer = sys_utils.Program_Start(read,model,'predict',False)   
+    Program_Initializer = sys_utils.Program_Start(read,model,export,'train-test',True)   
     FILEOBJECTS,N_classes = Program_Initializer.__startup__()
 
     # SETUP NEURAL NETWORK MODELS
@@ -33,11 +35,14 @@ if __name__ == '__main__':
 
     # DETERMINE WHICH MODE TO RUN PROGRAM IN
     if Program_Initializer.program_mode == 'train':
-        Program_Mode = mode_utils.Train_Mode(FILEOBJECTS[:300],model_names)
+        Program_Mode = mode_utils.Train_Mode(FILEOBJECTS,model_names,N_classes,
+                                             exportpath=Program_Initializer.exportpath)
     elif Program_Initializer.program_mode == 'train-test':     
-        Program_Mode =  mode_utils.TrainTest_Mode(FILEOBJECTS,model_names)
+        Program_Mode =  mode_utils.TrainTest_Mode(FILEOBJECTS,model_names,N_classes,
+                                                  exportpath=Program_Initializer.exportpath)
     elif Program_Initializer.program_mode == 'predict':
-        Program_Mode = mode_utils.Test_Mode(FILEOBJECTS[:30],model_names)
+        Program_Mode = mode_utils.Test_Mode(FILEOBJECTS,model_names,N_classes,
+                                            exportpath=Program_Initializer.exportpath)
     else:
         print("\n\tError! - Unsupported mode type")
 

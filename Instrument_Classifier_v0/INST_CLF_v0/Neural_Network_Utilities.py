@@ -9,7 +9,7 @@ Instrument Classifier v0
 
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import tensorflow as tf
 import tensorflow.keras as keras
 
@@ -69,7 +69,7 @@ class Network_Container:
                 self.n_classes = model.output.shape[-1]     # output shape of netowkr
                 self.__savemodel__(model)                   # save Locally
 
-        assert self.n_classes != None           # make sure we know classes
+        assert self.n_classes is not None        # make sure we know how many classes
 
     def __createmodels__(self):
         """ Create & name Neural Network Models """

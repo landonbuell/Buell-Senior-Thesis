@@ -8,10 +8,10 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import numpy as np
+import pandas as pd
 import sys
 import os
 from sklearn.model_selection import train_test_split
-import tensorflow as tf
 
 import System_Utilities as sys_utils
 import Feature_Utilities as feat_utils
@@ -40,11 +40,13 @@ class Program_Mode:
     --------------------------------
     Execute MAIN program in perscribed mode
     """
-    def __init__(self,FILEOBJS,model_names,n_classes,show_summary=True,group_size=256):
+    def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
+                 show_summary=True,group_size=256):
         """ Inititialize Class Object Instance """
         self.FILEOBJS = FILEOBJS
         self.model_names = model_names
         self.n_classes = n_classes
+        self.exportpath = exportpath
         self.show_summary = show_summary    # show results of stages
         self.n_files = len(self.FILEOBJS)
         self.group_size = group_size
@@ -104,9 +106,10 @@ class Train_Mode (Program_Mode):
     --------------------------------
     Creates Program Train Mode Object
     """
-    def __init__(self,FILEOBJS,model_names,n_classes,show_summary=True,n_iters=2):
+    def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
+                 show_summary=True,n_iters=2):
         """ Instantiate Class Method """
-        super().__init__(FILEOBJS,model_names,show_summary)
+        super().__init__(FILEOBJS,model_names,n_classes,exportpath,show_summary)
         self.n_iters = n_iters
 
         # For each model store a list of history objs
@@ -114,12 +117,23 @@ class Train_Mode (Program_Mode):
                                 self.model_names[1]:[],
                                 self.model_names[2]:[]}
 
+    def __call__(self,Networks):
+        """ Call this Instance to Execute Training and Testing """
+        print("\nBegining Training process....")
+        for I in range (0,self.n_iters):
+            print("\tIteration:",I)
+            self.__TRAIN__(Networks)
+            self.FILEOBJS = np.random.permutation(self.FILEOBJS)
+        print("\tTraining Completed! =)")
+        self.export_results()
+        return self
+
     def __TRAIN__(self,Networks):
         """ Train Netorks on data from FILEOBJS """
         group_cntr = 0
         epcs = 4       # training epochs on subset
         for I in range (0,self.n_files,self.group_size):    # In a given group
-            print("\t\t\tGroup Number:",group_cntr)
+            print("\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)                                                   
             for dataset,model in zip(Design_Matrices,self.model_names):
@@ -140,17 +154,6 @@ class Train_Mode (Program_Mode):
         self.model_histories[str(model)].append(history_object)
         return self
 
-    def __call__(self,Networks):
-        """ Call this Instance to Execute Training and Testing """
-        print("\nBegining Training process....")
-        for I in range (0,self.n_iters):
-            print("\tIteration:",I)
-            self.__TRAIN__(Networks)
-            self.FILEOBJS = np.random.permutation(self.FILEOBJS)
-        print("\tTraining Completed! =)")
-        self.export_results()
-        return self
-
     def aggregate_history (self):
         """ Aggregate history objects by model type & metric type """
         pass
@@ -168,26 +171,35 @@ class Test_Mode (Program_Mode):
     model_names (iter) : List-like of strings calling Network models by name
     n_classes (int) : number of discrete classes for models
     show_summary (bool) : If True, result are displayed to user
+    exportpath (str) : String indicatiing where predictions are stored locally
     labels_present (bool) : If True, evaluation labels are given
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self, FILEOBJS,model_names,n_classes,show_summary=True,
-                 labels_present=False,prediction_threshold=0.5):
+    def __init__(self,FILEOBJS,model_names,n_classes,show_summary=True,
+                 exportpath=None,labels_present=False,prediction_threshold=0.5):
         """ Initialize Class Object Instance """
-        super().__init__(FILEOBJS,model_names)
-        self.labels_present = labels_present        # labels for the trainign set?
+        super().__init__(FILEOBJS,model_names,n_classes,exportpath,show_summary)
+ 
+        self.labels_present = labels_present    # labels for the trainign set?
         self.prediction_threshold = prediction_threshold
-        if self.labels_present == True:     # we have labels!
-            self.labels = np.array([])      # hold them in list!
-            self.losses = { self.model_names[0]:np.array([]),
-                            self.model_names[1]:np.array([]),
-                            self.model_names[2]:np.array([])}
+        self.col_names = ['Fullpath',self.model_names[0],
+                     self.model_names[1],self.model_names[2]]
 
-        # For each model store a list of history objs
-        self.model_predictions = {  self.model_names[0]:np.array([]),
-                                    self.model_names[1]:np.array([]),
-                                    self.model_names[2]:np.array([])}
+        if self.labels_present == True:         # we have labels!
+            self.labels = np.array([])          # hold them in list!
+            self.col_names.append('Label')
+            
+        # For Exporting Predictions
+        self.fullexport = os.path.join(self.exportpath,'Z1.csv')       
+        self.output_frame = pd.DataFrame(data=None,columns=self.col_names)
+        self.output_frame.to_csv(path_or_buf=self.fullexport,mode='w')
+
+    def __call__(self,Networks):
+        """ Call this Instance to Execute Training and Testing """
+        print("\nBegining Testing Process...")
+        self.__TEST__(Networks)
+        print("\tTesting Completed! =)")
 
     def __TEST__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
@@ -196,42 +208,37 @@ class Test_Mode (Program_Mode):
             print("\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]  # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            epcs = 16                                   # trainign epochs
+            self.group_data = {'Fullpath' : np.array([x.fullpath for x in FILES])}
             for dataset,model in zip(Design_Matrices,self.model_names):
                 print("\t\t\tLoading & Testing Model:",model)
                 MODEL = Networks.__loadmodel__(model)   # Load network
                 X = dataset.__get_X__()                 # Features
-                self.__predict__(MODEL,X)           # run predictions
-                if self.labels_present == True:         # if we have labels               
-                    Y = dataset.__get_Y__()             # Labels
-                    self.__evaluate__(MODEL,X,Y)        # run evaluation
-                                   
-                Networks.__savemodel__(MODEL)           # save model              
+                if self.labels_present == True:         # we have labels
+                    Y = dataset.__get_Y__()             # Get Targets
+                self.__predict__(MODEL,X)               # run predictions              
+                Networks.__savemodel__(MODEL)           # save model
+            self.export_predicitions()                  # export predictions for group
             group_cntr += 1                 # incr counter
         return self                         # return self       
 
     def __predict__(self,model,X):
         """ Predict Class output from unlabeled sample features """
         y_pred = model.predict(x=X,verbose=0)   # get network predicitons
+        y_pred = np.argmax(y_pred,axis=-1)      # code by integer
         # store predictions
-        self.model_predictions[str(model.name)] = \
-            np.append(self.model_predictions[str(model.name)],y_pred)
+        self.group_data.update({str(model.name):y_pred})
         return self                             # return itself
 
     def __evaluate__(self,model,X,Y):
         """ Compute Loss value and metrics from labeled sample features """
-        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=False)    # build-in evaluation
+        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=False)    # built-in evaluation
         return self
 
-    def __call__(self,Networks):
-        """ Call this Instance to Execute Training and Testing """
-        print("\nBegining Testing Process...")
-        self.__TEST__(Networks)
-        print("\tTesting Completed! =)")
-
-    def export_results (self):
+    def export_predicitions (self):
         """ Export Results of training models to a local path """
-        pass
+        # create output frame
+        group_frame = pd.DataFrame(data=self.group_data,columns=self.col_names)
+        group_frame.to_csv(path_or_buf=self.fullexport,header=False,mode='a')
 
 class TrainTest_Mode (Program_Mode):
     """
@@ -242,17 +249,20 @@ class TrainTest_Mode (Program_Mode):
     model_names (iter) : List-like of strings calling Network models by name
     n_classes (int) : number of discrete classes for models
     show_summary (bool) : If True, result are displayed to user
+    exportpath (str) : String indicatiing where predictions are stored locally
     labels_present (bool) : If True, evaluation labels are given
     testsize (float) : Value on interval (0,1) indicate fraction of data to test with
     --------------------------------
     Creates Program Test Mode Object
     """
     def __init__(self, FILEOBJS,model_names,n_classes,show_summary=True   ,
-                 labels_present=True,testsize=0.1):
-        """ Initialize Class oject instance """
-        super().__init__(FILEOBJS,model_names,show_summary)
+                 labels_present=True,exportpath='',testsize=0.1):
+        """ Initialize Class Object Instance """
+        super().__init__(FILEOBJS,model_names,n_classes,exportpath,show_summary)
+
         self.testsize=testsize          # train/test size
         self.labels_present = labels_present    # labels?
+        self.exportpath = exportpath        # path to write data to
         self.Split_Objs()                   # split objs
                   
     def Split_Objs (self):
@@ -274,8 +284,9 @@ class TrainTest_Mode (Program_Mode):
         Training.__call__(Networks)
 
         # Run Testing Mode
-        Testing = Test_Mode(self.TEST_FILEOBJS,self.model_names,
-                            self.n_classes,self.show_summary,self,labels_present)
+        Testing = Test_Mode(self.TEST_FILEOBJS,self.model_names,self.n_classes,
+                            self.show_summary,self.exportpath,self,labels_present)
+        # Labels present is not defined!
         Testing.__call__(Networks)
             
         return self

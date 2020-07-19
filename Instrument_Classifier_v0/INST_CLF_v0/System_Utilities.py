@@ -25,9 +25,6 @@ Program_Utilities.py - "Program Utilities"
 
 """
 
-            #### VARIABLE DECLARATIONS ####
-
-
             #### DATA STRUCTURE CLASSES ####
 
 class File_Object ():
@@ -72,13 +69,17 @@ class Program_Start:
     Object to handle all program preprocessing
     --------------------------------
     readpath (str) : Local path nagivating to where data is stored
-    modelpath (str) : Local path to store
+    modelpath (str) : Local path to store data related to Nerual network Models
+    exportpath (str) : Local path to export final information
+    mode (str) : String indicating which mode to execute program with
+    newmodels (bool): If True, create new Nueral Network Models
     --------------------------------
 
     """
 
-    def __init__(self,readpath=None,modelpath=None,mode=None,newmodels=None):
-        """ Inititalize Program Attributes """
+    def __init__(self,readpath=None,modelpath=None,exportpath=None,
+                 mode=None,newmodels=None):
+        """ Initialize Class Object Instance """
         dt_obj = datetime.datetime.now()
         starttime = dt_obj.isoformat(sep='_',timespec='auto')
         print("Time Stamp:",starttime)
@@ -87,6 +88,8 @@ class Program_Start:
             self.readpath = readpath
         if modelpath is not None: 
             self.modelpath = modelpath
+        if exportpath is not None:
+            self.exportpath = exportpath
         if mode is not None:
             self.program_mode = mode
         if newmodels is not None:
@@ -108,6 +111,7 @@ class Program_Start:
         print("Running Main Program.....")
         print("\tCollecting data from:",self.readpath)
         print("\tStoring/Loading models from:",self.modelpath)
+        print("\tExporting Predictions to:",self.exportpath)
         print("\tCreating new models?",self.new_models)
         print("\t\tFound",nfiles,"files to read")
         print("\t\tFound",nclasses,"classes to sort")
@@ -140,6 +144,9 @@ class Program_Start:
         parser.add_argument('model_path',type=str,
                             help="Full Local Data Directory Path to store intermediate \
                                     file data. Reccommend using empty/new path.")
+        parser.add_argument('export_path',type=str,
+                            help='Full Local Directory Path to export model predicitions and \
+                                Evaluations to.')
         parser.add_argument('program_mode',type=str,
                             help="Mode for program execution. Must be in \
                                     ['train','train-test','predict']")
