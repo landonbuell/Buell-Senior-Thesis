@@ -94,12 +94,15 @@ class Program_Start:
             self.program_mode = mode
         if newmodels is not None:
             self.new_models = newmodels
-        else:                   # If ANY fail....
-            input_args = self.Argument_Parser()     # Parse Input args
-            self.readpath  = input_args[0]          # Data files kept here 
-            self.modelpath = input_args[1]          # store Network Model data
-            self.program_mode = input_args[2]       # set program mode
-            self.new_models = input_args[3]         # create new models?
+        try:
+            input_args = self.Argument_Parser() # Parse Input args
+            self.readpath  = input_args[0]      # Data files kept here 
+            self.modelpath = input_args[1]      # store Network Model data
+            self.exportpath = input_args[2]     # store network output
+            self.program_mode = input_args[3]   # set program mode
+            self.new_models = input_args[4]     # create new models?
+        except:
+            pass
         assert self.program_mode in ['train','train-test','predict']
 
         if self.program_mode == 'predict' and self.new_models == True:
@@ -155,7 +158,8 @@ class Program_Start:
                                 and new models are created in place")
         # Parse and return args
         args = parser.parse_args()
-        return [args.data_path,args.model_path,args.program_mode,args.new_models]
+        return [args.data_path,args.model_path,args.export_path,
+                args.program_mode,args.new_models]
 
     def Collect_CSVs (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
