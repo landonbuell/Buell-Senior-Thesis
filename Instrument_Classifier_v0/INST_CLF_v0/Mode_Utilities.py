@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import sys
 import os
+import datetime
 from sklearn.model_selection import train_test_split
 
 import System_Utilities as sys_utils
@@ -44,6 +45,9 @@ class Program_Mode:
     def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
                  show_summary=True,group_size=256):
         """ Inititialize Class Object Instance """
+        dt_obj = datetime.datetime.now()
+        self.timestamp = dt_obj.isoformat(sep='-',timespec='auto').replace(':','.')
+
         self.FILEOBJS = FILEOBJS
         self.model_names = model_names
         self.n_classes = n_classes
@@ -51,6 +55,7 @@ class Program_Mode:
         self.show_summary = show_summary    # show results of stages
         self.n_files = len(self.FILEOBJS)
         self.group_size = group_size
+        
 
     def loop_counter(self,cntr,max,text):
         """ Print Loop Counter for User """
@@ -110,7 +115,7 @@ class Train_Mode (Program_Mode):
     Creates Program Train Mode Object
     """
     def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
-                 show_summary=True,n_iters=2):
+                 show_summary=True,n_iters=1):
         """ Instantiate Class Method """
         super().__init__(FILEOBJS=FILEOBJS,model_names=model_names,
                          n_classes=n_classes,exportpath=exportpath,
@@ -191,17 +196,11 @@ class Test_Mode (Program_Mode):
         self.labels_present = labels_present    # labels for the trainign set?
         self.prediction_threshold = prediction_threshold
         
-        if self.labels_present == True:         # we have labels!
-            self.labels = np.array([])          # hold them in list!
-            self.col_names = ['Group Num','Loss','Precision','Recall']
-
-        else:                                   # we don't have labels
-            self.col_names = ['Fullpath',self.model_names[0],
-                         self.model_names[1],self.model_names[2]]
-
-        self.fullexport = os.path.join(self.exportpath,'Z1.csv')       
-        self.output_frame = pd.DataFrame(data=None,columns=self.col_names)
-        self.output_frame.to_csv(path_or_buf=self.fullexport,mode='w')
+        # Process for outputting Data
+        self.prepare_output()     
+        self.fullexport = os.path.join(self.exportpath,self.outname)       
+        self.output_frame = pd.DataFrame(data=None,columns=self.frame_cols)
+        self.output_frame.to_csv(path_or_buf=self.fullexport)
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
@@ -218,15 +217,19 @@ class Test_Mode (Program_Mode):
             print("\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]  # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            self.group_data = {'Fullpath' : np.array([x.fullpath for x in FILES])}
+            self.init_output()
+            
             for dataset,model in zip(Design_Matrices,self.model_names):
                 print("\t\t\tLoading & Testing Model:",model)
                 MODEL = Networks.__loadmodel__(model)   # Load network
                 X = dataset.__get_X__()                 # Features
-                if self.labels_present == True:         # we have labels
-                    Y = dataset.__get_Y__()             # Get Targets
-                else:                                   # we don't have labels
-                    self.__predict__(MODEL,X)           # run predictions              
+                self.prepare_output()
+                if self.labels_present == True:     # we have labels
+                    Y = dataset.__get_Y__()         # Get Targets
+                    self.__evaluate__(MODEL,X,Y)    # Evaluate the model
+                else:                               # we don't have labels                       
+                    self.__predict__(MODEL,X)       # run predictions    
+                    
                 Networks.__savemodel__(MODEL)           # save model
             self.export_results()                       # export predictions for group
             group_cntr += 1                 # incr counter
@@ -237,20 +240,41 @@ class Test_Mode (Program_Mode):
         y_pred = model.predict(x=X,verbose=0)   # get network predicitons
         y_pred = np.argmax(y_pred,axis=-1)      # code by integer
         # store predictions
-        self.group_data.update({str(model.name):y_pred})
+        self.output_data.update({str(model.name):y_pred})
         return self                             # return itself
 
     def __evaluate__(self,model,X,Y):
         """ Compute Loss value and metrics from labeled sample features """
         result = model.evaluate(x=X,y=Y,verbose=0,return_dict=False)    # built-in evaluation
+        for x in result:
+            self.output_data.append(x)
+        return self
+
+    def init_output (self):
+        """ Prepare output dataframe file """
+        if self.labels_present == True: # we have labels, evaluate
+            self.outname = 'Evaluations-'+self.timestamp+'.csv'
+            self.frame_cols = ['Group Counter']
+            for model in self.model_names:
+                for metric in [' loss',' precison',' recall']:
+                    self.frame_cols.append(model+metric)    # add col name
+            self.output_data = []
+
+        elif self.labels_present == False:
+            self.outname = 'Predictions-'+self.timestamp+'.csv'
+            self.frame_cols = ['Fullpath']
+            for model in self.model_names:
+                self.frame_cols.append(model+' prediction')
+            self.output_data = {}
+
         return self
 
     def export_results (self):
         """ Export Results of training models to a local path """
         # create output frame
-        if self.labels_present == False:
-            group_frame = pd.DataFrame(data=self.group_data,columns=self.col_names)
-            group_frame.to_csv(path_or_buf=self.fullexport,header=False,mode='a')
+        group_frame = pd.DataFrame(data=self.output_data,columns=self.frame_cols)
+        # Append to exisiting output frame
+        group_frame.to_csv(path_or_buf=self.fullexport,header=False,mode='a')
 
 class TrainTest_Mode (Program_Mode):
     """

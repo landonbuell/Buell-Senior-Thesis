@@ -22,10 +22,10 @@ if __name__ == '__main__':
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
     read = os.path.join(parent,'Target-Data')
     model = os.path.join(parent,'Model-Data')
-    export = os.path.join(parent,'Export-Data')
+    export = os.path.join(parent,'Output-Data')
 
     # PRE-PROCESSING FOR PROGRAM
-    Program_Initializer = sys_utils.Program_Start(read,model,export,'train-test',True)   
+    Program_Initializer = sys_utils.Program_Start(read,model,export,'train-test',False)   
     FILEOBJECTS,N_classes = Program_Initializer.__startup__()
     exportpath = Program_Initializer.exportpath
 
@@ -38,11 +38,11 @@ if __name__ == '__main__':
     if Program_Initializer.program_mode == 'train':
         Program_Mode = mode_utils.Train_Mode(FILEOBJS=FILEOBJECTS,model_names=model_names,
                                             n_classes=N_classes,exportpath=exportpath,
-                                            show_summary=True,n_iters=2)
+                                            show_summary=True,n_iters=1)
     elif Program_Initializer.program_mode == 'train-test':     
-        Program_Mode =  mode_utils.TrainTest_Mode(FILEOBJS=FILEOBJECTS,model_names=model_names,
+        Program_Mode =  mode_utils.TrainTest_Mode(FILEOBJS=FILEOBJECTS[:20],model_names=model_names,
                                             n_classes=N_classes,exportpath=exportpath,
-                                            show_summary=True,testsize=0.1)
+                                            show_summary=True,testsize=0.5)
     elif Program_Initializer.program_mode == 'predict':
         Program_Mode = mode_utils.Test_Mode(FILEOBJS=FILEOBJECTS,model_names=model_names,
                                             n_classes=N_classes,exportpath=exportpath,
