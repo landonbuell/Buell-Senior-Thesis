@@ -25,7 +25,7 @@ if __name__ == '__main__':
     export = os.path.join(parent,'Output-Data')
 
     # PRE-PROCESSING FOR PROGRAM
-    Program_Initializer = sys_utils.Program_Start(read,model,export,'train-test',False)   
+    Program_Initializer = sys_utils.Program_Start(read,model,export,'predict',False)    
     FILEOBJECTS,N_classes = Program_Initializer.__startup__()
     exportpath = Program_Initializer.exportpath
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                                             n_classes=N_classes,exportpath=exportpath,
                                             show_summary=True,testsize=0.5)
     elif Program_Initializer.program_mode == 'predict':
-        Program_Mode = mode_utils.Test_Mode(FILEOBJS=FILEOBJECTS,model_names=model_names,
+        Program_Mode = mode_utils.Test_Mode(FILEOBJS=FILEOBJECTS[:100],model_names=model_names,
                                             n_classes=N_classes,exportpath=exportpath,
                                             show_summary=True,labels_present=False)
     else:

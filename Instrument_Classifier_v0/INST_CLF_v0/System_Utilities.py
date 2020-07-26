@@ -27,7 +27,7 @@ Program_Utilities.py - "Program Utilities"
 
             #### DATA STRUCTURE CLASSES ####
 
-class File_Object ():
+class File_Object:
     """
     Create File 
     --------------------------------
@@ -62,6 +62,66 @@ class File_Object ():
         self.n_samples = len(self.waveform)
         return self             # return self
 
+class Output_Data :
+    """
+    Output Data structure for Program based on mode
+    --------------------------------
+    labels (bool) : If True, evaluation labels are given
+    model_names (iter) : List-like of strings calling Network models by name
+    metrics (iter) : Array-like of strs contraining metrics to track
+    --------------------------------
+    Return Output Data Structure object
+    """
+
+    def __init__(self,labels,model_names,metrics=None,outpath=None):
+        """ Initialize Class Object Instance """
+        self.labels_present = labels
+        self.model_names = model_names
+        self.metrics = metrics
+        self.output_path = outpath
+        self.data,self.cols = self.init_strucutre
+
+    @property
+    def init_strucutre (self):
+        """ Initialize Output Structure Object """
+        data = {}               # init empty dict
+        
+        if self.labels_present == True:
+            # We have labels, run evaluation
+            metrics_dict = {}
+            cols = ['Group Num']
+            data.update({"Group Num":[]})
+            for metric in self.metrics: # each metric
+                metrics_dict.update({str(metric):np.array([])})
+            for model in self.model_names:
+                data.update({str(model):metrics_dict})
+
+        else:
+            # No labels, run predictions
+            cols = ['Fullpath']
+            data.update({'Fullpath':[]})
+            for model in self.model_names:
+                data.update({str(model):np.array([])})
+                cols.append(str(model))
+            
+        return data,cols
+
+    def add_keydata(self,values):
+        """ Add list of paths or group number to """
+        if self.labels_present == True:
+            # We have labels, evaluate on group
+            pass
+        else:
+            # We don't have labels, predict each sample
+            self.data['Fullpath'] = \
+                np.append(self.data['Fullpath'],values)
+        return self
+
+    def export_results(self):
+        """ Export outdat dat dictionary to local file """
+        out_frame = pd.DataFrame(data=self.data,columns=self.cols)
+        out_frame.to_csv(path_or_buf=self.output_path)
+
             #### PROGRAM PROCESSING CLASSES ####
 
 class Program_Start:
@@ -74,7 +134,7 @@ class Program_Start:
     mode (str) : String indicating which mode to execute program with
     newmodels (bool): If True, create new Nueral Network Models
     --------------------------------
-
+    Return Instantiated Program Start Class Instance
     """
 
     def __init__(self,readpath=None,modelpath=None,exportpath=None,
@@ -108,30 +168,31 @@ class Program_Start:
         if self.program_mode == 'predict' and self.new_models == True:
             print("\n\tERROR! -  Cannot run predictions on Untrained Models!")
             sys.exit()
-
-    def startup_messeges (self,nfiles,nclasses):
+            
+    @property
+    def startup_messeges (self):
         """ Print out Start up messeges to Console """
         print("Running Main Program.....")
         print("\tCollecting data from:",self.readpath)
         print("\tStoring/Loading models from:",self.modelpath)
         print("\tExporting Predictions to:",self.exportpath)
         print("\tCreating new models?",self.new_models)
-        print("\t\tFound",nfiles,"files to read")
-        print("\t\tFound",nclasses,"classes to sort")
+        print("\t\tFound",self.n_files,"files to read")
+        print("\t\tFound",self.n_classes,"classes to sort")
         print("\n")
 
     def __startup__(self):
         """ Run Program Start Up Processes """        
         self.files = self.Collect_CSVs()        # find CSV files
         fileobjects = self.Create_Fileobjs()    # file all files
-        n_files = len(fileobjects)        
+        self.n_files = len(fileobjects)        
         if self.program_mode in ['train','train-test']:
-            n_classes = self.get_nclasses(fileobjects)
+            self.n_classes = self.get_nclasses(fileobjects)
         else:
-            n_classes = None
-        self.startup_messeges (n_files,n_classes) 
+            self.n_classes = None
+        self.startup_messeges
         fileobjects = np.random.permutation(fileobjects)    # permute
-        return fileobjects,n_classes
+        return fileobjects,self.n_classes
 
     def Argument_Parser(self):
         """ Process Command Line Arguments """

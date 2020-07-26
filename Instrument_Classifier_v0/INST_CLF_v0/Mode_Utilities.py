@@ -56,7 +56,6 @@ class Program_Mode:
         self.n_files = len(self.FILEOBJS)
         self.group_size = group_size
         
-
     def loop_counter(self,cntr,max,text):
         """ Print Loop Counter for User """
         print('\t\t('+str(cntr)+'/'+str(max)+')',text)
@@ -195,35 +194,36 @@ class Test_Mode (Program_Mode):
                          show_summary=show_summary)
         self.labels_present = labels_present    # labels for the trainign set?
         self.prediction_threshold = prediction_threshold
-        
-        # Process for outputting Data
-        self.prepare_output()     
-        self.fullexport = os.path.join(self.exportpath,self.outname)       
-        self.output_frame = pd.DataFrame(data=None,columns=self.frame_cols)
-        self.output_frame.to_csv(path_or_buf=self.fullexport)
+
+        self.outputStructure = sys_utils.Output_Data(self.labels_present,
+                                self.model_names,['loss','precision','recall'],
+                                outpath=self.exportpath)
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Testing Process...")
         self.__TEST__(Networks)
         print("\tTesting Completed! =)")
-        if self.labels_present == True:
-            pred_frame = pd.load_csv(path_or_buf=self.fullexport)
+        
 
     def __TEST__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
         group_cntr = 0
+
+        # For Each group of files, Collect the data
         for I in range (0,self.n_files,self.group_size):# In a given group
             print("\tGroup Number:",group_cntr)
             FILES = self.FILEOBJS[I:I+self.group_size]  # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            self.init_output()
-            
+            self.outputStructure.add_keydata(group_cntr if self.labels_present == True \
+                else [x.fullpath for x in FILES])
+
+            # Run Predict/Eval the Group on each model
             for dataset,model in zip(Design_Matrices,self.model_names):
                 print("\t\t\tLoading & Testing Model:",model)
                 MODEL = Networks.__loadmodel__(model)   # Load network
                 X = dataset.__get_X__()                 # Features
-                self.prepare_output()
+                
                 if self.labels_present == True:     # we have labels
                     Y = dataset.__get_Y__()         # Get Targets
                     self.__evaluate__(MODEL,X,Y)    # Evaluate the model
@@ -231,7 +231,8 @@ class Test_Mode (Program_Mode):
                     self.__predict__(MODEL,X)       # run predictions    
                     
                 Networks.__savemodel__(MODEL)           # save model
-            self.export_results()                       # export predictions for group
+            del(Design_Matrices)            # delete Design Matrix Objs
+            self.outputStructure.export_results()
             group_cntr += 1                 # incr counter
         return self                         # return self       
 
@@ -239,42 +240,18 @@ class Test_Mode (Program_Mode):
         """ Predict Class output from unlabeled sample features """
         y_pred = model.predict(x=X,verbose=0)   # get network predicitons
         y_pred = np.argmax(y_pred,axis=-1)      # code by integer
-        # store predictions
-        self.output_data.update({str(model.name):y_pred})
+        # store predictions in arry based on model name
+        self.outputStructure.data[str(model.name)] = \
+            np.append(self.outputStructure.data[str(model.name)],y_pred)
         return self                             # return itself
 
     def __evaluate__(self,model,X,Y):
         """ Compute Loss value and metrics from labeled sample features """
-        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=False)    # built-in evaluation
+        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=True)    # built-in evaluation
         for x in result:
             self.output_data.append(x)
         return self
 
-    def init_output (self):
-        """ Prepare output dataframe file """
-        if self.labels_present == True: # we have labels, evaluate
-            self.outname = 'Evaluations-'+self.timestamp+'.csv'
-            self.frame_cols = ['Group Counter']
-            for model in self.model_names:
-                for metric in [' loss',' precison',' recall']:
-                    self.frame_cols.append(model+metric)    # add col name
-            self.output_data = []
-
-        elif self.labels_present == False:
-            self.outname = 'Predictions-'+self.timestamp+'.csv'
-            self.frame_cols = ['Fullpath']
-            for model in self.model_names:
-                self.frame_cols.append(model+' prediction')
-            self.output_data = {}
-
-        return self
-
-    def export_results (self):
-        """ Export Results of training models to a local path """
-        # create output frame
-        group_frame = pd.DataFrame(data=self.output_data,columns=self.frame_cols)
-        # Append to exisiting output frame
-        group_frame.to_csv(path_or_buf=self.fullexport,header=False,mode='a')
 
 class TrainTest_Mode (Program_Mode):
     """
