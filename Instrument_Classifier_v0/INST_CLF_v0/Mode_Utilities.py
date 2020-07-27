@@ -8,8 +8,6 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import numpy as np
-import pandas as pd
-import sys
 import os
 import datetime
 from sklearn.model_selection import train_test_split
@@ -43,7 +41,7 @@ class Program_Mode:
     Execute MAIN program in perscribed mode
     """
     def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
-                 show_summary=True,group_size=256):
+                 show_summary=True,group_size=64):
         """ Inititialize Class Object Instance """
         dt_obj = datetime.datetime.now()
         self.timestamp = dt_obj.isoformat(sep='-',timespec='auto').replace(':','.')
@@ -114,12 +112,15 @@ class Train_Mode (Program_Mode):
     Creates Program Train Mode Object
     """
     def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
-                 show_summary=True,n_iters=1):
+                 show_summary=True,n_iters=2):
         """ Instantiate Class Method """
         super().__init__(FILEOBJS=FILEOBJS,model_names=model_names,
                          n_classes=n_classes,exportpath=exportpath,
                          show_summary=show_summary)
+
         self.n_iters = n_iters
+        self.n_epochs = 4
+        self.group_counter = 0
 
         # For each model store a list of history objs
         self.model_histories = {self.model_names[0]:[],
@@ -138,11 +139,10 @@ class Train_Mode (Program_Mode):
         return self
 
     def __TRAIN__(self,Networks):
-        """ Train Netorks on data from FILEOBJS """
-        group_cntr = 0
-        epcs = 4       # training epochs on subset
+        """ Train Netorks on data from FILEOBJS """        
+        
         for I in range (0,self.n_files,self.group_size):    # In a given group
-            print("\tGroup Number:",group_cntr)
+            print("\tGroup Number:",self.group_counter)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)                                                   
             for dataset,model in zip(Design_Matrices,self.model_names):
@@ -150,11 +150,11 @@ class Train_Mode (Program_Mode):
                 MODEL = Networks.__loadmodel__(model)   # Load network
                 X = dataset.__get_X__()                 # Features
                 Y = dataset.__get_Y__()                 # Labels          
-                history = MODEL.fit(x=X,y=Y,batch_size=32,epochs=epcs,verbose=2,
-                                    initial_epoch=(group_cntr*epcs))
+                history = MODEL.fit(x=X,y=Y,batch_size=32,epochs=self.n_epochs,verbose=0,
+                                    initial_epoch=(self.group_counter*self.n_epochs))
                 Networks.__savemodel__(MODEL)           # save model
                 self.store_history(history,model)       # store data
-            group_cntr += 1                     # incr coutner
+            self.group_counter += 1                     # incr coutner
         return self                             # self
 
     def store_history (self,history_object,model):
@@ -194,6 +194,7 @@ class Test_Mode (Program_Mode):
                          show_summary=show_summary)
         self.labels_present = labels_present    # labels for the trainign set?
         self.prediction_threshold = prediction_threshold
+        self.group_counter = 0
 
         self.outputStructure = sys_utils.Output_Data(self.labels_present,
                                 self.model_names,['loss','precision','recall'],
@@ -208,14 +209,14 @@ class Test_Mode (Program_Mode):
 
     def __TEST__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
-        group_cntr = 0
 
         # For Each group of files, Collect the data
         for I in range (0,self.n_files,self.group_size):# In a given group
-            print("\tGroup Number:",group_cntr)
+            print("\tGroup Number:",self.group_counter)
             FILES = self.FILEOBJS[I:I+self.group_size]  # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            self.outputStructure.add_keydata(group_cntr if self.labels_present == True \
+            self.outputStructure.add_keydata(
+                self.group_counter if self.labels_present == True \
                 else [x.fullpath for x in FILES])
 
             # Run Predict/Eval the Group on each model
@@ -230,11 +231,11 @@ class Test_Mode (Program_Mode):
                 else:                               # we don't have labels                       
                     self.__predict__(MODEL,X)       # run predictions    
                     
-                Networks.__savemodel__(MODEL)           # save model
-            del(Design_Matrices)            # delete Design Matrix Objs
+                Networks.__savemodel__(MODEL)       # save model
+            del(Design_Matrices)                # delete Design Matrix Objs
             self.outputStructure.export_results()
-            group_cntr += 1                 # incr counter
-        return self                         # return self       
+            self.group_counter += 1                 # incr counter
+        return self                             # return self       
 
     def __predict__(self,model,X):
         """ Predict Class output from unlabeled sample features """
@@ -247,9 +248,14 @@ class Test_Mode (Program_Mode):
 
     def __evaluate__(self,model,X,Y):
         """ Compute Loss value and metrics from labeled sample features """
-        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=True)    # built-in evaluation
-        for x in result:
-            self.output_data.append(x)
+        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=True)     # built-in evaluation
+
+        for key in result.keys():                                    # each key
+            metric = key.split('_')[0]              # elminate extra counter
+            keystr = str(model.name)+'-'+metric     # create key
+            self.outputStructure.data[keystr] = \
+                np.append(self.outputStructure.data[keystr],result[key])
+           
         return self
 
 
@@ -296,7 +302,7 @@ class TrainTest_Mode (Program_Mode):
         # Run Training Mode
         Training = Train_Mode(FILEOBJS=self.TRAIN_FILEOBJS,model_names=self.model_names,
                               n_classes=self.n_classes,exportpath=self.exportpath,
-                              show_summary=self.show_summary,n_iters=2)
+                              show_summary=self.show_summary,n_iters=1)
         Training.__call__(Networks)
 
         # Run Testing Mode

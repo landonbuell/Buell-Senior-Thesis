@@ -129,7 +129,7 @@ class Neural_Network_Models:
     """
     Container for Neural network model architectures
     --------------------------------
-    * no args
+    n_classes (int) : number of discrete classes for models
     --------------------------------
     High-level wrapper for Tensorflow Sequential models
     """

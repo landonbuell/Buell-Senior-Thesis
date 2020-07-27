@@ -81,6 +81,9 @@ class Output_Data :
         self.output_path = outpath
         self.data,self.cols = self.init_strucutre
 
+        outframe = pd.DataFrame(data=self.data,columns=self.cols)
+        outframe.to_csv(path_or_buf=self.output_path)
+
     @property
     def init_strucutre (self):
         """ Initialize Output Structure Object """
@@ -88,14 +91,14 @@ class Output_Data :
         
         if self.labels_present == True:
             # We have labels, run evaluation
-            metrics_dict = {}
             cols = ['Group Num']
             data.update({"Group Num":[]})
-            for metric in self.metrics: # each metric
-                metrics_dict.update({str(metric):np.array([])})
-            for model in self.model_names:
-                data.update({str(model):metrics_dict})
-
+            for model in self.model_names:      # each network
+                for metric in self.metrics:     # each metric 
+                    keystr = model+'-'+metric   # create key of model-metric
+                    data.update({keystr:np.array([])})
+                    cols.append(keystr)         # add to cols
+                   
         else:
             # No labels, run predictions
             cols = ['Fullpath']
@@ -110,7 +113,8 @@ class Output_Data :
         """ Add list of paths or group number to """
         if self.labels_present == True:
             # We have labels, evaluate on group
-            pass
+            self.data['Group Num'] = \
+                np.append(self.data['Group Num'],values)
         else:
             # We don't have labels, predict each sample
             self.data['Fullpath'] = \
@@ -120,7 +124,7 @@ class Output_Data :
     def export_results(self):
         """ Export outdat dat dictionary to local file """
         out_frame = pd.DataFrame(data=self.data,columns=self.cols)
-        out_frame.to_csv(path_or_buf=self.output_path)
+        out_frame.to_csv(path_or_buf=self.output_path,header=True,mode='w')
 
             #### PROGRAM PROCESSING CLASSES ####
 
@@ -141,8 +145,8 @@ class Program_Start:
                  mode=None,newmodels=None):
         """ Initialize Class Object Instance """
         dt_obj = datetime.datetime.now()
-        starttime = dt_obj.isoformat(sep='_',timespec='auto')
-        print("Time Stamp:",starttime)
+        self.starttime = dt_obj.isoformat(sep='_',timespec='auto').replace(':','.')
+        print("Time Stamp:",self.starttime)
         # If arguments given:
         if readpath is not None:
             self.readpath = readpath
