@@ -34,25 +34,24 @@ class Program_Mode:
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
     n_classes (int) : number of discrete classes for models
+    timestamp (str) : String representing time of program start
     exportpath (str) : Local Path to output filedata
     show_summary (bool) : If True, result are displayed to user
     group_size (int) : number of file samples in each design matrix
     --------------------------------
     Execute MAIN program in perscribed mode
     """
-    def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
-                 show_summary=True,group_size=64):
+    def __init__(self,FILEOBJS,model_names,n_classes,timestamp,exportpath=None,
+                 show_summary=True,group_size=256):
         """ Inititialize Class Object Instance """
-        dt_obj = datetime.datetime.now()
-        self.timestamp = dt_obj.isoformat(sep='-',timespec='auto').replace(':','.')
-
-        self.FILEOBJS = FILEOBJS
-        self.model_names = model_names
-        self.n_classes = n_classes
-        self.exportpath = exportpath
-        self.show_summary = show_summary    # show results of stages
-        self.n_files = len(self.FILEOBJS)
-        self.group_size = group_size
+        self.FILEOBJS = FILEOBJS            # file objects in use
+        self.model_names = model_names      # name of models
+        self.n_classes = n_classes          # number of classes
+        self.timestamp = timestamp          # time when program began
+        self.exportpath = exportpath        # path to push results to
+        self.show_summary = show_summary    # show results of stages      
+        self.group_size = group_size        # giles to use in each mega-batch
+        self.n_files = len(self.FILEOBJS)   # number of file objects
         
     def loop_counter(self,cntr,max,text):
         """ Print Loop Counter for User """
@@ -104,6 +103,7 @@ class Train_Mode (Program_Mode):
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
     n_classes (int) : number of discrete classes for models
+    timestamp (str) : String representing time of program start
     exportpath (str) : Local Path to output filedata
     show_summary (bool) : If True, result are displayed to user
     group_size (int) : number of file samples in each design matrix
@@ -111,13 +111,15 @@ class Train_Mode (Program_Mode):
     --------------------------------
     Creates Program Train Mode Object
     """
-    def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
-                 show_summary=True,n_iters=2):
+    def __init__(self,FILEOBJS,model_names,n_classes,timestamp,exportpath=None,
+                 show_summary=True,group_size=256,n_iters=2):
         """ Instantiate Class Method """
         super().__init__(FILEOBJS=FILEOBJS,model_names=model_names,
-                         n_classes=n_classes,exportpath=exportpath,
-                         show_summary=show_summary)
+                         n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
+                         show_summary=show_summary,group_size=group_size)
 
+        outfile = 'HISTORY@'+self.timestamp+'.csv'
+        self.exportpath = os.path.join(self.exportpath,outfile)
         self.n_iters = n_iters
         self.n_epochs = 4
         self.group_counter = 0
@@ -135,7 +137,6 @@ class Train_Mode (Program_Mode):
             self.__TRAIN__(Networks)
             self.FILEOBJS = np.random.permutation(self.FILEOBJS)
         print("\tTraining Completed! =)")
-        self.export_results()
         return self
 
     def __TRAIN__(self,Networks):
@@ -144,7 +145,8 @@ class Train_Mode (Program_Mode):
         for I in range (0,self.n_files,self.group_size):    # In a given group
             print("\tGroup Number:",self.group_counter)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
-            Design_Matrices = super().construct_design_matrices(FILES)                                                   
+            Design_Matrices = super().construct_design_matrices(FILES)  
+            
             for dataset,model in zip(Design_Matrices,self.model_names):
                 print("\t\t\tLoading & Fitting Model:",model)
                 MODEL = Networks.__loadmodel__(model)   # Load network
@@ -154,6 +156,7 @@ class Train_Mode (Program_Mode):
                                     initial_epoch=(self.group_counter*self.n_epochs))
                 Networks.__savemodel__(MODEL)           # save model
                 self.store_history(history,model)       # store data
+
             self.group_counter += 1                     # incr coutner
         return self                             # self
 
@@ -163,14 +166,6 @@ class Train_Mode (Program_Mode):
         self.model_histories[str(model)].append(history_object)
         return self
 
-    def aggregate_history (self):
-        """ Aggregate history objects by model type & metric type """
-        pass
-
-    def export_results (self):
-        """ Export Results of training models to a local path """
-        pass
-
 class Test_Mode (Program_Mode):
     """
     Run Program in 'Test Mode'
@@ -179,6 +174,7 @@ class Test_Mode (Program_Mode):
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
     n_classes (int) : number of discrete classes for models
+    timestamp (str) : String representing time of program start
     exportpath (str) : Local Path to output filedata
     show_summary (bool) : If True, result are displayed to user
     group_size (int) : number of file samples in each design matrix
@@ -186,26 +182,30 @@ class Test_Mode (Program_Mode):
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self,FILEOBJS,model_names,n_classes,exportpath=None,
-                 show_summary=True,labels_present=False,prediction_threshold=0.5):
+    def __init__(self,FILEOBJS,model_names,n_classes,timestamp,exportpath=None,
+                 show_summary=True,group_size=256,labels_present=False,prediction_threshold=0.5):
         """ Initialize Class Object Instance """
         super().__init__(FILEOBJS=FILEOBJS,model_names=model_names,
-                         n_classes=n_classes,exportpath=exportpath,
-                         show_summary=show_summary)
-        self.labels_present = labels_present    # labels for the trainign set?
+                         n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
+                         show_summary=show_summary,group_size=group_size)
+
+        outfile = 'PREDICTIONS@'+self.timestamp+'.csv'
+        self.exportpath = os.path.join(self.exportpath,outfile)
         self.prediction_threshold = prediction_threshold
         self.group_counter = 0
-
-        self.outputStructure = sys_utils.Output_Data(self.labels_present,
-                                self.model_names,['loss','precision','recall'],
-                                outpath=self.exportpath)
+        self.outputStructure = sys_utils.Output_Data(self.model_names,
+                                            outpath=self.exportpath)
 
     def __call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Testing Process...")
         self.__TEST__(Networks)
         print("\tTesting Completed! =)")
-        
+
+        print("\nBegining Analysis Process...")  
+        Analyser = ML_utils.Model_Analysis(self.model_names,
+                        self.outputStructure.output_path,self.n_classes)
+        print("\tTesting Completed! =)")
 
     def __TEST__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
@@ -215,24 +215,17 @@ class Test_Mode (Program_Mode):
             print("\tGroup Number:",self.group_counter)
             FILES = self.FILEOBJS[I:I+self.group_size]  # subset of files
             Design_Matrices = super().construct_design_matrices(FILES)
-            self.outputStructure.add_keydata(
-                self.group_counter if self.labels_present == True \
-                else [x.fullpath for x in FILES])
+            self.outputStructure.add_index(FILES)       # add group data
 
             # Run Predict/Eval the Group on each model
             for dataset,model in zip(Design_Matrices,self.model_names):
                 print("\t\t\tLoading & Testing Model:",model)
                 MODEL = Networks.__loadmodel__(model)   # Load network
-                X = dataset.__get_X__()                 # Features
-                
-                if self.labels_present == True:     # we have labels
-                    Y = dataset.__get_Y__()         # Get Targets
-                    self.__evaluate__(MODEL,X,Y)    # Evaluate the model
-                else:                               # we don't have labels                       
-                    self.__predict__(MODEL,X)       # run predictions    
-                    
+                X = dataset.__get_X__()                 # Features                                                                               
+                self.__predict__(MODEL,X)             # run predictions                        
                 Networks.__savemodel__(MODEL)       # save model
-            del(Design_Matrices)                # delete Design Matrix Objs
+
+            del(Design_Matrices)                    # delete Design Matrix Objs
             self.outputStructure.export_results()
             self.group_counter += 1                 # incr counter
         return self                             # return self       
@@ -241,22 +234,11 @@ class Test_Mode (Program_Mode):
         """ Predict Class output from unlabeled sample features """
         y_pred = model.predict(x=X,verbose=0)   # get network predicitons
         y_pred = np.argmax(y_pred,axis=-1)      # code by integer
-        # store predictions in arry based on model name
+        # store predictions in array based on model name
         self.outputStructure.data[str(model.name)] = \
             np.append(self.outputStructure.data[str(model.name)],y_pred)
         return self                             # return itself
-
-    def __evaluate__(self,model,X,Y):
-        """ Compute Loss value and metrics from labeled sample features """
-        result = model.evaluate(x=X,y=Y,verbose=0,return_dict=True)     # built-in evaluation
-
-        for key in result.keys():                                    # each key
-            metric = key.split('_')[0]              # elminate extra counter
-            keystr = str(model.name)+'-'+metric     # create key
-            self.outputStructure.data[keystr] = \
-                np.append(self.outputStructure.data[keystr],result[key])
-           
-        return self
+       
 
 
 class TrainTest_Mode (Program_Mode):
@@ -267,23 +249,25 @@ class TrainTest_Mode (Program_Mode):
     FILEOBJS (iter) : List-like of File_object instances
     model_names (iter) : List-like of strings calling Network models by name
     n_classes (int) : number of discrete classes for models
+    timestamp (str) : String representing time of program start
+    exportpath (str) : Local Path to output filedata
     show_summary (bool) : If True, result are displayed to user
-    exportpath (str) : String indicatiing where predictions are stored locally
-    labels_present (bool) : If True, evaluation labels are given
+    group_size (int) : number of file samples in each design matrix
     testsize (float) : Value on interval (0,1) indicate fraction of data to test with
     --------------------------------
     Creates Program Test Mode Object
     """
-    def __init__(self, FILEOBJS,model_names,n_classes,show_summary=True   ,
-                 labels_present=True,exportpath='',testsize=0.1):
+    def __init__(self,FILEOBJS,model_names,n_classes,timestamp,exportpath='',
+                 show_summary=True,group_size=256,labels_present=True,n_iters=1,testsize=0.1):
         """ Initialize Class Object Instance """
         super().__init__(FILEOBJS=FILEOBJS,model_names=model_names,
-                         n_classes=n_classes,exportpath=exportpath,
-                         show_summary=show_summary)
-
-        self.testsize=testsize          # train/test size
+                         n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
+                         show_summary=show_summary,group_size=group_size)
+        
         self.labels_present = labels_present    # labels?
-        self.exportpath = exportpath        # path to write data to
+        self.n_iters = n_iters              # number of passes over data
+        self.testsize = testsize            # train/test size
+        
         self.Split_Objs()                   # split objs
                   
     def Split_Objs (self):
@@ -301,14 +285,16 @@ class TrainTest_Mode (Program_Mode):
 
         # Run Training Mode
         Training = Train_Mode(FILEOBJS=self.TRAIN_FILEOBJS,model_names=self.model_names,
-                              n_classes=self.n_classes,exportpath=self.exportpath,
-                              show_summary=self.show_summary,n_iters=1)
+                              n_classes=self.n_classes,timestamp=self.timestamp,
+                              exportpath=self.exportpath,show_summary=True,group_size=self.group_size,
+                              n_iters=2)
         Training.__call__(Networks)
 
         # Run Testing Mode
         Testing = Test_Mode(FILEOBJS=self.TEST_FILEOBJS,model_names=self.model_names,
-                              n_classes=self.n_classes,exportpath=self.exportpath,
-                              show_summary=self.show_summary,labels_present=True)
+                              n_classes=self.n_classes,timestamp=self.timestamp,
+                              exportpath=self.exportpath,show_summary=True,group_size=self.group_size,
+                              labels_present=True)
         Testing.__call__(Networks)
             
         return self

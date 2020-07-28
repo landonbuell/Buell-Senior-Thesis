@@ -21,9 +21,13 @@ Math_Utilities.py - "Math Utilities"
 
 class Mathematical_Utils :
     """
-    Mathematical Utilites for 
+    Mathematical Utilites for feature processing
+    --------------------------------
 
+    --------------------------------
+    All methods are static
     """
+
     @staticmethod
     def Distribution_Data (X):
         """

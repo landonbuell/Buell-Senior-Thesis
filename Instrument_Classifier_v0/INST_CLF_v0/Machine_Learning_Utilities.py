@@ -8,6 +8,7 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import numpy as np
+import pandas as pd
 import os
 import tensorflow.keras as keras
 import time
@@ -114,7 +115,6 @@ class Feature_Array:
         self.features = self.features.reshape(new_shape)
         return self
 
-
     def __getshape__(self):
         """ Return shape of feature attrb as tuple """
         return self.features.shape
@@ -128,3 +128,41 @@ class Feature_Array:
         self.features = np.array([])    # arr to hold features
         return self             # return new self
 
+class Model_Analysis:
+    """
+    Analyze Performance of Neural Metwork models
+    --------------------------------
+    model_names (iter) : List-like of strings calling Network models by name  
+    datapath (str) : Local path where data is contained
+    n_classes (int) : number of discrete classes for models
+    --------------------------------
+    Return Instantiated Model Analysis Object
+    """
+
+    def __init__(self,model_names,datapath,n_classes):
+        """ Instantiate Class Object """
+        self.model_names = model_names  # name of NN models
+        self.datapath = datapath        # path to find file
+        self.n_classes = n_classes      # classes in model
+
+        metrics = [keras.metrics.CategoricalCrossentropy(),
+                   keras.metrics.Precision(),
+                   keras.metrics.Recall()]
+
+        self.infile = self.datapath.split('\\')[-1] # last item in split
+        outfile = self.infile.split('@')[-1]        # time-stamp + ext
+        self.outfile = 'ANALYSIS@'+outfile
+
+    def Collect_Data (self):
+        """ Collect Data from predicitions File """
+        self.data = {'Metrics':self.metrics}
+        predictions = pd.read_csv(self.datapath,index_col=0)
+        self.labels = predictions['Label']
+        predictions = predicitons.drop(['Label'])
+
+    def evaluate_metrics(self,data):
+        """ Evaluate all performance data with given metrics """
+        pass
+
+
+            

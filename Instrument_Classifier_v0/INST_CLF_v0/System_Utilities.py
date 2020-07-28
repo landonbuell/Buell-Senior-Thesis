@@ -55,9 +55,9 @@ class File_Object:
 
     def read_audio (self):
         """ Read raw data from local path """
-        rate,data = sciowav.read(self.fullpath)
-        self.rate = rate            # set sample rate
+        rate,data = sciowav.read(self.fullpath)    
         data = data.reshape(1,-1).ravel()   # flatten waveform
+        self.rate = rate            # set sample rate
         self.waveform = data/np.abs(np.amax(data))
         self.n_samples = len(self.waveform)
         return self             # return self
@@ -65,64 +65,41 @@ class File_Object:
 class Output_Data :
     """
     Output Data structure for Program based on mode
-    --------------------------------
-    labels (bool) : If True, evaluation labels are given
-    model_names (iter) : List-like of strings calling Network models by name
-    metrics (iter) : Array-like of strs contraining metrics to track
+    --------------------------------  
+    model_names (iter) : List-like of strings calling Network models by name  
+    outpath (str) : Local Path to output data
     --------------------------------
     Return Output Data Structure object
     """
 
-    def __init__(self,labels,model_names,metrics=None,outpath=None):
+    def __init__(self,model_names,outpath=None):
         """ Initialize Class Object Instance """
-        self.labels_present = labels
-        self.model_names = model_names
-        self.metrics = metrics
+        self.model_names = model_names        
         self.output_path = outpath
-        self.data,self.cols = self.init_strucutre
-
-        outframe = pd.DataFrame(data=self.data,columns=self.cols)
-        outframe.to_csv(path_or_buf=self.output_path)
-
+        self.data,self.cols = self.init_structure
+      
     @property
-    def init_strucutre (self):
-        """ Initialize Output Structure Object """
-        data = {}               # init empty dict
-        
-        if self.labels_present == True:
-            # We have labels, run evaluation
-            cols = ['Group Num']
-            data.update({"Group Num":[]})
-            for model in self.model_names:      # each network
-                for metric in self.metrics:     # each metric 
-                    keystr = model+'-'+metric   # create key of model-metric
-                    data.update({keystr:np.array([])})
-                    cols.append(keystr)         # add to cols
-                   
-        else:
-            # No labels, run predictions
-            cols = ['Fullpath']
-            data.update({'Fullpath':[]})
-            for model in self.model_names:
-                data.update({str(model):np.array([])})
-                cols.append(str(model))
-            
+    def init_structure(self):
+        """ Initalize Output data Structure """
+        cols = ['Fullpath','Label']
+        for model in self.model_names:
+            cols.append(model)
+        # Create a dictionary
+        data = {}           # init dictionary
+        for i in cols:      # each entry
+            data.update({i:np.array([])})
         return data,cols
 
-    def add_keydata(self,values):
-        """ Add list of paths or group number to """
-        if self.labels_present == True:
-            # We have labels, evaluate on group
-            self.data['Group Num'] = \
-                np.append(self.data['Group Num'],values)
-        else:
-            # We don't have labels, predict each sample
-            self.data['Fullpath'] = \
-                np.append(self.data['Fullpath'],values)
+    def add_index(self,FILEOBJS):
+        """ Add filepaths and targets to output structure """
+        paths = [x.fullpath for x in FILEOBJS]  # get fullpaths
+        trgts = [x.target for x in FILEOBJS]    # get targets
+        self.data['Fullpath'] = np.append(self.data['Fullpath'],paths)
+        self.data['Label'] = np.append(self.data['Label'],trgts)
         return self
 
     def export_results(self):
-        """ Export outdat dat dictionary to local file """
+        """ Export outdat data dictionary to local file """
         out_frame = pd.DataFrame(data=self.data,columns=self.cols)
         out_frame.to_csv(path_or_buf=self.output_path,header=True,mode='w')
 
