@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>00e45cd9-f4c0-42c4-9217-91b95258762e</ProjectGuid>
+    <ProjectGuid>36f8cbfb-e37f-420d-a2a0-9e0b32446d08</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Instrument_Classifier_MAIN.py</StartupFile>
+    <StartupFile>Classifier_Analysis_MAIN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>INST_CLF_v0</Name>
-    <RootNamespace>INST_CLF_v0</RootNamespace>
+    <Name>Classifier_Analysis</Name>
+    <RootNamespace>Classifier_Analysis</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,26 +21,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Instrument_Classifier_MAIN.py" />
-    <Compile Include="Math_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Mode_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Feature_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine_Learning_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Neural_Network_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="System_Utilities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plotting_Utilities.py">
+    <Compile Include="Classifier_Analysis_MAIN.py" />
+    <Compile Include="Analysis_Utilities.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

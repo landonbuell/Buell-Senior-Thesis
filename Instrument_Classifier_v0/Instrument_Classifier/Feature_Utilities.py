@@ -83,6 +83,28 @@ class Time_Series_Features (Base_Features):
         super().__init__(waveform=waveform,rate=rate,
                 frames=frames,npts=npts,overlap=overlap)
 
+    def time_domain_envelop (self):
+        """ Compute Time Domain envelope of waveform """
+        return None
+
+    def zero_crossing_rate (self):
+        """ Compute Zero-Crossing rate of signal """
+        return None
+
+    def center_of_mass (self):
+        """ Compute temporal center of mass of waveform """
+        return None
+
+    def waveform_distribution(self):
+        """ Compute Distribution data from waveform """
+        return math_utils.Mathematical_Utils.Distribution_Data(self.X)
+
+    def auto_correlation_coefficients (self,k=4):
+        """ Compute first k 'autocorrelation coefficients from waveform """
+        return None
+
+
+
     def Phase_Space (self,dt=1):
         """
         Construct phase space representation of signal X

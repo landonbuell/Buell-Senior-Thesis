@@ -11,6 +11,7 @@ import numpy as np
 import os
 import datetime
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 import System_Utilities as sys_utils
 import Feature_Utilities as feat_utils
@@ -56,6 +57,10 @@ class Program_Mode:
     def loop_counter(self,cntr,max,text):
         """ Print Loop Counter for User """
         print('\t\t('+str(cntr)+'/'+str(max)+')',text)
+        return None
+
+    def Scale_Data (self):
+        """ Scale Design Matrix for processing """
         return None
 
     def collect_features (self,fileobj):

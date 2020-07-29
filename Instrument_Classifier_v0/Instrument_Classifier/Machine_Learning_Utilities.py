@@ -162,8 +162,6 @@ class Model_Analysis:
     def model_metrics(self,model):
         """ Compute all metrics for single model """
         y_pred = self.data[model]       # these are the predictions
-        
-        for 
 
     def __call__(self):
         """ Compute all metrics Values for all Models """
