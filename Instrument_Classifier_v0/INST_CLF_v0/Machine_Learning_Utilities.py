@@ -145,24 +145,35 @@ class Model_Analysis:
         self.datapath = datapath        # path to find file
         self.n_classes = n_classes      # classes in model
 
-        metrics = [keras.metrics.CategoricalCrossentropy(),
-                   keras.metrics.Precision(),
-                   keras.metrics.Recall()]
+        self.metrics = [keras.metrics.SparseCategoricalCrossentropy(),
+                        keras.metrics.Precision(),
+                        keras.metrics.Recall()]
 
+        
         self.infile = self.datapath.split('\\')[-1] # last item in split
         outfile = self.infile.split('@')[-1]        # time-stamp + ext
-        self.outfile = 'ANALYSIS@'+outfile
+        self.outfile_name = 'ANALYSIS@'+outfile
 
-    def Collect_Data (self):
-        """ Collect Data from predicitions File """
-        self.data = {'Metrics':self.metrics}
-        predictions = pd.read_csv(self.datapath,index_col=0)
-        self.labels = predictions['Label']
-        predictions = predicitons.drop(['Label'])
+    def read_data (self):
+        """ Load in Data from external source """
+        data = pd.read_csv(self.infile,header=0,index_col=0)
+        return data
 
-    def evaluate_metrics(self,data):
-        """ Evaluate all performance data with given metrics """
-        pass
+    def model_metrics(self,model):
+        """ Compute all metrics for single model """
+        y_pred = self.data[model]       # these are the predictions
+        
+        for 
+
+    def __call__(self):
+        """ Compute all metrics Values for all Models """
+        self.data = self.read_data()        # get data from CSV
+        self.truth = self.data['Label']     # get label column
+        for model in self.model_names:      # each model
+            self.model_metrics(model)       # compute metrics
+
+
+    
 
 
             

@@ -34,7 +34,7 @@ if __name__ == '__main__':
     Neural_Networks = NN_utils.Network_Container(NN_utils.model_names,
         N_classes,Program_Initializer.modelpath,Program_Initializer.new_models)
     model_names = Neural_Networks.__getmodelnames__
-
+    
     # DETERMINE WHICH MODE TO RUN PROGRAM
     if Program_Initializer.program_mode == 'train':
         Program_Mode = mode_utils.Train_Mode(FILEOBJS=FILEOBJECTS,model_names=model_names,

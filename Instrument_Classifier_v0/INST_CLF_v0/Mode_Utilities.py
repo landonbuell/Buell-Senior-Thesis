@@ -298,6 +298,4 @@ class TrainTest_Mode (Program_Mode):
         Testing.__call__(Networks)
             
         return self
-
-
-        
+   

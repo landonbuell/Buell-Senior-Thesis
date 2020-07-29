@@ -22,6 +22,8 @@ Neural_Network_Models.py - "Neural Network Models"
             #### VARIABLE DECLARATIONS ####
 
 model_names = ['JARVIS','VISION','ULTRON']      # names for models
+#model_names = ['PERCEPTRON_CLASSIFIER','SPECTROGRAM_CLASSIFIER',
+ #              'PHASESPACE_CLASSIFIER']         # names for models
 
 perceptron_shape = 15
 spectrogram_shape = (560,256,1)

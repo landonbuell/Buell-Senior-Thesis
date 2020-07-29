@@ -171,7 +171,7 @@ class Program_Start:
             self.n_classes = self.get_nclasses(fileobjects)
         else:
             self.n_classes = None
-        self.startup_messeges
+        self.startup_messeges           # Messages to User
         fileobjects = np.random.permutation(fileobjects)    # permute
         return fileobjects,self.n_classes
 
