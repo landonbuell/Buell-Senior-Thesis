@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
     export = os.path.join(parent,'Output-Data')
 
-    infile = 'PREDICTIONS@2020-07-28_14.23.03.479117.csv'
+    infile = 'PREDICTIONS@2020-07-29_20.43.59.585357.csv'
     model_names = ['JARVIS','VISION','ULTRON']      # names for models
     n_classes = 25
 
