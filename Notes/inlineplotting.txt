@@ -1,5 +1,0 @@
-from matplotlib import pyplot as plt
-
-plt.ion() # iteractive plotting
-
-plt.figure(fignum=1)
