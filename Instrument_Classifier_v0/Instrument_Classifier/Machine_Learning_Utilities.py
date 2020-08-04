@@ -15,7 +15,7 @@ import time
 
             #### Data Structrue ####
 
-class Design_Matrix:
+class DesignMatrix:
     """
     Construct design-matrix-like object
     --------------------------------
@@ -35,18 +35,18 @@ class Design_Matrix:
         self.ndim = ndim    # number of dimensions in array
         self.n_classes = n_classes
 
-    def add_sample (self,x):
+    def AddSample (self,x):
         """ Add features 'x' to design matrix, preserve shape """
-        self.X.append(x.__getfeatures__())      # add sample to design matrix
-        self.shapes.append(x.__getshape__())    # store shape       
-        self.n_samples += 1                     # current number of samples
-        try:
-            self.targets.append(x.target)       # add the target
-        except:                                 # otherwise
-            self.targets.append(None)           # add None-type
+        self.X.append(x.GetFeatures())      # add sample to design matrix
+        self.shapes.append(x.GetShape())    # store shape       
+        self.n_samples += 1                 # current number of samples
+        try:                                # attempt
+            self.targets.append(x.target)   # add the target
+        except:                             # otherwise
+            self.targets.append(None)       # add None-type
         return self
  
-    def pad_2D (self,new_shape,offsets=(0,0)):
+    def Pad2D (self,new_shape,offsets=(0,0)):
         """ Zero-Pad 2D samples to meet shape """
         new_X = np.zeros(shape=(self.n_samples,new_shape[0],new_shape[1]))   # create new design matrix
         new_shape = (new_shape[0],new_shape[1])
@@ -64,7 +64,7 @@ class Design_Matrix:
         self.X = self.X.reshape(self.n_samples,new_shape[0],new_shape[1],1)
         return self                         # return new instance
 
-    def shape_by_sample (self,shape=None):
+    def ShapeBySample (self,shape=None):
         """ Reshape design matrix by number of samples """
         if shape:
             self.X = self.X.reshape(shape)
@@ -72,21 +72,22 @@ class Design_Matrix:
             self.X = np.array(self.X).reshape(self.n_samples,-1)
         return self
 
-    def scale_X (self,scaler):
+    def ScaleX (self,scaler):
         """ Apply standard preprocessing scaling to self.X """
         assert type(self.X) == np.ndarray
         return self
 
-    def __get_Y__(self):
+    def __Get_Y__(self,onehot=True):
         """ treturn target matrix as One-hot-enc matrix """
-        self.Y = keras.utils.to_categorical(self.targets,self.n_classes)
+        if onehot == True:
+            self.Y = keras.utils.to_categorical(self.targets,self.n_classes)
         return self.Y
            
-    def __get_X__(self):
+    def __Get_X__(self):
         """ return design matrix as rect. np array """
         return self.X
 
-class Feature_Array:
+class FeatureArray:
     """
     Create Feature vector object
     --------------------------------
@@ -100,35 +101,35 @@ class Feature_Array:
         self.target = target            # set target
         self.features = np.array([])    # arr to hold features
 
-    def add_features (self,x,axis=None):
+    def AddFeatures (self,x,axis=None):
         """ Add object x to feature vector attribute"""
         self.features = np.append(self.features,x,axis=axis)
         return self             # return self
 
-    def set_features (self,x):
+    def SetFeatures (self,x):
         """ Clear feature array, reset to object 'x' - preserve shape """
         self.features = x
         return self
 
-    def reshape_arr (self,new_shape=(1,-1)):
+    def ReshapeArray (self,new_shape=(1,-1)):
         """ Reshape feature array to 'new_shape' """
         self.features = self.features.reshape(new_shape)
         return self
 
-    def __getshape__(self):
+    def GetShape (self):
         """ Return shape of feature attrb as tuple """
         return self.features.shape
 
-    def __getfeatures__ (self):
+    def GetFeatures (self):
         """ Assemble all features into single vector """
         return self.features    # return feature vector
 
-    def __delfeatures__ (self):
+    def DelFeatures (self):
         """ Delete all features (Save RAM) """
         self.features = np.array([])    # arr to hold features
         return self             # return new self
 
-class Model_Analysis:
+class ModelAnalysis:
     """
     Analyze Performance of Neural Metwork models
     --------------------------------
@@ -154,12 +155,12 @@ class Model_Analysis:
         outfile = self.infile.split('@')[-1]        # time-stamp + ext
         self.outfile_name = 'ANALYSIS@'+outfile
 
-    def read_data (self):
+    def ReadData (self):
         """ Load in Data from external source """
         data = pd.read_csv(self.infile,header=0,index_col=0)
         return data
 
-    def model_metrics(self,model):
+    def ModelMetrics (self,model):
         """ Compute all metrics for single model """
         y_pred = self.data[model]       # these are the predictions
 

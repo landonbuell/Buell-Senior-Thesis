@@ -28,7 +28,7 @@ Mode_Utilities.py - 'Mode Utilities'
 
             #### FUNCTION DEFINITIONS ####  
 
-class Program_Mode:
+class ProgramMode:
     """
     Base Program mode object from which all programs objects inherit from
     --------------------------------
@@ -54,53 +54,53 @@ class Program_Mode:
         self.group_size = group_size        # giles to use in each mega-batch
         self.n_files = len(self.FILEOBJS)   # number of file objects
         
-    def loop_counter(self,cntr,max,text):
+    def LoopCounter (self,cntr,max,text):
         """ Print Loop Counter for User """
         print('\t\t('+str(cntr)+'/'+str(max)+')',text)
         return None
 
-    def Scale_Data (self):
+    def ScaleData (self):
         """ Scale Design Matrix for processing """
         return None
 
-    def collect_features (self,fileobj):
+    def CollectFeatures (self,fileobj):
         """ Collected Features from a Given .WAV file object"""
-        fileobj = fileobj.read_audio()          # read raw .wav file
+        fileobj = fileobj.ReadAudio()          # read raw .wav file
         # Time series feature object
-        time_features = feat_utils.Time_Series_Features(fileobj.waveform,fileobj.rate)       
+        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform,fileobj.rate)       
         # Frequency series feature object
-        freq_features = feat_utils.Frequency_Series_Features(fileobj.waveform,
-                                        fileobj.rate,time_features.frames)
+        freqFeatures = feat_utils.FrequencySeriesFeatures(fileobj.waveform,
+                                        fileobj.rate,timeFeatures.frames)
 
-        x1 = ML_utils.Feature_Array(fileobj.target)     # Structure holds MLP features
-        x1 = x1.set_features(np.zeros(shape=(15,)))     # set features
-        x2 = ML_utils.Feature_Array(fileobj.target)     # strucutre to hold Sxx features
-        x2 = x2.set_features(freq_features.Sxx)         # set spectrogram
-        x3 = ML_utils.Feature_Array(fileobj.target)     # structure to hold PSC features
-        x3 = x3.set_features(np.zeros(shape=(2,2048)))  # set features
+        x1 = ML_utils.FeatureArray(fileobj.target)      # Structure holds MLP features
+        x1 = x1.SetFeatures(np.zeros(shape=(15,)))      # set features
+        x2 = ML_utils.FeatureArray(fileobj.target)      # strucutre to hold Sxx features
+        x2 = x2.SetFeatures(freqFeatures.Sxx)           # set spectrogram
+        x3 = ML_utils.FeatureArray(fileobj.target)      # structure to hold PSC features
+        x3 = x3.SetFeatures(np.zeros(shape=(2,2048)))   # set features
 
         return x1,x2,x3
 
-    def construct_design_matrices (self,FILES):
+    def ConstructDesignMatrices (self,FILES):
         """ Collect Features from a subset File Objects """
-        X1 = ML_utils.Design_Matrix(ndim=2,n_classes=self.n_classes)  # Design matrix for MLP
-        X2 = ML_utils.Design_Matrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Spectrogram
-        X3 = ML_utils.Design_Matrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Phase-Space
+        X1 = ML_utils.DesignMatrix(ndim=2,n_classes=self.n_classes)  # Design matrix for MLP
+        X2 = ML_utils.DesignMatrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Spectrogram
+        X3 = ML_utils.DesignMatrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Phase-Space
 
         for i,FILEOBJ in enumerate(FILES):
-            self.loop_counter(i,len(FILES),FILEOBJ.filename)    # print messege
-            x1,x2,x3 = self.collect_features(FILEOBJ)           # collect features
-            X1.add_sample(x1)   # Add sample to MLP
-            X2.add_sample(x2)   # Add sample to Sxx
-            X3.add_sample(x3)   # add sample to Psc
+            self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
+            x1,x2,x3 = self.CollectFeatures(FILEOBJ)       # collect features
+            X1.AddSample(x1)    # Add sample to MLP
+            X2.AddSample(x2)    # Add sample to Sxx
+            X3.AddSample(x3)    # add sample to Psc
 
-        X1 = X1.shape_by_sample()
-        X2 = X2.pad_2D(new_shape=Neural_Network_Utilities.spectrogram_shape)
-        X3 = X3.pad_2D(new_shape=Neural_Network_Utilities.phasespace_shape)
+        X1 = X1.ShapeBySample()
+        X2 = X2.Pad2D(new_shape=Neural_Network_Utilities.spectrogram_shape)
+        X3 = X3.Pad2D(new_shape=Neural_Network_Utilities.phasespace_shape)
         
         return [X1,X2,X3]
 
-class Train_Mode (Program_Mode):
+class TrainMode (ProgramMode):
     """
     Run Program in 'Train Mode'
         Inherits from 'Program_Mode' parent class
@@ -150,28 +150,29 @@ class Train_Mode (Program_Mode):
         for I in range (0,self.n_files,self.group_size):    # In a given group
             print("\tGroup Number:",self.group_counter)
             FILES = self.FILEOBJS[I:I+self.group_size]      # subset of files
-            Design_Matrices = super().construct_design_matrices(FILES)  
+            DesignMatrices = self.ConstructDesignMatrices(FILES)
             
-            for dataset,model in zip(Design_Matrices,self.model_names):
+            for matrix,model in zip(DesignMatrices,self.model_names):
                 print("\t\t\tLoading & Fitting Model:",model)
-                MODEL = Networks.__loadmodel__(model)   # Load network
-                X = dataset.__get_X__()                 # Features
-                Y = dataset.__get_Y__()                 # Labels          
-                history = MODEL.fit(x=X,y=Y,batch_size=32,epochs=self.n_epochs,verbose=0,
+                MODEL = Networks.LoadModel(model)       # Load network
+                X = matrix.__Get_X__()                  # Features
+                Y = matrix.__Get_Y__()                  # Labels          
+                history = MODEL.fit(x=X,y=Y,batch_size=64,epochs=self.n_epochs,verbose=0,
                                     initial_epoch=(self.group_counter*self.n_epochs))
-                Networks.__savemodel__(MODEL)           # save model
-                self.store_history(history,model)       # store data
+                Networks.SaveModel(MODEL)               # save model
+                self.StoreHistory(history,model)        # store data
 
-            self.group_counter += 1                     # incr coutner
+            del(DesignMatrices)                 # delete Design Matrix Objs
+            self.group_counter += 1             # incr coutner
         return self                             # self
 
-    def store_history (self,history_object,model):
+    def StoreHistory (self,history_object,model):
         """ Store Keras History Object in lists """
         assert model in self.model_names    # must be a known model
         self.model_histories[str(model)].append(history_object)
         return self
 
-class Test_Mode (Program_Mode):
+class TestMode (ProgramMode):
     """
     Run Program in 'Test Mode'
         Inherits from 'Program_Mode' parent class
@@ -198,7 +199,7 @@ class Test_Mode (Program_Mode):
         self.exportpath = os.path.join(self.exportpath,outfile)
         self.prediction_threshold = prediction_threshold
         self.group_counter = 0
-        self.outputStructure = sys_utils.Output_Data(self.model_names,
+        self.outputStructure = sys_utils.OutputData(self.model_names,
                                             outpath=self.exportpath)
 
     def __call__(self,Networks):
@@ -208,7 +209,7 @@ class Test_Mode (Program_Mode):
         print("\tTesting Completed! =)")
 
         print("\nBegining Analysis Process...")  
-        Analyser = ML_utils.Model_Analysis(self.model_names,
+        Analyser = ML_utils.ModelAnalysis(self.model_names,
                         self.outputStructure.output_path,self.n_classes)
         print("\tTesting Completed! =)")
 
@@ -219,19 +220,19 @@ class Test_Mode (Program_Mode):
         for I in range (0,self.n_files,self.group_size):# In a given group
             print("\tGroup Number:",self.group_counter)
             FILES = self.FILEOBJS[I:I+self.group_size]  # subset of files
-            Design_Matrices = super().construct_design_matrices(FILES)
-            self.outputStructure.add_index(FILES)       # add group data
+            DesignMatrices = self.ConstructDesignMatrices(FILES)
+            self.outputStructure.AddIndex(FILES)        # add group data
 
             # Run Predict/Eval the Group on each model
-            for dataset,model in zip(Design_Matrices,self.model_names):
+            for matrix,model in zip(DesignMatrices,self.model_names):
                 print("\t\t\tLoading & Testing Model:",model)
-                MODEL = Networks.__loadmodel__(model)   # Load network
-                X = dataset.__get_X__()                 # Features                                                                               
-                self.__predict__(MODEL,X)             # run predictions                        
-                Networks.__savemodel__(MODEL)       # save model
+                MODEL = Networks.LoadModel(model)   # Load network
+                X = matrix.__get_X__()              # Features                                                                               
+                self.__predict__(MODEL,X)           # run predictions                        
+                Networks.SaveModel(MODEL)           # save model
 
-            del(Design_Matrices)                    # delete Design Matrix Objs
-            self.outputStructure.export_results()
+            del(DesignMatrices)                    # delete Design Matrix Objs
+            self.outputStructure.ExportResults()
             self.group_counter += 1                 # incr counter
         return self                             # return self       
 
@@ -246,7 +247,7 @@ class Test_Mode (Program_Mode):
        
 
 
-class TrainTest_Mode (Program_Mode):
+class TrainTestMode (ProgramMode):
     """
     Run Program in 'Train_Mode' and 'Test Mode' sequentially
         Inherits from 'Train_Mode' and 'Test Mode' parent classes
@@ -271,11 +272,10 @@ class TrainTest_Mode (Program_Mode):
         
         self.labels_present = labels_present    # labels?
         self.n_iters = n_iters              # number of passes over data
-        self.testsize = testsize            # train/test size
-        
-        self.Split_Objs()                   # split objs
+        self.testsize = testsize            # train/test size        
+        self.SplitObjs()                   # split objs
                   
-    def Split_Objs (self):
+    def SplitObjs (self):
         """ Split objects into training.testing subsets """
         train,test = train_test_split(self.FILEOBJS,test_size=self.testsize)
         delattr(self,'FILEOBJS')        # delete attrb
@@ -289,14 +289,14 @@ class TrainTest_Mode (Program_Mode):
         """ Call this Instance to Execute Training and Testing """
 
         # Run Training Mode
-        Training = Train_Mode(FILEOBJS=self.TRAIN_FILEOBJS,model_names=self.model_names,
+        Training = TrainMode(FILEOBJS=self.TRAIN_FILEOBJS,model_names=self.model_names,
                               n_classes=self.n_classes,timestamp=self.timestamp,
                               exportpath=self.exportpath,show_summary=True,group_size=self.group_size,
                               n_iters=2)
         Training.__call__(Networks)
 
         # Run Testing Mode
-        Testing = Test_Mode(FILEOBJS=self.TEST_FILEOBJS,model_names=self.model_names,
+        Testing = TestMode(FILEOBJS=self.TEST_FILEOBJS,model_names=self.model_names,
                               n_classes=self.n_classes,timestamp=self.timestamp,
                               exportpath=self.exportpath,show_summary=True,group_size=self.group_size,
                               labels_present=True)

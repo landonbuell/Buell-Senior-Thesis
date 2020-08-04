@@ -31,7 +31,7 @@ phasespace_shape = (64,64,1)
 
 input_shapes = [perceptron_shape,spectrogram_shape,phasespace_shape]
 
-class Network_Container:
+class NetworkContainer:
     """
     Object that creates and contains Neural Network Model objects
     --------------------------------
@@ -61,48 +61,47 @@ class Network_Container:
         self.new_models = new       # create new models
         
         if self.new_models == True:             # create new networks?
-            networks = self.__createmodels__()  # create 3 models
+            networks = self.CreateModels()      # create 3 models
             for network in networks:            # for each model
-                self.__savemodel__(network)     # save them locally, and erase from ram
+                self.SaveModel(network)         # save them locally, and erase from ram
         else:                                   # load exisitng networks
-            networks = self.__getmodelnames__
+            networks = self.ModelNames
             for network in networks:                        # each model
-                model = self.__loadmodel__(network,True)    # load it into RAM
+                model = self.LoadModel(network,True)    # load it into RAM
                 self.n_classes = model.output.shape[-1]     # output shape of netowkr
-                self.__savemodel__(model)                   # save Locally
+                self.SaveModel(model)                   # save Locally
 
         assert self.n_classes is not None        # make sure we know how many classes
 
-    def __createmodels__(self):
+    def CreateModels (self):
         """ Create & name Neural Network Models """
-        Model_Class = Neural_Network_Models(self.n_classes) # Instantiate class
-
+       
         # Create multilayer Perceptron, and set local savepath
-        MLP_Classifier = Model_Class.Multilayer_Perceptron(self.MLP_name,input_shapes[0])
+        MLP_Classifier = NeuralNetworkModels.Multilayer_Perceptron(self.MLP_name,self.n_classes,input_shapes[0])
         setattr(MLP_Classifier,'savepath',self.MLP_savepath)
 
         # Create Spectrogram 2D Conv Network and set local save path
-        SXX_Classifier = Model_Class.Conv2D_Network(self.SXX_name,input_shapes[1])
+        SXX_Classifier = NeuralNetworkModels.Conv2D_Network(self.SXX_name,self.n_classes,input_shapes[1])
         setattr(SXX_Classifier,'savepath',self.SXX_savepath)
 
         # Create Phase Space 1D Conv Network and set loca save path
-        PSC_Classifier = Model_Class.Conv1D_Network(self.PSC_name,input_shapes[2])
+        PSC_Classifier = NeuralNetworkModels.Conv1D_Network(self.PSC_name,self.n_classes,input_shapes[2])
         setattr(PSC_Classifier,'savepath',self.PSC_savepath)
 
         # NOTE: 'input_shape' (list) is a global variable in this namespace
         return [MLP_Classifier,SXX_Classifier,PSC_Classifier]
 
     @property
-    def __getlocalpaths__(self):
+    def LocalPaths (self):
         """ Get local paths where network models are stored """
         return [self.MLP_savepath,self.SXX_savepath,self.PSC_savepath]
 
     @property
-    def __getmodelnames__(self):
+    def ModelNames (self):
         """ Return list of models names as strings """
         return [self.MLP_name,self.SXX_name,self.PSC_name]
 
-    def __loadmodel__(self,name,summary=False):
+    def LoadModel (self,name,summary=False):
         """ Load Local model Parameter into RAM """
         try:                # attempt this
             filepath = os.path.join(self.parent_path,name)   # full path
@@ -115,7 +114,7 @@ class Network_Container:
             model = None            
         return model
 
-    def __savemodel__(self,model):
+    def SaveModel (self,model):
         """ Save model to Local Disk """
         assert type(model) == keras.models.Sequential   # must be a keras model
         try:                                            # attempt
@@ -127,24 +126,23 @@ class Network_Container:
         return self                                 # return itself!
 
 
-class Neural_Network_Models:
+class NeuralNetworkModels:
     """
     Container for Neural network model architectures
     --------------------------------
-    n_classes (int) : number of discrete classes for models
+    * no args
     --------------------------------
     High-level wrapper for Tensorflow Sequential models
     """
-    def __init__(self,n_classes):
-        """ Initialize Class Object Instance """
-        self.n_classes = n_classes
 
-    def Multilayer_Perceptron (self,name,n_features,layerunits=[40,40],
+    @staticmethod
+    def Multilayer_Perceptron (name,n_classes,n_features,layerunits=[40,40],
                                metrics=['Precision','Recall']):
         """
         Create Mutlilayer Perceptron and set object as attribute
         --------------------------------
         name (str) : Name to attatch to Network Model
+        n_classes (int) : Number of unique output classes
         n_features (int) : Number of input features into Network
         layerunits (iter) : List-like of ints. I-th element is nodes in I-th hiddenlayer
         metrics (iter) : Array-like of strs contraining metrics to track
@@ -158,7 +156,7 @@ class Neural_Network_Models:
         for i,nodes in enumerate(layerunits):           # Each hidden layer
             model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
         # Add Output Layer
-        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
+        model.add(keras.layers.Dense(units=n_classes,activation='softmax',name='Output'))
 
         # Compile, Summary & Return
         model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
@@ -167,13 +165,15 @@ class Neural_Network_Models:
         print(model.summary())
         return model
 
-    def Conv2D_Network (self,name,inputshape,filtersizes=[(32,32),(32,32)],
+    @staticmethod
+    def Conv2D_Network (name,n_classes,inputshape,filtersizes=[(32,32),(32,32)],
                         kernelsizes=[(3,3),(3,3)],kernelstrides=[(2,2),(2,2)],
                         poolsizes=[(3,3),(3,3)],layerunits=[64],metrics=['Precision','Recall']):
         """
         Create Tensorflow 2D Convolutional Neural Network Model
         --------------------------------
         name (str) : Name to attatch to Network Model
+        n_classes (int) : Number of unique output classes
         inputshape (iter) : List-like of ints, indicating dimensionality of input figures
         filtersizes (iter) : List-like of ints.
             i-th element is number of filters in i-th layer group
@@ -201,7 +201,7 @@ class Neural_Network_Models:
         model.add(keras.layers.Flatten(name='F1'))
         for i,nodes in enumerate(layerunits):       # each dense layer
             model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
-        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
+        model.add(keras.layers.Dense(units=n_classes,activation='softmax',name='Output'))
         
         # Compile, Summary & Return
         model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
@@ -210,13 +210,15 @@ class Neural_Network_Models:
         print(model.summary())
         return model 
 
-    def Conv1D_Network (self,name,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
+    @staticmethod
+    def Conv1D_Network (name,n_classes,inputshape,filtersizes=[32,32],kernelsizes=[(3,3),(3,3)],
                         kernelstrides=[(1,1),(1,1)],poolsizes=[(2,2),(2,2)],
                         layerunits=[128],metrics=['Precision','Recall']):
         """
         Create Tensorflow 1D Convolutional Neural Network Model
         --------------------------------
         name (str) : Name to attatch to Network Model
+        n_classes (int) : Number of unique output classes
         inputshape (iter) : List-like of ints, indicating dimensionality of input figures
         filtersizes (iter) : List-like of ints.
             i-th element is number of filters in i-th layer group
@@ -237,7 +239,7 @@ class Neural_Network_Models:
         model.add(keras.layers.Flatten(name='F1'))
         for i,nodes in enumerate(layerunits):       # each dense layer
             model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
-        model.add(keras.layers.Dense(units=self.n_classes,activation='softmax',name='Output'))
+        model.add(keras.layers.Dense(units=n_classes,activation='softmax',name='Output'))
         
         # Compile, Summary & Return
         model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),

@@ -19,17 +19,17 @@ Math_Utilities.py - "Math Utilities"
 
             #### FUNCTION DEFINITIONS ####
 
-class Mathematical_Utils :
+class MathematicalUtilities :
     """
     Mathematical Utilites for feature processing
     --------------------------------
-
+    * no args
     --------------------------------
     All methods are static
     """
 
     @staticmethod
-    def Distribution_Data (X):
+    def DistributionData (X):
         """
         Analyze properties of an array of FP values
         --------------------------------
@@ -45,7 +45,7 @@ class Mathematical_Utils :
         return np.array([mean,median,mode[-1],var])
 
     @staticmethod
-    def RMS_Energy (X):
+    def RMSEnergy (X):
         """
         Compute RMS energy of object X along last axis
             Output contains 1 less dimension
@@ -58,7 +58,7 @@ class Mathematical_Utils :
         return RMS                          # return 
 
     @staticmethod
-    def Scale_X (X):
+    def ScaleX (X):
         """
         Apply standard preprocessing scaling to design matrix, X
         --------------------------------

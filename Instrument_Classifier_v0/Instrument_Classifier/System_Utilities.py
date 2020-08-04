@@ -27,7 +27,7 @@ Program_Utilities.py - "Program Utilities"
 
             #### DATA STRUCTURE CLASSES ####
 
-class File_Object:
+class FileObject:
     """
     Create File 
     --------------------------------
@@ -48,12 +48,12 @@ class File_Object:
         dir_tree = self.fullpath.split('/')
         self.filename = dir_tree[-1]    # filename
 
-    def assign_target (self,target):
+    def AssignTarget (self,target):
         """ Assign Target value to instance """
         self.target = target    # set y
         return self             # return self
 
-    def read_audio (self):
+    def ReadAudio (self):
         """ Read raw data from local path """
         rate,data = sciowav.read(self.fullpath)    
         data = data.reshape(1,-1).ravel()   # flatten waveform
@@ -62,7 +62,7 @@ class File_Object:
         self.n_samples = len(self.waveform)
         return self             # return self
 
-class Output_Data :
+class OutputData :
     """
     Output Data structure for Program based on mode
     --------------------------------  
@@ -76,10 +76,10 @@ class Output_Data :
         """ Initialize Class Object Instance """
         self.model_names = model_names        
         self.output_path = outpath
-        self.data,self.cols = self.init_structure
+        self.data,self.cols = self.InitializeStructure
       
     @property
-    def init_structure(self):
+    def InitializeStructure(self):
         """ Initalize Output data Structure """
         cols = ['Fullpath','Label']
         for model in self.model_names:
@@ -90,7 +90,7 @@ class Output_Data :
             data.update({i:np.array([])})
         return data,cols
 
-    def add_index(self,FILEOBJS):
+    def AddIndex(self,FILEOBJS):
         """ Add filepaths and targets to output structure """
         paths = [x.fullpath for x in FILEOBJS]  # get fullpaths
         trgts = [x.target for x in FILEOBJS]    # get targets
@@ -98,14 +98,14 @@ class Output_Data :
         self.data['Label'] = np.append(self.data['Label'],trgts)
         return self
 
-    def export_results(self):
+    def ExportResults(self):
         """ Export outdat data dictionary to local file """
         out_frame = pd.DataFrame(data=self.data,columns=self.cols)
         out_frame.to_csv(path_or_buf=self.output_path,header=True,mode='w')
 
             #### PROGRAM PROCESSING CLASSES ####
 
-class Program_Start:
+class ProgramStart:
     """
     Object to handle all program preprocessing
     --------------------------------
@@ -151,7 +151,7 @@ class Program_Start:
             sys.exit()
             
     @property
-    def startup_messeges (self):
+    def StartupMesseges (self):
         """ Print out Start up messeges to Console """
         print("Running Main Program.....")
         print("\tCollecting data from:",self.readpath)
@@ -162,20 +162,20 @@ class Program_Start:
         print("\t\tFound",self.n_classes,"classes to sort")
         print("\n")
 
-    def __startup__(self):
+    def __call__(self):
         """ Run Program Start Up Processes """        
-        self.files = self.Collect_CSVs()        # find CSV files
-        fileobjects = self.Create_Fileobjs()    # file all files
+        self.files = self.CollectCSVFiles()        # find CSV files
+        fileobjects = self.CreateFileobjs()    # file all files
         self.n_files = len(fileobjects)        
         if self.program_mode in ['train','train-test']:
-            self.n_classes = self.get_nclasses(fileobjects)
+            self.n_classes = self.GetNClasses(fileobjects)
         else:
             self.n_classes = None
-        self.startup_messeges           # Messages to User
+        self.StartupMesseges           # Messages to User
         fileobjects = np.random.permutation(fileobjects)    # permute
         return fileobjects,self.n_classes
 
-    def Argument_Parser(self):
+    def ArgumentParser(self):
         """ Process Command Line Arguments """
         parser = argparse.ArgumentParser(prog='Instrument Classifier v0',
                                          usage='Classify .WAV files by using pre-exisiting classifiered samples.',
@@ -203,7 +203,7 @@ class Program_Start:
         return [args.data_path,args.model_path,args.export_path,
                 args.program_mode,args.new_models]
 
-    def Collect_CSVs (self,exts='.csv'):
+    def CollectCSVFiles (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
         csv_files = []
         for roots,dirs,files in os.walk(self.readpath):  
@@ -212,7 +212,7 @@ class Program_Start:
                     csv_files.append(file)
         return csv_files
 
-    def Create_Fileobjs (self):
+    def CreateFileobjs (self):
         """ Create list of File Objects """
         fileobjects = []                        # list of all file objects
         for file in self.files:                 # each CSV file
@@ -220,12 +220,12 @@ class Program_Start:
             frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
             frame = frame.to_numpy()                    # make np arr   
             for row in frame:                           # each row
-                # 'File_Object' class is defined above
-                fileobjects.append(File_Object(row))    # add row to obj list
+                # 'FileObject' class is defined above
+                fileobjects.append(FileObject(row))    # add row to obj list
             del(frame)                          # del frame  
         return fileobjects                      # return list of insts
 
-    def get_nclasses (self,fileobjects):
+    def GetNClasses (self,fileobjects):
         """ Find Number of classes in target vector """
         y = [x.target for x in fileobjects]   # collect target from each file
         try:                        # Attempt
@@ -234,7 +234,7 @@ class Program_Start:
         except Exception:           # failure?
             return None             # no classes?
 
-    def Validate_Directories (must_exist=[],must_create=[]):
+    def ValidateDirectories (must_exist=[],must_create=[]):
         """
         Check in passed directories are valid for program execution
         --------------------------------
