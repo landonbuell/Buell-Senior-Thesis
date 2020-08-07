@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ad6a03cc-2872-4a58-88db-5b98a60338be</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Feature_Experiments.py</StartupFile>
+    <StartupFile>Feature_Experiments_MAIN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,8 +21,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Feature_Experiments.py" />
+    <Compile Include="Feature_Experiments_MAIN.py" />
     <Compile Include="Feature_Utilities.py" />
+    <Compile Include="System_Utilities.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

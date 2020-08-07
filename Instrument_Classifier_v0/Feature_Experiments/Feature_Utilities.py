@@ -14,9 +14,6 @@ import scipy.integrate as integ
 import scipy.signal as signal
 import scipy.sparse as sparse
 
-import Math_Utilities as math_utils
-import Plotting_Utilities as plot_utils
-
 """
 Feature_Utilities.py - "Feature Extraction Utils"
     Contains Definitions to extract features and data from
