@@ -22,4 +22,5 @@ if __name__ == '__main__':
     ProgramInitializer = sys_utils.ProgramStart(path)
     FILEOBJS,N_classes = ProgramInitializer.__call__()
 
-    
+    Iterator = sys_utils.FileIterator(FILEOBJS,N_classes)
+    Iterator.__call__()

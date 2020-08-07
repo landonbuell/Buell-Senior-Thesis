@@ -13,8 +13,8 @@ import os
 import sys
 import datetime
 
-
 import scipy.io.wavfile as sciowav
+import Feature_Utilities as feat_utils
 
 
 """
@@ -63,6 +63,46 @@ class FileObject:
 
             #### PROGRAM PROCESSING CLASSES ####
 
+class FileIterator :
+    """
+    Iterate through batches of file objects and Extract Features
+    --------------------------------
+    FILES (list) : List of FileObject Instances
+    n_classes (int) : Number of discrete classes in data
+    groupSize (int) : FileObjects to use in each mega-batches
+    n_iters (int) : Number of passes over the full data set
+    --------------------------------
+    Return Initialize FileIterator Object
+    """
+    
+    def __init__(self,FILES,n_classes,groupSize=256,n_iters=4):
+        """ Initialize Class Object Instance """
+        self.FILES = FILES
+        self.n_classes = n_classes
+        self.groupSize=groupSize
+        self.n_files = len(self.FILES)
+        self.groupCounter = 0
+
+    def LoopCounter (self,cntr,max,text):
+        """ Print Loop Counter for User """
+        print('\t\t('+str(cntr)+'/'+str(max)+')',text)
+        return None
+
+    def FeatureExtractor (self,file):
+        """ Extract Features From single file object """
+        file.ReadAudio()            # read audio, get waveform & sample rate
+
+        return None
+
+    def __call__(self):
+        """ Execute FileIterator Object """
+        for i in range(0,self.n_files,self.groupSize):  # Each fileobject
+            fileBatch = self.FILES[i:i+self.groupSize]  # Create group
+            for j,file in enumerate(fileBatch):         # each file
+                self.LoopCounter(i,len(fileBatch),file.filename)
+                self.FeatureExtractor(file)
+            self.groupCounter += 1                      # incr cntr by 1
+
 class ProgramStart:
     """
     Object to handle all program preprocessing
@@ -82,8 +122,7 @@ class ProgramStart:
         self.starttime = dt_obj.isoformat(sep='_',timespec='auto').replace(':','.')
         self.readpath = readpath
         print("Time Stamp:",self.starttime)
-        
-            
+                  
     @property
     def StartupMesseges (self):
         """ Print out Start up messeges to Console """
