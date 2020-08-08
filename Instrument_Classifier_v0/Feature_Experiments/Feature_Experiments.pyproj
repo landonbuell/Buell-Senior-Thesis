@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="Feature_Experiments_MAIN.py" />
     <Compile Include="Feature_Utilities.py" />
+    <Compile Include="Plotting_Utilities.py" />
     <Compile Include="System_Utilities.py">
       <SubType>Code</SubType>
     </Compile>

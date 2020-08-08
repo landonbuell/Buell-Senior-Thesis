@@ -93,18 +93,54 @@ class FileIterator :
         file.ReadAudio()                # read audio, get waveform & sample rate
         featureVector = np.array([])    # array to hold all features
         
-        timeSeriesFeatures = feat_utils.
+        timeSeriesFeatures = feat_utils.TimeSeriesFeatures(file.waveform)
 
-        return None
+        featureVector = np.append(featureVector,timeSeriesFeatures.TimeDomainEnvelope())
+        featureVector = np.append(featureVector,timeSeriesFeatures.ZeroCrossingRate())
+        featureVector = np.append(featureVector,timeSeriesFeatures.CenterOfMass())
+        featureVector = np.append(featureVector,timeSeriesFeatures.WaveformDistribution())
+        featureVector = np.append(featureVector,timeSeriesFeatures.AutoCorrelationCoefficients())
+
+        return featureVector
 
     def __call__(self):
         """ Execute FileIterator Object """
-        for i in range(0,self.n_files,self.groupSize):  # Each fileobject
-            fileBatch = self.FILES[i:i+self.groupSize]  # Create group
-            for j,file in enumerate(fileBatch):         # each file
-                self.LoopCounter(i,len(fileBatch),file.filename)
-                self.FeatureExtractor(file)
-            self.groupCounter += 1                      # incr cntr by 1
+        designMatrix = np.array([])
+        for i,file in enumerate(self.FILES):  # Each fileobject          
+            self.LoopCounter(i,self.n_files,file.filename)
+            x = self.FeatureExtractor(file)             # get feature vector
+            designMatrix = np.append(designMatrix,x)    # add samples to design matrix
+        designMatrix = designMatrix.reshape(self.n_files,-1)
+        self.X = designMatrix
+        return self
+
+    def ExportData (self,filename):
+        """ Export Design Matrix to CSV """
+        cols = ['TDE','ZXR','COM','Mean','Med','Mode','Var','ACC0','ACC1','ACC2','ACC3']
+        dataframe = pd.DataFrame(data=self.X,columns=cols)
+        dataframe['Class'] = [x.target for x in self.FILES]
+        dataframe.to_csv(filename+'.csv')
+        return self
+
+class DataAnalyzer :
+    """
+    Analyze Desgin Matrix from local CSV file 
+
+    """
+
+    def __init__(self,filename,n_classes):
+        """ Initialize Class Object Instance """
+        self.filename = filename
+        self.n_classes = n_classes
+        self.frame = pd.read_csv(self.filename)
+        self.n_rows = self.frame.shape[0]
+        self.n_cols = self.frame.shape[1]
+
+    def __call__(self):
+        """ Call Data Analyzer Object """
+        pass
+
+
 
 class ProgramStart:
     """

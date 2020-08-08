@@ -13,6 +13,7 @@ import scipy.fftpack as fftpack
 import scipy.integrate as integ
 import scipy.signal as signal
 import scipy.sparse as sparse
+import scipy.stats as stats
 
 """
 Feature_Utilities.py - "Feature Extraction Utils"
@@ -21,6 +22,31 @@ Feature_Utilities.py - "Feature Extraction Utils"
 """
 
         #### CLASS DEFINITIONS ####
+
+class MathematicalUtilities :
+    """
+    Mathematical Utilites for feature processing
+    --------------------------------
+    * no args
+    --------------------------------
+    All methods are static
+    """
+
+    @staticmethod
+    def DistributionData (X):
+        """
+        Analyze properties of an array of FP values
+        --------------------------------
+        X (arr) : Array of FP number to analyze as distribution
+        --------------------------------
+        Return array of [mean,median,mode,variance]
+        """
+        X = X.ravel()           # flatten
+        mean = np.mean(X)       # avg
+        median = np.median(X)   # median
+        mode,cnts = stats.mode(X,axis=None) # mode
+        var = np.var(X)         # variance
+        return np.array([mean,median,mode[0],var])
 
 class BaseFeatures:
     """
@@ -80,25 +106,40 @@ class TimeSeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,
                 frames=frames,npts=npts,overlap=overlap)
 
-    def TimeDomainEnvelop (self):
-        """ Compute Time Domain envelope of waveform """
-        return None
+    def TimeDomainEnvelope (self):
+        """ Compute Time Domain envelope of waveform (Virtanen) """
+        envelope = np.dot(self.X,self.X)
+        envelope = np.sqrt(envelope/self.n_samples)
+        return envelope
 
     def ZeroCrossingRate (self):
-        """ Compute Zero-Crossing rate of signal """
-        return None
+        """ Compute Zero-Crossing rate of signal (Kahn & Al-Khatib)"""
+        zeroXing = np.sign(np.diff(self.X))
+        zeroXing = np.sum(zeroXing)
+        return zeroXing
 
     def CenterOfMass (self):
-        """ Compute temporal center of mass of waveform """
-        return None
+        """ Compute temporal center of mass of waveform (Virtanen)"""
+        weights = np.arange(0,self.n_samples,1) 
+        centerOfMass = np.dot(weights,self.X)
+        return centerOfMass/np.sum(self.X)
 
     def WaveformDistribution(self):
         """ Compute Distribution data from waveform """
-        return math_utils.Mathematical_Utils.Distribution_Data(self.X)
+        return MathematicalUtilities.DistributionData(self.X)
 
-    def AutoCorrelationCoefficients (self,k=4):
-        """ Compute first k 'autocorrelation coefficients from waveform """
-        return None
+    def AutoCorrelationCoefficients (self,K=4):
+        """ Compute first K 'autocorrelation coefficients' from waveform (virtanen) """
+        coefficients = np.array([])     # arr to hold k coeffs
+        for k in range (0,K,1):         # for k coeffs      
+            _a,_b = self.X[0:self.n_samples-k],self.X[k:]            
+            sumA = np.dot(_a,_b)          # numerator
+            sumB = np.dot(_a,_a)            
+            sumC = np.dot(_b,_b)
+            R = sumA / (np.sqrt(sumB)*np.sqrt(sumC))    # compute coefficient
+            coefficients = np.append(coefficients,R)    # add to list of coeffs
+        return coefficients             # return the coeffs
+
 
     def PhaseSpace (self,dt=1):
         """
