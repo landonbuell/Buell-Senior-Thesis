@@ -90,7 +90,10 @@ class FileIterator :
 
     def FeatureExtractor (self,file):
         """ Extract Features From single file object """
-        file.ReadAudio()            # read audio, get waveform & sample rate
+        file.ReadAudio()                # read audio, get waveform & sample rate
+        featureVector = np.array([])    # array to hold all features
+        
+        timeSeriesFeatures = feat_utils.
 
         return None
 
