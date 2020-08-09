@@ -18,6 +18,12 @@ Plotting_Utilities.py - "Plotting Utilities"
 
             #### PLOTTING FUNCTIONS ####
 
+def Plot_Confusion (X,labels,title,save=False,show=True):
+    """
+    Plot 2D Confusion Matrix
+    """
+
+
 def Plot_Features_2D (X1,X2,classes,labels,title='',
                       save=False,show=True):
     """

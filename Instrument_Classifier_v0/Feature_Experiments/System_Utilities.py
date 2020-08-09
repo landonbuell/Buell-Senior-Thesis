@@ -13,7 +13,11 @@ import os
 import sys
 import datetime
 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import tensorflow.keras as keras
 import scipy.io.wavfile as sciowav
+
 import Feature_Utilities as feat_utils
 
 
@@ -116,7 +120,7 @@ class FileIterator :
 
     def ExportData (self,filename):
         """ Export Design Matrix to CSV """
-        cols = ['TDE','ZXR','COM','Mean','Med','Mode','Var','ACC0','ACC1','ACC2','ACC3']
+        cols = ['TDE','ZXR','COM','Mean','Med','Mode','Var','ACC1','ACC2','ACC3','ACC4']
         dataframe = pd.DataFrame(data=self.X,columns=cols)
         dataframe['Class'] = [x.target for x in self.FILES]
         dataframe.to_csv(filename+'.csv')
@@ -125,6 +129,9 @@ class FileIterator :
 class DataAnalyzer :
     """
     Analyze Desgin Matrix from local CSV file 
+    --------------------------------
+
+    --------------------------------
 
     """
 
@@ -132,14 +139,39 @@ class DataAnalyzer :
         """ Initialize Class Object Instance """
         self.filename = filename
         self.n_classes = n_classes
-        self.frame = pd.read_csv(self.filename)
-        self.n_rows = self.frame.shape[0]
-        self.n_cols = self.frame.shape[1]
+        
+
+    def LoadDataFrame (self):
+        """ Read Local Data Frame-Like Object """
+        frame = pd.read_csv(self.filename)
+        self.X = frame.drop(['Class'],axis=1).to_numpy()
+        self.Y = frame['Class'].to_numpy()
+        self.n_samples = self.Y.shape[0]
+        self.n_features = self.X.shape[1]
+        return self
+
+    def ScaleDesignMatrix (self):
+        """ Scale Design Matrix s.t. Cols have unit variance """
+        Scaler = StandardScaler()
+        Scaler.fit(self.X)
+        self.X = Scaler.transform(self.X)
+        return self
+
+    def OneHotEncode (self):
+        """ One-Hot-Encode Target Vector Y """
+        self.Y = keras.utils.to_categorical(self.Y,self.n_classes)
+        return self
+
+    def TrainTestSplit (self,testsize=0.2):
+        """ Split data into training & testing data sets """
+        return train_test_split(self.X,self.Y,test_size=testsize)
 
     def __call__(self):
         """ Call Data Analyzer Object """
-        pass
-
+        self.LoadDataFrame()
+        self.ScaleDesignMatrix()
+        self.OneHotEncode()
+        return self
 
 
 class ProgramStart:
@@ -211,5 +243,44 @@ class ProgramStart:
         except Exception:           # failure?
             return None             # no classes?
 
+class NeuralNetworks :
+    """
 
 
+    """
+
+    @staticmethod
+    def Multilayer_Perceptron (name,n_classes,n_features,layerunits=[40,40],
+                               metrics=['Precision','Recall']):
+        """
+        Create Mutlilayer Perceptron and set object as attribute
+        --------------------------------
+        name (str) : Name to attatch to Network Model
+        n_classes (int) : Number of unique output classes
+        n_features (int) : Number of input features into Network
+        layerunits (iter) : List-like of ints. I-th element is nodes in I-th hiddenlayer
+        metrics (iter) : Array-like of strs contraining metrics to track
+        --------------------------------
+        Return Compiled, unfit model instance
+        """
+        model = keras.models.Sequential(name=name)      # create instance & attactch name
+        model.add(keras.layers.InputLayer(input_shape=n_features,name='Input')) # input layer
+        
+        # Add Hidden Dense Layers
+        for i,nodes in enumerate(layerunits):           # Each hidden layer
+            model.add(keras.layers.Dense(units=nodes,activation='relu',name='D'+str(i+1)))
+        # Add Output Layer
+        model.add(keras.layers.Dense(units=n_classes,activation='softmax',name='Output'))
+
+        # Compile, Summary & Return
+        model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
+                      loss=keras.losses.CategoricalCrossentropy(),
+                      metrics=metrics)
+        print(model.summary())
+        return model
+
+
+    @staticmethod
+    def CallModel():
+        """ Call Nueral Network Model """
+        pass

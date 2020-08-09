@@ -10,6 +10,8 @@ PHYS 799
 import numpy as np
 import os 
 import pandas as pd
+import tensorflow as tf
+import tensorflow.keras as keras
 
 import System_Utilities as sys_utils
 import Feature_Utilities as feat_utils
@@ -27,13 +29,20 @@ if __name__ == '__main__':
     #Iterator.__call__()
     #Iterator.ExportData(str(ProgramInitializer.starttime))
     
-    Analyzer = sys_utils.DataAnalyzer('2020-08-07_22.59.38.562101.csv',N_classes)
 
-    plot_utils.Plot_Features_2D(Analyzer.frame['COM'].to_numpy(),
-                                np.arange(0,Analyzer.n_rows,1)+1,
-                                Analyzer.frame['Class'].to_numpy(),
-                                ['Center of Mass','Median'],
-                                'Feature Space')
+    Analyzer = sys_utils.DataAnalyzer('2020-08-07_22.59.38.562101.csv',N_classes)
+    Analyser.__call__()
+
+    MLP_MODEL = sys_utils.NeuralNetworks.Multilayer_Perceptron('JARVIS',N_classes,Analyzer.n_features,
+                                                               layerunits=[80,80])
+    MLP_MODEL.fit(X_train,Y_train,batch_size=64,epochs=20,verbose=2)
+
+    Y_pred = MLP_MODEL.predict(X_test)
+    Y_pred = np.argmax(Y_pred,axis=-1)
+    Y_test = np.argmax(Y_test,axis=-1)
+    confmat = tf.math.confusion_matrix(Y_test,Y_pred,N_classes)
+
+    plot_utils.Plot_Confusion()
 
 
     print("=)")

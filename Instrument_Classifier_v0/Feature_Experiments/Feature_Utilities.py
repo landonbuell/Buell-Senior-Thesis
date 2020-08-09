@@ -131,7 +131,7 @@ class TimeSeriesFeatures (BaseFeatures):
     def AutoCorrelationCoefficients (self,K=4):
         """ Compute first K 'autocorrelation coefficients' from waveform (virtanen) """
         coefficients = np.array([])     # arr to hold k coeffs
-        for k in range (0,K,1):         # for k coeffs      
+        for k in range (1,K+1,1):       # for k coeffs      
             _a,_b = self.X[0:self.n_samples-k],self.X[k:]            
             sumA = np.dot(_a,_b)          # numerator
             sumB = np.dot(_a,_a)            
