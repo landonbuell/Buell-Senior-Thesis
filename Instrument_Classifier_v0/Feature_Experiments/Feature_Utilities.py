@@ -90,7 +90,6 @@ class BaseFeatures:
         frames = frames.reshape(-1,self.npts)    # reshape (each row is frame)
         return frames                       # return frames
 
-
 class TimeSeriesFeatures (BaseFeatures):
     """
     Extract feature information from signal data in time-domain
@@ -140,7 +139,6 @@ class TimeSeriesFeatures (BaseFeatures):
             coefficients = np.append(coefficients,R)    # add to list of coeffs
         return coefficients             # return the coeffs
 
-
     def PhaseSpace (self,dt=1):
         """
         Construct phase space representation of signal X
@@ -157,7 +155,6 @@ class TimeSeriesFeatures (BaseFeatures):
                                   shape=(n_samples,n_samples),dtype=np.int8)
         phase_sparse_matrices.append(phase)
         return phase
-
 
 class FrequencySeriesFeatures (BaseFeatures):
     """

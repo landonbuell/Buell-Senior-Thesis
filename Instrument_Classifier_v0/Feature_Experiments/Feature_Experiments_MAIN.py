@@ -30,19 +30,20 @@ if __name__ == '__main__':
     #Iterator.ExportData(str(ProgramInitializer.starttime))
     
 
-    Analyzer = sys_utils.DataAnalyzer('2020-08-07_22.59.38.562101.csv',N_classes)
-    Analyser.__call__()
+    Analyzer = sys_utils.DataAnalyzer('2020-08-08_13.09.02.969141.csv',N_classes)
+    Analyzer.__call__()
+    X_train,X_test,Y_train,Y_test = Analyzer.TrainTestSplit()
 
     MLP_MODEL = sys_utils.NeuralNetworks.Multilayer_Perceptron('JARVIS',N_classes,Analyzer.n_features,
                                                                layerunits=[80,80])
-    MLP_MODEL.fit(X_train,Y_train,batch_size=64,epochs=20,verbose=2)
+    MLP_MODEL.fit(X_train,Y_train,batch_size=32,epochs=20,verbose=2)
 
     Y_pred = MLP_MODEL.predict(X_test)
     Y_pred = np.argmax(Y_pred,axis=-1)
     Y_test = np.argmax(Y_test,axis=-1)
     confmat = tf.math.confusion_matrix(Y_test,Y_pred,N_classes)
 
-    plot_utils.Plot_Confusion()
+    plot_utils.Plot_Confusion(confmat,np.arange(N_classes),"-")
 
 
     print("=)")

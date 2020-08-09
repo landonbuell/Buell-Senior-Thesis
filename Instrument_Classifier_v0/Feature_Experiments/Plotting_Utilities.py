@@ -21,8 +21,25 @@ Plotting_Utilities.py - "Plotting Utilities"
 def Plot_Confusion (X,labels,title,save=False,show=True):
     """
     Plot 2D Confusion Matrix
+    --------------------------------
+    X (arr) : (N x N) array of data representing confusion matrix
+    labels (arr):  (1 x N) array of data to represent labels grid
+    title (str) : Title to give figure
+    save (bool) : If true, save MPL figure to cwd (False by Default)
+    show (bool) : If true, shows current figure to User (True by Default)
+    --------------------------------
+    return None
     """
+    plt.imshow(X,cmap=plt.cm.binary)
+    plt.xlabel("Actual Class",fontsize=20,fontweight='bold')
+    plt.ylabel("Predicted Class",fontsize=20,fontweight='bold')
+    plt.xticks(ticks=labels,fontsize=12)
+    plt.yticks(ticks=labels,fontsize=12)
 
+    if save == True:
+        plt.savefig(title+'.png')
+    if show == True:
+        plt.show()
 
 def Plot_Features_2D (X1,X2,classes,labels,title='',
                       save=False,show=True):

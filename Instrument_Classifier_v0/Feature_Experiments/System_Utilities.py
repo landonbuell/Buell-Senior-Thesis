@@ -245,8 +245,7 @@ class ProgramStart:
 
 class NeuralNetworks :
     """
-
-
+    Class containing Static Methods to create various neural network models
     """
 
     @staticmethod
@@ -279,8 +278,3 @@ class NeuralNetworks :
         print(model.summary())
         return model
 
-
-    @staticmethod
-    def CallModel():
-        """ Call Nueral Network Model """
-        pass
