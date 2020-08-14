@@ -37,7 +37,7 @@ class MathematicalUtilities :
         """
         Analyze properties of an array of FP values
         --------------------------------
-        X (arr) : Array of FP number to analyze as distribution
+        X (arr) : (1 x N) Array of FP numbers to analyze as distribution
         --------------------------------
         Return array of [mean,median,mode,variance]
         """
@@ -47,6 +47,18 @@ class MathematicalUtilities :
         mode,cnts = stats.mode(X,axis=None) # mode
         var = np.var(X)         # variance
         return np.array([mean,median,mode[0],var])
+
+    @staticmethod
+    def ReimannSum (X,dx):
+        """
+        Compute Reimann Sum of 1D array X with sample spacing dx
+        --------------------------------
+        X (arr) : (1 x N) Array of FP numbers to compute Reimann Sum of
+        dx (float) : Spacing between samples, 1 by default
+        --------------------------------
+        Return Reimann Sum approximation of array
+        """
+        return np.sum(X)*dx
 
 class BaseFeatures:
     """

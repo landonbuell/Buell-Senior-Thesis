@@ -15,6 +15,9 @@ import datetime
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import SelectKBest
+import sklearn.feature_selection as feat_sel
+
 import tensorflow.keras as keras
 import scipy.io.wavfile as sciowav
 
@@ -67,6 +70,66 @@ class FileObject:
 
             #### PROGRAM PROCESSING CLASSES ####
 
+class DataAnalyzer :
+    """
+    Analyze Desgin Matrix from local CSV file 
+    --------------------------------
+
+    --------------------------------
+
+    """
+
+    def __init__(self,filename,n_classes):
+        """ Initialize Class Object Instance """
+        self.filename = filename
+        self.n_classes = n_classes
+        
+
+    def LoadDataFrame (self):
+        """ Read Local Data Frame-Like Object """
+        frame = pd.read_csv(self.filename)
+        self.X = frame.drop(['Class'],axis=1).to_numpy()
+        self.Y = frame['Class'].to_numpy()       
+        self.n_samples = self.Y.shape[0]
+        self.n_features = self.X.shape[1]
+        return self
+
+    def ScaleDesignMatrix (self):
+        """ Scale Design Matrix s.t. Cols have unit variance """
+        Scaler = StandardScaler()
+        Scaler.fit(self.X)
+        self.X = Scaler.transform(self.X)
+        return self
+
+    def OneHotEncode (self):
+        """ One-Hot-Encode Target Vector Y """
+        self.Y = keras.utils.to_categorical(self.Y,self.n_classes)
+        return self
+
+    def TrainTestSplit (self,testsize=0.2):
+        """ Split data into training & testing data sets """
+        return train_test_split(self.X,self.Y,test_size=testsize)
+
+    def ComputeVariance (self):
+        """ Compute Variance of Each Design Matrix Column """
+        self.variances = np.var(self.X,axis=0)
+
+    def SelectKBestFeatures (self,k=8):
+        """ Select K-Bets Features in Design Matric based ofn 'func' """
+        self.FeatureSelector = SelectKBest(score_func=feat_sel.f_classif,k=k)
+        self.X = self.FeatureSelector.fit_transform(self.X,self.Y)
+        self.n_features = k
+        return self
+
+    def __call__(self,scale=True):
+        """ Call Data Analyzer Object """
+        self.LoadDataFrame()
+        self.SelectKBestFeatures()
+        self.OneHotEncode()
+        if scale == True:
+            self.ScaleDesignMatrix()    
+        return self
+
 class FileIterator :
     """
     Iterate through batches of file objects and Extract Features
@@ -105,6 +168,8 @@ class FileIterator :
         featureVector = np.append(featureVector,timeSeriesFeatures.WaveformDistribution())
         featureVector = np.append(featureVector,timeSeriesFeatures.AutoCorrelationCoefficients())
 
+        freqSeriesFeatures = feat_utils.FrequencySeriesFeatures(file.waveform,frames=timeSeriesFeatures.frames)
+
         return featureVector
 
     def __call__(self):
@@ -125,54 +190,6 @@ class FileIterator :
         dataframe['Class'] = [x.target for x in self.FILES]
         dataframe.to_csv(filename+'.csv')
         return self
-
-class DataAnalyzer :
-    """
-    Analyze Desgin Matrix from local CSV file 
-    --------------------------------
-
-    --------------------------------
-
-    """
-
-    def __init__(self,filename,n_classes):
-        """ Initialize Class Object Instance """
-        self.filename = filename
-        self.n_classes = n_classes
-        
-
-    def LoadDataFrame (self):
-        """ Read Local Data Frame-Like Object """
-        frame = pd.read_csv(self.filename)
-        self.X = frame.drop(['Class'],axis=1).to_numpy()
-        self.Y = frame['Class'].to_numpy()
-        self.n_samples = self.Y.shape[0]
-        self.n_features = self.X.shape[1]
-        return self
-
-    def ScaleDesignMatrix (self):
-        """ Scale Design Matrix s.t. Cols have unit variance """
-        Scaler = StandardScaler()
-        Scaler.fit(self.X)
-        self.X = Scaler.transform(self.X)
-        return self
-
-    def OneHotEncode (self):
-        """ One-Hot-Encode Target Vector Y """
-        self.Y = keras.utils.to_categorical(self.Y,self.n_classes)
-        return self
-
-    def TrainTestSplit (self,testsize=0.2):
-        """ Split data into training & testing data sets """
-        return train_test_split(self.X,self.Y,test_size=testsize)
-
-    def __call__(self):
-        """ Call Data Analyzer Object """
-        self.LoadDataFrame()
-        self.ScaleDesignMatrix()
-        self.OneHotEncode()
-        return self
-
 
 class ProgramStart:
     """

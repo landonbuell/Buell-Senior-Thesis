@@ -10,6 +10,7 @@ PHYS 799
 import numpy as np
 import os 
 import pandas as pd
+
 import tensorflow as tf
 import tensorflow.keras as keras
 
@@ -30,12 +31,17 @@ if __name__ == '__main__':
     #Iterator.ExportData(str(ProgramInitializer.starttime))
     
 
-    Analyzer = sys_utils.DataAnalyzer('2020-08-08_13.09.02.969141.csv',N_classes)
-    Analyzer.__call__()
+    Analyzer = sys_utils.DataAnalyzer('2020-08-08_13.09.02.969141.csv',N_classes) 
+    Analyzer.__call__(scale=False)
+    Analyzer.ComputeVariance()
+
+    print(Analyzer.FeatureSelector.get_support())
+
+
     X_train,X_test,Y_train,Y_test = Analyzer.TrainTestSplit()
 
     MLP_MODEL = sys_utils.NeuralNetworks.Multilayer_Perceptron('JARVIS',N_classes,Analyzer.n_features,
-                                                               layerunits=[80,80])
+                                                               layerunits=[64,64])
     MLP_MODEL.fit(X_train,Y_train,batch_size=32,epochs=20,verbose=2)
 
     Y_pred = MLP_MODEL.predict(X_test)
@@ -44,6 +50,6 @@ if __name__ == '__main__':
     confmat = tf.math.confusion_matrix(Y_test,Y_pred,N_classes)
 
     plot_utils.Plot_Confusion(confmat,np.arange(N_classes),"-")
-
+    
 
     print("=)")
