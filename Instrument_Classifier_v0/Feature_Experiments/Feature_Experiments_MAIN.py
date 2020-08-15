@@ -26,9 +26,9 @@ if __name__ == '__main__':
     ProgramInitializer = sys_utils.ProgramStart(path)
     FILEOBJS,N_classes = ProgramInitializer.__call__()
 
-    #Iterator = sys_utils.FileIterator(FILEOBJS,N_classes)
-    #Iterator.__call__()
-    #Iterator.ExportData(str(ProgramInitializer.starttime))
+    Iterator = sys_utils.FileIterator(FILEOBJS,N_classes)
+    Iterator.__call__()
+    Iterator.ExportData(str(ProgramInitializer.starttime))
     
 
     Analyzer = sys_utils.DataAnalyzer('2020-08-08_13.09.02.969141.csv',N_classes) 

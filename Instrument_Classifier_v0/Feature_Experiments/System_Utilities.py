@@ -165,7 +165,7 @@ class FileIterator :
         featureVector = np.append(featureVector,timeSeriesFeatures.TimeDomainEnvelope())
         featureVector = np.append(featureVector,timeSeriesFeatures.ZeroCrossingRate())
         featureVector = np.append(featureVector,timeSeriesFeatures.CenterOfMass())
-        featureVector = np.append(featureVector,timeSeriesFeatures.WaveformDistribution())
+        featureVector = np.append(featureVector,timeSeriesFeatures.WaveformDistributionData())
         featureVector = np.append(featureVector,timeSeriesFeatures.AutoCorrelationCoefficients())
 
         freqSeriesFeatures = feat_utils.FrequencySeriesFeatures(file.waveform,frames=timeSeriesFeatures.frames)
@@ -179,13 +179,14 @@ class FileIterator :
             self.LoopCounter(i,self.n_files,file.filename)
             x = self.FeatureExtractor(file)             # get feature vector
             designMatrix = np.append(designMatrix,x)    # add samples to design matrix
+            del(x)
         designMatrix = designMatrix.reshape(self.n_files,-1)
         self.X = designMatrix
         return self
 
     def ExportData (self,filename):
         """ Export Design Matrix to CSV """
-        cols = ['TDE','ZXR','COM','Mean','Med','Mode','Var','ACC1','ACC2','ACC3','ACC4']
+        cols = ['TDE','ZXR','COM','Mean','Med','Var','ACC1','ACC2','ACC3','ACC4']
         dataframe = pd.DataFrame(data=self.X,columns=cols)
         dataframe['Class'] = [x.target for x in self.FILES]
         dataframe.to_csv(filename+'.csv')

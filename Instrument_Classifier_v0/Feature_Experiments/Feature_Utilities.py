@@ -10,7 +10,7 @@ Instrument Classifier v0
 import numpy as np
 
 import scipy.fftpack as fftpack
-import scipy.integrate as integ
+import scipy.integrate as integrate
 import scipy.signal as signal
 import scipy.sparse as sparse
 import scipy.stats as stats
@@ -41,12 +41,10 @@ class MathematicalUtilities :
         --------------------------------
         Return array of [mean,median,mode,variance]
         """
-        X = X.ravel()           # flatten
-        mean = np.mean(X)       # avg
-        median = np.median(X)   # median
-        mode,cnts = stats.mode(X,axis=None) # mode
-        var = np.var(X)         # variance
-        return np.array([mean,median,mode[0],var])
+        mean = np.mean(X,axis=-1)        # avg        
+        median = np.median(X,axis=-1)    # median
+        var = np.var(X,axis=-1)         # variance
+        return np.array([mean,median,var])
 
     @staticmethod
     def ReimannSum (X,dx):
@@ -70,8 +68,8 @@ class BaseFeatures:
 
     def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
         """ Initialize Class Object """
-        self.X = waveform                   # set waveform to self
-        self.n_samples = self.X.shape[0]    # samples in waveform
+        self.signal = waveform              # set waveform to self
+        self.n_samples = self.signal.shape[0]   # samples in waveform
         self.rate = rate                    # sample rate
         self.npts = npts                    # points per frame
         self.overlap = overlap              # overlap between frames
@@ -94,17 +92,21 @@ class BaseFeatures:
         frames = np.array([])               # array to hold time frames
         step = int(self.npts*(1-self.overlap))  # steps between frames
         for I in range(0,self.n_samples,step):  # iter through wave form
-            x = self.X[I:I+self.npts]           # create single frame
+            x = self.signal[I:I+self.npts]           # create single frame
             if x.shape[0] != self.npts:         # frame w/o N samples
                 pad = self.npts - x.shape[0]    # number of zeroes to pad
                 x = np.append(x,np.zeros(shape=(1,pad)))  
-            frames = np.append(frames,x)    # add single frame
-        frames = frames.reshape(-1,self.npts)    # reshape (each row is frame)
+            frames = np.append(frames,x)        # add single frame
+        frames = frames.reshape(-1,self.npts)   # reshape (each row is frame)
         return frames                       # return frames
+
+    
 
 class TimeSeriesFeatures (BaseFeatures):
     """
     Extract feature information from signal data in time-domain
+        Some methods can be applied to the full signal : attrb='signal'
+        or applied to each time-frame : attrb='frames'
     --------------------------------
     waveform (arr) : Array of shape (1 x n_samples) representing 
     npts (int) : Number of samples to include in each time-frame
@@ -117,35 +119,43 @@ class TimeSeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,
                 frames=frames,npts=npts,overlap=overlap)
 
-    def TimeDomainEnvelope (self):
-        """ Compute Time Domain envelope of waveform (Virtanen) """
-        envelope = np.dot(self.X,self.X)
-        envelope = np.sqrt(envelope/self.n_samples)
-        return envelope
+    def TimeDomainEnvelope(self,attrb='signal'):
+        """ Compute Time-Envelope by waveform or by frame (Virtanen) """
+        assert attrb in ['signal','frames']
+        X = self.__getattribute__(attrb)    # isolate signal or frames
+        TDE = np.sum(X*X,axis=-1)/self.n_samples
+        TDE = np.sqrt(TDE)
+        return TDE
 
-    def ZeroCrossingRate (self):
-        """ Compute Zero-Crossing rate of signal (Kahn & Al-Khatib)"""
-        zeroXing = np.sign(np.diff(self.X))
-        zeroXing = np.sum(zeroXing)
-        return zeroXing
+    def ZeroCrossingRate (self,attrb='signal'):
+        """ Compute Zero-Crossing rate of signal (Kahn & Al-Khatib) """
+        assert attrb in ['signal','frames']
+        X = self.__getattribute__(attrb)    # isolate signal or frames
+        X = np.diff(np.sign(X),n=1,axis=-1)
+        ZXR = np.sum(np.abs(X),axis=-1)
+        return ZXR/2
 
-    def CenterOfMass (self):
-        """ Compute temporal center of mass of waveform (Virtanen)"""
-        weights = np.arange(0,self.n_samples,1) 
-        centerOfMass = np.dot(weights,self.X)
-        return centerOfMass/np.sum(self.X)
+    def CenterOfMass (self,attrb='signal'):
+        """ Compute temporal center of mass of waveform or each frame (Virtanen) """
+        assert attrb in ['signal','frames']
+        X = self.__getattribute__(attrb)    # isolate signal or frames
+        weights = np.arange(0,X.shape[-1],1) 
+        COM = np.dot(X,weights)
+        return COM/np.sum(X,axis=-1)
 
-    def WaveformDistribution(self):
-        """ Compute Distribution data from waveform """
-        return MathematicalUtilities.DistributionData(self.X)
+    def WaveformDistributionData (self,attrb='signal'):
+        """ Compute Distribution data  """
+        assert attrb in ['signal','frames']
+        X = self.__getattribute__(attrb)    # isolate signal or frames
+        return MathematicalUtilities.DistributionData(X)
 
     def AutoCorrelationCoefficients (self,K=4):
-        """ Compute first K 'autocorrelation coefficients' from waveform (virtanen) """
+        """ Compute first K 'autocorrelation coefficients' from waveform (Virtanen) """
         coefficients = np.array([])     # arr to hold k coeffs
         for k in range (1,K+1,1):       # for k coeffs      
-            _a,_b = self.X[0:self.n_samples-k],self.X[k:]            
-            sumA = np.dot(_a,_b)          # numerator
-            sumB = np.dot(_a,_a)            
+            _a,_b = self.signal[0:self.n_samples-k],self.signal[k:]            
+            sumA = np.dot(_a,_b)        # numerator
+            sumB = np.dot(_a,_a)        
             sumC = np.dot(_b,_b)
             R = sumA / (np.sqrt(sumB)*np.sqrt(sumC))    # compute coefficient
             coefficients = np.append(coefficients,R)    # add to list of coeffs
@@ -185,9 +195,9 @@ class FrequencySeriesFeatures (BaseFeatures):
                 frames=frames,npts=npts,overlap=overlap)
 
         # Time Axis, Frequency Axis, Spectrogram
-        self.f,self.f_pts = self.FrequencyAxis(low=0,high=6000)
+        self.frequencyAxis,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
         self.t = np.arange(0,self.n_frames,1)          
-        self.Sxx = self.PowerSpectrum(self.f_pts)
+        self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
 
     def FrequencyAxis (self,low=0,high=6000):
         """
@@ -208,30 +218,17 @@ class FrequencySeriesFeatures (BaseFeatures):
 
     def HanningWindow (self,X):
         """
-        Apply hanning window to each row in array X
+        Apply Hanning window to each row in array X
         --------------------------------
         X (arr) Array-like of time-frames (n_frames x n_samples)
         --------------------------------
         Return X w/ Hann window applied to each row
         """
-        w = signal.hanning(M=X.shape[1],sym=False)  # window
-        for x in X:         # each row in X
-            x *= w          # apply window
+        window = signal.hanning(M=X.shape[-1],sym=False)  # window
+        X = np.dot(X,window)
         return X            # return new window
 
-    def MelFilterBanks (f,Sxx,n_filters,):
-        """
-        Compute Mel Filter Banks Spectral Energies
-        --------------------------------
-        f (arr) Array corresponding to frequency axis
-        Sxx (arr) : 2D Spectrogram (n_bins x n_frames) time vs. frequency vs. amplitude
-        n_filters (int) : Number of Mel filter banks in output
-        --------------------------------
-        Return Energy Approximation for each Mel Bank
-        """
-        mel = 1125 * np.log(1 + f/700)  # convert Hz to Mels
-
-    def PowerSpectrum (self,pts=[]):
+    def PowerSpectrum (self,attrb='frames',pts=[]):
         """
         Compute Discrete Fourier Transform of arrays in X
         --------------------------------
@@ -241,56 +238,30 @@ class FrequencySeriesFeatures (BaseFeatures):
         --------------------------------
         Return Z, array
         """        
-        Z = fftpack.fft(self.frames,axis=-1)  
-        Z = np.abs(Z)**2        # compute power:
-        if pts is not None:     # selection of pts
-            Z = Z[:,pts]        # slice
-        Z = np.transpose(Z)/self.npts   # pts in FFT
-        return Z
+        assert attrb in ['signal','frames']
+        X = self.__getattribute__(attrb)    # isolate signal or frames
+        Z = self.HanningWindow(X)   # apply Hanning Window
+        Z = fftpack.fft(X,axis=-1)  # apply DFT
+        Z = np.abs(Z)**2            # compute power:
+        if Z.ndim > 1:              # more than 1D
+            if pts is not None:     # selection of pts
+                Z = Z[:,pts]        # slice
+        else:                       # 1D arr
+            if pts is not None:     # selection of pts
+                Z = Z[pts]          # slice
+        Z /= self.npts              # pts in FFT
+        return Z                    # return Axis
 
-    def EnergySpectralDensity (self,f,t,Sxx,rate=44100,bands=[(0,6000)]):
-        """
-        Compute Energy Spectral density Distribution 
-        --------------------------------
-        f (arr) : Axis to map pts to frequency space (1 x n_bins)
-        t (arr) : Axis to map pts to time space (1 x n_frames)
-        Sxx (arr) : 2D Spectrogram (n_bins x n_frames) time vs. frequency vs. amplitude
-        rate (int) : waveform sample rate in Hz (44.1k by default)
-        bands (arr) : Iterable containing bounds of frequency bands (n_pairs x 2)
-        --------------------------------
-        Return array of sides (1 x n_pairs) for ESD in each pair
-        """ 
-        energy = np.array([])               # arr to hold energy
-        try:                                # attempt
-            Sxx = Sxx.toarray()             # sparse into np arr
-        except:                             # if failure...
-            pass                            # do nothing
-        for i,pair in enumerate(bands):     # each pair of bounds
-            idxs = np.where((f>=pair[0])&(f<=pair[1]))[0]   # find f-axis idxs
-            E = integrate.trapz(Sxx[idxs],dx=rate,axis=-1)  # integrate
-            E = np.sum(E)                   # sum elements
-            energy = np.append(energy,E)    # add to array
-        energy /= len(t)                    # avg energy/frame
-        energy /= np.max(energy)            # scale by max
-        return energy                       # return
+    def CenterOfMass (self,attrb):
+        """ Compute frequency center of mass of spectrum or spectrogram (Virtanen) """
+        assert attrb in ['frequencyAxis','spectrogram']
+        X = self.__getattribute__(attrb)        # isolate frequency or frames
+        weights = np.arange(0,X.shape[-1],1)    
+        COM = np.dot(X,weights)
+        return COM/np.sum(X,axis=-1)
 
-    def Spectrogram (self,X,f,pts):
-        """
-        Compute spectrogram using time-frames of a signal
-        --------------------------------
-        X (arr) : Array-like containing times frames
-        f (arr) : axis mapping to points in frequency space
-        pts (iter) : int index values to keep in array
-        --------------------------------
-        Return spectrogram, frequency & time axes, Sxx,f,t
-        """
-        n_frames,n_samples = X.shape    # input shape
-        X = Hanning_Window(X)           # apply Hann window
-        Sxx = Power_Spectrum(X,pts)     # compute FFT of each row
-        Sxx = Sxx.transpose()           # transpose
-        t = np.arange(0,n_frames)       # time axis  
-        Sxx_shape = Sxx.shape           # original shape
-        Sxx = np.array([0 if x<1 else x for x in Sxx.ravel()])
-        Sxx = Sxx.reshape(Sxx_shape)    # Reshape
-        Sxx = sparse.coo_matrix(Sxx,shape=Sxx_shape,dtype=np.float32)
-        return f,t,Sxx
+    def FrequnecyDistributionData (self,X=None):
+        """ Compute Distribution data  """
+        assert attrb in ['frequencyAxis','spectrogram']
+        X = self.__getattribute__(attrb)    # isolate frequency or frames
+        return MathematicalUtilities.DistributionData(X)
