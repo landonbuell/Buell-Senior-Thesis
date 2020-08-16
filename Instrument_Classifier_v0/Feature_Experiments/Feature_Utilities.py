@@ -195,8 +195,9 @@ class FrequencySeriesFeatures (BaseFeatures):
                 frames=frames,npts=npts,overlap=overlap)
 
         # Time Axis, Frequency Axis, Spectrogram
-        self.frequencyAxis,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
-        self.t = np.arange(0,self.n_frames,1)          
+        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
+        self.mels = 2595*np.log10(1+self.hertz/700)
+        self.t = np.arange(0,self.n_frames,1)   
         self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
 
     def FrequencyAxis (self,low=0,high=6000):
@@ -254,7 +255,7 @@ class FrequencySeriesFeatures (BaseFeatures):
 
     def CenterOfMass (self,attrb):
         """ Compute frequency center of mass of spectrum or spectrogram (Virtanen) """
-        assert attrb in ['frequencyAxis','spectrogram']
+        assert attrb in ['frequencySeries','spectrogram']
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         weights = np.arange(0,X.shape[-1],1)    
         COM = np.dot(X,weights)
@@ -262,6 +263,13 @@ class FrequencySeriesFeatures (BaseFeatures):
 
     def FrequnecyDistributionData (self,X=None):
         """ Compute Distribution data  """
-        assert attrb in ['frequencyAxis','spectrogram']
+        assert attrb in ['frequencySeries','spectrogram']
         X = self.__getattribute__(attrb)    # isolate frequency or frames
         return MathematicalUtilities.DistributionData(X)
+
+    def MelFilterBanks (self,attrbs,n_filters=20):
+        """ Compute Mel Filter Bank Energies across full DFT or spectrogram """
+        assert attrb in ['frequencySeries','spectrogram']
+        X = self.__getattribute__(attrb)        # isolate frequency or frames
+        melFreqLowBnd,melFreqHighBnd = self.mels[0],self.mels[-1]
+        melPoints = np.linspace(melFreqLowBnd,melFreqHighBnd,n_filters)
