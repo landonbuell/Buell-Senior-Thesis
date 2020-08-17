@@ -212,6 +212,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         Return frequency axis array between bounds, f
             and appropriate index, pts
         """
+        self.lowHz,self.highHz = low,high                   # set low/high bnds in Hz
         f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)# comput freq space
         pts = np.where((f_space>=low)&(f_space<=high))[0]   # get slices
         f_space = f_space[pts]                              # truncate space        
