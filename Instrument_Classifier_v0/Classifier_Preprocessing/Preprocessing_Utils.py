@@ -17,7 +17,7 @@ class FrequencySeriesFeatures :
         """ Intialize Class Object Instance """
         self.rate = 44100
         self.npts = 4096
-        self.hertz,self.pts = self.FrequencyAxis(0,8000)
+        self.hertz,self.pts = self.FrequencyAxis(0,6000)
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
         self.mels = self.HertzToMel(self.hertz)
@@ -40,26 +40,6 @@ class FrequencySeriesFeatures :
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
         
-    def MelFrequencyCeptsralCoefficients1 (self,n_filters=10):
-        """ Compute the first 'k' Mel Frequency Ceptral Coefficients """
-        lowMelFreq = self.HertzToMel(self.lowHz)
-        highMelFreq = self.HertzToMel(self.highHz)
-        melPts = np.linspace(lowMelFreq,highMelFreq,n_filters+2)
-        hertzPts = self.MelToHertz(melPts)
-        _bin = np.floor((self.npts+1)*hertzPts/self.rate)
-        
-        filterBank = np.zeros((n_filters,int(np.floor(self.npts/2+1))))
-        for m in range(1,n_filters+1,1):
-            fm_left = int(_bin[m-1]) 
-            fm_center = int(_bin[m]) 
-            fm_right = int(_bin[m+1])
-            
-            for k in range(fm_left,fm_center):
-                filterBank[m-1,k] = (k - _bin[m-1]) / (_bin[m] - _bin[m-1])
-            for k in range(fm_center,fm_right):
-                filterBank[m-1,k] = (_bin[m+1] - k) / (_bin[m+1] - _bin[m])
-
-        return filterBank
 
     def MelFrequencyCeptsralCoefficients (self,n_filters=10):
         """ Compute the first 'k' Mel Frequency Ceptral Coefficients """
@@ -80,7 +60,7 @@ class FrequencySeriesFeatures :
             for k in range(freqCenter,freqRight):
                 filterBanks[m-1,k] = (_bin[m+1] - k) / (_bin[m+1] - _bin[m])
        
-        
+        filterBanks = filterBanks[:,:len(self.pts)]
         return filterBanks
         
         

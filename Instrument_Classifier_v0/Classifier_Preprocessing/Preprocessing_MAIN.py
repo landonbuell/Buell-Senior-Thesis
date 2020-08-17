@@ -21,5 +21,5 @@ if __name__ == '__main__':
     banks = Features.MelFrequencyCeptsralCoefficients(n_filters=10)
 
     for bank in banks:
-        plt.plot(Features.hertz,bank[:744])
+        plt.plot(Features.hertz,bank)
     plt.show()

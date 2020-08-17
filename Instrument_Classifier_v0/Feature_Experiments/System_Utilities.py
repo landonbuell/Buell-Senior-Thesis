@@ -169,9 +169,11 @@ class FileIterator :
         featureVector = np.append(featureVector,timeSeriesFeatures.AutoCorrelationCoefficients())
 
         freqSeriesFeatures = feat_utils.FrequencySeriesFeatures(file.waveform,frames=timeSeriesFeatures.frames)
-        featureVector = np.append(featureVector,np.avg(freqSeriesFeatures.CenterOfMass('spectrogram')))
 
-        featureVector = np.append(featureVector,np.avg())
+        featureVector = np.append(featureVector,freqSeriesFeatures.MelFrequencyCeptralCoefficients())
+        featureVector = np.append(featureVector,freqSeriesFeatures.CenterOfMass())
+
+        
         return featureVector
 
     def __call__(self):
