@@ -25,7 +25,7 @@ model_names = ['JARVIS','VISION','ULTRON']      # names for models
 #model_names = ['PERCEPTRON_CLASSIFIER','SPECTROGRAM_CLASSIFIER',
  #              'PHASESPACE_CLASSIFIER']         # names for models
 
-perceptron_shape = 15
+perceptron_shape = 25
 spectrogram_shape = (560,256,1)
 phasespace_shape = (64,64,1)
 

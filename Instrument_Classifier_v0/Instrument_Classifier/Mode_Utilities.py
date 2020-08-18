@@ -66,16 +66,18 @@ class ProgramMode:
     def CollectFeatures (self,fileobj):
         """ Collected Features from a Given .WAV file object"""
         fileobj = fileobj.ReadAudio()          # read raw .wav file
-        # Time series feature object
-        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform,fileobj.rate)       
-        # Frequency series feature object
-        freqFeatures = feat_utils.FrequencySeriesFeatures(fileobj.waveform,
-                                        fileobj.rate,timeFeatures.frames)
-
+        
         x1 = ML_utils.FeatureArray(fileobj.target)      # Structure holds MLP features
-        x1 = x1.SetFeatures(np.zeros(shape=(15,)))      # set features
+
+        # Time Series Features Object
+        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)       
+        x1.AddFeatures(timeFeatures.__call__())     
+        freqFeatures = feat_utils.FrequencySeriesFeatures(fileobj.waveform,frames=timeFeatures.frames)
+        x1.AddFeatures(freqFeatures.__call__())
+            
         x2 = ML_utils.FeatureArray(fileobj.target)      # strucutre to hold Sxx features
         x2 = x2.SetFeatures(freqFeatures.Sxx)           # set spectrogram
+
         x3 = ML_utils.FeatureArray(fileobj.target)      # structure to hold PSC features
         x3 = x3.SetFeatures(np.zeros(shape=(2,2048)))   # set features
 

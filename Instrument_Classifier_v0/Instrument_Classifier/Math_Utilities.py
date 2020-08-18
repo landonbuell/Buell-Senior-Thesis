@@ -33,41 +33,25 @@ class MathematicalUtilities :
         """
         Analyze properties of an array of FP values
         --------------------------------
-        X (arr) : Array of FP number to analyze as distribution
+        X (arr) : (1 x N) Array of FP numbers to analyze as distribution
         --------------------------------
         Return array of [mean,median,mode,variance]
         """
-        X = X.ravel()           # flatten
-        mean = np.mean(X)       # avg
-        median = np.median(X)   # median
-        mode,cnts = stats.mode(X)    # mode
-        var = np.var(X)         # variance
-        return np.array([mean,median,mode[-1],var])
+        mean = np.mean(X,axis=-1)           # avg        
+        median = np.median(X,axis=-1)       # median
+        var = np.var(X,axis=-1)             # variance
+        return np.array([mean,median,var])  # return data
 
     @staticmethod
-    def RMSEnergy (X):
+    def ReimannSum (X,dx):
         """
-        Compute RMS energy of object X along last axis
-            Output contains 1 less dimension
+        Compute Reimann Sum of 1D array X with sample spacing dx
         --------------------------------
-        X (arr) : Array-like of floats 
+        X (arr) : (1 x N) Array of FP numbers to compute Reimann Sum of
+        dx (float) : Spacing between samples, 1 by default
         --------------------------------
-        Return RMS of array X
-        """           
-        RMS = np.sqrt(np.mean(X**2,axis=-1))# compute mean
-        return RMS                          # return 
+        Return Reimann Sum approximation of array
+        """
+        return np.sum(X)*dx
 
-    @staticmethod
-    def ScaleX (X):
-        """
-        Apply standard preprocessing scaling to design matrix, X
-        --------------------------------
-        X (arr) : Standard design matrix, shape (n_samples x n_features)
-        --------------------------------
-        Return scaled design matrix
-        """
-        scaler = StandardScaler()   # scalar instance
-        scaler = scaler.fit(X)      # fit frame
-        X_new = scaler.transform(X) # transform
-        return X_new                # return new design matrix
 

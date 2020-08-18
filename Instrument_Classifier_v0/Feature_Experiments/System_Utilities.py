@@ -113,18 +113,20 @@ class DataAnalyzer :
     def ComputeVariance (self):
         """ Compute Variance of Each Design Matrix Column """
         self.variances = np.var(self.X,axis=0)
+        return self.variances
 
     def SelectKBestFeatures (self,k=8):
         """ Select K-Bets Features in Design Matric based ofn 'func' """
         self.FeatureSelector = SelectKBest(score_func=feat_sel.f_classif,k=k)
         self.X = self.FeatureSelector.fit_transform(self.X,self.Y)
         self.n_features = k
+        print(self.FeatureSelector.get_support())
         return self
 
     def __call__(self,scale=True):
         """ Call Data Analyzer Object """
         self.LoadDataFrame()
-        self.SelectKBestFeatures()
+        self.SelectKBestFeatures(k=8)
         self.OneHotEncode()
         if scale == True:
             self.ScaleDesignMatrix()    
@@ -190,8 +192,8 @@ class FileIterator :
 
     def ExportData (self,filename):
         """ Export Design Matrix to CSV """
-        cols = ['TDE','ZXR','COM','Mean','Med','Var','ACC1','ACC2','ACC3','ACC4']
-        dataframe = pd.DataFrame(data=self.X,columns=cols)
+        #cols = ['TDE','ZXR','COM','Mean','Med','Var','ACC1','ACC2','ACC3','ACC4']
+        dataframe = pd.DataFrame(data=self.X)
         dataframe['Class'] = [x.target for x in self.FILES]
         dataframe.to_csv(filename+'.csv')
         return self

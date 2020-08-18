@@ -161,7 +161,10 @@ class TimeSeriesFeatures (BaseFeatures):
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         weights = np.arange(0,X.shape[-1],1)    # weight array
         COM = np.matmul(X,weights)              # operate
-        return np.mean(COM,axis=-1)             # return average
+        if COM.ndim > 1:                # more than 1D
+            return np.mean(COM,axis=-1) # return average
+        else:                           # scalar
+            return COM/self.n_samples   # divide by n samples 
 
     def WaveformDistributionData (self,attrb='signal'):
         """ 
@@ -346,7 +349,10 @@ class FrequencySeriesFeatures (BaseFeatures):
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         weights = np.arange(0,X.shape[-1],1)    # weight array
         COM = np.matmul(X,weights)              # operate
-        return np.mean(COM,axis=-1)             # return average
+        if COM.ndim >= 1:                # more or equal to 1D
+            return np.mean(COM,axis=-1) # return average
+        else:                           # scalar
+            return COM/self.n_samples   # divide by n samples 
 
     def FrequnecyDistributionData (self,attrb='spectrogram'):
         """ 

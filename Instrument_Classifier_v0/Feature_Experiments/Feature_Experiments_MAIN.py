@@ -26,23 +26,22 @@ if __name__ == '__main__':
     ProgramInitializer = sys_utils.ProgramStart(path)
     FILEOBJS,N_classes = ProgramInitializer.__call__()
 
-    Iterator = sys_utils.FileIterator(FILEOBJS,N_classes)
-    Iterator.__call__()
-    Iterator.ExportData(str(ProgramInitializer.starttime))
+    #Iterator = sys_utils.FileIterator(FILEOBJS,N_classes)
+    #Iterator.__call__()
+    #Iterator.ExportData(str(ProgramInitializer.starttime))
     
 
-    Analyzer = sys_utils.DataAnalyzer('2020-08-08_13.09.02.969141.csv',N_classes) 
-    Analyzer.__call__(scale=False)
-    Analyzer.ComputeVariance()
-
-    print(Analyzer.FeatureSelector.get_support())
-
+    Analyzer = sys_utils.DataAnalyzer('2020-08-17_15.53.51.124816.csv',N_classes) 
+    Analyzer.__call__(scale=True)
+    #print(Analyzer.ComputeVariance())
 
     X_train,X_test,Y_train,Y_test = Analyzer.TrainTestSplit()
 
     MLP_MODEL = sys_utils.NeuralNetworks.Multilayer_Perceptron('JARVIS',N_classes,Analyzer.n_features,
                                                                layerunits=[64,64])
-    MLP_MODEL.fit(X_train,Y_train,batch_size=32,epochs=20,verbose=2)
+    History = MLP_MODEL.fit(X_train,Y_train,batch_size=32,epochs=20,verbose=2)
+
+    plot_utils.Plot_History(History,MLP_MODEL)
 
     Y_pred = MLP_MODEL.predict(X_test)
     Y_pred = np.argmax(Y_pred,axis=-1)
