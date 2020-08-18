@@ -52,7 +52,7 @@ if __name__ == '__main__':
         print("\n\tError! - Unsupported mode type")
 
     #EXECUTE PROGRAM
-    ProgramMode.__call__(NeuralNetworks)      
+    ProgramMode.__CALL__(NeuralNetworks)      
 
     print("=)")
     

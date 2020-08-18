@@ -136,7 +136,7 @@ class TrainMode (ProgramMode):
                                 self.model_names[1]:[],
                                 self.model_names[2]:[]}
 
-    def __call__(self,Networks):
+    def __CALL__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Training process....")
         for I in range (0,self.n_iters):
@@ -204,7 +204,7 @@ class TestMode (ProgramMode):
         self.outputStructure = sys_utils.OutputData(self.model_names,
                                             outpath=self.exportpath)
 
-    def __call__(self,Networks):
+    def __CALL__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Testing Process...")
         self.__TEST__(Networks)
@@ -287,7 +287,7 @@ class TrainTestMode (ProgramMode):
         self.n_test_files = len(self.TEST_FILEOBJS)
         return self                     # return self
 
-    def __call__(self,Networks):
+    def __CALL__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
 
         # Run Training Mode
