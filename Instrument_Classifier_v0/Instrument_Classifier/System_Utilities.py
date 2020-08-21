@@ -105,7 +105,7 @@ class OutputData :
 
             #### PROGRAM PROCESSING CLASSES ####
 
-class ProgramStart:
+class ProgramInitializer:
     """
     Object to handle all program preprocessing
     --------------------------------
@@ -149,6 +149,10 @@ class ProgramStart:
         if self.program_mode == 'predict' and self.new_models == True:
             print("\n\tERROR! -  Cannot run predictions on Untrained Models!")
             sys.exit()
+
+    def __repr__(self):
+       """ Return String representation of Object/Instance """
+       return "ProgramInitializer performs preprocessing for program parameters "
             
     @property
     def StartupMesseges (self):
@@ -162,7 +166,7 @@ class ProgramStart:
         print("\t\tFound",self.n_classes,"classes to sort")
         print("\n")
 
-    def __call__(self):
+    def __Call__(self):
         """ Run Program Start Up Processes """        
         self.files = self.CollectCSVFiles()        # find CSV files
         fileobjects = self.CreateFileobjs()    # file all files

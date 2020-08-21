@@ -25,27 +25,29 @@ if __name__ == '__main__':
     export = os.path.join(parent,'Output-Data')
 
     # PRE-PROCESSING FOR PROGRAM
-    ProgramInitializer = sys_utils.ProgramStart(read,model,export,'train-test',True)    
-    FILEOBJECTS,N_classes = ProgramInitializer.__call__()
-    exportpath = ProgramInitializer.exportpath
-    timestart = ProgramInitializer.starttime
+    ProgramSetup = sys_utils.ProgramInitializer(read,model,export,'train-test',True)    
+    FILEOBJECTS,N_classes = ProgramSetup.__Call__()
+    exportpath = ProgramSetup.exportpath
+    timestart = ProgramSetup.starttime
 
     # SETUP NEURAL NETWORK MODELS
-    NeuralNetworks = NN_utils.NetworkContainer(NN_utils.model_names,
-        N_classes,ProgramInitializer.modelpath,ProgramInitializer.new_models)
-    Model_Names = NeuralNetworks.ModelNames
+    NeuralNetwork = NN_utils.NetworkContainer(NN_utils.modelName,N_classes,exportpath,
+                        NN_utils.inputShapeCNN,NN_utils.inputShapeMLP,ProgramSetup.new_models)
+    modelName = NeuralNetwork.name
+
+    print(NeuralNetwork.MODEL.summary())
     
     # DETERMINE WHICH MODE TO RUN PROGRAM
-    if ProgramInitializer.program_mode == 'train':
-        ProgramMode = mode_utils.TrainMode(FILEOBJS=FILEOBJECTS,model_names=Model_Names,
+    if ProgramSetup.program_mode == 'train':
+        ProgramMode = mode_utils.TrainMode(FILEOBJS=FILEOBJECTS,modelNames=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=True,n_iters=2)
-    elif ProgramInitializer.program_mode == 'train-test':     
-        ProgramMode =  mode_utils.TrainTestMode(FILEOBJS=FILEOBJECTS,model_names=Model_Names,
+    elif ProgramSetup.program_mode == 'train-test':     
+        ProgramMode =  mode_utils.TrainTestMode(FILEOBJS=FILEOBJECTS,modelNames=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=False,n_iters=4,testsize=0.1)
-    elif ProgramInitializer.program_mode == 'predict':
-        ProgramMode = mode_utils.TestMode(FILEOBJS=FILEOBJECTS,model_names=Model_Names,
+    elif ProgramSetup.program_mode == 'predict':
+        ProgramMode = mode_utils.TestMode(FILEOBJS=FILEOBJECTS,modelNames=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=True,labels_present=False)
     else:
