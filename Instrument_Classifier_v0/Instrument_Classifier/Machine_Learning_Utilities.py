@@ -72,9 +72,9 @@ class DesignMatrix:
             self.X = np.array(self.X).reshape(self.n_samples,-1)
         return self
 
-    def ScaleX (self,scaler):
-        """ Apply standard preprocessing scaling to self.X """
-        assert type(self.X) == np.ndarray
+    def SetMatrixData(self,X_new):
+        """ Set 'self.X' to given input X_new """
+        self.X = X_new
         return self
 
     def __Get_Y__(self,onehot=True):

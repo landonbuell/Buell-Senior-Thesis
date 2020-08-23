@@ -43,9 +43,9 @@ if __name__ == '__main__':
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=True,n_iters=2)
     elif ProgramSetup.program_mode == 'train-test':     
-        ProgramMode =  mode_utils.TrainTestMode(FILEOBJS=FILEOBJECTS,modelNames=modelName,
+        ProgramMode =  mode_utils.TrainTestMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
-                                            show_summary=False,n_iters=4,testsize=0.1)
+                                            show_summary=False,groupSize=256,n_iters=4,testSize=0.1)
     elif ProgramSetup.program_mode == 'predict':
         ProgramMode = mode_utils.TestMode(FILEOBJS=FILEOBJECTS,modelNames=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
@@ -54,7 +54,7 @@ if __name__ == '__main__':
         print("\n\tError! - Unsupported mode type")
 
     #EXECUTE PROGRAM
-    ProgramMode.__CALL__(NeuralNetworks)      
+    ProgramMode.__Call__(NeuralNetwork)      
 
     print("=)")
     

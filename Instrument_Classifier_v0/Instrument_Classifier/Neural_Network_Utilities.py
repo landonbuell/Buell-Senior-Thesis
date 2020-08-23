@@ -22,19 +22,18 @@ Neural_Network_Models.py - "Neural Network Models"
             #### VARIABLE DECLARATIONS ####
 
 modelName = "JARVIS"
-
-inputShapeMLP = (25,)
+inputShapeMLP = (23,)
 inputShapeCNN = (560,256,1)
 
 class NetworkContainer:
     """
     Object that creates and contains Neural Network Model objects
     --------------------------------
-    modelNames (iter) : list-like of 3 strings indicating names for models
-    inputAShape (iter) : list-like of ints giving shape of CNN branch input shape
-    inputBShape (iter) : list-like of ints giving shape of MLP branch input shape
+    modelName (str) : user-ID-able string to indicate model
     n_classes (int) : number of discrete classes for models
     path (str) : Local parent path object where models are stored
+    inputAShape (iter) : list-like of ints giving shape of CNN branch input shape
+    inputBShape (iter) : list-like of ints giving shape of MLP branch input shape   
     new (bool) : If true, new Neural Networks are overwritten
     --------------------------------
     Return Instantiated Neural Network Model Object
@@ -168,7 +167,8 @@ class NeuralNetworkModels:
         Return complied tf.keras model
         """
         modelCNN = NeuralNetworkModels.ConvolutionalNeuralNetwork2D(inputA,n_classes,
-                        filterSizes=[32,32],kernelSizes=[(3,3),(3,3)],neurons=[64,64])
+                        filterSizes=[32,32,32],kernelSizes=[(3,3),(3,3),(3,3)],
+                        poolSizes=[(3,3),(3,3),(3,3)],neurons=[64,64])
         modelMLP = NeuralNetworkModels.MultilayerPerceptron(inputB,n_classes)
 
         x = keras.layers.concatenate([modelCNN.output,modelMLP.output])
@@ -178,6 +178,6 @@ class NeuralNetworkModels:
 
         modelMain.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
                           loss=keras.losses.CategoricalCrossentropy(),
-                            metrics=['precision','recall'])
+                            metrics=['Precision','Recall'])
         return modelMain
 

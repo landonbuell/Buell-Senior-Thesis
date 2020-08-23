@@ -87,7 +87,7 @@ class TimeSeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,
                 frames=frames,npts=npts,overlap=overlap)
 
-    def __call__(self):
+    def __Call__(self):
         """
         Collect preset features from self in single function
         --------------------------------
@@ -223,7 +223,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         self.t = np.arange(0,self.n_frames,1)   
         self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
 
-    def __call__(self):
+    def __Call__(self):
         """
         Collect preset features from self in single function
         --------------------------------
@@ -234,7 +234,6 @@ class FrequencySeriesFeatures (BaseFeatures):
         featureVector = np.array([])
         featureVector = np.append(featureVector,self.MelFrequencyCeptralCoefficients())
         featureVector = np.append(featureVector,self.CenterOfMass())
-        featureVector = np.append(featureVector,self.FrequnecyDistributionData())
         return featureVector
 
     def FrequencyAxis (self,low=0,high=6000):
@@ -361,4 +360,4 @@ class FrequencySeriesFeatures (BaseFeatures):
         """
         assert attrb in ['frequencySeries','spectrogram']
         X = self.__getattribute__(attrb)    # isolate frequency or frames
-        return math_utils.MathematicalUtilities.DistributionData(X)
+        raise NotImplementedError
