@@ -142,6 +142,9 @@ class ModelAnalysis:
 
     def __init__(self,modelName,datapath,n_classes):
         """ Instantiate Class Object """
+
+        raise NotImplementedError()
+
         self.modelName = modelName      # name of NN models
         self.datapath = datapath        # path to find file
         self.n_classes = n_classes      # classes in model

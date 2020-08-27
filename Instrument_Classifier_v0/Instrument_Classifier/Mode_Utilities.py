@@ -131,7 +131,7 @@ class TrainMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          show_summary=show_summary,groupSize=groupSize)
 
-        self.outfile = 'TRAINING-HISTORY@'+self.timestamp+'.csv'
+        self.outfile = self.modelName+'@TRAINING-HISTORY@'+self.timestamp+'.csv'
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
@@ -173,10 +173,12 @@ class TrainMode (ProgramMode):
 
     def ExportHistory (self,historyObject):
         """ Store Keras History Object in lists """
-        updateData = {"Epoch":[x.fullpath for x in fileObjects],
-                      "Loss Score":[],
-                      "Precision":[],
-                      "Recall":[] }
+        metricsDictionary = historyObject.history
+        newKeys = self.OutputData.cols
+        updateData = {"Epoch Num":np.arange(self.n_epochs)}
+        for key,val in zip(newKeys[1:],metricsDictionary.values()):
+            newpair = {key:val}
+            updateData.update(newpair)
         self.OutputData.UpdateData(updateData)
         return self
         
@@ -204,7 +206,7 @@ class PredictMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          show_summary=show_summary,groupSize=groupSize)
 
-        outfile = 'PREDICTIONS@'+self.timestamp+'.csv'
+        outfile = self.modelName+'@PREDICTIONS@'+self.timestamp+'.csv'
         self.exportpath = os.path.join(self.exportpath,outfile)
         self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold
@@ -212,10 +214,10 @@ class PredictMode (ProgramMode):
     def __Call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Testing Process...")
-        self.__TEST__(Networks)
+        self.__PREDICT__(Networks)
         print("\tTesting Completed! =)")
 
-    def __TEST__(self,Networks):
+    def __PREDICT__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
         # For Each group of files, Collect the data
         for I in range (0,self.n_files,self.groupSize):# In a given group
@@ -228,10 +230,10 @@ class PredictMode (ProgramMode):
             modelPrediction = Networks.MODEL.predict(x=[X1,X2],batch_size=64,verbose=0)
             self.ExportPrediction(FILES,modelPrediction)
             
-            del(DesignMatrices)                     # delete Design Matrix Objs
-            self.outputStructure.ExportResults()
-            self.groupCounter += 1                  # incr counter
-        return self                                 # return self       
+            del(matrixSXX,matrixMLP)        # delete Design Matrix Objs
+            del(X1,X2)                      # delete Design Matricies
+            self.groupCounter += 1          # incr counter
+        return self                         # return self       
 
     def InitOutputStructure (self):
         """ Create Output Structure for Testing/Prediction Mode """

@@ -70,26 +70,26 @@ class OutputStructure :
     def __init__(self,programMode,exportPath):
         """ Initialize Class Object instance """
         if programMode == "Train":      # output for training history
-            self.keys = ["Epoch Num","Loss Score","Precision","Recall"]
+            self.cols = ["Epoch Num","Loss Score","Precision","Recall"]
         elif programMode == "Predict":  # output for predictions
-            self.keys = ["Filepath","Label","Prediction"]
+            self.cols = ["Filepath","Label","Prediction"]
         else:
             print("\n\tERROR! - File mode not recognized!")
-            self.keys = []
+            self.cols = []
             raise BaseException()
         self.exportPath = exportPath
         self.InitData()
     
     def InitData (self):
         """ Initialize Output Structure """
-        self.Data = pd.DataFrame(data=None,columns=self.keys)   # create frame
+        self.Data = pd.DataFrame(data=None,columns=self.cols)   # create frame
         self.Data.to_csv(path_or_buf=self.exportPath)           # export frame
         return self
 
     def UpdateData (self,X):
         """ Update Data in Output Frame """
         frame = pd.DataFrame(data=X)        # create new dataframe
-        frame.to_csv(path_or_buf=self.exportPath,columns=self.keys,
+        frame.to_csv(path_or_buf=self.exportPath,columns=self.cols,
                      header=False,mode='a') # append the output frame
         return self
         
@@ -150,7 +150,7 @@ class ProgramInitializer:
         self.files = self.CollectCSVFiles()        # find CSV files
         fileobjects = self.CreateFileobjs()    # file all files
         self.n_files = len(fileobjects)        
-        if self.program_mode in ['train','train-test']:
+        if self.program_mode in ['train','train-predict']:
             self.n_classes = self.GetNClasses(fileobjects)
         else:
             self.n_classes = None

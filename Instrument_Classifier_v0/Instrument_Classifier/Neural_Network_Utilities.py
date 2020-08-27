@@ -21,7 +21,7 @@ Neural_Network_Models.py - "Neural Network Models"
 
             #### VARIABLE DECLARATIONS ####
 
-modelName = "JARVIS"
+modelName = "VISION"
 inputShapeMLP = (23,)
 inputShapeCNN = (560,256,1)
 

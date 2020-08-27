@@ -25,7 +25,7 @@ if __name__ == '__main__':
     export = os.path.join(parent,'Output-Data')
 
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer(read,model,export,'predict',False)    
+    ProgramSetup = sys_utils.ProgramInitializer(read,model,export,'train-predict',True)    
     FILEOBJECTS,N_classes = ProgramSetup.__Call__()
     exportpath = ProgramSetup.exportpath
     timestart = ProgramSetup.starttime
@@ -41,13 +41,13 @@ if __name__ == '__main__':
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=True,groupSize=256,n_iters=1)
     elif ProgramSetup.program_mode == 'train-predict':     
-        ProgramMode =  mode_utils.TrainTestMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
+        ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=False,groupSize=256,n_iters=1,testSize=0.1)
     elif ProgramSetup.program_mode == 'predict':
         ProgramMode = mode_utils.PredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
-                                            show_summary=True,labels_present=False)
+                                            show_summary=True,groupSize=32,labels_present=False)
     else:
         print("\n\tError! - Unsupported mode type")
 
