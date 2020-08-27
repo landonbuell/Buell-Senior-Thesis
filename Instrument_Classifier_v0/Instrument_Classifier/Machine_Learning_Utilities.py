@@ -140,9 +140,9 @@ class ModelAnalysis:
     Return Instantiated Model Analysis Object
     """
 
-    def __init__(self,model_names,datapath,n_classes):
+    def __init__(self,modelName,datapath,n_classes):
         """ Instantiate Class Object """
-        self.model_names = model_names  # name of NN models
+        self.modelName = modelName      # name of NN models
         self.datapath = datapath        # path to find file
         self.n_classes = n_classes      # classes in model
 

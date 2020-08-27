@@ -52,9 +52,10 @@ class ProgramMode:
         self.show_summary = show_summary    # show results of stages      
         self.groupSize = groupSize          # giles to use in each mega-batch
         self.n_files = len(self.FILEOBJS)   # number of file objects
+        self.groupCounter = 0
 
         self.Scaler = StandardScaler()      # design matrix scaler
-        
+    
     def LoopCounter (self,cntr,max,text):
         """ Print Loop Counter for User """
         print('\t\t('+str(cntr)+'/'+str(max)+')',text)
@@ -96,7 +97,7 @@ class ProgramMode:
         
         for i,FILEOBJ in enumerate(FILES):
             self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
-            (x1,x2) = self.CollectFeatures(FILEOBJ)       # collect features
+            (x1,x2) = self.CollectFeatures(FILEOBJ)         # collect features
             X1.AddSample(x1)            # Add sample to Sxx 
             X2.AddSample(x2)            # Add sample to MLP
        
@@ -125,22 +126,24 @@ class TrainMode (ProgramMode):
     def __init__(self,FILEOBJS,modelName,n_classes,timestamp,exportpath=None,
                  show_summary=True,groupSize=256,n_iters=2):
         """ Instantiate Class Method """
+        self.programMode = "Train"
         super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          show_summary=show_summary,groupSize=groupSize)
 
-        self.outfile = 'HISTORY@'+self.timestamp+'.csv'
+        self.outfile = 'TRAINING-HISTORY@'+self.timestamp+'.csv'
         self.exportpath = os.path.join(self.exportpath,self.outfile)
+        self.InitOutputStructure()
         self.n_iters = n_iters
         self.n_epochs = 4
-        self.groupCounter = 0
-
+     
     def __Call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Training process....")
-        for I in range (0,self.n_iters):
-            print("\tIteration:",I)
-            self.__TRAIN__(Networks)
+        for I in range (0,self.n_iters):    # Each pass over full dataset
+            print("\tIteration:",I)         # Print interation num
+            self.__TRAIN__(Networks)        # Train the model
+            Networks.SaveModel()            # save locally
             self.FILEOBJS = np.random.permutation(self.FILEOBJS)
         print("\tTraining Completed! =)")
         return self
@@ -156,19 +159,28 @@ class TrainMode (ProgramMode):
             X2 = matrixMLP.__Get_X__()
             Y = matrixSXX.__Get_Y__()
             modelHistory = Networks.MODEL.fit(x=[X1,X2],y=Y,
-                               batch_size=32,epochs=self.n_epochs,verbose=1)
-           
+                               batch_size=32,epochs=self.n_epochs,verbose=1) 
+            self.ExportHistory(modelHistory)
             del(matrixSXX,matrixMLP)    # delete Design Matrix Objs
+            del(X1,X2,Y)                # delete Design Matrices
             self.groupCounter += 1      # incr coutner
         return self                     # self
 
-    def StoreHistory (self,historyObject):
-        """ Store Keras History Object in lists """
-        assert model in self.model_names    # must be a known model
-        self.model_histories[str(model)].append(history_object)
+    def InitOutputStructure (self):
+        """ Create Output Structure for Testing/Prediction Mode """
+        self.OutputData = sys_utils.OutputStructure(self.programMode,self.exportpath)
         return self
 
-class TestMode (ProgramMode):
+    def ExportHistory (self,historyObject):
+        """ Store Keras History Object in lists """
+        updateData = {"Epoch":[x.fullpath for x in fileObjects],
+                      "Loss Score":[],
+                      "Precision":[],
+                      "Recall":[] }
+        self.OutputData.UpdateData(updateData)
+        return self
+        
+class PredictMode (ProgramMode):
     """
     Run Program in 'Test Mode'
         Inherits from 'Program_Mode' parent class
@@ -187,15 +199,16 @@ class TestMode (ProgramMode):
     def __init__(self,FILEOBJS,modelName,n_classes,timestamp,exportpath=None,
                  show_summary=True,groupSize=256,labels_present=False,prediction_threshold=0.5):
         """ Initialize Class Object Instance """
+        self.programMode = "Predict"
         super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          show_summary=show_summary,groupSize=groupSize)
 
         outfile = 'PREDICTIONS@'+self.timestamp+'.csv'
         self.exportpath = os.path.join(self.exportpath,outfile)
+        self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold
-        self.groupCounter = 0
-
+        
     def __Call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Testing Process...")
@@ -204,28 +217,37 @@ class TestMode (ProgramMode):
 
     def __TEST__(self,Networks):
         """ Test Netorks on data from FILEOBJS """
-
         # For Each group of files, Collect the data
         for I in range (0,self.n_files,self.groupSize):# In a given group
             print("\tGroup Number:",self.groupCounter)
             FILES = self.FILEOBJS[I:I+self.groupSize]  # subset of files
-            DesignMatrices = self.ConstructDesignMatrices(FILES)
+            (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES)
+            X1 = matrixSXX.__Get_X__()
+            X2 = matrixMLP.__Get_X__()
+
+            modelPrediction = Networks.MODEL.predict(x=[X1,X2],batch_size=64,verbose=0)
+            self.ExportPrediction(FILES,modelPrediction)
             
             del(DesignMatrices)                     # delete Design Matrix Objs
             self.outputStructure.ExportResults()
             self.groupCounter += 1                  # incr counter
         return self                                 # return self       
 
-    def __predict__(self,model,X):
-        """ Predict Class output from unlabeled sample features """
-        y_pred = model.predict(x=X,verbose=0)   # get network predicitons
-        y_pred = np.argmax(y_pred,axis=-1)      # code by integer
-        # store predictions in array based on model name
-        self.outputStructure.data[str(model.name)] = \
-            np.append(self.outputStructure.data[str(model.name)],y_pred)
-        return self                             # return itself
+    def InitOutputStructure (self):
+        """ Create Output Structure for Testing/Prediction Mode """
+        self.OutputData = sys_utils.OutputStructure(self.programMode,self.exportpath)
+        return self
+
+    def ExportPrediction (self,fileObjects,predictionData):
+        """ Export data from prediction arry to Local path """
+        predictionData = np.argmax(predictionData,axis=-1)
+        updateData = {"Filepath":[x.fullpath for x in fileObjects],
+                      "Label":[x.target for x in fileObjects],
+                      "Prediction":predictionData}
+        self.OutputData.UpdateData(updateData)
+        return self
        
-class TrainTestMode (ProgramMode):
+class TrainPredictMode (ProgramMode):
     """
     Run Program in 'Train_Mode' and 'Test Mode' sequentially
         Inherits from 'Train_Mode' and 'Test Mode' parent classes
@@ -249,10 +271,10 @@ class TrainTestMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          show_summary=show_summary,groupSize=groupSize)
         
-        self.labelsPresent = labelsPresent    # labels?
+        self.labelsPresent = labelsPresent  # labels?
         self.n_iters = n_iters              # number of passes over data
         self.testSize = testSize            # train/test size        
-        self.SplitObjs()                   # split objs
+        self.SplitObjs()                    # split objs
                   
     def SplitObjs (self):
         """ Split objects into training.testing subsets """
@@ -275,11 +297,13 @@ class TrainTestMode (ProgramMode):
         Training.__Call__(Networks)
 
         # Run Testing Mode
-        Testing = TestMode(FILEOBJS=self.TEST_FILEOBJS,modelName=self.modelName,
+        Testing = PredictMode(FILEOBJS=self.TEST_FILEOBJS,modelName=self.modelName,
                               n_classes=self.n_classes,timestamp=self.timestamp,
                               exportpath=self.exportpath,show_summary=True,groupSize=self.groupSize,
                               labels_present=True)
         Testing.__Call__(Networks)
             
         return self
+
+
    

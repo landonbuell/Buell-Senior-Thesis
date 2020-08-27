@@ -62,48 +62,39 @@ class FileObject:
         self.n_samples = len(self.waveform)
         return self             # return self
 
-class OutputData :
+class OutputStructure :
     """
-    Output Data structure for Program based on mode
-    --------------------------------  
-    model_names (iter) : List-like of strings calling Network models by name  
-    outpath (str) : Local Path to output data
-    --------------------------------
-    Return Output Data Structure object
+    Data Structure to Store and Output History or Prediction arrays
     """
 
-    def __init__(self,model_names,outpath=None):
-        """ Initialize Class Object Instance """
-        self.model_names = model_names        
-        self.output_path = outpath
-        self.data,self.cols = self.InitializeStructure
-      
-    @property
-    def InitializeStructure(self):
-        """ Initalize Output data Structure """
-        cols = ['Fullpath','Label']
-        for model in self.model_names:
-            cols.append(model)
-        # Create a dictionary
-        data = {}           # init dictionary
-        for i in cols:      # each entry
-            data.update({i:np.array([])})
-        return data,cols
-
-    def AddIndex(self,FILEOBJS):
-        """ Add filepaths and targets to output structure """
-        paths = [x.fullpath for x in FILEOBJS]  # get fullpaths
-        trgts = [x.target for x in FILEOBJS]    # get targets
-        self.data['Fullpath'] = np.append(self.data['Fullpath'],paths)
-        self.data['Label'] = np.append(self.data['Label'],trgts)
+    def __init__(self,programMode,exportPath):
+        """ Initialize Class Object instance """
+        if programMode == "Train":      # output for training history
+            self.keys = ["Epoch Num","Loss Score","Precision","Recall"]
+        elif programMode == "Predict":  # output for predictions
+            self.keys = ["Filepath","Label","Prediction"]
+        else:
+            print("\n\tERROR! - File mode not recognized!")
+            self.keys = []
+            raise BaseException()
+        self.exportPath = exportPath
+        self.InitData()
+    
+    def InitData (self):
+        """ Initialize Output Structure """
+        self.Data = pd.DataFrame(data=None,columns=self.keys)   # create frame
+        self.Data.to_csv(path_or_buf=self.exportPath)           # export frame
         return self
 
-    def ExportResults(self):
-        """ Export outdat data dictionary to local file """
-        out_frame = pd.DataFrame(data=self.data,columns=self.cols)
-        out_frame.to_csv(path_or_buf=self.output_path,header=True,mode='w')
+    def UpdateData (self,X):
+        """ Update Data in Output Frame """
+        frame = pd.DataFrame(data=X)        # create new dataframe
+        frame.to_csv(path_or_buf=self.exportPath,columns=self.keys,
+                     header=False,mode='a') # append the output frame
+        return self
+        
 
-            #### PROGRAM PROCESSING CLASSES ####
+            #### PROGRAM PROCESSING CLASS ####
 
 class ProgramInitializer:
     """
@@ -144,27 +135,15 @@ class ProgramInitializer:
             self.new_models = input_args[4]     # create new models?
         except:
             pass
-        assert self.program_mode in ['train','train-test','predict']
+        assert self.program_mode in ['train','train-predict','predict']
 
-        if self.program_mode == 'predict' and self.new_models == True:
+        if (self.program_mode == 'predict') and (self.new_models == True):
             print("\n\tERROR! -  Cannot run predictions on Untrained Models!")
-            sys.exit()
+            raise BaseException()
 
     def __repr__(self):
        """ Return String representation of Object/Instance """
        return "ProgramInitializer performs preprocessing for program parameters "
-            
-    @property
-    def StartupMesseges (self):
-        """ Print out Start up messeges to Console """
-        print("Running Main Program.....")
-        print("\tCollecting data from:",self.readpath)
-        print("\tStoring/Loading models from:",self.modelpath)
-        print("\tExporting Predictions to:",self.exportpath)
-        print("\tCreating new models?",self.new_models)
-        print("\t\tFound",self.n_files,"files to read")
-        print("\t\tFound",self.n_classes,"classes to sort")
-        print("\n")
 
     def __Call__(self):
         """ Run Program Start Up Processes """        
@@ -178,6 +157,18 @@ class ProgramInitializer:
         self.StartupMesseges           # Messages to User
         fileobjects = np.random.permutation(fileobjects)    # permute
         return fileobjects,self.n_classes
+            
+    @property
+    def StartupMesseges (self):
+        """ Print out Start up messeges to Console """
+        print("Running Main Program.....")
+        print("\tCollecting data from:",self.readpath)
+        print("\tStoring/Loading models from:",self.modelpath)
+        print("\tExporting Predictions to:",self.exportpath)
+        print("\tCreating new models?",self.new_models)
+        print("\t\tFound",self.n_files,"files to read")
+        print("\t\tFound",self.n_classes,"classes to sort")
+        print("\n")
 
     def ArgumentParser(self):
         """ Process Command Line Arguments """
