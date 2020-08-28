@@ -21,20 +21,19 @@ Neural_Network_Models.py - "Neural Network Models"
 
             #### VARIABLE DECLARATIONS ####
 
-modelName = "JARVIS"
-
-inputShapeMLP = (25,)
+modelName = "VISION"
+inputShapeMLP = (23,)
 inputShapeCNN = (560,256,1)
 
 class NetworkContainer:
     """
     Object that creates and contains Neural Network Model objects
     --------------------------------
-    modelNames (iter) : list-like of 3 strings indicating names for models
-    inputAShape (iter) : list-like of ints giving shape of CNN branch input shape
-    inputBShape (iter) : list-like of ints giving shape of MLP branch input shape
+    modelName (str) : user-ID-able string to indicate model
     n_classes (int) : number of discrete classes for models
     path (str) : Local parent path object where models are stored
+    inputAShape (iter) : list-like of ints giving shape of CNN branch input shape
+    inputBShape (iter) : list-like of ints giving shape of MLP branch input shape   
     new (bool) : If true, new Neural Networks are overwritten
     --------------------------------
     Return Instantiated Neural Network Model Object
@@ -46,15 +45,16 @@ class NetworkContainer:
         self.shapeB = inputBShape
 
         self.n_classes = n_classes  # number of output classes
-        self.parentPath = path     # Set parent path for models      
-        self.newModel = new       # create new models
+        self.parentPath = os.path.join(path,self.name)  # Set parent path for models      
+        self.newModel = new         # create new models?
         
-        if self.newModel == True:             # create new networks?
-            self.MODEL = self.CreateNewModel()
+        if self.newModel == True:               # create new networks?
+            self.MODEL = self.CreateNewModel()  # create new
+            self.SaveModel()                    # save locally
         else:                                   # load exisitng networks
-           # Load Exisiting Network
-           pass
-        assert self.n_classes is not None        # make sure we know how many classes
+           self.MODEL = self.LoadExistingModel()# load model
+           self.n_classes = self.MODEL.get_layer(index=-1).output_shape[-1]
+        assert self.n_classes is not None       # make sure we know how many classes
 
     def __repr__(self):
         """ Return string representation of NetworkContainer Class """
@@ -79,7 +79,31 @@ class NetworkContainer:
         --------------------------------
         Return Instantiated Neural Network Model
         """
-        raise NotImplementedError
+        try:
+            model = keras.models.load_model(self.parentPath)   # load stored Model
+            print("\n\tSuccessfully loaded model:",self.name,"from\n\t\t",self.parentPath)
+        except:
+            print("\n\tERROR! - Could not find model:",self.name,"at:\n\t\t",self.parentPath)
+            raise FileNotFoundError()
+        return model
+
+    def SaveModel(self):
+        """ 
+        Store Current Model to local disk for future Use
+        --------------------------------
+        * no args
+        --------------------------------
+        Return Instantiated Neural Network Model
+        """
+        print("\tSaving Model",self.MODEL.name,"at:\n\t\t",self.parentPath)
+        try:
+            keras.models.save_model(self.MODEL,self.parentPath,overwrite=True)
+            print("\n\tSuccessfully saved model:",self.name,"to\n\t\t",self.parentPath)
+        except:
+            print("\n\tERROR! - Could not save model:",self.name,"at:\n\t\t",self.parentPath)
+            raise FileNotFoundError()
+        return self
+
 
 class NullLayer (keras.layers.Layer):
     """
@@ -168,7 +192,8 @@ class NeuralNetworkModels:
         Return complied tf.keras model
         """
         modelCNN = NeuralNetworkModels.ConvolutionalNeuralNetwork2D(inputA,n_classes,
-                        filterSizes=[32,32],kernelSizes=[(3,3),(3,3)],neurons=[64,64])
+                        filterSizes=[32,32,32],kernelSizes=[(3,3),(3,3),(3,3)],
+                        poolSizes=[(3,3),(3,3),(3,3)],neurons=[64,64])
         modelMLP = NeuralNetworkModels.MultilayerPerceptron(inputB,n_classes)
 
         x = keras.layers.concatenate([modelCNN.output,modelMLP.output])
@@ -176,8 +201,9 @@ class NeuralNetworkModels:
         x = keras.layers.Dense(units=n_classes,activation='softmax',name='Output')(x)
         modelMain = keras.Model(inputs=[modelCNN.input,modelMLP.input],outputs=x)
 
-        modelMain.compile(optimizer=keras.optimizers.Adam(learning_rate=0.01),
-                          loss=keras.losses.CategoricalCrossentropy(),
-                            metrics=['precision','recall'])
+        modelMain.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001,
+                                        beta_1=0.9,beta_2=0.999,epsilon=1e-07),
+                            loss=keras.losses.CategoricalCrossentropy(),
+                            metrics=['Precision','Recall'])
         return modelMain
 

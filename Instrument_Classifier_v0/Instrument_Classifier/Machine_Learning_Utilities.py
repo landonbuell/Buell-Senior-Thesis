@@ -72,9 +72,9 @@ class DesignMatrix:
             self.X = np.array(self.X).reshape(self.n_samples,-1)
         return self
 
-    def ScaleX (self,scaler):
-        """ Apply standard preprocessing scaling to self.X """
-        assert type(self.X) == np.ndarray
+    def SetMatrixData(self,X_new):
+        """ Set 'self.X' to given input X_new """
+        self.X = X_new
         return self
 
     def __Get_Y__(self,onehot=True):
@@ -140,9 +140,12 @@ class ModelAnalysis:
     Return Instantiated Model Analysis Object
     """
 
-    def __init__(self,model_names,datapath,n_classes):
+    def __init__(self,modelName,datapath,n_classes):
         """ Instantiate Class Object """
-        self.model_names = model_names  # name of NN models
+
+        raise NotImplementedError()
+
+        self.modelName = modelName      # name of NN models
         self.datapath = datapath        # path to find file
         self.n_classes = n_classes      # classes in model
 

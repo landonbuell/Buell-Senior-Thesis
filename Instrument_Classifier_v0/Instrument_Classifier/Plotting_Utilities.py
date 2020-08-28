@@ -54,24 +54,24 @@ def Plot_Features_2D (X1,X2,classes,labels,title='',
     if show == True:
         plt.show()
 
-def Plot_History (hist,model,save=False,show=True):
+def Plot_History (History,modelName,save=False,show=True):
     """
     Visualize Data from Keras History Object Instance
     --------------------------------
-    hist (inst) : Keras history object
-    model (inst) : Keras Sequential model w/ name attrb
+    History (Obj) : Keras history object
+    modelName (Obj) : Keras Sequential model w/ name attrb
     save (bool) : If true, save MPL figure to cwd (False by Default)
     show (bool) : If true, shows current figure to User (True by Default)
     --------------------------------
     Return None
     """
     # Initialize Figure
-    eps = np.array(hist.epoch)          # arr of epochs
-    n_figs = len(hist.history.keys())   # needed figures
+    eps = np.array(History.epoch)          # arr of epochs
+    n_figs = len(History.history.keys())   # needed figures
 
     fig,axs = plt.subplots(nrows=n_figs,ncols=1,sharex=True,figsize=(20,8))
-    plt.suptitle(model.name+' History',size=50,weight='bold')
-    hist_dict = hist.history
+    plt.suptitle(modelName+' History',size=50,weight='bold')
+    hist_dict = History.history
     
     for I in range (n_figs):                # over each parameter
         key = list(hist_dict)[I]
