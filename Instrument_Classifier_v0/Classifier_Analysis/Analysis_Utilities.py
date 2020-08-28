@@ -29,29 +29,30 @@ class Analyze_Models:
     Return Instante of class
     """
 
-    def __init__(self,model_names,datapath,infile,n_classes):
+    def __init__(self,modelName,datapath,infile,n_classes):
         """ Initialize Class Object Instance """
-        self.model_names = model_names
+        self.modelName = modelName
         self.datapath = datapath
         self.infile = infile
         self.n_classes = n_classes
 
-        self.outfile = 'ANALYSIS@'+self.infile.split('@')[-1]
+        self.outfile = infile.replace("PREDICTIONS","ANALYSIS")
         self.full_inpath = os.path.join(self.datapath,self.infile)
         self.full_outpath = os.path.join(self.datapath,self.outfile)
 
-    def assign_metrics (self,metrics_list=[]):
+    def AssignMetrics (self,metrics_list=[]):
         """ Assign metrics objects to list to self """
         self.metrics = metrics_list
         return self
 
-    def read_data(self):
+    def ReadData(self):
         """ Read raw prediction data from local file """
         self.indata = pd.read_csv(self.full_inpath,header=0,index_col=0)
         self.truth = self.indata['Label'].to_numpy(dtype=np.int32)
+        self.predictions = self.indata['Prediction'].to_numpy(dtype=np.int32)
         return self
 
-    def init_output(self):
+    def InitOutput(self):
         """ Initialize Output File data """
         self.scores = {'Metric':[]}          # column to hold metrics
         for metric in self.metrics:     # each metric:
@@ -60,25 +61,22 @@ class Analyze_Models:
             self.scores.update({model:np.array([])})
         return self
 
-
-    def write_output (self):
+    def WriteOutput (self):
         """ Write Metric scores to local file """
-        pass
+        raise NotImplementedError()
 
-    def __call__(self):
+    def __Call__(self):
         """ Call Program Mode """
-        self.init_output()
-        for model in self.model_names:      # each model
-            model_pred = self.indata[model].to_numpy(dtype=np.int32)
-            confusion = tf.math.confusion_matrix(self.truth,model_pred,
-                                                 self.n_classes)
-            self.Plot_Confusion(confusion,model)
+        
+        self.ReadData()      
+        confusion = tf.math.confusion_matrix(self.truth,self.predictions,self.n_classes)
+        self.PlotConfusion(confusion,self.modelName)
 
         return self
 
         #### FUNCTIONS DEFINITIONS ####
 
-    def Plot_Confusion(self,X,title,show=True):
+    def PlotConfusion(self,X,title,show=True):
         """ Plot Confusion Matrix """
         plt.title(title,fontsize=40,weight='bold')
         plt.imshow(X,cmap=plt.cm.binary)

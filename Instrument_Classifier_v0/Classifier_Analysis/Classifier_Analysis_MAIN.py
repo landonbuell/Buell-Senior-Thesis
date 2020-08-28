@@ -22,17 +22,11 @@ if __name__ == '__main__':
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
     export = os.path.join(parent,'Output-Data')
 
-    infile = 'PREDICTIONS@2020-07-29_20.43.59.585357.csv'
-    model_names = ['JARVIS','VISION','ULTRON']      # names for models
+    infile = 'VISION@PREDICTIONS@2020-08-27_13.20.24.810306.csv'
+    modelName = infile.split("@")[0]
     n_classes = 25
 
-    Program_Mode = analysis_utils.Analyze_Models(model_names,export,infile,n_classes)
-    Program_Mode.assign_metrics([   #keras.metrics.SparseCategoricalCrossentropy(),
-                                    keras.metrics.Precision(),
-                                    keras.metrics.Recall(),
-                                    keras.metrics.Accuracy()    ])
-
-    Program_Mode.read_data()
-    Program_Mode.__call__()
+    Program = analysis_utils.Analyze_Models(modelName,export,infile,n_classes)
+    Program.__Call__()
 
     print("=)")
