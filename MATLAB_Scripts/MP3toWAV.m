@@ -11,17 +11,18 @@ clc;
 
             %%%% Establish All directory Paths %%%%
 rootdir = 'C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\MATLAB_Scripts'; 
-readdir = 'C:\Users\Landon\Documents\aiff_audio';          
-outpath = 'C:\Users\Landon\Documents\wav_audio';
+readdir = 'C:\Users\Landon\Documents\audioMP3';          
+outpath = 'C:\Users\Landon\Documents\audioWAV2';
 
 try                         % attempt to change dir
-    chdir(outpath)           % change to path
+    chdir(outpath)          % change to path
 catch                       % if failure, 
-    mkdir(outpath)           % create the dir
+    mkdir(outpath)          % create the dir
 end     
 
-chdir(readdir);                 % change to reading directory
-files = dir('**\*.aif');    % all files in subfolder
+chdir(readdir);             % change to reading directory
+files = dir('**\*.mp3');    % all files in subfolder
+
 
 for i = 1:length(files)                 % in each file:
     
@@ -41,18 +42,14 @@ for i = 1:length(files)                 % in each file:
     data = data.';      % transpose data array
     %disp(size(data))
     
-    L = data(1,:);      % left audio track
-    R = data(2,:);      % right audio track
-    
-    outname = strrep(files(i).name,'.ff','');   % eliminate dynamic
-    outname = strrep(outname,'.stereo.aif',''); % fix extension
-    
-    left_outname = strcat(outname,'.L','.wav');
-    right_outname = strcat(outname,'.R','.wav');
+    outname = strrep(files(i).name,'_','.');    % eliminate underscore       
+    splitName = strsplit(outname,".");          % split string at '.'
+    outname = strcat(splitName{1},".",splitName{2});% create-output name   
+    outname = strcat(outname,'.LR','.wav');
+    outname = char(outname);
         
     chdir(outpath)
-    audiowrite(left_outname,L,rate);        % write left track
-    audiowrite(right_outname,R,rate);     % write right track
+    audiowrite(outname,data,rate);        % write track to disk
     
 end 
 disp("Program Complete")

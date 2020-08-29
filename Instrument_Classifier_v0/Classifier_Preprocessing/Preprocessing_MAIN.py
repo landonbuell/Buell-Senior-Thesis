@@ -16,10 +16,22 @@ import Preprocessing_Utils as utils
 
 if __name__ == '__main__':
 
-    Features = utils.FrequencySeriesFeatures()
+    # ESTABLISH DIRECTORIES
+    homePath = os.getcwd()
+    dataPath = "C:\\Users\\Landon\\Documents\\audioWAV"
+    exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0\\Target-Data"
+    exptFile = "Y1.csv"
+    exportPath = os.path.join(exptPath,exptFile)
 
-    banks = Features.MelFrequencyCeptsralCoefficients(n_filters=10)
+    Encoder = utils.TargetLabelEncoder()
+    FilePaths = Encoder.ReadLocalPath(dataPath)
+    TargetStrings = Encoder.AssignTarget(FilePaths)
+    TargetIntegers = Encoder.LabelEncoder(TargetStrings)
 
-    for bank in banks:
-        plt.plot(Features.hertz,bank)
-    plt.show()
+    cols = ["Fullpath","Target Int","Target String"]
+    Data = {"Fullpath":FilePaths,
+            "Target Int":TargetIntegers,
+            "target Str":TargetStrings }
+    Encoder.ConstructDataFrame(Data,exportPath)
+
+    print('=)')

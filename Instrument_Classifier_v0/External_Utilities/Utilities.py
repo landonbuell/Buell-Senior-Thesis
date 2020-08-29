@@ -67,7 +67,7 @@ def assign_class (filelist):
         classes.append(y)       # add to class list
     return classes              # list
 
-def read_directory (path,ext='.wav'):
+def ReadLocalPath (path,ext='.wav'):
     """ Read through directory and collect all files with ext """
     FILES = []                              # hold filename
     for roots,dirs,files in os.walk(path):  # walk through tree
