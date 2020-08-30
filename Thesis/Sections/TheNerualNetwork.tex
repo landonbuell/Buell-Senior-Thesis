@@ -1,0 +1,212 @@
+% ================================
+% Landon Buell
+% Kevin Short
+% Physics 799%
+% 30 July 2020 
+% ================================
+
+
+\documentclass[12pt,letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+
+
+\begin{document}
+
+% ================================================================
+
+\section{The Neural Network}
+\label{sec-TheNeuralNetwork}
+
+% ================================================================
+
+\subsection{An Introduction to Neural Networks}
+
+\paragraph*{}In the present age, some problems have shown themselves to be increasingly difficult to solve through conventional computer programs. The challenge arose as to how to build some sort of computer program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for an algorithm, we seek an architecture that allows for a computer to \textit{learn} and change and update itself as it is presented with more data. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
+
+\paragraph*{}Former YouTube video Classification team lead, and current Machine Learning consultant, Aurelien Geron writes \cite{Geron}: 
+\begin{quote}
+Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
+\end{quote}
+The result of such an analogy is a computer program that is structured like the brain. Typically, a computer program is simply a set of mathematical or logical instructions given to a computer to execute. In 1943, Neuroscientist Warren McCulloch and Mathematician Walter Pitts published a paper \cite{McCulloch} which began to pave the way for developing such a mathematical model of the brain \cite{Geron,Goodfellow,Loy}. 
+
+% ================================================================
+
+\subsection{The Structure of a Neural Network}
+
+\paragraph*{}A Neural Network is simply a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Geron,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. It is this process of transforming inputs successively in a particular order until an output is attained \cite{Geron,Loy}. This output encodes the models final "decision" given a unique input.
+
+\paragraph*{}A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network that are usually index with a superscipt, $0$ through $L-1$. Layer $0$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer}. The function that represents a layer $(l)$ is given by 
+\begin{equation}
+\label{eqn-LayerFunction}
+f^{(l)} : x \in \mathbb{R} \rightarrow y \in \mathbb{R}
+\end{equation}
+The value of $x$ can also be index by layer, we call the array $x^{(l)}$ the \textit{activations} of layer $l$. 
+
+\paragraph*{}The the model is recursive by nature, the activations from one layer, $l-1$, are used to directly produce the activations of the next successive layer $l$. Thus eqn. (\ref{eqn-LayerFunction}) can be alternatively written as:
+\begin{equation}
+\label{eqn-altLayerFunction}
+f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
+\end{equation}
+The array of activations, $x^{(0)}$, is the raw input given the neural network, most commonly called \textit{features}. Conversely, the activations $x^{(L-1)}$ are commonly called the network \textit{output} \cite{Geron,James,Loy}.
+
+
+
+% ================================================================
+
+\subsection{Layers Used in Classification Neural Network}
+
+\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called successively to transform features (an input) into a prediction (an output). As shown in eqn. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a sort of computational graph \cite{Goodfellow}. 
+
+\paragraph*{}Typically, a layer function can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. Many feed-forward network layers follow this structure. Step (i.) is usually in the form of a matrix-vector equation:
+\begin{equation}
+\label{eqn-matVectEqn}
+z^{(l)} = W^{(l)} x^{(l-1)} + b^{(l)}
+\end{equation}
+Where $W^{(l)}$ is the \textit{weighting-matrix} for layer $l$, $b^{(l)}$ is the \textit{bias-vector} for layer $l$, $z^{(l)}$ are the \textit{linear-activations} for layer $l$ and $x^{(l-1)}$ is the final activations for layer $l-1$.
+Step (ii.) is usually given by some \textit{activation function}:
+\begin{equation}
+\label{eqn-elementActivation}
+x^{(l)} = \sigma^{(l)} \big[ z^{(l)} \big]
+\end{equation}
+Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-matVectEqn}). $\sigma^{(l)}$ is some activation function, which is often use to enable the modeling of more complex-decision boundaries.
+
+Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
+
+\subsubsection{Dense Layer}
+
+\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer for short, was one of the earliest function types used in artificial neural network models. A dense layer is simply composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed back from McCulloch and Pitts' work \cite{McCulloch}, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
+
+\paragraph*{}We model a layer of neurons as a vector of floating-point numbers. Typically, it is required that the array be one-dimensional. Suppose a layer $(l)$ contains $n$ artificial neurons. We denote the array that hold those activations as $x^{(l)}$ and is given by:
+\begin{equation}
+\label{layer-DenseNeurons}
+\vec{x}^{(l)} = \Big[ x_0, x_1, x_2, \hdots , x_{n-2}, x_{n-1} \Big]^T
+\end{equation}
+The activation of each entry is given by a linear-combination of activations from the previous layer, as outlined in eqn.(\ref{eqn-matVectEqn}) and eqn.(\ref{eqn-elementActivation}). 
+
+\paragraph*{}Suppose the layer $l-1$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $m \times 1$.
+Thus for a dense layer $l$, the exact values of each activation is given by \cite{Geron,Loy}
+\begin{equation}
+\begin{bmatrix}
+x_0 \\ x_1 \\ \vdots \\ x_{n-1}
+\end{bmatrix}^{(l)} =
+\sigma^{(l)} \Bigg(
+\begin{bmatrix}
+w_{0,0} & w_{0,1} & \hdots & w_{0,m-1} \\
+w_{1,0} & w_{1,1} & \hdots & w_{1,m-1} \\
+\vdots & \vdots & \ddots & \vdots  \\
+w_{n-1,0} & w_{n-1,1} & \hdots & w_{n-1,m-1} 
+\end{bmatrix}^{(l)} 
+\begin{bmatrix}
+x_0 \\ x_1 \\ \vdots \\ x_{m-1}
+\end{bmatrix}^{(l-1)}
+\begin{bmatrix}
+b_0 \\ b_1 \\ \vdots \\ b_{n-1}
+\end{bmatrix}^{(l)} \Bigg)
+\end{equation}
+or more compactly:
+\begin{equation}
+\label{eqn-DenseFeedForward}
+x^{(l)} = \sigma^{(l)} \Big( W^{(l)} x^{(l-1)} + b^{(l)} \Big)
+\end{equation}
+Eqn. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}.
+
+\subsubsection{2-Dimensional Convolution Layer}
+
+\subsubsection{2-Dimensional Maximum Pooling Layer}
+
+\subsubsection{1-Dimensional Flattening Layer}
+
+\paragraph*{}A flattening layer is used to compress an array with two or more dimensions down into a single dimension. For a flattening layer $l$, multidimensional activations in layer $l-1$ are compressed down into a single dimensional array. We can use function notation to express this as:
+\begin{equation}
+\label{eqn-FlattenFunction}
+f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(M \times N \times ....)} \rightarrow
+x^{(l)} \in \mathbb{R}^{(MN...\times 1)}
+\end{equation}
+The numerical value of each activation is left unchanged. For a layer with activation shape$N \times M$, the resulting activations are reshaped into $NM \times 1$ as shown in eqn (\ref{eqn-FlattenFunction}).
+
+\paragraph*{}Flattening Layer are most commonly used to prepare activations for entry into dense layer or series of dense layers. For example, 2D or 3D images are typically processed with 2D convolution, which may output a 2D or 3D array of activations. Those values are then flattened to 1 dimensions, which can then be passed into dense layers for further processing.
+
+\subsubsection{1-Dimensional Concatenation Layer}
+
+
+% ================================================================
+
+\subsection{Training a Neural Network}
+
+% ================================================================
+
+\subsection{Chosen Model Architecture}
+
+
+% ================================================================
+
+
+
+
+
+
+
+
+
+
+% ================================================================
+
+\newpage
+
+\begin{thebibliography}{9}
+\bibliographystyle{apalike}
+
+\bibitem{Geron}
+Geron, Aurelien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. O'Reilly, 2017.
+
+\bibitem{Geron2}
+Geron, Aurelien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. 2nd ed., O'Reilly, 2019.
+
+\bibitem{Goodfellow}
+Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
+
+\bibitem{James}
+James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.
+
+\bibitem{Kahn}
+Khan, M. Kashif Saeed, and Wasfi G. Al-Khatib. “Machine-Learning Based Classification of Speech and Music.” Multimedia Systems, vol. 12, no. 1, 2006, pp. 55–67., doi:10.1007/s00530-006-0034-0.
+
+\bibitem{Levine}
+Levine, Daniel S. \textit{Introduction to Neural and Cognitive Modeling}. 3rd ed., Routledge, 2019.
+
+\bibitem{Liu}
+Liu, Zhu, et al. "Audio Feature Extraction and Analysis for Scene Segmentation and Classification." Journal of VLSI Signal Processing, vol. 20, 1998, pp. 61–79.
+
+\bibitem{Loy}
+Loy, James , \textit{Neural Network Projects with Python}. Packt Publishing, 2019
+
+\bibitem{McCulloch}
+McCulloch, Warren S., and Walter Pitts. "A Logical Calculus of the Ideas Immanent in Nervous Activity." \textit{The Bulletin of Mathematical Biophysics}, vol. 5, no. 4, 1943, pp. 115–133.
+
+\bibitem{Mierswa}
+Mierswa, Ingo, and Katharina Morik. "Automatic Feature Extraction for Classifying Audio Data." \textit{Machine Learning}, vol. 58, no. 2-3, 2005, pp. 127–149., doi:10.1007/s10994-005-5824-7.
+
+\bibitem{Peatross}
+Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics.} Brigham Young University, Department of Physics, 2015.
+
+\bibitem{Petrik}
+Petrik, Marek. "Introduction to Deep Learning." Machine Learning. 20 April. 2020, Durham, New Hampshire.
+
+\bibitem{Short}
+Short, K. and Garcia R.A. 2006. "Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method." AES: \textit{Audio Engineering Society Convention Paper}.
+
+\bibitem{Virtanen}
+Virtanen, Tuomas, et al. \textit{Computational Analysis of Sound Scenes and Events.} Springer, 2018.
+
+\bibitem{Zhang}
+Zhang, Tong, and C.-C. Jay Kuo. “Content-Based Classification and Retrieval of Audio.” \textit{Advanced Signal Processing Algorithms, Architectures, and Implementations VIII}, 2 Oct. 1998, pp. 432–443., doi:10.1117/12.325703.
+
+\end{thebibliography}
+
+% ================================================================
+
+\end{document}
