@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  30 JUL 2020 22:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  31 AUG 2020 10:48
 entering extended mode
 **./Citations.tex
 (Citations.tex
-LaTeX2e <2019-10-01> patch level 3
+LaTeX2e <2018-12-01>
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
-Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size12.clo"
-File: size12.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
+File: size12.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 )
 \c@part=\count80
 \c@section=\count81
@@ -20,30 +20,27 @@ File: size12.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry-de\geome
-try.sty"
-Package: geometry 2010/09/12 v5.6 Page Geometry
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
+.sty"
+Package: geometry 2018/04/16 v5.8 Page Geometry
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.s
 ty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifpdf.sty
-"
-Package: ifpdf 2019/10/25 v3.4 ifpdf legacy package. Use iftex instead.
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty
-"
-Package: iftex 2019/11/07 v1.0c TeX engine tests
-))
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifvtex.st
-y"
-Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifpdf.
+sty"
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifxetex.s
-ty"
-Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifvtex
+.sty"
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\ifxetex
+.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count88
 \Gm@cntv=\count89
@@ -118,18 +115,18 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 790 strings out of 492483
- 11402 string characters out of 3121135
- 80835 words of memory out of 3000000
- 5195 multiletter control sequences out of 15000+200000
+ 759 strings out of 492895
+ 11026 string characters out of 3123268
+ 79421 words of memory out of 3000000
+ 4735 multiletter control sequences out of 15000+200000
  4891 words of font info for 18 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,4n,23p,265b,147s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 23i,4n,19p,265b,147s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmr12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on Citations.pdf (1 page, 50088 bytes).
+Output written on Citations.pdf (1 page, 50134 bytes).
 PDF statistics:
  18 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

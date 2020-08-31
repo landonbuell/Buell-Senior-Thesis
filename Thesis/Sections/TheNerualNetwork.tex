@@ -27,11 +27,13 @@
 
 \paragraph*{}In the present age, some problems have shown themselves to be increasingly difficult to solve through conventional computer programs. The challenge arose as to how to build some sort of computer program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for an algorithm, we seek an architecture that allows for a computer to \textit{learn} and change and update itself as it is presented with more data. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
 
+\paragraph*{}A neural network is a mathematical function that seeks to produce an approximation $F^*$, of some unknown function $F$. For example, in a $k$-classes classifications setting, a network model is provided with some input array $x$ and tasked to map it to a particular categorical output $0$ through $k-1$, using a set of parameters, $\Theta$ \cite{Goodfellow,James}. During a period of training, a model is presented with sample inputs $x$, an expected output $y$, and optimizes the parameters of the set $\Theta$ in order to produce the approximated prediction, $y^*$ which maps to one of $k$ outputs.
+
 \paragraph*{}Former YouTube video Classification team lead, and current Machine Learning consultant, Aurelien Geron writes \cite{Geron}: 
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
-The result of such an analogy is a computer program that is structured like the brain. Typically, a computer program is simply a set of mathematical or logical instructions given to a computer to execute. In 1943, Neuroscientist Warren McCulloch and Mathematician Walter Pitts published a paper \cite{McCulloch} which began to pave the way for developing such a mathematical model of the brain \cite{Geron,Goodfellow,Loy}. 
+The result of such an analogy is a computer program that is reminiscent of the brain. Typically, a computer program is simply a set of mathematical or logical instructions given to a computer to execute. In 1943, Neuroscientist Warren McCulloch and Mathematician Walter Pitts published a paper \cite{McCulloch} which began to pave the way for developing such a mathematical model of the brain \cite{Geron,Goodfellow,Loy}. This model has been adapted over the last few decades to be able to produce an model that can functionally teach itself how to solve a very particular problem.
 
 % ================================================================
 
@@ -39,14 +41,21 @@ The result of such an analogy is a computer program that is structured like the 
 
 \paragraph*{}A Neural Network is simply a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Geron,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. It is this process of transforming inputs successively in a particular order until an output is attained \cite{Geron,Loy}. This output encodes the models final "decision" given a unique input.
 
-\paragraph*{}A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network that are usually index with a superscipt, $0$ through $L-1$. Layer $0$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer}. The function that represents a layer $(l)$ is given by 
+\paragraph*{}Other than inspiration from the brain, Neural Networks are name \textit{networks} because of their nested composition nature. The model can be represented by a linear or acyclic graphs which successively maps exactly how the repeated composition is structured. In a \textit{feed-forward network}, information is passes successively in one direction. For example functions could be chained together such as \cite{Goodfellow}
+\begin{equation}
+\label{eqn-FunctionChain}
+F(x) = f^{(L-1)}\big[f^{(L-2)}\big[...f^{(1)}\big[f^{(0)}\big[x]\big]\big]...\big]\big]
+\end{equation}
+Where each function $f^{(l)}$ represents a layer of the network model. The number of layers in a neural network is referred to as the network \textit{depth}. The dimensionality of each layer is referred to as the network \textit{width} \cite{Geron,Loy}.
+
+\paragraph*{}A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network, with each layer usually indexed by a superscipt, $0$ through $L-1$. Layer $0$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer}. The function that represents a layer $(l)$ is given by 
 \begin{equation}
 \label{eqn-LayerFunction}
 f^{(l)} : x \in \mathbb{R} \rightarrow y \in \mathbb{R}
 \end{equation}
-The value of $x$ can also be index by layer, we call the array $x^{(l)}$ the \textit{activations} of layer $l$. 
+The value of $x$ can also be index by layer, we call the array $x^{(l)}$ the \textit{activations} of layer $l$ \cite{Goodfellow,Loy}. 
 
-\paragraph*{}The the model is recursive by nature, the activations from one layer, $l-1$, are used to directly produce the activations of the next successive layer $l$. Thus eqn. (\ref{eqn-LayerFunction}) can be alternatively written as:
+\paragraph*{}The model is recursive by nature, the activations from one layer, $l-1$, are used to directly produce the activations of the next successive layer $l$. Thus eqn. (\ref{eqn-LayerFunction}) can be alternatively written as:
 \begin{equation}
 \label{eqn-altLayerFunction}
 f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
@@ -137,6 +146,12 @@ The numerical value of each activation is left unchanged. For a layer with activ
 
 \subsection{Training a Neural Network}
 
+\paragraph*{}A neural network's job is to produce an approximation of some function $F$, which we call $F^*$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonable approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
+\begin{quote}
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
+\end{quote}
+
+
 % ================================================================
 
 \subsection{Chosen Model Architecture}
@@ -189,6 +204,9 @@ McCulloch, Warren S., and Walter Pitts. "A Logical Calculus of the Ideas Immanen
 
 \bibitem{Mierswa}
 Mierswa, Ingo, and Katharina Morik. "Automatic Feature Extraction for Classifying Audio Data." \textit{Machine Learning}, vol. 58, no. 2-3, 2005, pp. 127–149., doi:10.1007/s10994-005-5824-7.
+
+\bibitem{Mitchell}
+Mitchell, Tom Michael. Machine Learning. 1st ed., McGraw-Hill, 1997.
 
 \bibitem{Peatross}
 Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics.} Brigham Young University, Department of Physics, 2015.
