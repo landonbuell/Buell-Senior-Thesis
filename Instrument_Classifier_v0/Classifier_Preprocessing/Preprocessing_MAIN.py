@@ -18,9 +18,9 @@ if __name__ == '__main__':
 
     # ESTABLISH DIRECTORIES
     homePath = os.getcwd()
-    dataPath = "C:\\Users\\Landon\\Documents\\audioWAV"
+    dataPath = "C:\\Users\\Landon\\Documents\\audioWAV2"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0\\Target-Data"
-    exptFile = "Y1.csv"
+    exptFile = "Y2.csv"
     exportPath = os.path.join(exptPath,exptFile)
 
     Encoder = utils.TargetLabelEncoder()

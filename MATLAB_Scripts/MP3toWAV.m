@@ -42,10 +42,12 @@ for i = 1:length(files)                 % in each file:
     data = data.';      % transpose data array
     %disp(size(data))
     
-    outname = strrep(files(i).name,'_','.');    % eliminate underscore       
+    outname = strrep(files(i).name,'_','.');    % eliminate underscore  
+    outname = strrep(outname,'-','');           % eliminate dashes
     splitName = strsplit(outname,".");          % split string at '.'
     outname = strcat(splitName{1},".",splitName{2});% create-output name   
     outname = strcat(outname,'.LR','.wav');
+    outname(1) = upper(outname(1));
     outname = char(outname);
         
     chdir(outpath)

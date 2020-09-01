@@ -22,7 +22,7 @@ class TargetLabelEncoder:
         self.woodWinds = ['AltoFlute','AltoSax','BbClarinet','EbClarinet',
                     'Flute','Oboe','SopSax','EbClarinet','BassClarinet',
                     'BassFlute','Bassoon']
-        self.strings = ['Bass','Cello','Viola','Violin']
+        self.strings = ['banjo','Bass','Cello','Viola','Violin']
         self.brass = ['BassTrombone','Horn','TenorTrombone','Trumpet','Tuba']
         self.percussion = ['bells','Marimba','Vibraphone','Xylophone']
         self.cymbals = ['crash','chinese','orchcrash','windgong','ride',
