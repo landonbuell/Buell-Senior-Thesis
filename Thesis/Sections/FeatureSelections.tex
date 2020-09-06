@@ -1,0 +1,142 @@
+% ================================
+% Landon Buell
+% Kevin Short
+% Physics 799
+% 5 September 2020 
+% ================================
+
+
+\documentclass[12pt,letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+
+
+\begin{document}
+
+% ================================================================
+
+\section{Feature Selections}
+\label{sec-FeatureSelections}
+
+\paragraph*{}Even best minds in the world will perform poorly on test which they have studied the wrong material- neural networks are no different. In order to properly train a neural network, the model must be presented with an appropriate set of training input $x$ and a complementary set of training labels $y$ \cite{Geron,Goodfellow,James}. It becomes quickly apparent that the nature of information contained in the input object $x$, called \textit{features}, is \textit{extremely important} to the performance of the classifier. Consider if you were tasked to identify cats and dogs from images, but instead were presented with only the top-most row of pixels- The task would be nearly impossible because of an inappropriate or in complete set of information.
+
+\paragraph*{}Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" \cite{Virtanen}:
+\begin{quote}
+For recognition algorithms, the necessary property of the acoustic features is low variability among features extracted from examples assigned to the same class, and at the same time high variability allowing distinction between features extracted from examples assigned to different classes.
+\end{quote}
+In constructing a neural network classifier, the development of appropriate features is of the utmost importance. To ensure the construction of a suitable model, we derive features based from three sources (i) a spectrogram matrix of the waveform, (ii) the time-space representation of the waveform, and (iii) the frequency space representation of the waveform. It is important to note that although this algorithm will classify sound waves to instruments, the model will never actually be presented with a waveform directly, instead it will rely on these features.
+
+\paragraph*{}Once we produce an sufficient set of features, we concatenate them into a single object, $\hat{x}$, called the \textit{feature-vector} \cite{Goodfellow}. In the training process, this object, along with the appropriate classification label, $y$ is presented to the neural network for processing. This process of constructing a feature vector from any data set is vital and is used to represent the data set in a far more compact and non-redundant format \cite{Virtanen,Liu}
+
+\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work success, and most importantly physics. In the following sections, we outline the set of $24$ features used in the classification process
+
+\subsubsection{Audio Preprocessing}
+
+% ================================================================
+
+\subsection{Spectrogram Feature}
+\label{subsec-spectrogram}
+
+\paragraph*{}The field of neural classification is well studied in the application of image-processing. Many large-scale, and introductory neural network projects find themselves under the umbrella of image classification \cite{Geron,Goodfellow,Loy,Mierswa}. As a result, model architectures for image related tasks are well-explored and have experimentally shown successful behavior. Following in those footsteps, it make senses to provide an image-like representation of a sound wave as a feature. We do this in the form of a spectrogram.
+
+\paragraph*{}A spectrogram is a representation of the energy distribution of a sound wave as a function of both space and time. In a conventional spectrogram, the passing of time is shown along the $x$-axis, and the frequency spectrum is shown on the $y$-axis. Thus each point in the 2-Dimensional space is an energy at a given time and frequency. Examples spectrograms from the wave form data set are shown in Fig. (\ref{fig-spectrograms}).
+
+\begin{figure}[H]
+\begin{center}
+\label{fig-spectrograms}
+\textcolor{red}{Insert spectrograms here}
+\caption{Spectrogram representations of various waveforms}
+\end{center}
+\end{figure}
+
+\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification. Frame-blocking creates a set of analysis frames, each of which is $N$ samples in length, and has a fixed overlap with the next adjacent frame. Each of the $k$ frames then allows for a section of the signal in somewhat stationary state \cite{Liu,Zhan,Kahn,Virtanen}. For this project, we have chosen to use frames of size $N = 4096$ with a $75\%$ or $3072$ sample overlap. At a sample rate of $f_s = 44100$ samples/second, each frame represents a slice of time that is about $0.1$ seconds long. 
+
+\paragraph*{}After frame-blocking, we apply a \textit{windowing function} to each frame. The analysis frame are concatenated into a $k \times N$ sized matrix, $A$, where each row is a frame. A standard \textit{Hann Window} of $N$ samples is generated and reshaped into a $N \times 1$ array,$H$. The $n$-th index in a Hann window with $N$ samples is defined:
+\begin{equation}
+\label{eqn-Hann}
+H[n] = \frac{1}{2}\bigg[ 1 - \cos\Big( \frac{2\pi n}{N-1}\Big)\bigg]
+\end{equation}
+The window function is applied to each analysis frame by computing the matrix-product of the $k \times N$ block-frame matrix and the $N \times 1$ window function array. \textcolor{red}{Math is wrong here! Check this, check the code too!}
+
+\paragraph*{}
+
+% ================================================================
+
+\subsection{Time-Space Features}
+\label{subsec-time}
+
+% ================================================================
+
+\subsection{Frequency-Space Features}
+\label{subsec-frequency}
+
+% ================================================================
+
+\newpage
+
+\begin{thebibliography}{9}
+\bibliographystyle{apalike}
+
+\bibitem{Geron}
+Geron, Aurelien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. O'Reilly, 2017.
+
+\bibitem{Geron2}
+Geron, Aurelien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. 2nd ed., O'Reilly, 2019.
+
+\bibitem{Goodfellow}
+Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
+
+\bibitem{James}
+James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.
+
+\bibitem{Kahn}
+Khan, M. Kashif Saeed, and Wasfi G. Al-Khatib. “Machine-Learning Based Classification of Speech and Music.” Multimedia Systems, vol. 12, no. 1, 2006, pp. 55–67., doi:10.1007/s00530-006-0034-0.
+
+\bibitem{Levine}
+Levine, Daniel S. \textit{Introduction to Neural and Cognitive Modeling}. 3rd ed., Routledge, 2019.
+
+\bibitem{Liu}
+Liu, Zhu, et al. "Audio Feature Extraction and Analysis for Scene Segmentation and Classification." Journal of VLSI Signal Processing, vol. 20, 1998, pp. 61–79.
+
+\bibitem{Loy}
+Loy, James , \textit{Neural Network Projects with Python}. Packt Publishing, 2019
+
+\bibitem{McCulloch}
+McCulloch, Warren S., and Walter Pitts. "A Logical Calculus of the Ideas Immanent in Nervous Activity." \textit{The Bulletin of Mathematical Biophysics}, vol. 5, no. 4, 1943, pp. 115–133.
+
+\bibitem{Mierswa}
+Mierswa, Ingo, and Katharina Morik. "Automatic Feature Extraction for Classifying Audio Data." \textit{Machine Learning}, vol. 58, no. 2-3, 2005, pp. 127–149., doi:10.1007/s10994-005-5824-7.
+
+\bibitem{Mitchell}
+Mitchell, Tom Michael. Machine Learning. 1st ed., McGraw-Hill, 1997.
+
+\bibitem{Olsen}
+Olson, Harry E. \textit{Music, Physics and Engineering}. 2nd ed., Dover Publications, 1967.
+
+\bibitem{Peatross}
+Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics.} Brigham Young University, Department of Physics, 2015.
+
+\bibitem{Petrik}
+Petrik, Marek. "Introduction to Deep Learning." Machine Learning. 20 April. 2020, Durham, New Hampshire.
+
+\bibitem{Short}
+Short, K. and Garcia R.A. 2006. "Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method." AES: \textit{Audio Engineering Society Convention Paper}.
+
+\bibitem{Virtanen}
+Virtanen, Tuomas, et al. \textit{Computational Analysis of Sound Scenes and Events.} Springer, 2018.
+
+\bibitem{White}
+White, Harvey Elliott, and Donald H. White. \textit{Physics and Music: the Science of Musical Sound}. Dover Publications, Inc., 2019.
+
+\bibitem{Zhang}
+Zhang, Tong, and C.-C. Jay Kuo. “Content-Based Classification and Retrieval of Audio.” \textit{Advanced Signal Processing Algorithms, Architectures, and Implementations VIII}, 2 Oct. 1998, pp. 432–443., doi:10.1117/12.325703.
+
+\end{thebibliography}
+
+% ================================================================
+
+\end{document}

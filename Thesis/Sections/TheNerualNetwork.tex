@@ -26,19 +26,20 @@
 
 \subsection{An Introduction to Neural Networks}
 
-\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of soundwaves, and human ears and brains interpret them, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an architecture that allows for a computer to \textit{learn} and change and update itself as it is presented with more data. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
+\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound waves, brain's interpretation them, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an architecture that allows for a computer to \textit{learn} and change and update itself as it is presented with more data. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
 
 \paragraph*{}A neural network is a mathematical function that seeks to produce an approximation $F^*$, of some usually unknown function $F$ . For audio recognition, $F$ is some function, or series of functions, that occurs in the brain which allows for a listener to take the sensation of audio, and map it to a known musical instrument. For a neural network, a model must construct an approximate function $F^*$ using a set of parameters $\Theta$, which allows the model to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}.
 
-\paragraph*{}Former YouTube video Classification team lead, and current Machine Learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
+\paragraph*{}Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
 The result of such an analogy is a computer program that is reminiscent of the brain. 
 
-\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly. Given a sample of sound, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olsen,White}. Similarly, a neural network uses features of a sound, represented by an array $x$, and learns a series of parameters, $\Theta$, that allow it to map those features to one or more pre-defined sources \cite{Virtanen}. 
+\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly. Given an example, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olsen,White}. We can simplify the idea of humans recognizing sound as some function or operation that occurs within the brain, accepting an input sound, and produces an output label. Similarly, a neural network can be constructed, presented with \textit{features} of multiple, labeled sound waves and learns a set of parameters $\Theta$ that allows for the mapping to a source.
 
-\paragraph*{}For this particular project, a neural network has been constructed to perform a  \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file. 
+
+\paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file. 
 
 % ================================================================
 
@@ -171,7 +172,18 @@ The numerical value of each activation is left unchanged. For a layer with activ
 \begin{quote}
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
 \end{quote}
+Without any external intervention, a model must update itself to improve it's performance at a give task a new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
 
+\paragraph*{}If we consider the set of parameters $\theta$ as a the concatenation, of each layer's weighting matrix and bias vector such that:
+\begin{equation}
+\label{eqn-Theta}
+\theta = \big\{
+W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)},W^{(L)}, b^{(L-1)},
+\big\}
+\end{equation}
+We can consider each parameter is simply a float-point number. Each value for each number contribute to the output of the function. In increasing complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is  a very high dimensional parameter-space.
+
+\paragraph*{}Finally,
 
 % ================================================================
 
