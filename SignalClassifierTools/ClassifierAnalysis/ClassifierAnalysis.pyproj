@@ -2,15 +2,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>cdfe437b-d44b-44e1-8e4e-96ea9039555c</ProjectGuid>
+    <ProjectGuid>1cff0bfc-3257-4a2d-9ecf-2d2fbbcb0227</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>MainClassifier.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>MainClassifier</Name>
-    <RootNamespace>MainClassifier</RootNamespace>
+    <Name>ClassifierAnalysis</Name>
+    <RootNamespace>ClassifierAnalysis</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="MainClassifier.py" />
+    <Compile Include="AnalysisUtilities.py" />
+    <Compile Include="AnalysisMAIN.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

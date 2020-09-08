@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "MainClassifier", "MainClassifier\MainClassifier.pyproj", "{CDFE437B-D44B-44E1-8E4E-96EA9039555C}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierMain", "ClassifierMain\ClassifierMain.pyproj", "{EB19D509-5F93-4509-8812-2C5ED9DB81FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,8 +11,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CDFE437B-D44B-44E1-8E4E-96EA9039555C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDFE437B-D44B-44E1-8E4E-96EA9039555C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB19D509-5F93-4509-8812-2C5ED9DB81FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB19D509-5F93-4509-8812-2C5ED9DB81FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

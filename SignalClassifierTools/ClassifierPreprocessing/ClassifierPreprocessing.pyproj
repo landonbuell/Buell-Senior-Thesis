@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>eb19d509-5f93-4509-8812-2c5ed9db81fb</ProjectGuid>
+    <ProjectGuid>75ce31aa-d8c4-4b1d-bf97-94989cf5d46d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>
     </StartupFile>
@@ -10,8 +10,8 @@
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ClassifierMain</Name>
-    <RootNamespace>ClassifierMain</RootNamespace>
+    <Name>ClassifierPreprocessing</Name>
+    <RootNamespace>ClassifierPreprocessing</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,14 +22,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FeatureUtilities.py" />
-    <Compile Include="ClassifierMAIN.py" />
-    <Compile Include="MachineLearningUtilities.py" />
-    <Compile Include="MathUtilities.py" />
-    <Compile Include="ModeUtilities.py" />
-    <Compile Include="NeuralNetworkUtilities.py" />
-    <Compile Include="PlottingUtilities.py" />
-    <Compile Include="SystemUtilities.py" />
+    <Compile Include="PreprocessMAIN.py" />
+    <Compile Include="PreprocessUtilities.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
