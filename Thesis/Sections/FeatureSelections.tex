@@ -14,6 +14,7 @@
 \usepackage{xcolor}
 \usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
 
+\DeclareMathOperator{\sign}{\text{sign}}
 
 \begin{document}
 
@@ -38,14 +39,14 @@ In constructing a neural network classifier, the development of appropriate feat
 
 \paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following:
 \begin{enumerate}
-\item A suitably sized number of files, of reasonable audio quality.
+\item A suitably sized number of files, of reasonable audio quality, with normalized ampltudes
 \item Audio encoded in a standard, and consistent format
 \item A consistent sample rate between audio files
 \item A consistent number of channels
 \end{enumerate}
 Note that different projects may require a different set of requirement from preprocessing\cite{Virtanen}. For this project, we have chosen to use the following parameters:
 \begin{enumerate}
-\item Roughtly $4000$ audio files Professionally or semi-professionally recorded in a studio. \textcolor{red}{Citation needed!}
+\item Roughtly $4000$ audio files Professionally or semi-professionally recorded in a studio. \textcolor{red}{Citation needed!}. All ampltiudes have been normalized to $\pm 1$ unit.
 \item All audio has be converted into \textit{.WAV} files from other formats, such as \textit{.AIF} or \textit{.MP3} using a MATLAB program
 \item All audio is sampled at $44,100$ Hz
 \item All audio has been down-mixed into mono-channel waveforms.
@@ -77,21 +78,31 @@ Note that different projects may require a different set of requirement from pre
 \label{eqn-FrameMatrix}
 A = \big\{ a^{(0)} , a^{(1)} , a^{(2)} , ... , a^{(k-1)} \big\} = 
 \begin{bmatrix}
-a^{(0)}_{0} & a^{(0)}_{1} & a^{(0)}_{2} & \hdots & a^{(0)}_{N-1} \\
-a^{(1)}_{0} & a^{(1)}_{1} & a^{(1)}_{2} & \hdots & a^{(1)}_{N-1} \\
-a^{(2)}_{0} & a^{(2)}_{1} & a^{(2)}_{2} & \hdots & a^{(2)}_{N-1} \\
+a^{(0)}[0] & a^{(0)}[1] & a^{(0)}[2] & \hdots & a^{(0)}[N-1] \\
+a^{(1)}[0] & a^{(1)}[1] & a^{(1)}[2] & \hdots & a^{(1)}[N-1] \\
+a^{(2)}[0] & a^{(2)}[1] & a^{(2)}[2] & \hdots & a^{(2)}[N-1] \\
 \vdots 		& \vdots 	  & \vdots 		& \ddots & \vdots        \\
-a^{(k-1)}_{0} & a^{(k-1)}_{1} & a^{(k-1)}_{2} & \hdots & a^{(k-1)}_{N-1} \\
+a^{(k-1)}[0] & a^{(k-1)}[1] & a^{(k-1)}[2] & \hdots & a^{(k-1)}[N-1] \\
 \end{bmatrix}
 \end{equation}
-We can also index this matrix, knowing that $A_{i,j} = a^{(i)}_{j}$.
+We use bracket notation, $[j]$ to indicate that each object is array-like. Many programming languages could also use the following indexing conventions for matrix 
+$A$:
+\begin{equation}
+\label{eqn-Indexing}
+A_{i,j} = a^{(i)}[j] = A[i][j] = A[i,j]
+\end{equation}
+Note that these all represent equivalent entries.
 
 \paragraph*{}After frame-blocking, we apply a \textit{windowing function} to each frame. A standard \textit{Hann Window} of $N$ samples is generated and reshaped into a $N \times 1$ column-array,$H$. The $n$-th index in a Hann window with $N$ samples is defined:
 \begin{equation}
 \label{eqn-Hann}
 H[n] = \frac{1}{2}\bigg[ 1 - \cos\Big( \frac{2\pi n}{N-1}\Big)\bigg]
 \end{equation}
-The window function is applied to each analysis frame by computing the dot-product of the Hann window array, $H$ and each row of the analysis frames matrix, $A_{i,:}$.
+The window function is applied to each analysis frame by computing the dot-product of the Hann window array, $H$ and each row of the analysis frames matrix, $A_{i,:}$. Result is an $k \times N$ array, $\widetilde{A}$:
+\begin{equation}
+\label{eqn-WindowMatrix}
+\widetilde{A} = A \cdot H^T
+\end{equation}
 
 \paragraph*{}Finally, we perform a \textit{Discrete Fourier Transform} (DFT) to bring the signal from a time domain into a frequency domain. \cite{Olson,Peatross}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space containing $N$ samples
 \begin{equation}
@@ -106,14 +117,14 @@ The window function is applied to each analysis frame by computing the dot-produ
 1 & \omega^{N-1} & \omega^{2(N-1)} & \omega^{3(N-1)} & \hdots & \omega^{(N-1)^2}
 \end{bmatrix}
 \end{equation}
-Each column of the matrix is a complex sinusoidal oscillating with an integer number of periods within the $N$-sample length window \cite{Short,Peatross}.The DFT is applied by a taking the matrix -product of $\mathbb{W}$ and $A^T$. The transpose of $A$ then makes each analysis frame into a column vector, which gives the appropriate dimension for multiplication.
+Each column of the matrix is a complex sinusoidal oscillating with an integer number of periods within the $N$-sample length window \cite{Short,Peatross}.The DFT is applied by a taking the matrix -product of $\mathbb{W}$ and $\widetilde{A}^T$. The transpose of $\widetilde{A}$ then makes each analysis frame into a column vector, which gives the appropriate dimension for multiplication.
 
 \paragraph*{}Most standard implementations of neural network require all activations to be real floating-point numbers. Since the the DFT matrix introduce complex values, we compute the square of the element-wise $L2$-norm of the resultant array.
 \begin{equation}
 \label{eqn-Spectrogram}
-S_{xx} = \big{\lVert} \mathbb{W}A^T \big{\rVert}_{2}^{2}
+S_{xx} = \big{\lVert} \mathbb{W}\widetilde{A}^T \big{\rVert}_{2}^{2}
 \end{equation}
-Where $\mathbb{W}$ is the DFT matrix from eqn. (\ref{eqn-DFTMatrix}) and $A^T$ is the transpose of the analysis frames matrix from eqn. (\ref{eqn-FrameMatrix}). The matrix $S_{xx}$, is the spectrogram representation of the initial waveform, and now contains $N \times k$ real floating-point numbers.
+Where $\mathbb{W}$ is the DFT matrix from eqn. (\ref{eqn-DFTMatrix}) and $\widetilde{A}^T$ is the transpose of the analysis frames matrix from eqn. (\ref{eqn-WindowMatrix}). The matrix $S_{xx}$, is the spectrogram representation of the initial waveform, and now contains $N \times k$ real floating-point numbers.
 
 \paragraph*{}Each Column of the $S_{xx}$ matrix is now a single-frame that has been moved into a frequency-space representation, thus there are $k$ columns, just as there were $k$ analysis frames. Given the discretized nature of digital audio, the fequency-sapce representation is not a continuous function, but rather a column vector, where the frequency has been assigned to one of $N$ bins. Since human hearing extends from about $20$ Hz to around $20$ kHz, audio files, such as music and voice recordings are typically sampled around $44.1$ kHz, to ensure that the full range of audio is held by the recording \cite{Olson,Virtanen}. 
 
@@ -133,17 +144,83 @@ This matrix is presented to the \textit{Convolution} branch of the neural networ
 \subsection{Time-Space Features}
 \label{subsec-time}
 
-\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. In some cases, this can be from the waveform directly, or my manipulation of rows and columns in the analysis frames matrix $A$ from eqn. (\ref{eqn-FrameMatrix}). For each feature, we detail the physical meaning of each feature, and provide a visualization in feature-space.
+\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. In some cases, this can be from the waveform directly, or my manipulation of rows and columns in the analysis frames matrix $A$ from eqn. (\ref{eqn-FrameMatrix}). For each feature, we detail the physical significance and provide a visualization in feature-space.
 
 \subsubsection{Time Domain Envelope}
 
+\paragraph*{}The time domain envelope (TDE) is a method of determining which parts of the sound wave contains most of the energy of the signal. Generally, we start by computing the RMS-Energy of each frame. The larger the RMS energy of the frame, the larger the amplitude of the waveform in that frame. For frames with smaller amplitude, we conclude that the signal has either not begun, or is decaying. The RMS-Energy of a single analysis-frame $a^{(i)}$ is given by \cite{Olson,Virtanen}
+\begin{equation}
+\label{eqn-RMS}
+RMS\big[ a^{(i)} \big] = \sqrt{\frac{1}{N} \sum_{j=0}^{N-1}a^{(i)}[j]}
+\end{equation}
+
+\paragraph*{}We adapt this feature to \textbf{compute the RMS-Energy of the full waveform}. By doing this, we acquire a rough estimate for the energy of a waveform in the entirety of the audio file \cite{Liu}. For instruments with long sustain or release times, such as strings or undampened mallet percussion, hold a comparably large waveform RMS when compared to those instruments without sustain such as brass or percussion.
+
+\begin{figure}[H]
+\label{fig-FeatureTDE}
+\begin{center}
+\textcolor{red}{PLOT OF TDE FEATURES HERE}
+\end{center}
+\caption{Time domain envelope visualized in feature-space}
+\end{figure}
+
 \subsubsection{Zero Crossing Rate}
 
+\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be done per total sound wave, or per unit time, such an per analysis-frame. In differentiating speech and music, it is commonly to use the difference between the frame with the highest ZXR and the lowest ZXR. In some cases, the ZXR can be correlated to frequency as well \cite{Kahn,Zhang}. The ZXR for a frame $a^{(i)}$ is given by \cite{Virtanen,Liu}
+\begin{equation}
+\label{eqn-ZXR}
+ZXR\big[ a^{(i)} \big] = \frac{1}{2} \sum_{j=1}^{N-1} \big{|} \sign(a^{(i)}[j]) - \sign(a^{(i)}[j-1]) \big{|} 
+\end{equation}
+Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$.
+
+\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. This provides a rough estimate for the average frequency in the full waveform, and can help discern clean periodic signals (low ZXR) from those that may have more volatile behavior (high ZXR)\cite{Virtanen}.
+
+\begin{figure}[H]
+\label{fig-FeatureZXR}
+\begin{center}
+\textcolor{red}{PLOT OF ZXR FEATURES HERE}
+\end{center}
+\caption{Zero crossing rate visualized in feature-space}
+\end{figure}
+
 \subsubsection{Center of Mass}
+
+\paragraph*{}The temporal center of mass (TCM) of a signal is used to compute where in time the amplitude sort of \textit{bunches up}. We treat the full waveform array, $a$, with $M$ samples as a 1-Dimensional discrete mass distribution. The TCM of that waveform is then given:
+\begin{equation}
+\label{eqn-FeatureTCM}
+TCM\big[ a \big] = \frac{\sum_{j=0}^{M-1}j a[j]}{\sum_{j=0}^{M-1}a[j]}
+\end{equation}
+This includes negative amplitude values acting as "negative masses".
+
+\paragraph*{}The TCM turns out to be a very unique feature, and very powerful in classification due to it's variance. For instruments with heavier attacks, we expect the TCM to be a very low value as most of the energy and amplitude is concentrated close to the start of the audio file. For instruments with long sustain times, we expect a very centrally located center of mass, and for instruments with long release times, we expect a very late TCM value.
+
+\begin{figure}[H]
+\label{fig-FeatureTCM}
+\begin{center}
+\textcolor{red}{PLOT OF TCM FEATURES HERE}
+\end{center}
+\caption{Temporal center-of-mass visualized in feature-space}
+\end{figure}
 
 \subsubsection{Statistical Distribution Data}
 
 \subsubsection{Auto Correlation Coefficients}
+
+\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution \cite{Virtanen}. We can compute any number of ACC's and their value changed depending on the index chosen. It is common to only compute the first $k$ ACC's. For a full waveform signal $a$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
+\begin{equation}
+\label{eqn-FeatureACC}
+ACC_k\big[ a \big] = \frac{\sum_{j=0}^{M-k-1}a[j]a[j+k]} {\sqrt{\sum_{j=0}^{M-k-1}a^2[j]} \sqrt{\sum_{j=0}^{M-k-1}a^2[j+k]}}
+\end{equation}
+
+\begin{figure}[H]
+\label{fig-FeatureACC}
+\begin{center}
+\textcolor{red}{PLOT OF ACC FEATURES HERE}
+\end{center}
+\caption{First four auto correlation coefficients visualized in feature-space}
+\end{figure}
+
+
 
 % ================================================================
 
@@ -152,7 +229,7 @@ This matrix is presented to the \textit{Convolution} branch of the neural networ
 \subsection{Frequency-Space Features}
 \label{subsec-frequency}
 
-\paragraph*{}The features described in this section ar ederived from the frequency-domain representations of each audio sample. Typically, these features are exacted from the spectrogram representation,$S_xx$, outlined in sec. (\ref{subsec-spectrogram}) and computed in eqn.(\ref{eqn-Spectrogram}). For each feature, we detail the physical meaning of each feature, and provide a visualization in feature-space.
+\paragraph*{}The features described in this section are derived from the frequency-domain representations of each audio sample. Typically, these features are exacted from the spectrogram representation,$S_xx$, outlined in sec. (\ref{subsec-spectrogram}) and computed in eqn.(\ref{eqn-Spectrogram}). For each feature, we detail the physical significance and provide a visualization in feature-space.
 
 \subsubsection{Mel Frequency Ceptral Coefficients}
 
