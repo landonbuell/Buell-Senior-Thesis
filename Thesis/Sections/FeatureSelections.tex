@@ -70,14 +70,28 @@ Note that different projects may require a different set of requirement from pre
 \end{center}
 \end{figure}
 
-\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification. Frame-blocking creates a set of analysis frames, each of which is $N$ samples in length, and has a fixed overlap with the next adjacent frame. Each of the $k$ frames then allows for a section of the signal in somewhat stationary state \cite{Liu,Zhan,Kahn,Virtanen}. For this project, we have chosen to use frames of size $N = 4096$ with a $75\%$ or $3072$ sample overlap. At a sample rate of $f_s = 44100$ samples/second, each frame represents a slice of time that is about $0.1$ seconds long. 
+\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification. Frame-blocking creates a set of analysis frames, $a^{(i)}$ each of which is $N$ samples in length, and has a fixed overlap with the next adjacent frame. Each of the $k$ frames then allows for a section of the signal in somewhat stationary state \cite{Liu,Zhan,Kahn,Virtanen}. For this project, we have chosen to use frames of size $N = 4096$ with a $75\%$ or $3072$ sample overlap. At a sample rate of $f_s = 44100$ samples/second, each frame represents a slice of time that is about $0.1$ seconds long. 
 
-\paragraph*{}After frame-blocking, we apply a \textit{windowing function} to each frame. The analysis frame are concatenated into a $k \times N$ sized matrix, $A$, where each row is a frame. A standard \textit{Hann Window} of $N$ samples is generated and reshaped into a $N \times 1$ array,$H$. The $n$-th index in a Hann window with $N$ samples is defined:
+\paragraph*{}We concatenate each analysis frame, $a^{(i)}, i \in [0,k-1]$ into a single $k \times N$ matrix, called $A$. Each row is a frame, each column is an index in that frame
+\begin{equation}
+\label{eqn-FrameMatrix}
+A = \big\{ a^{(0)} , a^{(1)} , a^{(2)} , ... , a^{(k-1)} \big\} = 
+\begin{bmatrix}
+a^{(0)}_{0} & a^{(0)}_{1} & a^{(0)}_{2} & \hdots & a^{(0)}_{N-1} \\
+a^{(1)}_{0} & a^{(1)}_{1} & a^{(1)}_{2} & \hdots & a^{(1)}_{N-1} \\
+a^{(2)}_{0} & a^{(2)}_{1} & a^{(2)}_{2} & \hdots & a^{(2)}_{N-1} \\
+\vdots 		& \vdots 	  & \vdots 		& \ddots & \vdots        \\
+a^{(k-1)}_{0} & a^{(k-1)}_{1} & a^{(k-1)}_{2} & \hdots & a^{(k-1)}_{N-1} \\
+\end{bmatrix}
+\end{equation}
+We can also index this matrix, knowing that $A_{i,j} = a^{(i)}_{j}$.
+
+\paragraph*{}After frame-blocking, we apply a \textit{windowing function} to each frame. A standard \textit{Hann Window} of $N$ samples is generated and reshaped into a $N \times 1$ column-array,$H$. The $n$-th index in a Hann window with $N$ samples is defined:
 \begin{equation}
 \label{eqn-Hann}
 H[n] = \frac{1}{2}\bigg[ 1 - \cos\Big( \frac{2\pi n}{N-1}\Big)\bigg]
 \end{equation}
-The window function is applied to each analysis frame by computing the dot-product of the Hann window array, $H$ and each row of the analysis frames matrix, $A$. This way, the window function has been effectively applied to each frame
+The window function is applied to each analysis frame by computing the dot-product of the Hann window array, $H$ and each row of the analysis frames matrix, $A_{i,:}$.
 
 \paragraph*{}Finally, we perform a \textit{Discrete Fourier Transform} (DFT) to bring the signal from a time domain into a frequency domain. \cite{Olson,Peatross}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space containing $N$ samples
 \begin{equation}
@@ -92,26 +106,25 @@ The window function is applied to each analysis frame by computing the dot-produ
 1 & \omega^{N-1} & \omega^{2(N-1)} & \omega^{3(N-1)} & \hdots & \omega^{(N-1)^2}
 \end{bmatrix}
 \end{equation}
-Each column of the matrix is a complex sinusoidal oscillating with an integer number of periods within the $N$-sample length window \cite{Short,Peatross}.The DFT is applied by a taking the matrix -product of $\mathbb{W}$ and $A^T$. The transpose of $A$ then makes each analysis frame into a column vector, which gives the appropriate dimension from multiplciation.
+Each column of the matrix is a complex sinusoidal oscillating with an integer number of periods within the $N$-sample length window \cite{Short,Peatross}.The DFT is applied by a taking the matrix -product of $\mathbb{W}$ and $A^T$. The transpose of $A$ then makes each analysis frame into a column vector, which gives the appropriate dimension for multiplication.
 
-\paragraph*{}Most standard implementations of neural network require all activations to be real floating-point numbers. Since the the DFT matrix introduce complex values, we  compute the Hadamard (element-wise) product of $\mathbb{W}A^T$ and it's complex conjugate as such:
+\paragraph*{}Most standard implementations of neural network require all activations to be real floating-point numbers. Since the the DFT matrix introduce complex values, we compute the square of the element-wise $L2$-norm of the resultant array.
 \begin{equation}
 \label{eqn-Spectrogram}
-\big( \mathbb{W}A^T \big) \odot \big( \mathbb{W}A^T \big)^* = S_{xx}
+S_{xx} = \big{\lVert} \mathbb{W}A^T \big{\rVert}_{2}^{2}
 \end{equation}
-Where $\mathbb{W}$ is the DFT matrix from eqn. (\ref{eqn-DFTMatrix}), $A^T$ is the transpose of the analysis frames matrix, and $^*$ denotes the element-wise complex conjugate. The matrix $S_{xx}$, is the spectrogram representation of the initial waveform, and now contains $N \times k$ real floating-point numbers.
+Where $\mathbb{W}$ is the DFT matrix from eqn. (\ref{eqn-DFTMatrix}) and $A^T$ is the transpose of the analysis frames matrix from eqn. (\ref{eqn-FrameMatrix}). The matrix $S_{xx}$, is the spectrogram representation of the initial waveform, and now contains $N \times k$ real floating-point numbers.
 
 \paragraph*{}Each Column of the $S_{xx}$ matrix is now a single-frame that has been moved into a frequency-space representation, thus there are $k$ columns, just as there were $k$ analysis frames. Given the discretized nature of digital audio, the fequency-sapce representation is not a continuous function, but rather a column vector, where the frequency has been assigned to one of $N$ bins. Since human hearing extends from about $20$ Hz to around $20$ kHz, audio files, such as music and voice recordings are typically sampled around $44.1$ kHz, to ensure that the full range of audio is held by the recording \cite{Olson,Virtanen}. 
 
-\paragraph*{}However, standard musical instruments seldom extend above $8$ kHz \cite{Olson,White}. This means that when constructing the spectrogram, we will rarely ever see energy present above this frequency, and the $S_{xx}$ will contain mostly zero, or zero-like entries. As a result of this, we can simply crop each matrix, to display frequencies that are only between $0$ Hz and $8000$ Hz. This makes the input smaller, and eliminates redundant and non-useful information. This brings the number rows in the $S_{xx}$ matrix from $N$ to $N'$. lastly, each raw audio file may contain a different number of samples to begin with, thus a different number of analysis frames are created. To ensure each sample presented to the classifier, we assert that each matrix must have exactly $k'$ columns. If $k < k'$, columns of zeros are added to pad the input, and if $k' < k$, columns are removed.
+\paragraph*{}However, standard musical instruments seldom extend above $8$ kHz \cite{Olson,Virtanen,White}. This means that when constructing the spectrogram, we will rarely ever see energy present above this frequency at any time, and the $S_{xx}$ matrix will contain mostly zero, or zero-like entries. As a result of this, we can simply crop each matrix, to display frequencies that are only between $0$ Hz and $8000$ Hz. This makes the input array smaller, and eliminates redundant and non-useful information. This brings the number rows in the $S_{xx}$ matrix from $N$ down to $N'$. lastly, each raw audio file may contain a different number of samples to begin with, thus a different number of analysis frames are created. To ensure all sample are a homogeneous size, we assert that each matrix must have exactly $k'$ columns. If $k' < k$, columns of zeros are added to pad the input, and if $k' > k$, columns are removed.
 
-\paragraph*{}Each spectrogram is now $N' \times k'$ and effectively encodes the energy distribution of the waveform a a function of both time and frequency. The spectrogram is the first feature used in this model. For this classifier, we have chosen $N' = 560$ and $k' = 256$. For training, a mini-batch of $b$ samples are concatenated into a single array object. \textcolor{blue}{See Neural Network section for more details}. For a batch of $b$ samples of $N' \times k' \times 1$ spectrograms, we shape $X_1$ such that:
+\paragraph*{}Each spectrogram is now $N' \times k' \times 1$ ($1$ representing a single gray-scale channel, as oppose to $3$ for RGB inputs) and effectively encodes the energy distribution of the waveform a a function of both time and frequency. The spectrogram is the first feature used in this model. For this classifier, we have chosen $N' = 560$ and $k' = 256$. For training, a mini-batch of $b$ samples are concatenated into a single array object. \textcolor{blue}{See Neural Network section for more details}. For a batch of $b$ samples of $N' \times k' \times 1$ spectrograms, we shape $X_1$ such that:
 \begin{equation}
 \label{eqn-X1 shape}
 X_1 = \big\{ S_{xx}^{(0)},S_{xx}^{(1)},S_{xx}^{(2)}, ... , S_{xx}^{(b-1)} \big\} \in \mathbb{R}^{(b \times N' \times k' \times 1)}
 \end{equation}
-
-\paragraph*{}The fourth dimension, which contains $1$ element, allows for the spectrogram matrix to be processed identically to how neural networks process gray-scale images. For example, and RGB image would have a last-axis shape of $3$ elements. This matrix is presented to the \textit{Convolution} branch of the neural network from processing. \textcolor{blue}{See Neural Network section for more details}
+This matrix is presented to the \textit{Convolution} branch of the neural network from processing. \textcolor{blue}{See Neural Network section for more details}
 
 % ================================================================
 
@@ -120,7 +133,17 @@ X_1 = \big\{ S_{xx}^{(0)},S_{xx}^{(1)},S_{xx}^{(2)}, ... , S_{xx}^{(b-1)} \big\}
 \subsection{Time-Space Features}
 \label{subsec-time}
 
-\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. In some cases, this can be from the waveform.
+\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. In some cases, this can be from the waveform directly, or my manipulation of rows and columns in the analysis frames matrix $A$ from eqn. (\ref{eqn-FrameMatrix}). For each feature, we detail the physical meaning of each feature, and provide a visualization in feature-space.
+
+\subsubsection{Time Domain Envelope}
+
+\subsubsection{Zero Crossing Rate}
+
+\subsubsection{Center of Mass}
+
+\subsubsection{Statistical Distribution Data}
+
+\subsubsection{Auto Correlation Coefficients}
 
 % ================================================================
 
@@ -128,6 +151,14 @@ X_1 = \big\{ S_{xx}^{(0)},S_{xx}^{(1)},S_{xx}^{(2)}, ... , S_{xx}^{(b-1)} \big\}
 
 \subsection{Frequency-Space Features}
 \label{subsec-frequency}
+
+\paragraph*{}The features described in this section ar ederived from the frequency-domain representations of each audio sample. Typically, these features are exacted from the spectrogram representation,$S_xx$, outlined in sec. (\ref{subsec-spectrogram}) and computed in eqn.(\ref{eqn-Spectrogram}). For each feature, we detail the physical meaning of each feature, and provide a visualization in feature-space.
+
+\subsubsection{Mel Frequency Ceptral Coefficients}
+
+\subsubsection{Center of Mass}
+
+\paragraph*{}The frequency center-of-mass ($f_{CoM}$) for an audio file provides a strong representation of how overtones and energy is distributed in the signal. For example, a low instrument such as a tuba or bass may have a very low $f_{CoM}$ while flutes and violins may have a very high $f_{CoM}$.
 
 % ================================================================
 
