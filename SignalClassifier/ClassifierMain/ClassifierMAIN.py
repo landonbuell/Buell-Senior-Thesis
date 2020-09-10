@@ -19,7 +19,7 @@ import NeuralNetworkUtilities as NN_utils
 
 if __name__ == '__main__':
        
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
+    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
     read = os.path.join(parent,'Target-Data')
     model = os.path.join(parent,'Model-Data')
     export = os.path.join(parent,'Output-Data')
