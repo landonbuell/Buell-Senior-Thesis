@@ -135,7 +135,7 @@ class TrainMode (ProgramMode):
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
-        self.n_epochs = 4
+        self.n_epochs = 2
      
     def __Call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
