@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  8 SEP 2020 15:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  11 SEP 2020 00:10
 entering extended mode
 **./FeatureSelections.tex
 (FeatureSelections.tex
@@ -319,21 +319,21 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 [2]
 
-LaTeX Warning: Citation `Zhan' on page 3 undefined on input line 74.
+LaTeX Warning: Citation `Zhan' on page 3 undefined on input line 76.
 
-[3] [4] [5] [6] [7] [8] [9] [10] (FeatureSelections.aux)
+[3] [4] [5] [6] [7] [8] [9] [10] [11] [12] (FeatureSelections.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3429 strings out of 492895
- 46986 string characters out of 3123268
- 127962 words of memory out of 3000000
- 7293 multiletter control sequences out of 15000+200000
+ 3438 strings out of 492895
+ 47130 string characters out of 3123268
+ 127058 words of memory out of 3000000
+ 7302 multiletter control sequences out of 15000+200000
  10150 words of font info for 38 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,9n,35p,969b,217s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,9n,35p,958b,217s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
@@ -350,9 +350,9 @@ ms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Landon/AppData
 andon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.p
 fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
 ts/symbols/msbm10.pfb>
-Output written on FeatureSelections.pdf (10 pages, 172648 bytes).
+Output written on FeatureSelections.pdf (12 pages, 180108 bytes).
 PDF statistics:
- 87 PDF objects out of 1000 (max. 8388607)
+ 93 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

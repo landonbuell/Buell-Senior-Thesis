@@ -18,8 +18,9 @@ import NeuralNetworkUtilities as NN_utils
             #### MAIN EXECUTABLE ####
 
 if __name__ == '__main__':
-       
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
+    
+    # HARD-CODE DIRECTORIES FOR DEVELOPMENT/DEBUGGING
+    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
     read = os.path.join(parent,'Target-Data')
     model = os.path.join(parent,'Model-Data')
     export = os.path.join(parent,'Output-Data')
@@ -41,7 +42,7 @@ if __name__ == '__main__':
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=True,groupSize=256,n_iters=1)
     elif ProgramSetup.program_mode == 'train-predict':     
-        ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
+        ProgramMode = mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
                                             show_summary=False,groupSize=256,n_iters=1,testSize=0.1)
     elif ProgramSetup.program_mode == 'predict':
