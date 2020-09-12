@@ -22,7 +22,7 @@ NeuralNetworkModels.py - "Neural Network Models"
             #### VARIABLE DECLARATIONS ####
 
 modelName = "JARVIS"
-inputShapeMLP = (23,)
+inputShapeMLP = (20,)
 inputShapeCNN = (560,256,1)
 
 class NetworkContainer:

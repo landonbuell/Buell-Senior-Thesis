@@ -33,13 +33,13 @@ In constructing a neural network classifier, the development of appropriate feat
 
 \paragraph*{}Once we produce an sufficient set of features, we concatenate them into a single object, $\hat{x}$, called the \textit{feature-vector} \cite{Goodfellow}. In the training process, this object, along with the appropriate classification label, $y$ is presented to the neural network for processing. This process of constructing a feature vector from any data set is vital and is used to represent the data set in a far more compact and non-redundant format \cite{Virtanen,Liu}
 
-\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work success, and most importantly physics. In the following sections, we outline the set of $24$ features used in the classification process
+\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work success, and most importantly physics. In the following sections, we outline the set of $21$ features used in the classification process
 
 \newpage
 
 \subsubsection{The Design Matrix}
 
-\paragraph*{}The $24$ features are from each file are organized into one of two array structures. each called a \textit{design matrix}. A design matrix is an N-Dimensional array of real floating-point numbers that stores the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. each has shape given by:
+\paragraph*{}The $21$ features are from each file are organized into one of two array structures. each called a \textit{design matrix}. A design matrix is an N-Dimensional array of real floating-point numbers that stores the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. each has shape given by:
 \begin{equation}
 \label{eqn-X1Shape}
 X_1 \in \mathbb{R}^{(b \times N' \times k' \times 1)}
@@ -167,7 +167,7 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 \paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. In some cases, this can be from the waveform directly, or my manipulation of rows and columns in the analysis frames matrix $A$ from eqn. (\ref{eqn-FrameMatrix}). For each feature, we detail the physical significance and provide a visualization in feature-space.
 
-\paragraph*{}From time space, we use the following $10$ features:
+\paragraph*{}From time space, we use the following $7$ features:
 
 \begin{itemize}
 
@@ -176,8 +176,6 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 \item[•] Zero Crossing Rate
 
 \item[•] Temporal Center of Mass
-
-\item[•] Waveform Mean, Median, and Mode 
 
 \item[•] Auto Correlation Coefficients ($\times 4$)
 
@@ -238,9 +236,6 @@ This includes negative amplitude values acting as "negative masses".
 \end{center}
 \caption{Temporal center-of-mass visualized in feature-space}
 \end{figure}
-
-\subsubsection{Statistical Distribution Data}
-\textcolor{red}{Honetly, I may remove these from the classifier}
 
 \subsubsection{Auto Correlation Coefficients}
 

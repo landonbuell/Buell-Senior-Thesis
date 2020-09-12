@@ -98,8 +98,7 @@ class TimeSeriesFeatures (BaseFeatures):
         featureVector = np.array([])
         featureVector = np.append(featureVector,self.TimeDomainEnvelope())
         featureVector = np.append(featureVector,self.ZeroCrossingRate())
-        featureVector = np.append(featureVector,self.CenterOfMass())
-        featureVector = np.append(featureVector,self.WaveformDistributionData())
+        featureVector = np.append(featureVector,self.CenterOfMass())       
         featureVector = np.append(featureVector,self.AutoCorrelationCoefficients())
         return featureVector
     
