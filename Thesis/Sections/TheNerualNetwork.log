@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  5 SEP 2020 18:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  12 SEP 2020 21:31
 entering extended mode
 **./TheNerualNetwork.tex
 (TheNerualNetwork.tex
@@ -105,15 +105,42 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks20
 \@floatcapt=\box30
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphicx
-.sty"
-Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\caption.s
+ty"
+Package: caption 2020/09/02 v3.5a Customizing captions (AR)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\caption3.
+sty"
+Package: caption3 2020/08/30 v2.0 caption3 kernel (AR)
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.s
 ty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks21
 )
+\captionmargin=\dimen112
+\captionmargin@=\dimen113
+\captionwidth=\dimen114
+\caption@tempdima=\dimen115
+\caption@indent=\dimen116
+\caption@parindent=\dimen117
+\caption@hangindent=\dimen118
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count101
+\c@continuedfloat=\count102
+Package caption Info: float package is loaded.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\subcaptio
+n.sty"
+Package: subcaption 2020/08/23 v1.3g Sub-captions (AR)
+\c@subfigure=\count103
+\c@subtable=\count104
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphicx
+.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics
 .sty"
 Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
@@ -132,8 +159,8 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 ex.def"
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen112
-\Gin@req@width=\dimen113
+\Gin@req@height=\dimen119
+\Gin@req@width=\dimen120
 )
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcolor.sty
 "
@@ -174,49 +201,51 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 ty"
 Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count101
-\Gm@cntv=\count102
-\c@Gm@tempcnt=\count103
-\Gm@bindingoffset=\dimen114
-\Gm@wd@mp=\dimen115
-\Gm@odd@mp=\dimen116
-\Gm@even@mp=\dimen117
-\Gm@layoutwidth=\dimen118
-\Gm@layoutheight=\dimen119
-\Gm@layouthoffset=\dimen120
-\Gm@layoutvoffset=\dimen121
+\Gm@cnth=\count105
+\Gm@cntv=\count106
+\c@Gm@tempcnt=\count107
+\Gm@bindingoffset=\dimen121
+\Gm@wd@mp=\dimen122
+\Gm@odd@mp=\dimen123
+\Gm@even@mp=\dimen124
+\Gm@layoutwidth=\dimen125
+\Gm@layoutheight=\dimen126
+\Gm@layouthoffset=\dimen127
+\Gm@layoutvoffset=\dimen128
 \Gm@dimlist=\toks22
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
 .cfg")) (TheNerualNetwork.aux)
 \openout1 = `TheNerualNetwork.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-
 pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count104
-\scratchdimen=\dimen122
+\scratchcounter=\count108
+\scratchdimen=\dimen129
 \scratchbox=\box31
-\nofMPsegments=\count105
-\nofMParguments=\count106
+\nofMPsegments=\count109
+\nofMParguments=\count110
 \everyMPshowfont=\toks23
-\MPscratchCnt=\count107
-\MPscratchDim=\dimen123
-\MPnumerator=\count108
-\makeMPintoPDFobject=\count109
+\MPscratchCnt=\count111
+\MPscratchDim=\dimen130
+\MPnumerator=\count112
+\makeMPintoPDFobject=\count113
 \everyMPtoPDFconversion=\toks24
 )
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/epstopdf-pkg\epst
@@ -259,12 +288,12 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 34.
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 34.
 
  ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd
 "
@@ -272,18 +301,120 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-[2] [3] [4] [5]
+[2] [3]
 
-LaTeX Warning: Citation `Khan' on page 6 undefined on input line 194.
+Package caption Warning: \label without proper reference on input line 164.
+See the caption package documentation for explanation.
 
-<../Figures/NeuralNetworkArchitecture.png, id=27, 794.97pt x 1228.59pt>
+
+LaTeX Warning: Reference `fig-2DConvExample' on page 4 undefined on input line 
+165.
+
+<../figures/2DConvExample(a).png, id=21, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(a).png Graphic file (type png)
+<use ../figures/2DConvExample(a).png>
+Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 17
+0.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 170--171
+[][] 
+ []
+
+<../figures/2DConvExample(b).png, id=23, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(b).png Graphic file (type png)
+<use ../figures/2DConvExample(b).png>
+Package pdftex.def Info: ../figures/2DConvExample(b).png  used on input line 17
+4.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 174--175
+[][] 
+ []
+
+<../figures/2DConvExample(c).png, id=24, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(c).png Graphic file (type png)
+<use ../figures/2DConvExample(c).png>
+Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 17
+9.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+[4]
+Overfull \hbox (9.56802pt too wide) in paragraph at lines 195--196
+ \OT1/cmr/m/n/12 The con-vo-lu-tion lay-ers al-lows for sev-eral ad-van-tages. 
+Among these are (i) \OT1/cmr/m/it/12 sparse-connectivity\OT1/cmr/m/n/12 :
+ []
+
+
+Package caption Warning: \label without proper reference on input line 164.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-2DConvExample' on page 5 undefined on input line 
+203.
+
+
+Package caption Warning: \label without proper reference on input line 202.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-2DMaxPool' on page 5 undefined on input line 203.
+
+
+<../figures/2DConvExample(d).png, id=28, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(d).png Graphic file (type png)
+<use ../figures/2DConvExample(d).png>
+Package pdftex.def Info: ../figures/2DConvExample(d).png  used on input line 20
+7.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+[5 <../figures/2DConvExample(a).png> <../figures/2DConvExample(b).png> <../figu
+res/2DConvExample(c).png>]
+
+LaTeX Warning: Reference `sec-Training' on page 6 undefined on input line 237.
+
+[6 <../figures/2DConvExample(d).png>] [7]
+! Extra }, or forgotten $.
+l.270 ...he prediction for training sample $x^(0)}
+                                                  $ is not likely to be simi...
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+[8]
+
+Package caption Warning: \label without proper reference on input line 268.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-NetworkArchitecture' on page 9 undefined on input
+ line 284.
+
+<../Figures/NeuralNetworkArchitecture.png, id=47, 794.97pt x 1228.59pt>
 File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
 <use ../Figures/NeuralNetworkArchitecture.png>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
-t line 201.
+t line 289.
 (pdftex.def)             Requested size: 357.7332pt x 552.8604pt.
-[6] [7 <../Figures/NeuralNetworkArchitecture.png>] [8] [9] [10] [11]
-(TheNerualNetwork.aux)
+[9]
+
+Package caption Warning: \label without proper reference on input line 268.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-NetworkArchitecture' on page 10 undefined on inpu
+t line 298.
+
+[10 <../Figures/NeuralNetworkArchitecture.png>]
+
+Package caption Warning: \label without proper reference on input line 268.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-NetworkArchitecture' on page 11 undefined on inpu
+t line 321.
+
+[11] [12] [13] [14] (TheNerualNetwork.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -292,28 +423,29 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 3237 strings out of 492483
- 41640 string characters out of 3121135
- 119813 words of memory out of 3000000
- 7559 multiletter control sequences out of 15000+200000
- 10150 words of font info for 38 fonts, out of 3000000 for 9000
+ 4544 strings out of 492483
+ 67215 string characters out of 3121135
+ 137756 words of memory out of 3000000
+ 8854 multiletter control sequences out of 15000+200000
+ 10450 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,9n,37p,824b,267s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,10n,43p,824b,509s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Landon/AppData/Local/Prog
 rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Landon/AppDa
-ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users
-/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.p
-fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on TheNerualNetwork.pdf (11 pages, 284918 bytes).
+ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users
+/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.
+pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmr8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Progr
+ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppDa
+ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on TheNerualNetwork.pdf (14 pages, 351917 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
+ 103 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
