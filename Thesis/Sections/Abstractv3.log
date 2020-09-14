@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  13 SEP 2020 22:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  14 SEP 2020 15:41
 entering extended mode
-**./Abstract.tex
-(Abstract.tex
+**./Abstractv3.tex
+(Abstractv3.tex
 LaTeX2e <2018-12-01>
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -184,8 +184,8 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@dimlist=\toks22
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
-.cfg")) (Abstract.aux)
-\openout1 = `Abstract.aux'.
+.cfg")) (Abstractv3.aux)
+\openout1 = `Abstractv3.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
 LaTeX Font Info:    ... okay on input line 17.
@@ -309,19 +309,19 @@ G,.JBIG2,.JB2,.eps]
 [1
 
 {C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-(Abstract.aux) ) 
+(Abstractv3.aux) ) 
 Here is how much of TeX's memory you used:
  3342 strings out of 492895
- 45678 string characters out of 3123268
+ 45698 string characters out of 3123268
  119707 words of memory out of 3000000
  7226 multiletter control sequences out of 15000+200000
  4851 words of font info for 18 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,5n,35p,1055b,121s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on Abstract.pdf (1 page, 27316 bytes).
+ 41i,5n,35p,1107b,121s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+Output written on Abstractv3.pdf (1 page, 26569 bytes).
 PDF statistics:
  14 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
