@@ -40,27 +40,48 @@ class FileObject:
 
     def __init__(self,datarow):
         """ Initialize Object Instance """
-        self.fullpath = datarow[0]      # set full file path
+        # Directory & File Meta Data
+        self.fullpath = datarow[0]              # set full file path
+        dir_tree = self.fullpath.split('/')     
+        self.filename = dir_tree[-1]            # filename
+        self.extension = "."+self.filename.split(".")[-1]
+
+        # Set Target for this File
         try:
             self.target = int(datarow[1])   # target as int           
         except:
             self.target = None              # no label
-        dir_tree = self.fullpath.split('/')
-        self.filename = dir_tree[-1]    # filename
-
+        
     def AssignTarget (self,target):
         """ Assign Target value to instance """
         self.target = target    # set y
         return self             # return self
 
-    def ReadAudio (self):
-        """ Read raw data from local path """
+    def ReadFileData (self):
+        """ Read Data into array based on data type """
+        if self.extension == ".wav":    # is wav file?
+            return self.ReadFileWAV()   # read 
+        elif self.extension == ".txt":  # is txt file?
+            return self.ReadFileTXT()   # read .txt file
+        else:
+            raise NotImplementedError() # extension not matched
+
+    def ReadFileWAV (self):
+        """ Read raw .wav file data from local path """
         rate,data = sciowav.read(self.fullpath)    
         data = data.reshape(1,-1).ravel()   # flatten waveform
-        self.rate = rate            # set sample rate
+        self.rate = rate                # set sample rate
         self.waveform = data/np.abs(np.amax(data))
         self.n_samples = len(self.waveform)
-        return self             # return self
+        return self                     # return self
+
+    def ReadFileTXT (self):
+        """ Read raw .txt file data from local path """
+        data = np.loadtxt(self.fullpath,dtype=float,usecols=0,unpack=True)
+        self.waveform = data.flatten()
+        assert np.ndim(self.waveform) == 1
+        self.rate = 44100
+        return self
 
 class OutputStructure :
     """
@@ -93,7 +114,6 @@ class OutputStructure :
                      header=False,mode='a') # append the output frame
         return self
         
-
             #### PROGRAM PROCESSING CLASS ####
 
 class ProgramInitializer:
@@ -127,12 +147,12 @@ class ProgramInitializer:
         if newmodels is not None:
             self.new_models = newmodels
         try:
-            input_args = self.Argument_Parser() # Parse Input args
-            self.readpath  = input_args[0]      # Data files kept here 
-            self.modelpath = input_args[1]      # store Network Model data
-            self.exportpath = input_args[2]     # store network output
-            self.program_mode = input_args[3]   # set program mode
-            self.new_models = input_args[4]     # create new models?
+            inputArgs = self.Argument_Parser() # Parse Input args
+            self.readpath  = inputArgs[0]      # Data files kept here 
+            self.modelpath = inputArgs[1]      # store Network Model data
+            self.exportpath = inputArgs[2]     # store network output
+            self.program_mode = inputArgs[3]   # set program mode
+            self.new_models = inputArgs[4]     # create new models?
         except:
             pass
         assert self.program_mode in ['train','train-predict','predict']

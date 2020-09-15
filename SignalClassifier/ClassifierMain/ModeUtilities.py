@@ -71,7 +71,7 @@ class ProgramMode:
 
     def CollectFeatures (self,fileobj):
         """ Collected Features from a Given .WAV file object"""
-        fileobj = fileobj.ReadAudio()          # read raw .wav file
+        fileobj = fileobj.ReadFileData()                # read raw .wav file
         
         x2 = ML_utils.FeatureArray(fileobj.target)      # Structure holds MLP features
 

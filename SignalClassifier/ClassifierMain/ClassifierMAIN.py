@@ -47,9 +47,10 @@ if __name__ == '__main__':
     elif ProgramSetup.program_mode == 'predict':
         ProgramMode = mode_utils.PredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
-                                            show_summary=True,groupSize=32,labels_present=False)
+                                            show_summary=True,groupSize=256,labels_present=False)
     else:
         print("\n\tError! - Unsupported mode type")
+        raise ValueError()
 
     #EXECUTE PROGRAM
     ProgramMode.__Call__(NeuralNetwork)      
