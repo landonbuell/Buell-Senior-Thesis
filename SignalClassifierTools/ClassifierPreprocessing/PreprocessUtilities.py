@@ -14,6 +14,14 @@ import os
 
         #### CLASS DECLARATIONS ####
 
+class FileObject:
+    """ Hold file data In structure """
+
+    def __init__(self,imptPath,exptPath):
+        """ Initialize FileObject Instance """
+        self.intpath = imptPath
+        self.outpath = exptPath
+
 class TargetLabelEncoder:
     """ Encode Files By Name and Integer """
 
@@ -26,22 +34,22 @@ class TargetLabelEncoder:
         self.brass = ['BassTrombone','Horn','TenorTrombone','Trumpet','Tuba']
         self.percussion = ['bells','Marimba','Vibraphone','Xylophone']
         self.cymbals = ['crash','chinese','orchcrash','windgong','ride',
-                    'hihat','splash','thaigong',]
+                        'hihat','splash','thaigong',]
 
     @property
     def AcceptedInstruments (self):
         """ Accepted Instrument String Titles """
         return self.woodWinds + self.strings + self.brass + self.percussion + self.cymbals
 
-    def ReadLocalPath (self,path,ext='.wav'):
+    def ReadLocalPath (self,inpath,outpath,ext='.wav'):
         """ Read through directory and collect all files with ext """
-        FILES = []                              # hold filename
-        for roots,dirs,files in os.walk(path):  # walk through tree
-            for file in files:                  # each file
-                if file.endswith(ext):          # .WAV file
+        FILEOBJS = []                               # hold fileobjs
+        for roots,dirs,files in os.walk(inpath):    # walk through tree
+            for file in files:                      # each file
+                if file.endswith(ext):              # .WAV file
                     fullpath = os.path.join(roots,file)
-                    FILES.append(fullpath)      # add to list
-        return FILES                            # return list of files
+                    FILEOBJS.append(FileObject(fullpath,outpath))   # add to list
+        return FILEOBJS                            # return list of files
 
     def AssignTarget (self,filelist):
         """ Assign tagret class value based on name """
@@ -49,11 +57,11 @@ class TargetLabelEncoder:
         for file in filelist:
             filename = file.split("\\")[-1]     # last element in list
             name = filename.split(".")[0]       # 0-th element in list
-            if name in self.AcceptedInstruments:    # in valid instruments
-                targetString = name.upper() # set instrument
-            elif name in self.percussion:        # percussion?
-                targetString = 'PERCUSSION' # set
-            elif name in self.cymbals:           # cymbals?
+            if name in self.AcceptedInstruments:# in valid instruments
+                targetString = name.upper()     # set instrument
+            elif name in self.percussion:       # percussion?
+                targetString = 'PERCUSSION'     # set
+            elif name in self.cymbals:          # cymbals?
                 targetString = 'CYMBAL'     # set
             else:                           # not in lists?
                 targetString = 'OTHER'      # set other

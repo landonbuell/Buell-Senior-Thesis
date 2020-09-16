@@ -1,6 +1,6 @@
 % ================
 % Landon Buell
-% Read .wav Files
+% Read .aiff Files
 % PHYS 799
 % 2 Jan 2020
 % ================
@@ -11,8 +11,8 @@ clc;
 
             %%%% Establish All directory Paths %%%%
 rootdir = 'C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\MATLAB_Scripts'; 
-readdir = 'C:\Users\Landon\Documents\audioMP3';          
-outpath = 'C:\Users\Landon\Documents\audioWAV2';
+readdir = 'C:\Users\Landon\Documents\audioWAV';          
+outpath = 'C:\Users\Landon\Documents\audioWAV';
 
 try                         % attempt to change dir
     chdir(outpath)          % change to path
@@ -21,7 +21,7 @@ catch                       % if failure,
 end     
 
 chdir(readdir);             % change to reading directory
-files = dir('**\*.mp3');    % all files in subfolder
+files = dir('**\*.aif');    % all files in subfolder
 
 
 for i = 1:length(files)                 % in each file:
@@ -42,19 +42,18 @@ for i = 1:length(files)                 % in each file:
     data = data.';      % transpose data array
     %disp(size(data))
     
-    % Decontruct Input name
-    outname = strrep(files(i).name,'_','.');    % eliminate underscore  
-    outname = strrep(outname,'-','');           % eliminate dashes
-    splitName = strsplit(outname,".");          % split string at '.'
-    inst = upper(char(splitName(1)));
+    L = data(1,:);      % left audio track
+    R = data(2,:);      % right audio track
     
-    % Reconstruct Output name
-    outputName = strjoin(splitName(1,2:end-1),".");
-    outputName = char(strcat(inst,".",outputName,".wav"));
+    outname = strrep(files(i).name,'.ff','');   % eliminate dynamic
+    outname = strrep(outname,'.stereo.aif',''); % fix extension
     
-    % Change Path & Export
+    left_outname = strcat(outname,'.L','.wav');
+    right_outname = strcat(outname,'.R','.wav');
+        
     chdir(outpath)
-    audiowrite(outputName,data,rate);        % write track to disk
+    audiowrite(left_outname,L,rate);        % write left track
+    audiowrite(right_outname,R,rate);     % write right track
     
 end 
 disp("Program Complete")
