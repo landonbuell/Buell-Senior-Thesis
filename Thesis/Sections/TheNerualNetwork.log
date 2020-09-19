@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  12 SEP 2020 21:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  19 SEP 2020 18:09
 entering extended mode
 **./TheNerualNetwork.tex
 (TheNerualNetwork.tex
@@ -303,21 +303,21 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 [2] [3]
 
-Package caption Warning: \label without proper reference on input line 164.
+Package caption Warning: \label without proper reference on input line 168.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-2DConvExample' on page 4 undefined on input line 
-165.
+166.
 
 <../figures/2DConvExample(a).png, id=21, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(a).png Graphic file (type png)
 <use ../figures/2DConvExample(a).png>
 Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 17
-0.
+1.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 170--171
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 171--172
 [][] 
  []
 
@@ -325,108 +325,92 @@ Overfull \hbox (4.39906pt too wide) in paragraph at lines 170--171
 File: ../figures/2DConvExample(b).png Graphic file (type png)
 <use ../figures/2DConvExample(b).png>
 Package pdftex.def Info: ../figures/2DConvExample(b).png  used on input line 17
-4.
+5.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 174--175
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 175--176
 [][] 
  []
 
 <../figures/2DConvExample(c).png, id=24, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(c).png Graphic file (type png)
 <use ../figures/2DConvExample(c).png>
-Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 17
-9.
+Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 18
+0.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 [4]
-Overfull \hbox (9.56802pt too wide) in paragraph at lines 195--196
+Overfull \hbox (9.56802pt too wide) in paragraph at lines 196--197
  \OT1/cmr/m/n/12 The con-vo-lu-tion lay-ers al-lows for sev-eral ad-van-tages. 
 Among these are (i) \OT1/cmr/m/it/12 sparse-connectivity\OT1/cmr/m/n/12 :
  []
 
 
-Package caption Warning: \label without proper reference on input line 164.
+Package caption Warning: \label without proper reference on input line 168.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-2DConvExample' on page 5 undefined on input line 
-203.
+204.
 
 
-Package caption Warning: \label without proper reference on input line 202.
+Package caption Warning: \label without proper reference on input line 206.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig-2DMaxPool' on page 5 undefined on input line 203.
+LaTeX Warning: Reference `fig-2DMaxPool' on page 5 undefined on input line 204.
 
 
 <../figures/2DConvExample(d).png, id=28, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(d).png Graphic file (type png)
 <use ../figures/2DConvExample(d).png>
 Package pdftex.def Info: ../figures/2DConvExample(d).png  used on input line 20
-7.
+8.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 [5 <../figures/2DConvExample(a).png> <../figures/2DConvExample(b).png> <../figu
-res/2DConvExample(c).png>]
-
-LaTeX Warning: Reference `sec-Training' on page 6 undefined on input line 237.
-
-[6 <../figures/2DConvExample(d).png>] [7]
-! Extra }, or forgotten $.
-l.270 ...he prediction for training sample $x^(0)}
-                                                  $ is not likely to be simi...
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-[8]
-
-Package caption Warning: \label without proper reference on input line 268.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `fig-NetworkArchitecture' on page 9 undefined on input
- line 284.
-
-<../Figures/NeuralNetworkArchitecture.png, id=47, 794.97pt x 1228.59pt>
-File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
-<use ../Figures/NeuralNetworkArchitecture.png>
-Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
-t line 289.
-(pdftex.def)             Requested size: 357.7332pt x 552.8604pt.
+res/2DConvExample(c).png>] [6 <../figures/2DConvExample(d).png>] [7] [8]
 [9]
 
-Package caption Warning: \label without proper reference on input line 268.
+Package caption Warning: \label without proper reference on input line 301.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 10 undefined on inpu
 t line 298.
 
-[10 <../Figures/NeuralNetworkArchitecture.png>]
+<../Figures/NeuralNetworkArchitecture.png, id=50, 794.97pt x 1228.59pt>
+File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
+<use ../Figures/NeuralNetworkArchitecture.png>
+Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
+t line 303.
+(pdftex.def)             Requested size: 357.7332pt x 552.8604pt.
+[10]
 
-Package caption Warning: \label without proper reference on input line 268.
+Package caption Warning: \label without proper reference on input line 301.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 11 undefined on inpu
-t line 321.
+t line 312.
 
-[11] [12] [13] [14] (TheNerualNetwork.aux)
+[11 <../Figures/NeuralNetworkArchitecture.png>]
+
+Package caption Warning: \label without proper reference on input line 301.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-NetworkArchitecture' on page 12 undefined on inpu
+t line 335.
+
+[12] [13] [14] [15] (TheNerualNetwork.aux)
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 4544 strings out of 492483
- 67215 string characters out of 3121135
+ 4547 strings out of 492483
+ 67281 string characters out of 3121135
  137756 words of memory out of 3000000
- 8854 multiletter control sequences out of 15000+200000
+ 8857 multiletter control sequences out of 15000+200000
  10450 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,10n,43p,824b,509s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -443,9 +427,9 @@ public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Progr
 ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppDa
 ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on TheNerualNetwork.pdf (14 pages, 351917 bytes).
+Output written on TheNerualNetwork.pdf (15 pages, 355148 bytes).
 PDF statistics:
- 103 PDF objects out of 1000 (max. 8388607)
+ 106 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

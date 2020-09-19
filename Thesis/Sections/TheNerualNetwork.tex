@@ -102,6 +102,7 @@ Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in
 % ================
 
 \subsubsection{Dense Layer}
+\label{subsec-DenseLayer}
 
 \paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer for short, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed back from McCulloch and Pitts' work \cite{McCulloch}, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
 
@@ -250,7 +251,7 @@ The numerical value of each activation is left unchanged. For a layer with activ
 \subsection{Training a Neural Network}
 \label{sec-Training}
 
-\paragraph*{}A neural network's job is to produce an approximation of some function $F$, which we call $F^*$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonable approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
+\paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
 \begin{quote}
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
 \end{quote}
@@ -259,25 +260,38 @@ Without any human intervention, a model must update itself to improve it's perfo
 \paragraph*{}We consider the set of parameters $\Theta$ as a concatenation of each applicable layer's weighting matrix and bias vector such that:
 \begin{equation}
 \label{eqn-Theta}
-\theta = \big\{
-W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)},W^{(L)}, b^{(L-1)},
+\Theta = \big\{
+W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)},
 \big\}
 \end{equation}
-We can consider each parameter as just float-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function. In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is a very high dimensional parameter-space.
+Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function. Note that $W^{(l)}$ or $b^{(l)}$, itself is a parameter to train, but rather the entries that make up those structures must be trained. In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow}.
 
 \subsubsection{The Cost Function}
 
-\paragraph*{}Suppose we pass a training sample $x^{0})$, with expected outcome $y$, into the neural network . For a perfectly accurate model, we expect the network's final layer, the output layer, $x^{(L-1)}$ to have activations such that $x^{(L-1)} \approx y$. Since the starting parameters of a network are often randomly generated, the prediction for training sample $x^(0)}$ is not likely to be similar to $y$ at all. We introduce a \textit{Cost Function} into our model that compares the difference between the neural output $x^{(L-1)}$ (also called $y^*$) and the desired, or expected output $y$ \cite{Goodfellow,James}.
+\paragraph*{}Suppose we pass a training sample, given by the feature-vector $x^{(0)}$, with an expected outcome given by the vector $y$, into the neural network. After the network finishes processing, it's output activations are given by the vector $x^{(L-1)}$, also noted at $y^*$. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
 
-\paragraph*{}There are various types of cost functions 
+\paragraph*{}To quantify the difference between the model's prediction,m $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $\mathbb{J}(y^*,y)$, to the network \cite{Goodfellow,James}.The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single value, usually a floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
+
+\paragraph*{}$\mathbb{J}(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use a \textit{Categorical Crossentropy} (CXE) cost function. For a single predictions sample, it is defined \cite{Goodfellow}:
+\begin{equation}
+\label{eqn-CategoricalCrossentropy}
+\text{CXE}\big[ y^* , y \big] = - \sum_{i=0}^{k-1} y^*_i \log_{10}(y_i) 
+\end{equation}
+In practice, this operation is performed over a batch of samples and an average is computed and used a \textit{batch loss} \cite{Goodfellow}.
+
 
 \subsubsection{The Optimizer}
+
+\paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem.
+
+\paragraph*{}The general process of training
 
 % ================================================================
 
 \newpage
 
 \subsection{Chosen Model Architecture}
+\label{sec-Architecture}
 
 \paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textit{[See Section on Features]}, and constructed a neural network architecture to compliment these features.
 
