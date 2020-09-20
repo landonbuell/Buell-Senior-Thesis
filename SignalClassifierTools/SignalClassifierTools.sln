@@ -9,6 +9,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierAnalysis", "Class
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierFeatures", "ClassifierFeatures\ClassifierFeatures.pyproj", "{08B0A18F-A687-4BFF-B773-5EDB90B5DD25}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ReadChaoticSynthesizers", "ReadChaoticSynthesizers\ReadChaoticSynthesizers.pyproj", "{B10063DB-4C0F-4A02-AE4E-423B09C0C63C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{1CFF0BFC-3257-4A2D-9ECF-2D2FBBCB0227}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08B0A18F-A687-4BFF-B773-5EDB90B5DD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08B0A18F-A687-4BFF-B773-5EDB90B5DD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B10063DB-4C0F-4A02-AE4E-423B09C0C63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B10063DB-4C0F-4A02-AE4E-423B09C0C63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
