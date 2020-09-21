@@ -8,10 +8,12 @@ PHYS 799
         #### IMPORTS ####
 
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import scipy.fftpack as fftpack
 import os
 import sys
-import pandas as pd
-import matplotlib.pyplot as plt
+
 
         #### CLASS OBJECT DECLARATIONS ####
 
@@ -30,19 +32,68 @@ class FileObject :
         return "\nFileObject Located at:\n\t" + self.path
 
     def ReadData (self):
-        """ Read raw lines """
-        self.data = pd.read_csv(self.path,sep="\t\t",
-                        header=2,index_col=0,dtype=np.float64)
+        """ Read raw txt file data """
+        cols = ["X","Y","Z"]
+        data = np.loadtxt(self.path,dtype=str,
+                comments="%",delimiter=None,skiprows=2,unpack=True)
+        self.t = data[0].astype(np.uint16)
+        self.Xt = data[1].astype(np.float64)
+        self.Yt = data[2].astype(np.float64)
+        self.Zt = data[3].astype(np.float64)
+        self.npts = len(self.t)
         return self
 
-    def PlotWaveform (self,save=False,show=True):
+    def ExtendArray(self,niters):
+        """ Extend Each Time Series array with itself """
+        for i in range(0,niters):
+            self.Xt = np.append(self.Xt,self.Xt)
+            self.Yt = np.append(self.Yt,self.Yt)
+            self.Zt = np.append(self.Zt,self.Zt)
+        self.t = np.arange(len(self.Xt))
+        self.npts = len(self.t)
+        return self
+
+    def FourierTransform(self):
+        """ Transform Wavefrom into Frequeny Domain """
+        
+        self.f = fftpack.fftfreq(n=self.npts)
+        self.Xf = np.abs(fftpack.fft(self.Xt,n=self.npts,axis=-1))**2
+        self.Yf = np.abs(fftpack.fft(self.Yt,n=self.npts,axis=-1))**2
+        self.Zf = np.abs(fftpack.fft(self.Zt,n=self.npts,axis=-1))**2
+
+    def PlotTimeSeries (self,save=False,show=True):
         """ Visualize data attribute """
-        plt.figure(figsize=(16,12))
+        plt.figure(figsize=(12,8))
         plt.title(self.name,size=40,weight='bold')
         plt.xlabel("Time",size=20,weight='bold')
         plt.ylabel("Amplitude",size=20,weight='bold')
 
-        plt.plot(self.data,color='blue',label='waveform')
+        plt.plot(self.t,self.Xt,color='blue',label='X')
+        plt.plot(self.t,self.Yt,color='green',label='Y')
+        plt.plot(self.t,self.Zt,color='purple',label='Z')
+
+        plt.legend()
+        plt.tight_layout()
+        plt.grid()
+
+        if save == True:
+            saveName = self.path
+            plt.savefig(self.name+".png")
+        if show == True:
+            plt.show()
+
+    def PlotFreqSeries (self,save=False,show=True):
+        """ Visualize data attribute """
+        plt.figure(figsize=(12,8))
+        plt.title(self.name,size=40,weight='bold')
+        plt.xlabel("Frequency",size=20,weight='bold')
+        plt.ylabel("Amplitude",size=20,weight='bold')
+
+        plt.plot(self.f,self.Xf,color='blue',label='X')
+        plt.plot(self.f,self.Yf,color='green',label='Y')
+        plt.plot(self.f,self.Zf,color='purple',label='Z')
+
+        plt.legend()
         plt.tight_layout()
         plt.grid()
 

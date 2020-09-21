@@ -20,10 +20,16 @@ if __name__ == '__main__':
     try:
         readPath = sys.argv[1]
     except:
-        readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerTXT"
+        readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerTXT\\PER2TO10"
 
     Startup = utils.ProgramInitalizer(readPath)
-    for file in Startup.csvFiles:       # each csv
+    for file in Startup.csvFiles:
         file.ReadData()
+        file.ExtendArray(niters=2)
+        file.FourierTransform()
+
+        file.PlotTimeSeries()
+        file.PlotFreqSeries()
+
 
     print("=)")
