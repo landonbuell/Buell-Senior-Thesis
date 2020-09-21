@@ -45,8 +45,15 @@ for i = 1:length(files)                 % in each file:
     L = data(1,:);      % left audio track
     R = data(2,:);      % right audio track
     
-    outname = strrep(files(i).name,'.ff','');   % eliminate dynamic
-    outname = strrep(outname,'.stereo.aif',''); % fix extension
+    % Decontruct Input name
+    outname = strrep(filename,'_','.');    % eliminate underscore  
+    outname = strrep(outname,'-','');           % eliminate dashes
+    splitName = strsplit(outname,".");          % split string at '.'
+    inst = upper(char(splitName(1)));
+    
+    % Reconstruct Output name
+    outputName = strjoin(splitName(1,2:end-1),".");
+    outputName = char(strcat(inst,".",outputName,".wav"));
     
     left_outname = strcat(outname,'.L','.wav');
     right_outname = strcat(outname,'.R','.wav');

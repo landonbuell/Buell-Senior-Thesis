@@ -43,7 +43,7 @@ for i = 1:length(files)                 % in each file:
     %disp(size(data))
     
     % Decontruct Input name
-    outname = strrep(files(i).name,'_','.');    % eliminate underscore  
+    outname = strrep(filename,'_','.');    % eliminate underscore  
     outname = strrep(outname,'-','');           % eliminate dashes
     splitName = strsplit(outname,".");          % split string at '.'
     inst = upper(char(splitName(1)));

@@ -10,7 +10,7 @@ PHYS 799
 import numpy as np
 import os
 import sys
-import pandas
+import pandas as pd
 import matplotlib.pyplot as plt
 
         #### CLASS OBJECT DECLARATIONS ####
@@ -31,7 +31,9 @@ class FileObject :
 
     def ReadData (self):
         """ Read raw lines """
-        raise NotImplementedError()
+        self.data = pd.read_csv(self.path,sep="\t\t",
+                        header=2,index_col=0,dtype=np.float64)
+        return self
 
     def PlotWaveform (self,save=False,show=True):
         """ Visualize data attribute """
@@ -61,9 +63,9 @@ class ProgramInitalizer :
 
     def CollectFiles (self,exts='.txt'):
         """ Walk through Local Path and File all files w/ extension """
-        fileObjs = []
+        csvFiles = []
         for roots,dirs,files in os.walk(self.readpath):  
             for file in files:                  
                 if file.endswith(exts):  
-                    fileObjs.append(FileObject(os.path.join(roots,file)))
-        return fileObjs
+                    csvFiles.append(FileObject(os.path.join(roots,file)))
+        return csvFiles

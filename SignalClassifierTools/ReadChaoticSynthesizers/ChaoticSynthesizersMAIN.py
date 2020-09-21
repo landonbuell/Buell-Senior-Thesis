@@ -20,8 +20,10 @@ if __name__ == '__main__':
     try:
         readPath = sys.argv[1]
     except:
-        readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizer"
+        readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerTXT"
 
     Startup = utils.ProgramInitalizer(readPath)
+    for file in Startup.csvFiles:       # each csv
+        file.ReadData()
 
     print("=)")
