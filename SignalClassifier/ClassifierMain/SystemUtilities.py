@@ -42,7 +42,7 @@ class FileObject:
         """ Initialize Object Instance """
         # Directory & File Meta Data
         self.fullpath = datarow[0]              # set full file path
-        dir_tree = self.fullpath.split('/')     
+        dir_tree = self.fullpath.split('\\')     
         self.filename = dir_tree[-1]            # filename
         self.extension = "."+self.filename.split(".")[-1]
 
@@ -232,7 +232,7 @@ class ProgramInitializer:
         fileobjects = []                        # list of all file objects
         for file in self.files:                 # each CSV file
             fullpath = os.path.join(self.readpath,file) # make full path str
-            frame = pd.read_csv(fullpath,index_col=0)   # load in CSV
+            frame = pd.read_csv(fullpath,index_col=False)   # load in CSV
             frame = frame.to_numpy()                    # make np arr   
             for row in frame:                           # each row
                 # 'FileObject' class is defined above

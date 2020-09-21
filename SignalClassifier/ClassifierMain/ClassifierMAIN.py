@@ -43,7 +43,7 @@ if __name__ == '__main__':
     elif ProgramSetup.program_mode == 'train-predict':     
         ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
-                                            show_summary=False,groupSize=256,n_iters=1,testSize=0.1)
+                                            show_summary=False,groupSize=256,n_iters=2,testSize=0.1)
     elif ProgramSetup.program_mode == 'predict':
         ProgramMode = mode_utils.PredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timestart,exportpath=exportpath,
