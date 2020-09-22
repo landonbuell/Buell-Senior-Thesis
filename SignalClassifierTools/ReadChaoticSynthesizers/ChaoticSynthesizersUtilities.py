@@ -11,6 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import scipy.fftpack as fftpack
+import scipy.io.wavfile as sciowav
+import tensorflow as tf
 import os
 import sys
 
@@ -25,7 +27,8 @@ class FileObject :
     def __init__(self,filepath):
         """ Initialize FileObject Instance """
         self.path = filepath
-        self.name = self.path.split("\\")[-1]
+        self.filename = self.path.split("\\")[-1]
+        self.name = self.filename.split(".")[0]
 
     def __repr__(self):
         """ String Represenation of this Object """
@@ -56,7 +59,7 @@ class FileObject :
     def FourierTransform(self):
         """ Transform Wavefrom into Frequeny Domain """
         
-        self.f = fftpack.fftfreq(n=self.npts)
+        self.f = fftpack.fftfreq(n=self.npts,d=1/44100)
         self.Xf = np.abs(fftpack.fft(self.Xt,n=self.npts,axis=-1))**2
         self.Yf = np.abs(fftpack.fft(self.Yt,n=self.npts,axis=-1))**2
         self.Zf = np.abs(fftpack.fft(self.Zt,n=self.npts,axis=-1))**2
@@ -102,6 +105,19 @@ class FileObject :
             plt.savefig(self.name+".png")
         if show == True:
             plt.show()
+
+    def WriteWAVFile(self,path):
+        """ Write X,Y,Z axes as .wav files to path """
+        rate = 44100
+        self.Xt = self.Xt.reshape(-1,1)
+        self.Yt = self.Yt.reshape(-1,1)
+        self.Zt = self.Zt.reshape(-1,1)
+
+        tf.audio.encode_wav(self.Xt,rate,name=os.path.join(path,self.name+"X.wav"))
+        tf.audio.encode_wav(self.Yt,rate,name=os.path.join(path,self.name+"Y.wav"))
+        tf.audio.encode_wav(self.Zt,rate,name=os.path.join(path,self.name+"Z.wav"))
+
+        return self
 
 class ProgramInitalizer :
     """
