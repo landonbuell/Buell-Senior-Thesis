@@ -7,13 +7,19 @@
 
 
 \documentclass[12pt,letterpaper]{article}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{xcolor}
+
 \usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
 
 
@@ -72,6 +78,39 @@ The value of $x$ can also be index by layer, we call the array $x^{(l)}$ the \te
 f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
 \end{equation}
 The array of activations, $x^{(0)}$, is the raw input given the neural network, most commonly called \textit{features}. Conversely, the activations $x^{(L-1)}$ are commonly called the network \textit{output} \cite{Geron,James,Loy}.
+
+\begin{algorithm}[H]
+\caption{Forward propagation system in a standard deep neural network. Each iteration in the main \textit{for-loop} represents the execution of a layer, and passing the result to the "next" layer function. A practical application of this algorithm should include batches of samples instead of a single sample.
+\textcolor{red}{I will put this some place better soon! It is here for future placement}}
+\label{algFeedForward}
+
+\begin{algorithmic}
+\REQUIRE Network with $L$ layers - $0,1,2,....,L-2,L-1$
+\REQUIRE Set of weighting parameters - $W^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of bias parameters - $b^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of layer activation function - $a^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Input sample - $x^{(0)}$
+
+$Z = \{\} \leftarrow$ array to hold pre-activations \\
+$X = \{\} \leftarrow$ array to hold final activations
+
+\FOR {$l = 1,2,...,L-2,L-1$}
+	\item Compute pre-nonlinear activation
+	\item $z^{(l)} \leftarrow W^{(l)}x^{(l-1)} + b^{(l)}$
+	\item Apply activation function
+	\item $x^{(l)} \leftarrow a^{(l)}[z^{(l)}]$
+	\item Store values for later use in optimizer
+	\item $Z \leftarrow Z.add(z^{(l)})$
+	\item $X \leftarrow X.add(x^{(l)})$
+\ENDFOR
+
+\item Network final prediction is last object in 'act' array.
+\item $y^* \leftarrow x^{(L-1)} = X[-1]$
+\item Return the pre-nonlinear activations and final-nonlinear activations
+\RETURN $Z , X$
+
+\end{algorithmic}
+\end{algorithm}
 
 
 
@@ -149,10 +188,10 @@ Eqn. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense 
 
 \subsubsection{2-Dimensional Convolution Layer}
 
-\paragraph*{}Convolution layers emerged from studying the brain's visual cortex, and have been used from image recognition related tasks for around 40 years. \cite{Geron,Loy}). This layer get's it's name from it's implementation of the mathematical \textit{convolution} function. The 2D discrete-convolution of function $A(i,j)$ and $B(i,j)$ is given by \cite{Goodfellow}:
+\paragraph*{}Convolution layers emerged from studying the brain's visual cortex, and have been used from image recognition related tasks for around 40 years. \cite{Geron,Loy}). This layer get's it's name from it's implementation of the mathematical \textit{convolution} function. The 2D discrete-convolution of function or 2D array $A[i,j]$ and $B[i,j]$ is given by \cite{Goodfellow}:
 \begin{equation}
 \label{eqn-convolution}
-C(i,j) = (A * B)(i,j) = \sum_{u}\sum_{v} A(i,j)B(i - u,j - v)
+C[i,j] = (A * B)[i,j] = \sum_{u}\sum_{v} A[i,j]B[i - u,j - v]
 \end{equation}
 Note that convolution is commutative: $(A * B) = (B * A)$. We implement a convolutional layer $f^{(l)})$, by creating a series of $K$ weighting matrices, called \textit{filters}, each of size $m \times n$, where $m,n \in \mathbb{Z}$. Often we choose $m = n$ and call the shape the \textit{convolution kernel size} \cite{Loy, Goodfellow}.
 
@@ -230,6 +269,8 @@ The numerical value of each activation is left unchanged. For a layer with activ
 
 \subsubsection{1-Dimensional Concatenation Layer}
 
+\paragraph*{}The 1-Dimensional Concatenation Layer, also called 1D-Concat layer takes separate vectors of activations
+
 % ================================================================
 
 \subsection{Activation Functions Used in Network Layers}
@@ -239,6 +280,24 @@ The numerical value of each activation is left unchanged. For a layer with activ
 
 \subsubsection{Rectified Linear Unit}
 
+\paragraph*{}The Rectified Linear Unit (ReLU) activation function acts element-wise on the activations in a given layer. If the activation of a neurons is non-zero or non-negative, the value is untouched, otherwise a $0$ is returned. For an input activation $x$, ReLU is defined by:
+\begin{equation}
+\label{eqn-ReLU}
+\text{ReLU}\big[x\big] = \max\big(0,x\big) = \left\{
+\begin{array}{ll}
+    x & \text{if\hspace{0.5cm}} x > 0 \\
+    0 & \text{otherwise}
+\end{array} 
+\right.
+\end{equation}
+ReLU is only defined on a real domain. We provide a visualization of the function in fig. (\ref{fig-ReLU}).
+\begin{figure}[H]
+\label{fig-ReLU}
+\begin{center}
+\includegraphics[scale=0.2]{../Figures/RectifiedLinearUnit}
+\end{center}
+\caption{Rectifed Linear Unit (ReLU) activation function}
+\end{figure}
 
 
 \subsubsection{Softmax}
@@ -280,11 +339,123 @@ Each parameter is floating-point number, which is stored in a weight matrix $W^{
 In practice, this operation is performed over a batch of samples and an average is computed and used a \textit{batch loss} \cite{Goodfellow}.
 
 
-\subsubsection{The Optimizer}
+\subsubsection{Gradient Based Learning}
 
 \paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem.
 
-\paragraph*{}The general process of training
+\paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow described this \cite{Goodfellow}:
+\begin{quote}
+In most learning scenarios, we care about some performance measure $P$,... We reduce a different cost function, $J(\theta)$ in the hope that doing so will also imprvce $P$.
+\end{quote}
+By choosing an appropriate cost function, and selecting the parameters $\Theta$ that minimize the average cost over a data set, we also assume that doing so minimized the error in the performance $P$.
+
+\paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in eqn. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize with a gradient-based method. 
+
+\paragraph*{}We can reduce the cost given a set of paramaters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative of each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
+\begin{equation}
+\label{eqn-CostGradient}
+\nabla_{\Theta}\big[ J \big] = 
+\Big[ 	\frac{\partial J}{\partial W^{(0)}}, \frac{\partial J}{\partial b^{(0)}}, 
+		\frac{\partial J}{\partial W^{(1)}}, \frac{\partial J}{\partial b^{(1)}}, \hdots ,
+		\frac{\partial J}{\partial W^{(L-1)}}, \frac{\partial J}{\partial b^{(L-1)}} \Big]^T
+\end{equation}
+Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element in the $W^{(l)}$ matrix, and preserves the shape.
+
+\paragraph*{}Due to the nested composition of the network output in eqn. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through the neural network to compute the partial derivative with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron}. Below we detail an algorithm in pseudo-code to back-propagate through a fully-connected nueral network, such as the multilayer perceptron outlines in sec.(\ref{sec-NetworkStructre})
+
+\begin{algorithm}[H]
+\caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample}
+\label{algBackProp}
+
+\begin{algorithmic}
+\REQUIRE Cost/Objective function $J$ and learning rate $\alpha$
+\REQUIRE Set of weighting parameters - $W^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of bias parameters - $b^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of layer activation function - $a^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of layer activation function derivatives - $\partial a^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of pre-nonlinear activation - $Z^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of post-nonlinear activation - $X^{(i)}, i \in \{0,1,....,L-1\}$
+
+Execute forward pass in algorithm (\ref{algFeedForward}) and compute the gradient of the cost with respect to the final layer activations \\
+$dx \leftarrow \nabla_{(y^*)}J(y,y^*)$ \\
+Intialize $\nabla J$ as output object, should have same shape as $\Theta$
+
+\FOR {$L-1,L-2,...,2,1$}
+	\item Compute gradient w.r.t pre-nonlinear activation portion of layer function
+	\item $dx^{(l)} \leftarrow \nabla_{Z^{(l)}}J = dx^{(l)} \odot \partial a^{(l)}[ Z^{(l)} ]$
+	\item Compute gradient w.r.t weighting and bias elements
+	\item $db \leftarrow \nabla_{b^{(l)}}J = dx^{(l)}$
+	\item $dW \leftarrow \nabla_{W^{(l)}}J = dx^{(l)} \cdot X^{(l-1)}$
+
+	\item Add $db$ and $dW$ steps to $\nabla J$ object
+	\item $\nabla J = \nabla J .Add(dW,db)$
+\ENDFOR
+
+\item Return gradient w.r.t to each parameter in $\Theta$
+\RETURN $\nabla J$
+
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph*{}After (i) computing the gradient, we can scale is by a desired learning rate, $\alpha$ and (ii) add it element-wise to the exisitint elements in $\Theta$. By repeating steps (i) and (ii) in sucession, we gradually drive the cost function to produces consistently lower and lower values. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in eqn. (\ref{eqn-GradientLearning}).
+\begin{equation}
+\label{eqn-GradientLearning}
+\Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
+\end{equation}
+
+
+
+
+\subsubsection{The Optimizer}
+
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful variant of algorithms with an adaptive learning rate. It tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. As an extra step, ADAM also includes correction factors for both first order moments, and uses a combination of them to update the network parameters \cite{Geron,Goodfellow}. For a given iteration $(i)$, The ADAM update is given:
+\begin{equation}
+\label{eqn-ADAMupdate}
+\begin{split}
+s^{(i)} &= \rho_1 s^{(i-1)} + (1 - \rho_1) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
+r^{(i)} &= \rho_2 r^{(i-1)} + (1 - \rho_2) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \odot
+							\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
+s'^{(i)} &= \frac{s^{(i)}}{1-\rho_1^t} \\
+r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^t} \\
+\Theta^{(i)} &= \Theta^{(i-1)} + (-\alpha)\frac{s'^{(i)}}{\sqrt{r'^{(i)}}+\delta} \\
+\end{split}
+\end{equation}
+
+\paragraph*{}ADAM has experimentally shown to be a very powerful and robust optimizer useful for a wide range of tasks. Because of the two decay constants $\rho_1$ and $\rho_2$, we an compound and accumulate the values of past gradients to continue to push the cost to lower and lower values, even if the magnitude of the gradient becomes very small \cite{Geron}. 
+
+\begin{algorithm}[H]
+\caption{Adaptive-Moments (ADAM) optimizer for a neural network}
+\label{algAdaGrad}
+
+\begin{algorithmic}
+\REQUIRE Step size $\alpha$
+\REQUIRE Small constant $\delta$ for numerical stabilization, usually about $10^{-7}$.
+\REQUIRE constants $\rho_1$, $\rho_2$ used got exponential decay rates, usually $0.9$ and $0.999$ respectively.
+\REQUIRE Subroutine/function to compute gradient of cost function.
+\REQUIRE Mini-batch size, $m$
+\REQUIRE Stopping criterion $S$
+
+Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
+
+\WHILE {Stopping Criterion $S$ is \FALSE}
+	\item Extract a mini-batch of $m$ samples from larger data set $X$. $[x^{(0)},x^{(1)},...,x^{(m-1)}]$ and corresponding target values 
+	$[y^{(0)},y^{(1)},...,y^{(m-1)}]$.
+	\item Compute numerical gradient estimate of each sample in batch. This can be done with standard back-propagation in algorithm (\ref{algBackProp}) and 			 	normalize by batch size $m$:
+	\item $\nabla J \leftarrow \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]$
+	
+	\item Compute first bias moment: $s \leftarrow \rho_1 s + (1 - \rho_1) \nabla J$
+	\item Compute second bias moment: $r \leftarrow \rho_2 s + (1 - \rho_2) \nabla J \odot \nabla J$
+	\item First bias correction: $s' \leftarrow \frac{s}{1 - \rho_1^i}$
+	\item Second bias correction: $r' \leftarrow \frac{r}{1 - \rho_2^i}$
+	
+	\item Compute And Apply update:	$\Delta \Theta = (-\alpha) \frac{s'}{\sqrt{r'} + \delta}$
+	\item $\Theta = \Theta + \Delta \Theta$	
+	\item Update Iteration number: $i \leftarrow i + 1$
+\ENDWHILE
+
+\end{algorithmic}
+\end{algorithm}
+
 
 % ================================================================
 
@@ -293,9 +464,9 @@ In practice, this operation is performed over a batch of samples and an average 
 \subsection{Chosen Model Architecture}
 \label{sec-Architecture}
 
-\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textit{[See Section on Features]}, and constructed a neural network architecture to compliment these features.
+\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textcolor{blue}{See Section on Features}, and constructed a neural network architecture to compliment these features. From these two input arrays, one being a matrix and the other being a column-vector, we have produced a \textit{multimodal neural network}, that process the two inputs, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs.
 
-\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. This means that rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a produce of the same audio file sound wave, and thus share a common training label. Each of the two entry points feed into their own, non-related set of layer functions. The second-to-last layer, the outputs from both neural networks are concatenated into a single dense layer, which is then passed into the output layer, which contains $k$ neurons, one of reach unique class \cite{Loy,Geron}. A visual representation of this architecture can be found in fig. (\ref{fig-NetworkArchitecture}).
+\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in fig. (\ref{fig-NetworkArchitecture}).
 
 \begin{figure}[H]
 \label{fig-NetworkArchitecture}
@@ -309,7 +480,7 @@ In practice, this operation is performed over a batch of samples and an average 
 
 \subsubsection{The Spectrogram Branch}
 
-\paragraph*{}The spectrogram branch is pictured on the right side of fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olsen,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
+\paragraph*{}The spectrogram branch is pictured on the left side of fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olsen,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
 
 \paragraph*{}The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in each sample. As a model hyper-parameter, we have chosen each batch to contain $64$ samples. We have also chosen to truncate time and frequency axes (ii \& iii) to contain $560$ frequency bins, and $256$ time-frames. Each image also contains a single channel, which make it gray-scale when visualized. We can denote the 4D shape of the input object into this branch as:
 \begin{equation}
@@ -345,7 +516,7 @@ Again, any other shape will be rejected by the model, and an error is raised.
 
 \subsubsection{The Final Output Branch}
 
-\paragraph*{}
+\paragraph*{}The last layer in eachof the two branches is a ReLu-activated Dense layer containing 64 neurons. The activations are concatenated
 
 
 % ================================================================
