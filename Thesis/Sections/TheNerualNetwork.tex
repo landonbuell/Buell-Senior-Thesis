@@ -329,9 +329,9 @@ Each parameter is floating-point number, which is stored in a weight matrix $W^{
 
 \paragraph*{}Suppose we pass a training sample, given by the feature-vector $x^{(0)}$, with an expected outcome given by the vector $y$, into the neural network. After the network finishes processing, it's output activations are given by the vector $x^{(L-1)}$, also noted at $y^*$. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
 
-\paragraph*{}To quantify the difference between the model's prediction,m $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $\mathbb{J}(y^*,y)$, to the network \cite{Goodfellow,James}.The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single value, usually a floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
+\paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the network \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single value, usually a floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
 
-\paragraph*{}$\mathbb{J}(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use a \textit{Categorical Crossentropy} (CXE) cost function. For a single predictions sample, it is defined \cite{Goodfellow}:
+\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use a \textit{Categorical Crossentropy} (CXE) cost function. For a single predictions sample, it is defined \cite{Goodfellow}:
 \begin{equation}
 \label{eqn-CategoricalCrossentropy}
 \text{CXE}\big[ y^* , y \big] = - \sum_{i=0}^{k-1} y^*_i \log_{10}(y_i) 
@@ -408,7 +408,7 @@ Intialize $\nabla J$ as output object, should have same shape as $\Theta$
 
 \subsubsection{The Optimizer}
 
-\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful variant of algorithms with an adaptive learning rate. It tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. As an extra step, ADAM also includes correction factors for both first order moments, and uses a combination of them to update the network parameters \cite{Geron,Goodfellow}. For a given iteration $(i)$, The ADAM update is given:
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful variant of algorithms with an adaptive learning rate. It tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost. For a given iteration $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
