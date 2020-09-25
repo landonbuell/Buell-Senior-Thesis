@@ -298,9 +298,18 @@ ReLU is only defined on a real domain. We provide a visualization of the functio
 \end{center}
 \caption{Rectifed Linear Unit (ReLU) activation function}
 \end{figure}
+For our chosen architecture, ReLU is applied to the activations in every single Convolution layer and Dense Layer, with the exception of the output dense layer.
 
 
 \subsubsection{Softmax}
+
+\paragraph*{}The softmax activation function is commonly used in the output layer of a multi-class classification network, such as the one we implement. When softmax acts on a vector or activation, the result is a normalized,non-negative output vector. \cite{Geron,Goodfellow,Virtanen}. The $i$-th element in a softmax activation function is given by:
+\begin{equation}
+\label{eqn-Softmax}
+\text{Softmax}\big[ x \big]_{i} = \frac{1}{\sum_{j}e^{x_j}}e^{x_i}
+\end{equation}
+
+\paragraph*{}This function is only used in the output layer of a neural network, and encodes a discrete categorical probability. For example, if eqn.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
 
 
 % ================================================================
@@ -464,7 +473,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \subsection{Chosen Model Architecture}
 \label{sec-Architecture}
 
-\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textcolor{blue}{See Section on Features}, and constructed a neural network architecture to compliment these features. From these two input arrays, one being a matrix and the other being a column-vector, we have produced a \textit{multimodal neural network}, that process the two inputs, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs.
+\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, as well as a complementary architecture, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textcolor{blue}{See Section on Features}, and constructed a neural network architecture to coincide with these features. From these two input arrays, one being a matrix and the other being a column-vector, we have produced a \textit{multimodal neural network}, that process the two inputs, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs \textcolor{blue}{citation for multimodal networks}.
 
 \paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in fig. (\ref{fig-NetworkArchitecture}).
 
@@ -497,37 +506,30 @@ Any other shape will be rejected by the model, and an error is raised.
 \end{enumerate}  
 The Convolution layers convoluted over the middle two axes of the data (over space and time in the spectrogram). 
 
-\paragraph*{}By grouping layers in this structure, each of the $32$ filters passes over a $3 \times 3$ area, and then again. The result is 
+\paragraph*{}By grouping layers in this structure, we use the convolution  layers to reduce the number of features, and then the pooling layer to extract only the largest activations of the remianing features. This ensures that in the full spectrogram image, only the dominant features and feature shapes are preserved and passed into the next layer set for processing.
 
 % ================
 
 \subsubsection{The Perceptron Branch}
 
-\paragraph*{} The Perceptron branch is picture on the right side of fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties of a larger data set - in this case, each waveform. We call these properties \textit{features} \cite{Geron,Kahn,Virtanen}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
+\paragraph*{} The Perceptron branch is picture on the right side of fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Virtanen}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
 
-\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $23$ unique clssification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
+\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
 \label{eqn-shapeX2}
 X_2 \in \mathbb{R}^{(64 \times 20)}
 \end{equation}
-Again, any other shape will be rejected by the model, and an error is raised.
+This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other shape will be rejected by the model, and an error is raised.
+
+\paragraph*{}In perceptron models, scaling the design matrix appropriately drastically improves the classification performance. A design matrix is scaled by taking all samples in a column (a particular feature from each class), subtracting the average, and then scaling it such that it has unit variance \cite{Geron,James}. This ensures that no one feature dominates the performance of the model and that layer activations to not get saturated as data progresses through the network.
 
 % ================
 
 \subsubsection{The Final Output Branch}
 
-\paragraph*{}The last layer in eachof the two branches is a ReLu-activated Dense layer containing 64 neurons. The activations are concatenated
-
+\paragraph*{}The last layer in each of the two branches is a ReLU-activated Dense layer containing 64 neurons, represented by a $64 \times 1$ column vectors. We combine these model layers by using a \textit{concatenation layer} to fuse the two column vectors together, "vertically", such that the result is a $128 \times 1$ column vector. This vector is then passed into the final dense layer, which used the softmax activation, and encodes the joint predictions based on both model branches. 
 
 % ================================================================
-
-
-
-
-
-
-
-
 
 
 % ================================================================
