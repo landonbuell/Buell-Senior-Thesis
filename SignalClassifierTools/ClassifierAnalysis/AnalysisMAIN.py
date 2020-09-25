@@ -19,11 +19,11 @@ import AnalysisUtilities as utils
         
 if __name__ == '__main__':
 
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Instrument_Classifier_v0'
+    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
     export = os.path.join(parent,'Output-Data')
 
-    infiles = ['VISION@PREDICTIONS@2020-08-27_13.20.24.810306.csv']
-    n_classes = 25
+    infiles = ['JARVIS@PREDICTIONS@2020-09-21_02.41.33.904809.csv']
+    n_classes = 33
 
     for file in infiles:
         modelName = file.split("@")[0]

@@ -109,14 +109,12 @@ class FileObject :
     def WriteWAVFile(self,path):
         """ Write X,Y,Z axes as .wav files to path """
         rate = 44100
-        self.Xt = self.Xt.reshape(-1,1)
-        self.Yt = self.Yt.reshape(-1,1)
-        self.Zt = self.Zt.reshape(-1,1)
+        self.Xt = self.Xt.reshape(-1,1)/np.max(np.abs(self.Xt))
+        self.Yt = self.Yt.reshape(-1,1)/np.max(np.abs(self.Yt))
+        self.Zt = self.Zt.reshape(-1,1)/np.max(np.abs(self.Zt))
 
-        tf.audio.encode_wav(self.Xt,rate,name=os.path.join(path,self.name+"X.wav"))
-        tf.audio.encode_wav(self.Yt,rate,name=os.path.join(path,self.name+"Y.wav"))
-        tf.audio.encode_wav(self.Zt,rate,name=os.path.join(path,self.name+"Z.wav"))
-
+        
+        
         return self
 
 class ProgramInitalizer :

@@ -21,13 +21,13 @@ if __name__ == '__main__':
         readPath = sys.argv[1]
     except:
         readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerTXT\\PER2TO10"
-    writePath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerWAV"
+    writePath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerWAV\\PER2TO10"
 
     Startup = utils.ProgramInitalizer(readPath)
     for file in Startup.csvFiles:
         file.ReadData()
         file.ExtendArray(niters=7)
-        
+       
         #file.FourierTransform()
         #file.PlotTimeSeries()
         #file.PlotFreqSeries()

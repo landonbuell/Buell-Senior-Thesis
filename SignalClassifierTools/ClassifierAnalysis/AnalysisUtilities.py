@@ -70,14 +70,14 @@ class AnalyzeModels:
         
         self.ReadData()      
         confusion = tf.math.confusion_matrix(self.truth,self.predictions,self.n_classes)
-        self.PlotConfusion(confusion,self.modelName)
+        self.PlotConfusion(confusion,self.infile)
         return self
 
         #### FUNCTIONS DEFINITIONS ####
 
     def PlotConfusion(self,X,title,show=True):
         """ Plot Confusion Matrix """
-        plt.title(title,fontsize=40,weight='bold')
+        plt.title(title,fontsize=20,weight='bold')
         plt.imshow(X,cmap=plt.cm.binary)
         plt.xticks(np.arange(0,self.n_classes,1))
         plt.yticks(np.arange(0,self.n_classes,1))
