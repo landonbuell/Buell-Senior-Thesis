@@ -1,0 +1,46 @@
+\contentsline {section}{\numberline {1}Introduction}{3}%
+\contentsline {section}{\numberline {2}Methodology}{4}%
+\contentsline {subsection}{\numberline {2.1}Designing the Function}{4}%
+\contentsline {subsection}{\numberline {2.2}Collecting and Pre-processing Raw Data}{4}%
+\contentsline {subsection}{\numberline {2.3}Designing Classification Features}{4}%
+\contentsline {subsection}{\numberline {2.4}Designing A Complementary Network Architecture}{4}%
+\contentsline {subsection}{\numberline {2.5}Testing and Evaluating Network Performance}{5}%
+\contentsline {subsection}{\numberline {2.6}Running Predictions of Chaotic Synthesizer Files}{5}%
+\contentsline {section}{\numberline {3}The Neural Network}{6}%
+\contentsline {subsection}{\numberline {3.1}An Introduction to Neural Networks}{6}%
+\contentsline {subsection}{\numberline {3.2}The Structure of a Neural Network}{7}%
+\contentsline {subsection}{\numberline {3.3}Layers Used in Classification Neural Network}{8}%
+\contentsline {subsubsection}{\numberline {3.3.1}Dense Layer}{9}%
+\contentsline {subsubsection}{\numberline {3.3.2}2-Dimensional Convolution Layer}{10}%
+\contentsline {subsubsection}{\numberline {3.3.3}2-Dimensional Maximum Pooling Layer}{12}%
+\contentsline {subsubsection}{\numberline {3.3.4}1-Dimensional Flattening Layer}{12}%
+\contentsline {subsubsection}{\numberline {3.3.5}1-Dimensional Concatenation Layer}{13}%
+\contentsline {subsection}{\numberline {3.4}Activation Functions Used in Network Layers}{13}%
+\contentsline {subsubsection}{\numberline {3.4.1}Rectified Linear Unit}{13}%
+\contentsline {subsubsection}{\numberline {3.4.2}Softmax}{14}%
+\contentsline {subsection}{\numberline {3.5}Training a Neural Network}{14}%
+\contentsline {subsubsection}{\numberline {3.5.1}The Cost Function}{15}%
+\contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{15}%
+\contentsline {subsubsection}{\numberline {3.5.3}The Optimizer}{17}%
+\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{19}%
+\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{22}%
+\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{22}%
+\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{23}%
+\contentsline {section}{\numberline {4}Feature Selections}{23}%
+\contentsline {subsubsection}{\numberline {4.0.1}The Design Matrix}{25}%
+\contentsline {subsubsection}{\numberline {4.0.2}Audio Preprocessing}{25}%
+\contentsline {subsection}{\numberline {4.1}Spectrogram Feature}{26}%
+\contentsline {subsection}{\numberline {4.2}Time-Space Features}{29}%
+\contentsline {subsubsection}{\numberline {4.2.1}Time Domain Envelope}{29}%
+\contentsline {subsubsection}{\numberline {4.2.2}Zero Crossing Rate}{30}%
+\contentsline {subsubsection}{\numberline {4.2.3}Center of Mass}{30}%
+\contentsline {subsubsection}{\numberline {4.2.4}Auto Correlation Coefficients}{31}%
+\contentsline {subsection}{\numberline {4.3}Frequency-Space Features}{32}%
+\contentsline {subsubsection}{\numberline {4.3.1}Mel Frequency Cepstral Coefficients}{32}%
+\contentsline {subsubsection}{\numberline {4.3.2}Center of Mass}{33}%
+\contentsline {section}{\numberline {5}Evaluating Performance}{33}%
+\contentsline {subsection}{\numberline {5.1}Cross Validation}{34}%
+\contentsline {subsection}{\numberline {5.2}Performance Metrics}{35}%
+\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{35}%
+\contentsline {subsubsection}{\numberline {5.2.2}Precision Score}{36}%
+\contentsline {subsubsection}{\numberline {5.2.3}Recall Score}{36}%
