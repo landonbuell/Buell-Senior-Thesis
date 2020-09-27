@@ -11,6 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>ClassifierMain</Name>
     <RootNamespace>ClassifierMain</RootNamespace>
+    <InterpreterId>
+    </InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

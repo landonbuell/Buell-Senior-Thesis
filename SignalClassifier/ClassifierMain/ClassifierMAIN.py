@@ -8,7 +8,6 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import os
-import sys
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import ModeUtilities as mode_utils

@@ -64,7 +64,7 @@ class ProgramMode:
     def ScaleData (self,matrixObj):
         """ Scale Design Matrix 'X' for processing """
         X = matrixObj.__Get_X__()           # get raw data
-        self.Scaler.partial_fit(X,y=None)   # fit te matrix
+        self.Scaler.partial_fit(X,y=None)   # fit the matrix
         X_new = self.Scaler.transform(X)    # scale & return
         matrixObj.SetMatrixData(X_new)      # set as attrb
         return matrixObj                    # retuen updaed inst.
