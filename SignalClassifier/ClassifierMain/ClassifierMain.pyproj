@@ -11,8 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>ClassifierMain</Name>
     <RootNamespace>ClassifierMain</RootNamespace>
-    <InterpreterId>
-    </InterpreterId>
+    <InterpreterId>Global|VisualStudio|ClassifierPyEnv (Python 3.8 (64-bit))</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +30,9 @@
     <Compile Include="NeuralNetworkUtilities.py" />
     <Compile Include="PlottingUtilities.py" />
     <Compile Include="SystemUtilities.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|VisualStudio|ClassifierPyEnv (Python 3.8 (64-bit))" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

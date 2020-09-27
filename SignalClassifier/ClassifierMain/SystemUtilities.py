@@ -120,32 +120,20 @@ class ProgramInitializer:
     """
     Object to handle all program preprocessing
     --------------------------------
-    readpath (str) : Local path nagivating to where data is stored
-    modelpath (str) : Local path to store data related to Nerual network Models
-    exportpath (str) : Local path to export final information
+    pathList (list) : List of Local Directory paths - 
+        [*readpath - training data index, *modelpath - Store models here,
+            *exportPath - 
     mode (str) : String indicating which mode to execute program with
     newmodels (bool): If True, create new Nueral Network Models
     --------------------------------
     Return Instantiated Program Start Class Instance
     """
 
-    def __init__(self,readpath=None,modelpath=None,exportpath=None,
-                 mode=None,newmodels=None):
+    def __init__(self,pathList=None,mode=None,newmodels=None):
         """ Initialize Class Object Instance """
         dt_obj = datetime.datetime.now()
         self.starttime = dt_obj.isoformat(sep='_',timespec='auto').replace(':','.')
         print("Time Stamp:",self.starttime)
-        # If arguments given:
-        if readpath is not None:
-            self.readpath = readpath
-        if modelpath is not None: 
-            self.modelpath = modelpath
-        if exportpath is not None:
-            self.exportpath = exportpath
-        if mode is not None:
-            self.program_mode = mode
-        if newmodels is not None:
-            self.new_models = newmodels
         try:
             inputArgs = self.Argument_Parser() # Parse Input args
             self.readpath  = inputArgs[0]      # Data files kept here 

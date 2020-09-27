@@ -21,7 +21,7 @@ NeuralNetworkModels.py - "Neural Network Models"
 
             #### VARIABLE DECLARATIONS ####
 
-modelName = "JARVIS"
+modelName = "InDevCLF"
 inputShapeMLP = (20,)
 inputShapeCNN = (560,256,1)
 
