@@ -4,6 +4,8 @@ function newSignal = ExtendWaveform(rawSignal,N)
 %       N (int): Number of time to append a waveform to itself
 
 newSignal = reshape(rawSignal,1,[]);
+newSignal = newSignal - mean(newSignal);
+newSignal = newSignal * max(abs(newSignal));
 
 for i = 1:N
    newSignal = [newSignal,newSignal];
