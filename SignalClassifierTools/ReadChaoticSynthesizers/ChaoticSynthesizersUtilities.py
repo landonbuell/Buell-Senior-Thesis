@@ -8,129 +8,41 @@ PHYS 799
         #### IMPORTS ####
 
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-import scipy.fftpack as fftpack
-import scipy.io.wavfile as sciowav
-import tensorflow as tf
 import os
 import sys
 
 
         #### CLASS OBJECT DECLARATIONS ####
 
-class FileObject :
-    """
-    Create an object Instance to contain all data from chaotic synthesizer audio
-    """
-
-    def __init__(self,filepath):
-        """ Initialize FileObject Instance """
-        self.path = filepath
-        self.filename = self.path.split("\\")[-1]
-        self.name = self.filename.split(".")[0]
-
-    def __repr__(self):
-        """ String Represenation of this Object """
-        return "\nFileObject Located at:\n\t" + self.path
-
-    def ReadData (self):
-        """ Read raw txt file data """
-        cols = ["X","Y","Z"]
-        data = np.loadtxt(self.path,dtype=str,
-                comments="%",delimiter=None,skiprows=2,unpack=True)
-        self.t = data[0].astype(np.uint16)
-        self.Xt = data[1].astype(np.float64)
-        self.Yt = data[2].astype(np.float64)
-        self.Zt = data[3].astype(np.float64)
-        self.npts = len(self.t)
-        return self
-
-    def ExtendArray(self,niters):
-        """ Extend Each Time Series array with itself """
-        for i in range(0,niters):
-            self.Xt = np.append(self.Xt,self.Xt)
-            self.Yt = np.append(self.Yt,self.Yt)
-            self.Zt = np.append(self.Zt,self.Zt)
-        self.t = np.arange(len(self.Xt))
-        self.npts = len(self.t)
-        return self
-
-    def FourierTransform(self):
-        """ Transform Wavefrom into Frequeny Domain """
-        
-        self.f = fftpack.fftfreq(n=self.npts,d=1/44100)
-        self.Xf = np.abs(fftpack.fft(self.Xt,n=self.npts,axis=-1))**2
-        self.Yf = np.abs(fftpack.fft(self.Yt,n=self.npts,axis=-1))**2
-        self.Zf = np.abs(fftpack.fft(self.Zt,n=self.npts,axis=-1))**2
-
-    def PlotTimeSeries (self,save=False,show=True):
-        """ Visualize data attribute """
-        plt.figure(figsize=(12,8))
-        plt.title(self.name,size=40,weight='bold')
-        plt.xlabel("Time",size=20,weight='bold')
-        plt.ylabel("Amplitude",size=20,weight='bold')
-
-        plt.plot(self.t,self.Xt,color='blue',label='X')
-        plt.plot(self.t,self.Yt,color='green',label='Y')
-        plt.plot(self.t,self.Zt,color='purple',label='Z')
-
-        plt.legend()
-        plt.tight_layout()
-        plt.grid()
-
-        if save == True:
-            saveName = self.path
-            plt.savefig(self.name+".png")
-        if show == True:
-            plt.show()
-
-    def PlotFreqSeries (self,save=False,show=True):
-        """ Visualize data attribute """
-        plt.figure(figsize=(12,8))
-        plt.title(self.name,size=40,weight='bold')
-        plt.xlabel("Frequency",size=20,weight='bold')
-        plt.ylabel("Amplitude",size=20,weight='bold')
-
-        plt.plot(self.f,self.Xf,color='blue',label='X')
-        plt.plot(self.f,self.Yf,color='green',label='Y')
-        plt.plot(self.f,self.Zf,color='purple',label='Z')
-
-        plt.legend()
-        plt.tight_layout()
-        plt.grid()
-
-        if save == True:
-            saveName = self.path
-            plt.savefig(self.name+".png")
-        if show == True:
-            plt.show()
-
-    def WriteWAVFile(self,path):
-        """ Write X,Y,Z axes as .wav files to path """
-        rate = 44100
-        self.Xt = self.Xt.reshape(-1,1)/np.max(np.abs(self.Xt))
-        self.Yt = self.Yt.reshape(-1,1)/np.max(np.abs(self.Yt))
-        self.Zt = self.Zt.reshape(-1,1)/np.max(np.abs(self.Zt))
-
-        
-        
-        return self
 
 class ProgramInitalizer :
     """
     Initialize Program and Preprocess all data 
     """
-    def __init__(self,readpath):
+    def __init__(self,readpath,outpath):
         """ Initilize ProgramInitializer Instance """
         self.readpath = readpath
-        self.csvFiles = self.CollectFiles()
+        self.writePath = outpath
 
-    def CollectFiles (self,exts='.txt'):
+    def CollectFiles (self,exts='.wav'):
         """ Walk through Local Path and File all files w/ extension """
-        csvFiles = []
+        self.csvFiles = []
         for roots,dirs,files in os.walk(self.readpath):  
             for file in files:                  
                 if file.endswith(exts):  
-                    csvFiles.append(FileObject(os.path.join(roots,file)))
-        return csvFiles
+                    filePath = os.path.join(roots,file)
+                    self.csvFiles.append(filePath)
+        return self
+
+    def CreateFrame(self):
+        """ Intialize OutputFrame """
+        cols = ["Full Path"]
+        self.frame = pd.DataFrame(data=self.csvFiles,columns=cols)
+        self.frame.to_csv(self.writePath,index=False)
+        return self
+
+    def __Call__(self):
+        """ Call This Program Instance """
+        self.CollectFiles()
+        self.CreateFrame()

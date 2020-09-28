@@ -19,20 +19,20 @@ import NeuralNetworkUtilities as NN_utils
 if __name__ == '__main__':
        
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
-    read = os.path.join(parent,'Target-Data')
+    read = os.path.join(parent,'ChaoticSynth-Data')
     model = os.path.join(parent,'Model-Data')
     export = os.path.join(parent,'Output-Data')
     modelName = "ChaoticSynthClassifier"
 
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],'train',True)    
+    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],'predict',False)    
     FILEOBJECTS,N_classes = ProgramSetup.__Call__()
     exportPath = ProgramSetup.exportPath
     timeStart = ProgramSetup.starttime
 
     # SETUP NEURAL NETWORK MODELS
     NeuralNetwork = NN_utils.NetworkContainer(modelName,N_classes,ProgramSetup.modelPath,
-                        NN_utils.inputShapeCNN,NN_utils.inputShapeMLP,ProgramSetup.newModels)
+                        NN_utils.inputShapeCNN,NN_utils.inputShapeMLP,new=ProgramSetup.newModels)
     
     # DETERMINE WHICH MODE TO RUN PROGRAM
     if ProgramSetup.programMode == 'train':

@@ -7,7 +7,6 @@ PHYS 799
 
         #### IMPORTS ####
 
-import numpy as np
 import os
 import sys
 import ChaoticSynthesizersUtilities as utils
@@ -20,18 +19,14 @@ if __name__ == '__main__':
     try:
         readPath = sys.argv[1]
     except:
-        readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerTXT\\PER2TO10"
-    writePath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerWAV\\PER2TO10"
-
-    Startup = utils.ProgramInitalizer(readPath)
-    for file in Startup.csvFiles:
-        file.ReadData()
-        file.ExtendArray(niters=7)
-       
-        #file.FourierTransform()
-        #file.PlotTimeSeries()
-        #file.PlotFreqSeries()
-
-        file.WriteWAVFile(writePath)
+        readPath = "C:\\Users\\Landon\\Documents\\audioChaoticSynthesizerWAV\\PER2TO10"
+    
+    # Establish Output Path
+    outputName = readPath.split("\\")[-1]+".csv"
+    writePath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\ChaoticSynth-Data"
+    writePath = os.path.join(writePath,outputName)
+    
+    Program = utils.ProgramInitalizer(readPath,writePath)
+    Program.__Call__()
 
     print("=)")

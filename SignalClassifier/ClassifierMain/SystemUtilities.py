@@ -144,11 +144,13 @@ class ProgramInitializer:
     Return Instantiated Program Start Class Instance
     """
 
-    def __init__(self,pathList=None,mode=None,newmodels=None):
+    def __init__(self,pathList=None,mode=None,newModels=None):
         """ Initialize Class Object Instance """
         dt_obj = datetime.datetime.now()
         self.starttime = dt_obj.isoformat(sep='_',timespec='auto').replace(':','.')
         print("Time Stamp:",self.starttime)
+        self.programMode = mode
+        self.newModels = newModels
         try:
             inputArgs = self.Argument_Parser()  # Parse Input args
             self.readPath  = inputArgs[0]       # Data files kept here 
@@ -159,10 +161,9 @@ class ProgramInitializer:
         except:
             self.readPath = pathList[0]
             self.modelPath =  pathList[1]
-            self.exportPath = pathList[2]
-            self.programMode = "train-predict"
-            self.newModels = True
+            self.exportPath = pathList[2]  
         assert self.programMode in ['train','train-predict','predict']
+        assert self.newModels in [True,False]
 
         if (self.programMode == 'predict') and (self.newModels == True):
             print("\n\tERROR! -  Cannot run predictions on Untrained Models!")

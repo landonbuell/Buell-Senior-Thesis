@@ -55,6 +55,7 @@ class NetworkContainer:
         else:                                   # load exisitng networks
            self.MODEL = self.LoadExistingModel()# load model
            self.n_classes = self.MODEL.get_layer(index=-1).output_shape[-1]
+           print("\t\tUPDATE: Found",self.n_classes,"classes to sort")
         assert self.n_classes is not None       # make sure we know how many classes
 
     def __repr__(self):

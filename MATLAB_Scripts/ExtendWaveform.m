@@ -5,7 +5,7 @@ function newSignal = ExtendWaveform(rawSignal,N)
 
 newSignal = reshape(rawSignal,1,[]);
 newSignal = newSignal - mean(newSignal);
-newSignal = newSignal * max(abs(newSignal));
+newSignal = newSignal / max(abs(newSignal));
 
 for i = 1:N
    newSignal = [newSignal,newSignal];
