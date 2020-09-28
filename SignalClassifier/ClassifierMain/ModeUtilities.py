@@ -184,8 +184,8 @@ class TrainMode (ProgramMode):
         
 class PredictMode (ProgramMode):
     """
-    Run Program in 'Test Mode'
-        Inherits from 'Program_Mode' parent class
+    Run Program in 'Predict Mode'
+        Inherits from 'ProgramMode' parent class
     --------------------------------
     FILEOBJS (iter) : List-like of File_object instances
     modelName (str) : user-ID-able string to indicate model

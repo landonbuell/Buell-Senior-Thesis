@@ -21,9 +21,10 @@ NeuralNetworkModels.py - "Neural Network Models"
 
             #### VARIABLE DECLARATIONS ####
 
-modelName = "InDevCLF"
 inputShapeMLP = (20,)
 inputShapeCNN = (560,256,1)
+
+            #### NEURAL NETWORK OBJECTS ####
 
 class NetworkContainer:
     """
@@ -58,7 +59,8 @@ class NetworkContainer:
 
     def __repr__(self):
         """ Return string representation of NetworkContainer Class """
-        return "-"
+        return "Neural Network Contained Object Instance\n" + \
+                "\tContains Mutli-Modal Network, Wrappers to Save and Load Parameters"
         
     def CreateNewModel (self):
         """
@@ -104,18 +106,17 @@ class NetworkContainer:
             raise FileNotFoundError()
         return self
 
-
-class NullLayer (keras.layers.Layer):
+class IdentityLayer (keras.layers.Layer):
     """
-    Null Layer for Neural network, does nothing
+    Identity Layer for Neural network, does nothing
     """
     def __init__(self,name):
         """ Initialize Class Object Instance """
-        super(NullLayer,self).__init__(trainable=False,name=name)
+        super().__init__(trainable=False,name=name)
 
     def __repr__(self):
         """ Return string representation of NullLayer Class """
-        return "NullLayer Class returns unmodifed input 'X' "
+        return "IndentityLayer Class returns unmodifed input 'X' "
 
     def Call (self,X):
         """ Call Null Layer Object """
@@ -142,7 +143,7 @@ class NeuralNetworkModels:
         return un-complied MLP model
         """
         networkInput = keras.layers.Input(shape=inputShape,name='inputMLP')
-        x = NullLayer(name='N1_')(networkInput)
+        x = IdentityLayer(name='N1_')(networkInput)
         for i,nodes in enumerate(neurons):
             x = keras.layers.Dense(units=nodes,activation='relu',
                                    name='D'+str(i+1)+'_')(x)
@@ -165,7 +166,7 @@ class NeuralNetworkModels:
         """
         assert len(filterSizes) == len(kernelSizes)
         networkInput = keras.layers.Input(shape=inputShape,name="inputCNN")
-        x = NullLayer(name='N1')(networkInput)
+        x = IdentityLayer(name='N1')(networkInput)
         for i,(filters,kernel,pool) in enumerate(zip(filterSizes,kernelSizes,poolSizes)):
             x = keras.layers.Conv2D(filters=filters,kernel_size=(kernel),activation='relu',name='C'+str(i+1)+'A')(x)
             x = keras.layers.Conv2D(filters=filters,kernel_size=(kernel),activation='relu',name='C'+str(i+1)+'B')(x)

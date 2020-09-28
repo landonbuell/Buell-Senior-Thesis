@@ -286,6 +286,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         Z /= self.npts              # pts in FFT
         return Z                    # return Axis
 
+
     def MelFilters (self,n_filters):
         """ 
         Compute the first 'm' Mel Frequency Ceptral Coefficients 

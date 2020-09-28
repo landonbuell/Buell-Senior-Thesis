@@ -70,6 +70,10 @@ class DesignMatrix:
         self.X = self.X.reshape(self.n_samples,new_shape[0],new_shape[1],1)
         return self                         # return new instance
 
+    def _Pad2D (self,newShape):
+        """ Zero-Pad or crop 2D samples to meet shape """
+        raise NotImplementedError()
+
     def ShapeBySample (self,shape=None):
         """ Reshape design matrix by number of samples """
         if shape:
@@ -179,9 +183,3 @@ class ModelAnalysis:
         self.truth = self.data['Label']     # get label column
         for model in self.model_names:      # each model
             self.model_metrics(model)       # compute metrics
-
-
-    
-
-
-            

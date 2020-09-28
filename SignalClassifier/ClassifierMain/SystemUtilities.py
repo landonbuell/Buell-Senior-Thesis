@@ -86,6 +86,11 @@ class FileObject:
 class OutputStructure :
     """
     Data Structure to Store and Output History or Prediction arrays
+    --------------------------------
+    programMode (str) : Current Program Execution Model
+    exportPath (str) : Local path where structure is exported to
+    --------------------------------
+    Return Instantiated output Structure Class
     """
 
     def __init__(self,programMode,exportPath):
@@ -113,6 +118,16 @@ class OutputStructure :
         frame.to_csv(path_or_buf=self.exportPath,columns=self.cols,
                      header=False,mode='a') # append the output frame
         return self
+
+class CategoryDictionary :
+    """
+    Category Dictionary Maps an integer class to string class
+        and vice-versa
+    """
+
+    def __init__(self):
+        """ Intitialize CategoryDictionary Instance """
+        raise NotImplementedError()
         
             #### PROGRAM PROCESSING CLASS ####
 
@@ -121,8 +136,8 @@ class ProgramInitializer:
     Object to handle all program preprocessing
     --------------------------------
     pathList (list) : List of Local Directory paths - 
-        [*readpath - training data index, *modelpath - Store models here,
-            *exportPath - 
+        [*readPath - training data index, *modelpath - Store models here,
+            *exportPath - predictions / traing data are exported to
     mode (str) : String indicating which mode to execute program with
     newmodels (bool): If True, create new Nueral Network Models
     --------------------------------
@@ -135,17 +150,21 @@ class ProgramInitializer:
         self.starttime = dt_obj.isoformat(sep='_',timespec='auto').replace(':','.')
         print("Time Stamp:",self.starttime)
         try:
-            inputArgs = self.Argument_Parser() # Parse Input args
-            self.readpath  = inputArgs[0]      # Data files kept here 
-            self.modelpath = inputArgs[1]      # store Network Model data
-            self.exportpath = inputArgs[2]     # store network output
-            self.program_mode = inputArgs[3]   # set program mode
-            self.new_models = inputArgs[4]     # create new models?
+            inputArgs = self.Argument_Parser()  # Parse Input args
+            self.readPath  = inputArgs[0]       # Data files kept here 
+            self.modelPath = inputArgs[1]       # store Network Model data
+            self.exportPath = inputArgs[2]      # store network output
+            self.programMode = inputArgs[3]     # set program mode
+            self.newModels = inputArgs[4]       # create new models?
         except:
-            pass
-        assert self.program_mode in ['train','train-predict','predict']
+            self.readPath = pathList[0]
+            self.modelPath =  pathList[1]
+            self.exportPath = pathList[2]
+            self.programMode = "train-predict"
+            self.newModels = True
+        assert self.programMode in ['train','train-predict','predict']
 
-        if (self.program_mode == 'predict') and (self.new_models == True):
+        if (self.programMode == 'predict') and (self.newModels == True):
             print("\n\tERROR! -  Cannot run predictions on Untrained Models!")
             raise BaseException()
 
@@ -158,7 +177,7 @@ class ProgramInitializer:
         self.files = self.CollectCSVFiles()        # find CSV files
         fileobjects = self.CreateFileobjs()    # file all files
         self.n_files = len(fileobjects)        
-        if self.program_mode in ['train','train-predict']:
+        if self.programMode in ['train','train-predict']:
             self.n_classes = self.GetNClasses(fileobjects)
         else:
             self.n_classes = None
@@ -170,17 +189,17 @@ class ProgramInitializer:
     def StartupMesseges (self):
         """ Print out Start up messeges to Console """
         print("Running Main Program.....")
-        print("\tCollecting data from:",self.readpath)
-        print("\tStoring/Loading models from:",self.modelpath)
-        print("\tExporting Predictions to:",self.exportpath)
-        print("\tCreating new models?",self.new_models)
+        print("\tCollecting data from:",self.readPath)
+        print("\tStoring/Loading models from:",self.modelPath)
+        print("\tExporting Predictions to:",self.exportPath)
+        print("\tCreating new models?",self.newModels)
         print("\t\tFound",self.n_files,"files to read")
         print("\t\tFound",self.n_classes,"classes to sort")
         print("\n")
 
     def ArgumentParser(self):
         """ Process Command Line Arguments """
-        parser = argparse.ArgumentParser(prog='Instrument Classifier v0',
+        parser = argparse.ArgumentParser(prog='SignalClassifier',
                                          usage='Classify .WAV files by using pre-exisiting classifiered samples.',
                                          description="\n\t CLI Help for Instrument Classifier Program:",
                                          add_help=True)
@@ -204,12 +223,12 @@ class ProgramInitializer:
         # Parse and return args
         args = parser.parse_args()
         return [args.data_path,args.model_path,args.export_path,
-                args.program_mode,args.new_models]
+                args.programMode,args.newModels]
 
     def CollectCSVFiles (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
         csv_files = []
-        for roots,dirs,files in os.walk(self.readpath):  
+        for roots,dirs,files in os.walk(self.readPath):  
             for file in files:                  
                 if file.endswith(exts):       
                     csv_files.append(file)
@@ -219,7 +238,7 @@ class ProgramInitializer:
         """ Create list of File Objects """
         fileobjects = []                        # list of all file objects
         for file in self.files:                 # each CSV file
-            fullpath = os.path.join(self.readpath,file) # make full path str
+            fullpath = os.path.join(self.readPath,file) # make full path str
             frame = pd.read_csv(fullpath,index_col=False)   # load in CSV
             frame = frame.to_numpy()                    # make np arr   
             for row in frame:                           # each row
@@ -237,19 +256,4 @@ class ProgramInitializer:
         except Exception:           # failure?
             return None             # no classes?
 
-    def ValidateDirectories (must_exist=[],must_create=[]):
-        """
-        Check in passed directories are valid for program execution
-        --------------------------------
-        must (str) : Path and name of file containing rows of {name,target} pairs.
-        extr_path (str) :  Path to store intermediate file data
-        --------------------------------
-        Return True, Terminate if fail ir
-        """
-        for path in must_exist:                 # paths that must exisit
-            if os.path.isdir(path) == False:    # not not dir:
-                print("\n\tERROR! - Cannot Locate:\n\t\t",path)
-        for path in must_create:                # path that must create
-            os.makedirs(path,exist_ok=True)     # create path
-        return None
 
