@@ -44,3 +44,6 @@
 \contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{35}%
 \contentsline {subsubsection}{\numberline {5.2.2}Precision Score}{36}%
 \contentsline {subsubsection}{\numberline {5.2.3}Recall Score}{36}%
+\contentsline {section}{\numberline {6}Experimental Results}{37}%
+\contentsline {section}{\numberline {7}Conclusion}{38}%
+\contentsline {section}{\numberline {8}Acknowledgments}{39}%
