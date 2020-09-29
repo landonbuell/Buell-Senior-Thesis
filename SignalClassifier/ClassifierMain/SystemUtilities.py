@@ -46,11 +46,15 @@ class FileObject:
         self.filename = dir_tree[-1]            # filename
         self.extension = "."+self.filename.split(".")[-1]
 
-        # Set Target for this File
+        # Set Target Int/Str for this File
         try:
-            self.target = int(datarow[1])   # target as int           
+            self.targetInt = int(datarow[1])    # target as int             
         except:
-            self.target = None              # no label
+            self.targetInt = None    # unknown int
+        try:
+            self.targetStr = str(datarow[2])    # target as str
+        except:
+            self.targetStr = None    # unknown str
         
     def AssignTarget (self,target):
         """ Assign Target value to instance """
@@ -125,10 +129,56 @@ class CategoryDictionary :
         and vice-versa
     """
 
-    def __init__(self):
+    def __init__(self,localPath,modelName):
         """ Intitialize CategoryDictionary Instance """
+        self.localPath = localPath
+        self.modelName = modelName
+        self.fileName = modelName+"Categories.csv"
+        self.filePath = os.path.join(self.localPath,self.fileName)
+
+    def __Call__(self,newModel,fileObjs):
+        """ Run Category Encode / Decode Dictionary """
+        if newModel == True:        
+            # A new Model is created, Overwrite existing File
+            print("\t\tBuilding new Encode/Decode Dictionary...")
+            self.encoder,self.decoder = self.BuildCategories(fileObjs)
+            self.ExportCategories()
+        else:
+            # Check if the encoder / Decoder Exists:
+            if os.path.isfile(self.filePath) == True:
+                print("\t\tFound Encode/Decode Dictionary")
+                # the file exists, load it as enc/dec dict
+                self.encoder,self.decoder = self.LoadCategories()
+            else:
+                # File does not exists, make a new Dictionary
+                print("\t\tCount not fine Encode/Decode Dictionary, building new")
+                self.encoder,self.decoder = self.BuildCategories(fileObjs)
+                self.ExportCategories()
+        return self
+
+    def LoadCategories (self):
+        """ Load File to Match Int Class to Str Class """
+        data = pd.read_csv(self.fileName,header=0,usecols=[1,2])
         raise NotImplementedError()
-        
+        return None,None
+
+    def ExportCategories (self):
+        """ Export Decode Dictionary (Int -> Str) """
+        raise NotImplementedError()
+        return self
+
+    def BuildCategories (self,fileObjs):
+        """ Construct Dictionary to map STR -> INT """
+        encoder = {}            # empty enc dict
+        decoder = {}            # empty dec dict
+        targetInts = [x.targetInt for x in fileObjs]
+        targetStrs = [x.targetStr for x in fileObjs]
+        for x,y in zip(targetInts,targetStrs):
+            if x not in encoder.keys():     
+                decoder.update({x:y})   # add int : str pair
+                encoder.update({y:x})   # add str : int pair
+        return encoder,decoder
+             
             #### PROGRAM PROCESSING CLASS ####
 
 class ProgramInitializer:
@@ -144,29 +194,35 @@ class ProgramInitializer:
     Return Instantiated Program Start Class Instance
     """
 
-    def __init__(self,pathList=None,mode=None,newModels=None):
+    def __init__(self,pathList=[None,None,None],mode=None,
+                 modelName=None,newModel=None):
         """ Initialize Class Object Instance """
         dt_obj = datetime.datetime.now()
-        self.starttime = dt_obj.isoformat(sep='_',timespec='auto').replace(':','.')
+        self.starttime = \
+            dt_obj.isoformat(sep='.',timespec='auto').replace(':','.').replace('-','.')
         print("Time Stamp:",self.starttime)
         self.programMode = mode
-        self.newModels = newModels
+        self.newModel = newModel
+        self.modelName = modelName
         try:
-            inputArgs = self.Argument_Parser()  # Parse Input args
+            inputArgs = self.ArgumentParser()   # Parse Input args
             self.readPath  = inputArgs[0]       # Data files kept here 
             self.modelPath = inputArgs[1]       # store Network Model data
             self.exportPath = inputArgs[2]      # store network output
             self.programMode = inputArgs[3]     # set program mode
-            self.newModels = inputArgs[4]       # create new models?
+            self.modelName = inputArgs[4]       # name to use
+            self.newModel = inputArgs[5]        # create new model?         
         except:
             self.readPath = pathList[0]
             self.modelPath =  pathList[1]
             self.exportPath = pathList[2]  
+        # Ensure that all variables make sense
         assert self.programMode in ['train','train-predict','predict']
-        assert self.newModels in [True,False]
+        assert self.newModel in [True,False]
+        assert modelName is not None
 
-        if (self.programMode == 'predict') and (self.newModels == True):
-            print("\n\tERROR! -  Cannot run predictions on Untrained Models!")
+        if (self.programMode == 'predict') and (self.newModel == True):
+            print("\n\tERROR! -  Cannot run predictions on an untrained (new) Model!")
             raise BaseException()
 
     def __repr__(self):
@@ -175,28 +231,48 @@ class ProgramInitializer:
 
     def __Call__(self):
         """ Run Program Start Up Processes """        
-        self.files = self.CollectCSVFiles()        # find CSV files
-        fileobjects = self.CreateFileobjs()    # file all files
-        self.n_files = len(fileobjects)        
+        self.files = self.CollectCSVFiles()     # find CSV files
+        fileObjects = self.CreateFileobjs()     # file all files
+        self.n_files = len(fileObjects)         # get number of files
+        
+        # Construct Encoder / Decoder Dictionaries
+        self.categories = CategoryDictionary(self.modelPath,self.modelName)
+        self.categories.__Call__(self.newModel,fileObjects)
+
+        # Find Number of Classes
         if self.programMode in ['train','train-predict']:
-            self.n_classes = self.GetNClasses(fileobjects)
+            self.n_classes = self.GetNClasses(fileObjects)  
         else:
-            self.n_classes = None
+            self.n_classes = None 
+
+        # Final Bits
         self.StartupMesseges           # Messages to User
-        fileobjects = np.random.permutation(fileobjects)    # permute
-        return fileobjects,self.n_classes
+        fileObjects = np.random.permutation(fileObjects)    # permute
+        return fileObjects
+
+    @property
+    def GetLocalaths (self):
+        """ Return Necessaru Directory Paths """
+        return (self.readPath,self.exportPath,self.modelPath)
+
+    @property
+    def GetModelParams (self):
+        """ Return Important Parameters for Creating Models """
+        return (self.modelName,self.newModel,self.n_classes,self.starttime)
             
     @property
     def StartupMesseges (self):
         """ Print out Start up messeges to Console """
-        print("Running Main Program.....")
-        print("\tCollecting data from:",self.readPath)
-        print("\tStoring/Loading models from:",self.modelPath)
-        print("\tExporting Predictions to:",self.exportPath)
-        print("\tCreating new models?",self.newModels)
-        print("\t\tFound",self.n_files,"files to read")
-        print("\t\tFound",self.n_classes,"classes to sort")
+        print("\nRunning Main Program.....")
+        print("\tCollecting data from:\n\t\t",self.readPath)
+        print("\tStoring/Loading models from:\n\t\t",self.modelPath)
+        print("\tExporting Predictions to:\n\t\t",self.exportPath)
+        print("\tModel name:",self.modelName)
+        print("\tCreating new models?",self.newModel)
+        print("\tNumber of Files found:",self.n_files)
+        print("\tNumber of Categories found:",self.n_classes)
         print("\n")
+        return None
 
     def ArgumentParser(self):
         """ Process Command Line Arguments """
@@ -205,26 +281,28 @@ class ProgramInitializer:
                                          description="\n\t CLI Help for Instrument Classifier Program:",
                                          add_help=True)
 
-        parser.add_argument('data_path',type=str,
+        parser.add_argument("dataPath",type=str,
                             help="Full Local Directory Path of file(s) containing \
                                     rows of of answer-key-like data; formatted: \
                                     | Index | Fullpath  | Target Int    | Target Str |")
-        parser.add_argument('model_path',type=str,
+        parser.add_argument('modelPath',type=str,
                             help="Full Local Data Directory Path to store intermediate \
                                     file data. Reccommend using empty/new path.")
-        parser.add_argument('export_path',type=str,
+        parser.add_argument('exportPath',type=str,
                             help='Full Local Directory Path to export model predicitions and \
                                 Evaluations to.')
-        parser.add_argument('program_mode',type=str,
+        parser.add_argument('programMode',type=str,
                             help="Mode for program execution. Must be in \
                                     ['train','train-test','predict']")
-        parser.add_argument('new_models',type=bool,
+        parser.add_argument("modelName",type=str,
+                            help="Name of Model to use or create")
+        parser.add_argument("newModels",type=bool,
                             help="If True, Networks sharing the same name are overwritten, \
                                 and new models are created in place")
         # Parse and return args
         args = parser.parse_args()
-        return [args.data_path,args.model_path,args.export_path,
-                args.programMode,args.newModels]
+        return [args.dataPath,args.modelPath,args.exportPath,
+                args.programMode,args.modelName,args.newModels]
 
     def CollectCSVFiles (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
@@ -250,11 +328,10 @@ class ProgramInitializer:
 
     def GetNClasses (self,fileobjects):
         """ Find Number of classes in target vector """
-        y = [x.target for x in fileobjects]   # collect target from each file
-        try:                        # Attempt
-            n_classes = np.amax(y)  # maximum value is number of classes
-            return n_classes + 1    # account for zero-index
-        except Exception:           # failure?
-            return None             # no classes?
+        y = [x.targetInt for x in fileobjects]   # collect target from each file
+        try:                            # Attempt    
+            return len(np.unique(y))    # account for zero-index
+        except Exception:               # failure?
+            return None                 # no classes?
 
 
