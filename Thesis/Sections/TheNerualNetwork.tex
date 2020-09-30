@@ -7,11 +7,19 @@
 
 
 \documentclass[12pt,letterpaper]{article}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 \usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{xcolor}
+
 \usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
 
 
@@ -25,26 +33,28 @@
 % ================================================================
 
 \subsection{An Introduction to Neural Networks}
+\label{sec-NerualNetworkIntro}
 
-\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of soundwaves, and human ears and brains interpret them, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an architecture that allows for a computer to \textit{learn} and change and update itself as it is presented with more data. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
+\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound waves, brain's interpretation them, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an architecture that allows for a computer to \textit{learn} and change and update itself as it is presented with more data. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
 
 \paragraph*{}A neural network is a mathematical function that seeks to produce an approximation $F^*$, of some usually unknown function $F$ . For audio recognition, $F$ is some function, or series of functions, that occurs in the brain which allows for a listener to take the sensation of audio, and map it to a known musical instrument. For a neural network, a model must construct an approximate function $F^*$ using a set of parameters $\Theta$, which allows the model to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}.
 
-\paragraph*{}Former YouTube video Classification team lead, and current Machine Learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
+\paragraph*{}Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
 The result of such an analogy is a computer program that is reminiscent of the brain. 
 
-\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly. Given a sample of sound, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olsen,White}. Similarly, a neural network uses features of a sound, represented by an array $x$, and learns a series of parameters, $\Theta$, that allow it to map those features to one or more pre-defined sources \cite{Virtanen}. 
+\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly. Given an example, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olsen,White}. We can simplify the idea of humans recognizing sound as some function or operation that occurs within the brain, accepting an input sound, and produces an output label. Similarly, a neural network can be constructed, presented with \textit{features} of multiple, labeled sound waves and learns a set of parameters $\Theta$ that allows for the mapping to a source.
 
-\paragraph*{}For this particular project, a neural network has been constructed to perform a  \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file. 
+\paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file. 
 
 % ================================================================
 
 \newpage
 
 \subsection{The Structure of a Neural Network}
+\label{sec-NetworkStructre}
 
 \paragraph*{}A Neural Network is simply a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. It is this process of transforming inputs successively in a particular order until an output is attained \cite{Geron,Loy}. This output encodes the models final "decision" given a unique input.
 
@@ -69,6 +79,39 @@ f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
 \end{equation}
 The array of activations, $x^{(0)}$, is the raw input given the neural network, most commonly called \textit{features}. Conversely, the activations $x^{(L-1)}$ are commonly called the network \textit{output} \cite{Geron,James,Loy}.
 
+\begin{algorithm}[H]
+\caption{Forward propagation system in a standard deep neural network. Each iteration in the main \textit{for-loop} represents the execution of a layer, and passing the result to the "next" layer function. A practical application of this algorithm should include batches of samples instead of a single sample.
+\textcolor{red}{I will put this some place better soon! It is here for future placement}}
+\label{algFeedForward}
+
+\begin{algorithmic}
+\REQUIRE Network with $L$ layers - $0,1,2,....,L-2,L-1$
+\REQUIRE Set of weighting parameters - $W^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of bias parameters - $b^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of layer activation function - $a^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Input sample - $x^{(0)}$
+
+$Z = \{\} \leftarrow$ array to hold pre-activations \\
+$X = \{\} \leftarrow$ array to hold final activations
+
+\FOR {$l = 1,2,...,L-2,L-1$}
+	\item Compute pre-nonlinear activation
+	\item $z^{(l)} \leftarrow W^{(l)}x^{(l-1)} + b^{(l)}$
+	\item Apply activation function
+	\item $x^{(l)} \leftarrow a^{(l)}[z^{(l)}]$
+	\item Store values for later use in optimizer
+	\item $Z \leftarrow Z.add(z^{(l)})$
+	\item $X \leftarrow X.add(x^{(l)})$
+\ENDFOR
+
+\item Network final prediction is last object in 'act' array.
+\item $y^* \leftarrow x^{(L-1)} = X[-1]$
+\item Return the pre-nonlinear activations and final-nonlinear activations
+\RETURN $Z , X$
+
+\end{algorithmic}
+\end{algorithm}
+
 
 
 % ================================================================
@@ -76,6 +119,7 @@ The array of activations, $x^{(0)}$, is the raw input given the neural network, 
 \newpage
 
 \subsection{Layers Used in Classification Neural Network}
+\label{sec-Layers}
 
 \paragraph*{}As stated previously, a neural network is composed of a series of functions that are called successively to transform features (an input) into a prediction (an output). As shown in eqn. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a sort of computational graph \cite{Goodfellow}. 
 
@@ -92,23 +136,29 @@ x^{(l)} = \sigma^{(l)} \big[ z^{(l)} \big]
 \end{equation}
 Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-matVectEqn}). $\sigma^{(l)}$ is some activation function, which is often use to enable the modeling of more complex-decision boundaries. 
 
-\paragraph*{}Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
+\paragraph*{}The combination of eqn. (\ref{eqn-matVectEqn}) and eqn. (\ref{eqn-elementActivation}), for a layer $l$ , make up the function represented by that layer, as in eqn. (\ref{eqn-altLayerFunction}). Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
 
 % ================
 
 \subsubsection{Dense Layer}
+\label{subsec-DenseLayer}
 
-\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer for short, was one of the earliest function types used in artificial neural network models. A dense layer is simply composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed back from McCulloch and Pitts' work \cite{McCulloch}, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
+\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer for short, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed back from McCulloch and Pitts' work \cite{McCulloch}, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
 
 \paragraph*{}We model a layer of neurons as a vector of floating-point numbers. Typically, it is required that the array be one-dimensional. Suppose a layer $(l)$ contains $n$ artificial neurons. We denote the array that hold those activations as $x^{(l)}$ and is given by:
 \begin{equation}
 \label{layer-DenseNeurons}
 \vec{x}^{(l)} = \Big[ x_0, x_1, x_2, \hdots , x_{n-2}, x_{n-1} \Big]^T
 \end{equation}
-The activation of each entry is given by a linear-combination of activations from the previous layer, as outlined in eqn.(\ref{eqn-matVectEqn}) and eqn.(\ref{eqn-elementActivation}). 
+The activation of each entry is given by a linear-combination of activations from the previous layer, as outlined in eqn.(\ref{eqn-matVectEqn}) and eqn.(\ref{eqn-elementActivation}).
 
-\paragraph*{}Suppose the layer $l-1$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $m \times 1$.
-Thus for a dense layer $l$, the exact values of each activation is given by \cite{Geron,Loy}
+\paragraph*{}Suppose the layer $l-1$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $m \times 1$. We can denote the function in a similar manner to eqn.(\ref{eqn-altLayerFunction}) as:
+\begin{equation}
+\label{eqn-FunctionDense}
+f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(m \times 1)} \rightarrow x^{(l)} \in \mathbb{R}^{(n \times 1)}
+\end{equation}
+
+Thus for a dense layer $l$, the exact values of each activation is given by \cite{Geron,Loy}:
 \begin{equation}
 \begin{bmatrix}
 x_0 \\ x_1 \\ \vdots \\ x_{n-1}
@@ -122,7 +172,7 @@ w_{n-1,0} & w_{n-1,1} & \hdots & w_{n-1,m-1}
 \end{bmatrix}^{(l)} 
 \begin{bmatrix}
 x_0 \\ x_1 \\ \vdots \\ x_{m-1}
-\end{bmatrix}^{(l-1)}
+\end{bmatrix}^{(l-1)} +
 \begin{bmatrix}
 b_0 \\ b_1 \\ \vdots \\ b_{n-1}
 \end{bmatrix}^{(l)} \Bigg)
@@ -132,15 +182,74 @@ or more compactly:
 \label{eqn-DenseFeedForward}
 x^{(l)} = \sigma^{(l)} \Big( W^{(l)} x^{(l-1)} + b^{(l)} \Big)
 \end{equation}
-Eqn. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}.
+Eqn. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. 
 
 % ================
 
 \subsubsection{2-Dimensional Convolution Layer}
 
+\paragraph*{}Convolution layers emerged from studying the brain's visual cortex, and have been used from image recognition related tasks for around 40 years. \cite{Geron,Loy}). This layer get's it's name from it's implementation of the mathematical \textit{convolution} function. The 2D discrete-convolution of function or 2D array $A[i,j]$ and $B[i,j]$ is given by \cite{Goodfellow}:
+\begin{equation}
+\label{eqn-convolution}
+C[i,j] = (A * B)[i,j] = \sum_{u}\sum_{v} A[i,j]B[i - u,j - v]
+\end{equation}
+Note that convolution is commutative: $(A * B) = (B * A)$. We implement a convolutional layer $f^{(l)})$, by creating a series of $K$ weighting matrices, called \textit{filters}, each of size $m \times n$, where $m,n \in \mathbb{Z}$. Often we choose $m = n$ and call the shape the \textit{convolution kernel size} \cite{Loy, Goodfellow}.
+
+\paragraph*{}In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(N \times M)}$, the convolutions filters "step" through the input data and repeatedly compute the element-wise product of each $m \times n$ weighting kernel, and the local activation of the $x^{(l-1)}$ array. The step size in each of the 2-dimension is known as the \textit{stride}. Each of the $K$ filters is used to generate a $m \times n$ feature map from the input activation. For an appropriately trained network, some filters may be dedicated to detecting vertical lines, horizontal lines, sharp edges, areas of mostly one color, etc. \cite{Loy,Geron}.
+
+\paragraph*{}In general, for an $N \times M$ input, with kernel size $m \times n$, with stride size $1 \times 1$, and $K$ feature maps.
+\begin{equation}
+f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(N \times M)} \rightarrow
+x^{(l)} \in \mathbb{R}^{([N-n+1] \times [M-m+1] \times K)}
+\end{equation}
+As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in fig. (\ref{fig-2DConvExample}):
+\begin{figure}[H]
+\label{fig-2DConvExample}
+\begin{center}
+\begin{subfigure}{0.45\textwidth}
+\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
+\caption{Input Activations}
+\end{subfigure}
+\begin{subfigure}{0.45\textwidth}
+\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
+\caption{Convolution Filter}
+\end{subfigure}
+\begin{subfigure}{0.9\textwidth}
+\centering
+\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
+\caption{Convolution Result}
+\end{subfigure}
+\end{center}
+\caption{The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite{Goodfellow}}
+\end{figure}
+Note that formal implementations include a bias vector and an activation function.
+
+\paragraph*{}For 2D convolution over input $x^{(l-1)}$ with feature map $W^{(l)}_k$, producing activations $x^{(l)}$, we compute the activations $x^{(l)}_{k}$ as \cite{Goodfellow}
+\begin{equation}
+\label{eqn-ConvFeedForward}
+x^{(l)}_k = \sigma^{(l)}\bigg[ \Big( \sum_{u=0}^{m-1} \sum_{v=0}^{n-1} x^{(l-1)}(i,j) W^{(l)}_k(i - u,j - v) \Big) + b^{(l)}_k \bigg]
+\end{equation}
+\textcolor{red}{Please check my math here!}
+This operation repeats for each of the $K$ feature maps. Each maps has it's own $n \times m$ weighting matrix and appropriately shaped bias .
+
+\paragraph*{}The convolution layers allows for several advantages. Among these are (i) \textit{sparse-connectivity}: not every single activation (pixel) is connect to every single output pixel, so it is more computationally efficient, (ii) \textit{positional invariance}: key features can be identified regardless of where they are in the layer
+
+
+
 % ================
 
 \subsubsection{2-Dimensional Maximum Pooling Layer}
+
+\paragraph*{}A Maximum Pooling layers simply returns the maximum neuron activation in a group of neurons. In the case of 2D Max Pooling, we choose a kernel size to be $m \times n$, just like in the 2D Convolution layer, and extract the maximum value in each window, and then step along accrdoing to the chosen stride size \cite{Loy,Goodfellow}.As an example, consider again figure (\ref{fig-2DConvExample}). Using the $2 \times 2$ kernel on the $3 \times 4$ input, each box would then contain the maximum value of the input activations. We detail this in fig. (\ref{fig-2DMaxPool}):
+\begin{figure}[h]
+\label{fig-2DMaxPool}
+\begin{center}
+\includegraphics[scale=0.6]{../figures/2DConvExample(d)}
+\end{center}
+\caption{The result of 2D maximum-pooling an input array. This image was adapted from Loy, pg. 126 \cite{Loy}}
+\end{figure} 
+
+\paragraph*{}Pooling layers, such as maximum pooling, average pooling, or similar are typically placed after a layer or a set of layers of convolution. The purpose of this arrangement is to reduce the number of weights, thereby dropping the complexity of the model and ensuring only features with large activation values are preserved \cite{Geron,Loy,Goodfellow}.
 
 % ================
 
@@ -160,17 +269,201 @@ The numerical value of each activation is left unchanged. For a layer with activ
 
 \subsubsection{1-Dimensional Concatenation Layer}
 
+\paragraph*{}The 1-Dimensional Concatenation Layer, also called 1D-Concat layer takes separate vectors of activations
+
+% ================================================================
+
+\subsection{Activation Functions Used in Network Layers}
+\label{sec-ActivationFunctions}
+
+\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{sec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in eqn. (\ref{eqn-matVectEqn}), and then an element-wise activation function as in eqn. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in out classification neural network. 
+
+\subsubsection{Rectified Linear Unit}
+
+\paragraph*{}The Rectified Linear Unit (ReLU) activation function acts element-wise on the activations in a given layer. If the activation of a neurons is non-zero or non-negative, the value is untouched, otherwise a $0$ is returned. For an input activation $x$, ReLU is defined by:
+\begin{equation}
+\label{eqn-ReLU}
+\text{ReLU}\big[x\big] = \max\big(0,x\big) = \left\{
+\begin{array}{ll}
+    x & \text{if\hspace{0.5cm}} x > 0 \\
+    0 & \text{otherwise}
+\end{array} 
+\right.
+\end{equation}
+ReLU is only defined on a real domain. We provide a visualization of the function in fig. (\ref{fig-ReLU}).
+\begin{figure}[H]
+\label{fig-ReLU}
+\begin{center}
+\includegraphics[scale=0.2]{../Figures/RectifiedLinearUnit}
+\end{center}
+\caption{Rectifed Linear Unit (ReLU) activation function}
+\end{figure}
+For our chosen architecture, ReLU is applied to the activations in every single Convolution layer and Dense Layer, with the exception of the output dense layer.
+
+
+\subsubsection{Softmax}
+
+\paragraph*{}The softmax activation function is commonly used in the output layer of a multi-class classification network, such as the one we implement. When softmax acts on a vector or activation, the result is a normalized,non-negative output vector. \cite{Geron,Goodfellow,Virtanen}. The $i$-th element in a softmax activation function is given by:
+\begin{equation}
+\label{eqn-Softmax}
+\text{Softmax}\big[ x \big]_{i} = \frac{1}{\sum_{j}e^{x_j}}e^{x_i}
+\end{equation}
+
+\paragraph*{}This function is only used in the output layer of a neural network, and encodes a discrete categorical probability. For example, if eqn.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
+
 
 % ================================================================
 
 \newpage
 
 \subsection{Training a Neural Network}
+\label{sec-Training}
 
-\paragraph*{}A neural network's job is to produce an approximation of some function $F$, which we call $F^*$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonable approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
+\paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
 \begin{quote}
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
 \end{quote}
+Without any human intervention, a model must update itself to improve it's performance at a give task a new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
+
+\paragraph*{}We consider the set of parameters $\Theta$ as a concatenation of each applicable layer's weighting matrix and bias vector such that:
+\begin{equation}
+\label{eqn-Theta}
+\Theta = \big\{
+W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)},
+\big\}
+\end{equation}
+Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function. Note that $W^{(l)}$ or $b^{(l)}$, itself is a parameter to train, but rather the entries that make up those structures must be trained. In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow}.
+
+\subsubsection{The Cost Function}
+
+\paragraph*{}Suppose we pass a training sample, given by the feature-vector $x^{(0)}$, with an expected outcome given by the vector $y$, into the neural network. After the network finishes processing, it's output activations are given by the vector $x^{(L-1)}$, also noted at $y^*$. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
+
+\paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the network \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single value, usually a floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
+
+\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use a \textit{Categorical Crossentropy} (CXE) cost function. For a single predictions sample, it is defined \cite{Goodfellow}:
+\begin{equation}
+\label{eqn-CategoricalCrossentropy}
+\text{CXE}\big[ y^* , y \big] = - \sum_{i=0}^{k-1} y^*_i \log_{10}(y_i) 
+\end{equation}
+In practice, this operation is performed over a batch of samples and an average is computed and used a \textit{batch loss} \cite{Goodfellow}.
+
+
+\subsubsection{Gradient Based Learning}
+
+\paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem.
+
+\paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow described this \cite{Goodfellow}:
+\begin{quote}
+In most learning scenarios, we care about some performance measure $P$,... We reduce a different cost function, $J(\theta)$ in the hope that doing so will also imprvce $P$.
+\end{quote}
+By choosing an appropriate cost function, and selecting the parameters $\Theta$ that minimize the average cost over a data set, we also assume that doing so minimized the error in the performance $P$.
+
+\paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in eqn. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize with a gradient-based method. 
+
+\paragraph*{}We can reduce the cost given a set of paramaters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative of each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
+\begin{equation}
+\label{eqn-CostGradient}
+\nabla_{\Theta}\big[ J \big] = 
+\Big[ 	\frac{\partial J}{\partial W^{(0)}}, \frac{\partial J}{\partial b^{(0)}}, 
+		\frac{\partial J}{\partial W^{(1)}}, \frac{\partial J}{\partial b^{(1)}}, \hdots ,
+		\frac{\partial J}{\partial W^{(L-1)}}, \frac{\partial J}{\partial b^{(L-1)}} \Big]^T
+\end{equation}
+Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element in the $W^{(l)}$ matrix, and preserves the shape.
+
+\paragraph*{}Due to the nested composition of the network output in eqn. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through the neural network to compute the partial derivative with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron}. Below we detail an algorithm in pseudo-code to back-propagate through a fully-connected nueral network, such as the multilayer perceptron outlines in sec.(\ref{sec-NetworkStructre})
+
+\begin{algorithm}[H]
+\caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample}
+\label{algBackProp}
+
+\begin{algorithmic}
+\REQUIRE Cost/Objective function $J$ and learning rate $\alpha$
+\REQUIRE Set of weighting parameters - $W^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of bias parameters - $b^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of layer activation function - $a^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of layer activation function derivatives - $\partial a^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of pre-nonlinear activation - $Z^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Set of post-nonlinear activation - $X^{(i)}, i \in \{0,1,....,L-1\}$
+
+Execute forward pass in algorithm (\ref{algFeedForward}) and compute the gradient of the cost with respect to the final layer activations \\
+$dx \leftarrow \nabla_{(y^*)}J(y,y^*)$ \\
+Intialize $\nabla J$ as output object, should have same shape as $\Theta$
+
+\FOR {$L-1,L-2,...,2,1$}
+	\item Compute gradient w.r.t pre-nonlinear activation portion of layer function
+	\item $dx^{(l)} \leftarrow \nabla_{Z^{(l)}}J = dx^{(l)} \odot \partial a^{(l)}[ Z^{(l)} ]$
+	\item Compute gradient w.r.t weighting and bias elements
+	\item $db \leftarrow \nabla_{b^{(l)}}J = dx^{(l)}$
+	\item $dW \leftarrow \nabla_{W^{(l)}}J = dx^{(l)} \cdot X^{(l-1)}$
+
+	\item Add $db$ and $dW$ steps to $\nabla J$ object
+	\item $\nabla J = \nabla J .Add(dW,db)$
+\ENDFOR
+
+\item Return gradient w.r.t to each parameter in $\Theta$
+\RETURN $\nabla J$
+
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph*{}After (i) computing the gradient, we can scale is by a desired learning rate, $\alpha$ and (ii) add it element-wise to the exisitint elements in $\Theta$. By repeating steps (i) and (ii) in sucession, we gradually drive the cost function to produces consistently lower and lower values. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in eqn. (\ref{eqn-GradientLearning}).
+\begin{equation}
+\label{eqn-GradientLearning}
+\Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
+\end{equation}
+
+
+
+
+\subsubsection{The Optimizer}
+
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful variant of algorithms with an adaptive learning rate. It tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost. For a given iteration $(i)$, The ADAM update is given:
+\begin{equation}
+\label{eqn-ADAMupdate}
+\begin{split}
+s^{(i)} &= \rho_1 s^{(i-1)} + (1 - \rho_1) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
+r^{(i)} &= \rho_2 r^{(i-1)} + (1 - \rho_2) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \odot
+							\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
+s'^{(i)} &= \frac{s^{(i)}}{1-\rho_1^t} \\
+r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^t} \\
+\Theta^{(i)} &= \Theta^{(i-1)} + (-\alpha)\frac{s'^{(i)}}{\sqrt{r'^{(i)}}+\delta} \\
+\end{split}
+\end{equation}
+
+\paragraph*{}ADAM has experimentally shown to be a very powerful and robust optimizer useful for a wide range of tasks. Because of the two decay constants $\rho_1$ and $\rho_2$, we an compound and accumulate the values of past gradients to continue to push the cost to lower and lower values, even if the magnitude of the gradient becomes very small \cite{Geron}. 
+
+\begin{algorithm}[H]
+\caption{Adaptive-Moments (ADAM) optimizer for a neural network}
+\label{algAdaGrad}
+
+\begin{algorithmic}
+\REQUIRE Step size $\alpha$
+\REQUIRE Small constant $\delta$ for numerical stabilization, usually about $10^{-7}$.
+\REQUIRE constants $\rho_1$, $\rho_2$ used got exponential decay rates, usually $0.9$ and $0.999$ respectively.
+\REQUIRE Subroutine/function to compute gradient of cost function.
+\REQUIRE Mini-batch size, $m$
+\REQUIRE Stopping criterion $S$
+
+Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
+
+\WHILE {Stopping Criterion $S$ is \FALSE}
+	\item Extract a mini-batch of $m$ samples from larger data set $X$. $[x^{(0)},x^{(1)},...,x^{(m-1)}]$ and corresponding target values 
+	$[y^{(0)},y^{(1)},...,y^{(m-1)}]$.
+	\item Compute numerical gradient estimate of each sample in batch. This can be done with standard back-propagation in algorithm (\ref{algBackProp}) and 			 	normalize by batch size $m$:
+	\item $\nabla J \leftarrow \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]$
+	
+	\item Compute first bias moment: $s \leftarrow \rho_1 s + (1 - \rho_1) \nabla J$
+	\item Compute second bias moment: $r \leftarrow \rho_2 s + (1 - \rho_2) \nabla J \odot \nabla J$
+	\item First bias correction: $s' \leftarrow \frac{s}{1 - \rho_1^i}$
+	\item Second bias correction: $r' \leftarrow \frac{r}{1 - \rho_2^i}$
+	
+	\item Compute And Apply update:	$\Delta \Theta = (-\alpha) \frac{s'}{\sqrt{r'} + \delta}$
+	\item $\Theta = \Theta + \Delta \Theta$	
+	\item Update Iteration number: $i \leftarrow i + 1$
+\ENDWHILE
+
+\end{algorithmic}
+\end{algorithm}
 
 
 % ================================================================
@@ -178,10 +471,11 @@ A computer program is said to learn from experience $E$ with respect to some cla
 \newpage
 
 \subsection{Chosen Model Architecture}
+\label{sec-Architecture}
 
-\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, rather than the quantity of available data \cite{Geron,Khan,Liu}. We have derived an appropriate set of inputs arrays \textit{[See Section on Features]}, and constructed a neural network architecture to compliment these features.
+\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, as well as a complementary architecture, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textcolor{blue}{See Section on Features}, and constructed a neural network architecture to coincide with these features. From these two input arrays, one being a matrix and the other being a column-vector, we have produced a \textit{multimodal neural network}, that process the two inputs, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs \textcolor{blue}{citation for multimodal networks}.
 
-\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. This means that rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a produce of the same audio file sound wave, and thus share a common training label. Each of the two entry points feed into their own, non-related set of layer functions. The second-to-last layer, the outputs from both neural networks are concatenated into a single dense layer, which is then passed into the output layer, which contains $k$ neurons, one of reach unique class \cite{Loy,Geron}. A visual representation of this architecture can be found in fig. (\ref{fig-NetworkArchitecture}).
+\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in fig. (\ref{fig-NetworkArchitecture}).
 
 \begin{figure}[H]
 \label{fig-NetworkArchitecture}
@@ -212,37 +506,30 @@ Any other shape will be rejected by the model, and an error is raised.
 \end{enumerate}  
 The Convolution layers convoluted over the middle two axes of the data (over space and time in the spectrogram). 
 
-\paragraph*{}By grouping layers in this structure, each of the $32$ filters passes over a $3 \times 3$ area, and then again. The result is 
+\paragraph*{}By grouping layers in this structure, we use the convolution  layers to reduce the number of features, and then the pooling layer to extract only the largest activations of the remianing features. This ensures that in the full spectrogram image, only the dominant features and feature shapes are preserved and passed into the next layer set for processing.
 
 % ================
 
 \subsubsection{The Perceptron Branch}
 
-\paragraph*{} The Perceptron branch is picture on the right side of fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties of a larger data set - in this case, each waveform. We call these properties \textit{features} \cite{Geron,Kahn,Virtanen}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
+\paragraph*{} The Perceptron branch is picture on the right side of fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Virtanen}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
 
-\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $23$ unique clssification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
+\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
 \label{eqn-shapeX2}
-X_2 \in \mathbb{R}^{(64 \times 23)}
+X_2 \in \mathbb{R}^{(64 \times 20)}
 \end{equation}
-Again, any other shape will be rejected by the model, and an error is raised.
+This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other shape will be rejected by the model, and an error is raised.
+
+\paragraph*{}In perceptron models, scaling the design matrix appropriately drastically improves the classification performance. A design matrix is scaled by taking all samples in a column (a particular feature from each class), subtracting the average, and then scaling it such that it has unit variance \cite{Geron,James}. This ensures that no one feature dominates the performance of the model and that layer activations to not get saturated as data progresses through the network.
 
 % ================
 
 \subsubsection{The Final Output Branch}
 
-\paragraph*{}
-
+\paragraph*{}The last layer in each of the two branches is a ReLU-activated Dense layer containing 64 neurons, represented by a $64 \times 1$ column vectors. We combine these model layers by using a \textit{concatenation layer} to fuse the two column vectors together, "vertically", such that the result is a $128 \times 1$ column vector. This vector is then passed into the final dense layer, which used the softmax activation, and encodes the joint predictions based on both model branches. 
 
 % ================================================================
-
-
-
-
-
-
-
-
 
 
 % ================================================================

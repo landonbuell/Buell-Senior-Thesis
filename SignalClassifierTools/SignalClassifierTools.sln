@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.74
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierPreprocessing", "ClassifierPreprocessing\ClassifierPreprocessing.pyproj", "{75CE31AA-D8C4-4B1D-BF97-94989CF5D46D}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierAnalysis", "ClassifierAnalysis\ClassifierAnalysis.pyproj", "{1CFF0BFC-3257-4A2D-9ECF-2D2FBBCB0227}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierFeatures", "ClassifierFeatures\ClassifierFeatures.pyproj", "{08B0A18F-A687-4BFF-B773-5EDB90B5DD25}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ReadChaoticSynthesizers", "ReadChaoticSynthesizers\ReadChaoticSynthesizers.pyproj", "{B10063DB-4C0F-4A02-AE4E-423B09C0C63C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75CE31AA-D8C4-4B1D-BF97-94989CF5D46D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75CE31AA-D8C4-4B1D-BF97-94989CF5D46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CFF0BFC-3257-4A2D-9ECF-2D2FBBCB0227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CFF0BFC-3257-4A2D-9ECF-2D2FBBCB0227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08B0A18F-A687-4BFF-B773-5EDB90B5DD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08B0A18F-A687-4BFF-B773-5EDB90B5DD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B10063DB-4C0F-4A02-AE4E-423B09C0C63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B10063DB-4C0F-4A02-AE4E-423B09C0C63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8691B4FC-FF46-427F-9660-F483EB2B7D6F}
+	EndGlobalSection
+EndGlobal

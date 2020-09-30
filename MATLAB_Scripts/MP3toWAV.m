@@ -1,6 +1,6 @@
 % ================
 % Landon Buell
-% Read .aiff Files
+% Read .wav Files
 % PHYS 799
 % 2 Jan 2020
 % ================
@@ -42,14 +42,19 @@ for i = 1:length(files)                 % in each file:
     data = data.';      % transpose data array
     %disp(size(data))
     
-    outname = strrep(files(i).name,'_','.');    % eliminate underscore       
+    % Decontruct Input name
+    outname = strrep(filename,'_','.');    % eliminate underscore  
+    outname = strrep(outname,'-','');           % eliminate dashes
     splitName = strsplit(outname,".");          % split string at '.'
-    outname = strcat(splitName{1},".",splitName{2});% create-output name   
-    outname = strcat(outname,'.LR','.wav');
-    outname = char(outname);
-        
+    inst = upper(char(splitName(1)));
+    
+    % Reconstruct Output name
+    outputName = strjoin(splitName(1,2:end-1),".");
+    outputName = char(strcat(inst,".",outputName,".wav"));
+    
+    % Change Path & Export
     chdir(outpath)
-    audiowrite(outname,data,rate);        % write track to disk
+    audiowrite(outputName,data,rate);        % write track to disk
     
 end 
 disp("Program Complete")
