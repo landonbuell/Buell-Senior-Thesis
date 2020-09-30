@@ -25,13 +25,15 @@ if __name__ == '__main__':
     modelName = "InDevCLF"
 
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],'train-predict',modelName,True)    
+    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],'train-predict',modelName,False)    
     FILEOBJECTS = ProgramSetup.__Call__()
     (dataPath,exportPath,modelPath) = ProgramSetup.GetLocalPaths
     (modelName,newModel,N_classes,timeStart) = ProgramSetup.GetModelParams
+
     # SETUP NEURAL NETWORK MODELS
     NeuralNetwork = NN_utils.NetworkContainer(modelName,N_classes,modelPath,
                         NN_utils.inputShapeCNN,NN_utils.inputShapeMLP,newModel)
+    NeuralNetwork.SetDecoder(ProgramSetup.GetDecoder)
     del(ProgramSetup)
     
     # DETERMINE WHICH MODE TO RUN PROGRAM

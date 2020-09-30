@@ -140,31 +140,39 @@ class CategoryDictionary :
         """ Run Category Encode / Decode Dictionary """
         if newModel == True:        
             # A new Model is created, Overwrite existing File
-            print("\t\tBuilding new Encode/Decode Dictionary...")
+            print("\tBuilding new Encode/Decode Dictionary...")
             self.encoder,self.decoder = self.BuildCategories(fileObjs)
             self.ExportCategories()
         else:
             # Check if the encoder / Decoder Exists:
             if os.path.isfile(self.filePath) == True:
-                print("\t\tFound Encode/Decode Dictionary")
+                print("\tFound Encode/Decode Dictionary")
                 # the file exists, load it as enc/dec dict
                 self.encoder,self.decoder = self.LoadCategories()
             else:
                 # File does not exists, make a new Dictionary
-                print("\t\tCount not fine Encode/Decode Dictionary, building new")
+                print("\tCould not fine Encode/Decode Dictionary, building new")
                 self.encoder,self.decoder = self.BuildCategories(fileObjs)
                 self.ExportCategories()
         return self
 
     def LoadCategories (self):
-        """ Load File to Match Int Class to Str Class """
-        data = pd.read_csv(self.fileName,header=0,usecols=[1,2])
-        raise NotImplementedError()
-        return None,None
+        """ Load File to Match Int -> Str Class """
+        decoder = {}
+        encoder = {}
+        rawData = pd.read_csv(self.filePath)
+        Ints,Strs = rawData.iloc[:,0],rawData.iloc[:,1]
+        for Int,Str in zip(Ints,Strs):      # iterate by each
+            encoder.update({str(Str):int(Int)})
+            decoder.update({int(Int):str(Str)})
+        return encoder,decoder
 
     def ExportCategories (self):
         """ Export Decode Dictionary (Int -> Str) """
-        raise NotImplementedError()
+        decodeList = sorted(self.decoder.items())
+        cols = ["Target Int","Target Str"]
+        decodeFrame = pd.DataFrame(data=decodeList,columns=cols)
+        decodeFrame.to_csv(self.filePath,index=False)
         return self
 
     def BuildCategories (self,fileObjs):
@@ -176,7 +184,12 @@ class CategoryDictionary :
         for x,y in zip(targetInts,targetStrs):
             if x not in encoder.keys():     
                 decoder.update({x:y})   # add int : str pair
-                encoder.update({y:x})   # add str : int pair
+        # Organize in numerical order
+        sortedItems = sorted(decoder.items())
+        encoder = {}      # reset encoder
+        for (targetInt,targetStr) in sortedItems:
+            encoder.update({targetStr:targetInt})
+            decoder.update({targetInt:targetStr})
         return encoder,decoder
              
             #### PROGRAM PROCESSING CLASS ####
@@ -230,7 +243,8 @@ class ProgramInitializer:
        return "ProgramInitializer performs preprocessing for program parameters "
 
     def __Call__(self):
-        """ Run Program Start Up Processes """        
+        """ Run Program Start Up Processes """     
+        print("\nRunning Main Program.....\n")
         self.files = self.CollectCSVFiles()     # find CSV files
         fileObjects = self.CreateFileobjs()     # file all files
         self.n_files = len(fileObjects)         # get number of files
@@ -241,7 +255,7 @@ class ProgramInitializer:
 
         # Find Number of Classes
         if self.programMode in ['train','train-predict']:
-            self.n_classes = self.GetNClasses(fileObjects)  
+            self.n_classes = len(self.GetDecoder)
         else:
             self.n_classes = None 
 
@@ -251,7 +265,7 @@ class ProgramInitializer:
         return fileObjects
 
     @property
-    def GetLocalaths (self):
+    def GetLocalPaths (self):
         """ Return Necessaru Directory Paths """
         return (self.readPath,self.exportPath,self.modelPath)
 
@@ -259,11 +273,15 @@ class ProgramInitializer:
     def GetModelParams (self):
         """ Return Important Parameters for Creating Models """
         return (self.modelName,self.newModel,self.n_classes,self.starttime)
+
+    @property
+    def GetDecoder (self):
+        """ Return Decoder Dictionary, maps Int -> Str """
+        return self.categories.decoder
             
     @property
     def StartupMesseges (self):
         """ Print out Start up messeges to Console """
-        print("\nRunning Main Program.....")
         print("\tCollecting data from:\n\t\t",self.readPath)
         print("\tStoring/Loading models from:\n\t\t",self.modelPath)
         print("\tExporting Predictions to:\n\t\t",self.exportPath)
