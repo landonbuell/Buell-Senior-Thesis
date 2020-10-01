@@ -70,40 +70,43 @@ class ProgramMode:
     def CollectFeatures (self,fileobj):
         """ Collected Features from a Given .WAV file object"""
         fileobj = fileobj.ReadFileData()                # read raw .wav file
-        
-        x2 = ML_utils.FeatureArray(fileobj.targetInt)      # Structure holds MLP features
-
-        # Time Series Features Object
-        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)       
-        x2.AddFeatures(timeFeatures.__Call__())         # add time-domain features
-        freqFeatures = feat_utils.FrequencySeriesFeatures(fileobj.waveform,frames=timeFeatures.frames)
-        x2.AddFeatures(freqFeatures.__Call__())         # add frequency-domain features
+       
+        # Create Feature vector for MLP Branch
+        featureVector = ML_utils.FeatureArray(fileobj.targetInt)        # Structure to hold all MLP features
+        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  # collect time-domain features     
+        featureVector.AddFeatures(timeFeatures.__Call__())              # and time-domain features
+        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal,presetFrames=timeFeatures.frames)
+        featureVector.AddFeatures(freqFeatures.__Call__())              # add frequency-domain features
             
-        x1 = ML_utils.FeatureArray(fileobj.targetInt)      # strucutre to hold Sxx features
-        x1 = x1.SetFeatures(freqFeatures.spectrogram)   # set spectrogram
+        # Create Spectrogram Matrix for CNN Branch
+        featureMatrix = ML_utils.FeatureArray(fileobj.targetInt)        # strucutre to hold Sxx features
+        featureMatrix = featureMatrix.SetFeatures(freqFeatures.spectrogram)   # set spectrogram
 
         del(timeFeatures)
         del(freqFeatures)
-
-        return (x1,x2)          # return the feature arrays
+        return (featureMatrix,featureVector)    # return the feature arrays
 
     def ConstructDesignMatrices (self,FILES):
         """ Collect Features from a subset File Objects """
 
+        # Intitialize Design Matricies
         X1 = ML_utils.DesignMatrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Spectrogram
         X2 = ML_utils.DesignMatrix(ndim=2,n_classes=self.n_classes)  # Design matrix for MLP
         
+        # Add Samples to Design Matricies
         for i,FILEOBJ in enumerate(FILES):
             self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
             (x1,x2) = self.CollectFeatures(FILEOBJ)         # collect features
             X1.AddSample(x1)            # Add sample to Sxx 
             X2.AddSample(x2)            # Add sample to MLP
        
-        X1 = X1.Pad2D(new_shape=NN_utils.inputShapeCNN) # shape spectrogram
-        X2 = X2.ShapeBySample()                         # shape design matrix
-        X2 = self.ScaleData(X2)                         # scale design matrix
+        # Format Design Matricies for Input
+        X1 = X1.ShapeBySample()     # shape spectrogram matrix
+        X1 = X1.AddChannel()        # add channel to Matrix
+        X2 = X2.ShapeBySample()     # shape design matrix
+        X2 = self.ScaleData(X2)     # scale design matrix
 
-        return (X1,X2)      # return 2 Design matricie & target matrix
+        return (X1,X2)      # return 2 Design matricies & target matrix
 
 class TrainMode (ProgramMode):
     """

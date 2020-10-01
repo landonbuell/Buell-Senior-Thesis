@@ -9,8 +9,6 @@ Instrument Classifier v0
               
 import numpy as np
 import scipy.stats as stats
-import tensorflow as tf
-from sklearn.preprocessing import StandardScaler
 
 """
 MathUtilities.py - "Math Utilities"

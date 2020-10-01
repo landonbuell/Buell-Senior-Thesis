@@ -19,14 +19,14 @@ import NeuralNetworkUtilities as NN_utils
 if __name__ == '__main__':
        
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
-    #read = os.path.join(parent,'Target-Data')
-    read = os.path.join(parent,'ChaoticSynth-Data')
+    read = os.path.join(parent,'Target-Data')
+    #read = os.path.join(parent,'ChaoticSynth-Data')
     model = os.path.join(parent,'Model-Data')
     export = os.path.join(parent,'Output-Data')
-    modelName = "ChaoticSynthClassifier"
+    modelName = "InDevCLF"
 
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],"predict",modelName,False)    
+    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],"train-predict",modelName,True)    
     FILEOBJECTS = ProgramSetup.__Call__()
     (dataPath,exportPath,modelPath) = ProgramSetup.GetLocalPaths
     (modelName,newModel,N_classes,timeStart) = ProgramSetup.GetModelParams
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     elif ProgramSetup.programMode == 'train-predict':     
         ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
-                                            groupSize=256,n_iters=2,testSize=0.1)
+                                            groupSize=256,n_iters=2,testSize=0.2)
     elif ProgramSetup.programMode == 'predict':
         ProgramMode = mode_utils.PredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
