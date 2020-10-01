@@ -120,7 +120,7 @@ class OutputStructure :
         """ Update Data in Output Frame """
         frame = pd.DataFrame(data=X)        # create new dataframe
         frame.to_csv(path_or_buf=self.exportPath,columns=self.cols,
-                     header=False,mode='a') # append the output frame
+                     index=False,header=False,mode='a') # append the output frame
         return self
 
 class CategoryDictionary :
