@@ -178,10 +178,9 @@ class NeuralNetworkModels:
             x = keras.layers.Conv2D(filters=filters,kernel_size=(kernel),activation='relu',name='C'+str(i+1)+'B')(x)
             x = keras.layers.MaxPool2D(pool_size=pool,name='P'+str(i+1))(x)
 
-        x = keras.layers.Flatten()(x)          
+        x = keras.layers.Flatten(name="F1")(x)          
         for i,nodes in enumerate(neurons):
-            x = keras.layers.Dense(units=nodes,activation='relu',
-                                   name='_D'+str(i+1))(x)
+            x = keras.layers.Dense(units=nodes,activation='relu',name='CD'+str(i+1))(x)
         x = keras.Model(inputs=networkInput,outputs=x,name="ConvolutionalNetwork2D")
         return x
 

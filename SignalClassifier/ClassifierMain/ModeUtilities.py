@@ -224,7 +224,7 @@ class PredictMode (ProgramMode):
             X2 = matrixMLP.__Get_X__()
 
             modelPrediction = Networks.MODEL.predict(x=[X1,X2],batch_size=64,verbose=0)
-            self.ExportPrediction(FILES,modelPrediction)
+            self.ExportPrediction(FILES,modelPrediction,Networks.classDecoder)
             
             del(matrixSXX,matrixMLP)        # delete Design Matrix Objs
             del(X1,X2)                      # delete Design Matricies
@@ -236,12 +236,15 @@ class PredictMode (ProgramMode):
         self.OutputData = sys_utils.OutputStructure(self.programMode,self.exportpath)
         return self
 
-    def ExportPrediction (self,fileObjects,predictionData):
+    def ExportPrediction (self,fileObjects,predictionData,decoder):
         """ Export data from prediction arry to Local path """
         predictionData = np.argmax(predictionData,axis=-1)
         updateData = {"Filepath":[x.fullpath for x in fileObjects],
-                      "Label":[x.target for x in fileObjects],
-                      "Prediction":predictionData}
+                      "Label Int":[x.target for x in fileObjects],
+                      "Label Str":[decoder[x.target] for x in fileObjects],
+                      "Prediction Int":predictionData,
+                      "Prediction Int":[decoder[x] for x in predictionData]
+                      }
         self.OutputData.UpdateData(updateData)
         return self
        
