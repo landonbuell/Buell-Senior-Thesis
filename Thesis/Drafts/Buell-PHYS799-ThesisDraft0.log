@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  30 SEP 2020 01:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  2 OCT 2020 11:54
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -390,48 +390,45 @@ LaTeX Warning: Reference `fig-spectrograms' on page 7 undefined on input line 2
 
 [7]
 
-LaTeX Warning: Citation `Olson' on page 8 undefined on input line 242.
-
-
-LaTeX Warning: Citation `Olson' on page 8 undefined on input line 268.
+LaTeX Warning: Citation `Olson' on page 8 undefined on input line 243.
 
 [8]
 
-LaTeX Warning: Citation `Olson' on page 9 undefined on input line 270.
+LaTeX Warning: Citation `Olson' on page 9 undefined on input line 275.
 
 [9]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 288.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 293.
 
  ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 288.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 293.
 
 
-LaTeX Warning: Citation `Olson' on page 10 undefined on input line 310.
+LaTeX Warning: Citation `Olson' on page 10 undefined on input line 315.
 
 [10] [11] [12] [13]
 
-LaTeX Warning: Citation `Olson' on page 14 undefined on input line 457.
+LaTeX Warning: Citation `Olson' on page 14 undefined on input line 462.
 
 [14] [15] [16] [17] [18]
 
-Package caption Warning: \label without proper reference on input line 645.
+Package caption Warning: \label without proper reference on input line 650.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-2DConvExample' on page 19 undefined on input line
- 643.
+ 648.
 
 <../figures/2DConvExample(a).png, id=76, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(a).png Graphic file (type png)
 <use ../figures/2DConvExample(a).png>
-Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 64
-8.
+Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 65
+3.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 648--649
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 653--654
 [][] 
  []
 
@@ -439,79 +436,79 @@ Overfull \hbox (4.39906pt too wide) in paragraph at lines 648--649
 File: ../figures/2DConvExample(b).png Graphic file (type png)
 <use ../figures/2DConvExample(b).png>
 Package pdftex.def Info: ../figures/2DConvExample(b).png  used on input line 65
-2.
+7.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 652--653
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 657--658
 [][] 
  []
 
 <../figures/2DConvExample(c).png, id=79, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(c).png Graphic file (type png)
 <use ../figures/2DConvExample(c).png>
-Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 65
-7.
+Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 66
+2.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 [19]
-Overfull \hbox (9.56802pt too wide) in paragraph at lines 673--674
+Overfull \hbox (9.56802pt too wide) in paragraph at lines 678--679
  \OT1/cmr/m/n/12 The con-vo-lu-tion lay-ers al-lows for sev-eral ad-van-tages. 
 Among these are (i) \OT1/cmr/m/it/12 sparse-connectivity\OT1/cmr/m/n/12 :
  []
 
 
-Package caption Warning: \label without proper reference on input line 645.
+Package caption Warning: \label without proper reference on input line 650.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-2DConvExample' on page 20 undefined on input line
- 679.
+ 684.
 
 
-Package caption Warning: \label without proper reference on input line 681.
+Package caption Warning: \label without proper reference on input line 686.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig-2DMaxPool' on page 20 undefined on input line 679
+LaTeX Warning: Reference `fig-2DMaxPool' on page 20 undefined on input line 684
 .
 
 <../figures/2DConvExample(d).png, id=83, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(d).png Graphic file (type png)
 <use ../figures/2DConvExample(d).png>
 Package pdftex.def Info: ../figures/2DConvExample(d).png  used on input line 68
-3.
+8.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 [20 <../figures/2DConvExample(a).png> <../figures/2DConvExample(b).png> <../fig
 ures/2DConvExample(c).png>] [21 <../figures/2DConvExample(d).png>]
 
-LaTeX Warning: Reference `sec-Training' on page 22 undefined on input line 715.
+LaTeX Warning: Reference `sec-Training' on page 22 undefined on input line 720.
 
 
 
-Package caption Warning: \label without proper reference on input line 731.
+Package caption Warning: \label without proper reference on input line 736.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig-ReLU' on page 22 undefined on input line 729.
+LaTeX Warning: Reference `fig-ReLU' on page 22 undefined on input line 734.
 
 <../Figures/RectifiedLinearUnit.png, id=95, 1156.32pt x 722.7pt>
 File: ../Figures/RectifiedLinearUnit.png Graphic file (type png)
 <use ../Figures/RectifiedLinearUnit.png>
 Package pdftex.def Info: ../Figures/RectifiedLinearUnit.png  used on input line
- 733.
+ 738.
 (pdftex.def)             Requested size: 231.2599pt x 144.53743pt.
 [22 <../Figures/RectifiedLinearUnit.png>] [23] [24]
 
 LaTeX Warning: Reference `sec-NetworkStructre' on page 25 undefined on input li
-ne 809.
+ne 814.
 
 [25] [26] [27]
 
-Package caption Warning: \label without proper reference on input line 914.
+Package caption Warning: \label without proper reference on input line 919.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 28 undefined on inpu
-t line 911.
+t line 916.
 
 [28]
 
@@ -521,28 +518,28 @@ nclusion: found PDF version <1.7>, but at most version <1.5> allowed
 File: ../Figures/NeuralNetworkArchitecture.pdf Graphic file (type pdf)
 <use ../Figures/NeuralNetworkArchitecture.pdf>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.pdf  used on inpu
-t line 916.
+t line 921.
 (pdftex.def)             Requested size: 357.7332pt x 552.8604pt.
 [29]
 
-Package caption Warning: \label without proper reference on input line 914.
+Package caption Warning: \label without proper reference on input line 919.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 30 undefined on inpu
-t line 925.
+t line 930.
 
 [30 <../Figures/NeuralNetworkArchitecture.pdf>]
 
-Package caption Warning: \label without proper reference on input line 914.
+Package caption Warning: \label without proper reference on input line 919.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 31 undefined on inpu
-t line 948.
+t line 953.
 
 [31] [32] [33]
-Underfull \hbox (badness 10000) in paragraph at lines 1038--1058
+Underfull \hbox (badness 10000) in paragraph at lines 1043--1063
 []$[]$ $[]$
  []
 
@@ -555,13 +552,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5037 strings out of 492895
- 77041 string characters out of 3123268
- 148535 words of memory out of 3000000
- 8869 multiletter control sequences out of 15000+200000
+ 5038 strings out of 492895
+ 77050 string characters out of 3123268
+ 148544 words of memory out of 3000000
+ 8870 multiletter control sequences out of 15000+200000
  11056 words of font info for 41 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,39p,967b,509s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,19n,39p,921b,509s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
@@ -580,7 +577,7 @@ b><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
 ublic/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (41 pages, 528725 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (41 pages, 528799 bytes).
 PDF statistics:
  252 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
