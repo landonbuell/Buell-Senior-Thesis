@@ -175,8 +175,8 @@ class TrainMode (ProgramMode):
         """ Store Keras History Object in lists """
         metricsDictionary = historyObject.history
         newKeys = self.OutputData.cols
-        updateData = {"Epoch Num":np.arange(self.n_epochs)}
-        for key,val in zip(newKeys[1:],metricsDictionary.values()):
+        updateData = {}
+        for key,val in zip(newKeys,metricsDictionary.values()):
             newpair = {key:val}
             updateData.update(newpair)
         self.OutputData.UpdateData(updateData)
@@ -241,12 +241,15 @@ class PredictMode (ProgramMode):
 
     def ExportPrediction (self,fileObjects,predictionData,decoder):
         """ Export data from prediction arry to Local path """
-        predictionData = np.argmax(predictionData,axis=-1)
-        updateData = {"Filepath":[x.fullpath for x in fileObjects],
-                      "Label Int":[x.target for x in fileObjects],
-                      "Label Str":[decoder[x.target] for x in fileObjects],
-                      "Prediction Int":predictionData,
-                      "Prediction Int":[decoder[x] for x in predictionData]
+        predictionInts = np.argmax(predictionData,axis=-1)
+        predcitionStrs = [decoder[x] for x in predictionInts]
+        confidences = np.max(predictionData,axis=-1)
+        updateData = {  "Filepath":[x.fullpath for x in fileObjects],
+                        "Int Label":[x.targetInt for x in fileObjects],
+                        "Str Label":[x.targetStr for x in fileObjects],
+                        "Int Prediction":predictionInts,
+                        "Str Prediction":predcitionStrs,
+                        "Confidence":confidences
                       }
         self.OutputData.UpdateData(updateData)
         return self

@@ -100,9 +100,10 @@ class OutputStructure :
     def __init__(self,programMode,exportPath):
         """ Initialize Class Object instance """
         if programMode == "Train":      # output for training history
-            self.cols = ["Epoch Num","Loss Score","Precision","Recall"]
+            self.cols = ["Loss Score","Precision","Recall"]
         elif programMode == "Predict":  # output for predictions
-            self.cols = ["Filepath","Label","Prediction"]
+            self.cols = ["Filepath","Int Label","Str Label",
+                         "Int Prediction","Str Prediction","Confidence"]
         else:
             print("\n\tERROR! - File mode not recognized!")
             self.cols = []
@@ -112,8 +113,8 @@ class OutputStructure :
     
     def InitData (self):
         """ Initialize Output Structure """
-        self.Data = pd.DataFrame(data=None,columns=self.cols)   # create frame
-        self.Data.to_csv(path_or_buf=self.exportPath)           # export frame
+        self.Data = pd.DataFrame(data=None,columns=self.cols)       # create frame
+        self.Data.to_csv(path_or_buf=self.exportPath,index=False)   # export frame
         return self
 
     def UpdateData (self,X):
@@ -255,7 +256,7 @@ class ProgramInitializer:
 
         # Find Number of Classes
         if self.programMode in ['train','train-predict']:
-            self.n_classes = len(self.GetDecoder)
+            self.n_classes = max(self.GetDecoder.keys()) + 1
         else:
             self.n_classes = None 
 

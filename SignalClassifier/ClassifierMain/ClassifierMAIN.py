@@ -23,7 +23,7 @@ if __name__ == '__main__':
     #read = os.path.join(parent,'ChaoticSynth-Data')
     model = os.path.join(parent,'Model-Data')
     export = os.path.join(parent,'Output-Data')
-    modelName = "InDevCLF"
+    modelName = "ChaoticSynthClassifier"
 
     # PRE-PROCESSING FOR PROGRAM
     ProgramSetup = sys_utils.ProgramInitializer([read,model,export],"train-predict",modelName,True)    
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     elif ProgramSetup.programMode == 'train-predict':     
         ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
-                                            groupSize=256,n_iters=2,testSize=0.2)
+                                            groupSize=256,n_iters=2,testSize=0.1)
     elif ProgramSetup.programMode == 'predict':
         ProgramMode = mode_utils.PredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
