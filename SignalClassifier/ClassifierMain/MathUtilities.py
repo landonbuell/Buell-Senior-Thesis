@@ -8,7 +8,6 @@ Instrument Classifier v0
             #### IMPORTS ####
               
 import numpy as np
-import scipy.stats as stats
 
 """
 MathUtilities.py - "Math Utilities"

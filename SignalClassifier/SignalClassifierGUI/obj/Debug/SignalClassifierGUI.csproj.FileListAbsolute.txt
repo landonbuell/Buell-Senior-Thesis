@@ -1,0 +1,15 @@
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\bin\Debug\SignalClassifierGUI.exe.config
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\bin\Debug\SignalClassifierGUI.exe
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\bin\Debug\SignalClassifierGUI.pdb
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.csprojAssemblyReference.cache
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\MainWindow.g.cs
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\App.g.cs
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI_MarkupCompile.cache
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI_MarkupCompile.lref
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\MainWindow.baml
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.g.resources
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.Properties.Resources.resources
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.csproj.GenerateResource.cache
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.csproj.CoreCompileInputs.cache
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.exe
+C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\SignalClassifierGUI\obj\Debug\SignalClassifierGUI.pdb
