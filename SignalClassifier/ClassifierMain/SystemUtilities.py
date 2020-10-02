@@ -256,7 +256,11 @@ class ProgramInitializer:
 
         # Find Number of Classes
         if self.programMode in ['train','train-predict']:
-            self.n_classes = max(self.GetDecoder.keys()) + 1
+            try:
+                self.n_classes = max(self.GetDecoder.keys()) + 1
+            except:
+                print("\n\tERROR! - Something when wrong with the encoder dictionary!")
+                raise ValueError()
         else:
             self.n_classes = None 
 
