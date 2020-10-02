@@ -158,9 +158,11 @@ class TrainMode (ProgramMode):
             X1 = matrixSXX.__Get_X__()
             X2 = matrixMLP.__Get_X__()
             Y = matrixSXX.__Get_Y__()
+
             modelHistory = Networks.MODEL.fit(x=[X1,X2],y=Y,
                                batch_size=32,epochs=self.n_epochs,verbose=1) 
             self.ExportHistory(modelHistory)
+
             del(matrixSXX,matrixMLP)    # delete Design Matrix Objs
             del(X1,X2,Y)                # delete Design Matrices
             self.groupCounter += 1      # incr coutner

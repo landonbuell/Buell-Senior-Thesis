@@ -57,6 +57,9 @@ if __name__ == '__main__':
     del(ProgramSetup)
     ProgramMode.__Call__(NeuralNetwork)      
 
+    dt_obj = sys_utils.datetime.datetime.now()
+    endtime = dt_obj.isoformat(sep='.',timespec='auto').replace(':','.').replace('-','.')
+    print("Time Stamp:",endtime)
     print("=)")
     
 
