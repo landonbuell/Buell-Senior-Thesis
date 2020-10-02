@@ -8,10 +8,7 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import numpy as np
-import pandas as pd
-import os
 import tensorflow.keras as keras
-import time
 
 """
 MachineLearningUtilities.py - 'Machine Learning Utilities'
@@ -51,35 +48,18 @@ class DesignMatrix:
         except:                             # otherwise
             self.targets.append(None)       # add None-type
         return self
- 
-    def Pad2D (self,new_shape,offsets=(0,0)):
-        """ Zero-Pad 2D samples to meet shape """
-        new_X = np.zeros(shape=(self.n_samples,new_shape[0],new_shape[1]))   # create new design matrix
-        new_shape = (new_shape[0],new_shape[1])
-        for i in range(self.n_samples):     # iterate by sample
-            dx,dy = offsets[0],offsets[1]   # align upper left     
-            try: 
-                new_X[i][dx:dx+self.X[i].shape[0],dy:dy+self.X[i].shape[1]] += self.X[i] 
-            except:
-                slice = self.X[i][:new_shape[0],:new_shape[1]]
-                shape_diff = np.array(new_shape) - slice.shape      # needed padding
-                slice = np.pad(slice,[[0,shape_diff[0]],[0,shape_diff[1]]])
-                new_X[i] += slice
-            self.shapes[i] = new_shape      # reset shape
-        self.X = new_X              # overwrite
-        self.X = self.X.reshape(self.n_samples,new_shape[0],new_shape[1],1)
-        return self                         # return new instance
 
-    def _Pad2D (self,newShape):
-        """ Zero-Pad or crop 2D samples to meet shape """
-        raise NotImplementedError()
+    def AddChannel (self):
+        """ Add Extra dimension to Design Matrix - used for Spectrogram """
+        currentShape = self.X.shape     # current shape
+        newShape = [i for i in currentShape] + [1]
+        self.X = self.X.reshape(newShape)
+        return self
 
-    def ShapeBySample (self,shape=None):
+    def ShapeBySample (self):
         """ Reshape design matrix by number of samples """
-        if shape:
-            self.X = self.X.reshape(shape)
-        else:
-            self.X = np.array(self.X).reshape(self.n_samples,-1)
+        self.X = np.array(self.X)
+        self.X.reshape(self.n_samples,-1)
         return self
 
     def SetMatrixData(self,X_new):
@@ -139,47 +119,3 @@ class FeatureArray:
         self.features = np.array([])    # arr to hold features
         return self             # return new self
 
-class ModelAnalysis:
-    """
-    Analyze Performance of Neural Metwork models
-    --------------------------------
-    model_names (iter) : List-like of strings calling Network models by name  
-    datapath (str) : Local path where data is contained
-    n_classes (int) : number of discrete classes for models
-    --------------------------------
-    Return Instantiated Model Analysis Object
-    """
-
-    def __init__(self,modelName,datapath,n_classes):
-        """ Instantiate Class Object """
-
-        raise NotImplementedError()
-
-        self.modelName = modelName      # name of NN models
-        self.datapath = datapath        # path to find file
-        self.n_classes = n_classes      # classes in model
-
-        self.metrics = [keras.metrics.SparseCategoricalCrossentropy(),
-                        keras.metrics.Precision(),
-                        keras.metrics.Recall()]
-
-        
-        self.infile = self.datapath.split('\\')[-1] # last item in split
-        outfile = self.infile.split('@')[-1]        # time-stamp + ext
-        self.outfile_name = 'ANALYSIS@'+outfile
-
-    def ReadData (self):
-        """ Load in Data from external source """
-        data = pd.read_csv(self.infile,header=0,index_col=0)
-        return data
-
-    def ModelMetrics (self,model):
-        """ Compute all metrics for single model """
-        y_pred = self.data[model]       # these are the predictions
-
-    def __call__(self):
-        """ Compute all metrics Values for all Models """
-        self.data = self.read_data()        # get data from CSV
-        self.truth = self.data['Label']     # get label column
-        for model in self.model_names:      # each model
-            self.model_metrics(model)       # compute metrics

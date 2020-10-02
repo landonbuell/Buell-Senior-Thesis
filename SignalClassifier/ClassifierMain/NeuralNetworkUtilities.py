@@ -22,7 +22,7 @@ NeuralNetworkModels.py - "Neural Network Models"
             #### VARIABLE DECLARATIONS ####
 
 inputShapeMLP = (20,)
-inputShapeCNN = (560,256,1)
+inputShapeCNN = (558,256,1)
 
             #### NEURAL NETWORK OBJECTS ####
 
@@ -62,6 +62,11 @@ class NetworkContainer:
         """ Return string representation of NetworkContainer Class """
         return "Neural Network Contained Object Instance\n" + \
                 "\tContains Mutli-Modal Network, Wrappers to Save and Load Parameters"
+
+    def SetDecoder (self,decoder):
+        """ Add Decoder Dictionary, maps Int -> Str """
+        self.classDecoder = decoder
+        return self
         
     def CreateNewModel (self):
         """
@@ -147,7 +152,7 @@ class NeuralNetworkModels:
         x = IdentityLayer(name='N1_')(networkInput)
         for i,nodes in enumerate(neurons):
             x = keras.layers.Dense(units=nodes,activation='relu',
-                                   name='D'+str(i+1)+'_')(x)
+                                   name='D'+str(i+1))(x)
         x = keras.Model(inputs=networkInput,outputs=x,name="MultilayerPerceptron")
         return x
 
@@ -173,10 +178,9 @@ class NeuralNetworkModels:
             x = keras.layers.Conv2D(filters=filters,kernel_size=(kernel),activation='relu',name='C'+str(i+1)+'B')(x)
             x = keras.layers.MaxPool2D(pool_size=pool,name='P'+str(i+1))(x)
 
-        x = keras.layers.Flatten()(x)          
+        x = keras.layers.Flatten(name="F1")(x)          
         for i,nodes in enumerate(neurons):
-            x = keras.layers.Dense(units=nodes,activation='relu',
-                                   name='D'+str(i+1))(x)
+            x = keras.layers.Dense(units=nodes,activation='relu',name='CD'+str(i+1))(x)
         x = keras.Model(inputs=networkInput,outputs=x,name="ConvolutionalNetwork2D")
         return x
 
@@ -201,7 +205,7 @@ class NeuralNetworkModels:
         x = keras.layers.concatenate([modelCNN.output,modelMLP.output])
 
         x = keras.layers.Dense(units=n_classes,activation='softmax',name='Output')(x)
-        modelMain = keras.Model(inputs=[modelCNN.input,modelMLP.input],outputs=x)
+        modelMain = keras.Model(name=name,inputs=[modelCNN.input,modelMLP.input],outputs=x)
 
         modelMain.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001,
                                         beta_1=0.9,beta_2=0.999,epsilon=1e-07),
