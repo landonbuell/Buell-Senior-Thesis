@@ -1,15 +1,110 @@
 \relax 
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}\protected@file@percent }
-\newlabel{sec-Introduction}{{1}{3}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Methodology}{4}\protected@file@percent }
-\newlabel{sec-Methodology}{{2}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Designing the Function}{4}\protected@file@percent }
-\newlabel{eqn-MappingFunction}{{1}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Collecting and Pre-processing Raw Data}{4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Designing Classification Features}{4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Designing A Complementary Network Architecture}{4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Testing and Evaluating Network Performance}{5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Running Predictions of Chaotic Synthesizer Files}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}\protected@file@percent }
+\newlabel{sec-Introduction}{{1}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methodology}{3}\protected@file@percent }
+\newlabel{sec-Methodology}{{2}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Designing the Function}{3}\protected@file@percent }
+\newlabel{eqn-MappingFunction}{{1}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Collecting and Pre-processing Raw Data}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Designing Classification Features}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Designing A Complementary Network Architecture}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Testing and Evaluating Network Performance}{4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Running Predictions of Chaotic Synthesizer Files}{4}\protected@file@percent }
+\citation{Khan}
+\citation{Geron}
+\citation{Goodfellow}
+\citation{James}
+\citation{Virtanen}
+\citation{Goodfellow}
+\citation{Virtanen}
+\citation{Liu}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Feature Selections}{5}\protected@file@percent }
+\newlabel{sec-Features}{{3}{5}}
+\citation{Geron2}
+\citation{James}
+\citation{Virtanen}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.1}The Design Matrix}{6}\protected@file@percent }
+\newlabel{eqn-X1Shape}{{2}{6}}
+\newlabel{eqn-X2Shape}{{3}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.0.2}Audio Preprocessing}{6}\protected@file@percent }
+\newlabel{subsubsec-Preprocessing}{{3.0.2}{6}}
+\citation{Geron}
+\citation{Goodfellow}
+\citation{Loy}
+\citation{Mierswa}
+\citation{Liu}
+\citation{Zhang}
+\citation{Kahn}
+\citation{Virtanen}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Spectrogram Feature}{7}\protected@file@percent }
+\newlabel{subsec-spectrogram}{{3.1}{7}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig-spectrograms}{{\caption@xref {fig-spectrograms}{ on input line 204}}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Spectrogram representations of various waveforms\relax }}{7}\protected@file@percent }
+\newlabel{eqn-FrameMatrix}{{4}{7}}
+\newlabel{eqn-IndexingA}{{5}{7}}
+\citation{Virtanen}
+\citation{Olson}
+\citation{Peatross}
+\citation{Short}
+\citation{Peatross}
+\newlabel{eqn-Hann}{{6}{8}}
+\newlabel{eqn-WindowMatrix}{{7}{8}}
+\newlabel{eqn-DFTMatrix}{{8}{8}}
+\newlabel{eqn-DFT}{{9}{8}}
+\newlabel{eqn-Spectrogram}{{10}{8}}
+\newlabel{eqn-IndexingS}{{11}{8}}
+\citation{Olson}
+\citation{Virtanen}
+\citation{White}
+\newlabel{eqn-X1 shape}{{12}{9}}
+\citation{Olson}
+\citation{Virtanen}
+\citation{Liu}
+\citation{Kahn}
+\citation{Zhang}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Time-Space Features}{10}\protected@file@percent }
+\newlabel{subsec-time}{{3.2}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Time Domain Envelope}{10}\protected@file@percent }
+\newlabel{eqn-RMS}{{13}{10}}
+\newlabel{fig-FeatureTDE}{{\caption@xref {fig-FeatureTDE}{ on input line 323}}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Time domain envelope visualized in feature-space\relax }}{10}\protected@file@percent }
+\citation{Virtanen}
+\citation{Liu}
+\citation{Virtanen}
+\citation{Virtanen}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Zero Crossing Rate}{11}\protected@file@percent }
+\newlabel{eqn-ZXR}{{14}{11}}
+\newlabel{fig-FeatureZXR}{{\caption@xref {fig-FeatureZXR}{ on input line 344}}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Zero crossing rate visualized in feature-space\relax }}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Center of Mass}{11}\protected@file@percent }
+\newlabel{eqn-FeatureTCM}{{15}{11}}
+\newlabel{fig-FeatureTCM}{{\caption@xref {fig-FeatureTCM}{ on input line 365}}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Temporal center-of-mass visualized in feature-space\relax }}{11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.4}Auto Correlation Coefficients}{12}\protected@file@percent }
+\newlabel{eqn-FeatureACC}{{16}{12}}
+\newlabel{fig-FeatureACC}{{\caption@xref {fig-FeatureACC}{ on input line 384}}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces First four auto correlation coefficients visualized in feature-space\relax }}{12}\protected@file@percent }
+\citation{Liu}
+\citation{Virtanen}
+\citation{Zhang}
+\citation{Virtanen}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Frequency-Space Features}{13}\protected@file@percent }
+\newlabel{subsec-frequency}{{3.3}{13}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Mel Frequency Cepstral Coefficients}{13}\protected@file@percent }
+\newlabel{eqn-HztoMel}{{17}{13}}
+\newlabel{eqn-MeltoHz}{{18}{13}}
+\newlabel{fig-MelFilterBanks}{{\caption@xref {fig-MelFilterBanks}{ on input line 424}}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Mel Filter Banks shown in frequency space with units of Hertz\relax }}{13}\protected@file@percent }
+\newlabel{eqn-FilterBanks}{{19}{13}}
+\citation{Olson}
+\citation{White}
+\newlabel{fig-FeatureMFCC}{{\caption@xref {fig-FeatureMFCC}{ on input line 440}}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Mel Frequency Ceptral Coefficients in feature-space\relax }}{14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Center of Mass}{14}\protected@file@percent }
+\newlabel{eqn-FeatureFCM}{{20}{14}}
+\newlabel{fig-FeatureFCM}{{\caption@xref {fig-FeatureFCM}{ on input line 465}}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Frequency center-of-mass visualized in feature-space\relax }}{14}\protected@file@percent }
 \citation{Geron2}
 \citation{Goodfellow}
 \citation{Levine}
@@ -23,10 +118,10 @@
 \citation{Loy}
 \citation{Geron}
 \citation{Loy}
-\@writefile{toc}{\contentsline {section}{\numberline {3}The Neural Network}{6}\protected@file@percent }
-\newlabel{sec-TheNeuralNetwork}{{3}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}An Introduction to Neural Networks}{6}\protected@file@percent }
-\newlabel{subsec-NerualNetworkIntro}{{3.1}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}The Neural Network}{15}\protected@file@percent }
+\newlabel{sec-TheNeuralNetwork}{{4}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}An Introduction to Neural Networks}{15}\protected@file@percent }
+\newlabel{subsec-NerualNetworkIntro}{{4.1}{15}}
 \citation{Goodfellow}
 \citation{Geron}
 \citation{Loy}
@@ -35,19 +130,18 @@
 \citation{Geron}
 \citation{James}
 \citation{Loy}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}The Structure of a Neural Network}{7}\protected@file@percent }
-\newlabel{subsec-NetworkStructre}{{3.2}{7}}
-\newlabel{eqn-FunctionChain}{{2}{7}}
-\newlabel{eqn-LayerFunction}{{3}{7}}
-\newlabel{eqn-altLayerFunction}{{4}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}The Structure of a Neural Network}{16}\protected@file@percent }
+\newlabel{subsec-NetworkStructre}{{4.2}{16}}
+\newlabel{eqn-FunctionChain}{{22}{16}}
+\newlabel{eqn-LayerFunction}{{23}{16}}
+\newlabel{eqn-altLayerFunction}{{24}{16}}
 \citation{Goodfellow}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Forward propagation system in a standard deep neural network. Each iteration in the main \textit  {for-loop} represents the execution of a layer, and passing the result to the "next" layer function. We assume each layter to follow a two-step structure, being (i) a linear transformation as in eqn. (5\hbox {}) and (ii) an element-wise non-linear activation function as in eqn. (6\hbox {}). A practical application of this algorithm should include batches of samples instead of a single sample. \leavevmode {\color  {red}I Want to include this algorithm for context - especially on the programming end, but am not sure where to put it. }\relax }}{8}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{algFeedForward}{{1}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Layers Used in Classification Neural Network}{8}\protected@file@percent }
-\newlabel{subsec-Layers}{{3.3}{8}}
-\newlabel{eqn-LinearTransform}{{5}{8}}
-\newlabel{eqn-elementActivation}{{6}{8}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Forward propagation system in a standard deep neural network. Each iteration in the main \textit  {for-loop} represents the execution of a layer, and passing the result to the "next" layer function. We assume each layter to follow a two-step structure, being (i) a linear transformation as in eqn. (25\hbox {}) and (ii) an element-wise non-linear activation function as in eqn. (26\hbox {}). A practical application of this algorithm should include batches of samples instead of a single sample. \leavevmode {\color  {red}I Want to include this algorithm for context - especially on the programming end, but am not sure where to put it. }\relax }}{17}\protected@file@percent }
+\newlabel{algFeedForward}{{1}{17}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Layers Used in Classification Neural Network}{17}\protected@file@percent }
+\newlabel{subsec-Layers}{{4.3}{17}}
+\newlabel{eqn-LinearTransform}{{25}{17}}
+\newlabel{eqn-elementActivation}{{26}{17}}
 \citation{Geron2}
 \citation{Loy}
 \citation{McCulloch}
@@ -58,57 +152,57 @@
 \citation{Geron}
 \citation{Loy}
 \citation{Goodfellow}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Dense Layer}{9}\protected@file@percent }
-\newlabel{subsubsec-DenseLayer}{{3.3.1}{9}}
-\newlabel{layer-DenseNeurons}{{7}{9}}
-\newlabel{eqn-FunctionDense}{{8}{9}}
-\newlabel{eqn-DenseFeedForward}{{10}{9}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Dense Layer}{18}\protected@file@percent }
+\newlabel{subsubsec-DenseLayer}{{4.3.1}{18}}
+\newlabel{layer-DenseNeurons}{{27}{18}}
+\newlabel{eqn-FunctionDense}{{28}{18}}
+\newlabel{eqn-DenseFeedForward}{{30}{18}}
 \citation{Loy}
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Goodfellow}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}2-Dimensional Convolution Layer}{10}\protected@file@percent }
-\newlabel{subsubsec-Conv2DLayer}{{3.3.2}{10}}
-\newlabel{eqn-convolution}{{11}{10}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}2-Dimensional Convolution Layer}{19}\protected@file@percent }
+\newlabel{subsubsec-Conv2DLayer}{{4.3.2}{19}}
+\newlabel{eqn-convolution}{{31}{19}}
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Loy}
-\newlabel{fig-2DConvExample}{{\caption@xref {fig-2DConvExample}{ on input line 307}}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite  {Goodfellow}\relax }}{11}\protected@file@percent }
-\newlabel{eqn-ConvFeedForward}{{13}{11}}
+\newlabel{fig-2DConvExample}{{\caption@xref {fig-2DConvExample}{ on input line 650}}{20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite  {Goodfellow}\relax }}{20}\protected@file@percent }
+\newlabel{eqn-ConvFeedForward}{{33}{20}}
 \citation{Geron}
 \citation{Loy}
 \citation{Goodfellow}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}2-Dimensional Maximum Pooling Layer}{12}\protected@file@percent }
-\newlabel{fig-2DMaxPool}{{\caption@xref {fig-2DMaxPool}{ on input line 343}}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The result of 2D maximum-pooling an input array. This image was adapted from Loy, pg. 126 \cite  {Loy}\relax }}{12}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}1-Dimensional Flattening Layer}{12}\protected@file@percent }
-\newlabel{eqn-FlattenFunction}{{14}{12}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}2-Dimensional Maximum Pooling Layer}{21}\protected@file@percent }
+\newlabel{fig-2DMaxPool}{{\caption@xref {fig-2DMaxPool}{ on input line 686}}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The result of 2D maximum-pooling an input array. This image was adapted from Loy, pg. 126 \cite  {Loy}\relax }}{21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}1-Dimensional Flattening Layer}{21}\protected@file@percent }
+\newlabel{eqn-FlattenFunction}{{34}{21}}
 \citation{Geron}
 \citation{Loy}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Virtanen}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}1-Dimensional Concatenation Layer}{13}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Activation Functions Used in Network Layers}{13}\protected@file@percent }
-\newlabel{sec-ActivationFunctions}{{3.4}{13}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Rectified Linear Unit}{13}\protected@file@percent }
-\newlabel{eqn-ReLU}{{15}{13}}
-\newlabel{fig-ReLU}{{\caption@xref {fig-ReLU}{ on input line 393}}{13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Rectifed Linear Unit (ReLU) activation function\relax }}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.5}1-Dimensional Concatenation Layer}{22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Activation Functions Used in Network Layers}{22}\protected@file@percent }
+\newlabel{sec-ActivationFunctions}{{4.4}{22}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Rectified Linear Unit}{22}\protected@file@percent }
+\newlabel{eqn-ReLU}{{35}{22}}
+\newlabel{fig-ReLU}{{\caption@xref {fig-ReLU}{ on input line 736}}{22}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Rectifed Linear Unit (ReLU) activation function\relax }}{22}\protected@file@percent }
 \citation{Goodfellow}
 \citation{Mitchell}
 \citation{Geron}
 \citation{Goodfellow}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Softmax}{14}\protected@file@percent }
-\newlabel{eqn-Softmax}{{16}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Training a Neural Network}{14}\protected@file@percent }
-\newlabel{subsec-Training}{{3.5}{14}}
-\newlabel{eqn-Theta}{{17}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Softmax}{23}\protected@file@percent }
+\newlabel{eqn-Softmax}{{36}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Training a Neural Network}{23}\protected@file@percent }
+\newlabel{subsec-Training}{{4.5}{23}}
+\newlabel{eqn-Theta}{{37}{23}}
 \citation{Goodfellow}
 \citation{James}
 \citation{James}
@@ -118,164 +212,74 @@
 \citation{Geron}
 \citation{Goodfellow}
 \citation{James}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.1}The Cost Function}{15}\protected@file@percent }
-\newlabel{eqn-CategoricalCrossentropy}{{18}{15}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}The Cost Function}{24}\protected@file@percent }
+\newlabel{eqn-CategoricalCrossentropy}{{38}{24}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Gradient Based Learning}{24}\protected@file@percent }
 \citation{Geron}
-\newlabel{eqn-CostGradient}{{19}{16}}
+\newlabel{eqn-CostGradient}{{39}{25}}
 \citation{Geron}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit  {for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample\relax }}{17}\protected@file@percent }
-\newlabel{algBackProp}{{2}{17}}
-\newlabel{eqn-GradientLearning}{{20}{17}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3}The Optimizer}{17}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit  {for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample\relax }}{26}\protected@file@percent }
+\newlabel{algBackProp}{{2}{26}}
+\newlabel{eqn-GradientLearning}{{40}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.3}The Optimizer}{26}\protected@file@percent }
 \citation{Geron}
-\newlabel{eqn-ADAMupdate}{{21}{18}}
+\newlabel{eqn-ADAMupdate}{{41}{27}}
 \citation{Geron}
 \citation{Kahn}
 \citation{Liu}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Adaptive-Moments (ADAM) optimizer for a neural network\relax }}{19}\protected@file@percent }
-\newlabel{algAdaGrad}{{3}{19}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{19}\protected@file@percent }
-\newlabel{sec-Architecture}{{3.6}{19}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Adaptive-Moments (ADAM) optimizer for a neural network\relax }}{28}\protected@file@percent }
+\newlabel{algAdaGrad}{{3}{28}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Chosen Model Architecture}{28}\protected@file@percent }
+\newlabel{sec-Architecture}{{4.6}{28}}
 \citation{White}
 \citation{Olsen}
 \citation{Kahn}
-\newlabel{fig-NetworkArchitecture}{{\caption@xref {fig-NetworkArchitecture}{ on input line 576}}{21}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The developed architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output is produced\relax }}{21}\protected@file@percent }
+\newlabel{fig-NetworkArchitecture}{{\caption@xref {fig-NetworkArchitecture}{ on input line 919}}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The developed architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output is produced\relax }}{30}\protected@file@percent }
 \citation{Geron}
 \citation{Kahn}
 \citation{Virtanen}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{22}\protected@file@percent }
-\newlabel{eqn-shapeX1}{{22}{22}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}The Spectrogram Branch}{31}\protected@file@percent }
+\newlabel{eqn-shapeX1}{{42}{31}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}The Perceptron Branch}{31}\protected@file@percent }
 \citation{James}
 \citation{Loy}
 \citation{Geron}
 \citation{James}
-\citation{Geron}
-\citation{Goodfellow}
-\citation{James}
-\citation{Virtanen}
-\newlabel{eqn-shapeX2}{{23}{23}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{23}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Feature Selections}{23}\protected@file@percent }
-\newlabel{sec-FeatureSelections}{{4}{23}}
-\citation{Goodfellow}
-\citation{Virtanen}
-\citation{Liu}
-\citation{Geron2}
-\citation{James}
-\citation{Virtanen}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.0.1}The Design Matrix}{25}\protected@file@percent }
-\newlabel{eqn-X1Shape}{{24}{25}}
-\newlabel{eqn-X2Shape}{{25}{25}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.0.2}Audio Preprocessing}{25}\protected@file@percent }
-\citation{Geron}
-\citation{Goodfellow}
-\citation{Loy}
-\citation{Mierswa}
-\citation{Liu}
-\citation{Zhang}
-\citation{Kahn}
-\citation{Virtanen}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Spectrogram Feature}{26}\protected@file@percent }
-\newlabel{subsec-spectrogram}{{4.1}{26}}
-\newlabel{fig-spectrograms}{{\caption@xref {fig-spectrograms}{ on input line 695}}{26}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Spectrogram representations of various waveforms\relax }}{26}\protected@file@percent }
-\newlabel{eqn-FrameMatrix}{{26}{26}}
-\newlabel{eqn-IndexingA}{{27}{26}}
-\citation{Olson}
-\citation{Peatross}
-\citation{Short}
-\citation{Peatross}
-\citation{Olson}
-\citation{Virtanen}
-\newlabel{eqn-Hann}{{28}{27}}
-\newlabel{eqn-WindowMatrix}{{29}{27}}
-\newlabel{eqn-DFTMatrix}{{30}{27}}
-\newlabel{eqn-Spectrogram}{{31}{27}}
-\newlabel{eqn-IndexingS}{{32}{27}}
-\citation{Olson}
-\citation{Virtanen}
-\citation{White}
-\newlabel{eqn-X1 shape}{{33}{28}}
-\citation{Olson}
-\citation{Virtanen}
-\citation{Liu}
-\citation{Kahn}
-\citation{Zhang}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Time-Space Features}{29}\protected@file@percent }
-\newlabel{subsec-time}{{4.2}{29}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Time Domain Envelope}{29}\protected@file@percent }
-\newlabel{eqn-RMS}{{34}{29}}
-\newlabel{fig-FeatureTDE}{{\caption@xref {fig-FeatureTDE}{ on input line 809}}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Time domain envelope visualized in feature-space\relax }}{29}\protected@file@percent }
-\citation{Virtanen}
-\citation{Liu}
-\citation{Virtanen}
-\citation{Virtanen}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Zero Crossing Rate}{30}\protected@file@percent }
-\newlabel{eqn-ZXR}{{35}{30}}
-\newlabel{fig-FeatureZXR}{{\caption@xref {fig-FeatureZXR}{ on input line 830}}{30}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Zero crossing rate visualized in feature-space\relax }}{30}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Center of Mass}{30}\protected@file@percent }
-\newlabel{eqn-FeatureTCM}{{36}{30}}
-\newlabel{fig-FeatureTCM}{{\caption@xref {fig-FeatureTCM}{ on input line 851}}{30}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Temporal center-of-mass visualized in feature-space\relax }}{30}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.4}Auto Correlation Coefficients}{31}\protected@file@percent }
-\newlabel{eqn-FeatureACC}{{37}{31}}
-\newlabel{fig-FeatureACC}{{\caption@xref {fig-FeatureACC}{ on input line 870}}{31}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces First four auto correlation coefficients visualized in feature-space\relax }}{31}\protected@file@percent }
-\citation{Liu}
-\citation{Virtanen}
-\citation{Zhang}
-\citation{Virtanen}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Frequency-Space Features}{32}\protected@file@percent }
-\newlabel{subsec-frequency}{{4.3}{32}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Mel Frequency Cepstral Coefficients}{32}\protected@file@percent }
-\newlabel{eqn-HztoMel}{{38}{32}}
-\newlabel{eqn-MeltoHz}{{39}{32}}
-\newlabel{fig-MelFilterBanks}{{\caption@xref {fig-MelFilterBanks}{ on input line 910}}{32}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Mel Filter Banks shown in frequency space with units of Hertz\relax }}{32}\protected@file@percent }
-\newlabel{eqn-FilterBanks}{{40}{32}}
-\citation{Olson}
-\citation{White}
+\newlabel{eqn-shapeX2}{{43}{32}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.3}The Final Output Branch}{32}\protected@file@percent }
 \citation{Goodfellow}
 \citation{Geron2}
 \citation{Mitchell}
-\newlabel{fig-FeatureMFCC}{{\caption@xref {fig-FeatureMFCC}{ on input line 926}}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Mel Frequency Ceptral Coefficients in feature-space\relax }}{33}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Center of Mass}{33}\protected@file@percent }
-\newlabel{eqn-FeatureFCM}{{41}{33}}
-\newlabel{fig-FeatureFCM}{{\caption@xref {fig-FeatureFCM}{ on input line 951}}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Frequency center-of-mass visualized in feature-space\relax }}{33}\protected@file@percent }
+\citation{James}
+\citation{Geron}
+\citation{James}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Evaluating Performance}{33}\protected@file@percent }
 \newlabel{sec-PerfEval}{{5}{33}}
-\citation{James}
-\citation{Geron}
-\citation{James}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Cross Validation}{34}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces A $K$-Fold Cross Validation program.\relax }}{34}\protected@file@percent }
-\newlabel{algFeedForward}{{4}{34}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Cross Validation}{33}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces A $K$-Fold Cross Validation program.\relax }}{33}\protected@file@percent }
+\newlabel{algFeedForward}{{4}{33}}
 \citation{Geron}
 \citation{Geron}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Performance Metrics}{35}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{35}\protected@file@percent }
-\newlabel{eqn-ConfMat}{{43}{35}}
-\newlabel{fig-ConfMat}{{\caption@xref {fig-ConfMat}{ on input line 1029}}{35}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Example Confusion Matrices for $k$-classes tasks\relax }}{35}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Precision Score}{36}\protected@file@percent }
-\newlabel{eqn-BinaryPrecision}{{44}{36}}
-\newlabel{eqn-KPrecision}{{45}{36}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.3}Recall Score}{36}\protected@file@percent }
-\newlabel{eqn-BinaryRecall}{{46}{36}}
-\newlabel{eqn-KRecall}{{47}{36}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Experimental Results}{37}\protected@file@percent }
-\newlabel{sec-Results}{{6}{37}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{38}\protected@file@percent }
-\newlabel{sec-Conclusion}{{7}{38}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Acknowledgments}{39}\protected@file@percent }
-\newlabel{sec-Acknowledge}{{8}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Performance Metrics}{34}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{34}\protected@file@percent }
+\newlabel{eqn-ConfMat}{{5.2.1}{34}}
+\newlabel{fig-ConfMat}{{\caption@xref {fig-ConfMat}{ on input line 1042}}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Example Confusion Matrices for $k$-classes tasks\relax }}{34}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Precision Score}{35}\protected@file@percent }
+\newlabel{eqn-BinaryPrecision}{{44}{35}}
+\newlabel{eqn-KPrecision}{{45}{35}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.3}Recall Score}{35}\protected@file@percent }
+\newlabel{eqn-BinaryRecall}{{46}{35}}
+\newlabel{eqn-KRecall}{{47}{35}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Tracking Metrics over a Period of Training}{35}\protected@file@percent }
+\newlabel{subsec-TrainingMetrics}{{5.3}{35}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Experimental Results}{36}\protected@file@percent }
+\newlabel{sec-Results}{{6}{36}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{37}\protected@file@percent }
+\newlabel{sec-Conclusion}{{7}{37}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Acknowledgments}{38}\protected@file@percent }
+\newlabel{sec-Acknowledge}{{8}{38}}
 \bibstyle{apalike}
 \bibcite{Geron}{1}
 \bibcite{Geron2}{2}
