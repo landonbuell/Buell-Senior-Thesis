@@ -19,14 +19,14 @@ import NeuralNetworkUtilities as NN_utils
 if __name__ == '__main__':
        
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
-    read = os.path.join(parent,'Target-Data')
-    #read = os.path.join(parent,'ChaoticSynth-Data')
+    #read = os.path.join(parent,'Target-Data')
+    read = os.path.join(parent,'ChaoticSynth-Data')
     model = os.path.join(parent,'Model-Data')
     export = os.path.join(parent,'Output-Data')
     modelName = "ChaoticSynthClassifier"
 
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],"train-predict",modelName,True)    
+    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],"predict",modelName,False)    
     FILEOBJECTS = ProgramSetup.__Call__()
     (dataPath,exportPath,modelPath) = ProgramSetup.GetLocalPaths
     (modelName,newModel,N_classes,timeStart) = ProgramSetup.GetModelParams
