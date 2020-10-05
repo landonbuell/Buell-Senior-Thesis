@@ -18,6 +18,35 @@ PlottingUtilities.py - "Plotting Utilities"
 
             #### PLOTTING FUNCTIONS ####
 
+def PlotFeatures (X1,classes,labels,title='',
+                      save=False,show=True):
+    """
+    Create 2D visualization Comparing features
+    --------------------------------
+    X1 (arr) : (1 x N) array of data to plot on x-axis
+    X2 (arr) : (1 x N) array of data to plot on y-axis
+    classes (arr) : (1 x N) array of labels use to color-code by class
+    labels (iter) : (2 x 1) iterable containing labels for x & y axes
+    title (str) : Title for plot
+    save (bool) : If true, save MPL figure to cwd (False by Default)
+    show (bool) : If true, shows current figure to User (True by Default)
+    --------------------------------
+    return None
+    """
+    plt.figure(figsize=(16,12))
+    plt.title(title,size=40,weight='bold')
+    plt.xlabel(str(labels[0]),size=20,weight='bold')
+    plt.ylabel(str(labels[1]),size=20,weight='bold')
+
+    plt.scatter(np.arange(len(X1)),X1,c=classes)
+
+    plt.grid()
+    plt.tight_layout()
+    if save == True:
+        plt.savefig(title+'.png')
+    if show == True:
+        plt.show()
+
 def Plot_Features_2D (X1,X2,classes,labels,title='',
                       save=False,show=True):
     """

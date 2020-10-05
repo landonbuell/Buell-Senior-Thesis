@@ -25,6 +25,7 @@
     <Compile Include="FeatureUtilities.py" />
     <Compile Include="MathUtilities.py" />
     <Compile Include="PlottingUtilities.py" />
+    <Compile Include="SystemUtilities.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

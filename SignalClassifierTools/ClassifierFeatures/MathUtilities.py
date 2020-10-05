@@ -8,8 +8,6 @@ Instrument Classifier v0
             #### IMPORTS ####
               
 import numpy as np
-import scipy.stats as stats
-import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
 """
@@ -53,5 +51,12 @@ class MathematicalUtilities :
         Return Reimann Sum approximation of array
         """
         return np.sum(X)*dx
+
+    @staticmethod
+    def ScaleDesignMatrix(X):
+        """ Apply Standard Scaler to Design Matrix Features """
+        Scaler = StandardScaler()
+        X_new = Scaler.fit_transform(X)
+        return X_new
 
 
