@@ -215,21 +215,17 @@ class ProgramInitializer:
         self.starttime = \
             dt_obj.isoformat(sep='.',timespec='auto').replace(':','.').replace('-','.')
         print("Time Stamp:",self.starttime)
+
+        # Establish Paths
+        self.readPath = pathList[0]
+        self.modelPath =  pathList[1]
+        self.exportPath = pathList[2]
+
+        # Establish Params
         self.programMode = mode
         self.newModel = newModel
         self.modelName = modelName
-        try:
-            inputArgs = self.ArgumentParser()   # Parse Input args
-            self.readPath  = inputArgs[0]       # Data files kept here 
-            self.modelPath = inputArgs[1]       # store Network Model data
-            self.exportPath = inputArgs[2]      # store network output
-            self.programMode = inputArgs[3]     # set program mode
-            self.modelName = inputArgs[4]       # name to use
-            self.newModel = inputArgs[5]        # create new model?         
-        except:
-            self.readPath = pathList[0]
-            self.modelPath =  pathList[1]
-            self.exportPath = pathList[2]  
+        
         # Ensure that all variables make sense
         assert self.programMode in ['train','train-predict','predict']
         assert self.newModel in [True,False]
@@ -257,7 +253,8 @@ class ProgramInitializer:
         # Find Number of Classes
         if self.programMode in ['train','train-predict']:
             try:
-                self.n_classes = max(self.GetDecoder.keys()) + 1
+                decodeKeys = [i for i in self.GetDecoder.keys()]
+                self.n_classes = np.max(decodeKeys) + 1
             except:
                 print("\n\tERROR! - Something when wrong with the encoder dictionary!")
                 raise ValueError()
