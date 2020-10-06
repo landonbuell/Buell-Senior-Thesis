@@ -243,8 +243,8 @@ class ArgumentValidator :
         self.modelPath = os.path.join(parent,'Model-Data')
         self.exportPath = os.path.join(parent,'Output-Data')
         self.programMode = "train-predict"
-        self.modelName = "InDevCLF"
-        self.newModel= True
+        self.modelName = "ChaoticSynthClassifier"
+        self.newModel = True
 
     @property
     def GetLocalPaths (self):
