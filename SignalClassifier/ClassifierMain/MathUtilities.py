@@ -51,4 +51,15 @@ class MathematicalUtilities :
         """
         return np.sum(X)*dx
 
+    @staticmethod
+    def PadZeros(X,outCols=256):
+        """ Zero-pad 2D Array """
+        Xshape = X.shape                       # shape of spectrogram
+        colDeficit = outCols - Xshape[-1]      # number of missing columns
+        if colDeficit > 1:                          # need to add cols
+            zeroPad = np.zeros(shape=(Xshape[0],colDeficit),dtype=float)
+            X = np.concatenate((X,zeroPad),axis=-1) # pad w/ zeroes
+        else:                                       # otherwise
+            X = X[:,:outCols]                       # remove cols
+        return X                                    # return new Array
 

@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>08b0a18f-a687-4bff-b773-5edb90b5dd25</ProjectGuid>
+    <ProjectGuid>8c3cd77f-20c8-4fa8-8ba5-0ee71fc86099</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>FeaturesMAIN.py</StartupFile>
+    <StartupFile>CrossValidationMain.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ClassifierFeatures</Name>
-    <RootNamespace>ClassifierFeatures</RootNamespace>
+    <Name>KFoldsCrossValidation</Name>
+    <RootNamespace>KFoldsCrossValidation</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,10 +21,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FeaturesMAIN.py" />
-    <Compile Include="FeatureUtilities.py" />
-    <Compile Include="MathUtilities.py" />
-    <Compile Include="PlottingUtilities.py" />
+    <Compile Include="CrossValidationMain.py" />
+    <Compile Include="XValUtilities.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SystemUtilities.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

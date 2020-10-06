@@ -1,7 +1,7 @@
 """
 Landon Buell
 PHYS 799
-Instrument Classifier 
+Instrument Classifier v0
 12 June 2020
 """
 
@@ -30,25 +30,51 @@ class BaseFeatures:
     Basic Feature Extraction Class
         'Time_Series_Features' and 'Frequency_Series_Features' inherit from here
     Assigns waveform attribute, sample rate, number of samples,
+    --------------------------------
+    waveform (arr) : 1 x N array of FP64 values representing a time-series waveform
+    rate (int) : Signal sample rate in Hz (samples/sec)
+    npts (int) : Number of samples used in each analysis frame
+    overlap (float) : Percent overlap between frames (must be in (0,1))
+    n_frames (int) : Number of desired analysis frames
+    presetFrame (arr) : Array of analysis frames already made
+    --------------------------------
     divides into time-frames
     """
 
-    def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
+    def __init__(self,waveform,rate=44100,npts=4096,overlap=0.75,n_frames=256,presetFrames=None):
         """ Initialize Class Object """
         self.signal = waveform              # set waveform to self
-        self.n_samples = self.signal.shape[0]   # samples in waveform
         self.rate = rate                    # sample rate
         self.npts = npts                    # points per frame
         self.overlap = overlap              # overlap between frames
-        if frames is None:                  # if not givenframes
-            self.frames = self.TimeFrames() # set create the frames
-        else:                               # otherwise
-            self.frames = frames            # set the framnes
-        self.n_frames = self.frames.shape[0]# number of frames
+        self.n_frames = n_frames            # number of desired frames     
+        self.frameStep = int(self.npts*(1-self.overlap))  # steps between frames
+        self.ResizeWaveform()
+        if presetFrames is None:                # if not given frames
+            self.frames = self.AnalysisFrames() # set create the frames
+        else:                                   # otherwise
+            self.frames = presetFrames          # set the frames
+            self.n_frames = self.frames.shape[0]
 
-    def TimeFrames (self):
+    def ResizeWaveform(self):
+        """ Truncate or Zero-Pad Waveform Depending on Length """
+        currentSamples = self.signal.shape[-1]  # samples in waveform
+        neededSamples = self.frameStep * (self.n_frames - 1) + self.npts
+        if currentSamples > neededSamples:              # too many samples
+            self.signal = self.signal[:neededSamples]   # take first needed samples
+        elif currentSamples < neededSamples:            # not enough samples
+            deficit = neededSamples - currentSamples    # sample deficit
+            zeroPad = np.zeros((1,deficit),dtype=np.float64)
+            self.signal = np.append(self.signal,zeroPad)# add the zero pad to array
+        else:                                           # exactly right number of samples
+            pass
+        self.n_samples = self.signal.shape[-1]  # samples in waveform
+        assert (self.n_samples == neededSamples)
+        return self
+
+    def AnalysisFrames (self):
         """
-        Divide waveforms into frames of fixed length
+        Divide waveforms into analysis frames of fixed length
             Waveform in tail-zero padded to adjust length
             Useful for building spectrogram
         --------------------------------
@@ -57,14 +83,11 @@ class BaseFeatures:
         Return frames object (n_frames = 
         """
         frames = np.array([])               # array to hold time frames
-        step = int(self.npts*(1-self.overlap))  # steps between frames
-        for I in range(0,self.n_samples,step):  # iter through wave form
-            x = self.signal[I:I+self.npts]           # create single frame
-            if x.shape[0] != self.npts:         # frame w/o N samples
-                pad = self.npts - x.shape[0]    # number of zeroes to pad
-                x = np.append(x,np.zeros(shape=(1,pad)))  
-            frames = np.append(frames,x)        # add single frame
-        frames = frames.reshape(-1,self.npts)   # reshape (each row is frame)
+        step = self.frameStep
+        for i in range(0,256):                              # iter through wave form
+            x = self.signal[(i*step):(i*step)+self.npts]    # create single frame 
+            frames = np.append(frames,x)                    # add single frame
+        frames = frames.reshape(self.n_frames,self.npts)    # reshape (each row is frame)
         return frames                       # return frames
 
 
@@ -74,18 +97,19 @@ class TimeSeriesFeatures (BaseFeatures):
         Some methods can be applied to the full signal : attrb='signal'
         or applied to each time-frame : attrb='frames'
     --------------------------------
-    waveform (arr) : Array of shape (1 x n_samples) representing 
-    rate (int) : Sample rate of signal in Hz
-    frames (arr) : Array of time frames, if None, a new array is created
-    npts (int) : Number of samples to include in each time-frame
-    overlap (float) : Percentage overlap of sample between adjacent frames
+    waveform (arr) : 1 x N array of FP64 values representing a time-series waveform
+    rate (int) : Signal sample rate in Hz (samples/sec)
+    npts (int) : Number of samples used in each analysis frame
+    overlap (float) : Percent overlap between frames (must be in (0,1))
+    n_frames (int) : Number of desired analysis frames
+    presetFrame (arr) : Array of analysis frames already made
     --------------------------------
     Return Instantiated Time Series Feature Object
     """
-    def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
+    def __init__(self,waveform,rate=44100,npts=4096,overlap=0.75,n_frames=256,presetFrames=None):
         """ Initialize Class Object Instance """
-        super().__init__(waveform=waveform,rate=rate,
-                frames=frames,npts=npts,overlap=overlap)
+        super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
+                         n_frames=n_frames,presetFrames=presetFrames)
 
     def __Call__(self):
         """
@@ -98,8 +122,7 @@ class TimeSeriesFeatures (BaseFeatures):
         featureVector = np.array([])
         featureVector = np.append(featureVector,self.TimeDomainEnvelope())
         featureVector = np.append(featureVector,self.ZeroCrossingRate())
-        featureVector = np.append(featureVector,self.CenterOfMass())
-        featureVector = np.append(featureVector,self.WaveformDistributionData())
+        featureVector = np.append(featureVector,self.CenterOfMass())       
         featureVector = np.append(featureVector,self.AutoCorrelationCoefficients())
         return featureVector
     
@@ -199,19 +222,20 @@ class FrequencySeriesFeatures (BaseFeatures):
     """
     Extract feature information from signal data in time-domain
     --------------------------------
-    waveform (arr) : Array of shape (1 x n_samples) representing 
-    rate (int) : Sample rate of signal in Hz
-    frames (arr) : Array of time frames, if None, a new array is created
-    npts (int) : Number of samples to include in each time-frame
-    overlap (float) : Percentage overlap of sample between adjacent frames
+    waveform (arr) : 1 x N array of FP64 values representing a time-series waveform
+    rate (int) : Signal sample rate in Hz (samples/sec)
+    npts (int) : Number of samples used in each analysis frame
+    overlap (float) : Percent overlap between frames (must be in (0,1))
+    n_frames (int) : Number of desired analysis frames
+    presetFrame (arr) : Array of analysis frames already made
     --------------------------------
     Return Instantiated Frequency Series Feature Object
     """
 
-    def __init__(self,waveform,rate=44100,frames=None,npts=4096,overlap=0.75):
+    def __init__(self,waveform,rate=44100,npts=4096,overlap=0.75,n_frames=256,presetFrames=None):
         """ Initialize Class Object Instance """
-        super().__init__(waveform=waveform,rate=rate,
-                frames=frames,npts=npts,overlap=overlap)
+        super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
+                         n_frames=n_frames,presetFrames=presetFrames)
 
         # lambda function unit conversions
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
@@ -286,6 +310,7 @@ class FrequencySeriesFeatures (BaseFeatures):
                 Z = Z[pts]          # slice
         Z /= self.npts              # pts in FFT
         return Z                    # return Axis
+
 
     def MelFilters (self,n_filters):
         """ 
