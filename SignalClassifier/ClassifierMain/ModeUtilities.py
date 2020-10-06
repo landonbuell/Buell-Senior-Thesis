@@ -69,13 +69,13 @@ class ProgramMode:
 
     def CollectFeatures (self,fileobj):
         """ Collected Features from a Given .WAV file object"""
-        fileobj = fileobj.ReadFileData()                # read raw .wav file
-       
+        fileobj = fileobj.ReadFileWAV()             # read raw .wav file
+        featureVector = ML_utils.FeatureArray(fileobj.targetInt)
+
         # Create Feature vector for MLP Branch
-        featureVector = ML_utils.FeatureArray(fileobj.targetInt)        # Structure to hold all MLP features
-        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  # collect time-domain features     
+        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  # collect time-domain features  
         featureVector.AddFeatures(timeFeatures.__Call__())              # and time-domain features
-        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal,presetFrames=timeFeatures.frames)
+        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal)
         featureVector.AddFeatures(freqFeatures.__Call__())              # add frequency-domain features
             
         # Create Spectrogram Matrix for CNN Branch
