@@ -8,6 +8,7 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import os
+import argparse
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import ModeUtilities as mode_utils
@@ -18,15 +19,9 @@ import NeuralNetworkUtilities as NN_utils
 
 if __name__ == '__main__':
        
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
-    read = os.path.join(parent,'Target-Data')
-    #read = os.path.join(parent,'ChaoticSynth-Data')
-    model = os.path.join(parent,'Model-Data')
-    export = os.path.join(parent,'Output-Data')
-    modelName = "InDevCLF"
-
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],"train-predict",modelName,True)    
+    Args = sys_utils.ArgumentValidator()
+    ProgramSetup = sys_utils.ProgramInitializer(Args.GetLocalPaths,Args.GetSystemParams)    
     FILEOBJECTS = ProgramSetup.__Call__()
     (dataPath,exportPath,modelPath) = ProgramSetup.GetLocalPaths
     (modelName,newModel,N_classes,timeStart) = ProgramSetup.GetModelParams
@@ -55,14 +50,11 @@ if __name__ == '__main__':
 
     # EXECUTE PROGRAM
     del(ProgramSetup)
+    del(Args)
     ProgramMode.__Call__(NeuralNetwork)      
 
     dt_obj = sys_utils.datetime.datetime.now()
     endtime = dt_obj.isoformat(sep='.',timespec='auto').replace(':','.').replace('-','.')
     print("Time Stamp:",endtime)
     print("=)")
-    
-
-
-        
     

@@ -69,7 +69,7 @@ class ProgramMode:
 
     def CollectFeatures (self,fileobj):
         """ Collected Features from a Given .WAV file object"""
-        fileobj = fileobj.ReadFileData()                # read raw .wav file
+        fileobj = fileobj.ReadFileWAV()             # read raw .wav file
         featureVector = ML_utils.FeatureArray(fileobj.targetInt)
 
         # Create Feature vector for MLP Branch

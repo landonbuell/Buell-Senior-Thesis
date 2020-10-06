@@ -56,20 +56,6 @@ class FileObject:
         except:
             self.targetStr = None    # unknown str
         
-    def AssignTarget (self,target):
-        """ Assign Target value to instance """
-        self.target = target    # set y
-        return self             # return self
-
-    def ReadFileData (self):
-        """ Read Data into array based on data type """
-        if self.extension == ".wav":    # is wav file?
-            return self.ReadFileWAV()   # read 
-        elif self.extension == ".txt":  # is txt file?
-            return self.ReadFileTXT()   # read .txt file
-        else:
-            raise NotImplementedError() # extension not matched
-
     def ReadFileWAV (self):
         """ Read raw .wav file data from local path """
         rate,data = sciowav.read(self.fullpath)    
@@ -152,7 +138,7 @@ class CategoryDictionary :
                 self.encoder,self.decoder = self.LoadCategories()
             else:
                 # File does not exists, make a new Dictionary
-                print("\tCould not fine Encode/Decode Dictionary, building new")
+                print("\tCould not find Encode/Decode Dictionary, building new")
                 self.encoder,self.decoder = self.BuildCategories(fileObjs)
                 self.ExportCategories()
         return self
@@ -195,46 +181,122 @@ class CategoryDictionary :
              
             #### PROGRAM PROCESSING CLASS ####
 
-class ProgramInitializer:
-    """
-    Object to handle all program preprocessing
-    --------------------------------
-    pathList (list) : List of Local Directory paths - 
-        [*readPath - training data index, *modelpath - Store models here,
-            *exportPath - predictions / traing data are exported to
-    mode (str) : String indicating which mode to execute program with
-    newmodels (bool): If True, create new Nueral Network Models
-    --------------------------------
-    Return Instantiated Program Start Class Instance
-    """
+class ArgumentValidator :
+    """ Process and Validate Command Line Arguments """
 
-    def __init__(self,pathList=[None,None,None],mode=None,
-                 modelName=None,newModel=None):
-        """ Initialize Class Object Instance """
-        dt_obj = datetime.datetime.now()
-        self.starttime = \
-            dt_obj.isoformat(sep='.',timespec='auto').replace(':','.').replace('-','.')
-        print("Time Stamp:",self.starttime)
+    def __init__(self):
+        """ Initialize ArgumentValidator Instance """
+        self.MakeArgumentParser()
 
-        # Establish Paths
-        self.readPath = pathList[0]
-        self.modelPath =  pathList[1]
-        self.exportPath = pathList[2]
+        # Parse & return Args
+        if self.GetParsedArguments() == False:
+            # Can't Get CL-Args, use hardcoded ones
+            self.HardCodedVars()
 
-        # Establish Params
-        self.programMode = mode
-        self.newModel = newModel
-        self.modelName = modelName
-        
-        # Ensure that all variables make sense
+        # make Sure Args are in acceptable values
+        assert self.modelName is not None
         assert self.programMode in ['train','train-predict','predict']
         assert self.newModel in [True,False]
-        assert modelName is not None
 
+        self.ValidateLocalPaths(self.GetLocalPaths)   
         if (self.programMode == 'predict') and (self.newModel == True):
             print("\n\tERROR! -  Cannot run predictions on an untrained (new) Model!")
             raise BaseException()
 
+    def MakeArgumentParser(self):
+        self.argumentParser = argparse.ArgumentParser(description="Run Signal Classifier Program")
+        """ Construct Argument Parser Object """
+        self.argumentParser.add_argument("dataPath",type=str,
+                                         help="local path where target data is held")
+        self.argumentParser.add_argument("exportPath",type=str,
+                                         help="local path where model/dictionary data is/will be stored")
+        self.argumentParser.add_argument("modelPath",type=str,
+                                         help="local path where model history/predictions are exported")
+      
+        self.argumentParser.add_argument("programMode",type=str,
+                                         help="Mode of Programe Execution: ['train','train-predict','predict']")
+        self.argumentParser.add_argument("modelName",type=str,
+                                         help="Name assigned to model for human-indentification")
+        self.argumentParser.add_argument("newModel",type=bool,
+                                         help="If True, existing model of same name is overwritten")
+        return self
+
+    def GetParsedArguments(self):
+        """ Collect All Command-Line Parsed Arguments in a List """
+        try:
+            arguments = self.argumentParser.parse_args()
+            self.readPath = arguments[0]
+            self.exportPath = arguments[1]
+            self.modelPath = arguments[2]
+            self.programMode = arguments[3]
+            self.modelName = arguments[4]
+            self.newModels = arguments[5]
+            return True
+        except:
+            return False
+
+    def HardCodedVars(self):
+        """ These are Hard-coded vars, used only for development """
+        parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
+        self.readPath = os.path.join(parent,'Target-Data')
+        #self.readPath = os.path.join(parent,'ChaoticSynth-Data')
+        self.modelPath = os.path.join(parent,'Model-Data')
+        self.exportPath = os.path.join(parent,'Output-Data')
+        self.programMode = "train-predict"
+        self.modelName = "InDevCLF"
+        self.newModel= True
+
+    @property
+    def GetLocalPaths (self):
+        """ Return Necessaru Directory Paths """
+        return (self.readPath,self.exportPath,self.modelPath)
+
+    @property
+    def GetSystemParams (self):
+        """ Return Important Parameters for Creating Models """
+        return (self.programMode,self.modelName,self.newModel)
+
+    def ValidateLocalPaths (self,paths=[]):
+        """ Confirm Existance of All Directories in List """
+        for path in paths:
+            if os.path.isdir(path) == False:
+                # Directory does not exist
+                raise NotADirectoryError(path)
+        return self
+        
+class ProgramInitializer:
+    """
+    Object to handle all program preprocessing
+    --------------------------------
+    pathList (list) : List of 3 Local Directory paths:
+        readPath - local path where target data is held       
+        exportPath - local path where training history / predictions are exported
+        modelPath - local path where model/dictionary data is/will be stored
+    argsList (list): List of 3 Import Arguments for Program execution:
+        mode (str) : String indicating which mode to execute program with
+        modelname (str) : Name for Neural Network
+        newModel (bool): If True, create new Neural Network Models
+    --------------------------------
+    Return Instantiated Program Start Class Instance
+    """
+
+    def __init__(self,pathList=[None,None,None],argsList=[None,None,None]):
+        """ Initialize Class Object Instance """
+        dt_obj = datetime.datetime.now()
+        starttime = dt_obj.isoformat(sep='.',timespec='auto')
+        self.starttime = starttime.replace(':','.').replace('-','.')
+        print("Time Stamp:",self.starttime)
+
+        # Establish Paths
+        self.readPath = pathList[0]
+        self.exportPath = pathList[1]
+        self.modelPath =  pathList[2]
+        
+        # Establish Params
+        self.programMode = argsList[0]      
+        self.modelName = argsList[1]
+        self.newModel = argsList[2]
+        
     def __repr__(self):
        """ Return String representation of Object/Instance """
        return "ProgramInitializer performs preprocessing for program parameters "
@@ -294,36 +356,6 @@ class ProgramInitializer:
         print("\n")
         return None
 
-    def ArgumentParser(self):
-        """ Process Command Line Arguments """
-        parser = argparse.ArgumentParser(prog='SignalClassifier',
-                                         usage='Classify .WAV files by using pre-exisiting classifiered samples.',
-                                         description="\n\t CLI Help for Instrument Classifier Program:",
-                                         add_help=True)
-
-        parser.add_argument("dataPath",type=str,
-                            help="Full Local Directory Path of file(s) containing \
-                                    rows of of answer-key-like data; formatted: \
-                                    | Index | Fullpath  | Target Int    | Target Str |")
-        parser.add_argument('modelPath',type=str,
-                            help="Full Local Data Directory Path to store intermediate \
-                                    file data. Reccommend using empty/new path.")
-        parser.add_argument('exportPath',type=str,
-                            help='Full Local Directory Path to export model predicitions and \
-                                Evaluations to.')
-        parser.add_argument('programMode',type=str,
-                            help="Mode for program execution. Must be in \
-                                    ['train','train-test','predict']")
-        parser.add_argument("modelName",type=str,
-                            help="Name of Model to use or create")
-        parser.add_argument("newModels",type=bool,
-                            help="If True, Networks sharing the same name are overwritten, \
-                                and new models are created in place")
-        # Parse and return args
-        args = parser.parse_args()
-        return [args.dataPath,args.modelPath,args.exportPath,
-                args.programMode,args.modelName,args.newModels]
-
     def CollectCSVFiles (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
         csv_files = []
@@ -345,13 +377,3 @@ class ProgramInitializer:
                 fileobjects.append(FileObject(row))    # add row to obj list
             del(frame)                          # del frame  
         return fileobjects                      # return list of insts
-
-    def GetNClasses (self,fileobjects):
-        """ Find Number of classes in target vector """
-        y = [x.targetInt for x in fileobjects]   # collect target from each file
-        try:                            # Attempt    
-            return len(np.unique(y))    # account for zero-index
-        except Exception:               # failure?
-            return None                 # no classes?
-
-
