@@ -59,7 +59,9 @@ class DesignMatrix:
     def ShapeBySample (self):
         """ Reshape design matrix by number of samples """
         self.X = np.array(self.X)
-        self.X.reshape(self.n_samples,-1)
+        sampleShape = self.X[0].shape       # shape of 1 sample
+        newShape = [self.n_samples] + [i for i in sampleShape]
+        self.X = self.X.reshape(newShape)
         return self
 
     def SetMatrixData(self,X_new):
