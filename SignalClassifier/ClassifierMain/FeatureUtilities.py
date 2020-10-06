@@ -44,6 +44,7 @@ class BaseFeatures:
     def __init__(self,waveform,rate=44100,npts=4096,overlap=0.75,n_frames=256,presetFrames=None):
         """ Initialize Class Object """
         self.signal = waveform              # set waveform to self
+        self.n_samples = self.signal.shape[-1]  # samples in waveform
         self.rate = rate                    # sample rate
         self.npts = npts                    # points per frame
         self.overlap = overlap              # overlap between frames
@@ -79,10 +80,15 @@ class BaseFeatures:
         """
         frames = np.array([])               # array to hold time frames
         step = self.frameStep               # iter step size
-        for i in range(0,self.n_frames):                    # iter through wave form
+        framesInWaveform = int(np.floor(self.n_samples/step))    # frame from this waveform
+        for i in range(0,framesInWaveform):                 # iter through wave form
             x = self.signal[(i*step):(i*step)+self.npts]    # create single frame 
+            if len(x) < self.npts:                          # not enough samples
+                deficit = self.npts - len(x)                # number of zeros to pad
+                zeroPad = np.zeros((1,deficit),dtype=float) # create pad
+                x = np.append(x,zeroPad)            # append pad to frame
             frames = np.append(frames,x)                    # add single frame
-        frames = frames.reshape(self.n_frames,self.npts)    # reshape (each row is frame)
+        frames = frames.reshape(framesInWaveform,self.npts)    # reshape (each row is frame)
         return frames                       # return frames
 
 class TimeSeriesFeatures (BaseFeatures):
@@ -106,7 +112,7 @@ class TimeSeriesFeatures (BaseFeatures):
                          n_frames=n_frames,presetFrames=presetFrames)
         self.frames = None          # no analysis frames? (temp???)
 
-    def __Call__(self,n_frames=256):
+    def __Call__(self):
         """
         Collect preset features from self in single function
         --------------------------------
@@ -121,6 +127,10 @@ class TimeSeriesFeatures (BaseFeatures):
         featureVector = np.append(featureVector,self.ZeroCrossingRate())
         featureVector = np.append(featureVector,self.CenterOfMass())       
         featureVector = np.append(featureVector,self.AutoCorrelationCoefficients())
+        # Crop Waveform if previously Shorter
+        if self.oldSamples < self.n_samples:
+            self.signal = self.signal[:self.oldSamples]
+
         return featureVector
     
     def TimeDomainEnvelope(self,attrb='signal'):
@@ -216,16 +226,11 @@ class FrequencySeriesFeatures (BaseFeatures):
         """ Initialize Class Object Instance """
         super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
                          n_frames=n_frames,presetFrames=presetFrames)
+        self.frames = self.AnalysisFrames()
 
         # lambda function unit conversions
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
-
-        # Time Axis, Frequency Axis, Spectrogram
-        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
-        self.mels = 2595*np.log10(1+self.hertz/700)
-        self.t = np.arange(0,self.n_frames,1)   
-        self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
 
     def __Call__(self):
         """
@@ -235,6 +240,14 @@ class FrequencySeriesFeatures (BaseFeatures):
         --------------------------------
         Return features in frequency-domain
         """
+        # Time Axis, Frequency Axis, Spectrogram
+        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
+        self.mels = 2595*np.log10(1+self.hertz/700)
+        self.t = np.arange(0,self.n_frames,1)   
+        self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
+        self.spectrogram = math_utils.MathematicalUtilities.PadZeros(self.spectrogram,self.n_frames)
+
+        # Add Elements to Feature vector
         featureVector = np.array([])
         featureVector = np.append(featureVector,self.MelFrequencyCeptralCoefficients())
         featureVector = np.append(featureVector,self.CenterOfMass())
@@ -290,7 +303,6 @@ class FrequencySeriesFeatures (BaseFeatures):
                 Z = Z[pts]          # slice
         Z /= self.npts              # pts in FFT
         return Z                    # return Axis
-
 
     def MelFilters (self,n_filters):
         """ 
@@ -354,15 +366,3 @@ class FrequencySeriesFeatures (BaseFeatures):
             return np.mean(COM,axis=-1) # return average
         else:                           # scalar
             return COM/self.n_samples   # divide by n samples 
-
-    def FrequnecyDistributionData (self,attrb='spectrogram'):
-        """ 
-        Compute Distribution Data of Frequency Spectrum
-        --------------------------------
-        attrb (str) : Attribute to use for computations. Must be in ['frequencySeries','spectrogram']
-        --------------------------------
-        return [mean,median,variance] of array or last axis of array
-        """
-        assert attrb in ['frequencySeries','spectrogram']
-        X = self.__getattribute__(attrb)    # isolate frequency or frames
-        raise NotImplementedError

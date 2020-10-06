@@ -214,7 +214,7 @@ class ArgumentValidator :
                                          help="local path where model history/predictions are exported")
       
         self.argumentParser.add_argument("programMode",type=str,
-                                         help="Mode of Programe Execution: ['train','train-predict','predict']")
+                                         help="Mode of Program Execution: ['train','train-predict','predict']")
         self.argumentParser.add_argument("modelName",type=str,
                                          help="Name assigned to model for human-indentification")
         self.argumentParser.add_argument("newModel",type=bool,
