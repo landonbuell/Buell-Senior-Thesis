@@ -248,7 +248,7 @@ class ArgumentValidator :
 
     @property
     def GetLocalPaths (self):
-        """ Return Necessaru Directory Paths """
+        """ Return Necessary Directory Paths """
         return (self.readPath,self.exportPath,self.modelPath)
 
     @property
