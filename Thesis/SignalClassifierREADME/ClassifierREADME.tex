@@ -1,0 +1,85 @@
+% ================================
+% Landon Buell
+% Kevin Short 
+% PHYS 799.01
+% 11 October 2020
+% ================================
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{fancyhdr}
+
+
+\begin{document}
+
+% ================================================================
+
+\title{Multi-Modal Signal Classifier - README}
+\author{Landon Buell}
+\date{October 2020}
+\maketitle
+
+\begin{abstract}
+The \textit{Signal Classifier} program uses a hybrid neural network algorithm to attempt to classify time-series signals to a set of pre-determined classes. For the purpose of the algorithm's development, input samples were assumed to be .wav files of musical instruments performing one note, or several shorter notes in succession- totaling at around 100,000 - 200,000 samples each, sampled at 44.1 kHz.
+\end{abstract}
+
+% ================================================================
+
+\subsection{Getting the Signal Classifier on Your Machine}
+
+\paragraph*{}The \textit{Signal Classifier} program is stored in a GiHub Repository. As of Fall 2020, the repo can be found at
+\begin{quote}
+https://github.com/landonbuell/Buell-Senior-Thesis
+\end{quote}
+This repository can be pulled to your machine any number of ways, reccommended via github. (Git Clone, GitHub Desktop, etc.) Doing so will create new local directory on your machine. The "MAIN" python program itself is a standard \textit{.py} file located at:
+\begin{quote}
+../Buell-Senior-Thesis/SignalClassifier/ClassifierMain/ClassifierMAIN.py
+\end{quote}
+
+% ================================================================
+
+\subsection{Command Line Arguments}
+
+\paragraph*{}The Classifier requires 6 command-line arguments to function properly. These are:
+\begin{itemize}
+
+\item[•]\textbf{readPath} (str/path)\\
+The local directory path where "read" data files are stored. Each file in this path is a a particularly formatted csv file. The csv/excel files are formatted as follows:
+\begin{quote}
+(Detail formatting here)
+\end{quote}
+The folder should otherwise be empty.
+
+\item[•]\textbf{exportPath} (str/path)\\
+The local directory path where progress data is exported to. When finished, this path will contain \textit{.csv} files detailing the training history of the model at each epoch or the label predictions of each sample.
+
+\item[•]\textbf{modelPath} (str/path)\\
+The local directory oath where the TensorFlow models are exported to. Each model will be saved in it's own sub-folder. This is where the program will look for the model to re-load it for future train/predict sessions. 
+
+\item[•]\textbf{ProgramMode} (str)\\
+Indicates which mode the classifier program is executed as. Must be in ["train","predict","train-predict"]. \\
+\paragraph*{}In \textit{train} mode, all collected samples will be used to train the classifier model. A "TRAININGHISTORY" file will be exported to "exportPath".  In \textit{predict} mode, all collected samples will be used to run predictions with the classifier model. A "PREDICTIONS" file will be exported to "exportPath". In \textit{train-predict} mode, a 90\% training, and 10\% testing split is made pseudo-randomly. The Classifier then runs \textit{train} mode and \textit{test} mode with the respective data subsets.
+
+\item[•]\textbf{modelName} (str)\\
+String representation used to name the classifier model in a human-readable format.
+
+\item[•]\textbf{newModel} (bool)\\
+Determines weather or not to create a NEW model of the given name. If \textit{true}, then any existing model of the same name is overwritten (cannot be recovered easily!). If \textit{False}, the program looks for an existing model of the name to resume training/predictions given last saved state.
+
+
+
+\end{itemize}
+
+% ================================================================
+
+\subsection{When Running}
+
+% ================================================================
+
+\subsection{What to do with the Output}
+
+% ================================================================
+
+
+\end{document}
