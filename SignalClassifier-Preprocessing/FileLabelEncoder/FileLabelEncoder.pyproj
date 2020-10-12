@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>1cff0bfc-3257-4a2d-9ecf-2d2fbbcb0227</ProjectGuid>
+    <ProjectGuid>2177b0f6-ade2-41f8-81ad-7019507e3fe2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>AnalysisMAIN.py</StartupFile>
+    <StartupFile>PreprocessMAIN.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ClassifierAnalysis</Name>
-    <RootNamespace>ClassifierAnalysis</RootNamespace>
+    <Name>FileLabelEncoder</Name>
+    <RootNamespace>FileLabelEncoder</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,8 +21,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AnalysisUtilities.py" />
-    <Compile Include="AnalysisMAIN.py" />
+    <Compile Include="PreprocessMAIN.py" />
+    <Compile Include="PreprocessUtilities.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
