@@ -32,55 +32,78 @@ class AnalyzeModels:
     def __init__(self,modelName,datapath,infile,n_classes):
         """ Initialize Class Object Instance """
         self.modelName = modelName
-        self.datapath = datapath
-        self.infile = infile
+        self.dataPath = datapath
+        self.inFile = infile
         self.n_classes = n_classes
 
-        self.outfile = infile.replace("PREDICTIONS","ANALYSIS")
-        self.full_inpath = os.path.join(self.datapath,self.infile)
-        self.full_outpath = os.path.join(self.datapath,self.outfile)
-
-    def AssignMetrics (self,metrics_list=[]):
-        """ Assign metrics objects to list to self """
-        self.metrics = metrics_list
-        return self
+        self.outFile = infile.replace("PREDICTIONS","ANALYSIS")
+        self.fullInpath = os.path.join(self.dataPath,self.inFile)
+        self.fullOutpath = os.path.join(self.dataPath,self.outFile)
 
     def ReadData(self):
         """ Read raw prediction data from local file """
-        self.indata = pd.read_csv(self.full_inpath,header=0,index_col=0)
-        self.truth = self.indata['Label'].to_numpy(dtype=np.int32)
-        self.predictions = self.indata['Prediction'].to_numpy(dtype=np.int32)
+        self.frame = pd.read_csv(self.fullInpath)
         return self
-
-    def InitOutput(self):
-        """ Initialize Output File data """
-        self.scores = {'Metric':[]}          # column to hold metrics
-        for metric in self.metrics:     # each metric:
-            self.scores['Metric'].append(metric.name)    # add metric to col
-        for model in self.model_names:   # each model:
-            self.scores.update({model:np.array([])})
-        return self
-
-    def WriteOutput (self):
-        """ Write Metric scores to local file """
-        raise NotImplementedError()
 
     def __Call__(self):
         """ Call Program Mode """
         
-        self.ReadData()      
-        confusion = tf.math.confusion_matrix(self.truth,self.predictions,self.n_classes)
-        self.PlotConfusion(confusion,self.infile)
+        self.ReadData()             # get   
+        labels = self.frame['Int Label']
+        predictions = self.frame['Int Prediction']
+        confidence = self.frame['Confidence']
+
+        self.weightedConfusion = ConfusionMatrix.WeightedConfusion(self.n_classes,
+                                                labels,predictions,confidence)
+        self.standardConfusion = ConfusionMatrix.WeightedConfusion(self.n_classes,
+                                                labels,predictions)
         return self
 
-        #### FUNCTIONS DEFINITIONS ####
+class ConfusionMatrix :
+    """
+    Create Confusion Matricies 
+    --------------------------------
+    The confusion matrix, 'C' for a k-classes classifier is a k x k array:
+    C[i,j] = number of samples that belong to class i, 
+        and were predicted to be in class j
+    --------------------------------
+    """
 
-    def PlotConfusion(self,X,title,show=True):
-        """ Plot Confusion Matrix """
+    @staticmethod
+    def WeightedConfusion(n_classes,labels,preds,scores=None):
+        """ Create a confusion matric weighted by confidence """
+        matrix = np.zeros(shape=(n_classes,n_classes))      # empty conf-mat
+        if scores is None:                                  # no weights given, use 1's
+            scores = np.ones(shape=(len(labels)))      # weight with 1's
+        for x,y,z in zip(labels,preds,scores):              # iterate through labs,preds,& scores
+            matrix[x,y] += z                                # weight by confidence
+        return matrix
+
+    @staticmethod
+    def PlotConfusion(n_classes,X,title="",show=True):
+        """ Visualize Confusion with ColorMap """
         plt.title(title,fontsize=20,weight='bold')
         plt.imshow(X,cmap=plt.cm.binary)
-        plt.xticks(np.arange(0,self.n_classes,1))
-        plt.yticks(np.arange(0,self.n_classes,1))
+        plt.xticks(np.arange(0,n_classes,1))
+        plt.yticks(np.arange(0,n_classes,1))
         if show == True:
             plt.show()
+        return None
+
+    @staticmethod
+    def ExportConfusion(X,fileName,filePath):
+        """ Export Confusion Matrix to .csv file """
+        X = pd.DataFrame(data=X)
+        fullpath = os.path.join(filePath,fileName+".csv")
+        X.to_csv(fullpath,header=None,index=None,mode='w')
+        return None
+        
+
+class EncoderMap :
+    """
+    Get the Encder/Decoder Map for this classifier
+    """
+
+    def __init__(self):
+        """ Initialize EncoderMap Instance """
 

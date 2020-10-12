@@ -22,12 +22,18 @@ if __name__ == '__main__':
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
     export = os.path.join(parent,'Output-Data')
 
-    infiles = ['JARVIS@PREDICTIONS@2020-09-21_02.41.33.904809.csv']
+    infiles = ["ChaoticSynthClassifier@PREDICTIONS@2020.10.10.12.45.48.110578.csv"]
     n_classes = 33
 
     for file in infiles:
         modelName = file.split("@")[0]
         Program = utils.AnalyzeModels(modelName,export,file,n_classes)
         Program.__Call__()
+
+        #utils.ConfusionMatrix.PlotConfusion(n_classes,Program.weightedConfusion)
+        #utils.ConfusionMatrix.PlotConfusion(n_classes,Program.standardConfusion)
+
+        utils.ConfusionMatrix.ExportConfusion(Program.weightedConfusion,modelName+" Weighted Confusion",export)
+        utils.ConfusionMatrix.ExportConfusion(Program.standardConfusion,modelName+" Standard Confusion",export)
 
     print("=)")
