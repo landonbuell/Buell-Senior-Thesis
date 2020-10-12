@@ -68,7 +68,7 @@ class DesignMatrix:
         return self
 
     def __Get_Y__(self,onehot=True):
-        """ treturn target matrix as One-hot-enc matrix """
+        """ Return target matrix as One-hot-enc matrix """
         if onehot == True:
             self.Y = keras.utils.to_categorical(self.targets,self.n_classes)
         return self.Y

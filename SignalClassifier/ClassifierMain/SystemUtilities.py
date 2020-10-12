@@ -243,12 +243,12 @@ class ArgumentValidator :
         self.modelPath = os.path.join(parent,'Model-Data')
         self.exportPath = os.path.join(parent,'Output-Data')
         self.programMode = "train-predict"
-        self.modelName = "InDevCLF"
-        self.newModel= True
+        self.modelName = "ChaoticSynthClassifier"
+        self.newModel = True
 
     @property
     def GetLocalPaths (self):
-        """ Return Necessaru Directory Paths """
+        """ Return Necessary Directory Paths """
         return (self.readPath,self.exportPath,self.modelPath)
 
     @property
@@ -377,3 +377,19 @@ class ProgramInitializer:
                 fileobjects.append(FileObject(row))    # add row to obj list
             del(frame)                          # del frame  
         return fileobjects                      # return list of insts
+
+class ProgramFinisher :
+    """
+    Handel all final Housekeeping bits of this program
+        Ensure Everything has Run properly
+    """
+    def __init__(self,):
+        """ Initialize ProgramFinisher Instance """
+        dt_obj = datetime.datetime.now()
+        starttime = dt_obj.isoformat(sep='.',timespec='auto')
+        self.endtime = starttime.replace(':','.').replace('-','.')
+        
+    def __Call__(self,startime):
+        """ Run Program Finisher Instance """
+        print("Program Finish:",self.endtime)
+        # More things will go here soon

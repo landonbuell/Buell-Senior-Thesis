@@ -8,7 +8,6 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import os
-import argparse
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import ModeUtilities as mode_utils
@@ -53,8 +52,9 @@ if __name__ == '__main__':
     del(Args)
     ProgramMode.__Call__(NeuralNetwork)      
 
-    dt_obj = sys_utils.datetime.datetime.now()
-    endtime = dt_obj.isoformat(sep='.',timespec='auto').replace(':','.').replace('-','.')
-    print("Time Stamp:",endtime)
+    # FINAL HOUSKEEPING
+    ProgramCleanup = sys_utils.ProgramFinisher()
+    ProgramCleanup.__Call__(timeStart)
+    
     print("=)")
     

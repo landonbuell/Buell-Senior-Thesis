@@ -20,17 +20,23 @@ if __name__ == "__main__":
 
     # HARD-CODE VARIABLES FOR DEVELOPMENT
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifierTools'
-    read = os.path.join(parent,'XVal-Target-Data')
-    model = os.path.join(parent,'XVal-Model-Data')
+    read = os.path.join(parent,'XVal-Target-Data')   
     export = os.path.join(parent,'XVal-Output-Data')
+    model = os.path.join(parent,'XVal-Model-Data')
+    paths = [read,export,model]
     modelName = "XValCLF-"
  
     # PRE-PROCESSING FOR PROGRAM
-    ProgramSetup = sys_utils.ProgramInitializer([read,model,export],modelName)    
+    ProgramSetup = sys_utils.ProgramInitializer([read,export,model],modelName)    
     FILEOBJECTS = ProgramSetup.__Call__()
+    XValSplits = XVal_utils.CrossValidationSplit(FILEOBJECTS,read,10)
+    XValSplits.__Call__()
 
-    # PREPARE CROSS-VALIDATIONS
-    XVal = XVal_utils.CrossValidationSplit(FILEOBJECTS,10)
+    # RUN CROSS VALIDATION
+    localPaths = [XValSplits.splitsPath,export,model]
+    XVal = XVal_utils.CrossValidator(modelName,XValSplits.K,localPaths)
+    
+
 
     print("=)")
     
