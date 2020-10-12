@@ -53,10 +53,11 @@ class AnalyzeModels:
         predictions = self.frame['Int Prediction']
         confidence = self.frame['Confidence']
 
-        self.weightedConfusion = ConfusionMatrix.WeightedConfusion(self.n_classes,
-                                                labels,predictions,confidence)
-        self.standardConfusion = ConfusionMatrix.WeightedConfusion(self.n_classes,
-                                                labels,predictions)
+        Confusion = ConfusionMatrix(self.n_classes,labels,predictions,confidence)
+
+        self.weightedConfusion = Confusion.WeightedConfusion()
+        self.standardConfusion = Confusion.StandardConfusion()
+
         return self
 
 class ConfusionMatrix :
@@ -69,21 +70,39 @@ class ConfusionMatrix :
     --------------------------------
     """
 
-    @staticmethod
-    def WeightedConfusion(n_classes,labels,preds,scores=None):
-        """ Create a confusion matric weighted by confidence """
-        matrix = np.zeros(shape=(n_classes,n_classes))      # empty conf-mat
-        if scores is None:                                  # no weights given, use 1's
-            scores = np.ones(shape=(len(labels)))      # weight with 1's
-        for x,y,z in zip(labels,preds,scores):              # iterate through labs,preds,& scores
-            matrix[x,y] += z                                # weight by confidence
-        return matrix
+    def __init__(self,n_classes,labels,predictions,scores):
+        """ Initialize ConfusionMatrix Instance """
+        self.n_classes = n_classes
+        self.x = labels
+        self.y = predictions
+        self.z = scores
+     
+    def WeightedConfusion(self):
+        """ Create a confusion matric weighted by confidence & occurance """
+        weightedMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
+        standardMatrix = self.StandardConfusion()               # standard conf-mat
+        for x,y,z in zip(self.x,self.y,self.z):                 # labels,predictions,scores
+            weightedMatrix[x,y] += z                            # add confidence
+        for i in range(self.n_classes):
+            for j in range(self.n_classes):
+                try:                                            # attempt to divide
+                    weightedMatrix[i,j] /= standardMatrix[i,j]  # weight by occ.
+                except:                             # zero dividion error
+                    weightedMatrix[i,j] = 0.0       # set to zero
+        return weightedMatrix                       # return the weighted matrix
+
+    def StandardConfusion(self):
+        """ Create a confusion matric weighted by confidence & occurance """
+        standardMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
+        for x,y in zip(self.x,self.y):                  # labels,predictions,scores
+            standardMatrix[x,y] += 1.                   # add counter
+        return standardMatrix
 
     @staticmethod
-    def PlotConfusion(n_classes,X,title="",show=True):
+    def PlotConfusion(X,n_classes,title="",show=True):
         """ Visualize Confusion with ColorMap """
         plt.title(title,fontsize=20,weight='bold')
-        plt.imshow(X,cmap=plt.cm.binary)
+        plt.imshow(X,cmap=plt.cm.jet)
         plt.xticks(np.arange(0,n_classes,1))
         plt.yticks(np.arange(0,n_classes,1))
         if show == True:

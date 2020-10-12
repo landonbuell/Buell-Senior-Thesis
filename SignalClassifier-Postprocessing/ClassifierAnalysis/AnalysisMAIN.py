@@ -30,10 +30,10 @@ if __name__ == '__main__':
         Program = utils.AnalyzeModels(modelName,export,file,n_classes)
         Program.__Call__()
 
-        #utils.ConfusionMatrix.PlotConfusion(n_classes,Program.weightedConfusion)
-        #utils.ConfusionMatrix.PlotConfusion(n_classes,Program.standardConfusion)
-
         utils.ConfusionMatrix.ExportConfusion(Program.weightedConfusion,modelName+" Weighted Confusion",export)
         utils.ConfusionMatrix.ExportConfusion(Program.standardConfusion,modelName+" Standard Confusion",export)
 
+        utils.ConfusionMatrix.PlotConfusion(Program.weightedConfusion,33,modelName+" Weighted Confusion")
+        utils.ConfusionMatrix.PlotConfusion(Program.standardConfusion,33,modelName+" Standard Confusion")
+       
     print("=)")
