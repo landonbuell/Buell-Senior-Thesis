@@ -85,9 +85,9 @@ class ConfusionMatrix :
             weightedMatrix[x,y] += z                            # add confidence
         for i in range(self.n_classes):
             for j in range(self.n_classes):
-                try:                                            # attempt to divide
+                if (standardMatrix[i,j] != 0.0):                                            # attempt to divide
                     weightedMatrix[i,j] /= standardMatrix[i,j]  # weight by occ.
-                except:                             # zero dividion error
+                else:                                # zero dividion error
                     weightedMatrix[i,j] = 0.0       # set to zero
         return weightedMatrix                       # return the weighted matrix
 
