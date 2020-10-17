@@ -218,7 +218,7 @@ class ArgumentValidator :
                                          help="Mode of Program Execution: ['train','train-predict','predict']")
         self.argumentParser.add_argument("modelName",type=str,
                                          help="Name assigned to model for human-indentification")
-        self.argumentParser.add_argument("newModel",type=bool,
+        self.argumentParser.add_argument("newModel",type=str,
                                          help="If True, existing model of same name is overwritten")
         return self
 
@@ -231,7 +231,7 @@ class ArgumentValidator :
             self.modelPath = arguments.modelPath
             self.programMode = arguments.programMode
             self.modelName = arguments.modelName
-            self.newModel = arguments.newModel
+            self.newModel = self.StringToBoolean(arguments.newModel)
             return True
         except:
             return False
@@ -256,6 +256,17 @@ class ArgumentValidator :
     def GetSystemParams (self):
         """ Return Important Parameters for Creating Models """
         return (self.programMode,self.modelName,self.newModel)
+
+    @staticmethod
+    def StringToBoolean(value):
+        """ Convert String entry to boolen value """
+        value = str(value).lower()      # conv to lowercase str
+        if value in ["true","t","yes","y","1"]:
+            return True
+        elif value in ["false","f","no","n","0"]:
+            return False
+        else:
+            raise ValueError("\n\t Unrecognized value!")
 
     def ValidateLocalPaths (self,paths=[]):
         """ Confirm Existance of All Directories in List """

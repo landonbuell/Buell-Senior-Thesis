@@ -96,7 +96,7 @@ class CrossValidator :
 
     def GetTestArgumnets (self,iter):
         """ Get Command Line Arguments to Pass to Classifier Program """
-        readPath = os.path.join(self.dataPath,"Split"+str(iter)+"train")
+        readPath = os.path.join(self.dataPath,"Split"+str(iter)+"test")
         _sysArgs = ["python",self.scriptName]
         pathArgs = [readPath,self.exportPath,self.modelPath]
         progArgs = ['predict',self.modelName+str(iter),"False"]
@@ -111,8 +111,8 @@ class CrossValidator :
             # Create a New Model & Train
             print("")
             commandLineArgs = self.GetTrainArguments(i)
-            print(commandLineArgs)
-            os.system(commandLineArgs)
+            #print(commandLineArgs)
+            #os.system(commandLineArgs)
 
             # Load Existing Model and & Test
             print("")
