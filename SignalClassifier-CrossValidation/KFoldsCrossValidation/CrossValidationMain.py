@@ -28,6 +28,7 @@ if __name__ == "__main__":
     scriptName = "ClassifierMAIN.py"
 
     # HANDLE LOCAL DIRECTORIES
+    homePath = os.getcwd()
     paths = [read,export,model]
     modelName = "XValCLF-"
 
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     localPaths = [XValSplits.splitsPath,export,model]
     scriptData = [scriptPath,scriptName]
     XVal = XVal_utils.CrossValidator(modelName,XValSplits.K,scriptData,localPaths)
-    
+    XVal.__Call__(XValSplits,homePath)
 
 
     print("=)")

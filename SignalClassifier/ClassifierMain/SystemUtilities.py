@@ -204,8 +204,9 @@ class ArgumentValidator :
             raise BaseException()
 
     def MakeArgumentParser(self):
-        self.argumentParser = argparse.ArgumentParser(description="Run Signal Classifier Program")
         """ Construct Argument Parser Object """
+        self.argumentParser = argparse.ArgumentParser(description="Run Signal Classifier Program")
+        
         self.argumentParser.add_argument("dataPath",type=str,
                                          help="local path where target data is held")
         self.argumentParser.add_argument("exportPath",type=str,
@@ -225,12 +226,12 @@ class ArgumentValidator :
         """ Collect All Command-Line Parsed Arguments in a List """
         try:
             arguments = self.argumentParser.parse_args()
-            self.readPath = arguments[0]
-            self.exportPath = arguments[1]
-            self.modelPath = arguments[2]
-            self.programMode = arguments[3]
-            self.modelName = arguments[4]
-            self.newModels = arguments[5]
+            self.readPath = arguments.dataPath
+            self.exportPath = arguments.exportPath
+            self.modelPath = arguments.modelPath
+            self.programMode = arguments.programMode
+            self.modelName = arguments.modelName
+            self.newModels = arguments.newModel
             return True
         except:
             return False
