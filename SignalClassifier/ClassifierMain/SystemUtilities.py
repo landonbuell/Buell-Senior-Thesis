@@ -231,7 +231,7 @@ class ArgumentValidator :
             self.modelPath = arguments.modelPath
             self.programMode = arguments.programMode
             self.modelName = arguments.modelName
-            self.newModels = arguments.newModel
+            self.newModel = arguments.newModel
             return True
         except:
             return False
