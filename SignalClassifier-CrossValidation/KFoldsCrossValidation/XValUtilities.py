@@ -73,10 +73,12 @@ class CrossValidationSplit:
 class CrossValidator :
     """ Run K- Folds Cross Validation on Data """
 
-    def __init__(self,modelName,nSplits,pathList):
+    def __init__(self,modelName,nSplits,scriptData,pathList):
         """ Initialize CrossValidator """
         self.modelName = modelName      # parent model name
         self.K = nSplits                # number of splits
+        self.scriptPath = scriptData[0]    # where the Classifier scrip is located
+        self.scriptName = scriptData[1]    # what the cript is called
         # Establish Paths
         self.dataPath = pathList[0]     # Classifiers gets data from here
         self.exportPath = pathList[1]   # Classifiers Exports data to here
@@ -84,28 +86,41 @@ class CrossValidator :
         
     def GetTrainArguments (self,iter):
         """ Get Command Line Arguments to Pass to Classifier Program for Training """
-        readPath = os.path.join(self.dataPath,"Split"+iter+"train")
+        readPath = os.path.join(self.dataPath,"Split"+str(iter)+"train")
+        _sysArgs = ["python",self.scriptName]
         pathArgs = [readPath,self.exportPath,self.modelPath]
-        progArgs = ['train',self.modelName+str(iter),True]
-        return pathArgs + progArgs              # concat list args
+        progArgs = ['train',self.modelName+str(iter),"True"]
+        _allArgs = _sysArgs + pathArgs + progArgs   # combine all agrs into single list
+        _argsStr = " ".join(_allArgs)               # concat list args into str
+        return _argsStr                      
 
     def GetTestArgumnets (self,iter):
         """ Get Command Line Arguments to Pass to Classifier Program """
-        readPath = os.path.join(self.dataPath,"Split"+iter+"test")
+        readPath = os.path.join(self.dataPath,"Split"+str(iter)+"test")
+        _sysArgs = ["python",self.scriptName]
         pathArgs = [readPath,self.exportPath,self.modelPath]
-        progArgs = ['predict',self.modelName+str(iter),False]
-        return pathArgs + progArgs              # concat list args
+        progArgs = ['predict',self.modelName+str(iter),"False"]
+        _allArgs = _sysArgs + pathArgs + progArgs   # combine all agrs into single list
+        _argsStr = " ".join(_allArgs)               # concat list args into str
+        return _argsStr                  
 
-    def __Call__(self,XValSplit):
+    def __Call__(self,XValSplit,homePath):
         """ Run k-Folds Cross Validation """
+        os.chdir(self.scriptPath)       # changed to script path
         for i in range(self.K):         # for each split
             # Create a New Model & Train
-            commandLineArgs = self.GetTrainArguments()
+            print("")
+            commandLineArgs = self.GetTrainArguments(i)
+            #print(commandLineArgs)
+            #os.system(commandLineArgs)
 
             # Load Existing Model and & Test
-            commandLineArgs = self.GetTestArgumnets()
+            print("")
+            commandLineArgs = self.GetTestArgumnets(i)
+            print(commandLineArgs)
+            os.system(commandLineArgs)
 
-        os.remove(self.dataPath)        # deleted the splits
+        os.chdir(homePath)
         return self
 
 

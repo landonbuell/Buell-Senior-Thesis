@@ -19,12 +19,19 @@ import XValUtilities as XVal_utils
 if __name__ == "__main__":
 
     # HARD-CODE VARIABLES FOR DEVELOPMENT
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifierTools'
-    read = os.path.join(parent,'XVal-Target-Data')   
-    export = os.path.join(parent,'XVal-Output-Data')
-    model = os.path.join(parent,'XVal-Model-Data')
+    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis'
+    read = os.path.join(parent,'SignalClassifier-CrossValidation','XVal-Target-Data')   
+    export = os.path.join(parent,'SignalClassifier-CrossValidation','XVal-Output-Data')
+    model = os.path.join(parent,'SignalClassifier-CrossValidation','XVal-Model-Data')
+
+    scriptPath = os.path.join(parent,'SignalClassifier','ClassifierMain')
+    scriptName = "ClassifierMAIN.py"
+
+    # HANDLE LOCAL DIRECTORIES
+    homePath = os.getcwd()
     paths = [read,export,model]
     modelName = "XValCLF-"
+
  
     # PRE-PROCESSING FOR PROGRAM
     ProgramSetup = sys_utils.ProgramInitializer([read,export,model],modelName)    
@@ -32,10 +39,11 @@ if __name__ == "__main__":
     XValSplits = XVal_utils.CrossValidationSplit(FILEOBJECTS,read,10)
     XValSplits.__Call__()
 
-    # RUN CROSS VALIDATION
+    # Create Train-Test Splits
     localPaths = [XValSplits.splitsPath,export,model]
-    XVal = XVal_utils.CrossValidator(modelName,XValSplits.K,localPaths)
-    
+    scriptData = [scriptPath,scriptName]
+    XVal = XVal_utils.CrossValidator(modelName,XValSplits.K,scriptData,localPaths)
+    XVal.__Call__(XValSplits,homePath)
 
 
     print("=)")

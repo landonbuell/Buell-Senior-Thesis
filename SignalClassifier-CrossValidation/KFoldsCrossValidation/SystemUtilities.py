@@ -225,8 +225,7 @@ class ProgramInitializer:
     def CollectCSVFiles (self,exts='.csv'):
         """ Walk through Local Path and File all files w/ extension """
         csv_files = []
-        for roots,dirs,files in os.walk(self.readPath):  
-            for file in files:                  
+        for file in os.listdir(self.readPath):                  
                 if file.endswith(exts):       
                     csv_files.append(file)
         return csv_files
