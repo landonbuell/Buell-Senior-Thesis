@@ -112,7 +112,7 @@ class CrossValidator :
             print("")
             commandLineArgs = self.GetTrainArguments(i)
             #print(commandLineArgs)
-            #os.system(commandLineArgs)
+            os.system(commandLineArgs)
 
             # Load Existing Model and & Test
             print("")
