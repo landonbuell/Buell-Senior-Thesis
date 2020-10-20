@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "KFoldsCrossValidation", "KFoldsCrossValidation\KFoldsCrossValidation.pyproj", "{B9D91B63-84B8-420F-B059-5FC0D5B94108}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "AnalysisCrossValidation", "AnalysisCrossValidation\AnalysisCrossValidation.pyproj", "{3A688A20-C978-4DE1-BD19-B47EB56EDFCF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +13,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B9D91B63-84B8-420F-B059-5FC0D5B94108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9D91B63-84B8-420F-B059-5FC0D5B94108}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A688A20-C978-4DE1-BD19-B47EB56EDFCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A688A20-C978-4DE1-BD19-B47EB56EDFCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

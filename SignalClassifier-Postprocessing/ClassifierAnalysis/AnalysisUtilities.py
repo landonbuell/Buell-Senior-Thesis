@@ -76,8 +76,6 @@ class ConfusionMatrix :
         self.x = labels
         self.y = predictions
         self.z = scores
-        self.labelHistogram = np.histogram(self.x,bins=self.n_classes)[0]
-        self.predsHistogram = np.histogram(self.y,bins=self.n_classes)[0]
      
     def WeightedConfusion(self):
         """ Create a confusion matric weighted by confidence & occurance """
@@ -85,12 +83,16 @@ class ConfusionMatrix :
         standardMatrix = self.StandardConfusion()               # standard conf-mat
         for x,y,z in zip(self.x,self.y,self.z):                 # labels,predictions,scores
             weightedMatrix[x,y] += z                            # add confidence
-        for i,row in enumerate(weightedMatrix):     # each row
-            row /= self.labelHistogram[i]           # divide by that number of occurances
+        for i in range(self.n_classes):
+            for j in range(self.n_classes):
+                if (standardMatrix[i,j] != 0.0):                                            # attempt to divide
+                    weightedMatrix[i,j] /= standardMatrix[i,j]  # weight by occ.
+                else:                                # zero dividion error
+                    weightedMatrix[i,j] = 0.0       # set to zero
         return weightedMatrix                       # return the weighted matrix
 
     def StandardConfusion(self):
-        """ Create a standard confusion matrix representing occurance """
+        """ Create a confusion matric weighted by confidence & occurance """
         standardMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
         for x,y in zip(self.x,self.y):                  # labels,predictions,scores
             standardMatrix[x,y] += 1.                   # add counter
