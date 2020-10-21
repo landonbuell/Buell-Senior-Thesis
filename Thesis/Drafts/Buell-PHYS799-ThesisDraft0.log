@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  19 OCT 2020 23:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  21 OCT 2020 14:22
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -487,12 +487,12 @@ ne 504.
 
 [15] [16] [17]
 
-Package caption Warning: \label without proper reference on input line 609.
+Package caption Warning: \label without proper reference on input line 613.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 18 undefined on inpu
-t line 606.
+t line 610.
 
 [18]
 
@@ -502,70 +502,67 @@ nclusion: found PDF version <1.7>, but at most version <1.5> allowed
 File: ../Figures/NeuralNetworkArchitecture.pdf Graphic file (type pdf)
 <use ../Figures/NeuralNetworkArchitecture.pdf>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.pdf  used on inpu
-t line 611.
+t line 615.
 (pdftex.def)             Requested size: 357.7332pt x 552.8604pt.
 [19]
 
-Package caption Warning: \label without proper reference on input line 609.
+Package caption Warning: \label without proper reference on input line 613.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 20 undefined on inpu
-t line 620.
+t line 624.
 
 [20 <../Figures/NeuralNetworkArchitecture.pdf>]
 
-Package caption Warning: \label without proper reference on input line 609.
+Package caption Warning: \label without proper reference on input line 613.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 21 undefined on inpu
-t line 643.
+t line 647.
 
 [21] [22] [23]
 
-LaTeX Warning: Citation `Khan' on page 24 undefined on input line 676.
+LaTeX Warning: Citation `Khan' on page 24 undefined on input line 680.
 
 [24] [25] [26]
 
-Package caption Warning: \label without proper reference on input line 742.
+Package caption Warning: \label without proper reference on input line 748.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-spectrograms' on page 27 undefined on input line 
-740.
+744.
 
 [27]
 
-LaTeX Warning: Citation `Olson' on page 28 undefined on input line 784.
+LaTeX Warning: Citation `Olson' on page 28 undefined on input line 788.
 
 [28]
 
-LaTeX Warning: Citation `Olson' on page 29 undefined on input line 816.
+LaTeX Warning: Citation `Olson' on page 29 undefined on input line 820.
 
 [29]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 834.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 841.
 
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 834.
-
-
-LaTeX Warning: Citation `Olson' on page 30 undefined on input line 856.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 841.
 
 [30] [31] [32] [33]
 
-LaTeX Warning: Citation `Olson' on page 34 undefined on input line 1003.
+LaTeX Warning: Citation `Olson' on page 34 undefined on input line 1002.
 
 [34] [35]
-Underfull \hbox (badness 10000) in paragraph at lines 1087--1107
+Underfull \hbox (badness 10000) in paragraph at lines 1095--1115
 []$[]$ $[]$
  []
 
-[36] [37] [38] [39] [40] [41] [42] (Buell-PHYS799-ThesisDraft0.aux)
+[36] [37] [38] [39] [40] [41] [42] [43] (Buell-PHYS799-ThesisDraft0.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -574,10 +571,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5174 strings out of 492895
- 78731 string characters out of 3123268
- 152640 words of memory out of 3000000
- 9002 multiletter control sequences out of 15000+200000
+ 5177 strings out of 492895
+ 78786 string characters out of 3123268
+ 152529 words of memory out of 3000000
+ 9005 multiletter control sequences out of 15000+200000
  11056 words of font info for 41 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,19n,43p,921b,509s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -599,9 +596,9 @@ b><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
 ublic/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (43 pages, 537420 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (44 pages, 540407 bytes).
 PDF statistics:
- 259 PDF objects out of 1000 (max. 8388607)
+ 262 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
