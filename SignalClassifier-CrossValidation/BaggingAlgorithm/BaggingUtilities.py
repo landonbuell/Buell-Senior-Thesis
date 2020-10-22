@@ -36,20 +36,44 @@ class ProgramSetup :
         """ Collect Names of All Models in Folder """
         modelNames = []
         for item in os.listdir(self.modelPath): # in the path
-            if item.endswith(".csv") == False:  # is csv file
+            if item.endswith(".csv") == False:  # is not csv file
                 modelNames.append(item)
         return modelNames
 
 class ModelData:
     """ Load saved a Tensorflow model and get it's paramaters """
 
-    def __init__(self,savePath,modelName):
+    def __init__(self,dtaPath,modelPath,modelName):
         """ Intialize ModelData Instance """
-        self.savePath = savePath
+        self.dataPath = dataPath
+        self.modelPath = modelPath
         self.modelName = modelName
-        self.fullPath = os.path.join(self.savePath,self.modelName)
-
+        self.fullModelPath = os.path.join(self.modelPath,self.modelName)
+        self.historyFile = self.GetKeyWordFiles("@TRAINING-HISTORY@")
+        self.predictionFile = self.GetGetKeyWordFiles("@PREDICTIONS@")
+        
     def LoadModel(self):
         """ Load locally saved ensorFlow Model into RAM """
-        model = keras.models.load_model(self.fullPath)
-        return model
+        modelData = keras.models.load_model(self.fullModelPath)
+        return modelData
+
+    def GetKeyWordFiles (self,keyWord):
+        """ Collect All .csv files with 'keyWord' in it """
+        for file in os.listdir(self.dataPath):  # in the path
+            if file.endswith(".csv"):           # is csv file:
+                if (keyWord in file) & (self.modelName in file):   # keyword in name
+                    return file
+
+
+class BaggingAlgorithm :
+    """
+    Execute Baggining Algorithm
+    """
+
+    def __init__(self,modelList):
+        """ Initialize BaggingAlgorithmInstance """
+        self.modelList = modelList
+
+
+
+

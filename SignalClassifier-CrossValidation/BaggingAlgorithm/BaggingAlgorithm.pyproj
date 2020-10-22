@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>3a688a20-c978-4de1-bd19-b47eb56edfcf</ProjectGuid>
+    <ProjectGuid>386448ad-0fe4-40bb-9537-df9ed1588d6a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>AnalysisCrossValidationMain.py</StartupFile>
+    <StartupFile>BaggingMain.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>AnalysisCrossValidation</Name>
-    <RootNamespace>AnalysisCrossValidation</RootNamespace>
+    <Name>BaggingAlgorithm</Name>
+    <RootNamespace>BaggingAlgorithm</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,8 +21,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AnalysisCrossValidationMain.py" />
-    <Compile Include="AnalysisCrossValidationUtilities.py">
+    <Compile Include="BaggingMain.py" />
+    <Compile Include="BaggingUtilities.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
