@@ -25,33 +25,18 @@ import PlottingUtilities as plot_utils
 
 if __name__ == '__main__':
 
-    homePath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifierTools\\ClassifierFeatures"
     dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\Figures"
     
-    ProgramSetup = sys_utils.ProgramInitializer([dataPath,homePath,exptPath])
-    FILEOBJS = ProgramSetup.__Call__()
+    ProgramSetup = sys_utils.ProgramInitializer([dataPath,exptPath])
+    groupedFiles = ProgramSetup.__Call__()
     Decoder = ProgramSetup.GetDecoder
+    nClasses = ProgramSetup.n_classes
 
     n_features = 20
     DesignMatrix = np.array([])
     TargetVector = np.array([])
 
-    for fileObj in FILEOBJS[:256]:
-        fileObj.ReadFileWAV()
-        featureVector = np.array([])
-        timeFeatures = feat_utils.TimeSeriesFeatures(fileObj.waveform)
-        freqFeatures = feat_utils.FrequencySeriesFeatures(fileObj.waveform,presetFrames=timeFeatures.frames)
-        featureVector = np.append(featureVector,timeFeatures.__Call__())
-        featureVector = np.append(featureVector,freqFeatures.__Call__())
+    for i in range(nClasses):       # each class:
 
-        DesignMatrix = np.append(DesignMatrix,featureVector)
-        TargetVector = np.append(TargetVector,fileObj.targetInt)
-
-    DesignMatrix = DesignMatrix.reshape(-1,n_features)
-    DesignMatrix = math_utils.MathematicalUtilities.ScaleDesignMatrix(DesignMatrix)
-    DesignMatrix = np.transpose(DesignMatrix)       # transpose for indexing:
-
-    for i in range(len(DesignMatrix)):
-        plot_utils.PlotFeatures(DesignMatrix[i],classes=TargetVector,labels=[" "," "])
     
