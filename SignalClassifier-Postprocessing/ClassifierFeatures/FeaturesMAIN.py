@@ -13,7 +13,7 @@ import os
 
 import SystemUtilities as sys_utils
 import FeatureUtilities as feat_utils
-import MathUtilities as math_utils
+import StructureUtilities as struct_utils
 import PlottingUtilities as plot_utils
 
 """
@@ -34,9 +34,8 @@ if __name__ == '__main__':
     nClasses = ProgramSetup.n_classes
 
     n_features = 20
-    DesignMatrix = np.array([])
-    TargetVector = np.array([])
 
     for i in range(nClasses):       # each class:
-
+        DesignMatrix = struct_utils.FeatureContainer(i,Decoder[i],groupedFiles[i])
+        DesignMatrix.__Call__()
     

@@ -12,10 +12,9 @@ import numpy as np
 import scipy.fftpack as fftpack
 import scipy.integrate as integ
 import scipy.signal as signal
-import scipy.sparse as sparse
 
-import MathUtilities as math_utils
 import PlottingUtilities as plot_utils
+import StructureUtilities as struct_utils
 
 """
 FeaturesUtilities.py - "Feature Extraction Utils"
@@ -178,18 +177,6 @@ class TimeSeriesFeatures (BaseFeatures):
         else:                           # scalar
             return COM/self.n_samples   # divide by n samples 
 
-    def WaveformDistributionData (self,attrb='signal'):
-        """ 
-        Compute Distribution Data of Waveform Spectrum
-        --------------------------------
-        attrb (str) : Attribute to use for computations. Must be in ['signal','frames']
-        --------------------------------
-        return [mean,median,variance] of array or last axis of array
-        """
-        assert attrb in ['signal','frames']
-        X = self.__getattribute__(attrb)    # isolate signal or frames
-        return math_utils.MathematicalUtilities.DistributionData(X)
-
     def AutoCorrelationCoefficients (self,K=4):
         """ 
         Compute first K 'autocorrelation coefficients' from waveform (Virtanen) 
@@ -245,7 +232,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         self.mels = 2595*np.log10(1+self.hertz/700)
         self.t = np.arange(0,self.n_frames,1)   
         self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
-        self.spectrogram = math_utils.MathematicalUtilities.PadZeros(self.spectrogram,self.n_frames)
+        self.spectrogram = struct_utils.MathematicalUtilities.PadZeros(self.spectrogram,self.n_frames)
 
         # Add Elements to Feature vector
         featureVector = np.array([])

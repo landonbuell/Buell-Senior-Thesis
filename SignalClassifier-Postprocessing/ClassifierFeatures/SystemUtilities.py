@@ -16,6 +16,7 @@ import argparse
 
 import scipy.io.wavfile as sciowav
 
+import FeatureUtilities as feat_utils
 import PlottingUtilities as plot_utils
 
 """
@@ -160,15 +161,18 @@ class ProgramInitializer:
         decodeKeys = [i for i in self.GetDecoder.keys()]
         self.n_classes = np.max(decodeKeys) + 1
 
-        filesByCategory = self.FileByCategory(fileObjects)
+        filesByCategory = self.FilesByCategory(fileObjects)
           
         # Final Bits
         self.StartupMesseges           # Messages to User
         return filesByCategory
 
-    def FilesByCateogry (self,fileObjs):
+    def FilesByCategory (self,fileObjs):
         """ Group files intoa dictionary by category """
-        groupedFiles = {{x:[]} for x in range(0,self.n_classes)}
+        #groupedFiles = {{x:[]} for x in range(0,self.n_classes)}
+        groupedFiles = {}
+        for i in range(self.n_classes):
+            groupedFiles.update({i:[]})
         for file in fileObjs:
             groupedFiles[file.targetInt].append(file)
         return groupedFiles
