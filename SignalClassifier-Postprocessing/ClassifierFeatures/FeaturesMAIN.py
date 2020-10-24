@@ -16,11 +16,6 @@ import FeatureUtilities as feat_utils
 import StructureUtilities as struct_utils
 import PlottingUtilities as plot_utils
 
-"""
-    Not Implemented!
-
-"""
-
             #### MAIN EXECTUABLE ####
 
 if __name__ == '__main__':
@@ -35,7 +30,13 @@ if __name__ == '__main__':
 
     n_features = 20
 
-    for i in range(nClasses):       # each class:
+    for i in range(nClasses-1,0,-1):       # each class:
+        print("Class Int: "+str(i)+"\tClass Str:"+str(Decoder[i]))
         DesignMatrix = struct_utils.FeatureContainer(i,Decoder[i],groupedFiles[i])
         DesignMatrix.__Call__()
+        print(np.var(DesignMatrix.X,axis=0))
+        #[plot_utils.PlotHistogram(DesignMatrix.X[:,j],50," ") for j in range(n_features)]
+
+        print("=)")
+    print("=)")
     

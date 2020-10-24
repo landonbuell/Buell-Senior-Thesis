@@ -60,6 +60,7 @@ class FeatureContainer :
             # Initialize
             x = np.array([])
             file.ReadFileWAV()
+            print("\t"+file.filename)
 
             # Collect features
             timeFeatures = feat_utils.TimeSeriesFeatures(file.waveform)

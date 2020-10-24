@@ -27,7 +27,7 @@ FeaturesUtilities.py - "Feature Extraction Utils"
 class BaseFeatures:
     """
     Basic Feature Extraction Class
-        'Time_Series_Features' and 'Frequency_Series_Features' inherit from here
+        'TimeSeriesFeatures' and 'FrequencySeriesFeatures' inherit from here
     Assigns waveform attribute, sample rate, number of samples,
     --------------------------------
     waveform (arr) : 1 x N array of FP64 values representing a time-series waveform
@@ -169,13 +169,14 @@ class TimeSeriesFeatures (BaseFeatures):
         Return temporal center of mass
         """
         assert attrb in ['signal','frames']
+        """ This feature has been changed - Update it in Main Classifier! """
         X = self.__getattribute__(attrb)        # isolate frequency or frames
-        weights = np.arange(0,X.shape[-1],1)    # weight array
-        COM = np.matmul(X,weights)              # operate
-        if COM.ndim > 1:                # more than 1D
-            return np.mean(COM,axis=-1) # return average
-        else:                           # scalar
-            return COM/self.n_samples   # divide by n samples 
+        weights = np.arange(0,X.shape[0],1)     # weight array
+        COM = np.dot(weights,np.abs(X))         # operate
+        if COM.ndim >= 1:                   # more or equal to 1D
+            return np.mean(COM)             # return average
+        else:                               # scalar
+            return COM/self.n_samples       # divide by n samples 
 
     def AutoCorrelationCoefficients (self,K=4):
         """ 
@@ -331,8 +332,8 @@ class FrequencySeriesFeatures (BaseFeatures):
         assert attrb in ['frequencySeries','spectrogram']
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         X = X.transpose()
-        melFiltersBanks = self.MelFilters(n_filters).transpose() # get mel filters
-        MFCCs = np.matmul(X,melFiltersBanks)                    # apply to frequency spectrum
+        melFiltersBanks = self.MelFilters(n_filters).transpose()    # get mel filters
+        MFCCs = np.matmul(X,melFiltersBanks)                        # apply to frequency spectrum
         if MFCCs.ndim > 1:                  # 2D array
             MFCCs = np.mean(MFCCs,axis=0)   # summ about 0-th axis
         return MFCCs
@@ -346,10 +347,11 @@ class FrequencySeriesFeatures (BaseFeatures):
         return spectral center of mass
         """
         assert attrb in ['frequencySeries','spectrogram']
+        """ This feature has been changed - Update it in Main Classifier! """
         X = self.__getattribute__(attrb)        # isolate frequency or frames
-        weights = np.arange(0,X.shape[-1],1)    # weight array
-        COM = np.matmul(X,weights)              # operate
+        weights = np.arange(0,X.shape[0],1)     # weight array
+        COM = np.dot(weights,np.abs(X))         # operate
         if COM.ndim >= 1:                # more or equal to 1D
-            return np.mean(COM,axis=-1) # return average
+            return np.mean(COM)         # return average
         else:                           # scalar
             return COM/self.n_samples   # divide by n samples 
