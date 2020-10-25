@@ -25,8 +25,11 @@ if __name__ == "__main__":
     # MAKE PROGRAM INTIALIZER
     Setup = utils.ProgramSetup(dataPath,modelPath)
     modelNames = Setup.GetModelNames()
+    modelInstances = [utils.ModelData(dataPath,modelPath,name) for name in modelNames]
 
-    modelInstances = []
+    # MAIN BAGGING ALGORITHM
+    Bagging = utils.BaggingAlgorithm(modelInstances)
+    Bagging.__Call__()
 
     print("=)")
 
