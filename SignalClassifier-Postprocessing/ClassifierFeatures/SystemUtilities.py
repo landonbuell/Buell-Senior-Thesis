@@ -196,6 +196,14 @@ class ProgramInitializer:
         print("\n")
         return None
 
+    @staticmethod
+    def InitOutputMatrix(exportPath,n_features):
+        """ """
+        cols =  ["Target Str","Target Int"]
+        cols += ["FTR"+str(i) for i in range(n_features)]
+        outputFrame = pd.DataFrame(data=None,columns=cols)
+        outputFrame.to_csv(exportPath,index=False,header=True)
+
     def CollectCSVFiles (self,exts='.csv'):
         """ Find .csv files in Local Path """
         csv_files = []

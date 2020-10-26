@@ -20,22 +20,25 @@ import PlottingUtilities as plot_utils
 
 if __name__ == '__main__':
 
+    # Initialize Directories
     dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\Figures"
-    
+    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix.csv"
+
+    # Preprocessing
+    n_features = 20
     ProgramSetup = sys_utils.ProgramInitializer([dataPath,exptPath])
+    ProgramSetup.InitOutputMatrix(mtrxPath,n_features)
     groupedFiles = ProgramSetup.__Call__()
     Decoder = ProgramSetup.GetDecoder
     nClasses = ProgramSetup.n_classes
 
-    n_features = 20
-
-    for i in range(nClasses-1,0,-1):       # each class:
+    for i in range(nClasses):           # each class:
         print("Class Int: "+str(i)+"\tClass Str:"+str(Decoder[i]))
         DesignMatrix = struct_utils.FeatureContainer(i,Decoder[i],groupedFiles[i])
         DesignMatrix.__Call__()
-        print(np.var(DesignMatrix.X,axis=0))
-        #[plot_utils.PlotHistogram(DesignMatrix.X[:,j],50," ") for j in range(n_features)]
+        DesignMatrix.ExportFrame(mtrxPath)
+        
 
         print("=)")
     print("=)")

@@ -8,6 +8,7 @@ Instrument Classifier v0
             #### IMPORTS ####
               
 import numpy as np
+import pandas as pd
 
 import SystemUtilities as sys_utils
 import FeatureUtilities as feat_utils
@@ -57,19 +58,47 @@ class FeatureContainer :
     def __Call__(self):
         """ Execute methods of this object """
         for i,file in enumerate(self.fileObjs):   # each file in the class
+            print("\t"+file.filename)
+
             # Initialize
             x = np.array([])
             file.ReadFileWAV()
-            print("\t"+file.filename)
-
+          
             # Collect features
             timeFeatures = feat_utils.TimeSeriesFeatures(file.waveform)
             freqFeatures = feat_utils.FrequencySeriesFeatures(file.waveform)
             x = np.append(x,timeFeatures.__Call__())
             x = np.append(x,freqFeatures.__Call__())
-
             self.X[i] = x
 
-            
+        self.InitOutput()
+        return self
+
+    @property
+    def GetColumnNames(self):
+        """ Geat Feature Names for DF col header """
+        return ["FTR"+str(i) for i in range(self.n_features)]
+   
+    def InitOutput (self):
+        """ Return [classInt,classStr,features] as array """
+        # Prepare Frame of class Ints/Strs
+        indexFrame = pd.DataFrame(data=None)
+        indexFrame['Target Str'] = [str(self.targetStr) for x in range(self.n_files)]
+        indexFrame['Target Int'] = [str(self.targetInt) for x in range(self.n_files)]
+
+        # Prepare Frame of Design Matrix Data
+        X = self.X
+        featuresFrame = pd.DataFrame(data=X,columns=self.GetColumnNames)    # make dataFrame for features
+        self.outputFrame = pd.concat([indexFrame,featuresFrame],axis=1)    # concatenate the frames
+
+        return self
+
+    def ExportFrame(self,exportPath):
+        """ Export DataFrame """
+        try:        # try to write frame
+            self.outputFrame.to_csv(exportPath,index=False,header=False,mode='a')
+        except:     # create frame
+            raise FileNotFoundError()
+        return self
             
 
