@@ -9,7 +9,7 @@ PHYS 799
 
 import os
 import sys
-import AnalysisCrossValidationUtilities as utils
+import BaggingUtilities as utils
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -25,16 +25,12 @@ if __name__ == "__main__":
     # MAKE PROGRAM INTIALIZER
     Setup = utils.ProgramSetup(dataPath,modelPath)
     modelNames = Setup.GetModelNames()
+    modelInstances = [utils.ModelData(dataPath,modelPath,name) for name in modelNames]
 
-    for model in modelNames:
-        ModelInst = utils.ModelData(modelPath,model)
-        kerasModel = ModelInst.LoadModel()
-
-        """
-        Need to figured out methods to access weights.
-        Can organize weights into arbitary sized NP array
-            Compute Matrix norms-etc.
-        """
+    # MAIN BAGGING ALGORITHM
+    Bagging = utils.BaggingAlgorithm(modelInstances)
+    Bagging.__Call__()
 
     print("=)")
+
 
