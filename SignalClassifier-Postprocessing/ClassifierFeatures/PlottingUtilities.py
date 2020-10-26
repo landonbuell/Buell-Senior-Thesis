@@ -208,3 +208,30 @@ def Plot_Spectrum (xdata,ydata,labels=[''],title='',
         plt.savefig(title+'.png')
     if show == True:
         plt.show()
+
+def PlotHistogram(data,bins,title='',
+                   save=False,show=True):
+    """
+    Create Histogram visualization of feature
+    --------------------------------
+    data (arr) : (1 x N) array of data to plot on x-axis
+    bins (arr) : (1 x M) array of data to plot on y-axis ( can be multiple arrays)
+    title (str) : Title for plot
+    save (bool) : If true, save MPL figure to cwd (False by Default)
+    show (bool) : If true, shows current figure to User (True by Default)
+    --------------------------------
+    return None
+    """
+    plt.figure(figsize=(16,12))
+    plt.title(title,size=40,weight='bold')
+    plt.xlabel('Bins',size=30,weight='bold')
+    plt.ylabel('Counts',size=30,weight='bold')
+
+    plt.hist(x=data,bins=bins,color='blue')
+
+    plt.grid()
+    plt.tight_layout()
+    if save == True:
+        plt.savefig(title+'.png')
+    if show == True:
+        plt.show()

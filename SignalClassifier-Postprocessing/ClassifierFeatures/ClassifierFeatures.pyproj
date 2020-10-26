@@ -23,7 +23,7 @@
   <ItemGroup>
     <Compile Include="FeaturesMAIN.py" />
     <Compile Include="FeatureUtilities.py" />
-    <Compile Include="MathUtilities.py" />
+    <Compile Include="StructureUtilities.py" />
     <Compile Include="PlottingUtilities.py" />
     <Compile Include="SystemUtilities.py" />
   </ItemGroup>
