@@ -125,7 +125,7 @@ class TimeSeriesFeatures (BaseFeatures):
         featureVector = np.append(featureVector,self.TimeDomainEnvelope())
         featureVector = np.append(featureVector,self.ZeroCrossingRate())
         featureVector = np.append(featureVector,self.CenterOfMass())       
-        featureVector = np.append(featureVector,self.AutoCorrelationCoefficients())
+        featureVector = np.append(featureVector,self.AutoCorrelationCoefficients(12))
         # Crop Waveform if previously Shorter
         if self.oldSamples < self.n_samples:
             self.signal = self.signal[:self.oldSamples]
@@ -220,6 +220,11 @@ class FrequencySeriesFeatures (BaseFeatures):
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
 
+        # Time Axis, Frequency Axis
+        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
+        self.mels = self.HertzToMel(self.hertz)
+        self.t = np.arange(0,self.n_frames,1)   
+
     def __Call__(self):
         """
         Collect preset features from self in single function
@@ -227,17 +232,18 @@ class FrequencySeriesFeatures (BaseFeatures):
         *no args
         --------------------------------
         Return features in frequency-domain
-        """
-        # Time Axis, Frequency Axis, Spectrogram
-        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
-        self.mels = 2595*np.log10(1+self.hertz/700)
-        self.t = np.arange(0,self.n_frames,1)   
+        """      
+        # Create Spectrogram
         self.spectrogram = self.PowerSpectrum(pts=self.frequencyPoints).transpose()
         self.spectrogram = struct_utils.MathematicalUtilities.PadZeros(self.spectrogram,self.n_frames)
 
         # Add Elements to Feature vector
         featureVector = np.array([])
-        featureVector = np.append(featureVector,self.MelFrequencyCeptralCoefficients())
+        MFBEs = self.MelFilterBankEnergies()
+        featureVector = np.append(featureVector,MFBEs)
+        MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
+
+        featureVector = np.append(featureVector,MFCCs)
         featureVector = np.append(featureVector,self.CenterOfMass())
         return featureVector
 
@@ -320,7 +326,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         filterBanks = filterBanks[:,:len(self.frequencyPoints)]
         return filterBanks
 
-    def MelFrequencyCeptralCoefficients (self,attrb='spectrogram',n_filters=12):
+    def MelFilterBankEnergies (self,attrb='spectrogram',n_filters=12):
         """ 
         Compute Mel Filter Bank Energies across full DFT or spectrogram 
         --------------------------------
@@ -333,10 +339,28 @@ class FrequencySeriesFeatures (BaseFeatures):
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         X = X.transpose()
         melFiltersBanks = self.MelFilters(n_filters).transpose()    # get mel filters
-        MFCCs = np.matmul(X,melFiltersBanks)                        # apply to frequency spectrum
-        if MFCCs.ndim > 1:                  # 2D array
-            MFCCs = np.mean(MFCCs,axis=0)   # summ about 0-th axis
-        return MFCCs
+        MFBEs = np.matmul(X,melFiltersBanks)                        # apply to frequency spectrum
+        if MFBEs.ndim > 1:                  # 2D array
+            MFBEs = np.mean(MFBEs,axis=0)   # summ about 0-th axis
+        return MFBEs
+
+    def MelFrequencyCeptralCoefficients (self,melFilterEnergies):
+        """ 
+        Compute Mel Filter Bank Energies across full DFT or spectrogram 
+        --------------------------------
+        melFilterEnergies (arr) : Array (1 x N ) of MFBEs 
+        --------------------------------
+        Return MFCC applied to spectrum (self.n_frames/self.npts x n_filters)
+        """
+        n_filters = len(melFilterEnergies)
+        c = np.arange(0,n_filters)
+        MFCCs = np.zeros(shape=(n_filters))       # init MFCC array
+        for i in range(n_filters):                  # each MFCC:          
+            _log = np.log10(melFilterEnergies)
+            _cos = np.cos((c+1)*(i+0.5)*np.pi/(n_filters))
+            _coeff = np.dot(_log,_cos)
+            MFCCs[i] = _coeff
+        return np.sqrt(2/n_filters)*MFCCs
 
     def CenterOfMass (self,attrb='spectrogram'):
         """ 
