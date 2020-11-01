@@ -353,11 +353,11 @@ class FrequencySeriesFeatures (BaseFeatures):
         Return MFCC applied to spectrum (self.n_frames/self.npts x n_filters)
         """
         n_filters = len(melFilterEnergies)
-        c = np.arange(0,n_filters)
+        m = np.arange(0,n_filters)
         MFCCs = np.zeros(shape=(n_filters))       # init MFCC array
         for i in range(n_filters):                  # each MFCC:          
             _log = np.log10(melFilterEnergies)
-            _cos = np.cos((c+1)*(i+0.5)*np.pi/(n_filters))
+            _cos = np.cos((i+1)*(m+0.5)*np.pi/(n_filters))
             _coeff = np.dot(_log,_cos)
             MFCCs[i] = _coeff
         return np.sqrt(2/n_filters)*MFCCs

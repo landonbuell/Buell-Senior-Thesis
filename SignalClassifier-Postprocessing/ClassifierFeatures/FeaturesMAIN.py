@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # Initialize Directories
     dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\Figures"
-    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix.csv"
+    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix1.csv"
 
     # Preprocessing
     n_features = 40
@@ -39,7 +39,6 @@ if __name__ == '__main__':
         DesignMatrix.__Call__()
         DesignMatrix.ExportFrame(mtrxPath)
         
-
         print("=)")
     print("=)")
     
