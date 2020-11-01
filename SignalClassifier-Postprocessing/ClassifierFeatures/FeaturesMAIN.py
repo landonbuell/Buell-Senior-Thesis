@@ -23,10 +23,10 @@ if __name__ == '__main__':
     # Initialize Directories
     dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\Figures"
-    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix.csv"
+    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix1.csv"
 
     # Preprocessing
-    n_features = 20
+    n_features = 40
     ProgramSetup = sys_utils.ProgramInitializer([dataPath,exptPath])
     ProgramSetup.InitOutputMatrix(mtrxPath,n_features)
     groupedFiles = ProgramSetup.__Call__()
@@ -35,11 +35,10 @@ if __name__ == '__main__':
 
     for i in range(nClasses):           # each class:
         print("Class Int: "+str(i)+"\tClass Str:"+str(Decoder[i]))
-        DesignMatrix = struct_utils.FeatureContainer(i,Decoder[i],groupedFiles[i])
+        DesignMatrix = struct_utils.FeatureContainer(i,Decoder[i],groupedFiles[i],n_features)
         DesignMatrix.__Call__()
         DesignMatrix.ExportFrame(mtrxPath)
         
-
         print("=)")
     print("=)")
     
