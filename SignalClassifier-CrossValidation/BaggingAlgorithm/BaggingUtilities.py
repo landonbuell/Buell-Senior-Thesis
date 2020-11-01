@@ -109,12 +109,14 @@ class BaggingAlgorithm :
         """ Initialize BaggingAlgorithmInstance """
         self.modelList = modelList
         self.newModel = self.CloneModel()
-        self.SetWeightsToZero()
 
     def CloneModel(self):
         """ Create Clone of the model to set weights to """
         parentModel = keras.models.load_model(self.modelList[0].fullModelPath)
         newModel = keras.models.clone_model(parentModel)
+        for layerWeights in newModels.get_weights():
+            weightShape = layerweights.shape()
+            print(" ")
         return newModel
 
     def SetWeightsToZero(self):
@@ -145,7 +147,7 @@ class BaggingAlgorithm :
         nModels = len(self.modelList)
         _ = self.newModel.get_weights()
         for i,model in enumerate(self.modelList[1:]):
-            savedWeights = np.loadedModel = keras.models.load_model(model.fullModelPath)  # get a model
+            savedWeights = keras.models.load_model(model.fullModelPath)  # get a model
             modelWeights = loadedModel.get_weights()                    # get layer params
 
         return self
