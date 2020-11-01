@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # HARD-CODE VARIABLES FOR DEVELOPMENT
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis'
     read = os.path.join(parent,'SignalClassifier','Target-Data')   
-    export = os.path.join(parent,'SignalClassifier-CrossValidation','XVal-Output-Data')
+    export = os.path.join(parent,'SignalClassifier-CrossValidation','XVal2-Output-Data')
     model = os.path.join(parent,'SignalClassifier-CrossValidation','XVal-Model-Data')
 
     scriptPath = os.path.join(parent,'SignalClassifier','ClassifierMain')
@@ -30,9 +30,8 @@ if __name__ == "__main__":
     # HANDLE LOCAL DIRECTORIES
     homePath = os.getcwd()
     paths = [read,export,model]
-    modelName = "ChaoticXVal"
+    modelName = "FeaturesXVal"
 
- 
     # PRE-PROCESSING FOR PROGRAM
     ProgramSetup = sys_utils.ProgramInitializer([read,export,model],modelName)    
     FILEOBJECTS = ProgramSetup.__Call__()
