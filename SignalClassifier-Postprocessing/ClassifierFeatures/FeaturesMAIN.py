@@ -13,45 +13,32 @@ import os
 
 import SystemUtilities as sys_utils
 import FeatureUtilities as feat_utils
-import MathUtilities as math_utils
+import StructureUtilities as struct_utils
 import PlottingUtilities as plot_utils
-
-"""
-    Not Implemented!
-
-"""
 
             #### MAIN EXECTUABLE ####
 
 if __name__ == '__main__':
 
-    homePath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifierTools\\ClassifierFeatures"
+    # Initialize Directories
     dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\Figures"
-    
-    ProgramSetup = sys_utils.ProgramInitializer([dataPath,homePath,exptPath])
-    FILEOBJS = ProgramSetup.__Call__()
+    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix1.csv"
+
+    # Preprocessing
+    n_features = 40
+    ProgramSetup = sys_utils.ProgramInitializer([dataPath,exptPath])
+    ProgramSetup.InitOutputMatrix(mtrxPath,n_features)
+    groupedFiles = ProgramSetup.__Call__()
     Decoder = ProgramSetup.GetDecoder
+    nClasses = ProgramSetup.n_classes
 
-    n_features = 20
-    DesignMatrix = np.array([])
-    TargetVector = np.array([])
-
-    for fileObj in FILEOBJS[:256]:
-        fileObj.ReadFileWAV()
-        featureVector = np.array([])
-        timeFeatures = feat_utils.TimeSeriesFeatures(fileObj.waveform)
-        freqFeatures = feat_utils.FrequencySeriesFeatures(fileObj.waveform,presetFrames=timeFeatures.frames)
-        featureVector = np.append(featureVector,timeFeatures.__Call__())
-        featureVector = np.append(featureVector,freqFeatures.__Call__())
-
-        DesignMatrix = np.append(DesignMatrix,featureVector)
-        TargetVector = np.append(TargetVector,fileObj.targetInt)
-
-    DesignMatrix = DesignMatrix.reshape(-1,n_features)
-    DesignMatrix = math_utils.MathematicalUtilities.ScaleDesignMatrix(DesignMatrix)
-    DesignMatrix = np.transpose(DesignMatrix)       # transpose for indexing:
-
-    for i in range(len(DesignMatrix)):
-        plot_utils.PlotFeatures(DesignMatrix[i],classes=TargetVector,labels=[" "," "])
+    for i in range(nClasses):           # each class:
+        print("Class Int: "+str(i)+"\tClass Str:"+str(Decoder[i]))
+        DesignMatrix = struct_utils.FeatureContainer(i,Decoder[i],groupedFiles[i],n_features)
+        DesignMatrix.__Call__()
+        DesignMatrix.ExportFrame(mtrxPath)
+        
+        print("=)")
+    print("=)")
     

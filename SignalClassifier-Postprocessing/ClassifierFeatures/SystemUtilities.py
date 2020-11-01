@@ -16,6 +16,7 @@ import argparse
 
 import scipy.io.wavfile as sciowav
 
+import FeatureUtilities as feat_utils
 import PlottingUtilities as plot_utils
 
 """
@@ -82,28 +83,16 @@ class CategoryDictionary :
     def __init__(self,localPath,modelName):
         """ Intitialize CategoryDictionary Instance """
         self.localPath = localPath
-        self.modelName = modelName
         self.fileName = modelName+"Categories.csv"
         self.filePath = os.path.join(self.localPath,self.fileName)
 
     def __Call__(self,fileObjs):
-        """ Run Category Encode / Decode Dictionary """   
+        """ Run Category Encode / Decode Dictionary """     
         # A new Model is created, Overwrite existing File
         print("\tBuilding new Encode/Decode Dictionary...")
         self.encoder,self.decoder = self.BuildCategories(fileObjs)
-        self.ExportCategories()        
+        self.ExportCategories()
         return self
-
-    def LoadCategories (self):
-        """ Load File to Match Int -> Str Class """
-        decoder = {}
-        encoder = {}
-        rawData = pd.read_csv(self.filePath)
-        Ints,Strs = rawData.iloc[:,0],rawData.iloc[:,1]
-        for Int,Str in zip(Ints,Strs):      # iterate by each
-            encoder.update({str(Str):int(Int)})
-            decoder.update({int(Int):str(Str)})
-        return encoder,decoder
 
     def ExportCategories (self):
         """ Export Decode Dictionary (Int -> Str) """
@@ -131,26 +120,29 @@ class CategoryDictionary :
         return encoder,decoder
              
             #### PROGRAM PROCESSING CLASS ####
-
+      
 class ProgramInitializer:
     """
     Object to handle all program preprocessing
     --------------------------------
-    pathList (list) : List of Local Directory paths - 
-        [*readPath - training data index, homepath - Store models here,
-            *exportPath - predictions / traing data are exported to
-    mode (str) : String indicating which mode to execute program with
-    newmodels (bool): If True, create new Nueral Network Models
+    pathList (list) : List of 2 Local Directory paths:
+        readPath - local path where target data is held       
+        exportPath - local path where training history / predictions are exported
     --------------------------------
     Return Instantiated Program Start Class Instance
     """
 
-    def __init__(self,pathList=[None,None,None]):
+    def __init__(self,pathList=[None,None]):
         """ Initialize Class Object Instance """
-        self.readPath = pathList[0]  
-        self.exportPath = pathList[1]  
-        self.homePath = pathList[2]
+        dt_obj = datetime.datetime.now()
+        starttime = dt_obj.isoformat(sep='.',timespec='auto')
+        self.starttime = starttime.replace(':','.').replace('-','.')
+        print("Time Stamp:",self.starttime)
 
+        # Establish Paths
+        self.readPath = pathList[0]
+        self.exportPath = pathList[1]
+               
     def __repr__(self):
        """ Return String representation of Object/Instance """
        return "ProgramInitializer performs preprocessing for program parameters "
@@ -163,15 +155,28 @@ class ProgramInitializer:
         self.n_files = len(fileObjects)         # get number of files
         
         # Construct Encoder / Decoder Dictionaries
-        self.categories = CategoryDictionary(self.exportPath,"InDevCLF")
+        self.categories = CategoryDictionary(self.exportPath,"Feature")
         self.categories.__Call__(fileObjects)
-        self.n_classes = max(self.GetDecoder.keys()) + 1
 
+        decodeKeys = [i for i in self.GetDecoder.keys()]
+        self.n_classes = np.max(decodeKeys) + 1
+
+        filesByCategory = self.FilesByCategory(fileObjects)
+          
         # Final Bits
-        self.StartupMesseges
-        fileObjects = np.random.permutation(fileObjects)    # permute
-        return fileObjects
+        self.StartupMesseges           # Messages to User
+        return filesByCategory
 
+    def FilesByCategory (self,fileObjs):
+        """ Group files intoa dictionary by category """
+        #groupedFiles = {{x:[]} for x in range(0,self.n_classes)}
+        groupedFiles = {}
+        for i in range(self.n_classes):
+            groupedFiles.update({i:[]})
+        for file in fileObjs:
+            groupedFiles[file.targetInt].append(file)
+        return groupedFiles
+       
     @property
     def GetLocalPaths (self):
         """ Return Necessaru Directory Paths """
@@ -187,48 +192,24 @@ class ProgramInitializer:
         """ Print out Start up messeges to Console """
         print("\tCollecting data from:\n\t\t",self.readPath)
         print("\tExporting Predictions to:\n\t\t",self.exportPath)
-        print("\tNumber of Files found:",self.n_files)
         print("\tNumber of Categories found:",self.n_classes)
         print("\n")
         return None
 
-    def ArgumentParser(self):
-        """ Process Command Line Arguments """
-        parser = argparse.ArgumentParser(prog='SignalClassifier',
-                                         usage='Classify .WAV files by using pre-exisiting classifiered samples.',
-                                         description="\n\t CLI Help for Instrument Classifier Program:",
-                                         add_help=True)
-
-        parser.add_argument("dataPath",type=str,
-                            help="Full Local Directory Path of file(s) containing \
-                                    rows of of answer-key-like data; formatted: \
-                                    | Index | Fullpath  | Target Int    | Target Str |")
-        parser.add_argument('modelPath',type=str,
-                            help="Full Local Data Directory Path to store intermediate \
-                                    file data. Reccommend using empty/new path.")
-        parser.add_argument('exportPath',type=str,
-                            help='Full Local Directory Path to export model predicitions and \
-                                Evaluations to.')
-        parser.add_argument('programMode',type=str,
-                            help="Mode for program execution. Must be in \
-                                    ['train','train-test','predict']")
-        parser.add_argument("modelName",type=str,
-                            help="Name of Model to use or create")
-        parser.add_argument("newModels",type=bool,
-                            help="If True, Networks sharing the same name are overwritten, \
-                                and new models are created in place")
-        # Parse and return args
-        args = parser.parse_args()
-        return [args.dataPath,args.modelPath,args.exportPath,
-                args.programMode,args.modelName,args.newModels]
+    @staticmethod
+    def InitOutputMatrix(exportPath,n_features):
+        """ """
+        cols =  ["Target Str","Target Int"]
+        cols += ["FTR"+str(i) for i in range(n_features)]
+        outputFrame = pd.DataFrame(data=None,columns=cols)
+        outputFrame.to_csv(exportPath,index=False,header=True)
 
     def CollectCSVFiles (self,exts='.csv'):
-        """ Walk through Local Path and File all files w/ extension """
+        """ Find .csv files in Local Path """
         csv_files = []
-        for roots,dirs,files in os.walk(self.readPath):  
-            for file in files:                  
-                if file.endswith(exts):       
-                    csv_files.append(file)
+        for file in os.listdir(self.readPath):                       
+            if file.endswith(exts):       
+                csv_files.append(file)
         return csv_files
 
     def CreateFileobjs (self):
@@ -244,12 +225,18 @@ class ProgramInitializer:
             del(frame)                          # del frame  
         return fileobjects                      # return list of insts
 
-    def GetNClasses (self,fileobjects):
-        """ Find Number of classes in target vector """
-        y = [x.targetInt for x in fileobjects]   # collect target from each file
-        try:                            # Attempt    
-            return len(np.unique(y))    # account for zero-index
-        except Exception:               # failure?
-            return None                 # no classes?
-
-
+class ProgramFinisher :
+    """
+    Handel all final Housekeeping bits of this program
+        Ensure Everything has Run properly
+    """
+    def __init__(self,):
+        """ Initialize ProgramFinisher Instance """
+        dt_obj = datetime.datetime.now()
+        starttime = dt_obj.isoformat(sep='.',timespec='auto')
+        self.endtime = starttime.replace(':','.').replace('-','.')
+        
+    def __Call__(self,startime):
+        """ Run Program Finisher Instance """
+        print("Program Finish:",self.endtime)
+        # More things will go here soon
