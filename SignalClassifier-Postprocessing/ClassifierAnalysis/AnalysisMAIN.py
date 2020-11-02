@@ -19,21 +19,32 @@ import AnalysisUtilities as utils
         
 if __name__ == '__main__':
 
-    parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier'
-    export = os.path.join(parent,'Output-Data')
+    parent = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier-CrossValidation"
+    dataPath = os.path.join(parent,"XVal-Output-Data")
 
-    infiles = ["ChaoticSynthClassifier@PREDICTIONS@2020.10.10.12.45.48.110578.csv"]
+    models = ["ChaoticXVal","FeaturesXVal"]
     n_classes = 33
+
+
+    infiles = ["ChaoticXVal1@PREDICTIONS@2020.10.19.22.03.30.032221.csv",
+               "FeaturesXVal1@PREDICTIONS@2020.11.01.01.31.42.020625.csv"]
+
+    infiles = [file for file in os.listdir(dataPath) if ("@PREDICTIONS@" in file)]
+
+    export = os.path.join(parent,"Confusions")
 
     for file in infiles:
         modelName = file.split("@")[0]
-        Program = utils.AnalyzeModels(modelName,export,file,n_classes)
+        Program = utils.AnalyzeModels(modelName,dataPath,file,n_classes)
         Program.__Call__()
 
-        utils.ConfusionMatrix.ExportConfusion(Program.weightedConfusion,modelName+" Weighted Confusion",export)
-        utils.ConfusionMatrix.ExportConfusion(Program.standardConfusion,modelName+" Standard Confusion",export)
+        """
+        os.chdir(export)
+        utils.ClassifierMetrics.ExportConfusion(Program.weightedConfusion,modelName+" Weighted Confusion",export)
+        utils.ClassifierMetrics.ExportConfusion(Program.standardConfusion,modelName+" Standard Confusion",export)
 
-        utils.ConfusionMatrix.PlotConfusion(Program.weightedConfusion,33,modelName+" Weighted Confusion")
-        utils.ConfusionMatrix.PlotConfusion(Program.standardConfusion,33,modelName+" Standard Confusion")
-       
+        utils.ClassifierMetrics.PlotConfusion(Program.weightedConfusion,33,modelName+" Weighted Confusion")
+        utils.ClassifierMetrics.PlotConfusion(Program.standardConfusion,33,modelName+" Standard Confusion")
+        """
+
     print("=)")
