@@ -354,11 +354,11 @@ class FrequencySeriesFeatures (BaseFeatures):
         """
         n_filters = len(melFilterEnergies)
         m = np.arange(0,n_filters)
-        MFCCs = np.zeros(shape=(n_filters))       # init MFCC array
+        MFCCs = np.zeros(shape=(n_filters))         # init MFCC array
         for i in range(n_filters):                  # each MFCC:          
             _log = np.log10(melFilterEnergies)
             _cos = np.cos((i+1)*(m+0.5)*np.pi/(n_filters))
-            _coeff = np.dot(_log,_cos)
+            _coeff = np.dot(_log,_cos)              # compute dot product
             MFCCs[i] = _coeff
         return np.sqrt(2/n_filters)*MFCCs
 
