@@ -40,7 +40,7 @@ class FeatureProcessor:
 
     def CreateDictionary(self,encdPath):
         """ Handle class dictionary """
-        modelName = "ChaoticXVal"
+        modelName = "FeaturesXVal"
         categories = CategoryDictionary(encdPath,modelName)
         self.classNames = categories.encoder.keys()          # get names of categories
             
