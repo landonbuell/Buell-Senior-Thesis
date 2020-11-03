@@ -20,34 +20,35 @@
 \contentsline {subsubsection}{\numberline {3.4.2}Softmax}{13}% 
 \contentsline {subsection}{\numberline {3.5}Training a Neural Network}{13}% 
 \contentsline {subsubsection}{\numberline {3.5.1}The Cost Function}{14}% 
-\contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{14}% 
-\contentsline {subsubsection}{\numberline {3.5.3}The Optimizer}{16}% 
-\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{18}% 
-\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{21}% 
-\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{21}% 
-\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{22}% 
-\contentsline {section}{\numberline {4}Properties of Musical Instruments}{23}% 
-\contentsline {section}{\numberline {5}Feature Selections}{24}% 
-\contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{26}% 
-\contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{26}% 
-\contentsline {subsection}{\numberline {5.1}Spectrogram Features}{27}% 
-\contentsline {subsection}{\numberline {5.2}Time-Space Features}{30}% 
-\contentsline {subsubsection}{\numberline {5.2.1}Time Domain Envelope}{30}% 
-\contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{30}% 
-\contentsline {subsubsection}{\numberline {5.2.3}Center of Mass}{31}% 
-\contentsline {subsubsection}{\numberline {5.2.4}Auto Correlation Coefficients}{31}% 
-\contentsline {subsection}{\numberline {5.3}Frequency-Space Features}{33}% 
-\contentsline {subsubsection}{\numberline {5.3.1}Mel Frequency Cepstral Coefficients}{33}% 
-\contentsline {subsubsection}{\numberline {5.3.2}Center of Mass}{34}% 
-\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{34}% 
-\contentsline {section}{\numberline {6}Evaluating Performance}{35}% 
-\contentsline {subsection}{\numberline {6.1}Cross Validation}{35}% 
-\contentsline {subsection}{\numberline {6.2}Performance Metrics}{36}% 
-\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{36}% 
-\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{37}% 
-\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{37}% 
-\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{38}% 
-\contentsline {subsection}{\numberline {6.4}The Bagging Technique}{38}% 
-\contentsline {section}{\numberline {7}Experimental Results}{39}% 
-\contentsline {section}{\numberline {8}Conclusion}{40}% 
-\contentsline {section}{\numberline {9}Acknowledgments}{41}% 
+\contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{15}% 
+\contentsline {subsubsection}{\numberline {3.5.3}The Optimizer}{17}% 
+\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{19}% 
+\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{22}% 
+\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{22}% 
+\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{23}% 
+\contentsline {section}{\numberline {4}Properties of Musical Instruments}{24}% 
+\contentsline {section}{\numberline {5}Feature Selections}{25}% 
+\contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{27}% 
+\contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{27}% 
+\contentsline {subsection}{\numberline {5.1}Spectrogram Features}{28}% 
+\contentsline {subsection}{\numberline {5.2}Time-Space Features}{31}% 
+\contentsline {subsubsection}{\numberline {5.2.1}Time Domain Envelope}{31}% 
+\contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{31}% 
+\contentsline {subsubsection}{\numberline {5.2.3}Temporal Center of Mass}{32}% 
+\contentsline {subsubsection}{\numberline {5.2.4}Auto Correlation Coefficients}{32}% 
+\contentsline {subsection}{\numberline {5.3}Frequency-Space Features}{34}% 
+\contentsline {subsubsection}{\numberline {5.3.1}Mel Filter Bank Energies}{34}% 
+\contentsline {subsubsection}{\numberline {5.3.2}Mel Frequency Cepstral Coeffecients}{35}% 
+\contentsline {subsubsection}{\numberline {5.3.3}Frequency Center of Mass}{36}% 
+\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{36}% 
+\contentsline {section}{\numberline {6}Evaluating Performance}{37}% 
+\contentsline {subsection}{\numberline {6.1}Cross Validation}{37}% 
+\contentsline {subsection}{\numberline {6.2}Performance Metrics}{38}% 
+\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{38}% 
+\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{39}% 
+\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{39}% 
+\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{40}% 
+\contentsline {subsection}{\numberline {6.4}The Bagging Technique}{40}% 
+\contentsline {section}{\numberline {7}Experimental Results}{41}% 
+\contentsline {section}{\numberline {8}Conclusion}{42}% 
+\contentsline {section}{\numberline {9}Acknowledgments}{43}% 

@@ -157,6 +157,9 @@ class ClassifierMetrics :
         _loss = keras.losses.categorical_crossentropy(_labs,_prds).numpy()
         return np.mean(_loss)
 
+    ### Include prediction accuracy
+    # Include prediction threshold
+
     @staticmethod
     def PlotConfusion(X,n_classes,title="",show=True,save=True):
         """ Visualize Confusion with ColorMap """
