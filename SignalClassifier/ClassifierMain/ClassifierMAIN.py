@@ -34,7 +34,7 @@ if __name__ == '__main__':
     if ProgramSetup.programMode == 'train':
         ProgramMode = mode_utils.TrainMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
-                                            groupSize=256,n_iters=2)
+                                            groupSize=256,n_iters=3)
     elif ProgramSetup.programMode == 'train-predict':     
         ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
@@ -50,6 +50,7 @@ if __name__ == '__main__':
     # EXECUTE PROGRAM
     del(ProgramSetup)
     del(Args)
+
     ProgramMode.__Call__(NeuralNetwork)      
 
     # FINAL HOUSKEEPING

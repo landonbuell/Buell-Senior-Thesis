@@ -38,7 +38,7 @@ class ProgramMode:
     exportpath (str) : Local Path to output filedata  
     groupSize (int) : number of file samples in each design matrix
     --------------------------------
-    Execute MAIN program in perscribed mode
+    Execute MAIN program in prescribed mode
     """
     def __init__(self,FILEOBJS,modelName,n_classes,timestamp,exportpath=None,
                  groupSize=256):
@@ -48,7 +48,7 @@ class ProgramMode:
         self.n_classes = n_classes          # number of classes
         self.timestamp = timestamp          # time when program began
         self.exportpath = exportpath        # path to push results to       
-        self.groupSize = groupSize          # giles to use in each mega-batch
+        self.groupSize = groupSize          # files to use in each mega-batch
         self.n_files = len(self.FILEOBJS)   # number of file objects
         self.groupCounter = 0
 
@@ -61,7 +61,7 @@ class ProgramMode:
 
     def ScaleData (self,matrixObj):
         """ Scale Design Matrix 'X' for processing """
-        X = matrixObj.__Get_X__()           # get raw data
+        X = matrixObj.__GetX__()            # get raw data
         self.Scaler.partial_fit(X,y=None)   # fit the matrix
         X_new = self.Scaler.transform(X)    # scale & return
         matrixObj.SetMatrixData(X_new)      # set as attrb
@@ -81,29 +81,28 @@ class ProgramMode:
         # Create Spectrogram Matrix for CNN Branch
         featureMatrix = ML_utils.FeatureArray(fileobj.targetInt)        # strucutre to hold Sxx features
         featureMatrix = featureMatrix.SetFeatures(freqFeatures.spectrogram)   # set spectrogram
+        featureMatrix.AddAxis()                                         # add extra dimension
 
         del(timeFeatures)
         del(freqFeatures)
         return (featureMatrix,featureVector)    # return the feature arrays
 
-    def ConstructDesignMatrices (self,FILES):
+    def ConstructDesignMatrices (self,FILES,shapes):
         """ Collect Features from a subset File Objects """
-
+        shapeX1 = [len(FILES)] + [i for i in shapes[0]] # shape of CNN matrix
+        shapeX2 = [len(FILES)] + [i for i in shapes[1]] # shape of MLP matrix
         # Intitialize Design Matricies
-        X1 = ML_utils.DesignMatrix(ndim=4,n_classes=self.n_classes)  # Design matrix for Spectrogram
-        X2 = ML_utils.DesignMatrix(ndim=2,n_classes=self.n_classes)  # Design matrix for MLP
-        
+        X1 = ML_utils.DesignMatrix(shapeX1,self.n_classes)    # Design matrix for Spectrogram
+        X2 = ML_utils.DesignMatrix(shapeX2,self.n_classes)    # Design matrix for MLP
+
         # Add Samples to Design Matricies
         for i,FILEOBJ in enumerate(FILES):
             self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
             (x1,x2) = self.CollectFeatures(FILEOBJ)         # collect features
-            X1.AddSample(x1)            # Add sample to Sxx 
-            X2.AddSample(x2)            # Add sample to MLP
+            X1.AddSample(x1,i)          # add to CNN matrix
+            X2.AddSample(x2,i)          # add to MLP matrix
        
         # Format Design Matricies for Input
-        X1 = X1.ShapeBySample()     # shape spectrogram matrix
-        X1 = X1.AddChannel()        # add channel to Matrix
-        X2 = X2.ShapeBySample()     # shape design matrix
         X2 = self.ScaleData(X2)     # scale design matrix
 
         return (X1,X2)      # return 2 Design matricies & target matrix
@@ -134,43 +133,42 @@ class TrainMode (ProgramMode):
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
-        self.n_epochs = 4
+        self.n_epochs = 2
+
+    def InitOutputStructure (self):
+        """ Create Output Structure for Testing/Prediction Mode """
+        self.OutputData = sys_utils.OutputStructure(self.programMode,self.exportpath)
+        return self
      
     def __Call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
         print("\nBegining Training process....")
         for I in range (0,self.n_iters):    # Each pass over full dataset
             print("\tIteration:",I)         # Print interation num
-            self.__TRAIN__(Networks)        # Train the model
+            self.TrainModel(Networks)            # Train the model
             Networks.SaveModel()            # save locally
             self.FILEOBJS = np.random.permutation(self.FILEOBJS)
         print("\tTraining Completed! =)")
         return self
 
-    def __TRAIN__(self,Networks):
+    def TrainModel(self,Networks):
         """ Train Netorks on data from FILEOBJS """        
-        
+        shapes = Networks.GetInputShapes
         for I in range (0,self.n_files,self.groupSize):    # In a given group
             print("\tGroup Number:",self.groupCounter)
             FILES = self.FILEOBJS[I:I+self.groupSize]      # subset of files
-            (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES)
-            X1 = matrixSXX.__Get_X__()
-            X2 = matrixMLP.__Get_X__()
-            Y = matrixSXX.__Get_Y__()
+            (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES,shapes)
+            
+            # Execute training
+            modelHistory = Networks.MODEL.fit(x=[matrixSXX.__GetX__(),matrixMLP.__GetX__()],
+                                              y=matrixSXX.__GetY__(),
+                                                batch_size=32,epochs=self.n_epochs,verbose=1) 
 
-            modelHistory = Networks.MODEL.fit(x=[X1,X2],y=Y,
-                               batch_size=32,epochs=self.n_epochs,verbose=1) 
-            self.ExportHistory(modelHistory)
-
-            del(matrixSXX,matrixMLP)    # delete Design Matrix Objs
-            del(X1,X2,Y)                # delete Design Matrices
-            self.groupCounter += 1      # incr coutner
-        return self                     # self
-
-    def InitOutputStructure (self):
-        """ Create Output Structure for Testing/Prediction Mode """
-        self.OutputData = sys_utils.OutputStructure(self.programMode,self.exportpath)
-        return self
+            # Post-Training
+            del(matrixSXX,matrixMLP)            # delete Design Matrix Objs
+            self.ExportHistory(modelHistory)    # export training history    
+            self.groupCounter += 1              # incr counter          
+        return self                             # self
 
     def ExportHistory (self,historyObject):
         """ Store Keras History Object in lists """
@@ -210,47 +208,54 @@ class PredictMode (ProgramMode):
         self.exportpath = os.path.join(self.exportpath,outfile)
         self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold
-        
-    def __Call__(self,Networks):
-        """ Call this Instance to Execute Training and Testing """
-        print("\nBegining Testing Process...")
-        self.__PREDICT__(Networks)
-        print("\tTesting Completed! =)")
-
-    def __PREDICT__(self,Networks):
-        """ Test Netorks on data from FILEOBJS """
-        # For Each group of files, Collect the data
-        for I in range (0,self.n_files,self.groupSize):# In a given group
-            print("\tGroup Number:",self.groupCounter)
-            FILES = self.FILEOBJS[I:I+self.groupSize]  # subset of files
-            (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES)
-            X1 = matrixSXX.__Get_X__()
-            X2 = matrixMLP.__Get_X__()
-
-            modelPrediction = Networks.MODEL.predict(x=[X1,X2],batch_size=64,verbose=0)
-            self.ExportPrediction(FILES,modelPrediction,Networks.classDecoder)
-            
-            del(matrixSXX,matrixMLP)        # delete Design Matrix Objs
-            del(X1,X2)                      # delete Design Matricies
-            self.groupCounter += 1          # incr counter
-        return self                         # return self       
 
     def InitOutputStructure (self):
         """ Create Output Structure for Testing/Prediction Mode """
         self.OutputData = sys_utils.OutputStructure(self.programMode,self.exportpath)
         return self
+        
+    def __Call__(self,Networks):
+        """ Call this Instance to Execute Training and Testing """
+        print("\nBegining Testing Process...")
+        self.PredictModel(Networks)
+        print("\tTesting Completed! =)")
 
-    def ExportPrediction (self,fileObjects,predictionData,decoder):
-        """ Export data from prediction arry to Local path """
+    def PredictModel(self,Networks):
+        """ Test Netorks on data from FILEOBJS """
+        # For Each group of files, Collect the data
+        shapes = Networks.GetInputShapes
+        for I in range (0,self.n_files,self.groupSize):# In a given group
+            print("\tGroup Number:",self.groupCounter)
+            FILES = self.FILEOBJS[I:I+self.groupSize]  # subset of files
+            (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES,shapes)
+
+            # Run predictions
+            modelPrediction = Networks.MODEL.predict(x=[matrixSXX.__GetX__,matrixMLP.__GetX__],
+                                                     batch_size=64,verbose=0)
+
+            # Post-Predicting
+            del(matrixSXX,matrixMLP)        # delete Design Matrix Objs  
+            predictionData = self.InterpretPredictions(modelPrediction,Networks.classDecoder)
+            self.ExportPrediction(FILES,predictionData)       
+            self.groupCounter += 1          # incr counte          
+        return self                         # return self       
+
+    def InterpretPredictions(self,):
+        """ Interpret Results of Classifier Predictions """
         predictionInts = np.argmax(predictionData,axis=-1)
         predcitionStrs = [decoder[x] for x in predictionInts]
         confidences = np.max(predictionData,axis=-1)
+        return [predictionInts,predcitionStrs,confidences]
+
+    def ExportPrediction (self,fileObjects,predictionData):
+        """ Export data from prediction arry to Local path """
+             
         updateData = {  "Filepath":[x.fullpath for x in fileObjects],
                         "Int Label":[x.targetInt for x in fileObjects],
                         "Str Label":[x.targetStr for x in fileObjects],
-                        "Int Prediction":predictionInts,
-                        "Str Prediction":predcitionStrs,
-                        "Confidence":confidences
+                        "Int Prediction":predictionData[0], 
+                        "Str Prediction":predcitionData[1],
+                        "Confidence":predictionData[2]
                       }
         self.OutputData.UpdateData(updateData)
         return self
