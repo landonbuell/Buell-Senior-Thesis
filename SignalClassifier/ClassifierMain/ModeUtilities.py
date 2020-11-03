@@ -127,15 +127,14 @@ class TrainMode (ProgramMode):
                  groupSize=256,n_iters=2):
         """ Instantiate Class Method """
         self.programMode = "Train"
-        super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,
-                         n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
-                         groupSize=groupSize)
+        super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,n_classes=n_classes,
+                         timestamp=timestamp,exportpath=exportpath,groupSize=groupSize)
 
         self.outfile = self.modelName+'@TRAINING-HISTORY@'+self.timestamp+'.csv'
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
-        self.n_epochs = 2
+        self.n_epochs = 4
      
     def __Call__(self,Networks):
         """ Call this Instance to Execute Training and Testing """
