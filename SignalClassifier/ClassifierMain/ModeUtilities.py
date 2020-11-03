@@ -230,7 +230,7 @@ class PredictMode (ProgramMode):
             (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES,shapes)
 
             # Run predictions
-            modelPrediction = Networks.MODEL.predict(x=[matrixSXX.__GetX__,matrixMLP.__GetX__],
+            modelPrediction = Networks.MODEL.predict(x=[matrixSXX.__GetX__(),matrixMLP.__GetX__()],
                                                      batch_size=64,verbose=0)
 
             # Post-Predicting

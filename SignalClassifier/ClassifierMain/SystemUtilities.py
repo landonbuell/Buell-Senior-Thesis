@@ -86,7 +86,7 @@ class OutputStructure :
     def __init__(self,programMode,exportPath):
         """ Initialize Class Object instance """
         if programMode == "Train":      # output for training history
-            self.cols = ["Loss Score","Precision","Recall"]
+            self.cols = ["Loss Score","Accuracy","Precision","Recall"]
         elif programMode == "Predict":  # output for predictions
             self.cols = ["Filepath","Int Label","Str Label",
                          "Int Prediction","Str Prediction","Confidence"]
