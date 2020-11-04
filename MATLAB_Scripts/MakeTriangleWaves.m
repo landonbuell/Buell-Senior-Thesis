@@ -11,13 +11,13 @@ sampleRate = 44100;
 t = (1:nSamples)/sampleRate;
 
 exptPath = "C:\Users\Landon\Documents\audioSyntheticWAV";
-baseFileName = "SineWave.pure.";
+baseFileName = "TriangleWave.pure.";
 f = 16.35;
 
 chdir(exptPath);
 for i = 1:nFiles
     
-    waveform = sin(2*pi*f*t);
+    waveform = sawtooth(2*pi*f*t,0.5);
     %soundsc(waveform,sampleRate);
     
     freq = num2str(f);
