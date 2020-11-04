@@ -220,6 +220,6 @@ class NeuralNetworkModels:
         modelMain.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001,
                                         beta_1=0.9,beta_2=0.999,epsilon=1e-07),
                             loss=keras.losses.CategoricalCrossentropy(),
-                            metrics=['Accuracy','Precision','Recall'])
+                            metrics=[keras.metrics.Accuracy(),keras.metrics.Precision(),keras.metrics.Recall()])
         return modelMain
 

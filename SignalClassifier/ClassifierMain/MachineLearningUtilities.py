@@ -123,7 +123,9 @@ class DesignMatrix:
         """ Return target matrix as One-hot-enc matrix """
         if onehot == True:
             self.Y = keras.utils.to_categorical(self.targets,self.n_classes)
-        return self.Y
+            return self.Y
+        else:
+            return self.targets
 
     def __GetX__(self):
         """ return design matrix as rect. np array """

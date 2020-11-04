@@ -240,7 +240,7 @@ class PredictMode (ProgramMode):
             self.groupCounter += 1          # incr counte          
         return self                         # return self       
 
-    def InterpretPredictions(self,):
+    def InterpretPredictions(self,predictionData,decoder):
         """ Interpret Results of Classifier Predictions """
         predictionInts = np.argmax(predictionData,axis=-1)
         predcitionStrs = [decoder[x] for x in predictionInts]
@@ -254,7 +254,7 @@ class PredictMode (ProgramMode):
                         "Int Label":[x.targetInt for x in fileObjects],
                         "Str Label":[x.targetStr for x in fileObjects],
                         "Int Prediction":predictionData[0], 
-                        "Str Prediction":predcitionData[1],
+                        "Str Prediction":predictionData[1],
                         "Confidence":predictionData[2]
                       }
         self.OutputData.UpdateData(updateData)
