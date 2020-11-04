@@ -42,8 +42,8 @@ class NetworkContainer:
     def __init__(self,modelName,n_classes,path,inputAShape,inputBShape,new=True):
         """ Instantiate Class Object """
         self.name = modelName
-        self.shapeA = inputAShape
-        self.shapeB = inputBShape
+        self.shapeA = inputAShape   # CNN shape
+        self.shapeB = inputBShape   # MLP shape
 
         self.n_classes = n_classes  # number of output classes
         self.parentPath = os.path.join(path,self.name)  # Set parent path for models      
@@ -62,6 +62,16 @@ class NetworkContainer:
         """ Return string representation of NetworkContainer Class """
         return "Neural Network Contained Object Instance\n" + \
                 "\tContains Mutli-Modal Network, Wrappers to Save and Load Parameters"
+
+    @property
+    def GetInputShapes(self):
+        """ Get Input Layer Shape of Neural network """
+        return [self.shapeA,self.shapeB]
+
+    @property
+    def GetOutputShapes(self):
+        """ Get Output Layer Shape of Neural network """
+        return (self.n_classes,)
 
     def SetDecoder (self,decoder):
         """ Add Decoder Dictionary, maps Int -> Str """
@@ -210,6 +220,6 @@ class NeuralNetworkModels:
         modelMain.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001,
                                         beta_1=0.9,beta_2=0.999,epsilon=1e-07),
                             loss=keras.losses.CategoricalCrossentropy(),
-                            metrics=['Precision','Recall'])
+                            metrics=[keras.metrics.Accuracy(),keras.metrics.Precision(),keras.metrics.Recall()])
         return modelMain
 
