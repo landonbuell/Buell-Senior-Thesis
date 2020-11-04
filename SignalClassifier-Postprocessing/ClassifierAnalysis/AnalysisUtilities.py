@@ -17,11 +17,41 @@ import tensorflow.keras as keras
 
         #### OBJECT DEFINITIONS ####
 
+class CompareCrossValidations :
+    """
+    Compare Multiple models that have had K-Folds Cross Validation applied
+    --------------------------------
+    modelNames (iter) : List of of string giving model names
+    --------------------------------
+    Return New Instance of Class
+    """
+
+    def __init__(self,modelNames,parentPath,n_classes):
+        """ Initialize CompareCrossValidations Instance """
+        self.modelNames
+        self.parentPath
+
+    def __Call__(self):
+        """ Run Main Execution of this Class """
+
+        for model in self.modelNames:                       # each model
+            modelPath = os.path.join(self.parentPath,model) # get the path
+            predcitionFiles = self.GetPredictions()
+
+    def GetPredictions (self,path):
+        """ Get Prediction Files """
+        keyword = "@PREDICTIONS@"
+        files = []
+        for file in os.listdir(path):   # in this path
+            if keyword in file:
+                files.append(file)      # add to list
+        return files                    # return the list
+
 class AnalyzeModels:
     """
     Class Object to Analyze performance of model outputs using metrics
     --------------------------------
-    model_names (iter) : list-like of 3 strings indicating names for models
+    modelName (iter) : list od strings indicating names for models
     datapath (str) : Local Directory path where input file is held
     infile (str) : File name w/ ext indicating file to read
     n_classes (int) : number of discrete classes for models
@@ -48,19 +78,25 @@ class AnalyzeModels:
     def __Call__(self):
         """ Call Program Mode """
         
+        print("File:",self.inFile)
         self.ReadData()             # get   
         labels = self.frame['Int Label']
         predictions = self.frame['Int Prediction']
         confidence = self.frame['Confidence']
 
-        Confusion = ConfusionMatrix(self.n_classes,labels,predictions,confidence)
+        # Create Confusion matricies
+        Metrics = ClassifierMetrics(self.n_classes,labels,predictions,confidence)
+        self.weightedConfusion = Metrics.WeightedConfusion()
+        self.standardConfusion = Metrics.StandardConfusion()
 
-        self.weightedConfusion = Confusion.WeightedConfusion()
-        self.standardConfusion = Confusion.StandardConfusion()
+        # Compute Metrics
+        print("\tLoss:",Metrics.LossScore())
+        print("\tPrecision:",Metrics.PrecisionScore())
+        print("\tRecall:",Metrics.RecallScore())
 
         return self
 
-class ConfusionMatrix :
+class ClassifierMetrics :
     """
     Create Confusion Matricies 
     --------------------------------
@@ -71,7 +107,7 @@ class ConfusionMatrix :
     """
 
     def __init__(self,n_classes,labels,predictions,scores):
-        """ Initialize ConfusionMatrix Instance """
+        """ Initialize ClassifierMetric Instance """
         self.n_classes = n_classes
         self.x = labels
         self.y = predictions
@@ -98,13 +134,41 @@ class ConfusionMatrix :
             standardMatrix[x,y] += 1.                   # add counter
         return standardMatrix
 
+    def PrecisionScore(self):
+        """ Compute Precision Score of Data """
+        _labs = keras.utils.to_categorical(self.x,self.n_classes)
+        _prds = keras.utils.to_categorical(self.y,self.n_classes)
+        Prec = keras.metrics.Precision()
+        Prec.update_state(_labs,_prds)
+        return Prec.result().numpy()
+
+    def RecallScore (self):
+        """ Compute Recall Score of Data """
+        _labs = keras.utils.to_categorical(self.x,self.n_classes)
+        _prds = keras.utils.to_categorical(self.y,self.n_classes)
+        Recl = keras.metrics.Recall()
+        Recl.update_state(_labs,_prds)
+        return Recl.result().numpy()
+
+    def LossScore (self):
+        """ Compute Loss Score of Data """
+        _labs = keras.utils.to_categorical(self.x,self.n_classes)
+        _prds = keras.utils.to_categorical(self.y,self.n_classes)
+        _loss = keras.losses.categorical_crossentropy(_labs,_prds).numpy()
+        return np.mean(_loss)
+
+    ### Include prediction accuracy
+    # Include prediction threshold
+
     @staticmethod
-    def PlotConfusion(X,n_classes,title="",show=True):
+    def PlotConfusion(X,n_classes,title="",show=True,save=True):
         """ Visualize Confusion with ColorMap """
         plt.title(title,fontsize=20,weight='bold')
         plt.imshow(X,cmap=plt.cm.jet)
         plt.xticks(np.arange(0,n_classes,1))
-        plt.yticks(np.arange(0,n_classes,1))
+        plt.yticks(np.arange(0,n_classes,1))      
+        if save == True:
+            plt.savefig(title.replace(" ","_")+".png")
         if show == True:
             plt.show()
         return None
@@ -117,12 +181,3 @@ class ConfusionMatrix :
         X.to_csv(fullpath,header=None,index=None,mode='w')
         return None
         
-
-class EncoderMap :
-    """
-    Get the Encder/Decoder Map for this classifier
-    """
-
-    def __init__(self):
-        """ Initialize EncoderMap Instance """
-

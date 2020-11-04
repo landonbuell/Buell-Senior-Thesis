@@ -86,7 +86,7 @@ class OutputStructure :
     def __init__(self,programMode,exportPath):
         """ Initialize Class Object instance """
         if programMode == "Train":      # output for training history
-            self.cols = ["Loss Score","Precision","Recall"]
+            self.cols = ["Loss Score","Accuracy","Precision","Recall"]
         elif programMode == "Predict":  # output for predictions
             self.cols = ["Filepath","Int Label","Str Label",
                          "Int Prediction","Str Prediction","Confidence"]
@@ -194,7 +194,7 @@ class ArgumentValidator :
             self.HardCodedVars()
 
         # make Sure Args are in acceptable values
-        assert self.modelName is not None
+        assert self.modelName not in [None," "]
         assert self.programMode in ['train','train-predict','predict']
         assert self.newModel in [True,False]
 
@@ -316,7 +316,7 @@ class ProgramInitializer:
     def __Call__(self):
         """ Run Program Start Up Processes """     
         print("\nRunning Main Program.....\n")
-        self.files = self.CollectCSVFiles()     # find CSV files
+        self.files = self.CollectFiles()        # find CSV files
         fileObjects = self.CreateFileobjs()     # file all files
         self.n_files = len(fileObjects)         # get number of files
         
@@ -368,14 +368,13 @@ class ProgramInitializer:
         print("\n")
         return None
 
-    def CollectCSVFiles (self,exts='.csv'):
-        """ Walk through Local Path and File all files w/ extension """
-        csv_files = []
-        for roots,dirs,files in os.walk(self.readPath):  
-            for file in files:                  
-                if file.endswith(exts):       
-                    csv_files.append(file)
-        return csv_files
+    def CollectFiles (self,exts='.csv'):
+        """ Search Local Directory for all files matching given extension """
+        csvFiles = []
+        for file in os.listdir(self.readPath):  # in the path
+            if file.endswith(exts):     # is proper file type
+                csvFiles.append(file)   # add to list
+        return csvFiles                 # return the list
 
     def CreateFileobjs (self):
         """ Create list of File Objects """

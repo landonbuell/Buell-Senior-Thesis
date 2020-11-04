@@ -19,9 +19,9 @@ if __name__ == '__main__':
 
     # Initialize Directories
     parentPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis"
-    mtrxPath = os.path.join(parentPath,"FeatureData\\Matrix.csv")
-    exptPath = os.path.join(parentPath,"FeatureData")
-    encdPath = os.path.join(parentPath,"SignalClassifier-CrossValidation\\XVal-Output-Data")
+    mtrxPath = os.path.join(parentPath,"FeatureData\\Features1\\Matrix1.csv")
+    exptPath = os.path.join(parentPath,"FeatureData\\Features1")
+    encdPath = os.path.join(parentPath,"SignalClassifier-CrossValidation\\XVal-Output-Data\\FeaturesXVal")
 
     # Get Raw Datas
     inputFrame = pd.read_csv(mtrxPath,header=0).to_numpy()

@@ -169,7 +169,7 @@ The result of such an analogy is a computer program that is reminiscent of the b
 
 \paragraph*{}A Neural Network is simply a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. It is this process of transforming inputs successively in a particular order until an output is attained that makes up the core functionality of a neural network \cite{Geron,Loy}. This output encodes the models final "decision" given a unique input.
 
-\paragraph*{}Other than inspiration from the brain, Neural Networks are name \textit{networks} because of their nested composition nature. The model can be represented by a linear or acyclic computational graph which successively maps exactly how the repeated composition is structured. In a \textit{feed-forward network}, information is passes successively in one direction. For example functions could be chained together such as \cite{Goodfellow}
+\paragraph*{}Other than inspiration from the brain, Neural Networks are name \textit{networks} because of their nested composition nature. The model can be represented by a linear computational graph which successively maps exactly how the repeated composition is structured. In a \textit{feed-forward network}, information is passed successively in one direction. For example functions could be chained together such as \cite{Goodfellow}
 \begin{equation}
 \label{eqn-FunctionChain}
 F(x) = f^{(L-1)}\big[f^{(L-2)}\big[...f^{(1)}\big[f^{(0)}\big[x]\big]\big]...\big]\big]
@@ -183,15 +183,15 @@ f^{(l)} : x \in \mathbb{R} \rightarrow y \in \mathbb{R}
 \end{equation}
 The value of $x$ can also be index by layer, we call the array $x^{(l)}$ the \textit{activations} of layer $l$ \cite{Goodfellow,Loy}. 
 
-\paragraph*{}The model is recursive by nature, the activations from one layer, $l-1$, are used to directly produce the activations of the next successive layer $l$. Thus eqn. (\ref{eqn-LayerFunction}) can be alternatively written as:
+\paragraph*{}The model is recursive by nature, the activations from one layer, $l-1$, are used to directly produce the activations of the next successive layer $l$. Thus Eq. (\ref{eqn-LayerFunction}) can be alternatively written as:
 \begin{equation}
 \label{eqn-altLayerFunction}
 f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
 \end{equation}
-The array of activations, $x^{(0)}$, is the raw input given the neural network, called \textit{input} activations. Conversely, $x^{(L-1)}$ is referred to as\textit{output} activations \cite{Geron,James,Loy}.
+The array of activations, $x^{(0)}$, is the raw input given the neural network, called \textit{input} activations. Conversely, $x^{(L-1)}$ is referred to as \textit{output} activations \cite{Geron,James,Loy}.
 
 \begin{algorithm}[H]
-\caption{Forward propagation system in a standard deep neural network. Each iteration in the main \textit{for-loop} represents the execution of a layer, and passing the result to the "next" layer function. We assume each layter to follow a two-step structure, being (i) a linear transformation as in eqn. (\ref{eqn-LinearTransform}) and (ii) an element-wise non-linear activation function as in eqn. (\ref{eqn-elementActivation}).  A practical application of this algorithm should include batches of samples instead of a single sample.
+\caption{Forward propagation system in a standard deep neural network. Each iteration in the main \textit{for-loop} represents the execution of a layer, and passing the result to the "next" layer function. We assume each layer to follow a two-step structure, being (i) a linear transformation as in Eq. (\ref{eqn-LinearTransform}) and (ii) an element-wise non-linear activation function as in Eq. (\ref{eqn-elementActivation}).  A practical application of this algorithm should include batches of samples instead of a single sample.
 \textcolor{red}{I Want to include this algorithm for context - especially on the programming end, but am not sure where to put it. }}
 \label{algFeedForward}
 
@@ -200,13 +200,13 @@ The array of activations, $x^{(0)}$, is the raw input given the neural network, 
 \REQUIRE Set of layer functions $f^{(l)}, l \in 0,1,2,....,L-2,L-1$ made up of a linear transformation and a non-linear transformation.
 \REQUIRE Input sample - $x^{(0)}$
 
-If training the network, the intermediate layer activations must be stored for back-propagation. Otherwise, they must be discarded.
+If training the network, the intermediate layer activations must be stored for back-propagation. Otherwise, they may be discarded. \\
 $Z = \{\} \leftarrow$ array to hold pre-activations \\
 $X = \{\} \leftarrow$ array to hold final activations \\
 
 \FOR {$l = 1,2,...,L-2,L-1$}	
 	\item Evaluate Linear Transformation
-	\item $z^{(l)} \leftarrow$ 
+	\item $z^{(l)} \leftarrow W^{(l)} x^{(l-1)} + b^{(l)}$ 
 	\item Apply non-linear Activation Function
 	\item $x^{(l)} \leftarrow \sigma^{(l)} \big[ z^{(l)} \big]$ 
 	\item Store values for later use in optimizer, otherwise can be discarded.
@@ -214,10 +214,9 @@ $X = \{\} \leftarrow$ array to hold final activations \\
 	\item $X \leftarrow X.add(x^{(l)})$
 \ENDFOR
 
-\item Network final prediction is last object in 'act' array.
+\item Network final prediction is last object in $X$ array.
 \item $y^* \leftarrow x^{(L-1)} = X[-1]$
 \item Return the pre-nonlinear activations and final-nonlinear activations.\\
-\item The final index of $X$ represents the neural network's final prediction. \\
 \RETURN $Z , X$
 
 
@@ -231,9 +230,9 @@ $X = \{\} \leftarrow$ array to hold final activations \\
 \subsection{Layers Used in Classification Neural Network}
 \label{subsec-Layers}
 
-\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called successively to transform features (an input) into a prediction (an output). As shown in eqn. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a sort of recursive computational graph \cite{Goodfellow}. 
+\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a prediction (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a sort of recursive computational graph \cite{Goodfellow}. 
 
-\paragraph*{}Typically, a layer function can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries. The Linear transformation can be given by eqn (\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or eqn. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
+\paragraph*{}Typically, a layer function can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
 \begin{equation}
 \label{eqn-LinearTransform}
 z^{(l)} = W^{(l)} x^{(l-1)} + b^{(l)}
@@ -251,23 +250,23 @@ x^{(l)} = \sigma^{(l)} \big[ z^{(l)} \big]
 \end{equation}
 Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-LinearTransform}). $\sigma^{(l)}$ is some activation function, which is often use to enable the modeling of more complex-decision boundaries. 
 
-\paragraph*{}The combination of eqn. (\ref{eqn-LinearTransform}) and eqn. (\ref{eqn-elementActivation}), for a layer $l$ , make up the function represented by that layer, as in eqn. (\ref{eqn-altLayerFunction}). Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
+\paragraph*{}The combination of Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-elementActivation}), for a layer $l$ , make up the function represented by that layer, as in Eq. (\ref{eqn-altLayerFunction}). Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
 
 % ================================
 
 \subsubsection{Dense Layer}
 \label{subsubsec-DenseLayer}
 
-\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer for short, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed back from McCulloch and Pitts' work \cite{McCulloch}, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
+\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy,McCulloch}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed from McCulloch and Pitts' work \cite{McCulloch} in attempting to model cognitive processes as mathematical functions, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
 
 \paragraph*{}We model a layer of neurons as a vector of floating-point numbers. Typically, it is required that the array be one-dimensional. Suppose a layer $(l)$ contains $n$ artificial neurons. We denote the array that hold those activations as $x^{(l)}$ and is given by:
 \begin{equation}
 \label{layer-DenseNeurons}
 \vec{x}^{(l)} = \Big[ x_0, x_1, x_2, \hdots , x_{n-2}, x_{n-1} \Big]^T
 \end{equation}
-The activation of each entry is given by a linear-combination of activations from the previous layer, as outlined in eqn.(\ref{eqn-LinearTransform}) and eqn.(\ref{eqn-elementActivation}).
+The activation of each entry is given by a linear-combination of activations from the previous layer, Eq.(\ref{eqn-LinearTransform}) and the transformation in Eq.(\ref{eqn-elementActivation}).
 
-\paragraph*{}Suppose the layer $l-1$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $m \times 1$. We can denote the function in a similar manner to eqn.(\ref{eqn-altLayerFunction}) as:
+\paragraph*{}Suppose the layer $l-1$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $m \times 1$. We can denote the function in a similar manner to Eq.(\ref{eqn-altLayerFunction}) as:
 \begin{equation}
 \label{eqn-FunctionDense}
 f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(m \times 1)} \rightarrow x^{(l)} \in \mathbb{R}^{(n \times 1)}
@@ -297,7 +296,7 @@ or more compactly:
 \label{eqn-DenseFeedForward}
 x^{(l)} = \sigma^{(l)} \Big( W^{(l)} x^{(l-1)} + b^{(l)} \Big)
 \end{equation}
-Eqn. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. 
+Eq. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. \textcolor{red}{How Do I finish this section? Uses of Dens layer, physical meaning?} 
 
 % ================================
 
@@ -309,18 +308,17 @@ Eqn. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense 
 \label{eqn-convolution}
 C[i,j] = (A * B)[i,j] = \sum_{u}\sum_{v} A[i,j]B[i - u,j - v]
 \end{equation}
-Note that convolution is commutative: $(A * B) = (B * A)$. We implement a convolutional layer $f^{(l)})$, by creating a series of $K$ weighting matrices, called \textit{filters}, each of size $m \times n$, where $m,n \in \mathbb{Z}$. Often we choose $m = n$ and call the shape the \textit{convolution kernel size} \cite{Loy, Goodfellow}.
+Note that convolution is commutative: $(A * B) = (B * A)$. We implement a convolutional layer $f^{(l)}$ by creating a series of $K$ weighting matrices, called \textit{filters}, each of size $m \times n$, where $m,n \in \mathbb{Z}$. Often we choose $m = n$ and call the shape the \textit{convolution kernel size} \cite{Loy, Goodfellow}.
 
-\paragraph*{}In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(N \times M)}$, the convolutions filters "step" through the input data and repeatedly compute the element-wise product of each $m \times n$ weighting kernel, and the local activation of the $x^{(l-1)}$ array. The step size in each of the 2-dimension is known as the \textit{stride}. Each of the $K$ filters are used to generate a $m \times n$ feature map from the input activation. For an appropriately trained network, some filters may be dedicated to detecting vertical lines, horizontal lines, sharp edges, areas of mostly one color, etc. \cite{Geron,Loy}.
+\paragraph*{}In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(N \times M)}$, the convolutions filters "step" through the input data and repeatedly compute the element-wise product of each $m \times n$ weighting kernel, and the local activations of the $x^{(l-1)}$ array. The step size in each of the 2-dimension is known as the \textit{stride}. Each of the $K$ filters are used to generate a $m \times n$ feature map from the input activation. For an appropriately trained network, some filters may result in detecting vertical lines, horizontal lines, sharp edges, areas of mostly one color, etc. \cite{Geron,Loy}.
 
 \paragraph*{}In general, for an $N \times M$ input, with kernel size $m \times n$, with stride size $1 \times 1$, and $K$ feature maps.
 \begin{equation}
 f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(N \times M)} \rightarrow
 x^{(l)} \in \mathbb{R}^{([N-n+1] \times [M-m+1] \times K)}
 \end{equation}
-As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in fig. (\ref{fig-2DConvExample}):
+As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in Fig. (\ref{fig-2DConvExample}):
 \begin{figure}[H]
-\label{fig-2DConvExample}
 \begin{center}
 \begin{subfigure}{0.45\textwidth}
 \includegraphics[scale=0.6]{../figures/2DConvExample(a)}
@@ -337,6 +335,7 @@ As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \ti
 \end{subfigure}
 \end{center}
 \caption{The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite{Goodfellow}}
+\label{fig-2DConvExample}
 \end{figure}
 Note that formal implementations include a bias vector and an activation function.
 
@@ -353,8 +352,9 @@ This operation repeats for each of the $K$ feature maps. Each maps has it's own 
 % ================================
 
 \subsubsection{2-Dimensional Maximum Pooling Layer}
+\label{subsubsec-2DPool}
 
-\paragraph*{}A Maximum Pooling layers simply returns the maximum neuron activation in a group of neurons. In the case of 2D Max Pooling, we choose a kernel size to be $m \times n$, just like in the 2D Convolution layer, and extract the maximum value in each window, and then step along accrdoing to the chosen stride size \cite{Loy,Goodfellow}.As an example, consider again figure (\ref{fig-2DConvExample}a). Using the $2 \times 2$ kernel on the $3 \times 4$ input, each box would then contain the maximum value of the input activations. We detail this in fig. (\ref{fig-2DMaxPool}):
+\paragraph*{}A Maximum Pooling layers simply returns the maximum neuron activation in a group of neurons. In the case of 2D Max Pooling, we choose a kernel size to be $m \times n$, just like in the 2D Convolution layer, and extract the maximum value in each window, and then step along accrdoing to the chosen stride size \cite{Loy,Goodfellow}.As an example, consider again figure (\ref{fig-2DConvExample}a). Using the $2 \times 2$ kernel on the $3 \times 4$ input, each box would then contain the maximum value of the input activations. We detail this in Fig. (\ref{fig-2DMaxPool}):
 \begin{figure}[h]
 \label{fig-2DMaxPool}
 \begin{center}
@@ -368,20 +368,22 @@ This operation repeats for each of the $K$ feature maps. Each maps has it's own 
 % ================================
 
 \subsubsection{1-Dimensional Flattening Layer}
+\label{subsubsec-1DFlatten}
 
-\paragraph*{}A flattening layer is used to compress an array with two or more dimensions down into a single dimension. For a flattening layer $l$, multidimensional activations in layer $l-1$ are compressed down into a single dimensional array. We can use function notation to express this as:
+\paragraph*{}A flattening layer is used to compress an array with two or more dimensions down into a single dimension. For a flattening layer $l$, multidimensional activations in layer $l-1$ are rearranged down into a single dimensional array. Note that this is not like projecting the data into a lower dimension, but rather is simple the reorganization of values into an array of a single axis. We can use function notation to express this as:
 \begin{equation}
 \label{eqn-FlattenFunction}
 f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(M \times N \times ....)} \rightarrow
 x^{(l)} \in \mathbb{R}^{(MN...\times 1)}
 \end{equation}
-The numerical value of each activation is left unchanged. For a layer with activation shape$N \times M$, the resulting activations are reshaped into $NM \times 1$ as shown in eqn (\ref{eqn-FlattenFunction}).
+The numerical value of each activation is left unchanged. For a layer with activation shape$N \times M$, the resulting activations are reshaped into $NM \times 1$ as shown in Eq.(\ref{eqn-FlattenFunction}).
 
 \paragraph*{}Flattening Layer are most commonly used to prepare activations for entry into dense layer or series of dense layers. For example, 2D or 3D images are typically processed with 2D convolution, which may output a 2D or 3D array of activations. Those values are then flattened to 1 dimensions, which can then be passed into dense layers for further processing.
 
 % ================================
 
 \subsubsection{1-Dimensional Concatenation Layer}
+\label{subsubsec-1DConcat}
 
 \paragraph*{}The 1-Dimensional Concatenation Layer, also called 1D-Concat layer takes separate vectors of activations and combines them into a single 1D vector. Consider the layer activations $\vec{a}^{(l-1)}$ and $\vec{b}^{(l-1)}$ with shapes  $1 \times \alpha$ and $1 \times \beta$ respectively. They are the outputs of two different layers:
 \begin{equation}
@@ -389,7 +391,7 @@ The numerical value of each activation is left unchanged. For a layer with activ
 \text{\hspace{1cm} and \hspace{1cm}}
 \vec{b}^{(l-1)} = \big[ b_{0},  b_{1}, ... ,  b_{\beta-1} \big]
 \end{equation}
-The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 \times \alpha\beta$:
+The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 \times \alpha + \beta$:
 \begin{equation}
 \vec{c}^{(l)} = \big[ a_{0},  a_{1}, ... ,  a_{\alpha-1}, b_{0},  b_{1}, ... ,  b_{\beta-1} \big]
 \end{equation}
@@ -398,7 +400,7 @@ The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 
 \begin{equation}
 \label{eqn-ConcatenationFunction}
 f^{(l)} : x^{(l-1)}_{a} \in \mathbb{R}^{(1 \times \alpha)} , x^{(l-1)}_{b} \in \mathbb{R}^{(1 \times \beta)} , ....  \rightarrow
-x^{(l)}_{z} \in \mathbb{R}^{(1 \times \alpha\beta...)}
+x^{(l)}_{z} \in \mathbb{R}^{(1 \times \alpha + \beta + ...)}
 \end{equation}
 The concatenation layer is used to combine activation non-adjacent, or non-related layers into a single new layer. In this case of the model used in the project, we use it to combine the activations that result from two distinct models into a single layer that is then transformed into a final output. This process is detailed further in sec. (\ref{sec-Architecture}).
 
@@ -407,7 +409,7 @@ The concatenation layer is used to combine activation non-adjacent, or non-relat
 \subsection{Activation Functions Used in Network Layers}
 \label{sec-ActivationFunctions}
 
-\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{sec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in eqn. (\ref{eqn-LinearTransform}), and then an element-wise activation function as in eqn. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in out classification neural network. 
+\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{sec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in Eq. (\ref{eqn-LinearTransform}), and then an element-wise activation function as in Eq. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in out classification neural network. 
 
 \subsubsection{Rectified Linear Unit}
 
@@ -421,27 +423,28 @@ The concatenation layer is used to combine activation non-adjacent, or non-relat
 \end{array} 
 \right.
 \end{equation}
-ReLU is only defined on a real domain. We provide a visualization of the function in fig. (\ref{fig-ReLU}).
+ReLU is only defined on a real domain. We provide a visualization of the function in Fig. (\ref{fig-ReLU}).
 \begin{figure}[H]
-\label{fig-ReLU}
 \begin{center}
 \includegraphics[scale=0.2]{../Figures/RectifiedLinearUnit}
 \end{center}
 \caption{Rectifed Linear Unit (ReLU) activation function}
+\label{fig-ReLU}
 \end{figure}
 For our chosen architecture, ReLU is applied to the activations in every single Convolution layer and Dense Layer, with the exception of the output dense layer.
 
 % ================================
 
 \subsubsection{Softmax}
+\label{subsubsec-Softmax}
 
 \paragraph*{}The softmax activation function is commonly used in the output layer of a multi-class classification network, such as the one we implement. When softmax acts on a vector or activation, the result a non-negative output vector. with an $L_1$ norm of $1$ \cite{Geron,Goodfellow,Virtanen}. The $i$-th element in a softmax activation function is given by:
 \begin{equation}
 \label{eqn-Softmax}
-\text{Softmax}\big[ x \big]_{i} = \frac{1}{\sum_{j}e^{x_j}}e^{x_i}
+\text{Softmax}\big[ x \big]_{i} = \frac{e^{x_i}}{\sum_{j}e^{x_j}}
 \end{equation}
 
-\paragraph*{}This function is almost only used in the output layer of a neural network, and encodes a discrete categorical probability. For example, if eqn.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
+\paragraph*{}This function is almost only used in the output layer of a neural network, and encodes a discrete categorical probability. For example, if Eq.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
 
 
 % ================================================================
@@ -462,7 +465,9 @@ Without any human intervention, a model must update itself to improve it's perfo
 W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)},
 \big\}
 \end{equation}
-Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function. Note that $W^{(l)}$ or $b^{(l)}$, itself is a parameter to train, but rather the entries that make up those structures must be trained. In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow}.
+Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function. Note that $W^{(l)}$ or $b^{(l)}$, itself is a parameter to train, but rather the entries that make up those structures must be trained. Certain layers, such as pooling layers (\ref{subsubsec-2DPooling}), concatenation layers (\ref{subsubsec-1DConcat}), or flattening layers (\ref{subsubsec-1DFlatten}) do not contain any trainable parameters. Similarly, activation functions themselves are static and are not included in the list of parameters.
+
+\paragraph*{}In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}.
 
 \subsubsection{The Cost Function}
 
@@ -470,12 +475,24 @@ Each parameter is floating-point number, which is stored in a weight matrix $W^{
 
 \paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the network \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single value, usually a floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
 
-\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use a \textit{Categorical Crossentropy} (CXE) cost function. For a single predictions sample, it is defined \cite{Goodfellow}:
+\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use the \textit{Categorical Crossentropy} (CXE) cost function. For a sample labeled by the one-hot-encoded vector $y$ and corresponding prediction vector $y^*$, the CXE cost is given by \cite{Goodfellow,Virtanen}:
 \begin{equation}
-\label{eqn-CategoricalCrossentropy}
-\text{CXE}\big[ y^* , y \big] = - \sum_{i=0}^{k-1} y^*_i \log_{10}(y_i) 
+\label{eqn-CXELoss}
+\text{CXE}\big[ y^* , y \big] = - \sum_{i=0}^{k-1} y_i \log_{10}(y^*_i) 
 \end{equation}
-In practice, this operation is performed over a batch of samples and an average is computed and used a \textit{batch loss} \cite{Goodfellow}.
+
+\paragraph*{}Suppose that a given sample belongs to class $j$ in a $k$-classes classifier. Since the label vector, $y$ is one-hot-encoded, all entries are zero except $y_{j} = 1$. Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms. Similarly, the network output $y^*$ has only values between $0$ and $1$, due to the softmax activation function (\ref{subsubsec-Softmax}) in the output layer. Taking the logarithm results a negative quantity. The smaller the value for $y^*_j$, the larger the difference between corresponding indicies and the larger the mangitude of the cost. We multiply the sum by $-1$ to make all values positive.  
+
+\begin{figure}[h]
+\begin{center}
+\textcolor{red}{Plot of CXE goes here}
+%\includegraphics[scale=0.2]{•}
+\end{center}
+\caption{Plot of how $y^*_{j}$ affects the output values of the CXE cost function}
+\label{fig-CXELoss}
+\end{figure}
+
+\paragraph*{}When $y^*_j \approx y_j$, we compute a small cost value, and when $y^*_j << y_j$ we find a large cost value. We visualize this relationship in Fig. (\ref{fig-CXELoss}). In practice, this operation is performed over a batch of samples and an average is computed and used a \textit{batch loss} \cite{Goodfellow}.
 
 % ================================
 
@@ -485,13 +502,13 @@ In practice, this operation is performed over a batch of samples and an average 
 
 \paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow described this \cite{Goodfellow}:
 \begin{quote}
-In most learning scenarios, we care about some performance measure $P$,... We reduce a different cost function, $J(\theta)$ in the hope that doing so will also imprvce $P$.
+In most learning scenarios, we care about some performance measure $P$,... We reduce a different cost function, $J(\theta)$ in the hope that doing so will also improve $P$.
 \end{quote}
-By choosing an appropriate cost function, and selecting the parameters $\Theta$ that minimize the average cost over a data set, we also assume that doing so minimized the error in the performance $P$.
+By choosing an appropriate cost function, and selecting the parameters $\Theta$ that minimize the average cost over a data set, we also assume that doing so minimizes classification error and maximizes the performance $P$.
 
-\paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in eqn. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize with a gradient-based method. 
+\paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in Eq. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize the cost function with a gradient-based method. 
 
-\paragraph*{}We can reduce the cost given a set of paramaters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative of each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
+\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative of each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
 \begin{equation}
 \label{eqn-CostGradient}
 \nabla_{\Theta}\big[ J \big] = 
@@ -501,7 +518,7 @@ By choosing an appropriate cost function, and selecting the parameters $\Theta$ 
 \end{equation}
 Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element in the $W^{(l)}$ matrix, and preserves the shape.
 
-\paragraph*{}Due to the nested composition of the network output in eqn. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through the neural network to compute the partial derivative with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron}. Below we detail an algorithm in pseudo-code to back-propagate through a fully-connected nueral network, such as the multilayer perceptron outlines in sec.(\ref{sec-NetworkStructre})
+\paragraph*{}Due to the nested composition of the network output in Eq. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through computational graph of the neural network to compute the partial derivative with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron}. Below we detail an algorithm in pseudo-code to back-propagate through a fully-connected neural network, such as the multilayer perceptron outlines in sec.(\ref{sec-NetworkStructre})
 
 \begin{algorithm}[H]
 \caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample}
@@ -518,7 +535,7 @@ Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of 
 
 Execute forward pass in algorithm (\ref{algFeedForward}) and compute the gradient of the cost with respect to the final layer activations \\
 $dx \leftarrow \nabla_{(y^*)}J(y,y^*)$ \\
-Intialize $\nabla J$ as output object, should have same shape as $\Theta$
+Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 
 \FOR {$L-1,L-2,...,2,1$}
 	\item Compute gradient w.r.t pre-nonlinear activation portion of layer function
@@ -537,7 +554,7 @@ Intialize $\nabla J$ as output object, should have same shape as $\Theta$
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}After (i) computing the gradient, we can scale is by a desired learning rate, $\alpha$ and (ii) add it element-wise to the exisitint elements in $\Theta$. By repeating steps (i) and (ii) in sucession, we gradually drive the cost function to produces consistently lower and lower values. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in eqn. (\ref{eqn-GradientLearning}).
+\paragraph*{}After (i) computing the gradient, we can scale is by a desired learning rate, $\alpha$ and (ii) add it element-wise to the existing elements in $\Theta$. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in Eq. (\ref{eqn-GradientLearning}).
 \begin{equation}
 \label{eqn-GradientLearning}
 \Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
@@ -548,6 +565,8 @@ Intialize $\nabla J$ as output object, should have same shape as $\Theta$
 \subsubsection{The Optimizer}
 
 \textcolor{blue}{I need to clean this sub-subsection up as well. The optimizer needs a better introduction and justification}
+
+\paragraph*{}Standard gradient-based learning, as given by the parameter update rule in Eq. (\ref{eqn-GradientLearning}) is cumbersome and often prone to numerical error. This includes phenomena where very small changes can compound and produce undesired effects such as \textit{vanishing} or \textit{exploding} gradients \cite{Geron,Goodfellow,Loy}. To combat this, many gradient-based optimizers have been developed over the years to mitigate some f these vulnerabilities.
 
 \paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful variant of algorithms with an adaptive learning rate. It tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost. For a given iteration $(i)$, The ADAM update is given:
 \begin{equation}
@@ -607,7 +626,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 \paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, as well as a complementary architecture, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textcolor{blue}{See Section on Features}, and constructed a neural network architecture to coincide with these features. From these two input arrays, one being a matrix and the other being a column-vector, we have produced a \textit{multimodal neural network}, that process the two inputs, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs \textcolor{blue}{citation for multimodal networks}.
 
-\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in fig. (\ref{fig-NetworkArchitecture}).
+\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in Fig. (\ref{fig-NetworkArchitecture}).
 
 \begin{figure}[H]
 \label{fig-NetworkArchitecture}
@@ -621,7 +640,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 \subsubsection{The Spectrogram Branch}
 
-\paragraph*{}The spectrogram branch is pictured on the left side of fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olsen,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
+\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olsen,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
 
 \paragraph*{}The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in each sample. As a model hyper-parameter, we have chosen each batch to contain $64$ samples. We have also chosen to truncate time and frequency axes (ii \& iii) to contain $560$ frequency bins, and $256$ time-frames. Each image also contains a single channel, which make it gray-scale when visualized. We can denote the 4D shape of the input object into this branch as:
 \begin{equation}
@@ -644,7 +663,7 @@ The Convolution layers convoluted over the middle two axes of the data (over spa
 
 \subsubsection{The Perceptron Branch}
 
-\paragraph*{} The Perceptron branch is picture on the right side of fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Virtanen}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
+\paragraph*{} The Perceptron branch is picture on the right side of Fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Serizel}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
 
 \paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
@@ -681,7 +700,7 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 \begin{quote}
 The data reduction stage which is also called feature extraction, consists of discovering a few important facts about each class. The choice of features is critical as it greatly affects the accuracy of audio classification. 
 \end{quote}
-In the case of the biological process, the features of the audio is simply the raw time series waveform as processed by the brain. This information is then used into categorize the source. In the case of the neural network model, the time series waveform alone has shown to be unreliable in classification tasks \cite{Virtanen}. We must then develop a set of features or predictors that can describe important properties of the waveform in a far more efficient manner \cite{Goodfellow,James}.
+In the case of the biological process, the features of the audio is simply the raw time series waveform as processed by the brain. This information is then used into categorize the source. In the case of the neural network model, the time series waveform alone has shown to be unreliable in classification tasks \cite{Serizel}. We must then develop a set of features or predictors that can describe important properties of the waveform in a far more efficient manner \cite{Goodfellow,James}.
 
 \paragraph*{}It becomes quickly apparent that the choice of features is extrodinarily important to the process of training and evaluation of the classifier model. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
 
@@ -751,7 +770,7 @@ Note that different projects may require a different set of requirement from pre
 \end{center}
 \end{figure}
 
-\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the next adjacent frame. Each of the $k$ frames then allows for a section of the signal in somewhat stationary state \cite{Kahn,Virtanen}. 
+\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the next adjacent frame. Each of the $k$ frames then allows for a section of the signal in quazi-stationary state \cite{Kahn,Serizel}. 
 
 \paragraph*{}For this project, we have chosen to use frames of size $N = 4096$ with a $75\%$ or $3072$ sample overlap. Since each audio file contains a different number of samples, we choose the number of frames, $k$ to be less than or equal to $256$. If $k > 256$, the waveform in truncated, if $k \leq 256$ the frames left as is. The audio has been sampled at $f_s = 44100$ samples/second, so each frame represents a slice of time that is about $0.1$ seconds long.
 
@@ -809,7 +828,7 @@ Each column of the matrix is a complex sinusoidal oscillating with an integer nu
 \label{eqn-Spectrogram}
 S_{i,j} = \big{\lVert} (\mathbb{W}\widetilde{A}^T)_{i,j} \big{\rVert}_{2}^{2}
 \end{equation}
-Where $\mathbb{W}$ is the DFT matrix from eqn. (\ref{eqn-DFTMatrix}) and $\widetilde{A}^T$ is the transpose of the analysis frames matrix from eqn. (\ref{eqn-WindowMatrix}). The matrix $S$, is the spectrogram representation of the initial waveform, and has shape $N \times k$ of real floating-point numbers. We can index matrix $S$ similarly to that of matrix $A$ in eqn. (\ref{eqn-IndexingA}):
+Where $\mathbb{W}$ is the DFT matrix from Eq. (\ref{eqn-DFTMatrix}) and $\widetilde{A}^T$ is the transpose of the analysis frames matrix from Eq. (\ref{eqn-WindowMatrix}). The matrix $S$, is the spectrogram representation of the initial waveform, and has shape $N \times k$ of real floating-point numbers. We can index matrix $S$ similarly to that of matrix $A$ in Eq. (\ref{eqn-IndexingA}):
 \begin{equation}
 \label{eqn-IndexingS}
 S_{i,j} = S[i][j] = S[i,j]
@@ -850,7 +869,7 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 \paragraph*{}The time domain envelope (TDE) is a method of determining which parts of the sound wave contains most of the energy of the signal Often, we compute the RMS-Energy of each frame - a larger energy of the frame, the larger the average amplitude of the waveform in that frame. For frames with smaller amplitude, it is likely that the signal has either not begun, or is decaying. 
 
-\paragraph*{}We adapt this feature to \textbf{compute the RMS-Energy of the full waveform}. The RMS-Energy of the full waveform, $s$ is given by \cite{Olsen,Virtanen}
+\paragraph*{}We adapt this feature to \textbf{compute the RMS-Energy of the full waveform}. The RMS-Energy of the full waveform, $s$ is given by \cite{Olsen,Serizel}
 \begin{equation}
 \label{eqn-RMS}
 \text{RMS}\big[ s \big] = \sqrt{\frac{1}{M} \sum_{i=0}^{M-1} s[i]^2}
@@ -871,12 +890,12 @@ By using the full waveform, we acquire a rough estimate for the energy in the en
 
 \paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be done per total sound wave, per unit time, or per analysis-frame. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform. In some cases, the ZXR can be correlated to frequency as well \cite{Kahn,Zhang}. 
 
-\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. The ZXR for the full waveform $s$ is given by \cite{Virtanen,Liu}
+\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
 \begin{equation}
 \label{eqn-ZXR}
 \text{ZXR}\big[ s \big] = \frac{1}{2} \sum_{i=1}^{M-1} \Big{|} \sign(s[i]) - \sign(s[i-1]) \Big{|} 
 \end{equation}
-Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. This provides a rough estimate for the average frequency in the full waveform, and can help discern clean periodic signals (low ZXR) from those that may have more noise or volatile behavior (high ZXR)\cite{Virtanen}.
+Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. This provides a rough estimate for the average frequency in the full waveform,n and can help discern clean periodic signals (low ZXR) from those that may have more noise or volatile behavior (high ZXR)\cite{Serizel}.
 
 \begin{figure}[H]
 \begin{center}
@@ -888,7 +907,7 @@ Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. Th
 
 % ================================
 
-\subsubsection{Center of Mass}
+\subsubsection{Temporal Center of Mass}
 
 \paragraph*{}The temporal center of mass (TCM) of a signal is used to compute roughly where in time the amplitude of the waveform \textit{bunches up}. We treat the full waveform array, $s$, with $M$ samples as a discrete 1-Dimensional mass distribution. The TCM of that waveform is then given:
 \begin{equation}
@@ -911,7 +930,7 @@ This includes negative amplitude values acting as "negative masses". \textcolor{
 
 \subsubsection{Auto Correlation Coefficients}
 
-\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution . We can compute any number of ACC's and their value changed depending on the index chosen. It is common to only compute the first $K$ ACC's \cite{Virtanen}. For a full waveform signal $s$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
+\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution . We can compute any number of ACC's and their value changed depending on the index chosen. It is common to only compute the first $K$ ACC's \cite{Serizel}. For a full waveform signal $s$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
 \begin{equation}
 \label{eqn-FeatureACC}
 \text{ACC}_k\big[ s \big] = 
@@ -935,7 +954,7 @@ This includes negative amplitude values acting as "negative masses". \textcolor{
 \subsection{Frequency-Space Features}
 \label{subsec-frequency}
 
-\paragraph*{}The features described in this section are derived from the frequency-domain representations of each audio sample. Frequency space is represented by the transposed spectrogram matrix, $S^T$, described in sec. (\ref{subsec-spectrogram}). This is done to ensure that each  row is now an analysis frame, each column is a frequency bin. This gives a similar structure to the time-space analysis frames matrix, $A$, in eqn. (\ref{eqn-FrameMatrix}).
+\paragraph*{}The features described in this section are derived from the frequency-domain representations of each audio sample. Frequency space is represented by the transposed spectrogram matrix, $S^T$, described in sec. (\ref{subsec-spectrogram}). This is done to ensure that each  row is now an analysis frame, each column is a frequency bin. This gives a similar structure to the time-space analysis frames matrix, $A$, in Eq. (\ref{eqn-FrameMatrix}).
 For each feature, we detail the physical significance and provide a visualization in feature-space.
 
 \paragraph*{}From frequency space, we use the following $13$ features:
@@ -946,9 +965,11 @@ For each feature, we detail the physical significance and provide a visualizatio
 
 % ================================
 
-\subsubsection{Mel Frequency Cepstral Coefficients}
+\subsubsection{Mel Filter Bank Energies}
 
-\paragraph*{}Mel Frequency Ceptstral Coefficients (MFCC's) are a very prolific feature used widely in audio classification tasks \cite{Liu,Virtanen,Zhang}. MFCC's are produced by converting a linear-frequency axis with units such as Hertz into units of Mels, which are design to account for the non-linear perception of frequency in humans. The Hertz to Mel and Mel to Hertz transforms are given \cite{Virtanen}:
+\paragraph*{}Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping triangular bins \cite{Sahidullah}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, over a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
+
+\paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Kahn}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Kahn}:
 \begin{equation}
 \label{eqn-HztoMel}
 M_f[h] = 2595 \log_{10}\big(1+ \frac{h}{700}\big)
@@ -961,42 +982,63 @@ Where $M_f$ is the frequency in units of Mels, given $[h]$, a frequency in Hertz
 
 \paragraph*{}Mel filters are produced by grouping frequency-space into $R$ overlapping bins called \textit{Mel Filter-banks}. In units of Mels, each filter bank, $R_i$ remains a constant width, but when shown in Hertz, the bins increase logarithmically. 
 \begin{figure}[H]
-\label{fig-MelFilterBanks}
 \begin{center}
 \textcolor{red}{Figure of a few Mel Filter Banks goes here}
 \end{center}
 \caption{Mel Filter Banks shown in frequency space with units of Hertz}
+\label{fig-MelFilterBanks}
 \end{figure}
-Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped spectrogram, and transformed back into units of Hertz. When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Thus, each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
+Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, and transformed back into units of Hertz. When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
 \begin{equation}
 \label{eqn-FilterBanks}
 B = S^T M^T
 \end{equation}
 Matrix $B$ has shape $k \times R$.
 
-\paragraph*{}Using $S^T$ ensures that each row of the matrix is an analysis frame in frequency space. Similarly, each column of the matrix $M$ is a appropriately scaled Mel filter-bank. This way, the matrix product in eqn. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames. The resulting $R$ floating-point numbers are approximation of the signal's energy in those particular frequency bands. For this project, we have chosen to use $R = 12$ filter-banks, which are all used as features.
+\paragraph*{}Using $S^T$ ensures that each row of the matrix is an analysis frame in frequency space. Similarly, each column of the matrix $M$ is a appropriately scaled Mel filter-bank. This way, the matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all appended to the feature vector. 
 
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{PLOT OF MFCC FEATURES HERE}
 \end{center}
-\caption{Mel Frequency Ceptral Coefficients in feature-space}
-\label{fig-FeatureMFCC}
+\caption{Mel Frequency Cepstral Coefficients in feature-space}
+\label{fig-FeatureMFBE}
 \end{figure}
 
 % ================================
 
+\subsubsection{Mel Frequency Cepstral Coeffecients}
 
-\subsubsection{Center of Mass}
+\paragraph*{}Ceptstral coefficients are the result of computing the inverse discrete Fourier transform (IDFT) of the logarithm of the frequency Spectrum. Mel Frequency Cepstral Coefficients (MFCC's) are the most commonly used in digital signal processing. They are computed throught he inverse discrete cosine transform of the log energy in in each Mel frequency bank \cite{Serizel,Sahidullah}. The $c$-th coefficient is given by:
+\begin{equation}
+\label{feat-MFCC}
+\text{MFCC}[c] = \sqrt{\frac{2}{R}} \sum_{i=1}^{R} 
+\log\big(\widetilde{B[i]}\big) \cos\bigg(\frac{c(i-\frac{1}{2})\pi}{R[i]}\bigg)
+\end{equation}
+Where $\widetilde{B}$ are the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
 
-\paragraph*{}The frequency center-of-mass (FCM) for an audio file provides a strong representation of how overtones and energy is distributed in the signal's frequency domain. As with the temporal center-of-mass, we treat each row of the $S^T$ matrix as it's own 1-Dimensional mass distribution, and compute the center of mass of that row. This encodes the FCM for a single analysis frame (in frequency-space) in the waveform. For an frequency-analysis frame, $s^{(i)}$, the FCM is given by:
+\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes \cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. We provide a representation of MFCC properties below.
+
+\begin{figure}[H]
+\label{fig-FeatureMFCC}
+\begin{center}
+\textcolor{red}{PLOT OF MFCC FEATURES HERE}
+\end{center}
+\caption{Mel Frequency Cepstral Coefficients visualized in feature-space}
+\end{figure}
+
+% ================================
+
+\subsubsection{Frequency Center of Mass}
+
+\paragraph*{}The frequency center-of-mass (FCM) for an audio file provides a representation of how overtones and energy is distributed in the signal's frequency domain. As with the temporal center-of-mass, we treat each row of the $S^T$ matrix as it's own 1-Dimensional mass distribution, and compute the center of mass of that row. This encodes the FCM for a single analysis frame (in frequency-space) in the waveform. For an frequency-analysis frame, $s^{(i)}$, the FCM is given by:
 \begin{equation}
 \label{eqn-FeatureFCM}
-\text{TCM}_{i}\big[ s^{(i)} \big] = \frac{\sum_{j=0}^{N'-1}j s^{(i)}[j]}{\sum_{j=0}^{N'-1}s^{(i)}[j]}
+\text{FCM}_{i}\big[ s^{(i)} \big] = \frac{\sum_{j=0}^{N'-1}j s^{(i)}[j]}{\sum_{j=0}^{N'-1}s^{(i)}[j]}
 \end{equation}
 We compute the FCM for each of the $k'$ frames, and then average the results. We use the average FCM across $k'$ frames to compute the FCM feature:
 \begin{equation}
-TCM = \sum_{i=0}^{k'} \text{TCM}_{i}\big[ s^{(i)} \big]
+FCM = \sum_{i=0}^{k'} \frac{1}{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \end{equation}
 
 \paragraph*{}The average FCM gives a strong approximation of the instrument or signal source's range. For example, a flute or violin will have a considerably high FCM value, even in their lower registers. Similarly, basses or tubas will have considerably low FCM values. Given that the standard frequency range of some musical instruments is fixed, it is guaranteed that for any particular instrument, the FCM will consistently remain within certain bounds \cite{Olson,White}.
@@ -1278,6 +1320,12 @@ Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics.} Brigha
 
 \bibitem{Petrik}
 Petrik, Marek. "Introduction to Deep Learning." Machine Learning. 20 April. 2020, Durham, New Hampshire.
+
+\bibitem{Sahidullah}
+Sahidullah, Goutam S. “Design, Analysis and Experimental Evaluation of Block Based Transformation in MFCC Computation for Speaker Recognition.” 18 Nov. 2011. 
+
+\bibitem{Serizel}
+Serizel, Roman, et al. “Acoustic Features for Environmental Sound Analysis.” Computational Analysis of Sound Scenes and Events, by Tuomas Virtanen, Springer, 2018, pp. 71–101. 
 
 \bibitem{Short}
 Short, K. and Garcia R.A. 2006. "Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method." AES: \textit{Audio Engineering Society Convention Paper}.

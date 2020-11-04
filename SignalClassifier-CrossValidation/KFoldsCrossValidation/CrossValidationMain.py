@@ -30,9 +30,8 @@ if __name__ == "__main__":
     # HANDLE LOCAL DIRECTORIES
     homePath = os.getcwd()
     paths = [read,export,model]
-    modelName = "ChaoticXVal"
+    modelName = "XValCLFA"
 
- 
     # PRE-PROCESSING FOR PROGRAM
     ProgramSetup = sys_utils.ProgramInitializer([read,export,model],modelName)    
     FILEOBJECTS = ProgramSetup.__Call__()
