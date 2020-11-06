@@ -19,16 +19,17 @@ if __name__ == "__main__":
 
     # SETUP DIRECTORIES
     parentPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier-CrossValidation"
-    dataPath = os.path.join(parentPath,"XVal-Output-Data")
-    modelPath = os.path.join(parentPath,"XVal-Model-Data")
+    modelName = "XValCLFB"
+    dataPath = os.path.join(parentPath,"XValCLFB-Output-Data")
+    modelPath = os.path.join(parentPath,"XValCLFB-Model-Data")
 
     # MAKE PROGRAM INTIALIZER
-    Setup = utils.ProgramSetup(dataPath,modelPath)
-    modelNames = Setup.GetModelNames()
-    modelInstances = [utils.ModelData(dataPath,modelPath,name) for name in modelNames]
+    Setup = utils.ProgramSetup(modelName,dataPath,modelPath)
+    Setup.__Call__()
 
     # MAIN BAGGING ALGORITHM
-    Bagging = utils.BaggingAlgorithm(modelInstances)
+    (models,training,predictions) = Setup.GetPathLists
+    Bagging = utils.BaggingAlgorithm(models,training,predictions)
     Bagging.__Call__()
 
     print("=)")
