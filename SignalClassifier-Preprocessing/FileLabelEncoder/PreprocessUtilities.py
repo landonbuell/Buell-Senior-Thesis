@@ -114,6 +114,8 @@ class TargetLabelEncoder:
         self.brass = ["BASSTROMBONE","HORN","TENORTROMBONE","TROMBONE","TRUMPET","TUBA",]
         self.percussion = ["BELLS","CROTALE","HIHAT" ]
         self.mallets = ["MARIMBA","VIBRAPHONE","XYLOPHONE" ]
+        self.synths = ["SawtoothWave","SineWave","SquareWave","TriangleWave"]
+        self.noises = ["WhiteNoise"]
 
     def SetSamples(self,newSamples):
         """ Set new Samples to self """
@@ -125,7 +127,8 @@ class TargetLabelEncoder:
         """ Return List of accepted categories """
         classes = self.stringsBowed + self.stringsPlucked + \
                 self.windsHigh + self.windsLow + \
-                self.brass + self.percussion + self.mallets
+                self.brass + self.percussion + self.mallets + \
+                self.synths + self.noises
         print("\nNumber of Categories:",len(classes))
         for k in classes:        # each class
             print("\t"+k)       # print name

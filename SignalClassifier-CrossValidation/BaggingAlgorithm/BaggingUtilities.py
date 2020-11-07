@@ -19,68 +19,73 @@ import PlottingUtilities as plotutils
 class ProgramSetup :
     """ Intialize Program, Organize Paths, Etc. """
 
-    def __init__(self,dataPath,modelPath):
+    def __init__(self,modelName,dataPath,modelPath):
         """ Initialize ProgramSetup Instance """
+        self.modelName = modelName
         self.dataPath = dataPath
         self.modelPath = modelPath
-        self.predictionFiles = self.GetKeyWordFiles("@PREDICTIONS@")
+
+    def __Call__(self):
+        """ Run Instance of Program Setup """
+        self.modelPathList = self.GetModelPaths()
         self.trainingFiles = self.GetKeyWordFiles("@TRAINING-HISTORY@")
+        self.predictionFiles = self.GetKeyWordFiles("@PREDICTIONS@")
+        return self
+
+    @property
+    def GetPathLists (self):
+        """ Return Lists Needed For Bagging Algorithm """
+        return (self.modelPathList,self.trainingFiles,self.predictionFiles)
 
     def GetKeyWordFiles (self,keyWord):
         """ Collect All .csv files with 'keyWord' in it """
         files = []
-        for file in os.listdir(self.dataPath):  # in the path
-            if file.endswith(".csv"):           # is csv file:
-                if keyWord in file:             # keyword in name
-                    files.append(file)          # add file to list
+        for item in os.listdir(self.dataPath):
+            path = os.path.join(self.dataPath,item)           
+            if (self.modelName in item) and (keyWord in item): 
+                # this is a prediction file of this model
+                files.append(path)      # add file to list
         return files
 
-    def GetModelNames (self):
+    def GetModelPaths (self):
         """ Collect Names of All Models in Folder """
-        modelNames = []
+        pathList = []
         for item in os.listdir(self.modelPath): # in the path
-            if item.endswith(".csv") == False:  # is not csv file
-                modelNames.append(item)
-        return modelNames
+            path = os.path.join(self.modelPath,item)
+            if os.path.isdir(path) and (self.modelName in item):
+                # This is a folder that contains thedata for a tensorflow model          
+                pathList.append(path)
+        return pathList
 
-class ModelData:
-    """ Load saved a Tensorflow model and get it's paramaters """
+class BaggingAlgorithm :
+    """
+    Execute Baggining Algorithm
+    """
 
-    def __init__(self,dataPath,modelPath,modelName):
-        """ Intialize ModelData Instance """
-        self.dataPath = dataPath
-        self.modelPath = modelPath
-        self.modelName = modelName
+    def __init__(self,models,train,pred):
+        """ Initialize BaggingAlgorithmInstance """
+        self.modelPathList = models
+        self.trainingFiles = train
+        self.predictionFiles = pred
+        self.nFiles = len(self.modelPathList)
+
+    def LoadModel(self,modelPath):
+        """ Load a save TensorFlow model """
+        model = keras.models.load_model(modelPath)
+        for i in range (len(model.layers)):
+            layerWeights = model.layers[i].weights[0].numpy()
+            layerBiases = model.layers[i].weights[1].numpy()
+
+        return self
+
+    def __Call__(self):
+        """ Run Bagging Algorithm """
         
-        self.historyFile = self.GetKeywordFiles("@TRAINING-HISTORY@")
-        self.predictFile = self.GetKeywordFiles("@PREDICTIONS@")
+        for i in range(self.nFiles):
+            modelPath = self.modelPathList[i]
+            self.LoadModel(modelPath)
 
-        self.fullModelPath = os.path.join(self.modelPath,self.modelName)
-        self.fullHistoryPath = os.path.join(self.dataPath,self.historyFile)
-        self.fullPredictPath = os.path.join(self.dataPath,self.predictFile)
-        
-    def LoadModel(self):
-        """ Load locally saved TensorFlow Model into RAM """
-        modelData = keras.models.load_model(self.fullModelPath)
-        weights = modelData.get_weights()
-        return weights
-
-    def LoadHistoryFile(self):
-        """ Load Contents of TRAINING-HISTORY into RAM """
-        historyData = pd.read_csv(self.fullHistoryPath) # load history frame
-        lossData = historyData['Loss Score'].to_numpy()
-        precisionData = historyData['Precision'].to_numpy()
-        recallData = historyData['Recall'].to_numpy()
-        return (lossData,precisionData,recallData)
-
-    def GetKeywordFiles (self,keyWord):
-        """ Collect All .csv files with 'keyWord' in it """
-        for file in os.listdir(self.dataPath):  # in the path
-            if file.endswith(".csv"):           # is csv file:
-                if (keyWord in file) & (self.modelName in file):   # keyword in name
-                    return file
-        raise FileNotFoundError()
-        return None
+        return self
 
 class Mathematics:
     """ Static methods to provide mathematical functions """
@@ -100,55 +105,5 @@ class Mathematics:
         sumExp = np.exp(data).sum()
         return np.exp(data)/sumExp
 
-class BaggingAlgorithm :
-    """
-    Execute Baggining Algorithm
-    """
 
-    def __init__(self,modelList):
-        """ Initialize BaggingAlgorithmInstance """
-        self.modelList = modelList
-        self.newModel = self.CloneModel()
-
-    def CloneModel(self):
-        """ Create Clone of the model to set weights to """
-        parentModel = keras.models.load_model(self.modelList[0].fullModelPath)
-        newModel = keras.models.clone_model(parentModel)
-        for layerWeights in newModels.get_weights():
-            weightShape = layerweights.shape()
-            print(" ")
-        return newModel
-
-    def SetWeightsToZero(self):
-        """ Set all weights in the new Model to zero """
-        newWeights = self.newModel.get_weights()
-        for layer in self.newModel.layers:      # each layer
-            pass
-            # set all weights in this layer to zero
-        return self
-
-    def WeightLosses(self):
-        """ Collect & Weight the Models based on Loss """
-        _delta = 1e-8               # numerical stability
-        lossHistories = [] 
-        lossWeighted = np.array([])
-        for model in self.modelList:        # each model
-            print(model.modelName)          # disp model name            
-            # Collect & weight the models based on loss function?
-            (loss,prec,recl) = model.LoadHistoryFile()  # load history
-            lossHistories.append(loss)
-            lossWeighted = np.append(lossWeighted,Mathematics.WeightLossScore(loss))
-        #plotutils.TimePlotting.PlotLoss(lossHistories,"ChaoticXVal Losses")
-        return 1 - (lossWeighted/np.max(lossWeighted)) + _delta
-
-    def __Call__(self):
-        """ Run Bagging Algorithm """
-        lossWeights = self.WeightLosses()
-        nModels = len(self.modelList)
-        _ = self.newModel.get_weights()
-        for i,model in enumerate(self.modelList[1:]):
-            savedWeights = keras.models.load_model(model.fullModelPath)  # get a model
-            modelWeights = loadedModel.get_weights()                    # get layer params
-
-        return self
 
