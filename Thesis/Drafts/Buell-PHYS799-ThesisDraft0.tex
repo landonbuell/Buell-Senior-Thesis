@@ -665,7 +665,7 @@ The Convolution layers convoluted over the middle two axes of the data (over spa
 
 \paragraph*{} The Perceptron branch is picture on the right side of Fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Serizel}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
 
-\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
+\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-parameter of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
 \label{eqn-shapeX2}
 X_2 \in \mathbb{R}^{(64 \times 20)}
@@ -688,6 +688,10 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 \label{sec-Instruments}
 
 \textcolor{red}{I have notes written out for this section, I just need to write it out here soon}
+
+\paragraph*{}As discussed in Sec. (\ref{sec-TheNeuralNetwork}), performance quality of a neural network is greatly dependent on the properties of the chosen features \cite{Virtanen,Liu}. To ensure that a the classifier model performs adequately and consistently, we must choose these features to have high variance between classes, and low variance within each class. This enables a neural network to development clear decision boundaries between each unique class \cite{James,Serizel}. To develop this set of features, we explore the physical and mechanical properties of musical instruments and the sounds that they create.
+
+\paragraph*{}Rather than explore each class individually, 
 
 % ================================================================
 % ================================================================
