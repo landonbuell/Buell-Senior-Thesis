@@ -26,7 +26,7 @@ if __name__ == '__main__':
     mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix1.csv"
 
     # Preprocessing
-    n_features = 40
+    n_features = 20
     ProgramSetup = sys_utils.ProgramInitializer([dataPath,exptPath])
     ProgramSetup.InitOutputMatrix(mtrxPath,n_features)
     groupedFiles = ProgramSetup.__Call__()
