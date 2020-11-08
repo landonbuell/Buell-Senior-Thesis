@@ -11,89 +11,83 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
+import datetime
 
 import tensorflow as tf
 import tensorflow.keras as keras
 
         #### OBJECT DEFINITIONS ####
 
-class CompareCrossValidations :
-    """
-    Compare Multiple models that have had K-Folds Cross Validation applied
-    --------------------------------
-    modelNames (iter) : List of of string giving model names
-    --------------------------------
-    Return New Instance of Class
-    """
-
-    def __init__(self,modelNames,parentPath,n_classes):
-        """ Initialize CompareCrossValidations Instance """
-        self.modelNames
-        self.parentPath
-
-    def __Call__(self):
-        """ Run Main Execution of this Class """
-
-        for model in self.modelNames:                       # each model
-            modelPath = os.path.join(self.parentPath,model) # get the path
-            predcitionFiles = self.GetPredictions()
-
-    def GetPredictions (self,path):
-        """ Get Prediction Files """
-        keyword = "@PREDICTIONS@"
-        files = []
-        for file in os.listdir(path):   # in this path
-            if keyword in file:
-                files.append(file)      # add to list
-        return files                    # return the list
 
 class AnalyzeModels:
     """
     Class Object to Analyze performance of model outputs using metrics
     --------------------------------
-    modelName (iter) : list od strings indicating names for models
+    modelName (str) : String indicating names for model
     datapath (str) : Local Directory path where input file is held
-    infile (str) : File name w/ ext indicating file to read
     n_classes (int) : number of discrete classes for models
     --------------------------------
     Return Instante of class
     """
 
-    def __init__(self,modelName,datapath,infile,n_classes):
+    def __init__(self,modelName,datapath,n_classes):
         """ Initialize Class Object Instance """
+        # Set time stamp
+        dt_obj = datetime.datetime.now()
+        startTime = dt_obj.isoformat(sep='.',timespec='auto')
+        self.startTime = startTime.replace(':','.').replace('-','.')
+        print("Time Stamp:",self.startTime)
+
+        # Set Attributes
         self.modelName = modelName
-        self.dataPath = datapath
-        self.inFile = infile
+        self.dataPath = datapath  
         self.n_classes = n_classes
+        self.outputFile = self.modelName+"@ANALYSIS@"+self.startTime+".csv"
 
-        self.outFile = infile.replace("PREDICTIONS","ANALYSIS")
-        self.fullInpath = os.path.join(self.dataPath,self.inFile)
-        self.fullOutpath = os.path.join(self.dataPath,self.outFile)
+    def GetKeywordFiles(self,keyword):
+        """ Find files in path w/ Keyword in name """
+        pathList = []
+        for item in os.listdir(self.dataPath):
+            fullPath = os.path.join(self.dataPath,item)
+            if (self.modelName in item) and (keyword in item):
+                # matches criteria
+                pathList.append(fullPath)
+        return pathList
 
-    def ReadData(self):
-        """ Read raw prediction data from local file """
-        self.frame = pd.read_csv(self.fullInpath)
-        return self
+    def ExportMetrics(self,outputPath):
+        """ Export Metrics Array to Local path """
+        colNames = ["Accuracy","Precision","Recall","Loss"]
+        outputFrame = pd.DataFrame(data=None,index=None)
+        outputFrame["CLF"] = [x.split("\\")[-1] for x in self.predictionFiles]
+        for i in range(len(colNames)):
+            outputFrame[colNames[i]] = self.metricsArray[:,i]
+        outputPath = os.path.join(outputPath,self.outputFile)
+        outputFrame.to_csv(outputPath,index=False)
 
     def __Call__(self):
-        """ Call Program Mode """
-        
-        print("File:",self.inFile)
-        self.ReadData()             # get   
-        labels = self.frame['Int Label']
-        predictions = self.frame['Int Prediction']
-        confidence = self.frame['Confidence']
+        """ Run Main program instance """
+        # Get needed Files
+        self.trainingFiles = self.GetKeywordFiles("@TRAINING-HISTORY@")
+        self.predictionFiles = self.GetKeywordFiles("@PREDICTIONS@")
+        self.classDictionary = self.GetKeywordFiles("Categories")[-1]
 
-        # Create Confusion matricies
-        Metrics = ClassifierMetrics(self.n_classes,labels,predictions,confidence)
-        self.weightedConfusion = Metrics.WeightedConfusion()
-        self.standardConfusion = Metrics.StandardConfusion()
+        nRows = len(self.predictionFiles)
+        nCols = 4
+        self.metricsArray = np.empty(shape=(nRows,nCols))
 
-        # Compute Metrics
-        print("\tLoss:",Metrics.LossScore())
-        print("\tPrecision:",Metrics.PrecisionScore())
-        print("\tRecall:",Metrics.RecallScore())
+        # Iterate through predictions
+        for i,predFile in enumerate(self.predictionFiles):
 
+            # Gather all metrics for each Classfier
+            data = pd.read_csv(predFile)
+            labels = data["Int Label"].to_numpy()
+            predns = data["Int Prediction"].to_numpy()
+            scores = data["Confidence"].to_numpy()
+
+            ComputeMetrics = ClassifierMetrics(self.n_classes,labels,predns,scores) 
+            metrics = ComputeMetrics.MetricScores
+            self.metricsArray[i] = metrics
+       
         return self
 
 class ClassifierMetrics :
@@ -112,6 +106,9 @@ class ClassifierMetrics :
         self.x = labels
         self.y = predictions
         self.z = scores
+
+        self.xOneHot = keras.utils.to_categorical(self.x,self.n_classes)
+        self.yOneHot = keras.utils.to_categorical(self.y,self.n_classes)
      
     def WeightedConfusion(self):
         """ Create a confusion matric weighted by confidence & occurance """
@@ -134,31 +131,45 @@ class ClassifierMetrics :
             standardMatrix[x,y] += 1.                   # add counter
         return standardMatrix
 
+    """
+    Check Documentation for TensorFlow's Metrics
+        These four Methods require updates!
+    """
+
+    def AccuracyScore (self):
+        """ Compute Recall Score of Data """    
+        Accr = keras.metrics.Accuracy()
+        Accr.update_state(self.x,self.y)
+        return Accr.result().numpy()
+
     def PrecisionScore(self):
         """ Compute Precision Score of Data """
-        _labs = keras.utils.to_categorical(self.x,self.n_classes)
-        _prds = keras.utils.to_categorical(self.y,self.n_classes)
         Prec = keras.metrics.Precision()
-        Prec.update_state(_labs,_prds)
+        Prec.update_state(self.x,self.y)
         return Prec.result().numpy()
 
     def RecallScore (self):
         """ Compute Recall Score of Data """
-        _labs = keras.utils.to_categorical(self.x,self.n_classes)
-        _prds = keras.utils.to_categorical(self.y,self.n_classes)
         Recl = keras.metrics.Recall()
-        Recl.update_state(_labs,_prds)
+        Recl.update_state(self.x,self.y)
         return Recl.result().numpy()
 
     def LossScore (self):
         """ Compute Loss Score of Data """
-        _labs = keras.utils.to_categorical(self.x,self.n_classes)
-        _prds = keras.utils.to_categorical(self.y,self.n_classes)
-        _loss = keras.losses.categorical_crossentropy(_labs,_prds).numpy()
-        return np.mean(_loss)
+        Loss = keras.losses.categorical_crossentropy(self.xOneHot,self.yOneHot)
+        return np.mean(Loss.numpy())
+
+    @property
+    def MetricScores(self):
+        """ Collect All metric Scores in one arrays """
+        _accr = self.AccuracyScore()
+        _prec = self.PrecisionScore()
+        _recl = self.RecallScore()
+        _loss = self.LossScore()
+        return np.array([_accr,_prec,_recl,_loss])
 
     ### Include prediction accuracy
-    # Include prediction threshold
+    ### Include prediction threshold
 
     @staticmethod
     def PlotConfusion(X,n_classes,title="",show=True,save=True):
