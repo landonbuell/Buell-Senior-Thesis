@@ -32,15 +32,14 @@ class FeatureProcessor:
     def GetFeatureNames(self):
         """ Get Names of all features as list of strs """
         names = ["Time Domain Env.","Zero X-Rate","Time Center of Mass"]                         
-        names += ["Auto Correlation "+str(i+1) for i in range(12)]        
-        names += ["Mel Filter Energy "+str(i+1) for i in range(12)]       
+        names += ["Auto Correlation "+str(i+1) for i in range(4)]        
         names += ["MFCC "+str(i+1) for i in range (12)]      
         names += ["Frequency Center of Mass"]                                    
         return names
 
     def CreateDictionary(self,encdPath):
         """ Handle class dictionary """
-        modelName = "FeaturesXVal"
+        modelName = "XValCLFB"
         categories = CategoryDictionary(encdPath,modelName)
         self.classNames = categories.encoder.keys()          # get names of categories
             
