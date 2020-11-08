@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     # Run Main program
     Program = utils.AnalyzeModels(modelName,dataPath,n_classes)
-    Program.__Call__()
+    Program.__Call__(exptPath)
     Program.ExportMetrics(exptPath)
     
     print("=)")
