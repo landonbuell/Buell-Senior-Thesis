@@ -20,6 +20,8 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 
+\usepackage{multicol}
+
 \usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
 
 \usepackage{fancyhdr}
@@ -665,7 +667,7 @@ The Convolution layers convoluted over the middle two axes of the data (over spa
 
 \paragraph*{} The Perceptron branch is picture on the right side of Fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Serizel}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
 
-\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-paramater of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
+\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-parameter of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
 \label{eqn-shapeX2}
 X_2 \in \mathbb{R}^{(64 \times 20)}
@@ -687,7 +689,69 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 \section{Properties of Musical Instruments}
 \label{sec-Instruments}
 
-\textcolor{red}{I have notes written out for this section, I just need to write it out here soon}
+\paragraph*{}As discussed in Sec. (\ref{sec-TheNeuralNetwork}), performance quality of a neural network is greatly dependent on the properties of the chosen features \cite{Virtanen,Liu}. To ensure that a the classifier model performs adequately and consistently, we must choose these features to have high variance between classes, and low variance within each class. This enables a neural network to development clear decision boundaries between each unique class \cite{James,Serizel}. To develop this set of features, we explore the physical and mechanical properties of musical instruments and the sounds that they create.
+
+\paragraph*{}We have assembled training data samples than can be grouping in 38 classes of unique sources listed below:
+\begin{multicols}{2}
+\begin{enumerate}
+	\item Alto Flute
+	\item Alto Saxophone
+	\item Banjo
+	\item Bass
+	\item Bass Clairnet
+	\item Bass Flute
+	\item Bassoon
+	\item Bass Tromobe
+	\item B$\flat$ Clarinet
+	\item Bells
+		
+	\item Cello
+	\item Clarinet \textcolor{blue}{Check this!}
+	\item Contrabassoon
+	\item Crotale
+	\item E$\flat$ Clarinet
+	\item English Horn
+	\item Flute
+	\item Guitar
+	\item Hi-Hat
+	\item Horn
+		\columnbreak
+	\item Mandolin
+	\item Marimba
+	\item Oboe
+	\item Sawtooth Wave
+	\item Saxophone (Tenor)
+	\item Sine Wave
+	\item Soprano Saxophone
+	\item Square Wave
+	\item Tenor Trombone
+	\item Triangle Wave
+		
+	\item Trombone
+	\item Trumpet (B$\flat$)
+	\item Tuba
+	\item Vibraphone
+	\item Violin
+	\item Viola
+	\item White Nosie
+	\item Xylophone
+	\item
+	\item
+\end{enumerate}
+\end{multicols}
+
+\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instrumentsby using the \textit{Hornbostel-Sachs} system \textit{red}{Citation needed!}. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) Idiophones, (ii) membranophones, (iii) Chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
+
+
+% ================================================================
+
+\subsection*{Idiophones}
+\label{subsec-Idiophone}
+
+\paragraph*{}An idiophone is an instrument that produces sound through the vibration of the full body of the object. This generally includes most percussive instruments excluding drums \textcolor{red}{citation needed}. From the set of classes that we use, bells, crotales, Hi-hats, vibraphones, and xylophones are all examples of idiophones. 
+
+
+
 
 % ================================================================
 % ================================================================
