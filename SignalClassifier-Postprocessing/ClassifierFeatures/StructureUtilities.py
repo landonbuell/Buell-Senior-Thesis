@@ -90,7 +90,6 @@ class FeatureContainer :
         X = self.X
         featuresFrame = pd.DataFrame(data=X,columns=self.GetColumnNames)    # make dataFrame for features
         self.outputFrame = pd.concat([indexFrame,featuresFrame],axis=1)    # concatenate the frames
-
         return self
 
     def ExportFrame(self,exportPath):

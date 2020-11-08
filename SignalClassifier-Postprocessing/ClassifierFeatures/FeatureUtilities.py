@@ -125,7 +125,7 @@ class TimeSeriesFeatures (BaseFeatures):
         featureVector = np.append(featureVector,self.TimeDomainEnvelope())
         featureVector = np.append(featureVector,self.ZeroCrossingRate())
         featureVector = np.append(featureVector,self.CenterOfMass())       
-        featureVector = np.append(featureVector,self.AutoCorrelationCoefficients(12))
+        featureVector = np.append(featureVector,self.AutoCorrelationCoefficients())
         # Crop Waveform if previously Shorter
         if self.oldSamples < self.n_samples:
             self.signal = self.signal[:self.oldSamples]
@@ -169,7 +169,6 @@ class TimeSeriesFeatures (BaseFeatures):
         Return temporal center of mass
         """
         assert attrb in ['signal','frames']
-        """ This feature has been changed - Update it in Main Classifier! """
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         weights = np.arange(0,X.shape[0],1)     # weight array
         COM = np.dot(weights,np.abs(X))         # operate
@@ -240,7 +239,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         # Add Elements to Feature vector
         featureVector = np.array([])
         MFBEs = self.MelFilterBankEnergies()
-        featureVector = np.append(featureVector,MFBEs)
+        #featureVector = np.append(featureVector,MFBEs)     # don't use filter bank energies?
         MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
 
         featureVector = np.append(featureVector,MFCCs)
@@ -371,11 +370,10 @@ class FrequencySeriesFeatures (BaseFeatures):
         return spectral center of mass
         """
         assert attrb in ['frequencySeries','spectrogram']
-        """ This feature has been changed - Update it in Main Classifier! """
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         weights = np.arange(0,X.shape[0],1)     # weight array
         COM = np.dot(weights,np.abs(X))         # operate
         if COM.ndim >= 1:                # more or equal to 1D
             return np.mean(COM)         # return average
         else:                           # scalar
-            return COM/self.n_samples   # divide by n samples 
+            return COM/self.n_samples   # divide by n samples  
