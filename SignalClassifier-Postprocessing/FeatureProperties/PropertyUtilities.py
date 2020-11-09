@@ -126,20 +126,17 @@ class BoxPlotFigure:
         --------------------------------
         Return None
         """
-        plt.figure(figsize=(20,12))
-        plt.title(title,size=40,weight='bold')
+        plt.figure(figsize=(20,10))
+        #plt.title(title,size=60,weight='bold',pad=2.0)
         
         boxPlots = [x.data for x in data]
         plt.boxplot(boxPlots,showfliers=False)
 
-
         plt.grid()
-        #plt.tight_layout()
+        plt.subplots_adjust(left=0.02, right=0.98, top=0.95, bottom=0.15)
 
-        plt.ylabel("Scaled Value ($\mu = 0$, $\sigma^2 = 1$)",
-                   size=12,weight='bold')
         plt.xticks(ticks=range(1,len(boxPlots)+1),labels=xlabels,
-                   rotation=60,weight='bold')
+                   rotation=80,weight='bold')
         
         if save == True:
             plt.savefig(title.replace(" ","_")+".png")
