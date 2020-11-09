@@ -62,8 +62,9 @@ class BaggingAlgorithm :
     Execute Baggining Algorithm
     """
 
-    def __init__(self,models,train,pred):
+    def __init__(self,name,models,train,pred):
         """ Initialize BaggingAlgorithmInstance """
+        self.parentName = name
         self.modelPathList = models
         self.trainingFiles = train
         self.predictionFiles = pred
@@ -72,19 +73,47 @@ class BaggingAlgorithm :
     def LoadModel(self,modelPath):
         """ Load a save TensorFlow model """
         model = keras.models.load_model(modelPath)
-        for i in range (len(model.layers)):
-            layerWeights = model.layers[i].weights[0].numpy()
-            layerBiases = model.layers[i].weights[1].numpy()
+        modelWeights = model.get_weights()
+        return modelWeights
 
-        return self
+
+    def WeightedSumOfParams(self,Params,weights):
+        """ Computed weighted sum of model Params """
+        baggedWeights = [np.zeros(shape=x.shape) for x in Params[0]]
+        for i in Params.keys():             # model index
+            modelParams = Params[i]             # list of arrays (model parameters)
+            for j in range(len(modelParams)):   # each layer
+                weightedParas = modelParams[j] * weights[i]     # weight by weights!
+                baggedWeights[j] += modelParams[j]              # add to agg vals
+            print(" ")
+        nModels = len(Params.keys())
+        for layer in baggedWeights:     # each layer
+            layer /= nModels            # divide by num models
+        return baggedWeights
+
+    def NewModel(self,modelPath,newWeights):
+        """ Load an Exisiting Model, Clone, Replace Weights """
+        model = keras.models.load_model(modelPath)
+        newModel = keras.models.clone_model(model)
+        del(model)
+        newModel.set_weights(newWeights)
+        newModel._name = self.parentName + "_Bagged"
+        return newModel
 
     def __Call__(self):
         """ Run Bagging Algorithm """
-        
-        for i in range(self.nFiles):
+        weightsDict = {}
+        modelScores = np.ones(shape=(self.nFiles))
+        for i in range(self.nFiles-9):
+            # In each model, get the weights
+            print(self.modelPathList[i])
             modelPath = self.modelPathList[i]
-            self.LoadModel(modelPath)
+            modelWeights = self.LoadModel(modelPath)
+            weightsDict.update({i:modelWeights})
 
+        # Computed Weightesd Sum of paramss
+        newWeights =self.WeightedSumOfParams(weightsDict,modelScores)
+        self.BaggedModel = self.NewModel(self.modelPathList[0],newWeights)
         return self
 
 class Mathematics:
