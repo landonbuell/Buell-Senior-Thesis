@@ -733,24 +733,160 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 	\item Vibraphone
 	\item Violin
 	\item Viola
-	\item White Nosie
+	\item White Noise
 	\item Xylophone
 	\item
 	\item
 \end{enumerate}
 \end{multicols}
 
-\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instrumentsby using the \textit{Hornbostel-Sachs} system \textit{red}{Citation needed!}. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) Idiophones, (ii) membranophones, (iii) Chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
+\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instrumentsby using the \textit{Hornbostel-Sachs} system \textit{red}{Citation needed!}. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) idiophones, (ii) membranophones, (iii) chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
 
 
 % ================================================================
 
-\subsection*{Idiophones}
+\subsection{Idiophones}
 \label{subsec-Idiophone}
 
 \paragraph*{}An idiophone is an instrument that produces sound through the vibration of the full body of the object. This generally includes most percussive instruments excluding drums \textcolor{red}{citation needed}. From the set of classes that we use, bells, crotales, Hi-hats, vibraphones, and xylophones are all examples of idiophones. 
 
+% ================================================================
 
+\subsection{Membranophones}
+\label{subsec-membranophones}
+
+% ================================================================
+
+\subsection{Chordophones}
+\label{subsec-chordophones}
+
+\paragraph*{}A chordophone is a musical instrument that produces sound through the vibration of strings that are stretched between two fixed points \textcolor{red}{citation needed}. From our data set, banjos, basses, cellos, guitars, mandolins, violins, and violas are all examples of chordophones.
+
+\paragraph*{}We can model a chordophone simply as having a string of length $L$, with a constant linear mass density, $\mu$, subject to a tension force $F_T$. The string is flexible, and free to vibrate in a single dimension. We describe the state of string over space and time with a function $U(x,t)$. The behavior of the string can be  modeled by D'Alembert's 1-dimensional wave equation \cite{Haberman,Taylor}:
+\begin{equation}
+\label{eqn-1DWaveEqn}
+\frac{\partial^2 U}{\partial t^2} = v^2 \frac{\partial^2 U}{\partial x^2}
+\end{equation}
+Where $v$ is the wave propagation velocity, given by $\sqrt{\frac{F_T}{\mu}}$. Additionally, the string is fixed in place at both ends, which can be modeled by the boundary conditions:
+\begin{equation}
+U(0,t) = 0 
+	\text{\hspace*{2cm} and \hspace*{2cm}}
+U(L,t) = 0 
+\end{equation}
+
+\paragraph*{}In order to specify a solution, we must also specificy two intitial conditions. We described the initial state of the string at time $t = 0$  by the two conditions:
+\begin{equation}
+U(x,0) = f(x) 
+	\text{\hspace*{2cm} and \hspace*{2cm}}
+\frac{\partial U}{\partial t}(x,0) = g(x)
+\end{equation}
+Depending on the exact nature of the source instrument, $f(x)$ and $g(x)$ can take on different forms. For example, for plucked stringed instruments, $f(x)$ may appear to be as triangle-like function, with a peak at some position $0 < x_0 < L$ where then string was struck. $g(x)$
+
+\paragraph*{}We explore solutions that take the form \cite{Haberman}:
+\begin{equation}
+U(x,t) = \psi(x)h(t)
+\end{equation}
+Because of the linear nature of the wave equation, Eq. (\ref{eqn-1DWaveEqn}), a linear combination of solutions is also a solution, so we can express $U(x,t)$ as \cite{Haberman}:
+\begin{equation}
+U(x,t) = 
+\sum_{n=1}^{\infty} \bigg( A_n \sin\big(\frac{n\pi x}{L}\big)\cos\big(\frac{n\pi vt}{L}\big)
++ B_n \sin\big(\frac{n\pi x}{L}\big)\sin\big(\frac{n\pi vt}{L}\big) \bigg)
+\end{equation}
+The initial conditions are satisfied if:
+\begin{equation}
+\begin{array}{ll}
+    f(x) = \sum_{n=1}^{\infty} A_n \sin\big(\frac{n\pi x}{L}\big) \\
+    g(x) = \sum_{n=1}^{\infty} B_n\big(\frac{n\pi v}{L}\big)
+    			\sin\big(\frac{n\pi x}{L}\big)
+\end{array} 
+\end{equation}
+Where $A_n$ and $B_n$ are given by:
+\begin{equation}
+\begin{array}{ll}
+    A_n = \frac{2}{L} \int_{0}^{L} f(x) \sin\big(\frac{n\pi x}{L}\big) dx \\
+    B_n = \frac{2}{n\pi v} \int_{0}^{L} g(x) \sin\big(\frac{n\pi x}{L}\big) dx \\
+\end{array} 
+\end{equation} 
+
+\paragraph*{}Examining the solutions for $U(x,t)$ indicates that under the right initial conditions, chordophones vibrate with all harmonics present.  
+
+% ================================================================
+
+\subsection{Aerophones}
+\label{subsec-Aerophones}
+
+% ================================================================
+
+\subsection{Other Generated Sounds}
+\label{subsec-Generated}
+
+\paragraph*{}We group sounds produced from non-physical musical instruments in this final category. Form our data set, this category includes the four simplest waveforms, (i) sine waves, (ii) sawtooth waves, (iii) square waves, and (iv) triangle waves, as well as any color noises \cite{White}. Since these sounds are only produced synthetically through a MATLAB program, we choose not to include them in the Hornbostel-Sachs grouping above. We explore the properties of each of these generated sounds.
+
+% ================
+
+\subsubsection{Sine Wave}
+
+\paragraph*{}A sine wave is the simplest of sound waves, and makes up the foundation for all periodic wave forms \cite{White,Virtanen}. It consists of a single oscillatory term with a fixed fundamental frequency $f_0$. A sine wave's amplitude as a function of time is given by 
+\begin{equation}
+\label{eqn-SineWave}
+x(t) = A_0 \sin(2\pi f_0 t + \phi)
+\end{equation}
+Where $A_0$ gives an amplitude, $f_0$ is the fundamental frequency, and $\phi$ is a phase shift. We show a simple sine wave in the time and frequency domain in Fig. (\ref{fig-SineWave}).
+
+\begin{figure}[h]
+\begin{center}
+	\textit{[Image of Sine Wave Waveform]}
+	\textit{[Image of Sine Wave Freq. Spect]}
+\end{center}
+\caption{A sine wave in the (a) time-domian and (b) frequency domain}
+\label{fig-SineWave}
+\end{figure} 
+
+\paragraph*{}A pure sine wave contains no overtones, only a time-independent fundamental frequency, which can take on any value due to synthetic generation.
+
+% ================
+
+\subsubsection{Sawtooth Wave}
+
+\paragraph*{}
+
+% ================
+
+\subsubsection{Square Wave}
+
+\paragraph*{}A square wave is a piece-wise defined waveform whose value alternatively alternates between $+1$ and $-1$ \cite{White,Olsen}. A square wave with period $f_0$ has a waveform defined over a single period as:
+\begin{equation}
+\label{eqn-SquareWave}
+x(t) =  \left\{
+\begin{array}{ll}
+    +1 & \text{\hspace{0.5cm}} 0 < x \leq T_0 / 2 \\
+    -1 & \text{\hspace{0.5cm}} T_0/2 < x < T_0
+\end{array} 
+\right.
+\end{equation}
+where $T_0 \equiv 1/f_0$.
+
+\paragraph*{}We can use Fourier decomposition to examine the constituent sinusoidal wave that make up a square wave. The frequency space representation of a square wave indicates that is can be approximated as a sum of higher odd-numbered harmonics, with the amplitude of each decreasing by the reciprocal of the harmonic number \cite{White}. Thus a square wave in the time domain can be approximated as:
+\begin{equation}
+x(t) \approx \sum_{n = 1}^{\infty} \frac{1}{2n-1} \sin \bigg( 2 \pi (2n - 1)f_0 t \bigg)
+\end{equation} 
+
+\begin{figure}[h]
+\begin{center}
+	\textit{[Image of Square Wave Waveform]}
+	\textit{[Image of Sqaure Wave Freq. Spect]}
+\end{center}
+\caption{A square wave in the (a) time-domain and (b) frequency domain}
+\label{fig-SquareWave}
+\end{figure}
+
+% ================
+
+\subsubsection{Triangle Wave}
+
+% ================
+
+\subsubsection{White Noise}
 
 
 % ================================================================
@@ -760,13 +896,14 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 \section{Feature Selections}
 \label{sec-Features}
 
-\paragraph*{}Audio machine learning researchers M. Kashif Saeed Khan and Wasfi G. Al-Khatib discuss the vitality of feature selection \cite{Khan}: \textcolor{red}{I'm not sure how to introduce the importance of feature extraction}
+\paragraph*{}Classification tasks require a set of inputs that are used to make the decision as to which class the sample belongs to. These inputs are called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. Features are quantitative, low-dimensional representations of each sample that convey key characteristics of the sample. 
+Audio machine learning researchers M. Kashif Saeed Khan and Wasfi G. Al-Khatib discusses the vitality of feature selection \cite{Khan}:
 \begin{quote}
 The data reduction stage which is also called feature extraction, consists of discovering a few important facts about each class. The choice of features is critical as it greatly affects the accuracy of audio classification. 
 \end{quote}
 In the case of the biological process, the features of the audio is simply the raw time series waveform as processed by the brain. This information is then used into categorize the source. In the case of the neural network model, the time series waveform alone has shown to be unreliable in classification tasks \cite{Serizel}. We must then develop a set of features or predictors that can describe important properties of the waveform in a far more efficient manner \cite{Goodfellow,James}.
 
-\paragraph*{}It becomes quickly apparent that the choice of features is extrodinarily important to the process of training and evaluation of the classifier model. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
+\paragraph*{}It becomes quickly apparent that the choice of features is extraordinarily important to the process of training and evaluation of the classifier model. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
 
 \paragraph*{}Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
 \begin{quote}
@@ -776,7 +913,7 @@ To ensure the construction of a suitable model, we derive features based from th
 
 \paragraph*{}Once we produce an sufficient set of features, we concatenate them into a single object, $\hat{x}$, called the \textit{feature-vector} \cite{Goodfellow}. In the training process this object, along with the appropriate classification label, $y$ is presented to the neural network for processing. This process of constructing a feature vector from any data set is vital and is used to represent the data set in a far more compact and non-redundant format \cite{Virtanen,Liu,Kahn}.
 
-\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process
+\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalize to have a zero mean, and unit-variance acorss all classes. 
 
 \newpage
 
@@ -1284,19 +1421,19 @@ For multi-class problems, the recall score is also used as an average over all c
 
 % ================================================================
 
-\subsection{The Bagging Technique}
+\subsection{Boosted Aggregation}
 \label{subsec-Bagging}
 
-\paragraph*{}Many learning models such as neural networks, or decision trees suffer from \textit{high variance} \cite{James}. This means that randomly splitting a full dataset into halves and fitting two a different model to each half has the potential to produce wildly different fit parameters. In the case of neural networks, high variance can be amplified by the nature of the randomization in multidimensional optimizer \cite{Geron}. To mitagate this effect, we can employ a variant of the \textit{bagging} algorithm. Bagging uses an average, or weighted average, of parameters in multiple models that have been trained on overlapping data sets.
+\paragraph*{}Many learning models such as neural networks, or decision trees suffer from \textit{high variance} \cite{James}. This means that randomly splitting a full dataset into halves and fitting two different model to each half has the potential to produce wildly different fit parameters. In the case of neural networks, high variance can be amplified by the nature of the randomization in multidimensional optimizer \cite{Geron}. To mitigate this effect, we can employ a variant of the \textit{bagging} algorithm. Bagging uses an average, or weighted average, of parameters in multiple models that have been trained on overlapping data sets.
 
-\paragraph*{}Consider if we have $k$ models, all trained on overlapping training/testing data sets:
+\paragraph*{}Consider if we have $K$ models, all trained on overlapping training/testing data sets:
 \begin{equation}
-\text{Models} = \Big\{ F^*_{0} , F^*_{1} , F^*_{2} , ... , F^*_{k-2} , F^*_{k-1} \Big\}
+\text{Models} = \Big\{ F^*_{0} , F^*_{1} , F^*_{2} , ... , F^*_{K-2} , F^*_{K-1} \Big\}
 \end{equation}
-Each model contains a corresponding set of paramaters, $\Theta_{i}$, $i \in [0,k-1]$.
-We could then aggregate the parameters according to a weighted average to create a new set of paramaters, $\Theta_{k}$ which can be used to construct a new model, $F^*_{k}$.
+Each model contains a corresponding set of parameters, $\Theta^{i}$, $i \in [0,K-1]$.
+We could then aggregate the parameters according to a weighted average to create a new set of paramaters, $\Theta '$ which can be used to construct a new model, $F'$.
 
-\paragraph*{}This algorithm is often used after $K$-Folds Cross validation, as outlined in in subsec. (\ref{subsec-XValidation}). This grants the $k$ models and corresponding parameters that could be used in the bagging technique \cite{James}. \textcolor{blue}{This is very not finished yet}
+\paragraph*{}This algorithm is often used after $K$-Folds Cross validation, as outlined in in subsec. (\ref{subsec-XValidation}). This grants the $K$ models and corresponding parameters that could be used in the bagging technique \cite{James}. \textcolor{blue}{This is very not finished yet!}
 
 % ================================================================
 % ================================================================
@@ -1352,6 +1489,9 @@ Geron, Aurelien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorF
 \bibitem{Goodfellow}
 Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
 
+\bibitem{Haberman}
+“Wave Equation: Vibrating Strings and Membranes.” \textit{Applied Partial Differential Equations with Fourier Series and Boundary Value Problems}, by Richard Haberman, Pearson, 2019, pp. 130–150. 
+
 \bibitem{James}
 James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.
 
@@ -1393,6 +1533,9 @@ Serizel, Roman, et al. “Acoustic Features for Environmental Sound Analysis.”
 
 \bibitem{Short}
 Short, K. and Garcia R.A. 2006. "Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method." AES: \textit{Audio Engineering Society Convention Paper}.
+
+\bibitem{Taylor}
+“Continuum Mechanics.” \textit{Classical Mechanics}, by John Robert Taylor, University Science Books, 2005, pp. 681–738. 
 
 \bibitem{Tenorflow}
 TensorFlow: Large-scale machine learning on heterogeneous systems,
