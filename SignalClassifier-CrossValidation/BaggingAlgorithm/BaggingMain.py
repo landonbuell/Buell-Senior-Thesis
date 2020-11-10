@@ -29,8 +29,11 @@ if __name__ == "__main__":
 
     # MAIN BAGGING ALGORITHM
     (models,training,predictions) = Setup.GetPathLists
-    Bagging = utils.BaggingAlgorithm(models,training,predictions)
+    Bagging = utils.BaggingAlgorithm(modelName,models,training,predictions)
     Bagging.__Call__()
+
+    # New (Bagged Model) Need to save locally and run tests!
+    BaggedNetwork = Bagging.BaggedModel()
 
     print("=)")
 
