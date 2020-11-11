@@ -30,9 +30,11 @@
 \contentsline {subsection}{\numberline {4.1}Idiophones}{25}% 
 \contentsline {subsection}{\numberline {4.2}Membranophones}{25}% 
 \contentsline {subsection}{\numberline {4.3}Chordophones}{25}% 
+\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimension Vibrating String}{25}% 
+\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{26}% 
 \contentsline {subsection}{\numberline {4.4}Aerophones}{26}% 
 \contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{26}% 
-\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{26}% 
+\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{27}% 
 \contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{27}% 
 \contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{27}% 
 \contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{27}% 
@@ -57,8 +59,10 @@
 \contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{41}% 
 \contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{42}% 
 \contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{42}% 
+\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{42}% 
 \contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{43}% 
-\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{43}% 
-\contentsline {section}{\numberline {7}Experimental Results}{44}% 
-\contentsline {section}{\numberline {8}Conclusion}{45}% 
-\contentsline {section}{\numberline {9}Acknowledgments}{46}% 
+\contentsline {paragraph}{}{43}% 
+\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{44}% 
+\contentsline {section}{\numberline {7}Experimental Results}{45}% 
+\contentsline {section}{\numberline {8}Conclusion}{46}% 
+\contentsline {section}{\numberline {9}Acknowledgments}{47}% 
