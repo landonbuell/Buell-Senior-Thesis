@@ -280,7 +280,7 @@ class TrainPredictMode (ProgramMode):
     Creates Program Test Mode Object
     """
     def __init__(self,FILEOBJS,modelName,n_classes,timestamp,exportpath='',
-                 groupSize=256,n_iters=1,labelsPresent=True,testSize=0.1):
+                 groupSize=256,n_iters=2,labelsPresent=True,testSize=0.1):
         """ Initialize Class Object Instance """
         super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
@@ -307,8 +307,9 @@ class TrainPredictMode (ProgramMode):
         Training = TrainMode(FILEOBJS=self.TRAIN_FILEOBJS,modelName=self.modelName ,  
                               n_classes=self.n_classes,timestamp=self.timestamp,
                               exportpath=self.exportpath,groupSize=self.groupSize,
-                              n_iters=2)
+                              n_iters=self.n_iters)
         Training.__Call__(Networks)
+        del(Training)
 
         # Run Testing Mode
         Testing = PredictMode(FILEOBJS=self.TEST_FILEOBJS,modelName=self.modelName,
@@ -316,7 +317,8 @@ class TrainPredictMode (ProgramMode):
                               exportpath=self.exportpath,groupSize=self.groupSize,
                               labels_present=True)
         Testing.__Call__(Networks)
-            
+        del(Testing)
+        
         return self
 
 
