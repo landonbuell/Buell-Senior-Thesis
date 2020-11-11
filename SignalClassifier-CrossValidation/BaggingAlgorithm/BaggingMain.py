@@ -20,8 +20,8 @@ if __name__ == "__main__":
     # SETUP DIRECTORIES
     parentPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier-CrossValidation"
     modelName = "XValCLFB"
-    dataPath = os.path.join(parentPath,"XValCLFB-Output-Data")
-    modelPath = os.path.join(parentPath,"XValCLFB-Model-Data")
+    dataPath = os.path.join(parentPath,modelName+"-Output-Data")
+    modelPath = os.path.join(parentPath,modelName+"-Model-Data")
 
     # MAKE PROGRAM INTIALIZER
     Setup = utils.ProgramSetup(modelName,dataPath,modelPath)

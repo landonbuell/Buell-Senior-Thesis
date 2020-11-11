@@ -118,6 +118,10 @@ class CategoryDictionary :
 
     def __init__(self,localPath,modelName):
         """ Intitialize CategoryDictionary Instance """
+
+        # Need to Implement: method to Track Counts for Each Category
+        # Must be updateable if model is called again
+
         self.localPath = localPath
         self.modelName = modelName
         self.fileName = modelName+"Categories.csv"

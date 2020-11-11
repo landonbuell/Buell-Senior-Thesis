@@ -283,7 +283,6 @@ class TrainPredictMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          groupSize=groupSize)
         
-        self.labelsPresent = labelsPresent  # labels?
         self.n_iters = n_iters              # number of passes over data
         self.testSize = testSize            # train/test size        
         self.SplitObjs()                    # split objs
