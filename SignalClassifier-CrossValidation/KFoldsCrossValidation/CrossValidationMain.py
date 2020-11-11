@@ -21,9 +21,10 @@ if __name__ == "__main__":
     # HARD-CODE VARIABLES FOR DEVELOPMENT
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis'
     read = os.path.join(parent,'SignalClassifier','Target-Data')   
-    export = os.path.join(parent,'SignalClassifier-CrossValidation','XValCLFB-Output-Data')
-    model = os.path.join(parent,'SignalClassifier-CrossValidation','XValCLFB-Model-Data')
-    modelName = "XValCLFB"
+    modelName = "XValCLFC"
+    export = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Output-Data')
+    model = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Model-Data')
+    
 
     scriptPath = os.path.join(parent,'SignalClassifier','ClassifierMain')
     scriptName = "ClassifierMAIN.py"
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     # PRE-PROCESSING FOR PROGRAM
     ProgramSetup = sys_utils.ProgramInitializer([read,export,model],modelName)    
     FILEOBJECTS = ProgramSetup.__Call__()
-    XValSplits = XVal_utils.CrossValidationSplit(FILEOBJECTS,read,10)
+    XValSplits = XVal_utils.CrossValidationSplit(FILEOBJECTS,read,5)
     XValSplits.__Call__()
 
     # Create Train-Test Splits
