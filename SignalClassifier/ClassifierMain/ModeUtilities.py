@@ -56,7 +56,10 @@ class ProgramMode:
     
     def LoopCounter (self,cntr,max,text):
         """ Print Loop Counter for User """
-        print('\t\t('+str(cntr)+'/'+str(max)+')',text)
+        printString = '\t\t('+str(cntr)+'/'+str(max)+')'
+        print(printString,text)
+        del(printString)
+        del(text)
         return None
 
     def ScaleData (self,matrixObj):

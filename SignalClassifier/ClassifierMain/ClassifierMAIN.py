@@ -50,6 +50,7 @@ if __name__ == '__main__':
     # EXECUTE PROGRAM
     del(ProgramSetup)
     del(Args)
+    del(FILEOBJECTS)
 
     ProgramMode.__Call__(NeuralNetwork)      
 
