@@ -762,7 +762,9 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 
 \paragraph*{}A chordophone is a musical instrument that produces sound through the vibration of strings that are stretched between two fixed points \textcolor{red}{citation needed}. From our data set, banjos, basses, cellos, guitars, mandolins, violins, and violas are all examples of chordophones.
 
-\paragraph*{}We can model a chordophone simply as having a string of length $L$, with a constant linear mass density, $\mu$, subject to a tension force $F_T$. The string is flexible, and free to vibrate in a single dimension. We describe the state of string over space and time with a function $U(x,t)$. The behavior of the string can be  modeled by D'Alembert's 1-dimensional wave equation \cite{Haberman,Taylor}:
+\subsubsection{The 1-Dimension Vibrating String}
+
+\paragraph*{}We can model a chordophone as having a string of length $L$, with a constant linear mass density, $\mu$, subject to a tension force $F_T$. The string is flexible, and free to vibrate in a single dimension. We describe the state of string over space and time with a function $U(x,t)$. The behavior of the string can be  modeled by D'Alembert's 1-dimensional wave equation \cite{Haberman,Taylor}:
 \begin{equation}
 \label{eqn-1DWaveEqn}
 \frac{\partial^2 U}{\partial t^2} = v^2 \frac{\partial^2 U}{\partial x^2}
@@ -786,7 +788,7 @@ Depending on the exact nature of the source instrument, $f(x)$ and $g(x)$ can ta
 \begin{equation}
 U(x,t) = \psi(x)h(t)
 \end{equation}
-Because of the linear nature of the wave equation, Eq. (\ref{eqn-1DWaveEqn}), a linear combination of solutions is also a solution, so we can express $U(x,t)$ as \cite{Haberman}:
+From this separation, we find that $\psi(x)$ and $h(t)$ each are composed of a linear combination of orthogonal trigonometric functions. Applying the boundary and initial conditions to the system allows for a linear combination of solutions \cite{Haberman}:
 \begin{equation}
 U(x,t) = 
 \sum_{n=1}^{\infty} \bigg( A_n \sin\big(\frac{n\pi x}{L}\big)\cos\big(\frac{n\pi vt}{L}\big)
@@ -808,7 +810,13 @@ Where $A_n$ and $B_n$ are given by:
 \end{array} 
 \end{equation} 
 
-\paragraph*{}Examining the solutions for $U(x,t)$ indicates that under the right initial conditions, chordophones vibrate with all harmonics present.  
+\subsubsection{Consequences of the Wave Equation}
+
+\paragraph*{}The solution that we have derived from the wave equation shows that the behavior of $U(x,t)$ is greatly dependent on the nature of the string's initial shape, $f(x)$, when struck. In the case of picked or plucked instruments, the initial shape of $f(x)$ would be something like a "ramp function":
+\begin{equation}
+\label{eqn-RampFunc}
+f(x) = 
+\end{equation}
 
 % ================================================================
 
@@ -1268,14 +1276,14 @@ FCM = \sum_{i=0}^{k'} \frac{1}{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \section{Evaluating Performance}
 \label{sec-PerfEval}
 
-\paragraph*{}Before making predictions on unlabeled data such as the Chaotic Synthesizers, we must determine that our model performs reasonably on data that it has never interacted with. The most common practice is to divide a full data set into a subset of \textit{training} samples, and \textit{testing} samples. As the names imply, the training subset is used to fit the model, and we use the labeled testing data set to evaluate. The exact ratio of sample volume between these subsets varies depending on the task \cite{Goodfellow,Geron2,Mitchell}. Since the testing data is labeled, we can compare the classifiers predictions to the \textit{ground truth} labels.
+\paragraph*{}Before making predictions on unlabeled data such as the Chaotic Synthesizers, we must confirm that our model performs reasonably well on data that it has never interacted with. The most common practice is to divide a full data set into a subset of \textit{training} samples, and \textit{testing} samples. As the names imply, the training subset is used to fit the model, and we use the labeled testing data set to evaluate. The exact ratio of sample volume between these subsets varies depending on the task \cite{Goodfellow,Geron2,Mitchell}. Since the testing data is labeled, we can compare the classifiers predictions to the \textit{ground truth} labels.
 
 % ================================================================
 
 \subsection{Cross Validation}
 \label{subsec-XValidation}
 
-\paragraph*{}Performance evaluations are most commonly implemented in the form of \textit{$K$-Fold Cross-Validation} (Also called X-val). This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ are used to train the model. This belongs a larger family of statisical validations called \textit{Resampling methods} \cite{James}. Below, we detail pseudo-code for a $K$-Fold Cross Validation algorithm.
+\paragraph*{}Performance evaluations are commonly implemented in the form of \textit{$K$-Fold Cross-Validation} (Also called X-val) \cite{Geron,Goodfellow}. This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ remaining subsets are used to train the model. This belongs a larger family of statistical validations called \textit{Resampling methods} \cite{James}. Below, we detail pseudo-code for a $K$-Fold Cross Validation algorithm.
 
 \begin{algorithm}[H]
 \caption{A $K$-Fold Cross Validation program.}
@@ -1283,7 +1291,7 @@ FCM = \sum_{i=0}^{k'} \frac{1}{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 
 \begin{algorithmic}
 \REQUIRE Untrained Network or related learning algorithm, $F^*$
-\REQUIRE A full data set of $N$ samples. $X^{(i)}$, $i \in {0,1,2,...,N-1}$
+\REQUIRE A full labeled data set of $N$ samples. $X^{(i)}$, $i \in {0,1,2,...,N-1}$
 \REQUIRE Number of splits in Cross validation, $K$
 \REQUIRE Performance metric function(s), $P$
 
@@ -1294,9 +1302,9 @@ Performance History $\leftarrow \{\}$
 \FOR {$j = 0,1,2,3,...,K-2,K-1$}
 	\item Reset all parameters in $F^*$ to a random "untrained" state
 	\item Set aside testing data subset
-	\item $X_{test} = x_{j}$
+	\item $X_{test} \leftarrow x_{j}$
 	\item Concatenate the remaining subsets into training data set
-	\item $X_{train} = x_{i \neq j}$
+	\item $X_{train} =\leftarrow x_{i \neq j}$
 	\item Train the model, $F^*$ with the $X_{train}$ data set
 	\item Evaluate the trained model with the $X_{train}$ dataset, and compute value of metric function(s) $P$
 	\item Store Performance $P$ in Performance History array
@@ -1307,20 +1315,19 @@ Compare performance results, and adjust model, parameters as needed, and repeat 
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}By using cross-validation, we gain a deeper understanding of the model to ensure that the model can be consistently trained. This also helps counteract the possibility that the model got very lucky or unlucky with a particular set of initial conditions \cite{Geron,James}.
+\paragraph*{}The output of cross validation is $K$ models that are all trained and evaluated on overlapping subsets of the full data. Each model $F^*$, shows one possible outcome of training the network. It has a corresponding set of learned parameters $\Theta^*$, as defined in Eq. (\ref{eqn-Theta}) that it uses to make any predictions. 
 
 % ================================================================
 
 \subsection{Performance Metrics}
 
-\paragraph*{}In the case of the multi-category classifier, it is also important that we choose the appropriate metrics to evaluate our performance. While the neural network itself uses the cost function as it's sole performance metric to optimize, we also require a set of more human-readable functions. We introduce a set of functions and metrics than enable a more tangible interpretation of model performance. 
-To evaluate a performance metric, we require a set of samples with ground truth labels, $y$, and a model's prediction for those labels, $y^*$.
+\paragraph*{}In the case of the multi-category classifier, it is important that we choose the appropriate performance metrics to confirm that the network is completeing it's assigned as as expected \cite{Geron}. While the neural network itself uses the cost function as it's sole objective to optimize, we also require a set of more human-readable functions. For example, a loss score of $1.075$ over a given subset of previously unseen samples provides us with no real information as to how well the network is performing at it's designed task.  In this section, we introduce a set of functions and metrics than enable a more tangible interpretation of the model's performance. To evaluate any performance metric, we require a set of samples with ground truth labels, $y$, and a model's prediction for those labels, $y^*$ \cite{Goodfellow,James}.
 
 % ================================
 
 \subsubsection{Confusion Matrix}
 
-\paragraph*{}The confusion matrix (also called a confusion table) is a very quick, often graphical model that can be used to show how a model performs over a subset of predictions. The general idea of this object is count the number of times class $i$ is predicted to be in class $j$, and vice-versa \cite{Geron}. If we see that these classes are being repeatedly \textit{confused} in the model's prediction process, then we must modify the model or features to account for it. 
+\paragraph*{}The confusion matrix (also called a confusion table) is a very quick, often graphical model that can be used to show how a classifier model performs over a subset of predictions. The general idea of this object is count the number of times class $i$ is predicted to be in class $j$, and vice-versa \cite{Geron}. If we see that these classes are being repeatedly \textit{confused} in the model's prediction process, then we can modify the model or features to account for it. 
 
 \paragraph*{}For a $k$-classes classifier, a confusion matrix will have shape $k \times k$, and every element is a non-negative integer. Each row represents the "ground truth" or  labeled class, and each column represents a predicted class. Thus for a confusion matrix, $C$, we can say that:
 \begin{quote}
@@ -1334,7 +1341,7 @@ belong to class $i$, and were predicted to be in class $j$
 Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indicates an incorrect prediction. A confusion matrix with relatively large values in main diagonal indicates a model that consistently predicts correct labels \cite{Geron}. 
 
 \begin{figure}[H]
-\label{fig-ConfMat}
+
 	\begin{subfigure}[h]{0.45\textwidth}
 	\begin{center}
 	\textcolor{red}{Images of Confusion Matrices Go Here!} 
@@ -1356,68 +1363,88 @@ Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indi
 	\end{center}
 	\end{subfigure}
 \caption{Example Confusion Matrices for $k$-classes tasks}
+\label{fig-ConfMat}
 \end{figure}
  
-\paragraph*{}We can also use a confusion matrix to define four useful quantities relating a prediction to it's label. Suppose a belongs to class $q$, with the prediction given by, $y^*$ and a label is given by, $y$:
-\begin{enumerate}
-\item \textbf{True-Positive}\\
-A sample is \textit{TP} if $y^* = q$ and $y = q$
-\item \textbf{True-Negative}\\
-A sample is \textit{TN} if $y^* \neq q$ and $y \neq q$ 
-\item \textbf{False-Positive}\\
-A sample is \textit{FP} if $y^* = q$ and $y \neq q$ 
-\item \textbf{False-Negative}\\
-A sample is \textit{FN} if $y^* \neq q$ and $y = q$
-\end{enumerate}
-\textcolor{red}{Check this!}
+\paragraph*{}The confusion matrix can be a cumbersome, so often it is useful to express the performance in terms of more concise quantities. For this we use \textit{accuracy score}, \textit{precision score}, and \textit{recall score}.
 
 % ================================
 
 \subsubsection{Precision Score}
 
-\paragraph*{}Precision score (also called \textit{specificity}) offers a more concise performance metric than a confusion metric. For a classifier with $k = 2$ unique classes, we define the precision score of a model as:
+\paragraph*{}Precision score (also called \textit{specificity} or \textit{positive predictive value}) is the ratio of chosen elements to all relevant elements. This bounds precision to the range $(0,1)$, with a higher value more desirable. For a classifier with $k = 2$ unique classes, we define the precision score of a model as:
 \begin{equation}
 \label{eqn-BinaryPrecision}
 \text{Prec} = \frac{TP}{TP + FP}
 \end{equation}
-Where $TP$ is the number of \textit{true-positive}, and $FP$ is the number of false-positives predictions. For a $k$-classes confusion matrix, $C$, the precision score is given by the entry $C_{j,j}$ divided by the sum of column $j$:
+Where $TP$ is the number of \textit{true-positive}, and $FP$ is the number of false-positive predictions. For a $k$-classes confusion matrix, $C$, the precision score of a class $j$, is given by the entry $C_{j,j}$ divided by the sum of row $j$:
 \begin{equation}
 \label{eqn-KPrecision}
-\text{Prec}_j = \frac{C_{j,j}}{\sum_{i=0}^{k-1}C_{i,j}}
+\text{Prec}_j = \frac{C_{j,j}}{\sum_{i=0}^{k-1}C_{j,i}}
 \end{equation}
-For multi-class problems, the precision score is usually used as an average over all classes. 
+For multi-class problems, we report the precision score as averaged over all $k$ classes. 
 
-\paragraph*{}
-\textcolor{red}{Physical Significance of Precision}
+\paragraph*{}The quantity $TP + FP$ is a measurement of the total number chosen items in that class. Thus, the quantity precision gives the ratio of correct selections to all selections that were made. More intuitively, we can describe precision as the fraction of selected items that are relevant to the problem at hand \cite{Geron}. 
 
 % ================================
 
 \subsubsection{Recall Score}
 
-\paragraph*{}Recall score (also called \textit{sensitivity}) also offers a more concise performance metric than a confusion metric. For a classifier with $k = 2$ unique classes, we define the recall score of a model as:
+\paragraph*{}Recall score (also called \textit{sensitivity} or \textit{true positive rate}) also offers a more concise performance metric than a confusion metric. For a classifier with $k = 2$ unique classes, we define the recall score of a model as:
 \begin{equation}
 \label{eqn-BinaryRecall}
 \text{Recall} = \frac{TP}{TP + FN}
 \end{equation}
-Where $TP$ is the number of \textit{true-positive}, and $FN$ is the number of false-negative predictions. For a $k$-classes confusion matrix, $C$, the precision score is given by the entry $C_{j,j}$ divided by the sum of row $j$:
+Where $TP$ is the number of \textit{true-positive}, and $FN$ is the number of \textit{false-negative} predictions. For a $k$-classes confusion matrix, $C$, the precision score of a class $j$ is given by the entry $C_{j,j}$ divided by the sum of column $j$:
 \begin{equation}
 \label{eqn-KRecall}
-\text{Recall}j = \frac{C_{j,j}}{\sum_{i=0}^{k-1}C_{j,i}}
+\text{Recall}_j = \frac{C_{j,j}}{\sum_{i=0}^{k-1}C_{i,j}}
 \end{equation}
-For multi-class problems, the recall score is also used as an average over all classes. 
+For multi-class problems, we report the precision score as averaged over all $k$ classes.
 
-\paragraph*{}
-\textcolor{red}{Physical Significance of Recall}
+\paragraph*{}The quantity $TP + FN$ is a measurement of the total number items in that class, independent of selection. Thus, the quantity recall gives the ratio of correct selections to all selectes that were made. More intuitively, we can describe recall as the fraction of relevant items that were selected \cite{Geron}. 
 
 % ================================
 
-\
+\subsubsection{Accuracy Score}
+
+\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of 
 
 % ================================================================
 
 \subsection{Tracking Metrics over a Period of Training}
 \label{subsec-TrainingMetrics}
 
+\paragraph*{}A period of training is characterized by fitting the parameters $\Theta$ of a model $F^*$ to a set of data $X$ and corresponding labels $Y$ \cite{Goodfellow,Virtanen}. This is done by passing subsets of data, called \textit{mini-batches}, into the neural network for training. The average cost for the mini-batch is then used to compute the gradient vector $\nabla_{\Theta}J$, and subsequently update the model according to the optimizer chosen \cite{Geron,Goodfellow}. 
+
+\paragraph{}We execute computation in batches to reduce the amount of memory required for the operation. Pushing a full data set through a model at one time would require more RAM than is usually available , thus repeated subset of data tend to avoid memory exhaustion errors. Additionally, every mini-batch used equates to one step in the optimizer update rule \cite{Goodfellow}. Thus, a single pass over a full data set allows for multiple iterations of the optimizer to reduce the value of the cost function. This can be combined with multiple passes over the full data set, called \textit{epochs} \cite{James,Loy}.
+
+\paragraph*{}Large mini-batches require lots of RAM, but prevent the model from being over-fit to to any one sample, or class of samples. Small mini-batches require less RAM, but often may bias the optimizer to over-fit the given samples, and make optimization unstable \cite{Geron,James}. To ensure that the model is optimizing properly, we can track how the metrics behave over a training period. This allows us to monitor the \textit{rate of convergence} of the model. If the cost function is dropping to quickly or slowly, this may indicate that the optimizer learning rate is too high or too low. This may lead to an over-fit or under-fit model, or indicate an inappropriate set of feature is being used \cite{Geron,Goodfellow}. In Some cases, it can be used to initiate \textit{early-stopping}, which halts training when a set of parameters are met. 
+
+\paragraph*{}Given the high dimensionality of this model's parameter space,the large volume of sound files, and the large amount of RAM required to store the spectrogram matrix and the feature vector for each sample, we do not directly load the full data set into memory at once. Instead, we produce a large subset of the full data set of $256$ samples which we dub a \textit{mega-batch}. From this mega-batch, we produce the two deign matrices required for input, and load the corresponding labels. We then use a subset of this group as the \textit{mini-batches} for training. Each mini-batch contains $32$ samples. Once all mini-batches are fit, we discard the design matrices in the mega batch ans repeat for the next $256$ samples. 
+
+\paragraph*{}Along each training step, we record the precision, recall, and loss scores. Our program stores these values locally in a \textit{training-history} file, which we can examine after the program completes. Below, we visualize the value of each metric score at each training epoch. 
+
+\begin{figure}[h]
+\begin{center}
+%\includegraphics[scale=0.2]{•}
+\textcolor{red}{Loss Score Goes Here}
+\end{center}
+\caption{The loss function score decreases with each training step, indicating that optimization is performing correctly}
+\label{fig-LossScore}
+\end{figure}
+
+similarly, we can visualize the precision score and recall score at each training step.
+
+\begin{figure}[h]
+\begin{center}
+%\includegraphics[scale=0.2]{•}
+\textcolor{red}{Precision Score Goes Here}
+\textcolor{red}{Recall Score Goes Here}
+\end{center}
+\caption{The precision score (a) and recall score (b) increases with each training step}
+\label{fig-PrecisionRecallScores}
+\end{figure}
 
 % ================================================================
 
