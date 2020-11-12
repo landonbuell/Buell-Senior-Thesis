@@ -458,7 +458,7 @@ For our chosen architecture, ReLU is applied to the activations in every single 
 \begin{quote}
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
 \end{quote}
-Without any human intervention, a model must update itself to improve it's performance at a give task a new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
+Without any direct human intervention, a model must update itself to improve it's performance at a give task a new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
 
 \paragraph*{}We consider the set of parameters $\Theta$ as a concatenation of each applicable layer's weighting matrix and bias vector such that:
 \begin{equation}
@@ -467,40 +467,50 @@ Without any human intervention, a model must update itself to improve it's perfo
 W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)},
 \big\}
 \end{equation}
-Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function. Note that $W^{(l)}$ or $b^{(l)}$, itself is a parameter to train, but rather the entries that make up those structures must be trained. Certain layers, such as pooling layers (\ref{subsubsec-2DPooling}), concatenation layers (\ref{subsubsec-1DConcat}), or flattening layers (\ref{subsubsec-1DFlatten}) do not contain any trainable parameters. Similarly, activation functions themselves are static and are not included in the list of parameters.
+Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function, thus indirectly influences the final layer activations. Note that $W^{(l)}$ or $b^{(l)}$, themselves are not parameters, but arrays of parameters to be trained. Certain layers, such as pooling layers (\ref{subsubsec-2DPooling}), concatenation layers (\ref{subsubsec-1DConcat}), or flattening layers (\ref{subsubsec-1DFlatten}) do not contain any trainable parameters. Similarly, activation functions themselves are static and are not included in the list of parameters.
 
-\paragraph*{}In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}.
+\paragraph*{}In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers.
 
 \subsubsection{The Cost Function}
 
-\paragraph*{}Suppose we pass a training sample, given by the feature-vector $x^{(0)}$, with an expected outcome given by the vector $y$, into the neural network. After the network finishes processing, it's output activations are given by the vector $x^{(L-1)}$, also noted at $y^*$. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
+\paragraph*{}Suppose we pass a training sample, given by the feature-vector $x^{(0)}$, with an expected outcome given by the one-hot-encoded vector $y$, into the neural network. After the network finishes processing, it's output activations are given by the vector $x^{(L-1)}$, also noted as $y^*$. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
 
-\paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the network \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single value, usually a floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
+\paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the model \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
 
-\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use the \textit{Categorical Crossentropy} (CXE) cost function. For a sample labeled by the one-hot-encoded vector $y$ and corresponding prediction vector $y^*$, the CXE cost is given by \cite{Goodfellow,Virtanen}:
+\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use the \textit{Categorical Crossentropy} (CXE) cost function. For a sample labeled by the one-hot-encoded vector $y$ and corresponding prediction vector $y^*$, the CXE cost for a single sample is given by \cite{Goodfellow,Virtanen}:
 \begin{equation}
 \label{eqn-CXELoss}
-\text{CXE}\big[ y^* , y \big] = - \sum_{i=0}^{k-1} y_i \log_{10}(y^*_i) 
+\text{CXE}\big[ y , y^* \big] = - \sum_{i=0}^{k-1} y_i \log_{10}(y^*_i) 
+\end{equation}
+Thus, the average loss over a mini-batch of $b$ samples is given:
+\begin{equation}
+\label{eqn-CXELossAvg}
+\big\langle \text{CXE}\big[ y , y^* \big]\big\rangle = 
+- \frac{1}{b}\sum_{n=0}^{b-1}\sum_{i=0}^{k-1} y_i^{(n)} \log_{10}(y^{*(n)}_i) 
 \end{equation}
 
-\paragraph*{}Suppose that a given sample belongs to class $j$ in a $k$-classes classifier. Since the label vector, $y$ is one-hot-encoded, all entries are zero except $y_{j} = 1$. Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms. Similarly, the network output $y^*$ has only values between $0$ and $1$, due to the softmax activation function (\ref{subsubsec-Softmax}) in the output layer. Taking the logarithm results a negative quantity. The smaller the value for $y^*_j$, the larger the difference between corresponding indicies and the larger the mangitude of the cost. We multiply the sum by $-1$ to make all values positive.  
+\paragraph*{}Suppose that a given sample belongs to class $j$ in a $k$-classes classifier. Since the label vector, $y$ is one-hot-encoded, all entries are zero except $y_{j} = 1$.
+\begin{equation}
+y = \big[y_0,y_1, ... , y_{j} , ..., y_{k-1} \big]^T  = 
+\big[0,0, ... , 1 , ...,0 \big]^T
+\end{equation}
+Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms. The only non-zero term is the produce of $y_j$ and $\log_{10}(y^*_j)$. Since the vector $y^*$ has been subject to the softmax activation function, we must have $y^*_j \in [0,1]$. This means that taking the log of this value returns a negative number. Multiplying by negative number returns a high loss when the activation of $y^*_j$ is low and a low cost when $y^*_j \approx 1$. We visualize this relationship in Fig. (\ref{fig-CXELoss}):
 
 \begin{figure}[h]
 \begin{center}
-\textcolor{red}{Plot of CXE goes here}
-%\includegraphics[scale=0.2]{•}
+\includegraphics[scale=0.25]{../Figures/CXELoss}
 \end{center}
 \caption{Plot of how $y^*_{j}$ affects the output values of the CXE cost function}
 \label{fig-CXELoss}
 \end{figure}
 
-\paragraph*{}When $y^*_j \approx y_j$, we compute a small cost value, and when $y^*_j << y_j$ we find a large cost value. We visualize this relationship in Fig. (\ref{fig-CXELoss}). In practice, this operation is performed over a batch of samples and an average is computed and used a \textit{batch loss} \cite{Goodfellow}.
+\paragraph*{}By optimizing the parameters $\Theta$ in the network model, we allow for the output of a consistently low cost function to be produced across all samples in the data set.
 
 % ================================
 
 \subsubsection{Gradient Based Learning}
 
-\paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem.
+\paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized} \cite{James,Loy}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem \cite{Goodfellow}.
 
 \paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow described this \cite{Goodfellow}:
 \begin{quote}
@@ -556,7 +566,7 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}After (i) computing the gradient, we can scale is by a desired learning rate, $\alpha$ and (ii) add it element-wise to the existing elements in $\Theta$. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in Eq. (\ref{eqn-GradientLearning}).
+\paragraph*{}After (i) computing the gradient, we can scale it by a desired learning rate, $\alpha$ and (ii) add the gradient vector element-wise to the existing elements in $\Theta$ object. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values across a data set \cite{Geron}. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in Eq. (\ref{eqn-GradientLearning}).
 \begin{equation}
 \label{eqn-GradientLearning}
 \Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
@@ -566,19 +576,20 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 
 \subsubsection{The Optimizer}
 
-\textcolor{blue}{I need to clean this sub-subsection up as well. The optimizer needs a better introduction and justification}
+\paragraph*{}Standard gradient-based learning, as given by the parameter update rule in Eq. (\ref{eqn-GradientLearning}) is cumbersome and often prone to numerical error. This can include phenomena such as \textit{vanishing gradients}, \textit{exploding gradients}, \textit{poor conditioning}, or unstable solution-spaces. \cite{Geron,Goodfellow,Loy}. To combat this, we require a more stable and robust optimizer than the bare gradient descent method. Many gradient-based optimizers have been developed over the years to mitigate some f these vulnerabilities.
 
-\paragraph*{}Standard gradient-based learning, as given by the parameter update rule in Eq. (\ref{eqn-GradientLearning}) is cumbersome and often prone to numerical error. This includes phenomena where very small changes can compound and produce undesired effects such as \textit{vanishing} or \textit{exploding} gradients \cite{Geron,Goodfellow,Loy}. To combat this, many gradient-based optimizers have been developed over the years to mitigate some f these vulnerabilities.
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost.
 
-\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful variant of algorithms with an adaptive learning rate. It tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost. For a given iteration $(i)$, The ADAM update is given:
+\paragraph*{}This means that as the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. 
+Note that the upper index $(i)$ or $(i-1)$F gives an iteration index, while the upper iteration $i$ means to raise a value to the power of the iteration. For a given step $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
 s^{(i)} &= \rho_1 s^{(i-1)} + (1 - \rho_1) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
 r^{(i)} &= \rho_2 r^{(i-1)} + (1 - \rho_2) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \odot
 							\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
-s'^{(i)} &= \frac{s^{(i)}}{1-\rho_1^t} \\
-r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^t} \\
+s'^{(i)} &= \frac{s^{(i)}}{1-\rho_1^i} \\
+r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^i} \\
 \Theta^{(i)} &= \Theta^{(i-1)} + (-\alpha)\frac{s'^{(i)}}{\sqrt{r'^{(i)}}+\delta} \\
 \end{split}
 \end{equation}
@@ -624,9 +635,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \subsection{Chosen Model Architecture}
 \label{sec-Architecture}
 
-\textcolor{red}{I need to include a bit more detail \& citations on the "hybrid / multimodal" nature of this need works. Updates to follow}
-
-\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, as well as a complementary architecture, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays \textcolor{blue}{See Section on Features}, and constructed a neural network architecture to coincide with these features. From these two input arrays, one being a matrix and the other being a column-vector, we have produced a \textit{multimodal neural network}, that process the two inputs, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs \textcolor{blue}{citation for multimodal networks}.
+\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, as well as a complementary architecture, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays, explore in sec. (\ref{sec-Features}) and constructed a neural network architecture to coincide with these features. From each sample, we produce two input arrays, one being a matrix and the other being a column-vector, and present those to a  \textit{multimodal neural network} \cite{Virtanen}. This type of hybrid network accepts one array at each of two input layers, passes them through a series of non-overlapping layers, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs \textcolor{blue}{citation for multimodal networks}.
 
 \paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in Fig. (\ref{fig-NetworkArchitecture}).
 
