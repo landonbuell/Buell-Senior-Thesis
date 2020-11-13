@@ -221,9 +221,15 @@ class FrequencySeriesFeatures (BaseFeatures):
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
 
         # Time Axis, Frequency Axis
-        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
+        self.SetFrequencyRange(0,12000)
+        self.hertz,self.frequencyPoints = self.FrequencyAxis()
         self.mels = self.HertzToMel(self.hertz)
         self.t = np.arange(0,self.n_frames,1)   
+
+    def SetFrequencyRange(self,low=0,high=6000):
+        """ Set Frequency Axis Bounds """
+        self.lowHz,self.highHz = low,high
+        return self
 
     def __Call__(self):
         """
@@ -239,27 +245,24 @@ class FrequencySeriesFeatures (BaseFeatures):
 
         # Add Elements to Feature vector
         featureVector = np.array([])
-        MFBEs = self.MelFilterBankEnergies()
-        #featureVector = np.append(featureVector,MFBEs)     # don't use filter bank energies?
+        MFBEs = self.MelFilterBankEnergies(n_filters=16)
         MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
 
         featureVector = np.append(featureVector,MFCCs)
         featureVector = np.append(featureVector,self.CenterOfMass())
         return featureVector
 
-    def FrequencyAxis (self,low=0,high=6000):
+    def FrequencyAxis (self):
         """
         Compute Frequenxy Axis
         --------------------------------
-        low (float) : Low value for frequency slice
-        high (float) : High value for frequency bound
+        * no args
         --------------------------------
         Return frequency axis array between bounds, f
             and appropriate index, pts
         """
-        self.lowHz,self.highHz = low,high                   # set low/high bnds in Hz
         f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)# comput freq space
-        pts = np.where((f_space>=low)&(f_space<=high))[0]   # get slices
+        pts = np.where((f_space>=self.lowHz)&(f_space<=self.highHz))[0]   # get slices
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
 

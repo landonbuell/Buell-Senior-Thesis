@@ -34,11 +34,11 @@ if __name__ == '__main__':
     if ProgramSetup.programMode == 'train':
         ProgramMode = mode_utils.TrainMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
-                                            groupSize=256,n_iters=4)
+                                            groupSize=256,n_iters=2)
     elif ProgramSetup.programMode == 'train-predict':     
         ProgramMode =  mode_utils.TrainPredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,
-                                            groupSize=256,n_iters=4,testSize=0.1)
+                                            groupSize=256,n_iters=2,testSize=0.1)
     elif ProgramSetup.programMode == 'predict':
         ProgramMode = mode_utils.PredictMode(FILEOBJS=FILEOBJECTS,modelName=modelName,
                                             n_classes=N_classes,timestamp=timeStart,exportpath=exportPath,

@@ -57,9 +57,9 @@ class ProgramMode:
 
     def SetScaler(self,scalerInstance):
         """ Set Pre-existing Instance of a Sklearn Scaler to this Instance """
-        self.Scaler = scalerInstance()
+        self.Scaler = scalerInstance
         self.useNewScaler = False           # we have an exisitng scaler obj, use it
-        return self.Scaler()
+        return self.Scaler
     
     def LoopCounter (self,cntr,max,text):
         """ Print Loop Counter for User """
@@ -86,7 +86,7 @@ class ProgramMode:
         # Create Feature vector for MLP Branch
         timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  # collect time-domain features  
         featureVector.AddFeatures(timeFeatures.__Call__())              # and time-domain features
-        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal)
+        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal,n_frames=128)
         featureVector.AddFeatures(freqFeatures.__Call__())              # add frequency-domain features
             
         # Create Spectrogram Matrix for CNN Branch
@@ -117,7 +117,7 @@ class ProgramMode:
         if self.useNewScaler == True:
             X2 = self.ScaleData(X2,True)    # Fit & Scale
         else:
-            X2 = self.ScaleData(X1,False)   # Scale, but don't fit
+            X2 = self.ScaleData(X2,False)   # Scale, but don't fit
 
         return (X1,X2)      # return 2 Design matricies & target matrix
 
