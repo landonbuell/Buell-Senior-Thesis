@@ -118,21 +118,18 @@ class CategoryDictionary :
 
     def __init__(self,localPath,modelName):
         """ Intitialize CategoryDictionary Instance """
-
-        # Need to Implement: method to Track Counts for Each Category
-        # Must be updateable if model is called again
-
         self.localPath = localPath
         self.modelName = modelName
         self.fileName = modelName+"Categories.csv"
         self.filePath = os.path.join(self.localPath,self.fileName)
+        self.nClasses = None
 
     def __Call__(self,newModel,fileObjs):
         """ Run Category Encode / Decode Dictionary """
         if newModel == True:        
             # A new Model is created, Overwrite existing File
             print("\tBuilding new Encode/Decode Dictionary...")
-            self.encoder,self.decoder = self.BuildCategories(fileObjs)
+            self.encoder,self.decoder = self.BuildCategories(fileObjs)    
             self.ExportCategories()
         else:
             # Check if the encoder / Decoder Exists:
@@ -140,10 +137,11 @@ class CategoryDictionary :
                 print("\tFound Encode/Decode Dictionary")
                 # the file exists, load it as enc/dec dict
                 self.encoder,self.decoder = self.LoadCategories()
+                self.nClasses = max(self.encoder.values()) + 1  # get number of classes
             else:
                 # File does not exists, make a new Dictionary
                 print("\tCould not find Encode/Decode Dictionary, building new")
-                self.encoder,self.decoder = self.BuildCategories(fileObjs)
+                self.encoder,self.decoder = self.BuildCategories(fileObjs)    
                 self.ExportCategories()
         return self
 
@@ -153,6 +151,8 @@ class CategoryDictionary :
         encoder = {}
         rawData = pd.read_csv(self.filePath)
         Ints,Strs = rawData.iloc[:,0],rawData.iloc[:,1]
+        cnts = rawData,iloc[:,2]
+        self.nClasses = len(cnts.to_numpy())
         for Int,Str in zip(Ints,Strs):      # iterate by each
             encoder.update({str(Str):int(Int)})
             decoder.update({int(Int):str(Str)})
@@ -163,6 +163,7 @@ class CategoryDictionary :
         decodeList = sorted(self.decoder.items())
         cols = ["Target Int","Target Str"]
         decodeFrame = pd.DataFrame(data=decodeList,columns=cols)
+        decodeFrame["Counts"] = self.classCounter
         decodeFrame.to_csv(self.filePath,index=False)
         return self
 
@@ -172,9 +173,15 @@ class CategoryDictionary :
         decoder = {}            # empty dec dict
         targetInts = [x.targetInt for x in fileObjs]
         targetStrs = [x.targetStr for x in fileObjs]
+       
+        self.nClasses = np.max(targetInts) + 1
+        self.classCounter = np.zeros(shape=(self.nClasses),dtype=int)
+
         for x,y in zip(targetInts,targetStrs):
             if x not in encoder.keys():     
                 decoder.update({x:y})   # add int : str pair
+            self.classCounter[x] += 1   # add to cntr
+
         # Organize in numerical order
         sortedItems = sorted(decoder.items())
         encoder = {}      # reset encoder
@@ -182,7 +189,7 @@ class CategoryDictionary :
             encoder.update({targetStr:targetInt})
             decoder.update({targetInt:targetStr})
         return encoder,decoder
-             
+
             #### PROGRAM PROCESSING CLASS ####
 
 class ArgumentValidator :
@@ -327,17 +334,7 @@ class ProgramInitializer:
         # Construct Encoder / Decoder Dictionaries
         self.categories = CategoryDictionary(self.modelPath,self.modelName)
         self.categories.__Call__(self.newModel,fileObjects)
-
-        # Find Number of Classes
-        if self.programMode in ['train','train-predict']:
-            try:
-                decodeKeys = [i for i in self.GetDecoder.keys()]
-                self.n_classes = np.max(decodeKeys) + 1
-            except:
-                print("\n\tERROR! - Something when wrong with the encoder dictionary!")
-                raise ValueError()
-        else:
-            self.n_classes = None 
+        self.n_classes = self.categories.nClasses
 
         # Final Bits
         self.StartupMesseges           # Messages to User

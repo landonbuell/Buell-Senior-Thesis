@@ -2,19 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>eb19d509-5f93-4509-8812-2c5ed9db81fb</ProjectGuid>
+    <ProjectGuid>e5bd9032-1b3e-48c2-8401-92b1af0ca5be</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ClassifierMAIN.py</StartupFile>
+    <StartupFile>SpectrogramFiguresMain.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ClassifierMain</Name>
-    <RootNamespace>ClassifierMain</RootNamespace>
-    <InterpreterId>Global|PythonCore|3.8</InterpreterId>
-    <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>"C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\Target-Data" "C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\Output-Data" "C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\Model-Data" "train-predict" "TestFCLF" True</CommandLineArguments>
-    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <Name>SpectrogramFigures</Name>
+    <RootNamespace>SpectrogramFigures</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,17 +22,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FeatureUtilities.py" />
-    <Compile Include="ClassifierMAIN.py" />
-    <Compile Include="MachineLearningUtilities.py" />
     <Compile Include="MathUtilities.py" />
-    <Compile Include="ModeUtilities.py" />
-    <Compile Include="NeuralNetworkUtilities.py" />
+    <Compile Include="SystemUtilities.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlottingUtilities.py" />
-    <Compile Include="SystemUtilities.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|PythonCore|3.8" />
-    <InterpreterReference Include="Global|VisualStudio|ClassifierPyEnv (Python 3.8 (64-bit))" />
+    <Compile Include="SpectrogramFiguresMain.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
