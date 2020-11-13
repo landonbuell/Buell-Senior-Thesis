@@ -143,7 +143,7 @@ class TrainMode (ProgramMode):
         super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,n_classes=n_classes,
                          timestamp=timestamp,exportpath=exportpath,groupSize=groupSize)
 
-        outfile = self.modelName+"@"+self.timestamp+"@TRAINING-HISTORY.csv"
+        self.outfile = self.modelName+"@"+self.timestamp+"@TRAINING-HISTORY.csv"
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
@@ -221,8 +221,8 @@ class PredictMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          groupSize=groupSize)
 
-        outfile = self.modelName+"@"+self.timestamp+"@PREDICTIONS.csv"
-        self.exportpath = os.path.join(self.exportpath,outfile)
+        self.outfile = self.modelName+"@"+self.timestamp+"@PREDICTIONS.csv"
+        self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold
         self.useNewScaler = True
