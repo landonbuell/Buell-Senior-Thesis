@@ -108,7 +108,7 @@ class ProgramMode:
 
         # Add Samples to Design Matricies
         for i,FILEOBJ in enumerate(FILES):
-            self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
+            #self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
             (x1,x2) = self.CollectFeatures(FILEOBJ)         # collect features
             X1.AddSample(x1,i)          # add to CNN matrix
             X2.AddSample(x2,i)          # add to MLP matrix
@@ -143,7 +143,7 @@ class TrainMode (ProgramMode):
         super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,n_classes=n_classes,
                          timestamp=timestamp,exportpath=exportpath,groupSize=groupSize)
 
-        self.outfile = self.modelName+'@TRAINING-HISTORY@'+self.timestamp+'.csv'
+        outfile = self.modelName+"@"+self.timestamp+"@TRAINING-HISTORY.csv"
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
@@ -221,7 +221,7 @@ class PredictMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          groupSize=groupSize)
 
-        outfile = self.modelName+'@PREDICTIONS@'+self.timestamp+'.csv'
+        outfile = self.modelName+"@"+self.timestamp+"@PREDICTIONS.csv"
         self.exportpath = os.path.join(self.exportpath,outfile)
         self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold

@@ -163,7 +163,7 @@ class CategoryDictionary :
         decodeList = sorted(self.decoder.items())
         cols = ["Target Int","Target Str"]
         decodeFrame = pd.DataFrame(data=decodeList,columns=cols)
-        #decodeFrame["Counts"] = self.classCounter
+        decodeFrame["Counts"] = self.classCounter
         decodeFrame.to_csv(self.filePath,index=False)
         return self
 
