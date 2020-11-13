@@ -52,7 +52,14 @@ class ProgramMode:
         self.n_files = len(self.FILEOBJS)   # number of file objects
         self.groupCounter = 0
 
+        self.useNewScaler = True            # create new scaler & fit
         self.Scaler = StandardScaler()      # design matrix scaler
+
+    def SetScaler(self,scalerInstance):
+        """ Set Pre-existing Instance of a Sklearn Scaler to this Instance """
+        self.Scaler = scalerInstance()
+        self.useNewScaler = False           # we have an exisitng scaler obj, use it
+        return self.Scaler()
     
     def LoopCounter (self,cntr,max,text):
         """ Print Loop Counter for User """
@@ -62,10 +69,11 @@ class ProgramMode:
         del(text)
         return None
 
-    def ScaleData (self,matrixObj):
+    def ScaleData (self,matrixObj,fit=True):
         """ Scale Design Matrix 'X' for processing """
         X = matrixObj.__GetX__()            # get raw data
-        self.Scaler.partial_fit(X,y=None)   # fit the matrix
+        if fit == True:
+            self.Scaler.partial_fit(X,y=None)   # fit the matrix
         X_new = self.Scaler.transform(X)    # scale & return
         matrixObj.SetMatrixData(X_new)      # set as attrb
         return matrixObj                    # retuen updaed inst.
@@ -106,7 +114,10 @@ class ProgramMode:
             X2.AddSample(x2,i)          # add to MLP matrix
        
         # Format Design Matricies for Input
-        X2 = self.ScaleData(X2)     # scale design matrix
+        if self.useNewScaler == True:
+            X2 = self.ScaleData(X2,True)    # Fit & Scale
+        else:
+            X2 = self.ScaleData(X1,False)   # Scale, but don't fit
 
         return (X1,X2)      # return 2 Design matricies & target matrix
 
@@ -137,6 +148,7 @@ class TrainMode (ProgramMode):
         self.InitOutputStructure()
         self.n_iters = n_iters
         self.n_epochs = 2
+        
 
     def InitOutputStructure (self):
         """ Create Output Structure for Testing/Prediction Mode """
@@ -163,9 +175,11 @@ class TrainMode (ProgramMode):
             (matrixSXX,matrixMLP) = self.ConstructDesignMatrices(FILES,shapes)
             
             # Execute training
-            modelHistory = Networks.MODEL.fit(x=[matrixSXX.__GetX__(),matrixMLP.__GetX__()],
-                                              y=matrixSXX.__GetY__(),
-                                                batch_size=32,epochs=self.n_epochs,verbose=1) 
+            modelHistory = Networks.MODEL.fit(  
+                    x=[matrixSXX.__GetX__(),matrixMLP.__GetX__()],
+                    y=matrixSXX.__GetY__(),
+                    batch_size=32,epochs=self.n_epochs,verbose=1
+                                                ) 
 
             # Post-Training
             del(matrixSXX,matrixMLP)            # delete Design Matrix Objs
@@ -211,6 +225,7 @@ class PredictMode (ProgramMode):
         self.exportpath = os.path.join(self.exportpath,outfile)
         self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold
+        self.useNewScaler = True
 
     def InitOutputStructure (self):
         """ Create Output Structure for Testing/Prediction Mode """
@@ -309,13 +324,17 @@ class TrainPredictMode (ProgramMode):
                               exportpath=self.exportpath,groupSize=self.groupSize,
                               n_iters=self.n_iters)
         Training.__Call__(Networks)
-        del(Training)
+        
 
         # Run Testing Mode
         Testing = PredictMode(FILEOBJS=self.TEST_FILEOBJS,modelName=self.modelName,
                               n_classes=self.n_classes,timestamp=self.timestamp,
                               exportpath=self.exportpath,groupSize=self.groupSize,
                               labels_present=True)
+        Testing.SetScaler(Training.Scaler)
+
+
+        del(Training)
         Testing.__Call__(Networks)
         del(Testing)
         
