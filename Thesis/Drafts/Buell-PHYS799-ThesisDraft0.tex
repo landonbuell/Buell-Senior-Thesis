@@ -149,19 +149,19 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 \subsection{An Introduction to Neural Networks}
 \label{subsec-NerualNetworkIntro}
 
-\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound waves, and the brain's interpretation of them, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an solution that allows for a computer to \textit{learn} from past examples in order change and update itself. Such an algorithm exists in the form of a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
+\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound recognition, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an solution that allows for a computer to \textit{learn} from labeled training examples in order \textit{teach} itself. One such an algorithm that has been used for this type of task is a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine,Virtanen}.
 
-\paragraph*{}Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
+\paragraph*{}As the name implies, Early neural networks were inspired from from the human brain. Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
-The result of such an analogy is a computer program that is reminiscent of the brain.
+The result of such an analogy is a computer program that is reminiscent of the structure of the a brain. Where a biological brain uses these chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Geron,Levine}. 
 
-\paragraph*{}A neural network is a mathematical function that seeks to produce an approximation $F^*$, of some usually unknown function $F$ . For audio recognition, $F$ is some function or series of functions that occurs in the brain which allows for a listener to process the sensation of audio, and map it to a known source object. For a neural network, function $F^*$ uses a set of parameters $\Theta$, to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}.
+\paragraph*{}A neural network can then be considered as mathematical function that seeks to produce an approximation $F^*$, of some usually unknown function $F$ . For audio recognition, $F$ is some function or series of functions that occurs in the brain which allows for a listener to process the sensation of audio, and map it to a known source object. For a neural network, function $F^*$ uses a set of parameters $\Theta$, to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}. 
 
 \paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly \cite{Virtanen}. Given an example, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olsen,White}. We can simplify the idea of humans recognizing sound as some function or operation that occurs within the brain, accepting an input sound, and produces an output label. Similarly, a neural network can be constructed, presented with \textit{features} of multiple, labeled sound waves and learns a set of parameters $\Theta$ that allows for the mapping to a source.
 
-\paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file. 
+\paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file \cite{Goodfellow,Loy,Virtanen}. 
 
 % ================================================================
 
@@ -170,12 +170,18 @@ The result of such an analogy is a computer program that is reminiscent of the b
 
 \paragraph*{}A Neural Network is simply a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. It is this process of transforming inputs successively in a particular order until an output is attained that makes up the core functionality of a neural network \cite{Geron,Loy}. This output encodes the models final "decision" given a unique input.
 
-\paragraph*{}Other than inspiration from the brain, Neural Networks are name \textit{networks} because of their nested composition nature. The model can be represented by a linear computational graph which successively maps exactly how the repeated composition is structured. In a \textit{feed-forward network}, information is passed successively in one direction. For example functions could be chained together such as \cite{Goodfellow}
+\paragraph*{}Other than inspiration from the brain, Neural Networks are name \textit{networks} because of their nested composition nature. The model can be represented by a linked computational graph which successively maps exactly how the repeated composition is structured. Each node in the graph represents a \textit{layer}, which executes a particular prescribed mathematical function \cite{Goodfellow}. In the case of a \textit{linear, feed-forward} network, information passes in a single direction, to produce an output. We can represent this as a graph:
+\begin{equation}
+\label{eqn-FunctionGraph}
+F(x) = x \rightarrow f^{(0)}(x) \rightarrow f^{(1)}(x) \rightarrow ..... \rightarrow
+f^{(L-2)}(x) \rightarrow f^{(L-1)}(x) \rightarrow y
+\end{equation}
+or as a nested function:
 \begin{equation}
 \label{eqn-FunctionChain}
 F(x) = f^{(L-1)}\big[f^{(L-2)}\big[...f^{(1)}\big[f^{(0)}\big[x]\big]\big]...\big]\big]
 \end{equation}
-Where each function $f^{(l)}$ represents a layer of the network model. The number of layers in a neural network is referred to as the network \textit{depth}. The dimensionality of each layer is referred to as the network \textit{width} \cite{Geron,Loy}.
+Each function $f^{(l)}$ represents a layer of the network model. The number of layers in a neural network is referred to as the network \textit{depth}. The dimensionality of each layer is referred to as the network \textit{width} \cite{Geron,Loy}.
 
 \paragraph*{}A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network, with each layer usually indexed by a superscipt, $0$ through $L-1$. Layer $0$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer}. The function that represents a layer $(l)$ is given by 
 \begin{equation}
@@ -927,8 +933,6 @@ For recognition algorithms, the necessary property of the acoustic features is l
 \end{quote}
 To ensure the construction of a suitable model, we derive features based from three representations of the audio file: (i) a spectrogram matrix of the waveform, (ii) the time-space representation of the waveform, and (iii) the frequency-space representation of the waveform. It is important to note that although this algorithm will classify sound data to instruments, the model will never actually be presented with a waveform directly, instead it will rely solely on the features.
 
-\paragraph*{}Once we produce an sufficient set of features, we concatenate them into a single object, $\hat{x}$, called the \textit{feature-vector} \cite{Goodfellow}. In the training process this object, along with the appropriate classification label, $y$ is presented to the neural network for processing. This process of constructing a feature vector from any data set is vital and is used to represent the data set in a far more compact and non-redundant format \cite{Virtanen,Liu,Kahn}.
-
 \paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalize to have a zero mean, and unit-variance acorss all classes. 
 
 \newpage
@@ -937,7 +941,7 @@ To ensure the construction of a suitable model, we derive features based from th
 
 \subsubsection{The Design Matrix}
 
-\paragraph*{}The spectrogram and $20$ features from each sample are organized into one of two array structures, each called a \textit{design matrix}. A design matrix is an array of real floating-point numbers that stores the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. each has shape given by:
+\paragraph*{}The spectrogram and $20$ features from each sample are organized into one of two array structures, each called a \textit{design matrix}. A design matrix contains real floating-point numbers that stores the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. each has shape given by:
 \begin{equation}
 \label{eqn-X1Shape}
 X_1 \in \mathbb{R}^{(b \times N' \times k \times 1)}
