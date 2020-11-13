@@ -151,7 +151,7 @@ class CategoryDictionary :
         encoder = {}
         rawData = pd.read_csv(self.filePath)
         Ints,Strs = rawData.iloc[:,0],rawData.iloc[:,1]
-        cnts = rawData,iloc[:,2]
+        cnts = rawData.iloc[:,2]
         self.nClasses = len(cnts.to_numpy())
         for Int,Str in zip(Ints,Strs):      # iterate by each
             encoder.update({str(Str):int(Int)})

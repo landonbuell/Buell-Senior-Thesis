@@ -86,25 +86,12 @@ class CategoryDictionary :
         self.filePath = os.path.join(self.localPath,self.fileName)
         self.nClasses = None
 
-    def __Call__(self,newModel,fileObjs):
-        """ Run Category Encode / Decode Dictionary """
-        if newModel == True:        
-            # A new Model is created, Overwrite existing File
-            print("\tBuilding new Encode/Decode Dictionary...")
-            self.encoder,self.decoder = self.BuildCategories(fileObjs)    
-            self.ExportCategories()
-        else:
-            # Check if the encoder / Decoder Exists:
-            if os.path.isfile(self.filePath) == True:
-                print("\tFound Encode/Decode Dictionary")
-                # the file exists, load it as enc/dec dict
-                self.encoder,self.decoder = self.LoadCategories()
-                self.nClasses = max(self.encoder.values()) + 1  # get number of classes
-            else:
-                # File does not exists, make a new Dictionary
-                print("\tCould not find Encode/Decode Dictionary, building new")
-                self.encoder,self.decoder = self.BuildCategories(fileObjs)    
-                self.ExportCategories()
+    def __Call__(self,fileObjs):
+        """ Run Category Encode / Decode Dictionary """        
+        # A new Model is created, Overwrite existing File
+        print("\tBuilding new Encode/Decode Dictionary...")
+        self.encoder,self.decoder = self.BuildCategories(fileObjs)    
+        self.ExportCategories()
         return self
 
     def LoadCategories (self):
@@ -113,7 +100,7 @@ class CategoryDictionary :
         encoder = {}
         rawData = pd.read_csv(self.filePath)
         Ints,Strs = rawData.iloc[:,0],rawData.iloc[:,1]
-        cnts = rawData,iloc[:,2]
+        cnts = rawData.iloc[:,2]
         self.nClasses = len(cnts.to_numpy())
         for Int,Str in zip(Ints,Strs):      # iterate by each
             encoder.update({str(Str):int(Int)})
@@ -187,7 +174,7 @@ class ProgramInitializer:
          # Construct Encoder / Decoder Dictionaries
         self.categories = CategoryDictionary(self.modelPath,self.modelName)
         self.categories.__Call__(fileObjects)
-        self.n_classes = self.GetNClasses(fileObjects)
+        self.n_classes = self.categories.nClasses
      
         # Final Bits
         self.StartupMesseges
