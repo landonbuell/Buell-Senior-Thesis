@@ -8,14 +8,9 @@ Instrument Classifier v0
             #### IMPORTS ####
 
 import numpy as np
-
 import scipy.fftpack as fftpack
-import scipy.integrate as integ
 import scipy.signal as signal
-import scipy.sparse as sparse
 
-import MathUtilities as math_utils
-import PlottingUtilities as plot_utils
 
 """
 FeaturesUtilities.py - "Feature Extraction Utils"
@@ -215,6 +210,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
                          n_frames=n_frames,presetFrames=presetFrames)
         self.frames = self.AnalysisFrames()
+        self.window = signal.hanning(M=self.npts,sym=False)  # window
 
         # lambda function unit conversions
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
@@ -255,18 +251,6 @@ class FrequencySeriesFeatures (BaseFeatures):
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
 
-    def HanningWindow (self,X):
-        """
-        Apply Hanning window to each row in array X
-        --------------------------------
-        X (arr) Array-like of time-frames (n_frames x n_samples)
-        --------------------------------
-        Return X w/ Hann window applied to each row
-        """
-        window = signal.hanning(M=X.shape[-1],sym=False)  # window
-        X = np.dot(X,window)
-        return X                # return new window
-
     def PowerSpectrum (self,attrb='frames',pts=[]):
         """
         Compute Discrete Fourier Transform of arrays in X
@@ -278,7 +262,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         """        
         assert attrb in ['signal','frames']
         X = self.__getattribute__(attrb)    # isolate signal or frames
-        Z = self.HanningWindow(X)   # apply Hanning Window
+        X *= self.window            # Apply Hanning Window (hadamard prd. w/ rows)
         Z = fftpack.fft(X,axis=-1)  # apply DFT
         Z = np.abs(Z)**2            # compute power:
         if Z.ndim > 1:              # more than 1D
