@@ -581,12 +581,13 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 
 \subsubsection{The Optimizer}
 
-\paragraph*{}Standard gradient-based learning, as given by the parameter update rule in Eq. (\ref{eqn-GradientLearning}) is cumbersome and often prone to numerical error. This can include phenomena such as \textit{vanishing gradients}, \textit{exploding gradients}, \textit{poor conditioning}, or unstable solution-spaces. \cite{Geron,Goodfellow,Loy}. To combat this, we require a more stable and robust optimizer than the bare gradient descent method. Many gradient-based optimizers have been developed over the years to mitigate some f these vulnerabilities.
+\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to achieve the lowest possible value of the cost function over a data set \cite{Geron}. Some models such as minimizing a \textit{mean-squared error} for linear regression model can be solve analytically, while high dimensional neural networks
+Standard gradient-based learning, as given by the parameter update rule in Eq. (\ref{eqn-GradientLearning}) is cumbersome and often prone errors such as vanishing or exploding gradients. \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an algorithm that is more stable, and aggressive in it's ability to
 
 \paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost.
 
 \paragraph*{}This means that as the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. 
-Note that the upper index $(i)$ or $(i-1)$F gives an iteration index, while the upper iteration $i$ means to raise a value to the power of the iteration. For a given step $(i)$, The ADAM update is given:
+Note that a superscript $(i)$ or $(i-1)$ gives an iteration index, while the superscript $i$ means to raise a value to the power of $i$. For a given step $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
