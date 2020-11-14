@@ -57,9 +57,9 @@ class ProgramMode:
 
     def SetScaler(self,scalerInstance):
         """ Set Pre-existing Instance of a Sklearn Scaler to this Instance """
-        self.Scaler = scalerInstance()
+        self.Scaler = scalerInstance
         self.useNewScaler = False           # we have an exisitng scaler obj, use it
-        return self.Scaler()
+        return self.Scaler
     
     def LoopCounter (self,cntr,max,text):
         """ Print Loop Counter for User """
@@ -86,7 +86,7 @@ class ProgramMode:
         # Create Feature vector for MLP Branch
         timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  # collect time-domain features  
         featureVector.AddFeatures(timeFeatures.__Call__())              # and time-domain features
-        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal)
+        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal,n_frames=128)
         featureVector.AddFeatures(freqFeatures.__Call__())              # add frequency-domain features
             
         # Create Spectrogram Matrix for CNN Branch
@@ -108,7 +108,7 @@ class ProgramMode:
 
         # Add Samples to Design Matricies
         for i,FILEOBJ in enumerate(FILES):
-            self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
+            #self.LoopCounter(i,len(FILES),FILEOBJ.filename) # print messege
             (x1,x2) = self.CollectFeatures(FILEOBJ)         # collect features
             X1.AddSample(x1,i)          # add to CNN matrix
             X2.AddSample(x2,i)          # add to MLP matrix
@@ -117,7 +117,7 @@ class ProgramMode:
         if self.useNewScaler == True:
             X2 = self.ScaleData(X2,True)    # Fit & Scale
         else:
-            X2 = self.ScaleData(X1,False)   # Scale, but don't fit
+            X2 = self.ScaleData(X2,False)   # Scale, but don't fit
 
         return (X1,X2)      # return 2 Design matricies & target matrix
 
@@ -143,7 +143,7 @@ class TrainMode (ProgramMode):
         super().__init__(FILEOBJS=FILEOBJS,modelName=modelName,n_classes=n_classes,
                          timestamp=timestamp,exportpath=exportpath,groupSize=groupSize)
 
-        self.outfile = self.modelName+'@TRAINING-HISTORY@'+self.timestamp+'.csv'
+        self.outfile = self.modelName+"@"+self.timestamp+"@TRAINING-HISTORY.csv"
         self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.n_iters = n_iters
@@ -221,8 +221,8 @@ class PredictMode (ProgramMode):
                          n_classes=n_classes,timestamp=timestamp,exportpath=exportpath,
                          groupSize=groupSize)
 
-        outfile = self.modelName+'@PREDICTIONS@'+self.timestamp+'.csv'
-        self.exportpath = os.path.join(self.exportpath,outfile)
+        self.outfile = self.modelName+"@"+self.timestamp+"@PREDICTIONS.csv"
+        self.exportpath = os.path.join(self.exportpath,self.outfile)
         self.InitOutputStructure()
         self.predictionThreshold = prediction_threshold
         self.useNewScaler = True

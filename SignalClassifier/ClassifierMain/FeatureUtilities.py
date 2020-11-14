@@ -215,15 +215,22 @@ class FrequencySeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
                          n_frames=n_frames,presetFrames=presetFrames)
         self.frames = self.AnalysisFrames()
+        self.window = signal.hanning(M=self.npts,sym=False)  # window function
 
         # lambda function unit conversions
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
 
         # Time Axis, Frequency Axis
-        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
+        self.SetFrequencyRange(0,12000)
+        self.hertz,self.frequencyPoints = self.FrequencyAxis()
         self.mels = self.HertzToMel(self.hertz)
         self.t = np.arange(0,self.n_frames,1)   
+
+    def SetFrequencyRange(self,low=0,high=6000):
+        """ Set Frequency Axis Bounds """
+        self.lowHz,self.highHz = low,high
+        return self
 
     def __Call__(self):
         """
@@ -239,41 +246,26 @@ class FrequencySeriesFeatures (BaseFeatures):
 
         # Add Elements to Feature vector
         featureVector = np.array([])
-        MFBEs = self.MelFilterBankEnergies()
-        #featureVector = np.append(featureVector,MFBEs)     # don't use filter bank energies?
+        MFBEs = self.MelFilterBankEnergies(n_filters=16)
         MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
 
         featureVector = np.append(featureVector,MFCCs)
         featureVector = np.append(featureVector,self.CenterOfMass())
         return featureVector
 
-    def FrequencyAxis (self,low=0,high=6000):
+    def FrequencyAxis (self):
         """
         Compute Frequenxy Axis
         --------------------------------
-        low (float) : Low value for frequency slice
-        high (float) : High value for frequency bound
+        * no args
         --------------------------------
         Return frequency axis array between bounds, f
             and appropriate index, pts
         """
-        self.lowHz,self.highHz = low,high                   # set low/high bnds in Hz
         f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)# comput freq space
-        pts = np.where((f_space>=low)&(f_space<=high))[0]   # get slices
+        pts = np.where((f_space>=self.lowHz)&(f_space<=self.highHz))[0]   # get slices
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
-
-    def HanningWindow (self,X):
-        """
-        Apply Hanning window to each row in array X
-        --------------------------------
-        X (arr) Array-like of time-frames (n_frames x n_samples)
-        --------------------------------
-        Return X w/ Hann window applied to each row
-        """
-        window = signal.hanning(M=X.shape[-1],sym=False)  # window
-        X = np.dot(X,window)
-        return X                # return new window
 
     def PowerSpectrum (self,attrb='frames',pts=[]):
         """
@@ -286,7 +278,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         """        
         assert attrb in ['signal','frames']
         X = self.__getattribute__(attrb)    # isolate signal or frames
-        Z = self.HanningWindow(X)   # apply Hanning Window
+        X *= self.window
         Z = fftpack.fft(X,axis=-1)  # apply DFT
         Z = np.abs(Z)**2            # compute power:
         if Z.ndim > 1:              # more than 1D
