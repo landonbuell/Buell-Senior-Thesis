@@ -215,7 +215,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
                          n_frames=n_frames,presetFrames=presetFrames)
         self.frames = self.AnalysisFrames()
-        self.window = signal.hanning(M=X.shape[-1],sym=False)  # window
+        self.window = signal.hanning(M=self.npts,sym=False)  # window function
 
         # lambda function unit conversions
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
