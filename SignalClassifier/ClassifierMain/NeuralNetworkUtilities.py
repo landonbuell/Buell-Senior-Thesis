@@ -21,8 +21,8 @@ NeuralNetworkModels.py - "Neural Network Models"
 
             #### VARIABLE DECLARATIONS ####
 
-inputShapeMLP = (20,)
-inputShapeCNN = (558,256,1)
+inputShapeMLP = (24,)
+inputShapeCNN = (1115,128,1)
 
             #### NEURAL NETWORK OBJECTS ####
 
