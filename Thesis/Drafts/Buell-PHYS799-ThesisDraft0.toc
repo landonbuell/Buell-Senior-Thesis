@@ -56,7 +56,7 @@
 \contentsline {section}{\numberline {6}Evaluating Model Performance}{39}% 
 \contentsline {subsection}{\numberline {6.1}Cross Validation}{39}% 
 \contentsline {subsection}{\numberline {6.2}Performance Metrics}{40}% 
-\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{40}% 
+\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{41}% 
 \contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{41}% 
 \contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{42}% 
 \contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{42}% 

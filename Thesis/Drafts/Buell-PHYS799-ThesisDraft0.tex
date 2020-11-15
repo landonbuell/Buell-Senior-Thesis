@@ -784,14 +784,14 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 \label{eqn-1DWaveEqn}
 \frac{\partial^2 U}{\partial t^2} = v^2 \frac{\partial^2 U}{\partial x^2}
 \end{equation}
-Where $v$ is the wave propagation velocity, given by $\sqrt{\frac{F_T}{\mu}}$. Additionally, the string is fixed in place at both ends, which can be modeled by the boundary conditions:
+Where $v$ is the wave propagation velocity, given by $\sqrt{\frac{F_T}{\mu}}$. Additionally, the string is fixed in place at both ends, with the nut at $x = 0$ and the bridge at $x = L$, which can be modeled by the boundary conditions:
 \begin{equation}
 U(0,t) = 0 
 	\text{\hspace*{2cm} and \hspace*{2cm}}
 U(L,t) = 0 
 \end{equation}
 
-\paragraph*{}In order to specify a solution, we must also specificy two intitial conditions. We described the initial state of the string at time $t = 0$  by the two conditions:
+\paragraph*{}In order to specify a solution, we must also specify two initial conditions. We described the initial state of the string at time $t = 0$  by the two conditions:
 \begin{equation}
 U(x,0) = f(x) 
 	\text{\hspace*{2cm} and \hspace*{2cm}}
@@ -830,13 +830,15 @@ Where $A_n$ and $B_n$ are given by:
 \paragraph*{}The solution that we have derived from the wave equation shows that the behavior of $U(x,t)$ is greatly dependent on the nature of the string's initial shape, $f(x)$, when struck. In the case of picked or plucked instruments, the initial shape of $f(x)$ would be something like a "ramp function":
 \begin{equation}
 \label{eqn-RampFunc}
-f(x) = 
+f(x) =
 \end{equation}
 
 % ================================================================
 
 \subsection{Aerophones}
 \label{subsec-Aerophones}
+
+\paragraph*{}An aerophone is a musical instrument that produces sounds through the vibration of an air molecules in a column-like structure.
 
 % ================================================================
 
@@ -1260,7 +1262,7 @@ Where $\widetilde{B}$ are the column average of the Mel filter bank energies com
 \end{equation}
 We compute the FCM for each of the $k'$ frames, and then average the results. We use the average FCM across $k'$ frames to compute the FCM feature:
 \begin{equation}
-FCM = \sum_{i=0}^{k'} \frac{1}{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
+FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \end{equation}
 
 \paragraph*{}The average FCM gives a strong approximation of the instrument or signal source's range. For example, a flute or violin will have a considerably high FCM value, even in their lower registers. Similarly, basses or tubas will have considerably low FCM values. Given that the standard frequency range of some musical instruments is fixed, it is guaranteed that for any particular instrument, the FCM will consistently remain within certain bounds \cite{Olson,White}.
@@ -1296,7 +1298,7 @@ FCM = \sum_{i=0}^{k'} \frac{1}{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \subsection{Cross Validation}
 \label{subsec-XValidation}
 
-\paragraph*{}The optimization of neural networks are heavily dependent on initial conditions of parameters and the data sets. We consider models that suffer from this phenomenon to be \textit{high-variance} models \cite{James}. To eliminate any concerns of possible out-liers, or abnormalities that arise, it is commont implement a resampling method called \textit{cross validation} (Also called X-val) \cite{Geron,Goodfellow}. This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ remaining subsets are used to train the model. For each of the $K$ models, we can evaluate a series of performance metrics, and store any model parameters. We can compare any one model to the other $K-1$ models to ensure that each network is performing consistently, despite small changes in the initial data set. We detail pseudo-code for a $K$-Fold Cross Validation algorithm.
+\paragraph*{}The optimization of neural networks are heavily dependent on initial conditions of parameters and the data sets. We consider models that suffer from this phenomenon to be \textit{high-variance} models \cite{James}. To eliminate any concerns of possible out-liers, or abnormalities that arise, it is common to implement a resampling method called \textit{cross validation} (Also called X-validation) \cite{Geron,Goodfellow}. This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ remaining subsets are used to train the model. For each of the $K$ models, we can evaluate a series of performance metrics, and store any model parameters. We can compare any one model to the other $K-1$ models to ensure that each network is performing consistently, despite small changes in the initial data set. We detail pseudo-code for a $K$-Fold Cross Validation algorithm.
 
 \begin{algorithm}[H]
 \caption{A $K$-Fold Cross Validation program.}
@@ -1328,7 +1330,7 @@ Compare performance results, and adjust model, parameters as needed, and repeat 
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}The output of cross validation is $K$ models that are all trained and evaluated on overlapping subsets of the full data. Each model $F^*$, shows one possible outcome of training the network. It has a corresponding set of learned parameters $\Theta^*$, as defined in Eq. (\ref{eqn-Theta}) that it uses to make any predictions. 
+\paragraph*{}The output of cross validation is $K$ models that are all trained and evaluated on overlapping subsets of the full data. Each model $F^*$, shows a possible outcome of training the network given a subset of data samples, and a particular set of initial parameters.. It has a corresponding set of learned parameters $\Theta^*$, as defined in Eq. (\ref{eqn-Theta}) that it uses to make any predictions. 
 
 % ================================================================
 
