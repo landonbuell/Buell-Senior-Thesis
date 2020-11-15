@@ -67,8 +67,8 @@ class AnalyzeModels:
     def __Call__(self,exptPath):
         """ Run Main program instance """
         # Get needed Files
-        self.trainingFiles = self.GetKeywordFiles("@TRAINING-HISTORY@")
-        self.predictionFiles = self.GetKeywordFiles("@PREDICTIONS@")
+        self.trainingFiles = self.GetKeywordFiles("@TRAINING-HISTORY")
+        self.predictionFiles = self.GetKeywordFiles("@PREDICTIONS")
         self.classDictionary = self.GetKeywordFiles("Categories")[-1]
         homePath = os.getcwd()
 
@@ -77,7 +77,8 @@ class AnalyzeModels:
         self.metricsArray = np.empty(shape=(nRows,nCols))
 
         avgStandardConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
-        avgWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
+        avgHitsWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
+        avgScrsWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
 
         # Iterate through predictions
         for i,predFile in enumerate(self.predictionFiles):
@@ -92,17 +93,20 @@ class AnalyzeModels:
             metrics = ComputeMetrics.MetricScores
             self.metricsArray[i] = metrics
 
-            # Create & Export Standard Confusion Matrix
+            # Create & Names for Confusion matrices
             stdMatName =  self.modelName + str(i) + " Standard Confusion"
-            wtdMatName =  self.modelName + str(i) + " Weighted Confusion"
-            standardConfMat = ComputeMetrics.StandardConfusion()
-            weightedConfMat = ComputeMetrics.WeightedConfusion()
+            hitsMatName =  self.modelName + str(i) + " Hits Weighted Confusion"
+            scrsMatName =  self.modelName + str(i) + " Score Weighted Confusion"
 
-            ClassifierMetrics.ExportConfusion(standardConfMat,stdMatName,exptPath)
-            ClassifierMetrics.ExportConfusion(weightedConfMat,wtdMatName,exptPath)
+            # Create the matricies
+            standardConfMat = ComputeMetrics.StandardConfusion()
+            hitsWghtConfMat = ComputeMetrics.HitsWeightedConfusion()
+            scrsWghtConfMat = ComputeMetrics.ScoreWeightedConfusionn()
+
             os.chdir(exptPath)
             ClassifierMetrics.PlotConfusion(standardConfMat,self.n_classes,stdMatName,False)
-            ClassifierMetrics.PlotConfusion(weightedConfMat,self.n_classes,wtdMatName,False)
+            ClassifierMetrics.PlotConfusion(hitsWghtConfMat,self.n_classes,hitsMatName,False)
+            ClassifierMetrics.PlotConfusion(weightedConfMat,self.n_classes,scrsMatName,False)
             os.chdir(homePath)
 
             # Add To average Conf Mats
@@ -114,9 +118,9 @@ class AnalyzeModels:
         avgWeightedConfMat /= nRows
 
         avgStdMatName =  self.modelName + " Avg Standard Confusion"
-        avgWtdMatName =  self.modelName + " Avg Weighted Confusion"
-        ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
-        ClassifierMetrics.ExportConfusion(avgWeightedConfMat,avgWtdMatName,exptPath)
+        avghitMatName =  self.modelName + " Avg Weighted Confusion"
+        avghitMatName =  self.modelName + " Avg Weighted Confusion"
+
         os.chdir(exptPath)
         ClassifierMetrics.PlotConfusion(avgStandardConfMat,self.n_classes,avgStdMatName,False)
         ClassifierMetrics.PlotConfusion(avgWeightedConfMat,self.n_classes,avgWtdMatName,False)
@@ -144,8 +148,17 @@ class ClassifierMetrics :
         self.xOneHot = keras.utils.to_categorical(self.x,self.n_classes)
         self.yOneHot = keras.utils.to_categorical(self.y,self.n_classes)
      
-    def WeightedConfusion(self):
-        """ Create a confusion matric weighted by confidence & occurance """
+    def HitseWeightedConfusion(self):
+        """ Create a confusion matric weighted by occurance in each row """
+        weightedMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
+        standardMatrix = self.StandardConfusion()       # standard conf-mat
+        sumRow = np.sum(standardMatrix,axis=1)          # sum by each row
+        weightedMatrix /= sumRow                        # dive row by it's own sum (number of hits)
+
+        return weightedMatrix                       # return the weighted matrix
+
+    def ScoreWeightedConfusion(self):
+        """ Create a confusion matric weighted by confidence in predictions """
         weightedMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
         standardMatrix = self.StandardConfusion()               # standard conf-mat
         sumRow = np.sum(standardMatrix,axis=1)                  # sum by each row
