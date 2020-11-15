@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # HARD-CODE VARIABLES FOR DEVELOPMENT
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis'
     read = os.path.join(parent,'SignalClassifier','Target-Data')   
-    modelName = "XValCLFBeta"
+    modelName = "XValCLFAlpha"
     nSplits = 10
     export = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Output-Data')
     model = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Model-Data')
