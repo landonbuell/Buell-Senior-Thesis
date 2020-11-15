@@ -222,7 +222,7 @@ class FrequencySeriesFeatures (BaseFeatures):
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
 
         # Time Axis, Frequency Axis
-        self.SetFrequencyRange(0,12000)
+        self.SetFrequencyRange(0,6000)
         self.hertz,self.frequencyPoints = self.FrequencyAxis()
         self.mels = self.HertzToMel(self.hertz)
         self.t = np.arange(0,self.n_frames,1)   
@@ -246,7 +246,7 @@ class FrequencySeriesFeatures (BaseFeatures):
 
         # Add Elements to Feature vector
         featureVector = np.array([])
-        MFBEs = self.MelFilterBankEnergies(n_filters=16)
+        MFBEs = self.MelFilterBankEnergies(n_filters=12)
         MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
 
         featureVector = np.append(featureVector,MFCCs)
