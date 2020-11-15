@@ -239,7 +239,7 @@ $X = \{\} \leftarrow$ array to hold final activations \\
 
 \paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a prediction (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a sort of recursive computational graph \cite{Goodfellow}. 
 
-\paragraph*{}Typically, a layer function can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
+\paragraph*{}Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
 \begin{equation}
 \label{eqn-LinearTransform}
 z^{(l)} = W^{(l)} x^{(l-1)} + b^{(l)}
@@ -264,18 +264,18 @@ Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in
 \subsubsection{Dense Layer}
 \label{subsubsec-DenseLayer}
 
-\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy,McCulloch}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artifical neurons}, each of which holds a numerical value within it, called the \textit{activation} of that neuron. This idea was developed from McCulloch and Pitts' work \cite{McCulloch} in attempting to model cognitive processes as mathematical functions, and was expanded upon by Frank Rosenblatt in  1957 \cite{Geron}.
+\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy,McCulloch}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artificial neurons}, each of which holds a numerical value within it, (usual a double-precision floating point number) called the \textit{activation} of that neuron. This idea was developed from McCulloch and Pitts' work \cite{McCulloch} in attempting to model cognitive processes as mathematical functions, and was expanded upon by Frank Rosenblatt in  1957 by combining many dense layers together to form a multilayer perceptron (MLP) \cite{Geron,Loy,Levine}.
 
-\paragraph*{}We model a layer of neurons as a vector of floating-point numbers. Typically, it is required that the array be one-dimensional. Suppose a layer $(l)$ contains $n$ artificial neurons. We denote the array that hold those activations as $x^{(l)}$ and is given by:
+\paragraph*{}We model a layer of neurons as a vector of floating-point numbers. By convention, the array is an $n$-dimensional column vector, where $n$ is number of nodes in that layer. Suppose a layer $(l)$ contains $n$ artificial neurons- we denote the array that hold those activations as $x^{(l)}$ and is given by:
 \begin{equation}
 \label{layer-DenseNeurons}
 \vec{x}^{(l)} = \Big[ x_0, x_1, x_2, \hdots , x_{n-2}, x_{n-1} \Big]^T
 \end{equation}
 The activation of each entry is given by a linear-combination of activations from the previous layer, Eq.(\ref{eqn-LinearTransform}) and the transformation in Eq.(\ref{eqn-elementActivation}).
 
-\paragraph*{}Suppose the layer $l-1$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $m \times 1$. We can denote the function in a similar manner to Eq.(\ref{eqn-altLayerFunction}) as:
+\paragraph*{}Suppose the layer $(l-1)$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $n \times 1$. We can denote the function in a similar manner to Eq.(\ref{eqn-altLayerFunction}) as:
 \begin{equation}
-\label{eqn-FunctionDense}
+\label{eqn-FunctionDense}s
 f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(m \times 1)} \rightarrow x^{(l)} \in \mathbb{R}^{(n \times 1)}
 \end{equation}
 
@@ -603,7 +603,7 @@ r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^i} \\
 \paragraph*{}ADAM has experimentally shown to be a very powerful and robust optimizer useful for a wide range of tasks. Because of the two decay constants $\rho_1$ and $\rho_2$, we an compound and accumulate the values of past gradients to continue to push the cost to lower and lower values, even if the magnitude of the gradient becomes very small \cite{Geron}. 
 
 \begin{algorithm}[H]
-\caption{Adaptive-Moments (ADAM) optimizer for a neural network}
+\caption{Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite{Goodfellow}}
 \label{algAdaGrad}
 
 \begin{algorithmic}
@@ -641,16 +641,16 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \subsection{Chosen Model Architecture}
 \label{sec-Architecture}
 
-\paragraph*{}The success of a neural network algorithm is enormously dependent of the strength of the chosen features, as well as a complementary architecture, rather than the quantity of available data \cite{Geron,Kahn,Liu}. We have derived an appropriate set of inputs arrays, explore in sec. (\ref{sec-Features}) and constructed a neural network architecture to coincide with these features. From each sample, we produce two input arrays, one being a matrix and the other being a column-vector, and present those to a  \textit{multimodal neural network} \cite{Virtanen}. This type of hybrid network accepts one array at each of two input layers, passes them through a series of non-overlapping layers, and combines separate neural networks into a single model to produce a one prediction resulting from both inputs \textcolor{blue}{citation for multimodal networks}.
+\paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network it's \textit{architecture} \ref{Goodfellow}. Most standard implementations of networks utilize a \textit{unimodal architecture} where the model is created with a single input layer \cite{N}
 
-\paragraph*{}The full classification neural network used for this project consists of two distinct entry points. Rather than presenting the network with one set of input data, $X$, we present the network with two different arrays, $X_1$ and $X_2$. Both arrays are a product of the same audio file sound wave, and thus share a common training label, $y$. Each of the two entry layers leads to it's own branch and the given information is process roughly in parallel. Once a certain number of layer functions have been applied, each arm of the neural network is left with a single dense layer of activations. These two activation vectors are concatenated into a single new dense layer, and then passed through one final layer to generate the model's final output. A visual representation of this architecture can be found in Fig. (\ref{fig-NetworkArchitecture}).
+
 
 \begin{figure}[H]
 \label{fig-NetworkArchitecture}
 \begin{center}
-\includegraphics[scale=0.45]{../Figures/NeuralNetworkArchitecture}
+\includegraphics[scale=0.5]{../Figures/NeuralNetworkArchitecture}
 \end{center}
-\caption{The developed architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output is produced}
+\caption{The implemented miltimodal architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output vector is produced}
 \end{figure}
 
 % ================================
@@ -668,13 +668,13 @@ Any other shape will be rejected by the model, and an error is raised.
 
 \paragraph*{}After the input layer assert the appropriate shape, the array $X_1$, which is a collection of $64$ spectrograms, is passed into the first of three \textit{Convolution Layer Groups}. These layer groups are inspired from the \textit{VGG-16 Neural Network} architecture \textcolor{red}{[citation needed]}. Each convolution layer group in composed of three individual layers: 
 \begin{enumerate}
-\item A 2-Dimensional Convolution layer, using $32$ filters, a $3 \times 3$ kernel, a $1 \times 1$ step size, and a ReLU activation function,
-\item A 2-Dimensional Convolution layer, using $32$ filters, a $3 \times 3$ kernel, a $1 \times 1$ step size, and a ReLU activation function,
-\item A 2-Dimensional Maximum Pooling layer using a $3 \times 3$ pooling size, and an Identity activation function
+\item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
+\item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
+\item A 2-Dimensional Maximum Pooling layer, $3 \times 3$ pooling size, Identity activation function
 \end{enumerate}  
 The Convolution layers convoluted over the middle two axes of the data (over space and time in the spectrogram). 
 
-\paragraph*{}By grouping layers in this structure, we use the convolution  layers to reduce the number of features, and then the pooling layer to extract only the largest activations of the remianing features. This ensures that in the full spectrogram image, only the dominant features and feature shapes are preserved and passed into the next layer set for processing.
+\paragraph*{}By grouping layers in this structure, we use convolution to reduce the number of features, and then the pooling layer to extract only the largest activations of the remaining values. This ensures that in the full spectrogram image, only the dominant features and feature shapes are preserved and passed into the next layer set for processing. This also allows for positional invariance in features. Regardless of where in space or time a feature is detected, the moving kernel will still allow it to be found \cite{Goodfellow,Loy}.
 
 % ================
 
@@ -1286,17 +1286,17 @@ FCM = \sum_{i=0}^{k'} \frac{1}{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 % ================================================================
 
 \newpage
-\section{Evaluating Performance}
+\section{Evaluating Model Performance}
 \label{sec-PerfEval}
 
-\paragraph*{}Before making predictions on unlabeled data such as the Chaotic Synthesizers, we must confirm that our model performs reasonably well on data that it has never interacted with. The most common practice is to divide a full data set into a subset of \textit{training} samples, and \textit{testing} samples. As the names imply, the training subset is used to fit the model, and we use the labeled testing data set to evaluate. The exact ratio of sample volume between these subsets varies depending on the task \cite{Goodfellow,Geron2,Mitchell}. Since the testing data is labeled, we can compare the classifiers predictions to the \textit{ground truth} labels.
+\paragraph*{}Before making predictions on unlabeled data such as the Chaotic Synthesizers, we must confirm that our model performs reasonably well on data that it has never interacted with. The most common practice is to divide a full data set into a subset of \textit{training} samples, and \textit{testing} samples \cite{Geron}. As the names imply, the training subset is used to fit the model, and we use the labeled testing data set to evaluate how well the model has trained. The exact ratio of sizes between these subsets varies depending on the task \cite{Goodfellow,Geron2,Mitchell}, however we choose to generally use around $90\%$ training samples and $10\%$ testing samples.
 
 % ================================================================
 
 \subsection{Cross Validation}
 \label{subsec-XValidation}
 
-\paragraph*{}Performance evaluations are commonly implemented in the form of \textit{$K$-Fold Cross-Validation} (Also called X-val) \cite{Geron,Goodfellow}. This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ remaining subsets are used to train the model. This belongs a larger family of statistical validations called \textit{Resampling methods} \cite{James}. Below, we detail pseudo-code for a $K$-Fold Cross Validation algorithm.
+\paragraph*{}The optimization of neural networks are heavily dependent on initial conditions of parameters and the data sets. We consider models that suffer from this phenomenon to be \textit{high-variance} models \cite{James}. To eliminate any concerns of possible out-liers, or abnormalities that arise, it is commont implement a resampling method called \textit{cross validation} (Also called X-val) \cite{Geron,Goodfellow}. This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ remaining subsets are used to train the model. For each of the $K$ models, we can evaluate a series of performance metrics, and store any model parameters. We can compare any one model to the other $K-1$ models to ensure that each network is performing consistently, despite small changes in the initial data set. We detail pseudo-code for a $K$-Fold Cross Validation algorithm.
 
 \begin{algorithm}[H]
 \caption{A $K$-Fold Cross Validation program.}
@@ -1319,7 +1319,7 @@ Performance History $\leftarrow \{\}$
 	\item Concatenate the remaining subsets into training data set
 	\item $X_{train} =\leftarrow x_{i \neq j}$
 	\item Train the model, $F^*$ with the $X_{train}$ data set
-	\item Evaluate the trained model with the $X_{train}$ dataset, and compute value of metric function(s) $P$
+	\item Evaluate the trained model with the $X_{train}$ data set, and compute value of metric function(s) $P$
 	\item Store Performance $P$ in Performance History array
 \ENDFOR
 
@@ -1539,7 +1539,10 @@ James, Gareth, et al. \textit{An Introduction to Statistical Learning with Appli
 Khan, M. Kashif Saeed, and Wasfi G. Al-Khatib. “Machine-Learning Based Classification of Speech and Music.” Multimedia Systems, vol. 12, no. 1, 2006, pp. 55–67., doi:10.1007/s00530-006-0034-0.
 
 \bibitem{Levine}
-Levine, Daniel S. \textit{Introduction to Neural and Cognitive Modeling}. 3rd ed., Routledge, 2019.
+Levine, Daniel S. \textit{Introduction to Neural and Cognitive Modeling}. 2nd ed., Routledge, 2000.
+
+\bibitem{Li}
+Li, Yingming, and Ming Yang. “A Survey of Multi-View Representation Learning.” Journal of LateX Class Files, vol. 14, no. 8, Aug. 2015. 
 
 \bibitem{Liu}
 Liu, Zhu, et al. "Audio Feature Extraction and Analysis for Scene Segmentation and Classification." Journal of VLSI Signal Processing, vol. 20, 1998, pp. 61–79.
@@ -1555,6 +1558,9 @@ Mierswa, Ingo, and Katharina Morik. "Automatic Feature Extraction for Classifyin
 
 \bibitem{Mitchell}
 Mitchell, Tom Michael. Machine Learning. 1st ed., McGraw-Hill, 1997.
+
+\bibitem{Ngiam}
+Ngiam, Jiquan, et al. "Multimodal Deep Learning." 2011. 
 
 \bibitem{Olsen}
 Olson, Harry E. \textit{Music, Physics and Engineering}. 2nd ed., Dover Publications, 1967.

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  14 NOV 2020 11:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  14 NOV 2020 22:53
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -525,89 +525,84 @@ ne 538.
 
 [16] [17] [18]
 
-Package caption Warning: \label without proper reference on input line 648.
-See the caption package documentation for explanation.
+LaTeX Warning: Reference `Goodfellow' on page 19 undefined on input line 644.
 
 
-LaTeX Warning: Reference `fig-NetworkArchitecture' on page 19 undefined on inpu
-t line 645.
+LaTeX Warning: Citation `N' on page 19 undefined on input line 644.
 
-[19]
+
 
 pdfTeX warning: pdflatex (file ../Figures/NeuralNetworkArchitecture.pdf): PDF i
 nclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<../Figures/NeuralNetworkArchitecture.pdf, id=93, 794.97pt x 1228.59pt>
+<../Figures/NeuralNetworkArchitecture.pdf, id=90, 794.97pt x 1228.59pt>
 File: ../Figures/NeuralNetworkArchitecture.pdf Graphic file (type pdf)
 <use ../Figures/NeuralNetworkArchitecture.pdf>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.pdf  used on inpu
-t line 650.
-(pdftex.def)             Requested size: 357.7332pt x 552.8604pt.
-[20]
+t line 651.
+(pdftex.def)             Requested size: 397.48402pt x 614.2935pt.
+[19]
+Overfull \vbox (52.35275pt too high) has occurred while \output is active []
 
-Package caption Warning: \label without proper reference on input line 648.
+
+[20 <../Figures/NeuralNetworkArchitecture.pdf>]
+
+Package caption Warning: \label without proper reference on input line 649.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-NetworkArchitecture' on page 21 undefined on inpu
-t line 659.
+t line 660.
 
-[21 <../Figures/NeuralNetworkArchitecture.pdf>]
 
-Package caption Warning: \label without proper reference on input line 648.
+Package caption Warning: \label without proper reference on input line 649.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig-NetworkArchitecture' on page 22 undefined on inpu
-t line 682.
+LaTeX Warning: Reference `fig-NetworkArchitecture' on page 21 undefined on inpu
+t line 683.
 
-[22] [23] [24] [25] [26]
+[21] [22] [23] [24] [25]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[27]
+[26]
 
-LaTeX Warning: Citation `Khan' on page 28 undefined on input line 922.
+LaTeX Warning: Citation `Khan' on page 27 undefined on input line 923.
 
-[28] [29] [30]
+[27] [28] [29]
 
-Package caption Warning: \label without proper reference on input line 988.
+Package caption Warning: \label without proper reference on input line 989.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig-spectrograms' on page 31 undefined on input line 
-984.
+LaTeX Warning: Reference `fig-spectrograms' on page 30 undefined on input line 
+985.
+
+[30]
+
+LaTeX Warning: Citation `Olson' on page 31 undefined on input line 1029.
 
 [31]
 
-LaTeX Warning: Citation `Olson' on page 32 undefined on input line 1028.
+LaTeX Warning: Citation `Olson' on page 32 undefined on input line 1061.
 
 [32]
-
-LaTeX Warning: Citation `Olson' on page 33 undefined on input line 1060.
-
-[33]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1081
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1082
 .
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1081.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1082.
 
 
-[34] [35] [36] [37] [38]
+[33] [34] [35] [36] [37]
 
-LaTeX Warning: Citation `Olson' on page 39 undefined on input line 1265.
+LaTeX Warning: Citation `Olson' on page 38 undefined on input line 1266.
 
-[39]
-Overfull \hbox (2.64665pt too wide) in paragraph at lines 1298--1299
- \OT1/cmr/m/n/12 Per-for-mance eval-u-a-tions are com-monly im-ple-mented in th
-e form of $\OML/cmm/m/it/12 K$\OT1/cmr/m/it/12 -Fold Cross-Validation
- []
-
-[40]
-Underfull \hbox (badness 10000) in paragraph at lines 1357--1377
+[38] [39] [40]
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1378
 []$[]$ $[]$
  []
 
@@ -620,13 +615,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5328 strings out of 492895
- 81231 string characters out of 3123268
- 157352 words of memory out of 3000000
- 9151 multiletter control sequences out of 15000+200000
+ 5331 strings out of 492895
+ 81254 string characters out of 3123268
+ 157360 words of memory out of 3000000
+ 9154 multiletter control sequences out of 15000+200000
  11056 words of font info for 41 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,43p,921b,505s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,19n,43p,1033b,505s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
@@ -645,7 +640,7 @@ b><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
 ublic/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (50 pages, 605450 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (50 pages, 606035 bytes).
 PDF statistics:
  283 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
