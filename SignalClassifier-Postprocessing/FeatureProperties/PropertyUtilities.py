@@ -31,7 +31,7 @@ class FeatureProcessor:
     @property
     def GetFeatureNames(self):
         """ Get Names of all features as list of strs """
-        names = ["Time Domain Env.","Zero X-Rate","Time Center of Mass"]                         
+        names = ["Time Domain Env","Zero X-Rate","Time Center of Mass"]                         
         names += ["Auto Correlation "+str(i+1) for i in range(4)]        
         names += ["MFCC "+str(i+1) for i in range (12)]      
         names += ["Frequency Center of Mass"]                                    
@@ -39,14 +39,15 @@ class FeatureProcessor:
 
     def CreateDictionary(self,encdPath):
         """ Handle class dictionary """
-        modelName = "XValCLFB"
+        modelName = "XValCLFAlpha"
         categories = CategoryDictionary(encdPath,modelName)
         self.classNames = categories.encoder.keys()          # get names of categories
             
     def __Call__(self,exptPath):
         """ Execute Feature Processor Instance """   
         homePath = os.getcwd()
-        xTickNames = ["Full Data"] + [x for x in self.classNames] # make ticks for boxplot
+        #xTickNames = ["Full Data"] + [x for x in self.classNames] # make ticks for boxplot
+        xTickNames = [x for x in self.classNames] # make ticks for boxplot
         
         # Make BoxPlot Data for the Full matrix
         for i in range(self.nFeatures):   # Each feature:
@@ -54,7 +55,7 @@ class FeatureProcessor:
             featureData = self.X[:,i]            # get full col of matrix
             featureName = self.GetFeatureNames[i]
 
-            self.boxPlotArrays = [BoxPlotData(featureData,"Full Feature")]
+            self.boxPlotArrays = []
 
             for j in range(self.nClasses):          # each class
                 # Get data for this class
@@ -126,17 +127,19 @@ class BoxPlotFigure:
         --------------------------------
         Return None
         """
-        plt.figure(figsize=(20,10))
+        plt.figure(figsize=(20,8))
         #plt.title(title,size=60,weight='bold',pad=2.0)
         
         boxPlots = [x.data for x in data]
         plt.boxplot(boxPlots,showfliers=False)
 
         plt.grid()
-        plt.subplots_adjust(left=0.02, right=0.98, top=0.95, bottom=0.15)
+        plt.subplots_adjust(left=0.02, right=0.98, top=0.95, bottom=0.18)
 
+        plt.yticks(weight='bold')
         plt.xticks(ticks=range(1,len(boxPlots)+1),labels=xlabels,
                    rotation=80,weight='bold')
+        plt.hlines(0,0.5,len(xlabels)+0.5,color='black')
         
         if save == True:
             plt.savefig(title.replace(" ","_")+".png")

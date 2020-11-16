@@ -43,26 +43,26 @@
 \contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{30}% 
 \contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{30}% 
 \contentsline {subsection}{\numberline {5.1}Spectrogram Features}{32}% 
-\contentsline {subsection}{\numberline {5.2}Time-Space Features}{36}% 
+\contentsline {subsection}{\numberline {5.2}Time-Space Features}{35}% 
 \contentsline {subsubsection}{\numberline {5.2.1}Time Domain Envelope}{36}% 
-\contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{37}% 
+\contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{36}% 
 \contentsline {subsubsection}{\numberline {5.2.3}Temporal Center of Mass}{37}% 
 \contentsline {subsubsection}{\numberline {5.2.4}Auto Correlation Coefficients}{38}% 
-\contentsline {subsection}{\numberline {5.3}Frequency-Space Features}{39}% 
-\contentsline {subsubsection}{\numberline {5.3.1}Mel Filter Bank Energies}{39}% 
-\contentsline {subsubsection}{\numberline {5.3.2}Mel Frequency Cepstral Coeffecients}{40}% 
-\contentsline {subsubsection}{\numberline {5.3.3}Frequency Center of Mass}{41}% 
-\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{41}% 
-\contentsline {section}{\numberline {6}Evaluating Model Performance}{42}% 
-\contentsline {subsection}{\numberline {6.1}Cross Validation}{42}% 
-\contentsline {subsection}{\numberline {6.2}Performance Metrics}{43}% 
-\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{44}% 
-\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{44}% 
-\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{45}% 
-\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{45}% 
-\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{46}% 
-\contentsline {paragraph}{}{46}% 
-\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{47}% 
-\contentsline {section}{\numberline {7}Experimental Results}{48}% 
-\contentsline {section}{\numberline {8}Conclusion}{49}% 
-\contentsline {section}{\numberline {9}Acknowledgments}{50}% 
+\contentsline {subsection}{\numberline {5.3}Frequency-Space Features}{40}% 
+\contentsline {subsubsection}{\numberline {5.3.1}Mel Filter Bank Energies}{40}% 
+\contentsline {subsubsection}{\numberline {5.3.2}Mel Frequency Cepstral Coeffecients}{41}% 
+\contentsline {subsubsection}{\numberline {5.3.3}Frequency Center of Mass}{43}% 
+\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{43}% 
+\contentsline {section}{\numberline {6}Evaluating Model Performance}{44}% 
+\contentsline {subsection}{\numberline {6.1}Cross Validation}{44}% 
+\contentsline {subsection}{\numberline {6.2}Performance Metrics}{45}% 
+\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{46}% 
+\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{46}% 
+\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{47}% 
+\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{47}% 
+\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{48}% 
+\contentsline {paragraph}{}{48}% 
+\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{49}% 
+\contentsline {section}{\numberline {7}Experimental Results}{50}% 
+\contentsline {section}{\numberline {8}Conclusion}{51}% 
+\contentsline {section}{\numberline {9}Acknowledgments}{52}% 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  15 NOV 2020 23:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  16 NOV 2020 09:52
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -567,35 +567,33 @@ LaTeX Warning: Citation `Khan' on page 28 undefined on input line 927.
 
 [28] [29]
 
-LaTeX Warning: Citation `Zerizel' on page 30 undefined on input line 950.
+LaTeX Warning: Citation `Zerizel' on page 30 undefined on input line 952.
 
 
-LaTeX Warning: Citation `Tensorflow' on page 30 undefined on input line 961.
+LaTeX Warning: Citation `Tensorflow' on page 30 undefined on input line 963.
 
 [30] [31]
 
-Package caption Warning: \label without proper reference on input line 1000.
+Package caption Warning: \label without proper reference on input line 1002.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-spectrograms' on page 32 undefined on input line 
-996.
+998.
 
 <../Figures/AnalysisFrames.png, id=177, 804.75656pt x 407.27156pt>
 File: ../Figures/AnalysisFrames.png Graphic file (type png)
 <use ../Figures/AnalysisFrames.png>
-Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1010
+Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1012
 .
 (pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
 [32 <../Figures/AnalysisFrames.png>] [33] [34]
 
-LaTeX Warning: Reference `eqn-ShapeX1' on page 35 undefined on input line 1086.
+LaTeX Warning: Reference `eqn-ShapeX1' on page 35 undefined on input line 1088.
 
 
-[35]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1104
 .
-
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
@@ -603,12 +601,100 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1104.
 
 
-[36] [37] [38] [39] [40] [41] [42] [43]
-Underfull \hbox (badness 10000) in paragraph at lines 1379--1399
+[35]
+<../FiguresFeatures/Time_Domain_Env.png, id=190, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Time_Domain_Env.png Graphic file (type png)
+<use ../FiguresFeatures/Time_Domain_Env.png>
+Package pdftex.def Info: ../FiguresFeatures/Time_Domain_Env.png  used on input 
+line 1128.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [36 <../FiguresFeatures/Time_Domain_Env.png>]
+<../FiguresFeatures/Zero_X-Rate.png, id=196, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Zero_X-Rate.png Graphic file (type png)
+<use ../FiguresFeatures/Zero_X-Rate.png>
+Package pdftex.def Info: ../FiguresFeatures/Zero_X-Rate.png  used on input line
+ 1150.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [37 <../FiguresFeatures/Zero_X-Rate.png>]
+<../FiguresFeatures/Time_Center_of_Mass.png, id=201, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Time_Center_of_Mass.png Graphic file (type png)
+<use ../FiguresFeatures/Time_Center_of_Mass.png>
+Package pdftex.def Info: ../FiguresFeatures/Time_Center_of_Mass.png  used on in
+put line 1173.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+<../FiguresFeatures/Auto_Correlation_1.png, id=202, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Auto_Correlation_1.png Graphic file (type png)
+<use ../FiguresFeatures/Auto_Correlation_1.png>
+Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_1.png  used on inp
+ut line 1200.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/Auto_Correlation_2.png, id=203, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Auto_Correlation_2.png Graphic file (type png)
+<use ../FiguresFeatures/Auto_Correlation_2.png>
+Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_2.png  used on inp
+ut line 1207.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/Auto_Correlation_3.png, id=204, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Auto_Correlation_3.png Graphic file (type png)
+<use ../FiguresFeatures/Auto_Correlation_3.png>
+Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_3.png  used on inp
+ut line 1214.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/Auto_Correlation_4.png, id=205, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Auto_Correlation_4.png Graphic file (type png)
+<use ../FiguresFeatures/Auto_Correlation_4.png>
+Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_4.png  used on inp
+ut line 1221.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+ [38 <../FiguresFeatures/Time_Center_of_Mass.png>]
+Overfull \vbox (7.67204pt too high) has occurred while \output is active []
+
+
+[39 <../FiguresFeatures/Auto_Correlation_1.png> <../FiguresFeatures/Auto_Correl
+ation_2.png> <../FiguresFeatures/Auto_Correlation_3.png> <../FiguresFeatures/Au
+to_Correlation_4.png>] [40]
+<../FiguresFeatures/MFCC_1.png, id=221, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_1.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1305
+.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/MFCC_4.png, id=222, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_4.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1312
+.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/MFCC_8.png, id=223, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_8.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1319
+.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/MFCC_12.png, id=224, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_12.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 132
+6.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+ [41]
+Overfull \vbox (7.67204pt too high) has occurred while \output is active []
+
+
+[42 <../FiguresFeatures/MFCC_1.png> <../FiguresFeatures/MFCC_4.png> <../Figures
+Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
+<../FiguresFeatures/Frequency_Center_of_Mass.png, id=236, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/Frequency_Center_of_Mass.png Graphic file (type png)
+<use ../FiguresFeatures/Frequency_Center_of_Mass.png>
+Package pdftex.def Info: ../FiguresFeatures/Frequency_Center_of_Mass.png  used 
+on input line 1355.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [43 <../FiguresFeatures/Frequency_Center_of_Mass.png>] [44] [45]
+Underfull \hbox (badness 10000) in paragraph at lines 1442--1462
 []$[]$ $[]$
  []
 
-[44] [45] [46] [47] [48] [49] [50] [51] [52] (Buell-PHYS799-ThesisDraft0.aux)
+[46] [47] [48] [49] [50] [51] [52] [53] [54] (Buell-PHYS799-ThesisDraft0.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -617,34 +703,35 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5339 strings out of 492895
- 81438 string characters out of 3123268
+ 5405 strings out of 492895
+ 83751 string characters out of 3123268
  157302 words of memory out of 3000000
- 9161 multiletter control sequences out of 15000+200000
- 11056 words of font info for 41 fonts, out of 3000000 for 9000
+ 9214 multiletter control sequences out of 15000+200000
+ 12304 words of font info for 46 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,43p,1042b,505s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,19n,43p,1042b,546s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Landon/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Landon/AppDa
-ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users
-/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.
-pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmr12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmr17.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/Landon/AppData/Local/Progra
-ms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Landon/AppData/
-Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/L
-andon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pf
-b><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
-/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (53 pages, 693311 bytes).
+9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Landon/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Landon/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/User
+s/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8
+.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmr10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Landon/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/Landon/AppDat
+a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/L
+andon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.p
+fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Progr
+ams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Buell-PHYS799-ThesisDraft0.pdf (55 pages, 1871979 bytes).
 PDF statistics:
- 293 PDF objects out of 1000 (max. 8388607)
+ 328 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 

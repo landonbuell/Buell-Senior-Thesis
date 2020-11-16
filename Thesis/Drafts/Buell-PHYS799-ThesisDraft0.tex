@@ -329,19 +329,19 @@ x^{(l)} \in \mathbb{R}^{([N-n+1] \times [M-m+1] \times K)}
 As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in Fig. (\ref{fig-2DConvExample}):
 \begin{figure}[H]
 \begin{center}
-\begin{subfigure}{0.45\textwidth}
-\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
-\caption{Input Activations}
-\end{subfigure}
-\begin{subfigure}{0.45\textwidth}
-\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
-\caption{Convolution Filter}
-\end{subfigure}
-\begin{subfigure}{0.9\textwidth}
-\centering
-\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
-\caption{Convolution Result}
-\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
+	\caption{Input Activations}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
+	\caption{Convolution Filter}
+	\end{subfigure}
+	\begin{subfigure}{0.9\textwidth}
+	\centering
+	\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
+	\caption{Convolution Result}
+	\end{subfigure}
 \end{center}
 \caption{The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite{Goodfellow}}
 \label{fig-2DConvExample}
@@ -941,6 +941,8 @@ To ensure the construction of a suitable model, we derive features based from th
 \paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. We have developed a set of predictors that describe each sample in a compact manner, with reasonable separation boundaries between samples from different classes.
 These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalize to have a zero mean, and unit-variance across all classes. 
 
+\textcolor{red}{Describe nature of features w/ separation boundaries}
+
 \newpage
 
 % ================================
@@ -969,16 +971,16 @@ Y \in \mathbb{R}^{(b \times \kappa)}
 \subsubsection{Audio Preprocessing}
 \label{subsubsec-Preprocessing}
 
-\paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following:
+\paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following steps and requirements:
 \begin{enumerate}
-\item A suitably sized number of files, of reasonable audio quality, with normalized amplitudes
+\item A suitably sized number of files of reasonable audio quality with normalized amplitudes
 \item Audio encoded in a standard, and consistent format
 \item A consistent sample rate and bit depth between audio files
 \item A consistent number of channels
 \end{enumerate}
 Note that different projects may require a different set of requirement from preprocessing \cite{Virtanen}. For this project, we have chosen to use the following parameters:
 \begin{enumerate}
-\item Roughly $16,000$ audio files Professionally or semi-professionally recorded in a studio. \textcolor{red}{Citation needed!}. All ampltiudes have been normalized to $\pm 1$ unit.
+\item Roughly $18,000$ audio files Professionally or semi-professionally recorded in a studio. \textcolor{red}{Citation needed!}. All ampltiudes have been normalized to $\pm 1$ unit.
 \item All audio has be converted into \textit{.WAV} files from other formats, such as \textit{.AIF} or \textit{.MP3} using a MATLAB program
 \item All audio is sampled at $44,100$ Hz and \textcolor{blue}{Bit depth needed - 16? 24?}
 \item All audio has been down-mixed into mono-channel waveforms.
@@ -1092,8 +1094,6 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 % ================================================================
 
-\newpage
-
 \subsection{Time-Space Features}
 \label{subsec-time}
 
@@ -1109,6 +1109,8 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 % ================================
 
+\newpage
+
 \subsubsection{Time Domain Envelope}
 
 \paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude. (i.e. the signal has not started or is decaying)
@@ -1122,8 +1124,8 @@ For instruments with long sustain or release times, such as strings or undampene
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{Plot of TDE Feature Here}
-%\includegraphics[scale=0.3]{../FiguresFeatures/Time_Domain_Env}
+%textcolor{red}{Plot of TDE Feature Here}
+\includegraphics[scale=0.3]{../FiguresFeatures/Time_Domain_Env}
 \end{center}
 \caption{A comparison of the Time Domain Envelope across each class using a box-and-whisker plot}
 \label{fig-FeatureTDE}
@@ -1144,7 +1146,8 @@ Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZX
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF ZXR FEATURES HERE}
+%\textcolor{red}{PLOT OF ZXR FEATURES HERE}
+\includegraphics[scale=0.3]{../FiguresFeatures/Zero_X-Rate}
 \end{center}
 \caption{A comparison of the Zero-Crossing Rate for each class using a box-and-whisker plot}
 \label{fig-FeatureZXR}
@@ -1166,7 +1169,8 @@ The TCM of that waveform is then given:
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF TCM FEATURES HERE}
+%\textcolor{red}{PLOT OF TCM FEATURES HERE}
+\includegraphics[scale=0.3]{../FiguresFeatures/Time_Center_of_Mass}
 \end{center}
 \caption{A comparison of the temporal center mass for each class using a box-and-whisker plot}
 \label{fig-FeatureTCM}
@@ -1188,7 +1192,36 @@ The TCM of that waveform is then given:
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF ACC FEATURES HERE}
+%\textcolor{red}{PLOT OF ACC FEATURES HERE}
+
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_1}
+	\caption{ACC $k=1$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_2}
+	\caption{ACC $k=2$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_3}
+	\caption{ACC $k=3$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_4}
+	\caption{ACC $k=4$}
+	\end{subfigure}	
+	
 \end{center}
 \caption{A comparison of the the first four auto correlation coefficents in each class using a box-and-whisker plot}
 \label{fig-FeatureACC}
@@ -1260,13 +1293,42 @@ Where $\widetilde{B}$ is the column average of the Mel filter bank energies comp
 
 \paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal\cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. 
 
-\paragraph*{}As the frequency bin index increases, the width of the bin in frequency space increases. For instruments with higher fundamental frequencies, we expect very little energy in the lower frequency bins, and also a lower MFCC value. For instruments with lower fundamental frequencies, we expected 
+\paragraph*{}As the frequency bin index increases, the width of the bin in frequency space increases. \textcolor{red}{Finish this! What does a MFCC tell us with words!}
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF MFCC FEATURES HERE}
+%\textcolor{red}{PLOT OF MFCC FEATURES HERE}
+
+\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_1}
+	\caption{MFCC $R[1]$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_4}
+	\caption{MFCC $R[4]$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_8}
+	\caption{MFCC $R[8]$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_12}
+	\caption{MFCC $R[12]$}
+	\end{subfigure}	
+
 \end{center}
-\caption{A comparison of the $12$ Mel Frequency Cepstral Coefficients for each class using box-and-whisker plots}
+\caption{A comparison of 4 Mel Frequency Cepstral Coefficients, $1$, $4$, $8$ and $12$ for each class using box-and-whisker plots}
 \label{fig-FeatureMFCCs}
 \end{figure}
 
@@ -1289,9 +1351,10 @@ FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \begin{figure}[H]
 \label{fig-FeatureFCM}
 \begin{center}
-\textcolor{red}{PLOT OF FCM FEATURES HERE}
+%\textcolor{red}{PLOT OF FCM FEATURES HERE}
+\includegraphics[scale=0.3]{../FiguresFeatures/Frequency_Center_of_Mass}
 \end{center}
-\caption{Frequency center-of-mass visualized in feature-space}
+\caption{A comparison of the frequency center-of-mass for each class using box-and-whisker plots}
 \end{figure}
 
 % ================================================================
