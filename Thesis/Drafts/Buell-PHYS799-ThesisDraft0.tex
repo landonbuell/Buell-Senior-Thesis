@@ -1111,9 +1111,9 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 \subsubsection{Time Domain Envelope}
 
-\paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy containined in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small ampliute. (i.e. the signal has not started or is decaying)
+\paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude. (i.e. the signal has not started or is decaying)
  
-\paragraph*{}We adapt this TDE to \textbf{compute the RMS-Energy of the full waveform}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE presents a consistent measurement of energy in the full time-domain signal \cite{Liu}. The TDE is computed as RMS-Energy of the full waveform, $s$ and is given by \cite{Olson,Serizel}
+\paragraph*{}We adapt this TDE to \textbf{compute the time domain envelope of the full waveform}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE represents a consistent measurement of energy in the full time-domain signal \cite{Liu}. The TDE is computed as the RMS-Energy of the waveform, $s$ and is given by \cite{Olson,Serizel}:
 \begin{equation}
 \label{eqn-RMS}
 \text{RMS}\big[ s \big] = \sqrt{\frac{1}{M} \sum_{i=0}^{M-1} s[i]^2}
@@ -1122,9 +1122,10 @@ For instruments with long sustain or release times, such as strings or undampene
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF TDE FEATURES HERE}
+\textcolor{red}{Plot of TDE Feature Here}
+%\includegraphics[scale=0.3]{../FiguresFeatures/Time_Domain_Env}
 \end{center}
-\caption{A comparison of the Time Domain Envelope across each class}
+\caption{A comparison of the Time Domain Envelope across each class using a box-and-whisker plot}
 \label{fig-FeatureTDE}
 \end{figure}
 
@@ -1132,20 +1133,20 @@ For instruments with long sustain or release times, such as strings or undampene
 
 \subsubsection{Zero Crossing Rate}
 
-\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform \cite{Liu}. In some cases, the ZXR can be correlated to frequency as well \cite{Kahn,Zhang}. 
+\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform \cite{Kahn,Liu,Zhang}. 
 
-\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
+\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. Signals with a high ZXR can be representative of classes that often have additional noise and signals with a low ZXR, can indicate signals with more stable, periodic behavior. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
 \begin{equation}
 \label{eqn-ZXR}
 \text{ZXR}\big[ s \big] = \frac{1}{2} \sum_{i=1}^{M-1} \Big{|} \sign(s[i]) - \sign(s[i-1]) \Big{|} 
 \end{equation}
-Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. This provides a rough estimate for the average frequency in the full waveform,n and can help discern clean periodic signals (low ZXR) from those that may have more noise or volatile behavior (high ZXR)\cite{Serizel}.
+Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZXR also provides a very rough estimate for the average frequency of the waveform. This allows it to alos be useful in discerning classes with generllay hgher frequencies, such as upper woodwinds, against classes with generaly lower frequencies, such as low brass \cite{White}.
 
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{PLOT OF ZXR FEATURES HERE}
 \end{center}
-\caption{Zero crossing rate visualized in feature-space}
+\caption{A comparison of the Zero-Crossing Rate for each class using a box-and-whisker plot}
 \label{fig-FeatureZXR}
 \end{figure}
 
@@ -1153,20 +1154,21 @@ Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. Th
 
 \subsubsection{Temporal Center of Mass}
 
-\paragraph*{}The temporal center of mass (TCM) of a signal is used to compute roughly where in time the amplitude of the waveform \textit{bunches up}. We treat the full waveform array, $s$, with $M$ samples as a discrete 1-Dimensional mass distribution. The TCM of that waveform is then given:
+\paragraph*{}The temporal center of mass (TCM) of a signal is used to compute roughly where in time the amplitude of the waveform \textit{bunches up}. We compute the element-wise absolute value of the waveform and treat it as a 1-dimensional discrete mass distribution of $M$ samples.
+The TCM of that waveform is then given:
 \begin{equation}
 \label{eqn-FeatureTCM}
-\text{TCM}\big[ s \big] = \frac{\sum_{i=0}^{M-1}i s[i]}{\sum_{i=0}^{M-1}s[i]}
+\text{TCM}\big[ s \big] = \frac{\sum_{i=0}^{M-1}i \big|s[i]\big|}
+{\sum_{i=0}^{M-1}\big|s[i]\big|}
 \end{equation}
-This includes negative amplitude values acting as "negative masses". \textcolor{blue}{Should I use the absolute value of the signal instead?}
 
-\paragraph*{}The TCM turns out to be a very unique feature, and very powerful in classification due to it's variance textcolor{red}{Citation needed}. For instruments with heavier attacks, we expect the TCM to be a very near the start of the waveform. For instruments with long sustain times, we expect a very centrally located center of mass, and for instruments with long release times, we expect a later TCM value.
+\paragraph*{}TCM condenses the idea of the amplitude envelope into a single value. It allows for the quick measurement of where in the time most of the energy of the signal lies. For percussive instruments with short attack and release times, such as bells or xylophones, we expect a very low TCM. Instruments with plucked strings, but longer release times such as mandolins and guitars should have similarly low values. Instruments in the woodwind and brass family generally have longer sustain and release times, giving them a slightly higher center of mass. Strings and undampened percussion have notoriously long sustain and release times giving them much higher TCM values \cite{Olson,White}. Finally, the synthetic wave forms have no characteristic  envelope shape (due to their synthetic nature). This gives a centrally located TCM, very close to $M/2$.
 
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{PLOT OF TCM FEATURES HERE}
 \end{center}
-\caption{Temporal center-of-mass visualized in feature-space}
+\caption{A comparison of the temporal center mass for each class using a box-and-whisker plot}
 \label{fig-FeatureTCM}
 \end{figure}
 
@@ -1174,21 +1176,22 @@ This includes negative amplitude values acting as "negative masses". \textcolor{
 
 \subsubsection{Auto Correlation Coefficients}
 
-\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution . We can compute any number of ACC's and their value changed depending on the index chosen. It is common to only compute the first $K$ ACC's \cite{Serizel}. For a full waveform signal $s$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
+\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution. They are computed by summing a signal with a time-delayed variant of itself, and then normalized depending on the contect. We can compute any number of ACC's and their value changed depending on the index chosen. It is common to use the first $K$ ACC's \cite{Serizel}. For a full waveform signal $s$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
 \begin{equation}
 \label{eqn-FeatureACC}
 \text{ACC}_k\big[ s \big] = 
-\frac{\sum_{i=0}^{M-k-1}s[i]s[i+k]} {\sqrt{\sum_{i=0}^{M-k-1}s^2[i]} \sqrt{\sum_{i=0}^{M-k-1}s^2[i+k]}}
+\frac{\sum_{i=0}^{M-k-1}s[i]s[i+k]} {\sqrt{\sum_{i=0}^{M-k-1}s^2[i]} 
+\sqrt{\sum_{i=0}^{M-k-1}s^2[i+k]}}
 \end{equation}
 
-\paragraph*{}An ACC can be thought of as convolving a signal with a time-delayed version of itself. This measures similarity between samples related to the time difference between them \textcolor{red}{Citation needed}. \textcolor{blue}{I may need to try a different set of ACC's for this}
+\paragraph*{}\textcolor{red}{I need to complete my discussion of ACC's here!}
 
 \begin{figure}[H]
-\label{fig-FeatureACC}
 \begin{center}
 \textcolor{red}{PLOT OF ACC FEATURES HERE}
 \end{center}
-\caption{First four auto correlation coefficients visualized in feature-space}
+\caption{A comparison of the the first four auto correlation coefficents in each class using a box-and-whisker plot}
+\label{fig-FeatureACC}
 \end{figure}
 
 % ================================================================
@@ -1211,7 +1214,7 @@ For each feature, we detail the physical significance and provide a visualizatio
 
 \subsubsection{Mel Filter Bank Energies}
 
-\paragraph*{}Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping triangular bins \cite{Sahidullah}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, over a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
+\paragraph*{}MEl Filter Bank Energies are not used directly as features, but are used in computing Mel Frequency Cepstrum Coefficient (MFCC's) so we describe them here. Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping bins \cite{Sahidullah,Serizel}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, covering a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
 
 \paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Kahn}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Kahn}:
 \begin{equation}
@@ -1224,51 +1227,47 @@ H_f[m] = 700 \big(10^{(\frac{m}{2595})}-1\big)
 \end{equation}
 Where $M_f$ is the frequency in units of Mels, given $[h]$, a frequency in Hertz, and $H_f$ is the frequency in Hertz given $[m]$ a frequency in Mels.
 
-\paragraph*{}Mel filters are produced by grouping frequency-space into $R$ overlapping bins called \textit{Mel Filter-banks}. In units of Mels, each filter bank, $R_i$ remains a constant width, but when shown in Hertz, the bins increase logarithmically. 
+
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{Figure of a few Mel Filter Banks goes here}
 \end{center}
-\caption{Mel Filter Banks shown in frequency space with units of Hertz}
+\caption{Mel Filter Banks shown in frequency space with units of (a) Mels and (b)Hertz}
 \label{fig-MelFilterBanks}
 \end{figure}
-Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, and transformed back into units of Hertz. When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
+
+
+\paragraph*{}Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, Eq. (\ref{eqn-Spectrogram}). When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
 \begin{equation}
 \label{eqn-FilterBanks}
-B = S^T M^T
+B = (MS)^T
 \end{equation}
 Matrix $B$ has shape $k \times R$.
 
-\paragraph*{}Using $S^T$ ensures that each row of the matrix is an analysis frame in frequency space. Similarly, each column of the matrix $M$ is a appropriately scaled Mel filter-bank. This way, the matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all appended to the feature vector. 
-
-\begin{figure}[H]
-\begin{center}
-\textcolor{red}{PLOT OF MFCC FEATURES HERE}
-\end{center}
-\caption{Mel Frequency Cepstral Coefficients in feature-space}
-\label{fig-FeatureMFBE}
-\end{figure}
+\paragraph*{}Tis matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all are used to compute the MFCC's in the next section.
 
 % ================================
 
 \subsubsection{Mel Frequency Cepstral Coeffecients}
 
-\paragraph*{}Ceptstral coefficients are the result of computing the inverse discrete Fourier transform (IDFT) of the logarithm of the frequency Spectrum. Mel Frequency Cepstral Coefficients (MFCC's) are the most commonly used in digital signal processing. They are computed throught he inverse discrete cosine transform of the log energy in in each Mel frequency bank \cite{Serizel,Sahidullah}. The $c$-th coefficient is given by:
+\paragraph*{}Ceptstral coefficients are the result of computing the inverse discrete Fourier transform (IDFT) of the logarithm of the frequency Spectrum \cite{Serizel,Sahidullah}. Mel Frequency Cepstral Coefficients (MFCC's) are the most commonly used ceptral coefficients and appear commonly in digital signal processing. The $c$-th coefficient is given by:
 \begin{equation}
 \label{feat-MFCC}
 \text{MFCC}[c] = \sqrt{\frac{2}{R}} \sum_{i=1}^{R} 
 \log\big(\widetilde{B[i]}\big) \cos\bigg(\frac{c(i-\frac{1}{2})\pi}{R[i]}\bigg)
 \end{equation}
-Where $\widetilde{B}$ are the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
+Where $\widetilde{B}$ is the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
 
-\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes \cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. We provide a representation of MFCC properties below.
+\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal\cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. 
+
+\paragraph*{}As the frequency bin index increases, the width of the bin in frequency space increases. For instruments with higher fundamental frequencies, we expect very little energy in the lower frequency bins, and also a lower MFCC value. For instruments with lower fundamental frequencies, we expected 
 
 \begin{figure}[H]
-\label{fig-FeatureMFCC}
 \begin{center}
 \textcolor{red}{PLOT OF MFCC FEATURES HERE}
 \end{center}
-\caption{Mel Frequency Cepstral Coefficients visualized in feature-space}
+\caption{A comparison of the $12$ Mel Frequency Cepstral Coefficients for each class using box-and-whisker plots}
+\label{fig-FeatureMFCCs}
 \end{figure}
 
 % ================================
@@ -1443,7 +1442,11 @@ For multi-class problems, we report the precision score as averaged over all $k$
 
 \subsubsection{Accuracy Score}
 
-\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of 
+\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron,James}.
+
+\paragraph*{}For example, we could develop a model that uses a few predictors from every human currently alive and determine which of them has walked on the moon. There are roughly 7 billion humans alive, four of which have been on out moon. Simply guess \textit{no} for every human, our model would have more than a $99.9999\%$ accuracy. However, we would argue that this model does not perform well seeing as it has a $0 \%$ recall score, and and a $0 \%$ precision score.
+
+\paragraph*{}Despite this we can still sue accuracy score to provide a rough approximation for how the model is performing. \textcolor{red}{finish this!} 
 
 % ================================================================
 

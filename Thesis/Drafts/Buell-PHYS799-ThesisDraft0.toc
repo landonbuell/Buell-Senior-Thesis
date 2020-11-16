@@ -60,9 +60,9 @@
 \contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{44}% 
 \contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{45}% 
 \contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{45}% 
-\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{45}% 
-\contentsline {paragraph}{}{45}% 
-\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{46}% 
+\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{46}% 
+\contentsline {paragraph}{}{46}% 
+\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{47}% 
 \contentsline {section}{\numberline {7}Experimental Results}{48}% 
 \contentsline {section}{\numberline {8}Conclusion}{49}% 
 \contentsline {section}{\numberline {9}Acknowledgments}{50}% 
