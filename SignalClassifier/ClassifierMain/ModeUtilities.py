@@ -84,9 +84,9 @@ class ProgramMode:
         featureVector = ML_utils.FeatureArray(fileobj.targetInt)
 
         # Create Feature vector for MLP Branch
-        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  # collect time-domain features  
+        timeFeatures = feat_utils.TimeSeriesFeatures(fileobj.waveform)  
         featureVector.AddFeatures(timeFeatures.__Call__())              # and time-domain features
-        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal,n_frames=256)
+        freqFeatures = feat_utils.FrequencySeriesFeatures(timeFeatures.signal,npts=1024)
         featureVector.AddFeatures(freqFeatures.__Call__())              # add frequency-domain features
             
         # Create Spectrogram Matrix for CNN Branch
