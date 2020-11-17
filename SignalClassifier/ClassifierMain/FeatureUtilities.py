@@ -282,10 +282,8 @@ class FrequencySeriesFeatures (BaseFeatures):
         Return Z, array
         """        
         assert attrb in ['signal','frames']
-        X = self.__getattribute__(attrb)    # isolate signal or frames
-        plot_utils.Plot_Spectrum(np.arange(2048),X[10],[])
+        X = self.__getattribute__(attrb)    # isolate signal or frames      
         X[:,:self.npts] *= self.window
-        plot_utils.Plot_Spectrum(np.arange(2048),X[10],[])
         Z = fftpack.fft(X,axis=-1)  # apply DFT
         Z = np.abs(Z)**2            # compute power:
         if Z.ndim > 1:              # more than 1D
