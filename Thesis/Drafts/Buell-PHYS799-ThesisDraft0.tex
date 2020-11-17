@@ -453,7 +453,7 @@ For our chosen architecture, ReLU is applied to the activations in every single 
 \text{Softmax}\big[ x \big]_{i} = \frac{e^{x_i}}{\sum_{j}e^{x_j}}
 \end{equation}
 
-\paragraph*{}This function is almost only used in the output layer of a neural network, and encodes a discrete categorical probability. For example, if Eq.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
+\paragraph*{}This function is almost only used in the output layer of a neural network, and encodes a normalized discrete categorical probability \cite{Loy,Virtanen}. For example, if Eq.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
 
 
 % ================================================================
@@ -461,22 +461,24 @@ For our chosen architecture, ReLU is applied to the activations in every single 
 \subsection{Training a Neural Network}
 \label{subsec-Training}
 
-\paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
+\paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$ \cite{Goodfellow}. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Mitchell}:
 \begin{quote}
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
 \end{quote}
-Without any direct human intervention, a model must update itself to improve it's performance at a give task a new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
+Without any direct human intervention, a model must update itself to improve it's performance at a give task as new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
 
-\paragraph*{}We consider the set of parameters $\Theta$ as a concatenation of each applicable layer's weighting matrix and bias vector such that:
+\paragraph*{}We consider the set of parameters $\Theta$ as the set of values within each trainable layer's weighting matrix and bias vector such that:
 \begin{equation}
 \label{eqn-Theta}
 \Theta = \big\{
-W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)},
+W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)}
 \big\}
 \end{equation}
-Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function, thus indirectly influences the final layer activations. Note that $W^{(l)}$ or $b^{(l)}$, themselves are not parameters, but arrays of parameters to be trained. Certain layers, such as pooling layers (\ref{subsubsec-2DPooling}), concatenation layers (\ref{subsubsec-1DConcat}), or flattening layers (\ref{subsubsec-1DFlatten}) do not contain any trainable parameters. Similarly, activation functions themselves are static and are not included in the list of parameters.
+The arrays $W^{(l)}$and bias vectors $b^{(l)}$ are not trainable parameters, themselves. Instead, the floating-point entries within these arrays are the values that can be adjusted. Each element in this set may contain hundreds or thousands of parameters, so we represent these indirectly as elements of their respective matricies or vectors. We choose this notation for $\Theta$ for notation simplicity. Note that not all layers have trainable parameters, and activations functions themselves are not trainable, but fixed functions.
 
-\paragraph*{}In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers.
+\paragraph*{}Modern neural networks can contain upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers. In this sections we motivate and explore how the we can update the parameters in $\Theta$ as to train the neural network.
+
+% ================================
 
 \subsubsection{The Cost Function}
 
@@ -519,7 +521,7 @@ Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms. The only non
 
 \paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized} \cite{James,Loy}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem \cite{Goodfellow}.
 
-\paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow described this \cite{Goodfellow}:
+\paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow describes the difference \cite{Goodfellow}:
 \begin{quote}
 In most learning scenarios, we care about some performance measure $P$,... We reduce a different cost function, $J(\theta)$ in the hope that doing so will also improve $P$.
 \end{quote}
@@ -527,7 +529,7 @@ By choosing an appropriate cost function, and selecting the parameters $\Theta$ 
 
 \paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in Eq. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize the cost function with a gradient-based method. 
 
-\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative of each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
+\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative with respect to each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
 \begin{equation}
 \label{eqn-CostGradient}
 \nabla_{\Theta}\big[ J \big] = 
@@ -535,9 +537,24 @@ By choosing an appropriate cost function, and selecting the parameters $\Theta$ 
 		\frac{\partial J}{\partial W^{(1)}}, \frac{\partial J}{\partial b^{(1)}}, \hdots ,
 		\frac{\partial J}{\partial W^{(L-1)}}, \frac{\partial J}{\partial b^{(L-1)}} \Big]^T
 \end{equation}
-Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element in the $W^{(l)}$ matrix, and preserves the shape.
+Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element $W_{i,j}$ in the $W^{(l)}$ matrix, and preserves the shape. While there may only be $20$ or so layers, the gradient vector actually has one element for every trainable parameter in all of the layers. This means that for our network, the gradient vector contains upwards of $33,000$ elements. We again choose to group these elements by their parent structure for ease of notation.
 
-\paragraph*{}Due to the nested composition of the network output in Eq. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through computational graph of the neural network to compute the partial derivative with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron}. Below we detail an algorithm in pseudo-code to back-propagate through a fully-connected neural network, such as the multilayer perceptron outlines in sec.(\ref{sec-NetworkStructre})
+\paragraph*{}Due to the nested composition of the network output in Eq. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through computational graph of the neural network to compute the partial derivative of $J$ with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron,Goodfellow,Loy}. 
+
+
+
+% ================================
+
+\subsubsection{Back-Propagation}
+\label{subsubsec-BackProp}
+
+\paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-LayerFunction}) We can visualize this chain of operations as such:
+\begin{figure}
+\begin{center}
+
+\end{center}
+\end{figure}
+
 
 \begin{algorithm}[H]
 \caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample}
@@ -578,6 +595,9 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 \label{eqn-GradientLearning}
 \Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
 \end{equation}
+
+
+
 
 % ================================
 
@@ -645,14 +665,12 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 \paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network it's \textit{architecture} \ref{Goodfellow}. Most standard implementations of networks utilize a \textit{unimodal architecture} where the model is created with a single input layer \cite{N}
 
-
-
 \begin{figure}[H]
-\label{fig-NetworkArchitecture}
 \begin{center}
-\includegraphics[scale=0.5]{../Figures/NeuralNetworkArchitecture}
+\includegraphics[scale=0.75]{../Figures/NeuralNetworkArchitecture}
 \end{center}
 \caption{The implemented miltimodal architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output vector is produced}
+\label{fig-NetworkArchitecture}
 \end{figure}
 
 % ================================
