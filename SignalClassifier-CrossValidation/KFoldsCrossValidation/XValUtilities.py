@@ -107,7 +107,8 @@ class CrossValidator :
     def __Call__(self,XValSplit,homePath):
         """ Run k-Folds Cross Validation """
         os.chdir(self.scriptPath)       # changed to script path
-        for i in range(self.K):         # for each split
+        startK = 0                          # whaere to start (incase error!)
+        for i in range(startK,self.K,1):    # for each split
             # Create a New Model & Train
             print("")
             commandLineArgs = self.GetTrainArguments(i)

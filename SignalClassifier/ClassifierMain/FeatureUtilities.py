@@ -68,7 +68,7 @@ class BaseFeatures:
         assert (self.n_samples == neededSamples)
         return self
 
-    def AnalysisFrames (self):
+    def AnalysisFrames (self,):
         """
         Divide waveforms into analysis frames of fixed length
             Waveform in tail-zero padded to adjust length
@@ -78,17 +78,19 @@ class BaseFeatures:
         --------------------------------
         Return frames object (n_frames x npts)
         """
-        frames = np.array([])               # array to hold time frames
+        
         step = self.frameStep               # iter step size
-        framesInWaveform = int(np.floor(self.n_samples/step))    # frame from this waveform
+        framesInWaveform = int(np.floor(self.n_samples/step))   # frames from this waveform
+        frames = np.empty(shape=(framesInWaveform,self.npts*2)) # array to hold time frames
         for i in range(0,framesInWaveform):                 # iter through wave form
             x = self.signal[(i*step):(i*step)+self.npts]    # create single frame 
             if len(x) < self.npts:                          # not enough samples
                 deficit = self.npts - len(x)                # number of zeros to pad
-                zeroPad = np.zeros((1,deficit),dtype=float) # create pad
-                x = np.append(x,zeroPad)            # append pad to frame
-            frames = np.append(frames,x)                    # add single frame
-        frames = frames.reshape(framesInWaveform,self.npts)    # reshape (each row is frame)
+                zeroPad = np.zeros((1,deficit+self.npts))   # create pad                
+            else:                                           # enough samples
+                zeroPad = np.zeros((1,self.npts))           # create pad  
+            x = np.append(x,zeroPad)                # append pad to frame
+            frames[i] = x                           # add single frame
         return frames                       # return frames
 
 class TimeSeriesFeatures (BaseFeatures):
@@ -223,7 +225,7 @@ class FrequencySeriesFeatures (BaseFeatures):
 
         # Time Axis, Frequency Axis
         self.SetFrequencyRange(0,12000)
-        self.hertz,self.frequencyPoints = self.FrequencyAxis()
+        self.hertz,self.frequencyPoints = self.FrequencyAxis(2048)
         self.mels = self.HertzToMel(self.hertz)
         self.t = np.arange(0,self.n_frames,1)   
 
@@ -246,14 +248,14 @@ class FrequencySeriesFeatures (BaseFeatures):
 
         # Add Elements to Feature vector
         featureVector = np.array([])
-        MFBEs = self.MelFilterBankEnergies(n_filters=16)
+        MFBEs = self.MelFilterBankEnergies(n_filters=12)
         MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
 
         featureVector = np.append(featureVector,MFCCs)
         featureVector = np.append(featureVector,self.CenterOfMass())
         return featureVector
 
-    def FrequencyAxis (self):
+    def FrequencyAxis (self,npts=None):
         """
         Compute Frequenxy Axis
         --------------------------------
@@ -262,12 +264,15 @@ class FrequencySeriesFeatures (BaseFeatures):
         Return frequency axis array between bounds, f
             and appropriate index, pts
         """
-        f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)# comput freq space
+        if npts is None:
+            f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)    # Freq axis
+        else:
+            f_space = fftpack.fftfreq(n=int(npts),d=1/self.rate)    # Freq axis
         pts = np.where((f_space>=self.lowHz)&(f_space<=self.highHz))[0]   # get slices
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
 
-    def PowerSpectrum (self,attrb='frames',pts=[]):
+    def PowerSpectrum (self,attrb='frames',pts=[],addpadding=False):
         """
         Compute Discrete Fourier Transform of arrays in X
         --------------------------------
@@ -277,8 +282,8 @@ class FrequencySeriesFeatures (BaseFeatures):
         Return Z, array
         """        
         assert attrb in ['signal','frames']
-        X = self.__getattribute__(attrb)    # isolate signal or frames
-        X *= self.window
+        X = self.__getattribute__(attrb)    # isolate signal or frames      
+        X[:,:self.npts] *= self.window
         Z = fftpack.fft(X,axis=-1)  # apply DFT
         Z = np.abs(Z)**2            # compute power:
         if Z.ndim > 1:              # more than 1D

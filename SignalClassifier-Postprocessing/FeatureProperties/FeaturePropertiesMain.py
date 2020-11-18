@@ -21,7 +21,7 @@ if __name__ == '__main__':
     parentPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis"
     mtrxPath = os.path.join(parentPath,"FeatureData\\Features2\\Matrix2.csv")
     exptPath = os.path.join(parentPath,"FeatureData\\Features2")
-    encdPath = os.path.join(parentPath,"SignalClassifier-CrossValidation\\XValCLFB-Output-Data")
+    encdPath = os.path.join(parentPath,"SignalClassifier-CrossValidation\\XValCLFAlpha-Output-Data")
 
     # Get Raw Datas
     inputFrame = pd.read_csv(mtrxPath,header=0).to_numpy()

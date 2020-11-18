@@ -42,7 +42,7 @@ class AnalyzeModels:
         self.modelName = modelName
         self.dataPath = datapath  
         self.n_classes = n_classes
-        self.outputFile = self.modelName+"@ANALYSIS@"+self.startTime+".csv"
+        self.outputFile = self.modelName+"@"+self.startTime+"@ANALYSIS"+".csv"
 
     def GetKeywordFiles(self,keyword):
         """ Find files in path w/ Keyword in name """
@@ -67,8 +67,8 @@ class AnalyzeModels:
     def __Call__(self,exptPath):
         """ Run Main program instance """
         # Get needed Files
-        self.trainingFiles = self.GetKeywordFiles("@TRAINING-HISTORY@")
-        self.predictionFiles = self.GetKeywordFiles("@PREDICTIONS@")
+        self.trainingFiles = self.GetKeywordFiles("@TRAINING-HISTORY")
+        self.predictionFiles = self.GetKeywordFiles("@PREDICTIONS")
         self.classDictionary = self.GetKeywordFiles("Categories")[-1]
         homePath = os.getcwd()
 
@@ -76,8 +76,10 @@ class AnalyzeModels:
         nCols = 4
         self.metricsArray = np.empty(shape=(nRows,nCols))
 
+        # Initialize 3 Average Confusion matrices
         avgStandardConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
-        avgWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
+        avgHitsWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
+        avgScrsWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
 
         # Iterate through predictions
         for i,predFile in enumerate(self.predictionFiles):
@@ -92,34 +94,51 @@ class AnalyzeModels:
             metrics = ComputeMetrics.MetricScores
             self.metricsArray[i] = metrics
 
-            # Create & Export Standard Confusion Matrix
+            # Create & Names for Confusion matrices
             stdMatName =  self.modelName + str(i) + " Standard Confusion"
-            wtdMatName =  self.modelName + str(i) + " Weighted Confusion"
-            standardConfMat = ComputeMetrics.StandardConfusion()
-            weightedConfMat = ComputeMetrics.WeightedConfusion()
+            hitsMatName =  self.modelName + str(i) + " Hits Weighted Confusion"
+            scrsMatName =  self.modelName + str(i) + " Score Weighted Confusion"
 
-            ClassifierMetrics.ExportConfusion(standardConfMat,stdMatName,exptPath)
-            ClassifierMetrics.ExportConfusion(weightedConfMat,wtdMatName,exptPath)
+            # Create the matricies
+            standardConfMat = ComputeMetrics.StandardConfusion()
+            hitsWghtConfMat = ComputeMetrics.HitsWeightedConfusion()
+            scrsWghtConfMat = ComputeMetrics.ScoreWeightedConfusion()
+
             os.chdir(exptPath)
+            # Export the Confusion matrices Arrays
+            ClassifierMetrics.ExportConfusion(standardConfMat,stdMatName,exptPath)
+            ClassifierMetrics.ExportConfusion(hitsWghtConfMat,hitsMatName,exptPath)
+            ClassifierMetrics.ExportConfusion(scrsWghtConfMat,scrsMatName,exptPath)
+
+            # Export the Confusin matrices Plots
             ClassifierMetrics.PlotConfusion(standardConfMat,self.n_classes,stdMatName,False)
-            ClassifierMetrics.PlotConfusion(weightedConfMat,self.n_classes,wtdMatName,False)
+            ClassifierMetrics.PlotConfusion(hitsWghtConfMat,self.n_classes,hitsMatName,False)
+            ClassifierMetrics.PlotConfusion(scrsWghtConfMat,self.n_classes,scrsMatName,False)
             os.chdir(homePath)
 
             # Add To average Conf Mats
             avgStandardConfMat += standardConfMat
-            avgWeightedConfMat += weightedConfMat
+            avgHitsWeightedConfMat += hitsWghtConfMat
+            avgScrsWeightedConfMat += scrsWghtConfMat
 
         # scale Avg Conf Mats
         avgStandardConfMat /= nRows
-        avgWeightedConfMat /= nRows
+        avgHitsWeightedConfMat /= nRows
+        avgScrsWeightedConfMat /= nRows
 
         avgStdMatName =  self.modelName + " Avg Standard Confusion"
-        avgWtdMatName =  self.modelName + " Avg Weighted Confusion"
+        avgHitMatName =  self.modelName + " Avg Hits Weighted Confusion"
+        avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
+
+        
         ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
-        ClassifierMetrics.ExportConfusion(avgWeightedConfMat,avgWtdMatName,exptPath)
+        ClassifierMetrics.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
+        ClassifierMetrics.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
+
         os.chdir(exptPath)
-        ClassifierMetrics.PlotConfusion(avgStandardConfMat,self.n_classes,avgStdMatName,False)
-        ClassifierMetrics.PlotConfusion(avgWeightedConfMat,self.n_classes,avgWtdMatName,False)
+        ClassifierMetrics.PlotConfusion(avgStandardConfMat,self.n_classes,avgStdMatName)
+        ClassifierMetrics.PlotConfusion(avgHitsWeightedConfMat,self.n_classes,avgHitMatName)
+        ClassifierMetrics.PlotConfusion(avgScrsWeightedConfMat,self.n_classes,avgScrMatName)
         os.chdir(homePath)
 
         return self
@@ -144,8 +163,18 @@ class ClassifierMetrics :
         self.xOneHot = keras.utils.to_categorical(self.x,self.n_classes)
         self.yOneHot = keras.utils.to_categorical(self.y,self.n_classes)
      
-    def WeightedConfusion(self):
-        """ Create a confusion matric weighted by confidence & occurance """
+    def HitsWeightedConfusion(self):
+        """ Create a confusion matric weighted by occurance in each row """
+        weightedMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
+        standardMatrix = self.StandardConfusion()       # standard conf-mat
+        sumRow = np.sum(standardMatrix,axis=1)          # sum by each row
+        for i in range(self.n_classes):     # each row:
+            if sumRow[i] != 0:               # not zero
+                weightedMatrix[i] = standardMatrix[i] / sumRow[i]              
+        return weightedMatrix                       # return the weighted matrix
+
+    def ScoreWeightedConfusion(self):
+        """ Create a confusion matric weighted by confidence in predictions """
         weightedMatrix = np.zeros(shape=(self.n_classes,self.n_classes),dtype=float)  # empty conf-mat
         standardMatrix = self.StandardConfusion()               # standard conf-mat
         sumRow = np.sum(standardMatrix,axis=1)                  # sum by each row
@@ -222,12 +251,14 @@ class ClassifierMetrics :
         plt.figure(figsize=(16,16))
         plt.title(title,fontsize=20,weight='bold')
         plt.imshow(X,cmap=plt.cm.jet)
-        plt.xticks(np.arange(0,n_classes,1))
-        plt.yticks(np.arange(0,n_classes,1))      
+        plt.xticks(np.arange(0,n_classes,1),weight='bold')
+        plt.yticks(np.arange(0,n_classes,1),weight='bold')
+        plt.tight_layout()
         if save == True:
             plt.savefig(title.replace(" ","_")+".png")
         if show == True:
             plt.show()
+        plt.close()
         return None
 
     @staticmethod

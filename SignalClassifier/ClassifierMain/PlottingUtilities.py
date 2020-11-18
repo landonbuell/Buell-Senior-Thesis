@@ -135,10 +135,8 @@ def Plot_Spectrogram (f,t,Sxx,title='',
     plt.xlabel('Time',size=30,weight='bold')
     plt.ylabel('Frequnecy',size=30,weight='bold')
 
-    try:        # plot numpy array
-        plt.pcolormesh(t,f,Sxx,cmap=plt.cm.binary)
-    except:     # sparse matrix
-        plt.pcolormesh(t,f,Sxx,cmap=plt.cm.binary)
+    Sxx = np.log(Sxx)
+    plt.pcolormesh(t,f,Sxx,cmap=plt.cm.plasma)
 
     plt.grid()
     plt.tight_layout()

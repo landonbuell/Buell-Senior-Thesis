@@ -85,6 +85,8 @@
 \section{Introduction}
 \label{sec-Introduction}
 
+\paragraph*{}\textcolor{red}{How do I write an introduction???}
+
 % ================================================================
 % ================================================================
 
@@ -159,7 +161,7 @@ The result of such an analogy is a computer program that is reminiscent of the s
 
 \paragraph*{}A neural network can then be considered as mathematical function that seeks to produce an approximation $F^*$, of some usually unknown function $F$ . For audio recognition, $F$ is some function or series of functions that occurs in the brain which allows for a listener to process the sensation of audio, and map it to a known source object. For a neural network, function $F^*$ uses a set of parameters $\Theta$, to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}. 
 
-\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly \cite{Virtanen}. Given an example, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olsen,White}. We can simplify the idea of humans recognizing sound as some function or operation that occurs within the brain, accepting an input sound, and produces an output label. Similarly, a neural network can be constructed, presented with \textit{features} of multiple, labeled sound waves and learns a set of parameters $\Theta$ that allows for the mapping to a source.
+\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly \cite{Virtanen}. Given an example, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olson,White}. We can simplify the idea of humans recognizing sound as some function or operation that occurs within the brain, accepting an input sound, and produces an output label. Similarly, a neural network can be constructed, presented with \textit{features} of multiple, labeled sound waves and learns a set of parameters $\Theta$ that allows for the mapping to a source.
 
 \paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file \cite{Goodfellow,Loy,Virtanen}. 
 
@@ -327,19 +329,19 @@ x^{(l)} \in \mathbb{R}^{([N-n+1] \times [M-m+1] \times K)}
 As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in Fig. (\ref{fig-2DConvExample}):
 \begin{figure}[H]
 \begin{center}
-\begin{subfigure}{0.45\textwidth}
-\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
-\caption{Input Activations}
-\end{subfigure}
-\begin{subfigure}{0.45\textwidth}
-\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
-\caption{Convolution Filter}
-\end{subfigure}
-\begin{subfigure}{0.9\textwidth}
-\centering
-\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
-\caption{Convolution Result}
-\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
+	\caption{Input Activations}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
+	\caption{Convolution Filter}
+	\end{subfigure}
+	\begin{subfigure}{0.9\textwidth}
+	\centering
+	\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
+	\caption{Convolution Result}
+	\end{subfigure}
 \end{center}
 \caption{The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite{Goodfellow}}
 \label{fig-2DConvExample}
@@ -451,7 +453,7 @@ For our chosen architecture, ReLU is applied to the activations in every single 
 \text{Softmax}\big[ x \big]_{i} = \frac{e^{x_i}}{\sum_{j}e^{x_j}}
 \end{equation}
 
-\paragraph*{}This function is almost only used in the output layer of a neural network, and encodes a discrete categorical probability. For example, if Eq.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
+\paragraph*{}This function is almost only used in the output layer of a neural network, and encodes a normalized discrete categorical probability \cite{Loy,Virtanen}. For example, if Eq.(\ref{eqn-Softmax}) returns a vector of the form: $[ 0.75 , 0.25]$, we interpret this as a sample having a $75\%$ chance of beloinging to class $0$ and a $25\%$ change of belonging to class $1$.
 
 
 % ================================================================
@@ -459,22 +461,24 @@ For our chosen architecture, ReLU is applied to the activations in every single 
 \subsection{Training a Neural Network}
 \label{subsec-Training}
 
-\paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Goodfellow,Mitchell}:
+\paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$ \cite{Goodfellow}. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Mitchell}:
 \begin{quote}
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if it's performance at tasks in $T$, as measured by $P$, improves with experience $E$.
 \end{quote}
-Without any direct human intervention, a model must update itself to improve it's performance at a give task a new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
+Without any direct human intervention, a model must update itself to improve it's performance at a give task as new information is presented to it. To do this, the model must be constructed with a training procedure in mind. 
 
-\paragraph*{}We consider the set of parameters $\Theta$ as a concatenation of each applicable layer's weighting matrix and bias vector such that:
+\paragraph*{}We consider the set of parameters $\Theta$ as the set of values within each trainable layer's weighting matrix and bias vector such that:
 \begin{equation}
 \label{eqn-Theta}
 \Theta = \big\{
-W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)},
+W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)}
 \big\}
 \end{equation}
-Each parameter is floating-point number, which is stored in a weight matrix $W^{(l)}$ or bias vector $b^{(l)}$. Each value for each parameter contributes to the output of the function, thus indirectly influences the final layer activations. Note that $W^{(l)}$ or $b^{(l)}$, themselves are not parameters, but arrays of parameters to be trained. Certain layers, such as pooling layers (\ref{subsubsec-2DPooling}), concatenation layers (\ref{subsubsec-1DConcat}), or flattening layers (\ref{subsubsec-1DFlatten}) do not contain any trainable parameters. Similarly, activation functions themselves are static and are not included in the list of parameters.
+The arrays $W^{(l)}$and bias vectors $b^{(l)}$ are not trainable parameters, themselves. Instead, the floating-point entries within these arrays are the values that can be adjusted. Each element in this set may contain hundreds or thousands of parameters, so we represent these indirectly as elements of their respective matricies or vectors. We choose this notation for $\Theta$ for notation simplicity. Note that not all layers have trainable parameters, and activations functions themselves are not trainable, but fixed functions.
 
-\paragraph*{}In increasingly complicated neural networks, there can be upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers.
+\paragraph*{}Modern neural networks can contain upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers. In this sections we motivate and explore how the we can update the parameters in $\Theta$ as to train the neural network.
+
+% ================================
 
 \subsubsection{The Cost Function}
 
@@ -517,7 +521,7 @@ Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms. The only non
 
 \paragraph*{}We have developed a method for quantifying the difference between a given output $y^*$ and an expected output $y$ with the inclusion of a cost function. For a trained neural network, we expect that samples consistently produce a low cost value, particularly on previous unseen inputs, which indicates that the model has appropriately \textit{generalized} \cite{James,Loy}. The process of training the model is to choose the parameters in $\Theta$ that allows for this behavior of the cost function. We then treat the training process of a neural network as a higher dimensional \textit{optimization} problem \cite{Goodfellow}.
 
-\paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow described this \cite{Goodfellow}:
+\paragraph*{}A neural network uses \textit{indirect optimization}, which contrasts from pure optimization. Deep Learning expert Ian Goodfellow describes the difference \cite{Goodfellow}:
 \begin{quote}
 In most learning scenarios, we care about some performance measure $P$,... We reduce a different cost function, $J(\theta)$ in the hope that doing so will also improve $P$.
 \end{quote}
@@ -525,7 +529,7 @@ By choosing an appropriate cost function, and selecting the parameters $\Theta$ 
 
 \paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in Eq. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize the cost function with a gradient-based method. 
 
-\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative of each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
+\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative with respect to each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
 \begin{equation}
 \label{eqn-CostGradient}
 \nabla_{\Theta}\big[ J \big] = 
@@ -533,9 +537,24 @@ By choosing an appropriate cost function, and selecting the parameters $\Theta$ 
 		\frac{\partial J}{\partial W^{(1)}}, \frac{\partial J}{\partial b^{(1)}}, \hdots ,
 		\frac{\partial J}{\partial W^{(L-1)}}, \frac{\partial J}{\partial b^{(L-1)}} \Big]^T
 \end{equation}
-Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element in the $W^{(l)}$ matrix, and preserves the shape.
+Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of each element $W_{i,j}$ in the $W^{(l)}$ matrix, and preserves the shape. While there may only be $20$ or so layers, the gradient vector actually has one element for every trainable parameter in all of the layers. This means that for our network, the gradient vector contains upwards of $33,000$ elements. We again choose to group these elements by their parent structure for ease of notation.
 
-\paragraph*{}Due to the nested composition of the network output in Eq. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through computational graph of the neural network to compute the partial derivative with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron}. Below we detail an algorithm in pseudo-code to back-propagate through a fully-connected neural network, such as the multilayer perceptron outlines in sec.(\ref{sec-NetworkStructre})
+\paragraph*{}Due to the nested composition of the network output in Eq. (\ref{eqn-FunctionChain}), and subsequently the cost itself, we must use the chain rule of calculus to work backwards through computational graph of the neural network to compute the partial derivative of $J$ with respect to each parameter in $\Theta$. The process of working backwards to compute each element in the gradient vector is called \textit{back-propagation} \cite{Geron,Goodfellow,Loy}. 
+
+
+
+% ================================
+
+\subsubsection{Back-Propagation}
+\label{subsubsec-BackProp}
+
+\paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-LayerFunction}) We can visualize this chain of operations as such:
+\begin{figure}
+\begin{center}
+
+\end{center}
+\end{figure}
+
 
 \begin{algorithm}[H]
 \caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample}
@@ -576,6 +595,9 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 \label{eqn-GradientLearning}
 \Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
 \end{equation}
+
+
+
 
 % ================================
 
@@ -643,21 +665,19 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 \paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network it's \textit{architecture} \ref{Goodfellow}. Most standard implementations of networks utilize a \textit{unimodal architecture} where the model is created with a single input layer \cite{N}
 
-
-
 \begin{figure}[H]
-\label{fig-NetworkArchitecture}
 \begin{center}
-\includegraphics[scale=0.5]{../Figures/NeuralNetworkArchitecture}
+\includegraphics[scale=0.75]{../Figures/NeuralNetworkArchitecture}
 \end{center}
 \caption{The implemented miltimodal architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output vector is produced}
+\label{fig-NetworkArchitecture}
 \end{figure}
 
 % ================================
 
 \subsubsection{The Spectrogram Branch}
 
-\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olsen,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
+\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olson,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
 
 \paragraph*{}The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in each sample. As a model hyper-parameter, we have chosen each batch to contain $64$ samples. We have also chosen to truncate time and frequency axes (ii \& iii) to contain $560$ frequency bins, and $256$ time-frames. Each image also contains a single channel, which make it gray-scale when visualized. We can denote the 4D shape of the input object into this branch as:
 \begin{equation}
@@ -879,7 +899,7 @@ Where $A_0$ gives an amplitude, $f_0$ is the fundamental frequency, and $\phi$ i
 
 \subsubsection{Square Wave}
 
-\paragraph*{}A square wave is a piece-wise defined waveform whose value alternatively alternates between $+1$ and $-1$ \cite{White,Olsen}. A square wave with period $f_0$ has a waveform defined over a single period as:
+\paragraph*{}A square wave is a piece-wise defined waveform whose value alternatively alternates between $+1$ and $-1$ \cite{White,Olson}. A square wave with period $f_0$ has a waveform defined over a single period as:
 \begin{equation}
 \label{eqn-SquareWave}
 x(t) =  \left\{
@@ -926,9 +946,9 @@ Audio machine learning researchers M. Kashif Saeed Khan and Wasfi G. Al-Khatib d
 \begin{quote}
 The data reduction stage which is also called feature extraction, consists of discovering a few important facts about each class. The choice of features is critical as it greatly affects the accuracy of audio classification. 
 \end{quote}
-In the case of the biological process, the features of the audio is simply the raw time series waveform as processed by the brain. This information is then used into categorize the source. In the case of the neural network model, the time series waveform alone has shown to be unreliable in classification tasks \cite{Serizel}. We must then develop a set of features or predictors that can describe important properties of the waveform in a far more efficient manner \cite{Goodfellow,James}.
+In the biological process of categorizing sound sources, the time-domain waveform is usually enough to match the sound to a source \cite{Olson}. However, a computer representation of a waveform is an array-like structure of values sampled discretely in time and volume \cite{Virtanen,Liu}. Presenting the raw time-series waveform to a model directly has experimentally shown to be unstable in for classification tasks \cite{Serizel}. We must develop a set of features or predictors that can describe important properties of the waveform in an efficient manner \cite{Goodfellow,James}.
 
-\paragraph*{}It becomes quickly apparent that the choice of features is extraordinarily important to the process of training and evaluation of the classifier model. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
+\paragraph*{}It becomes quickly apparent that the choice of features is extraordinarily important to the process of training and evaluation of the classifier model \cite{Mierswa}. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
 
 \paragraph*{}Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
 \begin{quote}
@@ -936,7 +956,10 @@ For recognition algorithms, the necessary property of the acoustic features is l
 \end{quote}
 To ensure the construction of a suitable model, we derive features based from three representations of the audio file: (i) a spectrogram matrix of the waveform, (ii) the time-space representation of the waveform, and (iii) the frequency-space representation of the waveform. It is important to note that although this algorithm will classify sound data to instruments, the model will never actually be presented with a waveform directly, instead it will rely solely on the features.
 
-\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalize to have a zero mean, and unit-variance acorss all classes. 
+\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. We have developed a set of predictors that describe each sample in a compact manner, with reasonable separation boundaries between samples from different classes.
+These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalize to have a zero mean, and unit-variance across all classes. 
+
+\textcolor{red}{Describe nature of features w/ separation boundaries}
 
 \newpage
 
@@ -944,7 +967,7 @@ To ensure the construction of a suitable model, we derive features based from th
 
 \subsubsection{The Design Matrix}
 
-\paragraph*{}The spectrogram and $20$ features from each sample are organized into one of two array structures, each called a \textit{design matrix}. A design matrix contains real floating-point numbers that stores the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. each has shape given by:
+\paragraph*{}From each audio file, we produce a spectrogram matrix and a feature vector, as well as a target label for training purpose. From a collection of multiple samples, the spectrograms are concatenated into a single object $X_1$, and the feature vectors are concatenated into an object, $X_2$. Each objects is a multidimensional array called a \textit{design matrix} \cite{Geron,Goodfellow,Loy,Zerizel}. For any machine learning task, a  design matrix is an object that contains real floating-point numbers that store the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. Each has shape given by:
 \begin{equation}
 \label{eqn-X1Shape}
 X_1 \in \mathbb{R}^{(b \times N' \times k \times 1)}
@@ -953,23 +976,29 @@ X_1 \in \mathbb{R}^{(b \times N' \times k \times 1)}
 \label{eqn-X2Shape}
 X_2 \in \mathbb{R}^{(b \times p)}
 \end{equation}
-Where $N' \times k \times 1$ gives the shape of a single spectrogram matrix $S$, described in sect. (\ref{subsec-spectrogram}). Similarly, $p$ is the number of features derived from the time and frequency-representation of features outlined in sec. (\ref{subsec-time}) and sec.(\ref{subsec-frequency}).The first axis, with size $b$ indicates that there are $b$ audio samples stored in that design matrix.
+Where $N' \times k \times 1$ gives the shape of the spectrogram matrix $S$ from a single sample, described in sect. (\ref{subsec-spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in sec. (\ref{subsec-time}) and sec.(\ref{subsec-frequency}).The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. 
+
+\paragraph*{}A design matrix is typically accompanied by a \textit{target matrix},$Y$, which indicates the class that the particular sample belongs to. For a classifier with $\kappa$ classes, each sample labeled by a one-hot-encoded vector for shape $1 \times \kappa$ \cite{Tensorflow}. Thus, for the design matrices $X_1$ and $X_2$, we have a corresponding target matrix given by:
+\begin{equation}
+\label{eqn-YShape}
+Y \in \mathbb{R}^{(b \times \kappa)}
+\end{equation}
 
 % ================================
 
 \subsubsection{Audio Preprocessing}
 \label{subsubsec-Preprocessing}
 
-\paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following:
+\paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following steps and requirements:
 \begin{enumerate}
-\item A suitably sized number of files, of reasonable audio quality, with normalized amplitudes
+\item A suitably sized number of files of reasonable audio quality with normalized amplitudes
 \item Audio encoded in a standard, and consistent format
 \item A consistent sample rate and bit depth between audio files
 \item A consistent number of channels
 \end{enumerate}
 Note that different projects may require a different set of requirement from preprocessing \cite{Virtanen}. For this project, we have chosen to use the following parameters:
 \begin{enumerate}
-\item Roughly $16,000$ audio files Professionally or semi-professionally recorded in a studio. \textcolor{red}{Citation needed!}. All ampltiudes have been normalized to $\pm 1$ unit.
+\item Roughly $18,000$ audio files Professionally or semi-professionally recorded in a studio. \textcolor{red}{Citation needed!}. All ampltiudes have been normalized to $\pm 1$ unit.
 \item All audio has be converted into \textit{.WAV} files from other formats, such as \textit{.AIF} or \textit{.MP3} using a MATLAB program
 \item All audio is sampled at $44,100$ Hz and \textcolor{blue}{Bit depth needed - 16? 24?}
 \item All audio has been down-mixed into mono-channel waveforms.
@@ -994,11 +1023,19 @@ Note that different projects may require a different set of requirement from pre
 \end{center}
 \end{figure}
 
-\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the next adjacent frame. Each of the $k$ frames then allows for a section of the signal in quazi-stationary state \cite{Kahn,Serizel}. 
+\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the previous frame. Each of the $k$ frames then allows for a section of the signal to be analyzed in a \textit{quazi-stationary state} \cite{Kahn,Serizel}. Below we visualize how analysis frames are related to the full time-series waveform. 
 
-\paragraph*{}For this project, we have chosen to use frames of size $N = 4096$ with a $75\%$ or $3072$ sample overlap. Since each audio file contains a different number of samples, we choose the number of frames, $k$ to be less than or equal to $256$. If $k > 256$, the waveform in truncated, if $k \leq 256$ the frames left as is. The audio has been sampled at $f_s = 44100$ samples/second, so each frame represents a slice of time that is about $0.1$ seconds long.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.45]{../Figures/AnalysisFrames}
+\end{center}
+\caption{A visualization of how frame-blocking is used to create each analysis frames. This image has been adapted and modified from Liu, et. al. "Audio Feature Extraction and Analysis", Fig. (1). See ref. \cite{Liu}.}
+\label{fig-AnalysisFrames}
+\end{figure}
 
-\paragraph*{}We concatenate each analysis frame, $a_{i}, i \in [0,k-1]$ into a single $k \times N$ matrix, called $A$. Each row is a frame, each column is an index in that frame
+\paragraph*{}For this project, we have chosen to use frames of size $N = 4096$ with a $75\%$ or $3072$ sample overlap. Since each audio file contains a different number of samples, we choose the number of frames, $k$ to be less than or equal to $256$. If $k > 256$, the waveform in truncated, if $k \leq 256$ the frames left as is, and missing frames are accounted for later (to improve computation time). The audio has been sampled at $f_s = 44100$ samples/second, so each frame represents a slice of time that is about $0.1$ seconds long.
+
+\paragraph*{}We concatenate each analysis frame, $a_{i}, i \in [0,k-1]$ into a single $k \times N$ matrix, called $A$. Each row is a frame, each column is a sample in each frame
 \begin{equation}
 \label{eqn-FrameMatrix}
 A = \big\{ a_{0} , a_{1} , a_{2} , ... , a_{k-1} \big\} = 
@@ -1010,7 +1047,7 @@ a_{2}[0] & a_{2}[1] & a_{2}[2] & \hdots & a_{2}[N-1] \\
 a_{k-1}[0] & a_{k-1}[1] & a_{k-1}[2] & \hdots & a_{k-1}[N-1] \\
 \end{bmatrix}
 \end{equation}
-We use bracket notation, $a[j]$ to indicate that each analysis frame $a_i$ is array-like. The following indexing conventions for matrix $A$ all represent the same entry:
+We use bracket notation, $a[i]$ to indicate that each analysis frame $a_i$ is array-like. The following indexing conventions for matrix $A$ all represent the same entry:
 \begin{equation}
 \label{eqn-IndexingA}
 A_{i,j} = A_i[j] = A[i][j] = A[i,j]
@@ -1021,14 +1058,15 @@ A_{i,j} = A_i[j] = A[i][j] = A[i,j]
 \label{eqn-Hann}
 H[n] = \frac{1}{2}\bigg[ 1 - \cos\Big( \frac{2\pi n}{N-1}\Big)\bigg]
 \end{equation}
-This window function is applied to each analysis frame by computing the element-wise product of the Hann window array, $H$ and each row of the analysis frames matrix, $A_{i,:}$. Result is an $k \times N$ array, $\widetilde{A}$:
+This window function is applied to each analysis frame by computing the element-wise product of the Hann window array, $H$ and each row of the analysis frames matrix, $A_{i,:}$. The result is another $k \times N$ array, $\widetilde{A}$:
 \begin{equation}
 \label{eqn-WindowMatrix}
 \widetilde{A_i} = A_i \odot H
 \end{equation}
-The window function allows for a cleaner transform into frequency space \cite{Virtanen}. \textcolor{blue}{Expand on this. HOW? Why do we use a windowing function?}
 
-\paragraph*{}Finally, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space containing $N$ samples
+\paragraph*{}Window functions are use to account for discontinuities that may arise in the waveform at the edges of each analysis frame. The Fourier Transform assumes that an integer number of signal periods fit within each analysis frame, however this is rarely the case. A transform of this kind of signal can lead to \textit{spectral leakage} where energy appears to "leak" into adjacent frequency bins \textcolor{red}{Citation needed}. This result is a frequency domain that is not an accurate representation of the equivalent time domain. The Hann window uses the raised cosine function to taper the signal off to zero at the end-points, thus eliminate discontinuities at the edges while weighting the samples at the center much more heavily. 
+
+\paragraph*{}Finally, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross,Virtanen}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space signal containing $N$ samples
 \begin{equation}
 \label{eqn-DFTMatrix}
 \mathbb{W} = \frac{1}{\sqrt{N}}
@@ -1047,37 +1085,37 @@ Each column of the matrix is a complex sinusoidal oscillating with an integer nu
 \text{DFT}\big[ \widetilde{A} \big] = \mathbb{W}\widetilde{A}^T
 \end{equation}
 
-\paragraph*{}Most standard implementations of neural network models require all activations, weights, and biases to be real floating-point numbers. Since the the DFT matrix introduces complex values, we compute the square of the element-wise $L2$-norm of the resultant array.
+\paragraph*{}Most standard implementations of neural network models have all activations, weights, and biases to be real floating-point numbers cite{Levine,Loy,Tensorflow}. Since the elements of the DFT matrix lie on the complex unit circle, each real-valued analysis frame will be moved into complex space. This means we compute the element-wise product of the transformed signal matrix and it's complex-conjugate matrix. This is the $N \times k$
+spectrogram matrix, where each element is a real-values number. Matrix $S$ is defined:
 \begin{equation}
 \label{eqn-Spectrogram}
-S_{i,j} = \big{\lVert} (\mathbb{W}\widetilde{A}^T)_{i,j} \big{\rVert}_{2}^{2}
+S = (\mathbb{W}\widetilde{A}^T) \odot (\mathbb{W}\widetilde{A}^T)^*
 \end{equation}
-Where $\mathbb{W}$ is the DFT matrix from Eq. (\ref{eqn-DFTMatrix}) and $\widetilde{A}^T$ is the transpose of the analysis frames matrix from Eq. (\ref{eqn-WindowMatrix}). The matrix $S$, is the spectrogram representation of the initial waveform, and has shape $N \times k$ of real floating-point numbers. We can index matrix $S$ similarly to that of matrix $A$ in Eq. (\ref{eqn-IndexingA}):
+Where $\mathbb{W}$ is the DFT matrix from Eq. (\ref{eqn-DFTMatrix}) and $\widetilde{A}^T$ is the transpose of the analysis frames matrix from Eq. (\ref{eqn-WindowMatrix}). The asterisks indicate the element-wise complex conjugation. In practice, the matrix product $\mathbb{W}\widetilde{A}^T$ is computed once, and the conjugate is applied to a copy of the array.
+
+The matrix $S$, is the spectrogram representation of the initial waveform, and has shape $N \times k$ of real floating-point numbers. We can index matrix $S$ similarly to that of matrix $A$ in Eq. (\ref{eqn-IndexingA}):
 \begin{equation}
 \label{eqn-IndexingS}
 S_{i,j} = S[i][j] = S[i,j]
 \end{equation}
 
-\paragraph*{}Each column of the $S$ matrix is now a single-frame that has been moved into a frequency-space representation, thus there are $k$ columns, just as there were $k$ time-series analysis frames. Given the discretized nature of digital audio, the frequency-space representation is not a continuous function, but rather a column vector, where the frequency has been assigned to one of $N$ bins, ranging from $-f_s / 2$ to $+f_s/2$. To ensure homogeneous input sizes between all samples, we zero-pad the matrix $S$ with additional columns until $k = 256$. Recall that wave forms were truncated to ensure that $k \leq 256$ analysis frames.
+\paragraph*{}Each column of the $S$ matrix is now a single analysis frame that has been moved into a frequency-space representation of itself. There are $k$ columns, just as there were $k$ time-series frames, and $N$ rows since there were $N$ samples per row. Given the discrete nature of digital audio, the frequency-space representation is not a continuous function, but rather a column vector, where the frequency has been assigned to one of $N$ bins, ranging from $-f_s / 2$ to $+f_s/2$. To ensure homogeneous input sizes between all samples, we zero-pad the matrix $S$ with additional columns until $k = 256$. Recall that wave forms were truncated to ensure that $k \leq 256$ analysis frames.
 
-\paragraph*{}Standard western musical instruments seldom extend above $6$ kHz \cite{Olson,Virtanen,White}. This means that when constructing the spectrogram, we will rarely ever see energy present above this frequency at any time, and the $S$ matrix will contain mostly zero, or zero-like entries. To condense the size of the matrix, we select onlt the frequency bins that correspond to energies between $0$ Hz and $6000$ Hz. This makes the input array smaller, and eliminates redundant and non-useful information. The number rows in the $S$ matrix is reduced from $N$ down to $N'$. 
+\paragraph*{}Standard western musical instruments seldom have fundamental frequencies that extend above $6$ kHz \cite{Olson,Virtanen,White}. This means that when constructing the spectrogram, we will rarely see significant energy present above this frequency at any time, and the $S$ matrix will contain mostly zero, or zero-like entries. To condense the size of the matrix, we select only the frequency bins (rows) that correspond to energies between $0$ Hz and $6000$ Hz. This makes the input array smaller, and eliminates redundant and non-useful information. The number rows in the $S$ matrix is reduced from $N$ down to $N'$. 
 
-\paragraph*{}Each spectrogram is now $N' \times k \times 1$ (The last axis represents a single pixel channel, as opposed to $3$ channels for RGB inputs, etc.) and effectively encodes the energy distribution of the waveform as a function of both time and frequency. The spectrogram is the first feature used in this model. For this classifier, we have chosen $N' = 558$ and $k = 256$. For training, a batch of $b$ samples are concatenated into a single array object. For a batch of $b$ samples of $N' \times k \times 1$ spectrograms, we shape $X_1$ such that:
+\paragraph*{}Each spectrogram is now $N' \times k \times 1$ (The last axis represents a single pixel channel, as opposed to $3$ channels for RGB inputs, etc.) and effectively encodes the energy distribution of the waveform as a function of both time and frequency. The spectrogram makes up each sample in the first design matrix $X_1$, Eq.(\ref{eqn-ShapeX1}) used in this model. For this classifier, we have chosen $N' = 558$ and $k = 256$. For training, a batch of $b$ samples are concatenated into a single array object. For a batch of $b$ samples of $N' \times k \times 1$ spectrograms, we shape $X_1$ such that:
 \begin{equation}
-\label{eqn-X1 shape}
+\label{eqn-X1}
 X_1 = \big\{ S^{(0)},S^{(1)},S^{(2)}, ... , S^{(b-1)} \big\} \in \mathbb{R}^{(b \times N' \times k \times 1)}
 \end{equation}
 Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-X1Shape}). This matrix is presented to the \textit{Convolution} branch of the neural network for processing.
 
 % ================================================================
 
-\newpage
-
 \subsection{Time-Space Features}
 \label{subsec-time}
 
-\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample.For consistency between smaples, each waveform is padded or truncated to contain exactly $M$ samples. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
-
+\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
 
 \paragraph*{}From time space, we use the following $7$ features:
 \begin{itemize}
@@ -1089,22 +1127,25 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 % ================================
 
+\newpage
+
 \subsubsection{Time Domain Envelope}
 
-\paragraph*{}The time domain envelope (TDE) is a method of determining which parts of the sound wave contains most of the energy of the signal Often, we compute the RMS-Energy of each frame - a larger energy of the frame, the larger the average amplitude of the waveform in that frame. For frames with smaller amplitude, it is likely that the signal has either not begun, or is decaying. 
-
-\paragraph*{}We adapt this feature to \textbf{compute the RMS-Energy of the full waveform}. The RMS-Energy of the full waveform, $s$ is given by \cite{Olsen,Serizel}
+\paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude. (i.e. the signal has not started or is decaying)
+ 
+\paragraph*{}We adapt this TDE to \textbf{compute the time domain envelope of the full waveform}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE represents a consistent measurement of energy in the full time-domain signal \cite{Liu}. The TDE is computed as the RMS-Energy of the waveform, $s$ and is given by \cite{Olson,Serizel}:
 \begin{equation}
 \label{eqn-RMS}
 \text{RMS}\big[ s \big] = \sqrt{\frac{1}{M} \sum_{i=0}^{M-1} s[i]^2}
 \end{equation}
-By using the full waveform, we acquire a rough estimate for the energy in the entirety of the audio file \cite{Liu}. For instruments with long sustain or release times, such as strings or undampened mallet percussion, we expect a comparably large waveform RMS when compared to those instruments without sustain such as plucked stings or dampened percussion  \textcolor{red}{Citation?}
+For instruments with long sustain or release times, such as strings or undampened mallet percussion, we expect a comparably large TDE value. For instruments with short sustain times, such as plucked stings or dampened percussion we expect a comparably small TDE value \cite{Olson,White}. The difference allows for considerable separation between many percussion and woodwind classes.
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF TDE FEATURES HERE}
+%textcolor{red}{Plot of TDE Feature Here}
+\includegraphics[scale=0.3]{../FiguresFeatures/Time_Domain_Env}
 \end{center}
-\caption{Time domain envelope visualized in feature-space}
+\caption{A comparison of the Time Domain Envelope across each class using a box-and-whisker plot}
 \label{fig-FeatureTDE}
 \end{figure}
 
@@ -1112,20 +1153,21 @@ By using the full waveform, we acquire a rough estimate for the energy in the en
 
 \subsubsection{Zero Crossing Rate}
 
-\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be done per total sound wave, per unit time, or per analysis-frame. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform. In some cases, the ZXR can be correlated to frequency as well \cite{Kahn,Zhang}. 
+\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform \cite{Kahn,Liu,Zhang}. 
 
-\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
+\paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. Signals with a high ZXR can be representative of classes that often have additional noise and signals with a low ZXR, can indicate signals with more stable, periodic behavior. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
 \begin{equation}
 \label{eqn-ZXR}
 \text{ZXR}\big[ s \big] = \frac{1}{2} \sum_{i=1}^{M-1} \Big{|} \sign(s[i]) - \sign(s[i-1]) \Big{|} 
 \end{equation}
-Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. This provides a rough estimate for the average frequency in the full waveform,n and can help discern clean periodic signals (low ZXR) from those that may have more noise or volatile behavior (high ZXR)\cite{Serizel}.
+Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZXR also provides a very rough estimate for the average frequency of the waveform. This allows it to alos be useful in discerning classes with generllay hgher frequencies, such as upper woodwinds, against classes with generaly lower frequencies, such as low brass \cite{White}.
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF ZXR FEATURES HERE}
+%\textcolor{red}{PLOT OF ZXR FEATURES HERE}
+\includegraphics[scale=0.3]{../FiguresFeatures/Zero_X-Rate}
 \end{center}
-\caption{Zero crossing rate visualized in feature-space}
+\caption{A comparison of the Zero-Crossing Rate for each class using a box-and-whisker plot}
 \label{fig-FeatureZXR}
 \end{figure}
 
@@ -1133,20 +1175,22 @@ Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. Th
 
 \subsubsection{Temporal Center of Mass}
 
-\paragraph*{}The temporal center of mass (TCM) of a signal is used to compute roughly where in time the amplitude of the waveform \textit{bunches up}. We treat the full waveform array, $s$, with $M$ samples as a discrete 1-Dimensional mass distribution. The TCM of that waveform is then given:
+\paragraph*{}The temporal center of mass (TCM) of a signal is used to compute roughly where in time the amplitude of the waveform \textit{bunches up}. We compute the element-wise absolute value of the waveform and treat it as a 1-dimensional discrete mass distribution of $M$ samples.
+The TCM of that waveform is then given:
 \begin{equation}
 \label{eqn-FeatureTCM}
-\text{TCM}\big[ s \big] = \frac{\sum_{i=0}^{M-1}i s[i]}{\sum_{i=0}^{M-1}s[i]}
+\text{TCM}\big[ s \big] = \frac{\sum_{i=0}^{M-1}i \big|s[i]\big|}
+{\sum_{i=0}^{M-1}\big|s[i]\big|}
 \end{equation}
-This includes negative amplitude values acting as "negative masses". \textcolor{blue}{Should I use the absolute value of the signal instead?}
 
-\paragraph*{}The TCM turns out to be a very unique feature, and very powerful in classification due to it's variance textcolor{red}{Citation needed}. For instruments with heavier attacks, we expect the TCM to be a very near the start of the waveform. For instruments with long sustain times, we expect a very centrally located center of mass, and for instruments with long release times, we expect a later TCM value.
+\paragraph*{}TCM condenses the idea of the amplitude envelope into a single value. It allows for the quick measurement of where in the time most of the energy of the signal lies. For percussive instruments with short attack and release times, such as bells or xylophones, we expect a very low TCM. Instruments with plucked strings, but longer release times such as mandolins and guitars should have similarly low values. Instruments in the woodwind and brass family generally have longer sustain and release times, giving them a slightly higher center of mass. Strings and undampened percussion have notoriously long sustain and release times giving them much higher TCM values \cite{Olson,White}. Finally, the synthetic wave forms have no characteristic  envelope shape (due to their synthetic nature). This gives a centrally located TCM, very close to $M/2$.
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{PLOT OF TCM FEATURES HERE}
+%\textcolor{red}{PLOT OF TCM FEATURES HERE}
+\includegraphics[scale=0.3]{../FiguresFeatures/Time_Center_of_Mass}
 \end{center}
-\caption{Temporal center-of-mass visualized in feature-space}
+\caption{A comparison of the temporal center mass for each class using a box-and-whisker plot}
 \label{fig-FeatureTCM}
 \end{figure}
 
@@ -1154,21 +1198,51 @@ This includes negative amplitude values acting as "negative masses". \textcolor{
 
 \subsubsection{Auto Correlation Coefficients}
 
-\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution . We can compute any number of ACC's and their value changed depending on the index chosen. It is common to only compute the first $K$ ACC's \cite{Serizel}. For a full waveform signal $s$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
+\paragraph*{}Auto correlation coefficients (ACC) are rough estimates of the signal spectral distribution. They are computed by summing a signal with a time-delayed variant of itself, and then normalized depending on the contect. We can compute any number of ACC's and their value changed depending on the index chosen. It is common to use the first $K$ ACC's \cite{Serizel}. For a full waveform signal $s$, with $M$ samples, the $k$-th ACC (indexed from $1$ to $K$) is given by:
 \begin{equation}
 \label{eqn-FeatureACC}
 \text{ACC}_k\big[ s \big] = 
-\frac{\sum_{i=0}^{M-k-1}s[i]s[i+k]} {\sqrt{\sum_{i=0}^{M-k-1}s^2[i]} \sqrt{\sum_{i=0}^{M-k-1}s^2[i+k]}}
+\frac{\sum_{i=0}^{M-k-1}s[i]s[i+k]} {\sqrt{\sum_{i=0}^{M-k-1}s^2[i]} 
+\sqrt{\sum_{i=0}^{M-k-1}s^2[i+k]}}
 \end{equation}
 
-\paragraph*{}An ACC can be thought of as convolving a signal with a time-delayed version of itself. This measures similarity between samples related to the time difference between them \textcolor{red}{Citation needed}. \textcolor{blue}{I may need to try a different set of ACC's for this}
+\paragraph*{}\textcolor{red}{I need to complete my discussion of ACC's here!}
 
 \begin{figure}[H]
-\label{fig-FeatureACC}
 \begin{center}
-\textcolor{red}{PLOT OF ACC FEATURES HERE}
+%\textcolor{red}{PLOT OF ACC FEATURES HERE}
+
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_1}
+	\caption{ACC $k=1$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_2}
+	\caption{ACC $k=2$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_3}
+	\caption{ACC $k=3$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/Auto_Correlation_4}
+	\caption{ACC $k=4$}
+	\end{subfigure}	
+	
 \end{center}
-\caption{First four auto correlation coefficients visualized in feature-space}
+\caption{A comparison of the the first four auto correlation coefficents in each class using a box-and-whisker plot}
+\label{fig-FeatureACC}
 \end{figure}
 
 % ================================================================
@@ -1191,7 +1265,7 @@ For each feature, we detail the physical significance and provide a visualizatio
 
 \subsubsection{Mel Filter Bank Energies}
 
-\paragraph*{}Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping triangular bins \cite{Sahidullah}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, over a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
+\paragraph*{}MEl Filter Bank Energies are not used directly as features, but are used in computing Mel Frequency Cepstrum Coefficient (MFCC's) so we describe them here. Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping bins \cite{Sahidullah,Serizel}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, covering a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
 
 \paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Kahn}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Kahn}:
 \begin{equation}
@@ -1204,51 +1278,76 @@ H_f[m] = 700 \big(10^{(\frac{m}{2595})}-1\big)
 \end{equation}
 Where $M_f$ is the frequency in units of Mels, given $[h]$, a frequency in Hertz, and $H_f$ is the frequency in Hertz given $[m]$ a frequency in Mels.
 
-\paragraph*{}Mel filters are produced by grouping frequency-space into $R$ overlapping bins called \textit{Mel Filter-banks}. In units of Mels, each filter bank, $R_i$ remains a constant width, but when shown in Hertz, the bins increase logarithmically. 
+
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{Figure of a few Mel Filter Banks goes here}
 \end{center}
-\caption{Mel Filter Banks shown in frequency space with units of Hertz}
+\caption{Mel Filter Banks shown in frequency space with units of (a) Mels and (b)Hertz}
 \label{fig-MelFilterBanks}
 \end{figure}
-Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, and transformed back into units of Hertz. When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
+
+
+\paragraph*{}Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, Eq. (\ref{eqn-Spectrogram}). When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
 \begin{equation}
 \label{eqn-FilterBanks}
-B = S^T M^T
+B = (MS)^T
 \end{equation}
 Matrix $B$ has shape $k \times R$.
 
-\paragraph*{}Using $S^T$ ensures that each row of the matrix is an analysis frame in frequency space. Similarly, each column of the matrix $M$ is a appropriately scaled Mel filter-bank. This way, the matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all appended to the feature vector. 
-
-\begin{figure}[H]
-\begin{center}
-\textcolor{red}{PLOT OF MFCC FEATURES HERE}
-\end{center}
-\caption{Mel Frequency Cepstral Coefficients in feature-space}
-\label{fig-FeatureMFBE}
-\end{figure}
+\paragraph*{}Tis matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all are used to compute the MFCC's in the next section.
 
 % ================================
 
 \subsubsection{Mel Frequency Cepstral Coeffecients}
 
-\paragraph*{}Ceptstral coefficients are the result of computing the inverse discrete Fourier transform (IDFT) of the logarithm of the frequency Spectrum. Mel Frequency Cepstral Coefficients (MFCC's) are the most commonly used in digital signal processing. They are computed throught he inverse discrete cosine transform of the log energy in in each Mel frequency bank \cite{Serizel,Sahidullah}. The $c$-th coefficient is given by:
+\paragraph*{}Ceptstral coefficients are the result of computing the inverse discrete Fourier transform (IDFT) of the logarithm of the frequency Spectrum \cite{Serizel,Sahidullah}. Mel Frequency Cepstral Coefficients (MFCC's) are the most commonly used ceptral coefficients and appear commonly in digital signal processing. The $c$-th coefficient is given by:
 \begin{equation}
 \label{feat-MFCC}
 \text{MFCC}[c] = \sqrt{\frac{2}{R}} \sum_{i=1}^{R} 
 \log\big(\widetilde{B[i]}\big) \cos\bigg(\frac{c(i-\frac{1}{2})\pi}{R[i]}\bigg)
 \end{equation}
-Where $\widetilde{B}$ are the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
+Where $\widetilde{B}$ is the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
 
-\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes \cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. We provide a representation of MFCC properties below.
+\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal\cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. 
+
+\paragraph*{}As the frequency bin index increases, the width of the bin in frequency space increases. \textcolor{red}{Finish this! What does a MFCC tell us with words!}
 
 \begin{figure}[H]
-\label{fig-FeatureMFCC}
 \begin{center}
-\textcolor{red}{PLOT OF MFCC FEATURES HERE}
+%\textcolor{red}{PLOT OF MFCC FEATURES HERE}
+
+\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_1}
+	\caption{MFCC $R[1]$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_4}
+	\caption{MFCC $R[4]$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_8}
+	\caption{MFCC $R[8]$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/MFCC_12}
+	\caption{MFCC $R[12]$}
+	\end{subfigure}	
+
 \end{center}
-\caption{Mel Frequency Cepstral Coefficients visualized in feature-space}
+\caption{A comparison of 4 Mel Frequency Cepstral Coefficients, $1$, $4$, $8$ and $12$ for each class using box-and-whisker plots}
+\label{fig-FeatureMFCCs}
 \end{figure}
 
 % ================================
@@ -1270,9 +1369,10 @@ FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \begin{figure}[H]
 \label{fig-FeatureFCM}
 \begin{center}
-\textcolor{red}{PLOT OF FCM FEATURES HERE}
+%\textcolor{red}{PLOT OF FCM FEATURES HERE}
+\includegraphics[scale=0.3]{../FiguresFeatures/Frequency_Center_of_Mass}
 \end{center}
-\caption{Frequency center-of-mass visualized in feature-space}
+\caption{A comparison of the frequency center-of-mass for each class using box-and-whisker plots}
 \end{figure}
 
 % ================================================================
@@ -1423,7 +1523,11 @@ For multi-class problems, we report the precision score as averaged over all $k$
 
 \subsubsection{Accuracy Score}
 
-\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of 
+\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron,James}.
+
+\paragraph*{}For example, we could develop a model that uses a few predictors from every human currently alive and determine which of them has walked on the moon. There are roughly 7 billion humans alive, four of which have been on out moon. Simply guess \textit{no} for every human, our model would have more than a $99.9999\%$ accuracy. However, we would argue that this model does not perform well seeing as it has a $0 \%$ recall score, and and a $0 \%$ precision score.
+
+\paragraph*{}Despite this we can still sue accuracy score to provide a rough approximation for how the model is performing. \textcolor{red}{finish this!} 
 
 % ================================================================
 
@@ -1564,7 +1668,7 @@ Mitchell, Tom Michael. Machine Learning. 1st ed., McGraw-Hill, 1997.
 \bibitem{Ngiam}
 Ngiam, Jiquan, et al. "Multimodal Deep Learning." 2011. 
 
-\bibitem{Olsen}
+\bibitem{Olson}
 Olson, Harry E. \textit{Music, Physics and Engineering}. 2nd ed., Dover Publications, 1967.
 
 \bibitem{Peatross}
@@ -1572,6 +1676,9 @@ Peatross, Justin, and Michael Ware. \textit{Physics of Light and Optics.} Brigha
 
 \bibitem{Petrik}
 Petrik, Marek. "Introduction to Deep Learning." Machine Learning. 20 April. 2020, Durham, New Hampshire.
+
+\bibitem{Powers}
+Powers, David. (2008). \textit{Evaluation: From Precision, Recall and F-Factor to ROC, Informedness, Markedness \& Correlation}. Mach. Learn. Technol. 2. 
 
 \bibitem{Sahidullah}
 Sahidullah, Goutam S. “Design, Analysis and Experimental Evaluation of Block Based Transformation in MFCC Computation for Speaker Recognition.” 18 Nov. 2011. 
