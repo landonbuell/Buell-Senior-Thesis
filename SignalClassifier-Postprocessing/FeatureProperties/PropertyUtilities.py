@@ -39,7 +39,7 @@ class FeatureProcessor:
 
     def CreateDictionary(self,encdPath):
         """ Handle class dictionary """
-        modelName = "XValCLFAlpha"
+        modelName = "XValGammaCLF"
         categories = CategoryDictionary(encdPath,modelName)
         self.classNames = categories.encoder.keys()          # get names of categories
             
