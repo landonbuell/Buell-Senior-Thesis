@@ -548,12 +548,19 @@ Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of 
 \subsubsection{Back-Propagation}
 \label{subsubsec-BackProp}
 
-\paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-LayerFunction}) We can visualize this chain of operations as such:
-\begin{figure}
+\paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-LayerFunction}). Additionally, we recall that each layer itself is made up two steps which produce linear activations such as in Eq. (\ref{eqn-LinearTransform}) and non-linear activations, as in Eq. (\ref{eqn-elementActivation}). Therefore, to understand back propagation, it is necessary to examine the internal functions of each layer. We can use this idea to visualize this chain of operations as in Fig. (\ref{fig-ComputationalGraph})
+\begin{figure}[H]
 \begin{center}
-
+\textcolor{red}{Graph goes here}
 \end{center}
+\caption{A visual representation of a computational graph}
+\label{fig-ComputationalGraph}
 \end{figure}
+
+\paragraph*{}Given this graph chain and it's numerical nature, we cannot compute each element in the gradient vector by conventional symbolic calculus. We must instead use the chain rule for partial derivatives to begin at the final output of the network and successively work our way forward to the entry layer to compute the numerical derivative with respect to each parameter. This process is called \textit{back-propagation} \cite{Geron,Goodfellow,Loy}.
+
+\paragraph*{}We begin by 
+
 
 
 \begin{algorithm}[H]

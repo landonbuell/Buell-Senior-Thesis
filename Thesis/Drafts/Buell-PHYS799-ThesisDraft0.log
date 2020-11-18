@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  17 NOV 2020 13:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  17 NOV 2020 21:51
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -513,58 +513,63 @@ File: ../Figures/CXELoss.png Graphic file (type png)
 <use ../Figures/CXELoss.png>
 Package pdftex.def Info: ../Figures/CXELoss.png  used on input line 510.
 (pdftex.def)             Requested size: 361.34912pt x 144.53964pt.
- [15 <../Figures/CXELoss.png>] [16] [17] [18]
+ [15 <../Figures/CXELoss.png>]
 
-LaTeX Warning: Reference `Goodfellow' on page 19 undefined on input line 666.
+LaTeX Warning: Reference `fig-ComputationalGraph' on page 16 undefined on input
+ line 551.
+
+[16] [17] [18]
+
+LaTeX Warning: Reference `Goodfellow' on page 19 undefined on input line 672.
 
 
-LaTeX Warning: Citation `N' on page 19 undefined on input line 666.
+LaTeX Warning: Citation `N' on page 19 undefined on input line 672.
 
 <../Figures/NeuralNetworkArchitecture.png, id=90, 609.477pt x 741.0084pt>
 File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
 <use ../Figures/NeuralNetworkArchitecture.png>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
-t line 670.
+t line 676.
 (pdftex.def)             Requested size: 457.10664pt x 555.75494pt.
 [19] [20 <../Figures/NeuralNetworkArchitecture.png>] [21] [22] [23] [24]
 [25] [26] [27]
 
-LaTeX Warning: Citation `Khan' on page 28 undefined on input line 945.
+LaTeX Warning: Citation `Khan' on page 28 undefined on input line 951.
 
 [28] [29]
 
-LaTeX Warning: Citation `Zerizel' on page 30 undefined on input line 970.
+LaTeX Warning: Citation `Zerizel' on page 30 undefined on input line 976.
 
 
-LaTeX Warning: Citation `Tensorflow' on page 30 undefined on input line 981.
+LaTeX Warning: Citation `Tensorflow' on page 30 undefined on input line 987.
 
 [30] [31]
 
-Package caption Warning: \label without proper reference on input line 1020.
+Package caption Warning: \label without proper reference on input line 1034.
 See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig-spectrograms' on page 32 undefined on input line 
-1016.
+1022.
 
 <../Figures/AnalysisFrames.png, id=133, 804.75656pt x 407.27156pt>
 File: ../Figures/AnalysisFrames.png Graphic file (type png)
 <use ../Figures/AnalysisFrames.png>
-Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1030
+Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1036
 .
 (pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
 [32 <../Figures/AnalysisFrames.png>] [33] [34]
 
-LaTeX Warning: Reference `eqn-ShapeX1' on page 35 undefined on input line 1106.
+LaTeX Warning: Reference `eqn-ShapeX1' on page 35 undefined on input line 1112.
 
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1122
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1128
 .
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1122.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1128.
 
 
 [35]
@@ -572,45 +577,45 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 File: ../FiguresFeatures/Time_Domain_Env.png Graphic file (type png)
 <use ../FiguresFeatures/Time_Domain_Env.png>
 Package pdftex.def Info: ../FiguresFeatures/Time_Domain_Env.png  used on input 
-line 1146.
+line 1152.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [36 <../FiguresFeatures/Time_Domain_Env.png>]
 <../FiguresFeatures/Zero_X-Rate.png, id=152, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Zero_X-Rate.png Graphic file (type png)
 <use ../FiguresFeatures/Zero_X-Rate.png>
 Package pdftex.def Info: ../FiguresFeatures/Zero_X-Rate.png  used on input line
- 1168.
+ 1174.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [37 <../FiguresFeatures/Zero_X-Rate.png>]
 <../FiguresFeatures/Time_Center_of_Mass.png, id=157, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Time_Center_of_Mass.png Graphic file (type png)
 <use ../FiguresFeatures/Time_Center_of_Mass.png>
 Package pdftex.def Info: ../FiguresFeatures/Time_Center_of_Mass.png  used on in
-put line 1191.
+put line 1197.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
 <../FiguresFeatures/Auto_Correlation_1.png, id=158, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_1.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_1.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_1.png  used on inp
-ut line 1218.
+ut line 1224.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/Auto_Correlation_2.png, id=159, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_2.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_2.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_2.png  used on inp
-ut line 1225.
+ut line 1231.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/Auto_Correlation_3.png, id=160, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_3.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_3.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_3.png  used on inp
-ut line 1232.
+ut line 1238.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/Auto_Correlation_4.png, id=161, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_4.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_4.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_4.png  used on inp
-ut line 1239.
+ut line 1245.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [38 <../FiguresFeatures/Time_Center_of_Mass.png>]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
@@ -622,26 +627,26 @@ to_Correlation_4.png>] [40]
 <../FiguresFeatures/MFCC_1.png, id=177, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_1.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1323
+Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1329
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_4.png, id=178, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_4.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1330
+Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1336
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_8.png, id=179, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_8.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1337
+Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1343
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_12.png, id=180, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_12.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 134
-4.
+Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 135
+0.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [41]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
@@ -653,10 +658,10 @@ Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
 File: ../FiguresFeatures/Frequency_Center_of_Mass.png Graphic file (type png)
 <use ../FiguresFeatures/Frequency_Center_of_Mass.png>
 Package pdftex.def Info: ../FiguresFeatures/Frequency_Center_of_Mass.png  used 
-on input line 1373.
+on input line 1379.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [43 <../FiguresFeatures/Frequency_Center_of_Mass.png>] [44] [45]
-Underfull \hbox (badness 10000) in paragraph at lines 1460--1480
+Underfull \hbox (badness 10000) in paragraph at lines 1466--1486
 []$[]$ $[]$
  []
 
@@ -669,10 +674,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5404 strings out of 492895
- 83705 string characters out of 3123268
- 157270 words of memory out of 3000000
- 9213 multiletter control sequences out of 15000+200000
+ 5407 strings out of 492895
+ 83779 string characters out of 3123268
+ 157289 words of memory out of 3000000
+ 9216 multiletter control sequences out of 15000+200000
  12304 words of font info for 46 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,19n,43p,1042b,546s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -695,7 +700,7 @@ ts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Progr
 ams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (55 pages, 1797181 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (55 pages, 1797834 bytes).
 PDF statistics:
  284 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
