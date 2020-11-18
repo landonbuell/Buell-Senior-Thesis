@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Establish local Directory Paths
     parent = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier-CrossValidation"
-    modelName = "XValCLFAlpha"
+    modelName = "XValGammaCLF"
     dataPath = os.path.join(parent,modelName+"-Output-Data")
     exptPath = os.path.join(parent,modelName+"-Analysis")    
     n_classes = 38
