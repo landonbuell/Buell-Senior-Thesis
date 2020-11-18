@@ -104,18 +104,6 @@ class AnalyzeModels:
             hitsWghtConfMat = ComputeMetrics.HitsWeightedConfusion()
             scrsWghtConfMat = ComputeMetrics.ScoreWeightedConfusion()
 
-            os.chdir(exptPath)
-            # Export the Confusion matrices Arrays
-            ClassifierMetrics.ExportConfusion(standardConfMat,stdMatName,exptPath)
-            ClassifierMetrics.ExportConfusion(hitsWghtConfMat,hitsMatName,exptPath)
-            ClassifierMetrics.ExportConfusion(scrsWghtConfMat,scrsMatName,exptPath)
-
-            # Export the Confusin matrices Plots
-            ClassifierMetrics.PlotConfusion(standardConfMat,self.n_classes,stdMatName,False)
-            ClassifierMetrics.PlotConfusion(hitsWghtConfMat,self.n_classes,hitsMatName,False)
-            ClassifierMetrics.PlotConfusion(scrsWghtConfMat,self.n_classes,scrsMatName,False)
-            os.chdir(homePath)
-
             # Add To average Conf Mats
             avgStandardConfMat += standardConfMat
             avgHitsWeightedConfMat += hitsWghtConfMat

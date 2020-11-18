@@ -94,7 +94,7 @@
 \section{Methodology}
 \label{sec-Methodology}
 
-\paragraph*{}This multi-faceted project includes a great number of steps to ensure it's completion. Here we show a high-level outline of the pieces of this project. 
+\paragraph*{}This project includes a great number of steps to ensure it's completion. Here we show a high-level outline of the pieces involved.
 
 % ================================================================
 
@@ -225,7 +225,7 @@ $X = \{\} \leftarrow$ array to hold final activations \\
 
 \item Network final prediction is last object in $X$ array.
 \item $y^* \leftarrow x^{(L-1)} = X[-1]$
-\item Return the pre-nonlinear activations and final-nonlinear activations.\\
+\item Return the pre-nonlinear activations and final-nonlinear activations:\\
 \RETURN $Z , X$
 
 
@@ -239,9 +239,7 @@ $X = \{\} \leftarrow$ array to hold final activations \\
 \subsection{Layers Used in Classification Neural Network}
 \label{subsec-Layers}
 
-\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a prediction (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a sort of recursive computational graph \cite{Goodfellow}. 
-
-\paragraph*{}Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
+\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a predictions (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a chain-like computational graph \cite{Goodfellow}. Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
 \begin{equation}
 \label{eqn-LinearTransform}
 z^{(l)} = W^{(l)} x^{(l-1)} + b^{(l)}
@@ -257,7 +255,7 @@ Where $W^{(l)} x^{(l-1)}$ denotes a matrix-vector product, and $\big(W^{(l)} * x
 \label{eqn-elementActivation}
 x^{(l)} = \sigma^{(l)} \big[ z^{(l)} \big]
 \end{equation}
-Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-LinearTransform}). $\sigma^{(l)}$ is some activation function, which is often use to enable the modeling of more complex-decision boundaries. 
+Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-LinearTransform}). $\sigma^{(l)}$ is some activation function which introduces the ability to account for non-linearity in the 
 
 \paragraph*{}The combination of Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-elementActivation}), for a layer $l$ , make up the function represented by that layer, as in Eq. (\ref{eqn-altLayerFunction}). Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
 
