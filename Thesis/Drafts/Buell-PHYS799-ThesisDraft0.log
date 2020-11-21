@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  18 NOV 2020 11:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  21 NOV 2020 00:39
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
-LaTeX2e <2018-12-01>
+LaTeX2e <2019-10-01> patch level 3
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
-Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size12.clo"
-File: size12.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+File: size12.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
 )
 \c@part=\count80
 \c@section=\count81
@@ -22,7 +22,7 @@ File: size12.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 )
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsmath.s
 ty"
-Package: amsmath 2018/12/01 v2.17b AMS math features
+Package: amsmath 2019/11/16 v2.17d AMS math features
 \@mathmargin=\skip43
 
 For additional information on amsmath, use the `?' option.
@@ -47,20 +47,20 @@ y"
 Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count88
-LaTeX Info: Redefining \frac on input line 223.
+LaTeX Info: Redefining \frac on input line 227.
 \uproot@=\count89
 \leftroot@=\count90
-LaTeX Info: Redefining \overline on input line 385.
+LaTeX Info: Redefining \overline on input line 389.
 \classnum@=\count91
 \DOTSCASE@=\count92
-LaTeX Info: Redefining \ldots on input line 482.
-LaTeX Info: Redefining \dots on input line 485.
-LaTeX Info: Redefining \cdots on input line 606.
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
 \Mathstrutbox@=\box27
 \strutbox@=\box28
 \big@size=\dimen105
-LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 \macc@depth=\count93
 \c@MaxMatrixCols=\count94
 \dotsspace@=\muskip10
@@ -81,8 +81,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \multlinegap=\skip44
 \multlinetaggap=\skip45
 \mathdisplay@stack=\toks18
-LaTeX Info: Redefining \[ on input line 2844.
-LaTeX Info: Redefining \] on input line 2845.
+LaTeX Info: Redefining \[ on input line 2858.
+LaTeX Info: Redefining \] on input line 2859.
 )
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amssymb.
 sty"
@@ -93,6 +93,7 @@ Package: amssymb 2013/01/14 v3.01 AMS font symbols
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
@@ -163,7 +164,7 @@ Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics
 .sty"
-Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.sty
 "
@@ -173,7 +174,7 @@ Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 hics.cfg"
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 99.
+Package graphics Info: Driver file: pdftex.def on input line 105.
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\pdft
 ex.def"
@@ -203,7 +204,7 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\multicol.st
 y"
-Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
+Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
 \c@tracingmulticols=\count110
 \mult@box=\box31
 \multicol@leftmargin=\dimen121
@@ -242,35 +243,39 @@ Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
 \@tempa=\box52
 \@tempa=\box53
 \@tempa=\box54
-\c@columnbadness=\count116
-\c@finalcolumnbadness=\count117
+\c@minrows=\count116
+\c@columnbadness=\count117
+\c@finalcolumnbadness=\count118
 \last@try=\dimen127
 \multicolovershoot=\dimen128
 \multicolundershoot=\dimen129
 \mult@nat@firstbox=\box55
 \colbreak@box=\box56
-\mc@col@check@num=\count118
+\mc@col@check@num=\count119
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
-.sty"
-Package: geometry 2018/04/16 v5.8 Page Geometry
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry-de\geome
+try.sty"
+Package: geometry 2010/09/12 v5.6 Page Geometry
 
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifpdf.
-sty"
-Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifpdf.sty
+"
+Package: ifpdf 2019/10/25 v3.4 ifpdf legacy package. Use iftex instead.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty
+"
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifvtex.st
+y"
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifvtex
-.sty"
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifxetex.s
+ty"
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\ifxetex
-.sty"
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-\Gm@cnth=\count119
-\Gm@cntv=\count120
-\c@Gm@tempcnt=\count121
+\Gm@cnth=\count120
+\Gm@cntv=\count121
+\c@Gm@tempcnt=\count122
 \Gm@bindingoffset=\dimen130
 \Gm@wd@mp=\dimen131
 \Gm@odd@mp=\dimen132
@@ -321,74 +326,23 @@ Package caption Info: End \AtBeginDocument code.
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-
 pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count122
+\scratchcounter=\count123
 \scratchdimen=\dimen138
 \scratchbox=\box57
-\nofMPsegments=\count123
-\nofMParguments=\count124
+\nofMPsegments=\count124
+\nofMParguments=\count125
 \everyMPshowfont=\toks24
-\MPscratchCnt=\count125
+\MPscratchCnt=\count126
 \MPscratchDim=\dimen139
-\MPnumerator=\count126
-\makeMPintoPDFobject=\count127
+\MPnumerator=\count127
+\makeMPintoPDFobject=\count128
 \everyMPtoPDFconversion=\toks25
 )
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\epstopdf
--base.sty"
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\infwar
-err.sty"
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-)
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\grfext.s
-ty"
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvdefi
-nekeys.sty"
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ltxcmd
-s.sty"
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-)))
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\kvoption
-s.sty"
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvsetk
-eys.sty"
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\etexcm
-ds.sty"
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifluat
-ex.sty"
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-))))
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pdftexcmds\pdftex
-cmds.sty"
-Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty
-"
-Package: iftex 2019/11/07 v1.0c TeX engine tests
-)
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/epstopdf-pkg\epst
+opdf-base.sty"
+Package: epstopdf-base 2019-12-09 v2.10 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-38.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
+85.
 )
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -424,11 +378,13 @@ G,.JBIG2,.JB2,.eps]
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 59.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 59.
+
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 59.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 59.
+
  ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd
 "
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -501,166 +457,173 @@ ures/2DConvExample(c).png>] [11 <../figures/2DConvExample(d).png>]
 LaTeX Warning: Reference `sec-Training' on page 12 undefined on input line 419.
 
 
-<../Figures/RectifiedLinearUnit.png, id=60, 1156.32pt x 722.7pt>
+<../Figures/RectifiedLinearUnit.png, id=60, 1734.48pt x 578.16pt>
 File: ../Figures/RectifiedLinearUnit.png Graphic file (type png)
 <use ../Figures/RectifiedLinearUnit.png>
 Package pdftex.def Info: ../Figures/RectifiedLinearUnit.png  used on input line
  436.
-(pdftex.def)             Requested size: 231.2599pt x 144.53743pt.
+(pdftex.def)             Requested size: 433.61894pt x 144.53964pt.
 [12] [13 <../Figures/RectifiedLinearUnit.png>] [14]
 <../Figures/CXELoss.png, id=73, 1445.4pt x 578.16pt>
 File: ../Figures/CXELoss.png Graphic file (type png)
 <use ../Figures/CXELoss.png>
 Package pdftex.def Info: ../Figures/CXELoss.png  used on input line 508.
 (pdftex.def)             Requested size: 361.34912pt x 144.53964pt.
- [15 <../Figures/CXELoss.png>] [16] [17] [18]
+ [15 <../Figures/CXELoss.png>]
+<../Figures/LayerGraph.png, id=78, 609.9588pt x 750.6444pt>
+File: ../Figures/LayerGraph.png Graphic file (type png)
+<use ../Figures/LayerGraph.png>
+Package pdftex.def Info: ../Figures/LayerGraph.png  used on input line 552.
+(pdftex.def)             Requested size: 487.96771pt x 600.51633pt.
 
-LaTeX Warning: Reference `Goodfellow' on page 19 undefined on input line 671.
+Overfull \hbox (15.93648pt too wide) in paragraph at lines 552--553
+ [] 
+ []
+
+[16]
+Overfull \vbox (10.57558pt too high) has occurred while \output is active []
 
 
-LaTeX Warning: Citation `N' on page 19 undefined on input line 671.
+[17 <../Figures/LayerGraph.png>] [18] [19] [20]
 
-<../Figures/NeuralNetworkArchitecture.png, id=90, 609.477pt x 741.0084pt>
+LaTeX Warning: Reference `Goodfellow' on page 21 undefined on input line 705.
+
+
+LaTeX Warning: Citation `N' on page 21 undefined on input line 705.
+
+<../Figures/NeuralNetworkArchitecture.png, id=98, 609.477pt x 741.0084pt>
 File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
 <use ../Figures/NeuralNetworkArchitecture.png>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
-t line 675.
+t line 709.
 (pdftex.def)             Requested size: 457.10664pt x 555.75494pt.
-[19] [20 <../Figures/NeuralNetworkArchitecture.png>] [21] [22] [23] [24]
-[25] [26] [27]
+[21] [22 <../Figures/NeuralNetworkArchitecture.png>] [23] [24] [25] [26]
+[27] [28] [29]
 
-LaTeX Warning: Citation `Khan' on page 28 undefined on input line 950.
-
-[28] [29]
-
-LaTeX Warning: Citation `Zerizel' on page 30 undefined on input line 975.
-
-
-LaTeX Warning: Citation `Tensorflow' on page 30 undefined on input line 986.
+LaTeX Warning: Citation `Khan' on page 30 undefined on input line 984.
 
 [30] [31]
 
-Package caption Warning: \label without proper reference on input line 1025.
-See the caption package documentation for explanation.
+LaTeX Warning: Citation `Zerizel' on page 32 undefined on input line 1009.
 
 
-LaTeX Warning: Reference `fig-spectrograms' on page 32 undefined on input line 
-1021.
+LaTeX Warning: Citation `Tensorflow' on page 32 undefined on input line 1020.
 
-<../Figures/AnalysisFrames.png, id=133, 804.75656pt x 407.27156pt>
+[32] [33]
+<../Figures/AnalysisFrames.png, id=141, 804.75656pt x 407.27156pt>
 File: ../Figures/AnalysisFrames.png Graphic file (type png)
 <use ../Figures/AnalysisFrames.png>
-Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1035
+Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1066
 .
 (pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
-[32 <../Figures/AnalysisFrames.png>] [33] [34]
+ [34 <../Figures/AnalysisFrames.png>] [35] [36]
 
-LaTeX Warning: Reference `eqn-ShapeX1' on page 35 undefined on input line 1111.
+LaTeX Warning: Reference `eqn-ShapeX1' on page 37 undefined on input line 1160.
 
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1127
-.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
+176.
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1127.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1176.
 
 
-[35]
-<../FiguresFeatures/Time_Domain_Env.png, id=146, 1445.4pt x 578.16pt>
+[37]
+<../FiguresFeatures/Time_Domain_Env.png, id=155, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Time_Domain_Env.png Graphic file (type png)
 <use ../FiguresFeatures/Time_Domain_Env.png>
 Package pdftex.def Info: ../FiguresFeatures/Time_Domain_Env.png  used on input 
-line 1151.
+line 1200.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
- [36 <../FiguresFeatures/Time_Domain_Env.png>]
-<../FiguresFeatures/Zero_X-Rate.png, id=152, 1445.4pt x 578.16pt>
+ [38 <../FiguresFeatures/Time_Domain_Env.png>]
+<../FiguresFeatures/Zero_X-Rate.png, id=160, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Zero_X-Rate.png Graphic file (type png)
 <use ../FiguresFeatures/Zero_X-Rate.png>
 Package pdftex.def Info: ../FiguresFeatures/Zero_X-Rate.png  used on input line
- 1173.
+ 1222.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
- [37 <../FiguresFeatures/Zero_X-Rate.png>]
-<../FiguresFeatures/Time_Center_of_Mass.png, id=157, 1445.4pt x 578.16pt>
+ [39 <../FiguresFeatures/Zero_X-Rate.png>]
+<../FiguresFeatures/Time_Center_of_Mass.png, id=165, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Time_Center_of_Mass.png Graphic file (type png)
 <use ../FiguresFeatures/Time_Center_of_Mass.png>
 Package pdftex.def Info: ../FiguresFeatures/Time_Center_of_Mass.png  used on in
-put line 1196.
+put line 1245.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
-<../FiguresFeatures/Auto_Correlation_1.png, id=158, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_1.png, id=166, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_1.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_1.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_1.png  used on inp
-ut line 1223.
+ut line 1272.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/Auto_Correlation_2.png, id=159, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_2.png, id=167, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_2.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_2.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_2.png  used on inp
-ut line 1230.
+ut line 1279.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/Auto_Correlation_3.png, id=160, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_3.png, id=168, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_3.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_3.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_3.png  used on inp
-ut line 1237.
+ut line 1286.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/Auto_Correlation_4.png, id=161, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_4.png, id=169, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_4.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_4.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_4.png  used on inp
-ut line 1244.
+ut line 1293.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
- [38 <../FiguresFeatures/Time_Center_of_Mass.png>]
+ [40 <../FiguresFeatures/Time_Center_of_Mass.png>]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
 
 
-[39 <../FiguresFeatures/Auto_Correlation_1.png> <../FiguresFeatures/Auto_Correl
+[41 <../FiguresFeatures/Auto_Correlation_1.png> <../FiguresFeatures/Auto_Correl
 ation_2.png> <../FiguresFeatures/Auto_Correlation_3.png> <../FiguresFeatures/Au
-to_Correlation_4.png>] [40]
-<../FiguresFeatures/MFCC_1.png, id=177, 1445.4pt x 578.16pt>
+to_Correlation_4.png>] [42]
+<../FiguresFeatures/MFCC_1.png, id=186, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_1.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1328
+Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1377
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/MFCC_4.png, id=178, 1445.4pt x 578.16pt>
+<../FiguresFeatures/MFCC_4.png, id=187, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_4.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1335
+Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1384
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/MFCC_8.png, id=179, 1445.4pt x 578.16pt>
+<../FiguresFeatures/MFCC_8.png, id=188, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_8.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1342
+Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1391
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/MFCC_12.png, id=180, 1445.4pt x 578.16pt>
+<../FiguresFeatures/MFCC_12.png, id=189, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_12.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 134
-9.
+Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 139
+8.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
- [41]
+ [43]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
 
 
-[42 <../FiguresFeatures/MFCC_1.png> <../FiguresFeatures/MFCC_4.png> <../Figures
+[44 <../FiguresFeatures/MFCC_1.png> <../FiguresFeatures/MFCC_4.png> <../Figures
 Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
-<../FiguresFeatures/Frequency_Center_of_Mass.png, id=192, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Frequency_Center_of_Mass.png, id=200, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Frequency_Center_of_Mass.png Graphic file (type png)
 <use ../FiguresFeatures/Frequency_Center_of_Mass.png>
 Package pdftex.def Info: ../FiguresFeatures/Frequency_Center_of_Mass.png  used 
-on input line 1378.
+on input line 1427.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
- [43 <../FiguresFeatures/Frequency_Center_of_Mass.png>] [44] [45]
-Underfull \hbox (badness 10000) in paragraph at lines 1465--1485
+ [45 <../FiguresFeatures/Frequency_Center_of_Mass.png>] [46] [47]
+Underfull \hbox (badness 10000) in paragraph at lines 1514--1534
 []$[]$ $[]$
  []
 
-[46] [47] [48] [49] [50] [51] [52] [53] [54] (Buell-PHYS799-ThesisDraft0.aux)
+[48] [49] [50] [51] [52] [53] [54] [55] [56] (Buell-PHYS799-ThesisDraft0.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -669,13 +632,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5405 strings out of 492895
- 83729 string characters out of 3123268
- 158280 words of memory out of 3000000
- 9214 multiletter control sequences out of 15000+200000
+ 5295 strings out of 492483
+ 80537 string characters out of 3121135
+ 151270 words of memory out of 3000000
+ 9564 multiletter control sequences out of 15000+200000
  12304 words of font info for 46 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,43p,1042b,546s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 39i,19n,45p,1042b,510s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
@@ -695,9 +658,9 @@ ts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Progr
 ams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (55 pages, 1797637 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (57 pages, 1877369 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
+ 292 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 101 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 106 words of extra memory for PDF output out of 10000 (max. 10000000)
 
