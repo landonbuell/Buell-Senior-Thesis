@@ -117,7 +117,6 @@ class AnalyzeModels:
         avgStdMatName =  self.modelName + " Avg Standard Confusion"
         avgHitMatName =  self.modelName + " Avg Hits Weighted Confusion"
         avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
-
         
         ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
@@ -183,6 +182,11 @@ class ClassifierMetrics :
             standardMatrix[x,y] += 1.                   # add counter
         return standardMatrix
 
+    def __Call__(self,confMat):
+        """ Compute a Series of Metrics From the confusion matrix per each class """
+        precisions = self.PrecisionScore(confMat)       # precision scores over all classes
+        recall = self.RecallScore(confMat)       # recall scores over all classes
+
     def AccuracyScore (self):
         """ Compute Recall Score of Data """    
         acc = 0
@@ -191,31 +195,29 @@ class ClassifierMetrics :
                 acc += 1
         return acc/ len(self.x)
 
-    def PrecisionScore(self):
+    def PrecisionScore(self,confMat):
         """ Compute Precision Score of Data """
-        confMat = self.StandardConfusion()
-        sumRow = np.sum(confMat,axis=1)     # sum across rows
-        prec = 0
-        for i in range(self.n_classes):     # each class
-            if sumRow[i] != 0:
-                p = confMat[i,i]/sumRow[i]  # precision of class i
-            else: 
-                p = 0
-            prec += p                       # add to total
-        return prec / self.n_classes        # avg over classes
+        sumRow = np.sum(confMat,axis=1)         # sum across rows
+        prec = np.zeros(shape=self.n_classes)   # store precision scores
+        for i in range(self.n_classes):         # each class
+            if sumRow[i] != 0:                  # if not zero
+                p = confMat[i,i]/sumRow[i]      # precision of class i
+            else:                               # div by zero
+                p = 0                           # zero
+            prec[i] += p                        # add to total
+        return prec                             # return precision
        
-    def RecallScore (self):
+    def RecallScore (self,confMat):
         """ Compute Recall Score of Data """
-        confMat = self.StandardConfusion()
-        sumCol = np.sum(confMat,axis=0)     # sum across cols
-        recl = 0
-        for i in range(self.n_classes):     # each class
-            if sumCol[i] != 0:
-                r = confMat[i,i]/sumCol[i]  # recall of class i
-            else:
-                r = 0
-            recl += r                       # add to total
-        return recl / self.n_classes        # avg over classes
+        sumCol = np.sum(confMat,axis=0)         # sum across cols
+        recl = np.zeros(shape=self.n_classes)   # store precision scores
+        for i in range(self.n_classes):         # each class
+            if sumCol[i] != 0:                  # not zero
+                r = confMat[i,i]/sumCol[i]      # recall of class i
+            else:                               # div by zero?
+                r = 0                           # set to 0
+            recl[i]+= r                         # add to total
+        return recl                             # avg over classes
 
     def LossScore (self):
         """ Compute Loss Score of Data """
