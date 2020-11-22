@@ -91,7 +91,7 @@ class AnalyzeModels:
             scores = data["Confidence"].to_numpy()
 
             ComputeMetrics = ClassifierMetrics(self.n_classes,labels,predns,scores) 
-            metrics = ComputeMetrics.MetricScores
+            metrics = ComputeMetrics.MetricScores()
             self.metricsArray[i] = metrics
 
             # Create & Names for Confusion matrices
@@ -118,6 +118,7 @@ class AnalyzeModels:
         avgHitMatName =  self.modelName + " Avg Hits Weighted Confusion"
         avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
         
+        """
         ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
@@ -127,7 +128,9 @@ class AnalyzeModels:
         ClassifierMetrics.PlotConfusion(avgHitsWeightedConfMat,self.n_classes,avgHitMatName)
         ClassifierMetrics.PlotConfusion(avgScrsWeightedConfMat,self.n_classes,avgScrMatName)
         os.chdir(homePath)
+        """
 
+        self.ConfusionMatrix = avgStandardConfMat
         return self
 
 class ClassifierMetrics :
@@ -189,11 +192,7 @@ class ClassifierMetrics :
 
     def AccuracyScore (self):
         """ Compute Recall Score of Data """    
-        acc = 0
-        for (x,y) in zip(self.x,self.y):
-            if (x == y):
-                acc += 1
-        return acc/ len(self.x)
+        accy = np.zeros(shape=self.n_classes)   # store accuracy scores
 
     def PrecisionScore(self,confMat):
         """ Compute Precision Score of Data """
@@ -224,14 +223,12 @@ class ClassifierMetrics :
         Loss = keras.losses.categorical_crossentropy(self.xOneHot,self.yOneHot)
         return np.mean(Loss.numpy())
 
-    @property
     def MetricScores(self):
         """ Collect All metric Scores in one arrays """
         _accr = self.AccuracyScore()
         _prec = self.PrecisionScore()
         _recl = self.RecallScore()
-        _loss = self.LossScore()
-        return np.array([_accr,_prec,_recl,_loss])
+        return np.array([_accr,_prec,_recl])
 
     ### Include prediction threshold
 

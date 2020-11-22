@@ -1,0 +1,51 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>eb19d509-5f93-4509-8812-2c5ed9db81fb</ProjectGuid>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>ClassifierMain.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>ClassifierMain</Name>
+    <RootNamespace>ClassifierMain</RootNamespace>
+    <InterpreterId>Global|PythonCore|3.8</InterpreterId>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>"C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\Target-Data" "C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\Output-Data" "C:\Users\Landon\Documents\GitHub\Buell-Senior-Thesis\SignalClassifier\Model-Data" "train-predict" "GammaCLF" True</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="FeatureUtilities.py" />
+    <Compile Include="ClassifierMain.py" />
+    <Compile Include="MachineLearningUtilities.py" />
+    <Compile Include="MathUtilities.py" />
+    <Compile Include="ModeUtilities.py" />
+    <Compile Include="NeuralNetworkUtilities.py" />
+    <Compile Include="PlottingUtilities.py" />
+    <Compile Include="SystemUtilities.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.8" />
+    <InterpreterReference Include="Global|VisualStudio|ClassifierPyEnv (Python 3.8 (64-bit))" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
