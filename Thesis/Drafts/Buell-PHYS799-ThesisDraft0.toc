@@ -23,47 +23,47 @@
 \contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{15}%
 \contentsline {subsubsection}{\numberline {3.5.3}Back-Propagation}{16}%
 \contentsline {subsubsection}{\numberline {3.5.4}The Optimizer}{20}%
-\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{21}%
-\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{23}%
-\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{24}%
-\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{24}%
-\contentsline {section}{\numberline {4}Properties of Musical Instruments}{25}%
-\contentsline {subsection}{\numberline {4.1}Idiophones}{26}%
-\contentsline {subsection}{\numberline {4.2}Membranophones}{26}%
-\contentsline {subsection}{\numberline {4.3}Chordophones}{26}%
-\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{26}%
-\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{27}%
-\contentsline {subsection}{\numberline {4.4}Aerophones}{27}%
-\contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{28}%
-\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{28}%
-\contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{28}%
-\contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{28}%
-\contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{29}%
-\contentsline {subsubsection}{\numberline {4.5.5}White Noise}{29}%
-\contentsline {section}{\numberline {5}Feature Selections}{30}%
-\contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{32}%
-\contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{32}%
-\contentsline {subsection}{\numberline {5.1}Spectrogram Features}{34}%
-\contentsline {subsection}{\numberline {5.2}Time-Space Features}{37}%
-\contentsline {subsubsection}{\numberline {5.2.1}Time Domain Envelope}{38}%
-\contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{38}%
-\contentsline {subsubsection}{\numberline {5.2.3}Temporal Center of Mass}{39}%
-\contentsline {subsubsection}{\numberline {5.2.4}Auto Correlation Coefficients}{40}%
-\contentsline {subsection}{\numberline {5.3}Frequency-Space Features}{42}%
-\contentsline {subsubsection}{\numberline {5.3.1}Mel Filter Bank Energies}{42}%
-\contentsline {subsubsection}{\numberline {5.3.2}Mel Frequency Cepstral Coeffecients}{43}%
-\contentsline {subsubsection}{\numberline {5.3.3}Frequency Center of Mass}{45}%
-\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{45}%
-\contentsline {section}{\numberline {6}Evaluating Model Performance}{46}%
-\contentsline {subsection}{\numberline {6.1}Cross Validation}{46}%
-\contentsline {subsection}{\numberline {6.2}Performance Metrics}{47}%
-\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{48}%
-\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{48}%
-\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{49}%
-\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{49}%
-\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{50}%
-\contentsline {paragraph}{}{50}%
-\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{51}%
-\contentsline {section}{\numberline {7}Experimental Results}{52}%
-\contentsline {section}{\numberline {8}Conclusion}{53}%
-\contentsline {section}{\numberline {9}Acknowledgments}{54}%
+\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{22}%
+\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{24}%
+\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{25}%
+\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{25}%
+\contentsline {section}{\numberline {4}Properties of Musical Instruments}{26}%
+\contentsline {subsection}{\numberline {4.1}Idiophones}{27}%
+\contentsline {subsection}{\numberline {4.2}Membranophones}{27}%
+\contentsline {subsection}{\numberline {4.3}Chordophones}{27}%
+\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{27}%
+\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{28}%
+\contentsline {subsection}{\numberline {4.4}Aerophones}{28}%
+\contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{29}%
+\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{29}%
+\contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{29}%
+\contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{29}%
+\contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{30}%
+\contentsline {subsubsection}{\numberline {4.5.5}White Noise}{30}%
+\contentsline {section}{\numberline {5}Feature Selections}{31}%
+\contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{33}%
+\contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{33}%
+\contentsline {subsection}{\numberline {5.1}Spectrogram Features}{35}%
+\contentsline {subsection}{\numberline {5.2}Time-Space Features}{38}%
+\contentsline {subsubsection}{\numberline {5.2.1}Time Domain Envelope}{39}%
+\contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{39}%
+\contentsline {subsubsection}{\numberline {5.2.3}Temporal Center of Mass}{40}%
+\contentsline {subsubsection}{\numberline {5.2.4}Auto Correlation Coefficients}{41}%
+\contentsline {subsection}{\numberline {5.3}Frequency-Space Features}{43}%
+\contentsline {subsubsection}{\numberline {5.3.1}Mel Filter Bank Energies}{43}%
+\contentsline {subsubsection}{\numberline {5.3.2}Mel Frequency Cepstral Coeffecients}{44}%
+\contentsline {subsubsection}{\numberline {5.3.3}Frequency Center of Mass}{46}%
+\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{46}%
+\contentsline {section}{\numberline {6}Evaluating Model Performance}{47}%
+\contentsline {subsection}{\numberline {6.1}Cross Validation}{47}%
+\contentsline {subsection}{\numberline {6.2}Performance Metrics}{48}%
+\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{49}%
+\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{49}%
+\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{50}%
+\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{50}%
+\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{51}%
+\contentsline {paragraph}{}{51}%
+\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{52}%
+\contentsline {section}{\numberline {7}Experimental Results}{53}%
+\contentsline {section}{\numberline {8}Conclusion}{54}%
+\contentsline {section}{\numberline {9}Acknowledgments}{55}%

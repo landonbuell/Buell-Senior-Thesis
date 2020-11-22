@@ -275,7 +275,7 @@ The activation of each entry is given by a linear-combination of activations fro
 
 \paragraph*{}Suppose the layer $(l-1)$ contains $m$ neurons. Then the weighting-matrix, $W^{(l)}$ has shape $m \times n$, the bias-vector $b^{(l)}$ has shape $n \times 1$. We can denote the function in a similar manner to Eq.(\ref{eqn-altLayerFunction}) as:
 \begin{equation}
-\label{eqn-FunctionDense}s
+\label{eqn-FunctionDense}
 f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(m \times 1)} \rightarrow x^{(l)} \in \mathbb{R}^{(n \times 1)}
 \end{equation}
 
@@ -487,13 +487,13 @@ The arrays $W^{(l)}$and bias vectors $b^{(l)}$ are not trainable parameters, the
 \paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use the \textit{Categorical Crossentropy} (CXE) cost function. For a sample labeled by the one-hot-encoded vector $y$ and corresponding prediction vector $y^*$, the CXE cost for a single sample is given by \cite{Goodfellow,Virtanen}:
 \begin{equation}
 \label{eqn-CXELoss}
-\text{CXE}\big[ y , y^* \big] = - \sum_{i=0}^{k-1} y_i \log_{10}(y^*_i) 
+\text{CXE}\big[ y , y^* \big] = - \sum_{i=0}^{k-1} y_i \ln(y^*_i) 
 \end{equation}
 Thus, the average loss over a mini-batch of $b$ samples is given:
 \begin{equation}
 \label{eqn-CXELossAvg}
 \big\langle \text{CXE}\big[ y , y^* \big]\big\rangle = 
-- \frac{1}{b}\sum_{n=0}^{b-1}\sum_{i=0}^{k-1} y_i^{(n)} \log_{10}(y^{*(n)}_i) 
+- \frac{1}{b}\sum_{n=0}^{b-1}\sum_{i=0}^{k-1} y_i^{(n)} \ln(y^{*(n)}_i) 
 \end{equation}
 
 \paragraph*{}Suppose that a given sample belongs to class $j$ in a $k$-classes classifier. Since the label vector, $y$ is one-hot-encoded, all entries are zero except $y_{j} = 1$.
@@ -501,7 +501,7 @@ Thus, the average loss over a mini-batch of $b$ samples is given:
 y = \big[y_0,y_1, ... , y_{j} , ..., y_{k-1} \big]^T  = 
 \big[0,0, ... , 1 , ...,0 \big]^T
 \end{equation}
-Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms. The only non-zero term is the produce of $y_j$ and $\log_{10}(y^*_j)$. Since the vector $y^*$ has been subject to the softmax activation function, we must have $y^*_j \in [0,1]$. This means that taking the log of this value returns a negative number. Multiplying by negative number returns a high loss when the activation of $y^*_j$ is low and a low cost when $y^*_j \approx 1$. We visualize this relationship in Fig. (\ref{fig-CXELoss}):
+Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms, with the only exception at index $j$, where we have $y_j\ln(y^*_j) = \ln(y^*_j)$. Since the vector $y^*$ has been subject to the softmax activation function, we must have $y^*_j \in [0,1]$. This means that taking the natural log of this value returns a negative number. Multiplying that by negative 1 returns a high loss when the activation of $y^*_j$ is low and a low cost when $y^*_j \approx 1$. We visualize this relationship for a single sample in Fig. (\ref{fig-CXELoss}):
 
 \begin{figure}[h]
 \begin{center}
@@ -525,9 +525,9 @@ In most learning scenarios, we care about some performance measure $P$,... We re
 \end{quote}
 By choosing an appropriate cost function, and selecting the parameters $\Theta$ that minimize the average cost over a data set, we also assume that doing so minimizes classification error and maximizes the performance $P$.
 
-\paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in Eq. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize the cost function with a gradient-based method. 
+\paragraph*{}The cost of a sample is dependent on training labels $y$ and the network output $y^*$. The output is given by the final layer activation $x^{(L-1)}$, which in turn are produced by the previous layer and so forth, as demonstrated in Eq. (\ref{eqn-altLayerFunction}), This recursive nature combined with the dimensionality of the parameter object $\Theta$ makes an analytical solution to the optimization impractical \cite{Geron,Goodfellow,James}. We instead optimize the cost function with a numerical \textit{iterative} method \cite{Loy}. 
 
-\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by moving each element in $\Theta$ with small steps in the direction of the negative partial derivative with respect to each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
+\paragraph*{}We can reduce the cost given a set of parameters, $J(\Theta)$, by repeatedly moving each element in $\Theta$ with small steps in the direction of the negative partial derivative with respect to each parameter. In the case of the high-dimensional $\Theta$ object, we compute the partial derivative with respect to each weight and bias in the form of the \textit{gradient vector}. We denote the gradient of $J$ with respect to the parameters in $\Theta$ as:
 \begin{equation}
 \label{eqn-CostGradient}
 \nabla_{\Theta}\big[ J \big] = 
@@ -577,39 +577,53 @@ Similarly, the partial derivative of the cost with respect to the bias array can
 \frac{\partial J}{\partial x^{(L-1)}}\frac{\partial x^{(L-1)}}{\partial z^{(L-1)}}\frac{\partial z^{(L-1)}}{\partial b^{(L-1)}}
 \end{equation}
 
-\paragraph*{}For the categorical cross entropy cost function, we can evaluate $\partial J / \partial x^{(L-1)}$ over a single sample as:
+\paragraph*{}For the categorical cross entropy cost function, we can evaluate $\partial J / \partial x^{(L-1)}$ over a single sample that belongs to class $i$ as:
 \begin{equation}
 \label{eqn-CXELossDeriv}
 \frac{\partial J}{\partial x^{(L-1)}} = \frac{\partial J}{\partial y^*} =
-\frac{\partial}{\partial x^{(L-1)}}\big[ -y \log_{10} (y^*) \big] = -\frac{1}{\ln(10)}\sum_{i}\frac{y_{i}}{y^*_i}
+\frac{\partial}{\partial y^*}\Big[ -y \ln (y^*) \Big] = -\frac{1}{y^*_i + \delta}
 \end{equation}
-The value $\partial x^{(L-1)} / \partial z^{(L-1)}$ can be found by differentiating Eq. (\ref{eqn-elementActivation}) with respect to the input activations.
+We often introduce $\delta \approx 10^{-8}$ to prevent possible division by $0$ errors. The value $\partial x^{(L-1)} / \partial z^{(L-1)}$ can be found by differentiating Eq. (\ref{eqn-elementActivation}) with respect to the input activations.
 \begin{equation}
 \frac{\partial x^{(L-1)}}{\partial z^{(L-1)}} = \sigma^{'(l)} \big[ z^{(L-1)} \big]
 \end{equation}
-
+For a dense layer as in sec. (\ref{subsubsec-DenseLayer}) or a 2D-convolution layer as in sec. (\ref{subsubsec-Conv2DLayer}) $\partial z^{(L-1)} / \partial W^{(L-1)}$ is given by the derivative of Eq. (\ref{eqn-LinearTransform}) or Eq. (\ref{eqn-LinearTransform2}) with respect to $W^{(l)}$:
+\begin{equation}
+\frac{\partial z^{(L-1)}}{\partial W^{(L-1)}} = 
+\frac{\partial}{W^{(L-1)}}\Big[ W^{(L-1)}x^{(L-2)} + b^{(L-1)}\Big] = x^{(L-2)}
+\end{equation}
+\begin{equation}
+\frac{\partial z^{(L-1)}}{\partial W^{(L-1)}} = 
+\frac{\partial}{W^{(L-1)}}\Big[ \big( W^{(L-1)} * x^{(L-2)} \big) + b^{(L-1)}\Big] = x^{(L-2)}
+\end{equation}
+Finally, differentiating with respect to the bias array: $\partial z^{(L-1)} / \partial b^{(L-1)}$, we have:
+\begin{equation}
+\frac{\partial z^{(L-1)}}{\partial b^{(L-1)}} = \frac{\partial}{W^{(L-1)}}\Big[ W^{(L-1)}x^{(L-2)} + b^{(L-1)}\Big] = 1
+\end{equation}
 
 \paragraph*{}Suppose we then wish to compute the elements of $\frac{\partial J}{\partial W^{(l)}}$ and $\frac{\partial J}{\partial b^{(l)}}$. Using the same graph from Fig. (\ref{fig-ComputationalGraph}), we can follow the chain of information to derive an expression for the similar to Eq. (\ref{eqn-dWL1}) and Eq. (\ref{eqn-dbL1}) for each layer $(l)$ in the nueral network. In general, we can state that:
 \begin{equation}
 \label{eqn-dWGeneral}
+\nabla_{W^{(l)}}J = \frac{\partial J}{\partial W^{(l)}} = 
+\frac{\partial J}{\partial x^{(l)}}\odot \partial\sigma^{(l)}[ z^{(l)} ] \cdot x^{(l-1)}
 \end{equation}
 And
 \begin{equation}
 \label{eqn-dbGeneral}
+\nabla_{b^{(l)}}J = \frac{\partial J}{\partial b^{(l)}} = 
+\frac{\partial J}{\partial x^{(l)}}\odot \partial\sigma^{(l)}[ z^{(l)} ]
 \end{equation}
+Where $z^{(l)}$ are the linear activations defined in Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-LinearTransform2}). Note that each $z^{(l)}$ and $x^{(l)}$ are typically stored in memory during the forward pass in Alg. (\ref{algFeedForward}) to prevent the need to recompute them \cite{Geron2,Goodfellow}.
+
 
 \begin{algorithm}[H]
-\caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays is then the discrete gradient of that parameter. A practical application of this algorithm should include batches of samples instead of a single sample}
+\caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.}
 \label{algBackProp}
 
 \begin{algorithmic}
-\REQUIRE Cost/Objective function $J$ and learning rate $\alpha$
-\REQUIRE Set of weighting parameters - $W^{(i)}, i \in \{0,1,....,L-1\}$
-\REQUIRE Set of bias parameters - $b^{(i)}, i \in \{0,1,....,L-1\}$
-\REQUIRE Set of layer activation function - $\sigma^{(i)}, i \in \{0,1,....,L-1\}$
-\REQUIRE Set of layer activation function derivatives - $\partial\sigma^{(i)}, i \in \{0,1,....,L-1\}$
-\REQUIRE Set of pre-nonlinear activation - $Z^{(i)}, i \in \{0,1,....,L-1\}$
-\REQUIRE Set of post-nonlinear activation - $X^{(i)}, i \in \{0,1,....,L-1\}$
+\REQUIRE Cost/Objective function $J$.
+\REQUIRE Set of Layer functions $f^{(i)}$. Each one contains a weighting array $W^{(i)}$, a bias array $b^{(i)}$, and activation function $\sigma^{(i)}$, the activation function derivative, $\sigma^{'(i)}$. In all cases, $i \in \{0,1,....,L-1\}$
+\REQUIRE Set of linear and non-linear activation arrays $z^{(i)}$ and $x^{(i)}$.
 
 Execute forward pass in algorithm (\ref{algFeedForward}) and compute the gradient of the cost with respect to the final layer activations \\
 $dx \leftarrow \nabla_{(y^*)}J(y,y^*)$ \\
@@ -632,29 +646,28 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}After (i) computing the gradient, we can scale it by a desired learning rate, $\alpha$ and (ii) add the gradient vector element-wise to the existing elements in $\Theta$ object. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values across a data set \cite{Geron}. This is called \textit{gradient descent} and is the basis for many optimization algorithms. We show the general update rule on iteration $(i)$ for gradient based learning over a batch of $m$ samples in Eq. (\ref{eqn-GradientLearning}).
+\paragraph*{}After (i) computing the gradient, we can scale it by a desired learning rate $\alpha$, and (ii) add the gradient vector element-wise to the existing elements in $\Theta$ object. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values across a data set \cite{Geron}. This is called \textit{gradient descent} and is the basis for many optimization algorithms. Let $\bar{J}$ be the avergae cost over a batch of $b$ samples. We show the general update rule on iteration $(i)$ for gradient based learning in Eq. (\ref{eqn-GradientLearning}).
 \begin{equation}
 \label{eqn-GradientLearning}
-\Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \\
+\Theta^{(i)} = \Theta^{(i-1)} + (-\alpha) \nabla_{\Theta} \bar{J}
 \end{equation}
+Where $\Theta^{(i)}$ will give the set of new, updated parameters of the network.
 
 % ================================
 
 \subsubsection{The Optimizer}
 
-\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to achieve the lowest possible value of the cost function over a data set \cite{Geron}. Some models such as minimizing a \textit{mean-squared error} for linear regression model can be solve analytically, while high dimensional neural networks
-Standard gradient-based learning, as given by the parameter update rule in Eq. (\ref{eqn-GradientLearning}) is cumbersome and often prone errors such as vanishing or exploding gradients. \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an algorithm that is more stable, and aggressive in it's ability to
+\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to achieve the lowest possible value of the cost function over a data set \cite{Geron}. Some models such as minimizing a \textit{mean-squared error} for linear regression model can be solve analytically, while high dimensional neural networks, such as the one used in this project, outlined in sec. (\ref{subsec-Architecture}), cannot be solved symbolically. Thus, we then employ an iterative gradient method, much like the one in Eq. (\ref{eqn-GradientLearning}). These standard gradient-based learning algorithms are cumbersome and often prone errors such as vanishing or exploding gradients. \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an algorithm that is more stable, and robust in it's ability to drive the cost function to a successively lower value.
 
-\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients, as well as exponentially decaying average of past squared gradients \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost.
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients (see $s^{(i})$ in Eq. (\ref{eqn-ADAMupdate})), as well as exponentially decaying average of past squared gradients (see $r^{(i})$ in Eq. (\ref{eqn-ADAMupdate}))\cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost.
 
 \paragraph*{}This means that as the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. 
 Note that a superscript $(i)$ or $(i-1)$ gives an iteration index, while the superscript $i$ means to raise a value to the power of $i$. For a given step $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
-s^{(i)} &= \rho_1 s^{(i-1)} + (1 - \rho_1) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
-r^{(i)} &= \rho_2 r^{(i-1)} + (1 - \rho_2) \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big] \odot
-							\frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]  \\
+s^{(i)} &= \rho_1 s^{(i-1)} + (1 - \rho_1) \nabla_{\Theta} \bar{J}  \\
+r^{(i)} &= \rho_2 r^{(i-1)} + (1 - \rho_2) \Big[ \nabla_{\Theta} \bar{J} \odot \nabla_{\Theta} \bar{J} \Big]  \\
 s'^{(i)} &= \frac{s^{(i)}}{1-\rho_1^i} \\
 r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^i} \\
 \Theta^{(i)} &= \Theta^{(i-1)} + (-\alpha)\frac{s'^{(i)}}{\sqrt{r'^{(i)}}+\delta} \\
@@ -665,7 +678,7 @@ r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^i} \\
 
 \begin{algorithm}[H]
 \caption{Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite{Goodfellow}}
-\label{algAdaGrad}
+\label{alg-ADAM}
 
 \begin{algorithmic}
 \REQUIRE Step size $\alpha$
@@ -681,10 +694,10 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 	\item Extract a mini-batch of $m$ samples from larger data set $X$. $[x^{(0)},x^{(1)},...,x^{(m-1)}]$ and corresponding target values 
 	$[y^{(0)},y^{(1)},...,y^{(m-1)}]$.
 	\item Compute numerical gradient estimate of each sample in batch. This can be done with standard back-propagation in algorithm (\ref{algBackProp}) and 			 	normalize by batch size $m$:
-	\item $\nabla J \leftarrow \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]$
+	\item $\nabla \bar{J} \leftarrow \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]$
 	
-	\item Compute first bias moment: $s \leftarrow \rho_1 s + (1 - \rho_1) \nabla J$
-	\item Compute second bias moment: $r \leftarrow \rho_2 s + (1 - \rho_2) \nabla J \odot \nabla J$
+	\item Compute first bias moment: $s \leftarrow \rho_1 s + (1 - \rho_1) \nabla \bar{J}$
+	\item Compute second bias moment: $r \leftarrow \rho_2 s + (1 - \rho_2) \nabla \bar{J} \odot \nabla \bar{J}$
 	\item First bias correction: $s' \leftarrow \frac{s}{1 - \rho_1^i}$
 	\item Second bias correction: $r' \leftarrow \frac{r}{1 - \rho_2^i}$
 	
@@ -700,9 +713,9 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 % ================================================================
 
 \subsection{Chosen Model Architecture}
-\label{sec-Architecture}
+\label{subsec-Architecture}
 
-\paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network it's \textit{architecture} \ref{Goodfellow}. Most standard implementations of networks utilize a \textit{unimodal architecture} where the model is created with a single input layer \cite{N}
+\paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network it's \textit{architecture} \ref{Goodfellow}. Most standard implementations of networks utilize a \textit{unimodal architecture} where the model is created with a single input layer .
 
 \begin{figure}[H]
 \begin{center}
