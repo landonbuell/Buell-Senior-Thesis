@@ -1067,6 +1067,12 @@ Note that different projects may require a different set of requirement from pre
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{Insert spectrograms here}
+
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=0.45\textwidth , height=0.2\textheight]{../Figures/AnalysisFrame}
+	\caption{A section of a violin bowing an $A4$ note, $1024$ samples long}
+	\end{subfigure}
 \caption{Spectrogram representations of various waveforms}
 \label{fig-spectrograms}
 \end{center}
@@ -1112,19 +1118,19 @@ This window function is applied to each analysis frame by computing the element-
 \label{eqn-WindowMatrix}
 \widetilde{A_i} = A_i \odot H
 \end{equation}
-We show the effect of a Hanning window on a wae 
+We show the effect of a Hanning window on an analysis frame:
 \begin{figure}[H]
 
 	\begin{subfigure}{1.0\textwidth}
 	\centering
-	%\includegraphics[width=\textwidth , height=0.2\textheight]{../FiguresFeatures/Auto_Correlation_4}
-	\caption{A section of a waveform, $1024$ samples long}
+	\includegraphics[width=\textwidth , height=0.2\textheight]{../Figures/AnalysisFrame}
+	\caption{A section of a violin bowing an $A4$ note, $1024$ samples long}
 	\end{subfigure}	
 	
 	\begin{subfigure}{1.0\textwidth}
 	\centering
-	%\includegraphics[width=\textwidth , height=0.2\textheight]{../FiguresFeatures/Auto_Correlation_4}
-	\caption{The Same waveform with a Hanning Window Applied}
+	\includegraphics[width=\textwidth , height=0.2\textheight]{../Figures/WindowedFrame}
+	\caption{The same waveform with a Hanning Window Applied}
 	\end{subfigure}	
 
 \end{figure}

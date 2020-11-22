@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  22 NOV 2020 00:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  22 NOV 2020 11:33
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -529,9 +529,22 @@ File: ../Figures/AnalysisFrames.png Graphic file (type png)
 Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1079
 .
 (pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
- [35 <../Figures/AnalysisFrames.png>] [36] [37]
+ [35 <../Figures/AnalysisFrames.png>]
+<../Figures/AnalysisFrame.png, id=149, 1734.48pt x 578.16pt>
+File: ../Figures/AnalysisFrame.png Graphic file (type png)
+<use ../Figures/AnalysisFrame.png>
+Package pdftex.def Info: ../Figures/AnalysisFrame.png  used on input line 1120.
 
-LaTeX Warning: Reference `eqn-ShapeX1' on page 38 undefined on input line 1173.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../Figures/WindowedFrame.png, id=150, 1734.48pt x 578.16pt>
+File: ../Figures/WindowedFrame.png Graphic file (type png)
+<use ../Figures/WindowedFrame.png>
+Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1126.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+ [36] [37 <../Figures/AnalysisFrame.png> <../Figures/WindowedFrame.png>] [38]
+
+LaTeX Warning: Reference `eqn-ShapeX1' on page 39 undefined on input line 1173.
 
 
 LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
@@ -543,100 +556,100 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1189.
 
 
-[38]
-<../FiguresFeatures/Time_Domain_Env.png, id=158, 1445.4pt x 578.16pt>
+[39]
+<../FiguresFeatures/Time_Domain_Env.png, id=167, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Time_Domain_Env.png Graphic file (type png)
 <use ../FiguresFeatures/Time_Domain_Env.png>
 Package pdftex.def Info: ../FiguresFeatures/Time_Domain_Env.png  used on input 
 line 1213.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
- [39 <../FiguresFeatures/Time_Domain_Env.png>]
-<../FiguresFeatures/Zero_X-Rate.png, id=163, 1445.4pt x 578.16pt>
+ [40 <../FiguresFeatures/Time_Domain_Env.png>]
+<../FiguresFeatures/Zero_X-Rate.png, id=172, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Zero_X-Rate.png Graphic file (type png)
 <use ../FiguresFeatures/Zero_X-Rate.png>
 Package pdftex.def Info: ../FiguresFeatures/Zero_X-Rate.png  used on input line
  1235.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
- [40 <../FiguresFeatures/Zero_X-Rate.png>]
-<../FiguresFeatures/Time_Center_of_Mass.png, id=168, 1445.4pt x 578.16pt>
+ [41 <../FiguresFeatures/Zero_X-Rate.png>]
+<../FiguresFeatures/Time_Center_of_Mass.png, id=177, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Time_Center_of_Mass.png Graphic file (type png)
 <use ../FiguresFeatures/Time_Center_of_Mass.png>
 Package pdftex.def Info: ../FiguresFeatures/Time_Center_of_Mass.png  used on in
 put line 1258.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
-<../FiguresFeatures/Auto_Correlation_1.png, id=169, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_1.png, id=178, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_1.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_1.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_1.png  used on inp
 ut line 1285.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/Auto_Correlation_2.png, id=170, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_2.png, id=179, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_2.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_2.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_2.png  used on inp
 ut line 1292.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/Auto_Correlation_3.png, id=171, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_3.png, id=180, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_3.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_3.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_3.png  used on inp
 ut line 1299.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/Auto_Correlation_4.png, id=172, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Auto_Correlation_4.png, id=181, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Auto_Correlation_4.png Graphic file (type png)
 <use ../FiguresFeatures/Auto_Correlation_4.png>
 Package pdftex.def Info: ../FiguresFeatures/Auto_Correlation_4.png  used on inp
 ut line 1306.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
- [41 <../FiguresFeatures/Time_Center_of_Mass.png>]
+ [42 <../FiguresFeatures/Time_Center_of_Mass.png>]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
 
 
-[42 <../FiguresFeatures/Auto_Correlation_1.png> <../FiguresFeatures/Auto_Correl
+[43 <../FiguresFeatures/Auto_Correlation_1.png> <../FiguresFeatures/Auto_Correl
 ation_2.png> <../FiguresFeatures/Auto_Correlation_3.png> <../FiguresFeatures/Au
-to_Correlation_4.png>] [43]
-<../FiguresFeatures/MFCC_1.png, id=189, 1445.4pt x 578.16pt>
+to_Correlation_4.png>] [44]
+<../FiguresFeatures/MFCC_1.png, id=197, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_1.png>
 Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1390
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/MFCC_4.png, id=190, 1445.4pt x 578.16pt>
+<../FiguresFeatures/MFCC_4.png, id=198, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_4.png>
 Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1397
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/MFCC_8.png, id=191, 1445.4pt x 578.16pt>
+<../FiguresFeatures/MFCC_8.png, id=199, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_8.png>
 Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1404
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
-<../FiguresFeatures/MFCC_12.png, id=192, 1445.4pt x 578.16pt>
+<../FiguresFeatures/MFCC_12.png, id=200, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_12.png>
 Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 141
 1.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
- [44]
+ [45]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
 
 
-[45 <../FiguresFeatures/MFCC_1.png> <../FiguresFeatures/MFCC_4.png> <../Figures
+[46 <../FiguresFeatures/MFCC_1.png> <../FiguresFeatures/MFCC_4.png> <../Figures
 Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
-<../FiguresFeatures/Frequency_Center_of_Mass.png, id=203, 1445.4pt x 578.16pt>
+<../FiguresFeatures/Frequency_Center_of_Mass.png, id=211, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/Frequency_Center_of_Mass.png Graphic file (type png)
 <use ../FiguresFeatures/Frequency_Center_of_Mass.png>
 Package pdftex.def Info: ../FiguresFeatures/Frequency_Center_of_Mass.png  used 
 on input line 1440.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
- [46 <../FiguresFeatures/Frequency_Center_of_Mass.png>] [47] [48]
+ [47 <../FiguresFeatures/Frequency_Center_of_Mass.png>] [48] [49]
 Underfull \hbox (badness 10000) in paragraph at lines 1527--1547
 []$[]$ $[]$
  []
 
-[49] [50] [51] [52] [53] [54] [55] [56] [57] (Buell-PHYS799-ThesisDraft0.aux)
+[50] [51] [52] [53] [54] [55] [56] [57] [58] (Buell-PHYS799-ThesisDraft0.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -645,10 +658,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5296 strings out of 492483
- 80556 string characters out of 3121135
+ 5312 strings out of 492483
+ 81012 string characters out of 3121135
  150270 words of memory out of 3000000
- 9565 multiletter control sequences out of 15000+200000
+ 9579 multiletter control sequences out of 15000+200000
  12304 words of font info for 46 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,19n,45p,1042b,510s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -671,9 +684,9 @@ ts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Progr
 ams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (58 pages, 1881247 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (59 pages, 2057478 bytes).
 PDF statistics:
- 295 PDF objects out of 1000 (max. 8388607)
+ 303 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 106 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 116 words of extra memory for PDF output out of 10000 (max. 10000000)
 
