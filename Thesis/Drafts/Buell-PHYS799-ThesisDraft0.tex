@@ -1417,58 +1417,66 @@ FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \section{Evaluating Model Performance}
 \label{sec-PerfEval}
 
-\paragraph*{}Before making predictions on unlabeled data such as the Chaotic Synthesizers, we must confirm that our model performs reasonably well on data that it has never interacted with. The most common practice is to divide a full data set into a subset of \textit{training} samples, and \textit{testing} samples \cite{Geron}. As the names imply, the training subset is used to fit the model, and we use the labeled testing data set to evaluate how well the model has trained. The exact ratio of sizes between these subsets varies depending on the task \cite{Goodfellow,Geron2,Mitchell}, however we choose to generally use around $90\%$ training samples and $10\%$ testing samples.
+\paragraph*{}Before making predictions on unlabeled data such as the Chaotic Synthesizers, we must confirm that our model performs reasonably well on data that it has never interacted with. The most common practice is to divide a full data set into a subset of \textit{training} samples, and \textit{testing} samples \cite{Geron}. As the names imply, the training subset is used to fit the model, and we use the labeled testing data set to evaluate how well the model has trained. The exact ratio of sizes between these subsets varies depending on the task \cite{Goodfellow,Geron2,Mitchell}, however we choose to generally use around $90\%$ training samples and $10\%$ testing samples. By doing this train-test split scheme, we are confirming or disproving the predictive power of the model. If the model score high within it's training subset, but low within the testing subset, this can indicate a model that is \textit{overfitted}, and will not perform well on other unseen samples \cite{Geron}.
 
 % ================================================================
 
-\subsection{Cross Validation}
+\subsection{K-Folds Cross Validation}
 \label{subsec-XValidation}
 
-\paragraph*{}The optimization of neural networks are heavily dependent on initial conditions of parameters and the data sets. We consider models that suffer from this phenomenon to be \textit{high-variance} models \cite{James}. To eliminate any concerns of possible out-liers, or abnormalities that arise, it is common to implement a resampling method called \textit{cross validation} (Also called X-validation) \cite{Geron,Goodfellow}. This process involves taking a data set containing $N$ unique samples and dividing it into $K$ non-overlapping subsets. $1$ subset is reserved to evaluate the model, and $K-1$ remaining subsets are used to train the model. For each of the $K$ models, we can evaluate a series of performance metrics, and store any model parameters. We can compare any one model to the other $K-1$ models to ensure that each network is performing consistently, despite small changes in the initial data set. We detail pseudo-code for a $K$-Fold Cross Validation algorithm.
+\paragraph*{}We can expand on the idea of a train/test split with a resampling method called \textit{K-Folds Cross Validation} (Also called X-validation) \cite{Geron,James}. Suppose we have machine learning model $F^*$, with a set of trainable parameters $\Theta$. We also have a data set $X$ and a set of appropriately labeled targets, $Y$, each of which contain $N$ samples. For $K$-folds X-val, we divide the full data set into $K$ subsets (called \textit{folds}), each with size $K/N$:
+\begin{equation}
+\label{eqn-XValSplit}
+X,Y \rightarrow \Big\{ \big(X^{(0)},Y^{(0)}\big) , \big(X^{(1)},Y^{(1)}\big) , ... , \big(X^{(K-1)},Y^{(K-1)}\big) \Big\}
+\end{equation}
+For each iteration, $k \in [0,1,2,...,K-1]$ we reserve a single subset of data $\big(X^{(k)},Y^{(k)}\big)$ to use as a testing subset. We use the remaining $K-1$ subsets as training data. We fit the model with the data and labels to produce a model $F^{*(k)}$ which as set of parameters $\Theta^{k}$. We return the the test set, and run predictions on this unseen data subset. We compare those predictions to the corresponding set of labels $Y^{(k)}$ and evaluate the result of any selected performance metrics.
+
+\paragraph*{}The output of cross validation is $K$ models that are all trained and evaluated on overlapping subsets of the full data. Each model $F^*$, shows a possible outcome of training the network given a subset of data samples, and a particular set of initial parameters. It has a corresponding set of learned parameters $\Theta^*$, as defined in Eq. (\ref{eqn-Theta}) that it uses to make any predictions. We can compare the performance of each model and test if they produce similar outcomes, which indicates that the model will be able to consistently generalize to new, unseen samples.
 
 \begin{algorithm}[H]
 \caption{A $K$-Fold Cross Validation program.}
-\label{algFeedForward}
-
+\label{alg-CrossValidation}
 \begin{algorithmic}
 \REQUIRE Untrained Network or related learning algorithm, $F^*$
-\REQUIRE A full labeled data set of $N$ samples. $X^{(i)}$, $i \in {0,1,2,...,N-1}$
+\REQUIRE A full labeled data set $(X,Y)$ of $N$ samples
 \REQUIRE Number of splits in Cross validation, $K$
 \REQUIRE Performance metric function(s), $P$
 
 Divide Data into $K$ non-overlapping subsets $x_{i}$, each with roughly $N/K$ samples \\
-$X \rightarrow \big\{ x_{0}, x_{1}, x_{2}, ..., x_{K-2},  x_{K-1} \big\}$ \\
+$X,Y \rightarrow \Big\{ \big(X^{(0)},Y^{(0)}\big) , \big(X^{(1)},Y^{(1)}\big) , ... , \big(X^{(K-1)},Y^{(K-1)}\big) \Big\}$ \\
 Performance History $\leftarrow \{\}$
 
-\FOR {$j = 0,1,2,3,...,K-2,K-1$}
+\FOR {$k = 0,1,2,3,...,K-2,K-1$}
 	\item Reset all parameters in $F^*$ to a random "untrained" state
 	\item Set aside testing data subset
-	\item $X_{test} \leftarrow x_{j}$
+	\item $X_{test} \leftarrow X^{(k)}$
+	\item $Y_{test} \leftarrow Y^{(k)}$
 	\item Concatenate the remaining subsets into training data set
-	\item $X_{train} =\leftarrow x_{i \neq j}$
-	\item Train the model, $F^*$ with the $X_{train}$ data set
-	\item Evaluate the trained model with the $X_{train}$ data set, and compute value of metric function(s) $P$
+	\item $X_{train} \leftarrow X^{(i \neq j)}$
+	\item $Y_{train} \leftarrow Y^{(i \neq j)}$
+	\item Train the model, $F^*$ with the $X_{train}$ and $Y_{train}$ subset.
+	\item Evaluate the trained model with the $X_{test}$ and $Y_{test}$ data set, and compute value of metric function(s) $P$
 	\item Store Performance $P$ in Performance History array
-\ENDFOR
-
-Compare performance results, and adjust model, parameters as needed, and repeat if desired.
-
+\ENDFOR \\
+Compare performance results, and adjust model or parameters as needed, and repeat if desired. \\
+Run additional analysis on performance metrics.
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}The output of cross validation is $K$ models that are all trained and evaluated on overlapping subsets of the full data. Each model $F^*$, shows a possible outcome of training the network given a subset of data samples, and a particular set of initial parameters.. It has a corresponding set of learned parameters $\Theta^*$, as defined in Eq. (\ref{eqn-Theta}) that it uses to make any predictions. 
+\paragraph*{}Cross Validation is particularly useful in models such as neural networks because they suffer from the phenomenon of \textit{high-variance}, which means that small changes in initial conditions can drastically change the outcome of the model \cite{James}. Cross validation allows us to control these initial conditions by training the model on similar, but non-identical subsets of data, along with a slightly different set of initial parameters. This repetition allows us to explore the model's behavior over a range of possible initial conditions and validation sets, to ensure that the network is functions as expected over multiple trials. This also eliminates the fear of "unique" cases where the model happens to perform exceptionally well or exceptionally poorly given a random set of initial parameters \cite{Geron}.
+
 
 % ================================================================
 
 \subsection{Performance Metrics}
 
-\paragraph*{}In the case of the multi-category classifier, it is important that we choose the appropriate performance metrics to confirm that the network is completeing it's assigned as as expected \cite{Geron}. While the neural network itself uses the cost function as it's sole objective to optimize, we also require a set of more human-readable functions. For example, a loss score of $1.075$ over a given subset of previously unseen samples provides us with no real information as to how well the network is performing at it's designed task.  In this section, we introduce a set of functions and metrics than enable a more tangible interpretation of the model's performance. To evaluate any performance metric, we require a set of samples with ground truth labels, $y$, and a model's prediction for those labels, $y^*$ \cite{Goodfellow,James}.
+\paragraph*{}In the case of the multi-category classifier, it is important that we choose the appropriate performance metrics to confirm that the network is completeing it's assigned as as expected \cite{Geron}. While the neural network itself uses the cost function as it's sole objective to optimize, we also require a set of more human-readable functions. For example, an average loss score of $1.075$ over a given subset of previously unseen samples provides us with no real information as to how well the network is performing at it's designed task. In this section, we introduce a set of functions and metrics than enable a more tangible interpretation of the model's performance. To evaluate any performance metric, we require a set of samples with ground truth labels, $y$, and a model's prediction for those labels, $y^*$ \cite{Goodfellow,James}.
 
 % ================================
 
 \subsubsection{Confusion Matrix}
 
-\paragraph*{}The confusion matrix (also called a confusion table) is a very quick, often graphical model that can be used to show how a classifier model performs over a subset of predictions. The general idea of this object is count the number of times class $i$ is predicted to be in class $j$, and vice-versa \cite{Geron}. If we see that these classes are being repeatedly \textit{confused} in the model's prediction process, then we can modify the model or features to account for it. 
+\paragraph*{}The \textit{standard confusion matrix} (also called a confusion table) is a very quick, often graphical model that can be used to show how a classifier model performs over a subset of predictions. The general idea of this object is count the number of times class $i$ is predicted to be in class $j$, and vice-versa \cite{Geron}. If we see that these classes are being repeatedly \textit{confused} in the model's prediction process, then we can modify the model or features to account for it. 
 
 \paragraph*{}For a $k$-classes classifier, a confusion matrix will have shape $k \times k$, and every element is a non-negative integer. Each row represents the "ground truth" or  labeled class, and each column represents a predicted class. Thus for a confusion matrix, $C$, we can say that:
 \begin{quote}
@@ -1479,33 +1487,28 @@ belong to class $i$, and were predicted to be in class $j$
 \end{center}
 
 \end{quote}
-Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indicates an incorrect prediction. A confusion matrix with relatively large values in main diagonal indicates a model that consistently predicts correct labels \cite{Geron}. 
+Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indicates an incorrect prediction. A confusion matrix with relatively large values in main diagonal indicates a model that consistently predicts correct labels \cite{Geron}.  Below we present some "dummy" confusion matrices as numerical arrays, and a corresponding heat-map equivalent.
 
 \begin{figure}[H]
 
-	\begin{subfigure}[h]{0.45\textwidth}
+	\begin{subfigure}[h]{\textwidth , 0.8\textheight}
 	\begin{center}
 	\textcolor{red}{Images of Confusion Matrices Go Here!} 
 	\end{center}
 	\end{subfigure}
-	\begin{subfigure}[h]{0.45\textwidth}
+	\begin{subfigure}[h]{\textwidth , 0.8\textheight}
 	\begin{center}
 	\textcolor{red}{Images of Confusion Matrices Go Here!} 
 	\end{center}
 	\end{subfigure}
-	\begin{subfigure}[h]{0.45\textwidth}
-	\begin{center}
-	\textcolor{red}{Images of Confusion Matrices Go Here!} 
-	\end{center}
-	\end{subfigure}
-	\begin{subfigure}[h]{0.45\textwidth}
-	\begin{center}
-	\textcolor{red}{Images of Confusion Matrices Go Here!} 
-	\end{center}
-	\end{subfigure}
+		
 \caption{Example Confusion Matrices for $k$-classes tasks}
-\label{fig-ConfMat}
+\label{fig-DummyConfMat}
 \end{figure}
+
+\paragraph*{}In addition to the standard confusion matrix, we can also weight entries by prediction score. Rather than adding $+1$ to each entry $C_{i,j}$ where appropriate, we instead add the \textit{probability} value, which is bounded $[0,1]$ (See softmax activation function in sec. \ref{subsubsec-Softmax})). This allows us to bake in the predictive \textit{confidence} into the confusion matrix. For example, two correct predictions with a score $0.2$ are weighted equally to a single incorrect prediction of $0.4$. This is useful for identifying a classifier that makes correct predictions, but only by smaller threshold. This can almost be through of as assigning "partial credit" to each prediction.
+
+
  
 \paragraph*{}The confusion matrix can be a cumbersome, so often it is useful to express the performance in terms of more concise quantities. For this we use \textit{accuracy score}, \textit{precision score}, and \textit{recall score}.
 
@@ -1613,6 +1616,8 @@ We could then aggregate the parameters according to a weighted average to create
 \newpage
 \section{Experimental Results}
 \label{sec-Results}
+
+\paragraph*{}
 
 
 % ================================================================
