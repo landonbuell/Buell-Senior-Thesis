@@ -89,10 +89,7 @@ class AnalyzeModels:
             labels = data["Int Label"].to_numpy()
             predns = data["Int Prediction"].to_numpy()
             scores = data["Confidence"].to_numpy()
-
             ComputeMetrics = ClassifierMetrics(self.n_classes,labels,predns,scores) 
-            metrics = ComputeMetrics.MetricScores()
-            self.metricsArray[i] = metrics
 
             # Create & Names for Confusion matrices
             stdMatName =  self.modelName + str(i) + " Standard Confusion"
@@ -103,6 +100,11 @@ class AnalyzeModels:
             standardConfMat = ComputeMetrics.StandardConfusion()
             hitsWghtConfMat = ComputeMetrics.HitsWeightedConfusion()
             scrsWghtConfMat = ComputeMetrics.ScoreWeightedConfusion()
+
+            # Compute Metrics for this split
+            
+            metrics = ComputeMetrics.MetricScores(standardConfMat)
+            self.metricsArray[i] = metrics
 
             # Add To average Conf Mats
             avgStandardConfMat += standardConfMat
@@ -130,7 +132,11 @@ class AnalyzeModels:
         os.chdir(homePath)
         """
 
+        # Compute metrics avg. across all classes
         self.ConfusionMatrix = avgStandardConfMat
+
+
+
         return self
 
 class ClassifierMetrics :
@@ -185,14 +191,14 @@ class ClassifierMetrics :
             standardMatrix[x,y] += 1.                   # add counter
         return standardMatrix
 
-    def __Call__(self,confMat):
-        """ Compute a Series of Metrics From the confusion matrix per each class """
-        precisions = self.PrecisionScore(confMat)       # precision scores over all classes
-        recall = self.RecallScore(confMat)       # recall scores over all classes
-
-    def AccuracyScore (self):
+    def AccuracyScore (self,confMat):
         """ Compute Recall Score of Data """    
         accy = np.zeros(shape=self.n_classes)   # store accuracy scores
+        for i in range(self.n_classes):         # number of classes
+            accy[i] = confMat[i,i]              # True pos.
+        _sum = np.sum(confMat)
+        accy /= _sum                            # divide by all predictions
+        return accy                             # return accuracy
 
     def PrecisionScore(self,confMat):
         """ Compute Precision Score of Data """
@@ -218,17 +224,13 @@ class ClassifierMetrics :
             recl[i]+= r                         # add to total
         return recl                             # avg over classes
 
-    def LossScore (self):
-        """ Compute Loss Score of Data """
-        Loss = keras.losses.categorical_crossentropy(self.xOneHot,self.yOneHot)
-        return np.mean(Loss.numpy())
-
-    def MetricScores(self):
+    def MetricScores(self,confMat):
         """ Collect All metric Scores in one arrays """
-        _accr = self.AccuracyScore()
-        _prec = self.PrecisionScore()
-        _recl = self.RecallScore()
-        return np.array([_accr,_prec,_recl])
+        scoreMatrix = np.zeros(shape=(3,self.n_classes))
+        scoreMatrix[0] = self.AccuracyScore(confMat)
+        scoreMatrix[1] = self.PrecisionScore(confMat)
+        scoreMatrix[2] = self.RecallScore(confMat)
+        return scoreMatrix
 
     ### Include prediction threshold
 

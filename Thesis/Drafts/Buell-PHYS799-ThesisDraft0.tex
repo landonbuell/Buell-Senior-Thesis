@@ -157,86 +157,68 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
-The result of such an analogy is a computer program that is reminiscent of the structure of the a brain. Where a biological brain uses these chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Geron,Levine}. 
+The result of such an analogy is a computer program that is reminiscent of the a brain in that the program can \textit{learn} in a sense. Where a biological brain uses connections of chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Geron,Levine}. 
 
-\paragraph*{}A neural network can then be considered as mathematical function that seeks to produce an approximation $F^*$, of some usually unknown function $F$ . For audio recognition, $F$ is some function or series of functions that occurs in the brain which allows for a listener to process the sensation of audio, and map it to a known source object. For a neural network, function $F^*$ uses a set of parameters $\Theta$, to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}. 
+\paragraph*{}When a listener hears a sound, millions of neurons in their brain exchanges those chemical and electrical signals in such a way as to be able to identify the source of that sound \cite{Geron,Virtanen}. More conceptually, we can say that a listener is presented with a set of information $x$, which is air molecules vibrating near their tympanic membrane \cite{White}. That information is then passed into the brain where some function $F$ is used to model the incredibly complex set of neural connections. The output of that function is some label $y$, which the listener associates with a particular source \cite{Olson}. Similarly, we construct a neural network to accept a set of predictors $x$, which is passed into a function $F^*$ that is use to approximate $F$, and produce an output $y^*$, which predicts the source of the audio sample.
 
-\paragraph*{}Over the course of their lives, humans will learn to map sounds to sources almost effortlessly \cite{Virtanen}. Given an example, and the appropriate label, humans can do this with very reasonable accuracy over a wide array of sounds \cite{Olson,White}. We can simplify the idea of humans recognizing sound as some function or operation that occurs within the brain, accepting an input sound, and produces an output label. Similarly, a neural network can be constructed, presented with \textit{features} of multiple, labeled sound waves and learns a set of parameters $\Theta$ that allows for the mapping to a source.
+\paragraph*{}A neural network can then be considered as mathematical function that seeks to produce an approximation $F^*$, of some the usually unknown function $F$. The function $F^*$ uses a set of parameters $\Theta$, to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}. Over the course of their development, humans will be able to learn to match sounds to sources with relative ease, given the appropriate labels. In a similar manner, out neural network is present a collection of sound files and predictors and a complementary set of labels indicating the source of each sound.
 
-\paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument that could have produced the sound-wave in the audio file \cite{Goodfellow,Loy,Virtanen}. 
+\paragraph*{}For this particular project, a neural network has been constructed to perform a \textit{classification} task. A classification task involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument or sound source that could have produced the sound-wave in the audio file \cite{Goodfellow,Loy,Virtanen}. In this section we detail the nature of a general neural network. 
 
 % ================================================================
 
 \subsection{The Structure of a Neural Network}
 \label{subsec-NetworkStructure}
 
-\paragraph*{}A Neural Network is simply a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. It is this process of transforming inputs successively in a particular order until an output is attained that makes up the core functionality of a neural network \cite{Geron,Loy}. This output encodes the models final "decision" given a unique input.
+\paragraph*{}A Neural Network is a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. The output of one layer is passed forward and use as the input for the next layer. It is this process of transforming inputs successively in a particular order until an output is attained that makes up the core functionality of a neural network \cite{Geron,Loy}. The output of the final layer encodes the "decision" of the model given a particular input.
 
-\paragraph*{}Other than inspiration from the brain, Neural Networks are name \textit{networks} because of their nested composition nature. The model can be represented by a linked computational graph which successively maps exactly how the repeated composition is structured. Each node in the graph represents a \textit{layer}, which executes a particular prescribed mathematical function \cite{Goodfellow}. In the case of a \textit{linear, feed-forward} network, information passes in a single direction, to produce an output. We can represent this as a graph:
+\paragraph*{}Other than inspiration from the brain, Neural Networks are named \textit{networks} due to their successive chained or nested composition nature. A standard representation of a neural network is often a linked list or computational graph structure. This maps out exactly how the repeated compositions are structured and organizes the flow of information in more complicated networks. Each node in the computational graph represents a \textit{layer}, which executes a particular prescribed mathematical function \cite{Goodfellow}. In the case of a \textit{linear, feed-forward} network, information passes in a single direction, to produce an output. We can represent this as a graph:
 \begin{equation}
 \label{eqn-FunctionGraph}
-F(x) = x \rightarrow f^{(0)}(x) \rightarrow f^{(1)}(x) \rightarrow ..... \rightarrow
-f^{(L-2)}(x) \rightarrow f^{(L-1)}(x) \rightarrow y
+F^*(x) = x \rightarrow f^{(0)} \rightarrow f^{(1)} \rightarrow ..... \rightarrow
+f^{(L-2)} \rightarrow f^{(L-1)} \rightarrow y
 \end{equation}
 or as a nested function:
 \begin{equation}
 \label{eqn-FunctionChain}
 F(x) = f^{(L-1)}\big[f^{(L-2)}\big[...f^{(1)}\big[f^{(0)}\big[x]\big]\big]...\big]\big]
 \end{equation}
-Each function $f^{(l)}$ represents a layer of the network model. The number of layers in a neural network is referred to as the network \textit{depth}. The dimensionality of each layer is referred to as the network \textit{width} \cite{Geron,Loy}.
+The number of layers in a neural network is referred to as the network \textit{depth}. The dimensionality of each layer is referred to as the network \textit{width} \cite{Geron,Loy}.
+A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network, with each layer indexed by a superscipt, $(0)$ through $(L-1)$. Layer $(0)$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer} \cite{Geron,Loy}. 
 
-\paragraph*{}A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network, with each layer usually indexed by a superscipt, $0$ through $L-1$. Layer $0$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer}. The function that represents a layer $(l)$ is given by 
-\begin{equation}
-\label{eqn-LayerFunction}
-f^{(l)} : x \in \mathbb{R} \rightarrow y \in \mathbb{R}
-\end{equation}
-The value of $x$ can also be index by layer, we call the array $x^{(l)}$ the \textit{activations} of layer $l$ \cite{Goodfellow,Loy}. 
-
-\paragraph*{}The model is recursive by nature, the activations from one layer, $l-1$, are used to directly produce the activations of the next successive layer $l$. Thus Eq. (\ref{eqn-LayerFunction}) can be alternatively written as:
+\paragraph*{}Due to the chained nature of the model, the activations from some layer, $(l-1)$, are used to directly produce the activations for the next successive layer $(l)$. The function that represents a layer $(l)$ is given by:
 \begin{equation}
 \label{eqn-altLayerFunction}
 f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
 \end{equation}
 The array of activations, $x^{(0)}$, is the raw input given the neural network, called \textit{input} activations. Conversely, $x^{(L-1)}$ is referred to as \textit{output} activations \cite{Geron,James,Loy}.
 
+\paragraph*{}Below we outline a standard "forward pass" algorithm for a general feed-forward deep neural network. We presume each layer to be a node in a computational graph that contains a method "\textit{call}" which executes the layer's main function as in Eq. (\ref{eqn-altLayerFunction}). Each call method is presumed to be composed of two steps: a (i) linear transformation, and a (ii) non-linear activation function. See sec. (\ref{subsec-Layers}) for more detials. Additionally, each node contains a pointer "\textit{next}" which gives the next layer in the network chain. Each layer should also store it's linear activations, $z^{(l)}$ and it's output activations $x^{(l)}$ for training purposes. This algorithm is adapted from Goodfellow, \cite{Goodfellow}.
+
 \begin{algorithm}[H]
-\caption{Forward propagation system in a standard deep neural network. Each iteration in the main \textit{for-loop} represents the execution of a layer, and passing the result to the "next" layer function. We assume each layer to follow a two-step structure, being (i) a linear transformation as in Eq. (\ref{eqn-LinearTransform}) and (ii) an element-wise non-linear activation function as in Eq. (\ref{eqn-elementActivation}).  A practical application of this algorithm should include batches of samples instead of a single sample.
-\textcolor{red}{I Want to include this algorithm for context - especially on the programming end, but am not sure where to put it. }}
-\label{algFeedForward}
+\caption{Forward propagation system in a standard deep neural network. Each layer is presumed to be a node in a linked computational graph. This example has been setup to assume one input layer, and one output layer. Practical implementations should include mini-batches of data as opposed to a single sample.}
+\label{alg-FeedForward}
 
 \begin{algorithmic}
-\REQUIRE Network with $L$ layers - $0,1,2,....,L-2,L-1$
-\REQUIRE Set of layer functions $f^{(l)}, l \in 0,1,2,....,L-2,L-1$ made up of a linear transformation and a non-linear transformation.
+\REQUIRE Set of Layer functions $f^{(i)}$, $i \in [0,1,2,3,...,L-1]$.
 \REQUIRE Input sample - $x^{(0)}$
 
-If training the network, the intermediate layer activations must be stored for back-propagation. Otherwise, they may be discarded. \\
-$Z = \{\} \leftarrow$ array to hold pre-activations \\
-$X = \{\} \leftarrow$ array to hold final activations \\
-
-\FOR {$l = 1,2,...,L-2,L-1$}	
-	\item Evaluate Linear Transformation
-	\item $z^{(l)} \leftarrow W^{(l)} x^{(l-1)} + b^{(l)}$ 
-	\item Apply non-linear Activation Function
-	\item $x^{(l)} \leftarrow \sigma^{(l)} \big[ z^{(l)} \big]$ 
-	\item Store values for later use in optimizer, otherwise can be discarded.
-	\item $Z \leftarrow Z.add(z^{(l)})$
-	\item $X \leftarrow X.add(x^{(l)})$
+Set the current layer to be the input layer: \\
+$f^{(i)} \leftarrow f^{(0)}$
+\FOR {Layer $i \in [1,2,3,...,L-1]$}
+	\item Run "Call" Method with current activations, transform activations:
+	\item $x^{(i)}$ = $f^{(i)}$.call($x^{(i-1)}$)
+	\item Move to the next layer in the network:
+	\item $f^{(i)} \leftarrow f^{(i)}$.next()
 \ENDFOR
-
-\item Network final prediction is last object in $X$ array.
-\item $y^* \leftarrow x^{(L-1)} = X[-1]$
-\item Return the pre-nonlinear activations and final-nonlinear activations:\\
-\RETURN $Z , X$
-
-
+\item Return the network's output, which are the output activation of the final layer \\
+\RETURN $x^{(L-1}$
 \end{algorithmic}
 \end{algorithm}
 
-
-
 % ================================================================
 
-\subsection{Layers Used in Classification Neural Network}
+\subsection{Layers Used in this Classification Neural Network}
 \label{subsec-Layers}
 
 \paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a predictions (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a chain-like computational graph \cite{Goodfellow}. Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.

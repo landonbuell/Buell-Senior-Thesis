@@ -9,7 +9,7 @@
 \contentsline {section}{\numberline {3}The Neural Network}{5}%
 \contentsline {subsection}{\numberline {3.1}An Introduction to Neural Networks}{5}%
 \contentsline {subsection}{\numberline {3.2}The Structure of a Neural Network}{6}%
-\contentsline {subsection}{\numberline {3.3}Layers Used in Classification Neural Network}{7}%
+\contentsline {subsection}{\numberline {3.3}Layers Used in this Classification Neural Network}{7}%
 \contentsline {subsubsection}{\numberline {3.3.1}Dense Layer}{8}%
 \contentsline {subsubsection}{\numberline {3.3.2}2-Dimensional Convolution Layer}{9}%
 \contentsline {subsubsection}{\numberline {3.3.3}2-Dimensional Maximum Pooling Layer}{11}%
