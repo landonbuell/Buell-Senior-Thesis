@@ -761,55 +761,26 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 \paragraph*{}As discussed in Sec. (\ref{sec-TheNeuralNetwork}), performance quality of a neural network is greatly dependent on the properties of the chosen features \cite{Virtanen,Liu}. To ensure that a the classifier model performs adequately and consistently, we must choose these features to have high variance between classes, and low variance within each class. This enables a neural network to development clear decision boundaries between each unique class \cite{James,Serizel}. To develop this set of features, we explore the physical and mechanical properties of musical instruments and the sounds that they create.
 
 \paragraph*{}We have assembled training data samples than can be grouping in 38 classes of unique sources listed below:
-\begin{multicols}{2}
-\begin{enumerate}
-	\item Alto Flute
-	\item Alto Saxophone
-	\item Banjo
-	\item Bass
-	\item Bass Clairnet
-	\item Bass Flute
-	\item Bassoon
-	\item Bass Tromobe
-	\item B$\flat$ Clarinet
-	\item Bells
-		
-	\item Cello
-	\item Clarinet \textcolor{blue}{Check this!}
-	\item Contrabassoon
-	\item Crotale
-	\item E$\flat$ Clarinet
-	\item English Horn
-	\item Flute
-	\item Guitar
-	\item Hi-Hat
-	\item Horn
-		\columnbreak
-	\item Mandolin
-	\item Marimba
-	\item Oboe
-	\item Sawtooth Wave
-	\item Saxophone (Tenor)
-	\item Sine Wave
-	\item Soprano Saxophone
-	\item Square Wave
-	\item Tenor Trombone
-	\item Triangle Wave
-		
-	\item Trombone
-	\item Trumpet (B$\flat$)
-	\item Tuba
-	\item Vibraphone
-	\item Violin
-	\item Viola
-	\item White Noise
-	\item Xylophone
-	\item
-	\item
-\end{enumerate}
-\end{multicols}
 
-\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instrumentsby using the \textit{Hornbostel-Sachs} system \textit{red}{Citation needed!}. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) idiophones, (ii) membranophones, (iii) chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{||c|c|c||c|c|c||}
+\hline
+\textbf{Class Index} & \textbf{Class Name} & \textbf{Count} & \textbf{Class Index} & \textbf{Class Name} & \textbf{Count} \\
+\hline \hline
+$0$ & Alto Flute & $72$ & & \\ \hline
+$1$ & Alto Saxophone & 128&  \\ \hline
+$2$ & Banjo &
+$3$
+$4$
+$5$
+
+\end{tabular}
+\end{center}
+\caption{Instruments categories used in the classification task. Note that the network uses only integers to indentify sources while the }
+\end{figure}
+
+\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instruments by using the \textit{Hornbostel-Sachs} system \textit{red}{Citation needed!}. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) idiophones, (ii) membranophones, (iii) chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
 
 
 % ================================================================
