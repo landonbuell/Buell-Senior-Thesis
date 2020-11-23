@@ -28,8 +28,20 @@ if __name__ == '__main__':
 
     # Run Main program
     Program = utils.AnalyzeModels(modelName,dataPath,n_classes)
-    Program.__Call__(exptPath)
+    encode,decode = Program.MakeDecodeDictionary()
 
+    Program.__Call__(exptPath)
     Program.ExportMetrics(exptPath)
+
+
+    # Compute & Plots Avg. metrics per class
+    _ = np.arange(10)
+    ComputeMetrics = utils.ClassifierMetrics(n_classes,_,_,_)
+    scores = ComputeMetrics.MetricScores(Program.ConfusionMatrix)
+    os.chdir("C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\FiguresMetrics")
+    for i in range(n_classes):         # each class
+        className = decode[i]
+        print(className,Program.counts[i])
+        utils.ClassifierMetrics.PlotMetricsForClass(scores[:,i],className,False,True)
     
     print("=)")

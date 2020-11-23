@@ -44,6 +44,20 @@ class AnalyzeModels:
         self.n_classes = n_classes
         self.outputFile = self.modelName+"@"+self.startTime+"@ANALYSIS"+".csv"
 
+    def MakeDecodeDictionary(self):
+        """ Make Decoder Dictionary From Local Path """
+        decodeFileName = self.modelName + "Categories.csv"
+        decodeFullPath = os.path.join(self.dataPath,decodeFileName)
+        decoder = {}
+        encoder = {}
+        rawData = pd.read_csv(decodeFullPath)
+        Ints,Strs = rawData.iloc[:,0],rawData.iloc[:,1]   
+        self.counts = rawData.iloc[:,2]
+        for Int,Str in zip(Ints,Strs):          # iterate by each
+            encoder.update({str(Str):int(Int)})
+            decoder.update({int(Int):str(Str)})
+        return encoder,decoder
+
     def GetKeywordFiles(self,keyword):
         """ Find files in path w/ Keyword in name """
         pathList = []
@@ -56,7 +70,7 @@ class AnalyzeModels:
 
     def ExportMetrics(self,outputPath):
         """ Export Metrics Array to Local path """
-        colNames = ["Accuracy","Precision","Recall","Loss"]
+        colNames = ["Accuracy","Precision","Recall"]
         outputFrame = pd.DataFrame(data=None,index=None)
         outputFrame["CLF"] = [x.split("\\")[-1] for x in self.predictionFiles]
         for i in range(len(colNames)):
@@ -73,7 +87,7 @@ class AnalyzeModels:
         homePath = os.getcwd()
 
         nRows = len(self.predictionFiles)
-        nCols = 4
+        nCols = 3
         self.metricsArray = np.empty(shape=(nRows,nCols))
 
         # Initialize 3 Average Confusion matrices
@@ -104,6 +118,7 @@ class AnalyzeModels:
             # Compute Metrics for this split
             
             metrics = ComputeMetrics.MetricScores(standardConfMat)
+            metrics = np.mean(metrics,axis=1)
             self.metricsArray[i] = metrics
 
             # Add To average Conf Mats
@@ -134,9 +149,7 @@ class AnalyzeModels:
 
         # Compute metrics avg. across all classes
         self.ConfusionMatrix = avgStandardConfMat
-
-
-
+       
         return self
 
 class ClassifierMetrics :
@@ -232,7 +245,7 @@ class ClassifierMetrics :
         scoreMatrix[2] = self.RecallScore(confMat)
         return scoreMatrix
 
-    ### Include prediction threshold
+    ### Include prediction threshold???
 
     @staticmethod
     def PlotConfusion(X,n_classes,title="",show=True,save=True):
@@ -245,6 +258,26 @@ class ClassifierMetrics :
         plt.tight_layout()
         if save == True:
             plt.savefig(title.replace(" ","_")+".png")
+        if show == True:
+            plt.show()
+        plt.close()
+        return None
+
+
+    @staticmethod
+    def PlotMetricsForClass(X,namesave="",show=True,save=True):
+        """ Plot Accuracy, Precision, Recall for A Given Class """
+        plt.figure(figsize=(8,6))
+        plt.bar(["Accuracy","Precision","Recall"],height=X,
+                width=0.4,color=['r','g','b'])
+
+        plt.yticks(np.arange(0,1.1,0.1),size=20,weight='bold')
+        plt.xticks(size=20,weight='bold')
+
+        plt.grid()
+        plt.tight_layout()
+        if save == True:
+            plt.savefig(namesave.replace(" ","_")+".png")
         if show == True:
             plt.show()
         plt.close()
