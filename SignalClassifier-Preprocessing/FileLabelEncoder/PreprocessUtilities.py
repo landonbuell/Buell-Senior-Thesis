@@ -25,6 +25,10 @@ class FileObject:
         self.filename = self.intpath.split("\\")[-1]
         self.targetStr = self.filename.split(".")[0].upper()
 
+    def __repr__(self):
+        """ Debug Level String Representation of Instance """
+        return self.filename + " , " + self.targetStr
+
     def Category (self,newCategory=None):
         """ Get or Set self.category attribute """
         if newCategory is not None:
@@ -74,6 +78,8 @@ class SampleOrganizer:
                 sample.Category(newCategory="BASS")
             elif sample.targetStr == "CORANGLAIS":
                 sample.Category(newCategory="ENGLISHHORN")
+            elif sample.targetStr == "CLARINET":
+                sample.Category(newCategory="BBCLARINET")
         return self
 
     def EncodeSamples(self,encoder):
@@ -107,14 +113,14 @@ class TargetLabelEncoder:
         self.samples = samples
         self.stringsBowed = ["BASS","CELLO","VIOLA","VIOLIN" ]
         self.stringsPlucked = ["BANJO","GUITAR","MANDOLIN", ]
-        self.windsHigh = ["ALTOFLUTE","ALTOSAX","BBCLARINET","CLARINET",
+        self.windsHigh = ["ALTOFLUTE","ALTOSAX","BBCLARINET",
                             "EBCLARINET","ENGLISHHORN","FLUTE","OBOE",
                             "SAXOPHONE","SOPSAX",]
         self.windsLow = ["BASSCLARINET","BASSFLUTE","BASSOON","CONTRABASSOON", ]
         self.brass = ["BASSTROMBONE","HORN","TENORTROMBONE","TROMBONE","TRUMPET","TUBA",]
         self.percussion = ["BELLS","CROTALE","HIHAT" ]
         self.mallets = ["MARIMBA","VIBRAPHONE","XYLOPHONE" ]
-        self.synths = ["SawtoothWave","SineWave","SquareWave","TriangleWave"]
+        self.synths = ["SineWave","SquareWave","TriangleWave","SawtoothWave"]
         self.noises = ["WhiteNoise"]
 
     def SetSamples(self,newSamples):
