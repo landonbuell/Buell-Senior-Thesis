@@ -31,10 +31,10 @@ class FeatureProcessor:
     @property
     def GetFeatureNames(self):
         """ Get Names of all features as list of strs """
-        names = ["Time Domain Env","Zero X-Rate","Time Center of Mass"]                         
-        names += ["Auto Correlation "+str(i+1) for i in range(4)]        
+        names = ["TDE","ZXR","TCM"]                         
+        names += ["ACC "+str(i+1) for i in range(4)]        
         names += ["MFCC "+str(i+1) for i in range (12)]      
-        names += ["Frequency Center of Mass"]                                    
+        names += ["FCM"]                                    
         return names
 
     def CreateDictionary(self,encdPath):
