@@ -12,9 +12,10 @@ import numpy as np
 import scipy.fftpack as fftpack
 import scipy.integrate as integ
 import scipy.signal as signal
+import scipy.sparse as sparse
 
-import PlottingUtilities as plot_utils
 import StructureUtilities as struct_utils
+import PlottingUtilities as plot_utils
 
 """
 FeaturesUtilities.py - "Feature Extraction Utils"
@@ -67,7 +68,7 @@ class BaseFeatures:
         assert (self.n_samples == neededSamples)
         return self
 
-    def AnalysisFrames (self):
+    def AnalysisFrames (self,):
         """
         Divide waveforms into analysis frames of fixed length
             Waveform in tail-zero padded to adjust length
@@ -77,17 +78,19 @@ class BaseFeatures:
         --------------------------------
         Return frames object (n_frames x npts)
         """
-        frames = np.array([])               # array to hold time frames
+        
         step = self.frameStep               # iter step size
-        framesInWaveform = int(np.floor(self.n_samples/step))    # frame from this waveform
+        framesInWaveform = int(np.floor(self.n_samples/step))   # frames from this waveform
+        frames = np.empty(shape=(framesInWaveform,self.npts*2)) # array to hold time frames
         for i in range(0,framesInWaveform):                 # iter through wave form
             x = self.signal[(i*step):(i*step)+self.npts]    # create single frame 
             if len(x) < self.npts:                          # not enough samples
                 deficit = self.npts - len(x)                # number of zeros to pad
-                zeroPad = np.zeros((1,deficit),dtype=float) # create pad
-                x = np.append(x,zeroPad)            # append pad to frame
-            frames = np.append(frames,x)                    # add single frame
-        frames = frames.reshape(framesInWaveform,self.npts)    # reshape (each row is frame)
+                zeroPad = np.zeros((1,deficit+self.npts))   # create pad                
+            else:                                           # enough samples
+                zeroPad = np.zeros((1,self.npts))           # create pad  
+            x = np.append(x,zeroPad)                # append pad to frame
+            frames[i] = x                           # add single frame
         return frames                       # return frames
 
 class TimeSeriesFeatures (BaseFeatures):
@@ -214,15 +217,22 @@ class FrequencySeriesFeatures (BaseFeatures):
         super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
                          n_frames=n_frames,presetFrames=presetFrames)
         self.frames = self.AnalysisFrames()
+        self.window = signal.hanning(M=self.npts,sym=False)  # window function
 
         # lambda function unit conversions
         self.HertzToMel = lambda h : 2595*np.log10(1+ h/700)
         self.MelToHertz = lambda m : 700*(10**(m/2595)-1)
 
         # Time Axis, Frequency Axis
-        self.hertz,self.frequencyPoints = self.FrequencyAxis(low=0,high=6000)
+        self.SetFrequencyRange(0,12000)
+        self.hertz,self.frequencyPoints = self.FrequencyAxis(2048)
         self.mels = self.HertzToMel(self.hertz)
         self.t = np.arange(0,self.n_frames,1)   
+
+    def SetFrequencyRange(self,low=0,high=6000):
+        """ Set Frequency Axis Bounds """
+        self.lowHz,self.highHz = low,high
+        return self
 
     def __Call__(self):
         """
@@ -238,43 +248,31 @@ class FrequencySeriesFeatures (BaseFeatures):
 
         # Add Elements to Feature vector
         featureVector = np.array([])
-        MFBEs = self.MelFilterBankEnergies()
-        #featureVector = np.append(featureVector,MFBEs)     # don't use filter bank energies?
+        MFBEs = self.MelFilterBankEnergies(n_filters=12)
         MFCCs = self.MelFrequencyCeptralCoefficients(MFBEs)
 
         featureVector = np.append(featureVector,MFCCs)
         featureVector = np.append(featureVector,self.CenterOfMass())
         return featureVector
 
-    def FrequencyAxis (self,low=0,high=6000):
+    def FrequencyAxis (self,npts=None):
         """
         Compute Frequenxy Axis
         --------------------------------
-        low (float) : Low value for frequency slice
-        high (float) : High value for frequency bound
+        * no args
         --------------------------------
         Return frequency axis array between bounds, f
             and appropriate index, pts
         """
-        self.lowHz,self.highHz = low,high                   # set low/high bnds in Hz
-        f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)# comput freq space
-        pts = np.where((f_space>=low)&(f_space<=high))[0]   # get slices
+        if npts is None:
+            f_space = fftpack.fftfreq(n=self.npts,d=1/self.rate)    # Freq axis
+        else:
+            f_space = fftpack.fftfreq(n=int(npts),d=1/self.rate)    # Freq axis
+        pts = np.where((f_space>=self.lowHz)&(f_space<=self.highHz))[0]   # get slices
         f_space = f_space[pts]                              # truncate space        
         return f_space,pts                                  # return space & pts
 
-    def HanningWindow (self,X):
-        """
-        Apply Hanning window to each row in array X
-        --------------------------------
-        X (arr) Array-like of time-frames (n_frames x n_samples)
-        --------------------------------
-        Return X w/ Hann window applied to each row
-        """
-        window = signal.hanning(M=X.shape[-1],sym=False)  # window
-        X = np.dot(X,window)
-        return X                # return new window
-
-    def PowerSpectrum (self,attrb='frames',pts=[]):
+    def PowerSpectrum (self,attrb='frames',pts=[],addpadding=False):
         """
         Compute Discrete Fourier Transform of arrays in X
         --------------------------------
@@ -284,8 +282,8 @@ class FrequencySeriesFeatures (BaseFeatures):
         Return Z, array
         """        
         assert attrb in ['signal','frames']
-        X = self.__getattribute__(attrb)    # isolate signal or frames
-        Z = self.HanningWindow(X)   # apply Hanning Window
+        X = self.__getattribute__(attrb)    # isolate signal or frames      
+        X[:,:self.npts] *= self.window
         Z = fftpack.fft(X,axis=-1)  # apply DFT
         Z = np.abs(Z)**2            # compute power:
         if Z.ndim > 1:              # more than 1D
@@ -353,9 +351,10 @@ class FrequencySeriesFeatures (BaseFeatures):
         """
         n_filters = len(melFilterEnergies)
         m = np.arange(0,n_filters)
+        delta = 1e-8
         MFCCs = np.zeros(shape=(n_filters))         # init MFCC array
         for i in range(n_filters):                  # each MFCC:          
-            _log = np.log10(melFilterEnergies)
+            _log = np.log10(melFilterEnergies+delta)
             _cos = np.cos((i+1)*(m+0.5)*np.pi/(n_filters))
             _coeff = np.dot(_log,_cos)              # compute dot product
             MFCCs[i] = _coeff
@@ -370,10 +369,11 @@ class FrequencySeriesFeatures (BaseFeatures):
         return spectral center of mass
         """
         assert attrb in ['frequencySeries','spectrogram']
+        """ This feature has been changed - Update it in Main Classifier! """
         X = self.__getattribute__(attrb)        # isolate frequency or frames
         weights = np.arange(0,X.shape[0],1)     # weight array
         COM = np.dot(weights,np.abs(X))         # operate
         if COM.ndim >= 1:                # more or equal to 1D
             return np.mean(COM)         # return average
         else:                           # scalar
-            return COM/self.n_samples   # divide by n samples  
+            return COM/self.n_samples   # divide by n samples 
