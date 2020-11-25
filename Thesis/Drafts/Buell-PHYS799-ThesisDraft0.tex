@@ -1161,9 +1161,9 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 \paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. The number of samples $M$ is chosen to correspond the number of sample needed to make the $N \times k$ spectrogram matrix. This way,t he spectrogram and time-series features are representative of the same time interval in the file sample. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
 
-\paragraph*{}From time space, we use the following $7$ features:
+\paragraph*{}From time space, we use the following $11$ features:
 \begin{itemize}
-\item[•] Time Domain Envelope
+\item[•] Time Domain Envelope ($\times 5$)
 \item[•] Zero Crossing Rate
 \item[•] Temporal Center of Mass
 \item[•] Auto Correlation Coefficients ($\times 4$)
@@ -1184,14 +1184,34 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 \label{eqn-RMS}
 \text{TDE}_j\big[ s \big] = \sqrt{\frac{1}{Q} \sum_{i=n}^{n+Q} s[i]^2}
 \end{equation}
-For instruments with long sustain or release times, such as strings or undampened mallet percussion, we expect a comparably large TDE value. For instruments with short sustain times, such as plucked stings or dampened percussion we expect a comparably small TDE value \cite{Olson,White}. The difference allows for considerable separation between many percussion and woodwind classes.
+Where $Q$ gives the number of sample sin each analysis frame (number of sample sin waveform divided by number of frames), and $n$ gives the index where the $j$-th frame begins.
+
+\paragraph*{}These uniformly size analysis frames let us create an naive envelope of the waveform, but will allow it to generalize between classes. For example, this allows for a crude approximation of the energy in the attack, decay, sustain, and release energies in a waveform \cite{Virtanen,Olson}. For instruments with heavier attacks, we expect the TDE in the $1$-st frame to be comparably large, see Fig. (\ref{fig-FeatureTDE}a). Instruments with a heavy decay will likely have little energy in the $2$-nd or higher frames, indicating that the amplitude has substantially died off as in Fig. (\ref{fig-FeatureTDE}b). Conversely, instruments with longer sustain such as upper woodwinds, vibraphones or strings will container relatively higher TDE values for the later analysis frames as seen in Fig. (\ref{fig-FeatureTDE}c). Instruments with little or no waveform envelope, such as the synthesized waveforms and the whitenoise show constant TDE values across each frame as expected.
 
 \begin{figure}[H]
-\begin{center}
-%textcolor{red}{Plot of TDE Feature Here}
-\includegraphics[scale=0.3]{../FiguresFeatures/TDE}
-\end{center}
-\caption{A comparison of the Time Domain Envelope across each class using a box-and-whisker plot}
+
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/TDE_1}
+	\caption{TDE $1$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/TDE_2}
+	\caption{TDE $2$}
+	\end{subfigure}
+	
+	\begin{subfigure}{1.0\textwidth}
+	\centering
+	\includegraphics[width=\textwidth , height=0.2\textheight]
+		{../FiguresFeatures/TDE_3}
+	\caption{TDE $3$}
+	\end{subfigure}
+		
+\caption{A comparison of the first $3$ of $5$ Time Domain Envelope across each class using a box-and-whisker plot}
 \label{fig-FeatureTDE}
 \end{figure}
 
@@ -1199,14 +1219,16 @@ For instruments with long sustain or release times, such as strings or undampene
 
 \subsubsection{Zero Crossing Rate}
 
-\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform \cite{Kahn,Liu,Zhang}. 
+\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform \cite{Kahn,Liu,Zhang} that musical instruments do. 
 
 \paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. Signals with a high ZXR can be representative of classes that often have additional noise and signals with a low ZXR, can indicate signals with more stable, periodic behavior. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
 \begin{equation}
 \label{eqn-ZXR}
 \text{ZXR}\big[ s \big] = \frac{1}{2} \sum_{i=1}^{M-1} \Big{|} \sign(s[i]) - \sign(s[i-1]) \Big{|} 
 \end{equation}
-Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZXR also provides a very rough estimate for the average frequency of the waveform. This allows it to alos be useful in discerning classes with generllay hgher frequencies, such as upper woodwinds, against classes with generaly lower frequencies, such as low brass \cite{White}.
+Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZXR also provides a very rough estimate for the average frequency of the waveform. This allows it to allows be useful in discerning classes with generally higher fundamental frequencies, such as upper woodwinds, against classes with generally lower frequencies, such as low brass \cite{Liu,White}.
+
+\paragraph*{}This behavior becomes apparent when comparing sets of classes in Fig. (\ref{fig-FeatureZXR}). For example, consider the ZXR value of a a bass and cellos against that of bells or a soprano saxophone. The bass and cellos have on average much lower fundamental frequencies than that of bellos of soprano saxophones. In the case of this data set, the ZXR provides a predictor which contains clear separations between classes such as crotales and $E\flat$ clarinets. The large separation gives rise to a distinction decision boundary which means that this classes are not likely to be mistake when predictions are run \cite{Loy,James}.
 
 \begin{figure}[H]
 \begin{center}
@@ -1566,7 +1588,7 @@ In the case of a multi-class classifier, the recall score also represents an\tex
 
 % ================================================================
 
-\subsection{Micro F1-Score}
+\subsubsection{Micro F1-Score}
 
 % ================================
 
