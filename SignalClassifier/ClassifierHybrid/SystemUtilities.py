@@ -55,7 +55,14 @@ class FileObject:
             self.targetStr = str(datarow[2])    # target as str
         except:
             self.targetStr = None    # unknown str
-        
+
+    def __repr__(self):
+        """ Return Low-Level String description of Instance """
+        try:
+            return self.filename + " , " + str(self.targetInt) + " , " + str(self.targetStr)
+        except:
+            return self.filename + " , None , None"
+
     def ReadFileWAV (self):
         """ Read raw .wav file data from local path """
         rate,data = sciowav.read(self.fullpath)    
@@ -94,6 +101,7 @@ class OutputStructure :
             print("\n\tERROR! - File mode not recognized!")
             self.cols = []
             raise BaseException()
+        self.mode = programMode
         self.exportPath = exportPath
         self.InitData()
     
@@ -205,7 +213,7 @@ class ArgumentValidator :
             self.HardCodedVars()
 
         # make Sure Args are in acceptable values
-        assert self.modelName not in [None," "]
+        assert self.modelName not in [None,""," "]
         assert self.programMode in ['train','train-predict','predict']
         assert self.newModel in [True,False]
 
