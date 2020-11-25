@@ -24,7 +24,7 @@ NeuralNetworkModels.py - "Neural Network Models"
 #inputShapeMLP = (24,)
 #inputShapeCNN = (1115,128,1)
 
-inputShapeMLP = (20,)
+inputShapeMLP = (24,)
 inputShapeCNN = (558,256,1)
 
             #### NEURAL NETWORK OBJECTS ####

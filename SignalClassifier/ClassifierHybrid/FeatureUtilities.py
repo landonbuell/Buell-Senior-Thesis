@@ -135,19 +135,25 @@ class TimeSeriesFeatures (BaseFeatures):
 
         return featureVector
     
-    def TimeDomainEnvelope(self,attrb='signal'):
+    def TimeDomainEnvelope(self,nSplits=5):
         """ 
         Compute Time-Envelope by waveform or by frame (Virtanen) 
         --------------------------------
-        attrb (str) : Attribute to operate with. Must be in ['signal','frames']
+        nSplits (int) : Number of sections to split waveform into.
         --------------------------------
         Return Time-Domain-Envelope of waveform or frames
         """
-        assert attrb in ['signal','frames']
-        X = self.__getattribute__(attrb)    # isolate signal or frames
-        TDE = np.sum(X*X,axis=-1)/self.n_samples
-        TDE = np.sqrt(TDE)
-        return TDE
+        # Change this in main classifier!
+        X = self.signal
+        TDEs = np.zeros(shape=nSplits)
+        samplesPerSplit = int(self.n_samples/nSplits)
+        for i in range(0,nSplits):
+            startIdx = i*samplesPerSplit            # where frame starts
+            frame = X[startIdx:startIdx+samplesPerSplit]   # make temporary frame
+            RMS = np.sqrt(np.sum(frame**2)/samplesPerSplit)  
+            TDEs[i] = RMS                           # set to frame        
+        del(X)
+        return TDEs
 
     def ZeroCrossingRate (self,attrb='signal'):
         """ 
