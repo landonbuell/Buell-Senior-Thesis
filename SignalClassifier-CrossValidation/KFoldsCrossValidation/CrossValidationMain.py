@@ -26,8 +26,8 @@ if __name__ == "__main__":
     export = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Output-Data')
     model = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Model-Data')
    
-    scriptPath = os.path.join(parent,'SignalClassifier','ClassifierMain')
-    scriptName = "ClassifierMAIN.py"
+    scriptPath = os.path.join(parent,'SignalClassifier','ClassifierHybrid')
+    scriptName = "ClassifierHybridMain.py"
 
     # HANDLE LOCAL DIRECTORIES
     homePath = os.getcwd()
