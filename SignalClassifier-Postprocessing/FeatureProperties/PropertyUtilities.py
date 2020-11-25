@@ -31,7 +31,8 @@ class FeatureProcessor:
     @property
     def GetFeatureNames(self):
         """ Get Names of all features as list of strs """
-        names = ["TDE","ZXR","TCM"]                         
+        names = ["TDE "+str(i+1) for i in range(5)]
+        names += ["ZXR","TCM"]                         
         names += ["ACC "+str(i+1) for i in range(4)]        
         names += ["MFCC "+str(i+1) for i in range (12)]      
         names += ["FCM"]                                    

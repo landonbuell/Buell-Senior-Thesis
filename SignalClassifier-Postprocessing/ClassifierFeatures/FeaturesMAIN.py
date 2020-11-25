@@ -23,10 +23,10 @@ if __name__ == '__main__':
     # Initialize Directories
     dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
     exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\FiguresFeatures"
-    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix1.csv"
+    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix2.csv"
 
     # Preprocessing
-    n_features = 20
+    n_features = 24
     ProgramSetup = sys_utils.ProgramInitializer([dataPath,exptPath])
     ProgramSetup.InitOutputMatrix(mtrxPath,n_features)
     groupedFiles = ProgramSetup.__Call__()

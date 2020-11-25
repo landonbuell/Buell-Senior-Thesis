@@ -88,6 +88,9 @@
 \newlabel{subsubsec-Conv2DLayer}{{3.3.2}{9}}
 \newlabel{eqn-convolution}{{12}{9}}
 \citation{Goodfellow}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite  {Goodfellow}\relax }}{10}\protected@file@percent }
+\newlabel{fig-2DConvExample}{{1}{10}}
+\newlabel{eqn-ConvFeedForward}{{14}{10}}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
@@ -95,28 +98,23 @@
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Loy}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite  {Goodfellow}\relax }}{10}\protected@file@percent }
-\newlabel{fig-2DConvExample}{{1}{10}}
-\newlabel{eqn-ConvFeedForward}{{14}{10}}
 \citation{Geron}
 \citation{Loy}
 \citation{Goodfellow}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}2-Dimensional Maximum Pooling Layer}{11}\protected@file@percent }
 \newlabel{subsubsec-2DPool}{{3.3.3}{11}}
-\newlabel{fig-2DMaxPool}{{\caption@xref {fig-2DMaxPool}{ on input line 348}}{11}}
+\newlabel{fig-2DMaxPool}{{\caption@xref {fig-2DMaxPool}{ on input line 352}}{11}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The result of 2D maximum-pooling an input array. This image was adapted from Loy, pg. 126 \cite  {Loy}\relax }}{11}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}1-Dimensional Flattening Layer}{11}\protected@file@percent }
 \newlabel{subsubsec-1DFlatten}{{3.3.4}{11}}
-\newlabel{eqn-FlattenFunction}{{15}{11}}
 \citation{Geron}
 \citation{Loy}
+\newlabel{eqn-FlattenFunction}{{15}{12}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}1-Dimensional Concatenation Layer}{12}\protected@file@percent }
 \newlabel{subsubsec-1DConcat}{{3.3.5}{12}}
 \newlabel{eqn-ConcatenationFunction}{{18}{12}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Activation Functions Used in Network Layers}{12}\protected@file@percent }
 \newlabel{sec-ActivationFunctions}{{3.4}{12}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Rectified Linear Unit}{12}\protected@file@percent }
-\newlabel{eqn-ReLU}{{19}{12}}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Virtanen}
@@ -124,32 +122,32 @@
 \citation{Virtanen}
 \citation{Goodfellow}
 \citation{Mitchell}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Rectified Linear Unit}{13}\protected@file@percent }
+\newlabel{eqn-ReLU}{{19}{13}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Rectifed Linear Unit (ReLU) activation function\relax }}{13}\protected@file@percent }
 \newlabel{fig-ReLU}{{3}{13}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Softmax}{13}\protected@file@percent }
 \newlabel{subsubsec-Softmax}{{3.4.2}{13}}
 \newlabel{eqn-Softmax}{{20}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Training a Neural Network}{13}\protected@file@percent }
-\newlabel{subsec-Training}{{3.5}{13}}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Levine}
 \citation{Goodfellow}
 \citation{James}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Training a Neural Network}{14}\protected@file@percent }
+\newlabel{subsec-Training}{{3.5}{14}}
+\newlabel{eqn-Theta}{{21}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.1}The Cost Function}{14}\protected@file@percent }
 \citation{James}
 \citation{Goodfellow}
 \citation{Virtanen}
-\newlabel{eqn-Theta}{{21}{14}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.1}The Cost Function}{14}\protected@file@percent }
-\newlabel{eqn-CXELoss}{{22}{14}}
-\newlabel{eqn-CXELossAvg}{{23}{14}}
 \citation{Goodfellow}
 \citation{James}
 \citation{Loy}
 \citation{Goodfellow}
 \citation{Goodfellow}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plot of how $y^*_{j}$ affects the output values of the CXE cost function\relax }}{15}\protected@file@percent }
-\newlabel{fig-CXELoss}{{4}{15}}
+\newlabel{eqn-CXELoss}{{22}{15}}
+\newlabel{eqn-CXELossAvg}{{23}{15}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{15}\protected@file@percent }
 \citation{Geron}
 \citation{Goodfellow}
@@ -158,106 +156,108 @@
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plot of how $y^*_{j}$ affects the output values of the CXE cost function\relax }}{16}\protected@file@percent }
+\newlabel{fig-CXELoss}{{4}{16}}
 \newlabel{eqn-CostGradient}{{25}{16}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3}Back-Propagation}{16}\protected@file@percent }
-\newlabel{subsubsec-BackProp}{{3.5.3}{16}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A visual representation of a simplified neural network as a computational graph\relax }}{17}\protected@file@percent }
-\newlabel{fig-ComputationalGraph}{{5}{17}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3}Back-Propagation}{17}\protected@file@percent }
+\newlabel{subsubsec-BackProp}{{3.5.3}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A visual representation of a simplified neural network as a computational graph\relax }}{18}\protected@file@percent }
+\newlabel{fig-ComputationalGraph}{{5}{18}}
 \citation{Loy}
 \citation{Geron}
 \citation{Goodfellow}
-\newlabel{eqn-dWL1}{{27}{18}}
-\newlabel{eqn-dbL1}{{28}{18}}
-\newlabel{eqn-CXELossDeriv}{{29}{18}}
+\newlabel{eqn-dWL1}{{27}{19}}
+\newlabel{eqn-dbL1}{{28}{19}}
+\newlabel{eqn-CXELossDeriv}{{29}{19}}
 \citation{Geron2}
 \citation{Goodfellow}
-\newlabel{eqn-dWGeneral}{{34}{19}}
-\newlabel{eqn-dbGeneral}{{35}{19}}
+\newlabel{eqn-dWGeneral}{{34}{20}}
+\newlabel{eqn-dbGeneral}{{35}{20}}
 \citation{Geron}
 \citation{Geron}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit  {for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.\relax }}{20}\protected@file@percent }
-\newlabel{algBackProp}{{2}{20}}
-\newlabel{eqn-GradientLearning}{{36}{20}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.4}The Optimizer}{20}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit  {for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.\relax }}{21}\protected@file@percent }
+\newlabel{algBackProp}{{2}{21}}
+\newlabel{eqn-GradientLearning}{{36}{21}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.4}The Optimizer}{21}\protected@file@percent }
 \citation{Geron}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Goodfellow}
-\newlabel{eqn-ADAMupdate}{{37}{21}}
+\newlabel{eqn-ADAMupdate}{{37}{22}}
 \citation{Goodfellow}
 \citation{Virtanen}
 \citation{Geron}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite  {Goodfellow}\relax }}{22}\protected@file@percent }
-\newlabel{alg-ADAM}{{3}{22}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{22}\protected@file@percent }
-\newlabel{subsec-Architecture}{{3.6}{22}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite  {Goodfellow}\relax }}{23}\protected@file@percent }
+\newlabel{alg-ADAM}{{3}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{23}\protected@file@percent }
+\newlabel{subsec-Architecture}{{3.6}{23}}
 \citation{White}
 \citation{Olson}
 \citation{Kahn}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The implemented miltimodal architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output vector is produced\relax }}{23}\protected@file@percent }
-\newlabel{fig-NetworkArchitecture}{{6}{23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The implemented miltimodal architecture of the audio file classification neural network. The Left branch process an image-like input, the right branch processes a vector-like input. The activations are then merged, and then a single output vector is produced\relax }}{24}\protected@file@percent }
+\newlabel{fig-NetworkArchitecture}{{6}{24}}
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Geron}
 \citation{Kahn}
 \citation{Serizel}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{24}\protected@file@percent }
-\newlabel{eqn-shapeX1}{{38}{24}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{25}\protected@file@percent }
+\newlabel{eqn-shapeX1}{{38}{25}}
 \citation{James}
 \citation{Loy}
 \citation{Geron}
 \citation{James}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{25}\protected@file@percent }
-\newlabel{eqn-shapeX2}{{39}{25}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{26}\protected@file@percent }
+\newlabel{eqn-shapeX2}{{39}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{26}\protected@file@percent }
 \citation{Virtanen}
 \citation{Liu}
 \citation{James}
 \citation{Serizel}
 \citation{Haberman}
 \citation{Taylor}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Properties of Musical Instruments}{26}\protected@file@percent }
-\newlabel{sec-Instruments}{{4}{26}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Instruments categories used in the classification task. Note that the network uses only integers to indentify sources while the \relax }}{26}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Idiophones}{26}\protected@file@percent }
-\newlabel{subsec-Idiophone}{{4.1}{26}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Membranophones}{26}\protected@file@percent }
-\newlabel{subsec-membranophones}{{4.2}{26}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Chordophones}{26}\protected@file@percent }
-\newlabel{subsec-chordophones}{{4.3}{26}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Properties of Musical Instruments}{27}\protected@file@percent }
+\newlabel{sec-Instruments}{{4}{27}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Instruments categories used in the classification task. Note that the network uses only integers to indentify sources while the \relax }}{27}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Idiophones}{27}\protected@file@percent }
+\newlabel{subsec-Idiophone}{{4.1}{27}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Membranophones}{27}\protected@file@percent }
+\newlabel{subsec-membranophones}{{4.2}{27}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Chordophones}{27}\protected@file@percent }
+\newlabel{subsec-chordophones}{{4.3}{27}}
 \citation{Olson}
 \citation{White}
 \citation{Haberman}
 \citation{Haberman}
 \citation{Haberman}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{27}\protected@file@percent }
-\newlabel{eqn-1DWaveEqn}{{40}{27}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{28}\protected@file@percent }
+\newlabel{eqn-1DWaveEqn}{{40}{28}}
 \citation{White}
 \citation{White}
 \citation{Virtanen}
 \citation{White}
 \citation{Olson}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{28}\protected@file@percent }
-\newlabel{eqn-RampFunc}{{47}{28}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Aerophones}{28}\protected@file@percent }
-\newlabel{subsec-Aerophones}{{4.4}{28}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{28}\protected@file@percent }
-\newlabel{subsec-Generated}{{4.5}{28}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{28}\protected@file@percent }
-\newlabel{eqn-SineWave}{{48}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces A sine wave in the (a) time-domian and (b) frequency domain\relax }}{28}\protected@file@percent }
-\newlabel{fig-SineWave}{{8}{28}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{29}\protected@file@percent }
+\newlabel{eqn-RampFunc}{{47}{29}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Aerophones}{29}\protected@file@percent }
+\newlabel{subsec-Aerophones}{{4.4}{29}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{29}\protected@file@percent }
+\newlabel{subsec-Generated}{{4.5}{29}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{29}\protected@file@percent }
+\newlabel{eqn-SineWave}{{48}{29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces A sine wave in the (a) time-domian and (b) frequency domain\relax }}{29}\protected@file@percent }
+\newlabel{fig-SineWave}{{8}{29}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{29}\protected@file@percent }
 \citation{White}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{29}\protected@file@percent }
-\newlabel{eqn-SquareWave}{{49}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces A square wave in the (a) time-domain and (b) frequency domain\relax }}{29}\protected@file@percent }
-\newlabel{fig-SquareWave}{{9}{29}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{29}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.5}White Noise}{29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{30}\protected@file@percent }
+\newlabel{eqn-SquareWave}{{49}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces A square wave in the (a) time-domain and (b) frequency domain\relax }}{30}\protected@file@percent }
+\newlabel{fig-SquareWave}{{9}{30}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{30}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.5}White Noise}{30}\protected@file@percent }
 \citation{James}
 \citation{Loy}
 \citation{Serizel}
@@ -265,13 +265,19 @@
 \citation{Olson}
 \citation{Virtanen}
 \citation{Liu}
-\citation{Serizel}
 \citation{Goodfellow}
 \citation{James}
+\citation{Serizel}
 \citation{Mierswa}
 \citation{Virtanen}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Feature Selections}{30}\protected@file@percent }
-\newlabel{sec-Features}{{5}{30}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Feature Selections}{31}\protected@file@percent }
+\newlabel{sec-Features}{{5}{31}}
+\citation{Goodfellow}
+\citation{James}
+\citation{Loy}
+\citation{Loy}
+\citation{James}
+\citation{Serizel}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
@@ -280,13 +286,14 @@
 \citation{Loy}
 \citation{Geron2}
 \citation{James}
-\citation{Virtanen}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{32}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.0.1}Decision Boundaries}{32}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.0.2}The Design Matrix}{32}\protected@file@percent }
 \newlabel{eqn-X1Shape}{{51}{32}}
 \newlabel{eqn-X2Shape}{{52}{32}}
 \newlabel{eqn-YShape}{{53}{32}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{32}\protected@file@percent }
-\newlabel{subsubsec-Preprocessing}{{5.0.2}{32}}
+\citation{Virtanen}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.0.3}Audio Preprocessing}{33}\protected@file@percent }
+\newlabel{subsubsec-Preprocessing}{{5.0.3}{33}}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
@@ -301,16 +308,22 @@
 \newlabel{subsec-spectrogram}{{5.1}{34}}
 \@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Spectrogram representations of various waveforms\relax }}{34}\protected@file@percent }
 \newlabel{fig-spectrograms}{{10}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces A visualization of how frame-blocking is used to create each analysis frames. This image has been adapted and modified from Liu, et. al. "Audio Feature Extraction and Analysis", Fig. (1). See ref. \cite  {Liu}.\relax }}{35}\protected@file@percent }
-\newlabel{fig-AnalysisFrames}{{11}{35}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Frame Blocking}{34}\protected@file@percent }
+\newlabel{subsubsec-FrameBlocking}{{5.1.1}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces A visualization of how frame-blocking is used to create each analysis frames. This image has been adapted and modified from Liu, et. al. "Audio Feature Extraction and Analysis", Fig. (1). See ref. \cite  {Liu}.\relax }}{34}\protected@file@percent }
+\newlabel{fig-AnalysisFrames}{{11}{34}}
 \newlabel{eqn-FrameMatrix}{{54}{35}}
 \newlabel{eqn-IndexingA}{{55}{35}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.2}Windowing}{35}\protected@file@percent }
+\newlabel{subsubsec-Windowing}{{5.1.2}{35}}
 \newlabel{eqn-Hanning}{{56}{35}}
+\newlabel{eqn-WindowMatrix}{{57}{35}}
 \citation{Virtanen}
 \citation{Olson}
 \citation{Peatross}
 \citation{Virtanen}
-\newlabel{eqn-WindowMatrix}{{57}{36}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.3}Discrete Fourier Transform}{36}\protected@file@percent }
+\newlabel{subsubsec-DFT}{{5.1.3}{36}}
 \citation{Short}
 \citation{Peatross}
 \citation{Olson}
@@ -383,7 +396,7 @@
 \citation{White}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Frequency Center of Mass}{46}\protected@file@percent }
 \newlabel{eqn-FeatureFCM}{{71}{46}}
-\newlabel{fig-FeatureFCM}{{\caption@xref {fig-FeatureFCM}{ on input line 1396}}{46}}
+\newlabel{fig-FeatureFCM}{{\caption@xref {fig-FeatureFCM}{ on input line 1414}}{46}}
 \@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces A comparison of the frequency center-of-mass for each class using box-and-whisker plots\relax }}{46}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Assembling the Design Matrices}{46}\protected@file@percent }
 \newlabel{subsec-AssembleXs}{{5.4}{46}}
@@ -411,18 +424,25 @@
 \citation{Geron}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{49}\protected@file@percent }
 \newlabel{eqn-ConfMat}{{6.2.1}{49}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Example Confusion Matrices for $k$-classes tasks\relax }}{49}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Example Confusion Matrices for $4$-categories classifier\relax }}{49}\protected@file@percent }
 \newlabel{fig-DummyConfMat}{{20}{49}}
 \citation{Geron}
-\citation{Geron}
+\citation{James}
 \citation{Geron}
 \citation{James}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{50}\protected@file@percent }
 \newlabel{eqn-BinaryPrecision}{{74}{50}}
 \newlabel{eqn-KPrecision}{{75}{50}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{50}\protected@file@percent }
-\newlabel{eqn-BinaryRecall}{{76}{50}}
-\newlabel{eqn-KRecall}{{77}{50}}
+\citation{Geron}
+\citation{James}
+\citation{Geron}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{51}\protected@file@percent }
+\newlabel{eqn-BinaryRecall}{{76}{51}}
+\newlabel{eqn-KRecall}{{77}{51}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Micro F1-Score}{51}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Accuracy Score \&}{51}\protected@file@percent }
+\newlabel{eqn-BinaryAccuracy}{{78}{51}}
+\newlabel{eqn-AvgAccuracy}{{79}{51}}
 \citation{Goodfellow}
 \citation{Virtanen}
 \citation{Geron}
@@ -434,19 +454,18 @@
 \citation{James}
 \citation{Geron}
 \citation{Goodfellow}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{51}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{51}\protected@file@percent }
-\newlabel{subsec-TrainingMetrics}{{6.3}{51}}
-\@writefile{toc}{\contentsline {paragraph}{}{51}\protected@file@percent }
 \citation{James}
 \citation{Geron}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Tracking Metrics over a Period of Training}{52}\protected@file@percent }
+\newlabel{subsec-TrainingMetrics}{{6.4}{52}}
+\@writefile{toc}{\contentsline {paragraph}{}{52}\protected@file@percent }
 \citation{James}
-\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces The loss function score decreases with each training step, indicating that optimization is performing correctly\relax }}{52}\protected@file@percent }
-\newlabel{fig-LossScore}{{21}{52}}
-\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces The precision score (a) and recall score (b) increases with each training step\relax }}{52}\protected@file@percent }
-\newlabel{fig-PrecisionRecallScores}{{22}{52}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{52}\protected@file@percent }
-\newlabel{subsec-Bagging}{{6.4}{52}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces The loss function score decreases with each training step, indicating that optimization is performing correctly\relax }}{53}\protected@file@percent }
+\newlabel{fig-LossScore}{{21}{53}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces The precision score (a) and recall score (b) increases with each training step\relax }}{53}\protected@file@percent }
+\newlabel{fig-PrecisionRecallScores}{{22}{53}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Boosted Aggregation}{53}\protected@file@percent }
+\newlabel{subsec-Bagging}{{6.5}{53}}
 \@writefile{toc}{\contentsline {section}{\numberline {7}Experimental Results}{54}\protected@file@percent }
 \newlabel{sec-Results}{{7}{54}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{55}\protected@file@percent }

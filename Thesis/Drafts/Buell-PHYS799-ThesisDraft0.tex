@@ -309,19 +309,23 @@ x^{(l)} \in \mathbb{R}^{([N-n+1] \times [M-m+1] \times K)}
 As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in Fig. (\ref{fig-2DConvExample}):
 \begin{figure}[H]
 \begin{center}
+
 	\begin{subfigure}{0.45\textwidth}
 	\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
 	\caption{Input Activations}
 	\end{subfigure}
+	
 	\begin{subfigure}{0.45\textwidth}
 	\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
 	\caption{Convolution Filter}
 	\end{subfigure}
+	
 	\begin{subfigure}{0.9\textwidth}
 	\centering
 	\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
 	\caption{Convolution Result}
 	\end{subfigure}
+	
 \end{center}
 \caption{The result of convolving an input (a) with an filter map (b) is a new set of activations (c). This Image was adapted from Goodfellow, pg. 325 \cite{Goodfellow}}
 \label{fig-2DConvExample}
@@ -946,12 +950,12 @@ x(t) \approx \sum_{n = 1}^{\infty} \frac{1}{2n-1} \sin \bigg( 2 \pi (2n - 1)f_0 
 \section{Feature Selections}
 \label{sec-Features}
 
-\paragraph*{}Classification tasks require a set of inputs that are used to make the decision as to which class the sample belongs to. These inputs are called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. Features are quantitative, low-dimensional representations of each sample that convey key characteristics of the sample. 
+\paragraph*{}Classification tasks require a set of inputs  . These inputs are called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. Features are quantitative, low-dimensional representations of each sample that convey key characteristics of the sample. 
 Audio machine learning researchers M. Kashif Saeed Khan and Wasfi G. Al-Khatib discusses the vitality of feature selection \cite{Khan}:
 \begin{quote}
 The data reduction stage which is also called feature extraction, consists of discovering a few important facts about each class. The choice of features is critical as it greatly affects the accuracy of audio classification. 
 \end{quote}
-In the biological process of categorizing sound sources, the time-domain waveform is usually enough to match the sound to a source \cite{Olson}. However, a computer representation of a waveform is an array-like structure of values sampled discretely in time and volume \cite{Virtanen,Liu}. Presenting the raw time-series waveform to a model directly has experimentally shown to be unstable in for classification tasks \cite{Serizel}. We must develop a set of features or predictors that can describe important properties of the waveform in an efficient manner \cite{Goodfellow,James}.
+In the biological process of categorizing sound sources, the time-domain waveform is usually enough to match the sound to a source \cite{Olson}. However, a computer representation of a waveform is an array-like structure of values sampled discretely in time and volume \cite{Virtanen,Liu}. Presenting the raw time-series waveform to a model directly has experimentally shown to be unstable in for classification tasks so we must develop a set of features or predictors that can describe important properties of the waveform in an efficient manner \cite{Goodfellow,James,Serizel}.
 
 \paragraph*{}It becomes quickly apparent that the choice of features is extraordinarily important to the process of training and evaluation of the classifier model \cite{Mierswa}. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
 
@@ -962,11 +966,16 @@ For recognition algorithms, the necessary property of the acoustic features is l
 To ensure the construction of a suitable model, we derive features based from three representations of the audio file: (i) a spectrogram matrix of the waveform, (ii) the time-space representation of the waveform, and (iii) the frequency-space representation of the waveform. It is important to note that although this algorithm will classify sound data to instruments, the model will never actually be presented with a waveform directly, instead it will rely solely on the features.
 
 \paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. We have developed a set of predictors that describe each sample in a compact manner, with reasonable separation boundaries between samples from different classes.
-These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalize to have a zero mean, and unit-variance across all classes. 
+These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalized to have a zero mean, and unit-variance across all classes. 
 
-\textcolor{red}{Describe nature of features w/ separation boundaries}
+% ================================
 
-\newpage
+\subsubsection{Decision Boundaries}
+
+\paragraph*{}A trained classifier makes a prediction in the form of a statistical likelihood of a sample belonging to a particular class \cite{Goodfellow,James}. A $k$- categories classifier contains $k$ output neurons, each one representing a class. When a set of features is presented to the classifier, the value contained within each neuron is the "confidence" on the interval $[0,1]$ that a sample belongs to that class. For example, if neuron $q$ has an activation value of $0.25$, we say that there is a $25\%$ chance that the sample belongs to class $q$. Most commonly, we take the neuron with the highest activation value to be the chosen class, even if the next highest activation is a close second \cite{Loy}. 
+
+\paragraph*{}This concept stems from the idea that a trained neural network classifier is basing its predictions by generating \textit{decision boundaries} in feature space \cite{Loy,James,Serizel}. 
+
 
 % ================================
 
@@ -1020,16 +1029,15 @@ Note that different projects may require a different set of requirement from pre
 \begin{figure}[H]
 \begin{center}
 \textcolor{red}{Insert spectrograms here}
-
-	\begin{subfigure}{1.0\textwidth}
-	\centering
-	\includegraphics[width=0.45\textwidth , height=0.2\textheight]{../Figures/AnalysisFrame}
-	\caption{A section of a violin bowing an $A4$ note, $1024$ samples long}
-	\end{subfigure}
 \caption{Spectrogram representations of various waveforms}
 \label{fig-spectrograms}
 \end{center}
 \end{figure}
+
+% ================================
+
+\subsubsection{Frame Blocking}
+\label{subsubsec-FrameBlocking}
 
 \paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the previous frame. Each of the $k$ frames then allows for a section of the signal to be analyzed in a \textit{quazi-stationary state} \cite{Kahn,Serizel}. Below we visualize how analysis frames are related to the full time-series waveform. 
 
@@ -1061,6 +1069,11 @@ We use bracket notation, $a[i]$ to indicate that each analysis frame $a_i$ is ar
 A_{i,j} = A_i[j] = A[i][j] = A[i,j]
 \end{equation}
 
+% ================================
+
+\subsubsection{Windowing}
+\label{subsubsec-Windowing}
+
 \paragraph*{}After frame-blocking, we apply a \textit{windowing function} to each frame. A standard \textit{Hanning Window} of $N$ samples is generated as a $1 \times N$ row-array, $H$. The $n$-th index in a Hanning window with $N$ samples is defined:
 \begin{equation}
 \label{eqn-Hanning}
@@ -1088,9 +1101,14 @@ We show the effect of a Hanning window on an analysis frame:
 
 \end{figure}
 
-\paragraph*{}Window functions are use to account for discontinuities that may arise in the waveform at the edges of each analysis frame. The Fourier Transform assumes that an integer number of signal periods fit within each analysis frame, however this is rarely the case. A transform of this kind of signal can lead to \textit{spectral leakage} where energy appears to "leak" into adjacent frequency bins \textcolor{red}{Citation needed}. This result is a frequency domain that is not an accurate representation of the equivalent time domain. The Hanning window uses the raised cosine function to taper the signal off to zero at the end-points, thus eliminate discontinuities at the edges while weighting the samples at the center much more heavily. 
+\paragraph*{}Window functions are use to account for discontinuities that may arise in the waveform at the edges of each analysis frame. The Fourier Transform assumes that an integer number of signal periods fit within each analysis frame, however this is rarely the case. Transforming a signal with to \textit{spectral leakage} where energy appears to "leak" into adjacent frequency bins \textcolor{red}{Citation needed}. This result is a frequency domain that is not an accurate representation of the equivalent time domain. The Hanning window uses the raised cosine function to taper the signal off to zero at the end-points, thus eliminate discontinuities at the edges while weighting the samples at the center much more heavily. 
 
 \paragraph*{}Before we compute the Fourier Transform to move each analysis frame into frequency-space, we choose to tail-pad each analysis frame with an additional $1024$ samples of all zeros. This means that each frame has gone from being $1024$ samples, to $2048$ samples. Matrix $\widehat{A}$ has a shape of $k \times 2048$. Doubling the size of each analysis frame allows us the synthetically double the resolution in frequency-space, while retaining the resolution in time-space \cite{Virtanen}. 
+
+% ================================
+
+\subsubsection{Discrete Fourier Transform}
+\label{subsubsec-DFT}
 
 \paragraph*{}With this final change, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross,Virtanen}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space signal containing $N$ samples
 \begin{equation}
@@ -1141,7 +1159,7 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 \subsection{Time-Space Features}
 \label{subsec-time}
 
-\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
+\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. The number of samples $M$ is chosen to correspond the number of sample needed to make the $N \times k$ spectrogram matrix. This way,t he spectrogram and time-series features are representative of the same time interval in the file sample. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
 
 \paragraph*{}From time space, we use the following $7$ features:
 \begin{itemize}
@@ -1157,19 +1175,21 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 \subsubsection{Time Domain Envelope}
 
-\paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude. (i.e. the signal has not started or is decaying)
- 
-\paragraph*{}We adapt this TDE to \textbf{compute the time domain envelope of the full waveform}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE represents a consistent measurement of energy in the full time-domain signal \cite{Liu}. The TDE is computed as the RMS-Energy of the waveform, $s$ and is given by \cite{Olson,Serizel}:
+\paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude, i.e. the signal has not started or is decaying. The small size of each analysis frame makes computing a TDE for each impractical, and create a very high-dimensional feature vector. This would also cause problems as some waveforms may have an initial attack that differs in time by a few analysis frames. Computing TDE for each frame would therefore introduce temporal bias, as the same waveform delayed by a few milliseconds would generate a wildly different set of predictor values \cite{Serizel}. 
+
+\paragraph*{}One way to mitigate this is to group analysis frames together and compute the TDE of a collection of frames. This way, small most waveforms will produce an identical set of features to a time-delayed version of itself. By choosing a sufficiently large number of TDE values, we can also generate n approximation of than amplitude envelope of the time-series waveform. This comes at a higher computational cost, and a previously mentioned higher dimensional feature vector
+
+\paragraph*{}We adapt this TDE to \textbf{compute the time domain envelope over $5$ non-overlapping analysis frames}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE represents a consistent measurement of energy in each waveform subset. \cite{Liu}. The TDE is computed as the RMS-Energy of the waveform, $s$ and the $j$-th TDE value is given by \cite{Olson,Serizel}:
 \begin{equation}
 \label{eqn-RMS}
-\text{RMS}\big[ s \big] = \sqrt{\frac{1}{M} \sum_{i=0}^{M-1} s[i]^2}
+\text{TDE}_j\big[ s \big] = \sqrt{\frac{1}{Q} \sum_{i=n}^{n+Q} s[i]^2}
 \end{equation}
 For instruments with long sustain or release times, such as strings or undampened mallet percussion, we expect a comparably large TDE value. For instruments with short sustain times, such as plucked stings or dampened percussion we expect a comparably small TDE value \cite{Olson,White}. The difference allows for considerable separation between many percussion and woodwind classes.
 
 \begin{figure}[H]
 \begin{center}
 %textcolor{red}{Plot of TDE Feature Here}
-\includegraphics[scale=0.3]{../FiguresFeatures/Time_Domain_Env}
+\includegraphics[scale=0.3]{../FiguresFeatures/TDE}
 \end{center}
 \caption{A comparison of the Time Domain Envelope across each class using a box-and-whisker plot}
 \label{fig-FeatureTDE}
@@ -1191,7 +1211,7 @@ Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZX
 \begin{figure}[H]
 \begin{center}
 %\textcolor{red}{PLOT OF ZXR FEATURES HERE}
-\includegraphics[scale=0.3]{../FiguresFeatures/Zero_X-Rate}
+\includegraphics[scale=0.3]{../FiguresFeatures/ZXR}
 \end{center}
 \caption{A comparison of the Zero-Crossing Rate for each class using a box-and-whisker plot}
 \label{fig-FeatureZXR}
@@ -1214,7 +1234,7 @@ The TCM of that waveform is then given:
 \begin{figure}[H]
 \begin{center}
 %\textcolor{red}{PLOT OF TCM FEATURES HERE}
-\includegraphics[scale=0.3]{../FiguresFeatures/Time_Center_of_Mass}
+\includegraphics[scale=0.3]{../FiguresFeatures/TCM}
 \end{center}
 \caption{A comparison of the temporal center mass for each class using a box-and-whisker plot}
 \label{fig-FeatureTCM}
@@ -1241,28 +1261,28 @@ The TCM of that waveform is then given:
 	\begin{subfigure}{1.0\textwidth}
 	\centering
 	\includegraphics[width=\textwidth , height=0.2\textheight]
-		{../FiguresFeatures/Auto_Correlation_1}
+		{../FiguresFeatures/ACC_1}
 	\caption{ACC $k=1$}
 	\end{subfigure}
 	
 	\begin{subfigure}{1.0\textwidth}
 	\centering
 	\includegraphics[width=\textwidth , height=0.2\textheight]
-		{../FiguresFeatures/Auto_Correlation_2}
+		{../FiguresFeatures/ACC_2}
 	\caption{ACC $k=2$}
 	\end{subfigure}
 	
 	\begin{subfigure}{1.0\textwidth}
 	\centering
 	\includegraphics[width=\textwidth , height=0.2\textheight]
-		{../FiguresFeatures/Auto_Correlation_3}
+		{../FiguresFeatures/ACC_3}
 	\caption{ACC $k=3$}
 	\end{subfigure}
 	
 	\begin{subfigure}{1.0\textwidth}
 	\centering
 	\includegraphics[width=\textwidth , height=0.2\textheight]
-		{../FiguresFeatures/Auto_Correlation_4}
+		{../FiguresFeatures/ACC_4}
 	\caption{ACC $k=4$}
 	\end{subfigure}	
 	
@@ -1335,7 +1355,7 @@ Matrix $B$ has shape $k \times R$.
 \end{equation}
 Where $\widetilde{B}$ is the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
 
-\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal\cite{Virtanen}. Ceptrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. 
+\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal\cite{Virtanen}. Cepstrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. 
 
 \paragraph*{}As the frequency bin index increases, the width of the bin in frequency space increases. \textcolor{red}{Finish this! What does a MFCC tell us with words!}
 
@@ -1396,7 +1416,7 @@ FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \label{fig-FeatureFCM}
 \begin{center}
 %\textcolor{red}{PLOT OF FCM FEATURES HERE}
-\includegraphics[scale=0.3]{../FiguresFeatures/Frequency_Center_of_Mass}
+\includegraphics[scale=0.3]{../FiguresFeatures/FCM}
 \end{center}
 \caption{A comparison of the frequency center-of-mass for each class using box-and-whisker plots}
 \end{figure}
@@ -1452,8 +1472,8 @@ Performance History $\leftarrow \{\}$
 	\item $X_{test} \leftarrow X^{(k)}$
 	\item $Y_{test} \leftarrow Y^{(k)}$
 	\item Concatenate the remaining subsets into training data set
-	\item $X_{train} \leftarrow X^{(i \neq j)}$
-	\item $Y_{train} \leftarrow Y^{(i \neq j)}$
+	\item $X_{train} \leftarrow X^{(i \neq k)}$
+	\item $Y_{train} \leftarrow Y^{(i \neq k)}$
 	\item Train the model, $F^*$ with the $X_{train}$ and $Y_{train}$ subset.
 	\item Evaluate the trained model with the $X_{test}$ and $Y_{test}$ data set, and compute value of metric function(s) $P$
 	\item Store Performance $P$ in Performance History array
@@ -1487,30 +1507,30 @@ belong to class $i$, and were predicted to be in class $j$
 \end{center}
 
 \end{quote}
-Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indicates an incorrect prediction. A confusion matrix with relatively large values in main diagonal indicates a model that consistently predicts correct labels \cite{Geron}.  Below we present some "dummy" confusion matrices as numerical arrays, and a corresponding heat-map equivalent.
+Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indicates an incorrect prediction. A confusion matrix with relatively large values in main diagonal indicates a model that predicts correct labels \cite{Geron}.  Below we present some synthetic confusion matrices, which combine the counts in each index and a corresponding color map.
 
 \begin{figure}[H]
 
-	\begin{subfigure}[h]{\textwidth , 0.8\textheight}
-	\begin{center}
-	\textcolor{red}{Images of Confusion Matrices Go Here!} 
-	\end{center}
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresMetrics/StdConfA}
+	\caption{Diagonal dominance indicates a stronger classifier}
 	\end{subfigure}
-	\begin{subfigure}[h]{\textwidth , 0.8\textheight}
-	\begin{center}
-	\textcolor{red}{Images of Confusion Matrices Go Here!} 
-	\end{center}
+	\hfill	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresMetrics/StdConfB}
+	\caption{No diagonal dominance indicates a weaker classifier}
 	\end{subfigure}
 		
-\caption{Example Confusion Matrices for $k$-classes tasks}
+\caption{Example Confusion Matrices for $4$-categories classifier}
 \label{fig-DummyConfMat}
 \end{figure}
 
 \paragraph*{}In addition to the standard confusion matrix, we can also weight entries by prediction score. Rather than adding $+1$ to each entry $C_{i,j}$ where appropriate, we instead add the \textit{probability} value, which is bounded $[0,1]$ (See softmax activation function in sec. \ref{subsubsec-Softmax})). This allows us to bake in the predictive \textit{confidence} into the confusion matrix. For example, two correct predictions with a score $0.2$ are weighted equally to a single incorrect prediction of $0.4$. This is useful for identifying a classifier that makes correct predictions, but only by smaller threshold. This can almost be through of as assigning "partial credit" to each prediction.
 
+\paragraph*{}However, it is more useful to weight the confusion matrix according to class occurrence. For example, if we had a $2 \times 2$ matrix with entries $100$ and $20$ in the main diagonal, it seems that class $A$ has a much higher prediction success than class $B$. However, if there are $200$ elements in class $A$, and only $21$ in class $B$, then we see that class $A$ has a $50\%$ classification rate, while class $B$ has a $95\%$ classification rate, To Combat this, we typically normalize each confusion matrix by the number of samples in each "actual" class. Put simply, we all elements in a given row by the sum of that row.
 
- 
-\paragraph*{}The confusion matrix can be a cumbersome, so often it is useful to express the performance in terms of more concise quantities. For this we use \textit{accuracy score}, \textit{precision score}, and \textit{recall score}.
+\paragraph*{}The confusion matrix can be a cumbersome, so often it is useful to express the performance in terms of more concise quantities. For this we use \textit{accuracy score}, \textit{precision score}, \textit{F1-score}, and \textit{recall score}. These metrics are standard in the field of machine-learning classification and are often useful for identifying different strengths and weaknesses in each model \cite{Geron,James}.
 
 % ================================
 
@@ -1526,9 +1546,7 @@ Where $TP$ is the number of \textit{true-positive}, and $FP$ is the number of fa
 \label{eqn-KPrecision}
 \text{Prec}_j = \frac{C_{j,j}}{\sum_{i=0}^{k-1}C_{j,i}}
 \end{equation}
-For multi-class problems, we report the precision score as averaged over all $k$ classes. 
-
-\paragraph*{}The quantity $TP + FP$ is a measurement of the total number chosen items in that class. Thus, the quantity precision gives the ratio of correct selections to all selections that were made. More intuitively, we can describe precision as the fraction of selected items that are relevant to the problem at hand \cite{Geron}. 
+In the case of a multi-class classifier, the precision score represents an\textit{one-vs-all} measurement. This means that for any class $j$, the sample belongs to class $j$ or it does not. All other classes, $i \neq j$ are temporarily considered to be a single aggregated class. The quantity $TP + FP$, or the sum over the confusion matrix row is a measurement of the total number of items that are predicted to be in the given class. Therefore the precision metric answers the question: \textit{"How many selected items are relevant to the problem?"} \cite{Geron,James}.
 
 % ================================
 
@@ -1544,19 +1562,32 @@ Where $TP$ is the number of \textit{true-positive}, and $FN$ is the number of \t
 \label{eqn-KRecall}
 \text{Recall}_j = \frac{C_{j,j}}{\sum_{i=0}^{k-1}C_{i,j}}
 \end{equation}
-For multi-class problems, we report the precision score as averaged over all $k$ classes.
+In the case of a multi-class classifier, the recall score also represents an\textit{one-vs-all} measurement. This means that for any class $j$, the sample belongs to class $j$ or it does not. All other classes, $i \neq j$ are again temporarily considered to be a single aggregated class. The quantity $TP + FN$, or the sum over the confusion matrix coumn is a measurement of the total number of items that are actually in the given class. Therefore the recall metric answers the question: \textit{"How many relevant items to the problem are selected?"} \cite{Geron,James}.
 
-\paragraph*{}The quantity $TP + FN$ is a measurement of the total number items in that class, independent of selection. Thus, the quantity recall gives the ratio of correct selections to all selections that were made. More intuitively, we can describe recall as the fraction of relevant items that were selected \cite{Geron}. 
+% ================================================================
+
+\subsection{Micro F1-Score}
 
 % ================================
 
-\subsubsection{Accuracy Score}
+\subsubsection{Accuracy Score \&}
 
-\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron,James}.
+\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron}.
 
 \paragraph*{}For example, we could develop a model that uses a few predictors from every human currently alive and determine which of them has walked on the moon. There are roughly 7 billion humans alive, four of which have been on out moon. Simply guess \textit{no} for every human, our model would have more than a $99.9999\%$ accuracy. However, we would argue that this model does not perform well seeing as it has a $0 \%$ recall score, and and a $0 \%$ precision score.
 
-\paragraph*{}Despite this we can still sue accuracy score to provide a rough approximation for how the model is performing. \textcolor{red}{finish this!} 
+\paragraph*{}Accuracy score of model is defined:
+\begin{equation}
+\label{eqn-BinaryAccuracy}
+\text{Accuracy} = \frac{TP + FN}{TP + FP + FN + FP}
+\end{equation}
+
+\paragraph*{}For a multi-class problem, we present accuracy over \textit{all} classes simultaneously. It is the ratio of the sum of the main diagonal to the sum or all entries in the matrix:
+\begin{equation}
+\label{eqn-AvgAccuracy}
+\text{Accuracy} = \frac{\sum_{i}C_{i,i}}{\sum_{i}\sum_{j}C_{i,j}}
+\end{equation}
+Where all sum indexes goes from $0$ to $k-1$.
 
 % ================================================================
 
@@ -1617,7 +1648,11 @@ We could then aggregate the parameters according to a weighted average to create
 \section{Experimental Results}
 \label{sec-Results}
 
-\paragraph*{}
+\paragraph*{}To formally produce classification predictions on the chaotic synthesizer wave forms, we must use all of the principles outlined in the previous sections. Using the described features in sec. (\ref{sec-Features}) and appropriate architecture sec. (\ref{subsec-Architecture}), We run a 
+
+
+
+we produce a neural network \textit{ChaoticSynthClassifier} and train it on the roughly $18,000$ audio files that serve as the training set.
 
 
 % ================================================================

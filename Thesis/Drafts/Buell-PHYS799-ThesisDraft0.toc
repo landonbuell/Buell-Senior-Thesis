@@ -16,34 +16,38 @@
 \contentsline {subsubsection}{\numberline {3.3.4}1-Dimensional Flattening Layer}{11}%
 \contentsline {subsubsection}{\numberline {3.3.5}1-Dimensional Concatenation Layer}{12}%
 \contentsline {subsection}{\numberline {3.4}Activation Functions Used in Network Layers}{12}%
-\contentsline {subsubsection}{\numberline {3.4.1}Rectified Linear Unit}{12}%
+\contentsline {subsubsection}{\numberline {3.4.1}Rectified Linear Unit}{13}%
 \contentsline {subsubsection}{\numberline {3.4.2}Softmax}{13}%
-\contentsline {subsection}{\numberline {3.5}Training a Neural Network}{13}%
+\contentsline {subsection}{\numberline {3.5}Training a Neural Network}{14}%
 \contentsline {subsubsection}{\numberline {3.5.1}The Cost Function}{14}%
 \contentsline {subsubsection}{\numberline {3.5.2}Gradient Based Learning}{15}%
-\contentsline {subsubsection}{\numberline {3.5.3}Back-Propagation}{16}%
-\contentsline {subsubsection}{\numberline {3.5.4}The Optimizer}{20}%
-\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{22}%
-\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{24}%
-\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{25}%
-\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{25}%
-\contentsline {section}{\numberline {4}Properties of Musical Instruments}{26}%
-\contentsline {subsection}{\numberline {4.1}Idiophones}{26}%
-\contentsline {subsection}{\numberline {4.2}Membranophones}{26}%
-\contentsline {subsection}{\numberline {4.3}Chordophones}{26}%
-\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{27}%
-\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{28}%
-\contentsline {subsection}{\numberline {4.4}Aerophones}{28}%
-\contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{28}%
-\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{28}%
-\contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{28}%
-\contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{29}%
-\contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{29}%
-\contentsline {subsubsection}{\numberline {4.5.5}White Noise}{29}%
-\contentsline {section}{\numberline {5}Feature Selections}{30}%
-\contentsline {subsubsection}{\numberline {5.0.1}The Design Matrix}{32}%
-\contentsline {subsubsection}{\numberline {5.0.2}Audio Preprocessing}{32}%
+\contentsline {subsubsection}{\numberline {3.5.3}Back-Propagation}{17}%
+\contentsline {subsubsection}{\numberline {3.5.4}The Optimizer}{21}%
+\contentsline {subsection}{\numberline {3.6}Chosen Model Architecture}{23}%
+\contentsline {subsubsection}{\numberline {3.6.1}The Spectrogram Branch}{25}%
+\contentsline {subsubsection}{\numberline {3.6.2}The Perceptron Branch}{26}%
+\contentsline {subsubsection}{\numberline {3.6.3}The Final Output Branch}{26}%
+\contentsline {section}{\numberline {4}Properties of Musical Instruments}{27}%
+\contentsline {subsection}{\numberline {4.1}Idiophones}{27}%
+\contentsline {subsection}{\numberline {4.2}Membranophones}{27}%
+\contentsline {subsection}{\numberline {4.3}Chordophones}{27}%
+\contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{28}%
+\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{29}%
+\contentsline {subsection}{\numberline {4.4}Aerophones}{29}%
+\contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{29}%
+\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{29}%
+\contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{29}%
+\contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{30}%
+\contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{30}%
+\contentsline {subsubsection}{\numberline {4.5.5}White Noise}{30}%
+\contentsline {section}{\numberline {5}Feature Selections}{31}%
+\contentsline {subsubsection}{\numberline {5.0.1}Decision Boundaries}{32}%
+\contentsline {subsubsection}{\numberline {5.0.2}The Design Matrix}{32}%
+\contentsline {subsubsection}{\numberline {5.0.3}Audio Preprocessing}{33}%
 \contentsline {subsection}{\numberline {5.1}Spectrogram Features}{34}%
+\contentsline {subsubsection}{\numberline {5.1.1}Frame Blocking}{34}%
+\contentsline {subsubsection}{\numberline {5.1.2}Windowing}{35}%
+\contentsline {subsubsection}{\numberline {5.1.3}Discrete Fourier Transform}{36}%
 \contentsline {subsection}{\numberline {5.2}Time-Space Features}{38}%
 \contentsline {subsubsection}{\numberline {5.2.1}Time Domain Envelope}{39}%
 \contentsline {subsubsection}{\numberline {5.2.2}Zero Crossing Rate}{39}%
@@ -59,11 +63,12 @@
 \contentsline {subsection}{\numberline {6.2}Performance Metrics}{48}%
 \contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{49}%
 \contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{50}%
-\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{50}%
-\contentsline {subsubsection}{\numberline {6.2.4}Accuracy Score}{51}%
-\contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{51}%
-\contentsline {paragraph}{}{51}%
-\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{52}%
+\contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{51}%
+\contentsline {subsection}{\numberline {6.3}Micro F1-Score}{51}%
+\contentsline {subsubsection}{\numberline {6.3.1}Accuracy Score \&}{51}%
+\contentsline {subsection}{\numberline {6.4}Tracking Metrics over a Period of Training}{52}%
+\contentsline {paragraph}{}{52}%
+\contentsline {subsection}{\numberline {6.5}Boosted Aggregation}{53}%
 \contentsline {section}{\numberline {7}Experimental Results}{54}%
 \contentsline {section}{\numberline {8}Conclusion}{55}%
 \contentsline {section}{\numberline {9}Acknowledgments}{56}%
