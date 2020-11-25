@@ -81,11 +81,23 @@
 
 % ================================================================
 % ================================================================
+
+\begin{abstract}
+
+\end{abstract}
+
+% ================================================================
+% ================================================================
 \newpage
 \section{Introduction}
 \label{sec-Introduction}
 
-\paragraph*{}\textcolor{red}{How do I write an introduction???}
+\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}. These signals can take the form of day-to-day topics such as weather measurements, financial reports, or audio-visual media, and extend into disciplines of medicine, physics, and digital signal processing. In all cases, we explore a problem where the task to categorize the sample, or subset of the sample into one of $k$ \textit{bins} called classes \cite{Mierswa,Virtanen,Geron}.
+
+\paragraph*{}For this classification task, we have developed an automated model (called a \textit{classifier}) which can process information from a time-series audio file, and group the file based on it's prediction of what produced the sound in that file. For example, classifying an audio file which contains the waveform of a clarinet sustaining a single note should return the classification prediction of "clarinet" and so forth. This non-trivial task requires developing a model
+
+
+ Developments in computational efficiency and the age of \textit{Big Data} has lead to a staggering increase in the utilization
 
 % ================================================================
 % ================================================================
@@ -968,13 +980,17 @@ To ensure the construction of a suitable model, we derive features based from th
 \paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. We have developed a set of predictors that describe each sample in a compact manner, with reasonable separation boundaries between samples from different classes.
 These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalized to have a zero mean, and unit-variance across all classes. 
 
-% ================================
+% ================================================================
+
+\subsection{Feature Space}
+
+\paragraph*{}From each audio file sample, we derive an identical set of $p$ predictors that will be 
 
 \subsubsection{Decision Boundaries}
 
 \paragraph*{}A trained classifier makes a prediction in the form of a statistical likelihood of a sample belonging to a particular class \cite{Goodfellow,James}. A $k$- categories classifier contains $k$ output neurons, each one representing a class. When a set of features is presented to the classifier, the value contained within each neuron is the "confidence" on the interval $[0,1]$ that a sample belongs to that class. For example, if neuron $q$ has an activation value of $0.25$, we say that there is a $25\%$ chance that the sample belongs to class $q$. Most commonly, we take the neuron with the highest activation value to be the chosen class, even if the next highest activation is a close second \cite{Loy}. 
 
-\paragraph*{}This concept stems from the idea that a trained neural network classifier is basing its predictions by generating \textit{decision boundaries} in feature space \cite{Loy,James,Serizel}. 
+\paragraph*{}This concept stems from the idea that when a trained neural network classifier makes a prediction, it is doing so based on a set of generated \textit{decision boundaries} \cite{Geron,James}.
 
 
 % ================================
@@ -1003,7 +1019,7 @@ Y \in \mathbb{R}^{(b \times \kappa)}
 \subsubsection{Audio Preprocessing}
 \label{subsubsec-Preprocessing}
 
-\paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following steps and requirements:
+\paragraph*{}Preprocessing a data set is a necessary step to execute prior to feature extraction \cite{Geron2,James,Serizel}. In the case of audio files, preprocessing usually consists of ensuring that the data set contains the following steps and requirements:
 \begin{enumerate}
 \item A suitably sized number of files of reasonable audio quality with normalized amplitudes
 \item Audio encoded in a standard, and consistent format

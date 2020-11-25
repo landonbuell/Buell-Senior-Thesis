@@ -135,7 +135,7 @@ class AnalyzeModels:
         avgHitMatName =  self.modelName + " Avg Hits Weighted Confusion"
         avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
         
-        """
+        
         ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
@@ -145,7 +145,7 @@ class AnalyzeModels:
         ClassifierMetrics.PlotConfusion(avgHitsWeightedConfMat,self.n_classes,avgHitMatName)
         ClassifierMetrics.PlotConfusion(avgScrsWeightedConfMat,self.n_classes,avgScrMatName)
         os.chdir(homePath)
-        """
+        
 
         # Compute metrics avg. across all classes
         self.ConfusionMatrix = avgStandardConfMat

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  25 NOV 2020 00:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.12.29)  25 NOV 2020 11:43
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -531,62 +531,62 @@ LaTeX Warning: Citation `Khan' on page 31 undefined on input line 954.
 
 [31]
 
-LaTeX Warning: Citation `Zerizel' on page 32 undefined on input line 984.
+LaTeX Warning: Citation `Zerizel' on page 32 undefined on input line 986.
 
 
-LaTeX Warning: Citation `Tensorflow' on page 32 undefined on input line 995.
+LaTeX Warning: Citation `Tensorflow' on page 32 undefined on input line 997.
 
 [32] [33]
 <../Figures/AnalysisFrames.png, id=141, 804.75656pt x 407.27156pt>
 File: ../Figures/AnalysisFrames.png Graphic file (type png)
 <use ../Figures/AnalysisFrames.png>
-Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1046
+Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1048
 .
 (pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
  [34 <../Figures/AnalysisFrames.png>]
 <../Figures/AnalysisFrame.png, id=146, 1734.48pt x 578.16pt>
 File: ../Figures/AnalysisFrame.png Graphic file (type png)
 <use ../Figures/AnalysisFrame.png>
-Package pdftex.def Info: ../Figures/AnalysisFrame.png  used on input line 1092.
+Package pdftex.def Info: ../Figures/AnalysisFrame.png  used on input line 1094.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../Figures/WindowedFrame.png, id=147, 1734.48pt x 578.16pt>
 File: ../Figures/WindowedFrame.png Graphic file (type png)
 <use ../Figures/WindowedFrame.png>
-Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1098.
+Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1100.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [35] [36 <../Figures/AnalysisFrame.png> <../Figures/WindowedFrame.png>] [37]
 
-LaTeX Warning: Reference `eqn-ShapeX1' on page 38 undefined on input line 1150.
+LaTeX Warning: Reference `eqn-ShapeX1' on page 38 undefined on input line 1152.
 
 
 LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
-166.
+168.
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1166.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1168.
 
 
 [38]
 <../FiguresFeatures/TDE_1.png, id=164, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TDE_1.png Graphic file (type png)
 <use ../FiguresFeatures/TDE_1.png>
-Package pdftex.def Info: ../FiguresFeatures/TDE_1.png  used on input line 1196.
+Package pdftex.def Info: ../FiguresFeatures/TDE_1.png  used on input line 1198.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/TDE_2.png, id=165, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TDE_2.png Graphic file (type png)
 <use ../FiguresFeatures/TDE_2.png>
-Package pdftex.def Info: ../FiguresFeatures/TDE_2.png  used on input line 1203.
+Package pdftex.def Info: ../FiguresFeatures/TDE_2.png  used on input line 1205.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/TDE_3.png, id=166, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TDE_3.png Graphic file (type png)
 <use ../FiguresFeatures/TDE_3.png>
-Package pdftex.def Info: ../FiguresFeatures/TDE_3.png  used on input line 1210.
+Package pdftex.def Info: ../FiguresFeatures/TDE_3.png  used on input line 1212.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [39] [40 <../FiguresFeatures/TDE_1.png> <../FiguresFeatures/TDE_2.png> <../Fig
@@ -594,36 +594,36 @@ uresFeatures/TDE_3.png>]
 <../FiguresFeatures/ZXR.png, id=176, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ZXR.png Graphic file (type png)
 <use ../FiguresFeatures/ZXR.png>
-Package pdftex.def Info: ../FiguresFeatures/ZXR.png  used on input line 1236.
+Package pdftex.def Info: ../FiguresFeatures/ZXR.png  used on input line 1238.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [41 <../FiguresFeatures/ZXR.png>]
 <../FiguresFeatures/TCM.png, id=181, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TCM.png Graphic file (type png)
 <use ../FiguresFeatures/TCM.png>
-Package pdftex.def Info: ../FiguresFeatures/TCM.png  used on input line 1259.
+Package pdftex.def Info: ../FiguresFeatures/TCM.png  used on input line 1261.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
 <../FiguresFeatures/ACC_1.png, id=182, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_1.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_1.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_1.png  used on input line 1286.
+Package pdftex.def Info: ../FiguresFeatures/ACC_1.png  used on input line 1288.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/ACC_2.png, id=183, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_2.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_2.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_2.png  used on input line 1293.
+Package pdftex.def Info: ../FiguresFeatures/ACC_2.png  used on input line 1295.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/ACC_3.png, id=184, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_3.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_3.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_3.png  used on input line 1300.
+Package pdftex.def Info: ../FiguresFeatures/ACC_3.png  used on input line 1302.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/ACC_4.png, id=185, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_4.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_4.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_4.png  used on input line 1307.
+Package pdftex.def Info: ../FiguresFeatures/ACC_4.png  used on input line 1309.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [42 <../FiguresFeatures/TCM.png>] [43]
@@ -635,26 +635,26 @@ atures/ACC_3.png> <../FiguresFeatures/ACC_4.png>] [45]
 <../FiguresFeatures/MFCC_1.png, id=204, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_1.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1391
+Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1393
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_4.png, id=205, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_4.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1398
+Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1400
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_8.png, id=206, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_8.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1405
+Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1407
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_12.png, id=207, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_12.png>
 Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 141
-2.
+4.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [46]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
@@ -665,23 +665,23 @@ Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
 <../FiguresFeatures/FCM.png, id=218, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/FCM.png Graphic file (type png)
 <use ../FiguresFeatures/FCM.png>
-Package pdftex.def Info: ../FiguresFeatures/FCM.png  used on input line 1441.
+Package pdftex.def Info: ../FiguresFeatures/FCM.png  used on input line 1443.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [48 <../FiguresFeatures/FCM.png>] [49] [50]
 <../FiguresMetrics/StdConfA.png, id=230, 867.24pt x 867.24pt>
 File: ../FiguresMetrics/StdConfA.png Graphic file (type png)
 <use ../FiguresMetrics/StdConfA.png>
-Package pdftex.def Info: ../FiguresMetrics/StdConfA.png  used on input line 153
-8.
+Package pdftex.def Info: ../FiguresMetrics/StdConfA.png  used on input line 154
+0.
 (pdftex.def)             Requested size: 212.41261pt x 212.40288pt.
 <../FiguresMetrics/StdConfB.png, id=231, 867.24pt x 867.24pt>
 File: ../FiguresMetrics/StdConfB.png Graphic file (type png)
 <use ../FiguresMetrics/StdConfB.png>
 Package pdftex.def Info: ../FiguresMetrics/StdConfB.png  used on input line 154
-3.
+5.
 (pdftex.def)             Requested size: 212.41261pt x 212.40288pt.
 
-Underfull \hbox (badness 2617) in paragraph at lines 1544--1544
+Underfull \hbox (badness 2617) in paragraph at lines 1546--1546
 []\OT1/cmr/m/n/10.95 (b) |No di-ag-o-nal dom-i-nance in-di-cates a
  []
 
@@ -701,7 +701,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  5353 strings out of 492483
  81244 string characters out of 3121135
- 150300 words of memory out of 3000000
+ 149300 words of memory out of 3000000
  9615 multiletter control sequences out of 15000+200000
  12304 words of font info for 46 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -725,7 +725,7 @@ ts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Progr
 ams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (61 pages, 2291344 bytes).
+Output written on Buell-PHYS799-ThesisDraft0.pdf (61 pages, 2291400 bytes).
 PDF statistics:
  318 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
