@@ -230,7 +230,7 @@ $f^{(i)} \leftarrow f^{(0)}$
 
 % ================================================================
 
-\subsection{Layers Used in this Classification Neural Network}
+\subsection{Layers Used in this Classification Model}
 \label{subsec-Layers}
 
 \paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a predictions (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a chain-like computational graph \cite{Goodfellow}. Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
@@ -454,7 +454,7 @@ For our chosen architecture, ReLU is applied to the activations in every single 
 
 % ================================================================
 
-\subsection{Training a Neural Network}
+\subsection{Training The Model}
 \label{subsec-Training}
 
 \paragraph*{}A neural network's purpose is to produce a function $F^*$ that approximates an unknown function $F$, using a set of parameters, $\Theta$. The model must have a procedure for updating the parameters in $\Theta$ to allow for a reasonably close approximation of $F$ \cite{Goodfellow}. To better understand this, we turn to Tom Mitchell's explanation of a learning algorithm \cite{Mitchell}:
@@ -695,7 +695,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 	\item $\nabla \bar{J} \leftarrow \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]$
 	
 	\item Compute first bias moment: $s \leftarrow \rho_1 s + (1 - \rho_1) \nabla \bar{J}$
-	\item Compute second bias moment: $r \leftarrow \rho_2 s + (1 - \rho_2) \nabla \bar{J} \odot \nabla \bar{J}$
+	\item Compute second bias moment: $r \leftarrow \rho_2 r + (1 - \rho_2) \big( \nabla \bar{J} \odot \nabla \bar{J} \big)$
 	\item First bias correction: $s' \leftarrow \frac{s}{1 - \rho_1^i}$
 	\item Second bias correction: $r' \leftarrow \frac{r}{1 - \rho_2^i}$
 	
@@ -710,10 +710,12 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 % ================================================================
 
-\subsection{Chosen Model Architecture}
+\subsection{Multimodal Architecture}
 \label{subsec-Architecture}
 
-\paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network it's \textit{architecture} \ref{Goodfellow}. Most standard implementations of networks utilize a \textit{unimodal architecture} where the model is created with a single input layer .
+\paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network is referred to as it's \textit{architecture} \cite{Goodfellow}. 
+
+\paragraph*{}For this project, we have derived features that describe that audio file using two different \textit{modalities}. A modality is a method of describing and interpreting a sample of data \cite{Ngiam}. For example. Humans can be said to experience the world through five modalities - those being our cardinal senses of sight, hearing, taste, smell and touch. The sight and sound of a guitar are two very different ways of experiencing the same thing. One or the other is often enough to identify the guitar - but both together yield an ever higher predictive confidence.
 
 \begin{figure}[H]
 \begin{center}
@@ -723,20 +725,22 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \label{fig-NetworkArchitecture}
 \end{figure}
 
+\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N \times k$ spectrogram matrix, explored in sec. (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-view} learning, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
+
 % ================================
 
 \subsubsection{The Spectrogram Branch}
 
-\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olson,Kahn}. \textcolor{blue}{Details on the creating of the spectrogram can be found in the \textit{features} section of this document.}
+\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olson,Khan}
 
-\paragraph*{}The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in each sample. As a model hyper-parameter, we have chosen each batch to contain $64$ samples. We have also chosen to truncate time and frequency axes (ii \& iii) to contain $560$ frequency bins, and $256$ time-frames. Each image also contains a single channel, which make it gray-scale when visualized. We can denote the 4D shape of the input object into this branch as:
+\paragraph*{}The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in the image. For this model, we have selected to use $64$ samples per batch, $558$ pixels in width, $256$ pixels in length, and $1$ gray-scale channel. We denote the 4D shape of the design matrix for this branch as:
 \begin{equation}
 \label{eqn-shapeX1}
-X_1 \in \mathbb{R}^{(64 \times 560 \times 256 \times 1)}
+X_1 \in \mathbb{R}^{(64 \times 558 \times 256 \times 1)}
 \end{equation}
-Any other shape will be rejected by the model, and an error is raised.
+Any other shape will be rejected, and an error is raised.
 
-\paragraph*{}After the input layer assert the appropriate shape, the array $X_1$, which is a collection of $64$ spectrograms, is passed into the first of three \textit{Convolution Layer Groups}. These layer groups are inspired from the \textit{VGG-16 Neural Network} architecture \textcolor{red}{[citation needed]}. Each convolution layer group in composed of three individual layers: 
+\paragraph*{}After the input layer holds store the input activations, $X_1$ and tests for the appropriate shape, the array which is a collection of $64$ spectrograms, is passed into the first of three \textit{Convolution Layer Groups}. These layer groups are inspired from the \textit{VGG-16 Neural Network} architecture \textcolor{red}{[citation needed]}. Each convolution layer group in composed of three individual layers: 
 \begin{enumerate}
 \item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
 \item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
@@ -962,29 +966,28 @@ x(t) \approx \sum_{n = 1}^{\infty} \frac{1}{2n-1} \sin \bigg( 2 \pi (2n - 1)f_0 
 \section{Feature Selections}
 \label{sec-Features}
 
-\paragraph*{}Classification tasks require a set of inputs  . These inputs are called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. Features are quantitative, low-dimensional representations of each sample that convey key characteristics of the sample. 
+\paragraph*{}Classification tasks require a set of inputs called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. A features is a quantitative, low-dimensional representation of a sample that conveys key characteristics of it. For example, in classifying types of animals, a feature could be the mass, mass volume or number of teeth on the animal. Typically, we produce a set of features $p$ for each sample and assemble them into a $1 \times p$ vector called a \textit{feature vector} which acts as a list of descriptive qualities of the sample \cite{Geron,James}.
 Audio machine learning researchers M. Kashif Saeed Khan and Wasfi G. Al-Khatib discusses the vitality of feature selection \cite{Khan}:
 \begin{quote}
 The data reduction stage which is also called feature extraction, consists of discovering a few important facts about each class. The choice of features is critical as it greatly affects the accuracy of audio classification. 
 \end{quote}
-In the biological process of categorizing sound sources, the time-domain waveform is usually enough to match the sound to a source \cite{Olson}. However, a computer representation of a waveform is an array-like structure of values sampled discretely in time and volume \cite{Virtanen,Liu}. Presenting the raw time-series waveform to a model directly has experimentally shown to be unstable in for classification tasks so we must develop a set of features or predictors that can describe important properties of the waveform in an efficient manner \cite{Goodfellow,James,Serizel}.
+An adequate selection features is vital to the process of training and evaluation of the classifier model \cite{Mierswa,Serizel,Liu}. Consider the task of identifying cats and dogs from images, given only the top-most row of pixels or the number of eyes. While the data represents \textit{correct} properties, it is not enough information to distinguish the two categories.
 
-\paragraph*{}It becomes quickly apparent that the choice of features is extraordinarily important to the process of training and evaluation of the classifier model \cite{Mierswa}. Consider the task of identifying cats and dogs from images, given only images consisting of the top-most row of pixels. The inappropriate choice features does not reflect the significant characteristics of the data.
+\paragraph*{}In the biological process of categorizing sound sources, the time-domain waveform is usually enough to match the sound to a source \cite{Olson}. However, a computer representation of a waveform is an array-like structure of values sampled discretely in time and volume \cite{Virtanen,Liu}. Presenting the raw time-series waveform to a model directly has experimentally shown to be unstable in for classification tasks so we must develop a set of features or predictors that can describe important properties of the waveform in a far more efficient manner \cite{Goodfellow,James,Serizel}.
 
-\paragraph*{}Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
-\begin{quote}
-For recognition algorithms, the necessary property of the acoustic features is low variability among features extracted from examples assigned to the same class, and at the same time high variability allowing distinction between features extracted from examples assigned to different classes.
-\end{quote}
-To ensure the construction of a suitable model, we derive features based from three representations of the audio file: (i) a spectrogram matrix of the waveform, (ii) the time-space representation of the waveform, and (iii) the frequency-space representation of the waveform. It is important to note that although this algorithm will classify sound data to instruments, the model will never actually be presented with a waveform directly, instead it will rely solely on the features.
-
-\paragraph*{}To ensure suitable performance of this sound wave classification neural network, a great deal of time has been devoted to the construction of the elements of the feature vector. We have developed a set of predictors that describe each sample in a compact manner, with reasonable separation boundaries between samples from different classes.
-These features are derived are principles of music, digital signal processing, previous work, and underlying physics that governs the behavior of instruments. In the following sections, we outline the set of $21$ features used in the classification process. For each feature, we visualize the distribution in across each class in the form as box-plots. Each feature has been normalized to have a zero mean, and unit-variance across all classes. 
+\paragraph*{}To ensure the construction of a suitable model, we derive features based from three representations of the audio file: (i) a spectrogram matrix representation, (ii) the time-space representation, and (iii) the frequency-space representation. It is important to note that although this algorithm will map audio files to source instruments, the model will never actually be presented with a waveform directly, instead it will rely solely on the features to make predictions.
 
 % ================================================================
 
 \subsection{Feature Space}
 
-\paragraph*{}From each audio file sample, we derive an identical set of $p$ predictors that will be 
+\paragraph*{}From each audio file sample, we derive an identical set of $p$ predictors that will be use for classification. For this multi-modal neural network, the $p$ predictors are arranged into two separated structures, each called a \textit{design matrix}, described in sec. (\ref{subsubsec-DesignMatrix}) \cite{Goodfellow,Geron}.
+
+\paragraph*{}Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
+\begin{quote}
+For recognition algorithms, the necessary property of the acoustic features is low variability among features extracted from examples assigned to the same class, and at the same time high variability allowing distinction between features extracted from examples assigned to different classes.
+\end{quote}
+
 
 \subsubsection{Decision Boundaries}
 
@@ -996,8 +999,9 @@ These features are derived are principles of music, digital signal processing, p
 % ================================
 
 \subsubsection{The Design Matrix}
+\label{subsubsec-DesignMatrix}
 
-\paragraph*{}From each audio file, we produce a spectrogram matrix and a feature vector, as well as a target label for training purpose. From a collection of multiple samples, the spectrograms are concatenated into a single object $X_1$, and the feature vectors are concatenated into an object, $X_2$. Each objects is a multidimensional array called a \textit{design matrix} \cite{Geron,Goodfellow,Loy,Zerizel}. For any machine learning task, a  design matrix is an object that contains real floating-point numbers that store the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. Each has shape given by:
+\paragraph*{}From each training audio file, we produce a spectrogram matrix explored in sec. (\ref{subsec-Spectrogram}) and a feature vector, as well as a target label for training purpose. From a collection of multiple samples, the spectrograms are concatenated into a single object $X_1$, and the feature vectors are concatenated into an object, $X_2$. Each objects is a multidimensional array called a \textit{design matrix} \cite{Geron,Goodfellow,Loy,Zerizel}. For any machine learning task, a  design matrix is an object that contains real floating-point numbers that store the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. Each has shape given by:
 \begin{equation}
 \label{eqn-X1Shape}
 X_1 \in \mathbb{R}^{(b \times N' \times k)}
@@ -1039,7 +1043,7 @@ Note that different projects may require a different set of requirement from pre
 \newpage
 
 \subsection{Spectrogram Features}
-\label{subsec-spectrogram}
+\label{subsec-Spectrogram}
 
 \paragraph*{}The application of neural networks to image-processing and recognition has been well studied and developed in the last few decades \cite{Geron,Goodfellow,Loy,Mierswa}. As a result, model architectures for image processing related tasks are well-explored and have shown experimentally successful behavior. Following this success, it make senses to provide an image-like representation of a sound wave as a feature. We do this in the form of a \textit{spectrogram} matrix. A spectrogram is a representation of the energy distribution of a sound wave as a function of both frequency and time. In a conventional spectrogram, the passing of time is shown along the $x$-axis, and the frequency spectrum is shown on the $y$-axis. Thus each point in the 2-Dimensional space is an energy at a given time and frequency. Examples spectrograms from the wave form data set are shown in Fig. (\ref{fig-spectrograms}).
 \begin{figure}[H]
@@ -1173,7 +1177,7 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 % ================================================================
 
 \subsection{Time-Space Features}
-\label{subsec-time}
+\label{subsec-TimeFeatures}
 
 \paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. The number of samples $M$ is chosen to correspond the number of sample needed to make the $N \times k$ spectrogram matrix. This way,t he spectrogram and time-series features are representative of the same time interval in the file sample. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
 
@@ -1334,7 +1338,7 @@ The TCM of that waveform is then given:
 \newpage
 
 \subsection{Frequency-Space Features}
-\label{subsec-frequency}
+\label{subsec-FreqFeatures}
 
 \paragraph*{}The features described in this section are derived from the frequency-domain representations of each audio sample. Frequency space is represented by the transposed spectrogram matrix, $S^T$, described in sec. (\ref{subsec-spectrogram}). This is done to ensure that each  row is now an analysis frame, each column is a frequency bin. This gives a similar structure to the time-space analysis frames matrix, $A$, in Eq. (\ref{eqn-FrameMatrix}).
 For each feature, we detail the physical significance and provide a visualization in feature-space.
@@ -1747,7 +1751,7 @@ Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
 \bibitem{James}
 James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.
 
-\bibitem{Kahn}
+\bibitem{Khan}
 Khan, M. Kashif Saeed, and Wasfi G. Al-Khatib. “Machine-Learning Based Classification of Speech and Music.” Multimedia Systems, vol. 12, no. 1, 2006, pp. 55–67., doi:10.1007/s00530-006-0034-0.
 
 \bibitem{Levine}
