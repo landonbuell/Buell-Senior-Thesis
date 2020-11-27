@@ -407,18 +407,18 @@ The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 
 f^{(l)} : x^{(l-1)}_{a} \in \mathbb{R}^{(1 \times \alpha)} , x^{(l-1)}_{b} \in \mathbb{R}^{(1 \times \beta)} , ....  \rightarrow
 x^{(l)}_{z} \in \mathbb{R}^{(1 \times \alpha + \beta + ...)}
 \end{equation}
-The concatenation layer is used to combine activation non-adjacent, or non-related layers into a single new layer. In this case of the model used in the project, we use it to combine the activations that result from two distinct models into a single layer that is then transformed into a final output. This process is detailed further in sec. (\ref{sec-Architecture}).
+The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we use it to combine the outputs that result from the convolution branch and the perceptron branch tp produce an single aggregated output. This process is detailed further in sec. (\ref{sec-Architecture}).
 
 % ================================================================
 
 \subsection{Activation Functions Used in Network Layers}
 \label{sec-ActivationFunctions}
 
-\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{sec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in Eq. (\ref{eqn-LinearTransform}), and then an element-wise activation function as in Eq. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in out classification neural network. 
+\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{sec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in Eq. (\ref{eqn-LinearTransform}), and then an element-wise activation function as in Eq. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in this classification neural network. 
 
 \subsubsection{Rectified Linear Unit}
 
-\paragraph*{}The Rectified Linear Unit (ReLU) activation function acts element-wise on the activations in a given layer. If the activation of a neurons is non-zero or non-negative, the value is untouched, otherwise a $0$ is returned. For an input activation $x$, ReLU is defined by:
+\paragraph*{}The Rectified Linear Unit (ReLU) activation function acts element-wise on the activations in a given layer. If the activation of a neurons is non-negative, the value is untouched, otherwise a $0$ is returned. For an input activation array $x$, ReLU is defined by:
 \begin{equation}
 \label{eqn-ReLU}
 \text{ReLU}\big[x\big] = \max\big(0,x\big) = \left\{
@@ -467,18 +467,16 @@ Without any direct human intervention, a model must update itself to improve it'
 \begin{equation}
 \label{eqn-Theta}
 \Theta = \big\{
-W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L)}, b^{(L-1)}
+W^{(0)}, b^{(0)}, W^{(1)}, b^{(1)}, W^{(2)}, b^{(2)}, ... ,W^{(L-2)}, b^{(L-2)}, W^{(L-1)}, b^{(L-1)}
 \big\}
 \end{equation}
-The arrays $W^{(l)}$and bias vectors $b^{(l)}$ are not trainable parameters, themselves. Instead, the floating-point entries within these arrays are the values that can be adjusted. Each element in this set may contain hundreds or thousands of parameters, so we represent these indirectly as elements of their respective matricies or vectors. We choose this notation for $\Theta$ for notation simplicity. Note that not all layers have trainable parameters, and activations functions themselves are not trainable, but fixed functions.
-
-\paragraph*{}Modern neural networks can contain upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers. In this sections we motivate and explore how the we can update the parameters in $\Theta$ as to train the neural network.
+The arrays $W^{(l)}$and bias vectors $b^{(l)}$ are not trainable parameters themselves, but the the floating-point entries within them are the values that can be adjusted. Each element in this set may contain hundreds or thousands of parameters, so we represent these indirectly as parameters within their respective layers. We choose this notation for $\Theta$ for notation simplicity. Note that not all layers have trainable parameters, and activations functions themselves are not trainable, but fixed functions. Modern neural networks can contain upwards of hundreds of thousands,or even millions of elements in $\Theta$ making a neural network a functions that exist is a very high dimensional parameter-space \cite{Geron,Goodfellow,Levine}. For the network that we have designed in this project, there are roughly $33,000$ parameters across $20$ layers. In this sections we motivate and explore how the we can update the parameters in $\Theta$ as to train the neural network.
 
 % ================================
 
 \subsubsection{The Cost Function}
 
-\paragraph*{}Suppose we pass a training sample, given by the feature-vector $x^{(0)}$, with an expected outcome given by the one-hot-encoded vector $y$, into the neural network. After the network finishes processing, it's output activations are given by the vector $x^{(L-1)}$, also noted as $y^*$. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
+\paragraph*{}Suppose we pass a training sample into the neural network. This sample is represented by the feature-vector $x^{(0)}$, with an expected outcome given by the one-hot-encoded vector $y$.  After the network finishes processing, it's output activations, given by the vector $x^{(L-1)}$, also noted as $y^*$ represents the prediction for the class label. For a reasonably trained model, we expect the vector $y^*$ to be "similar" to $y$, indicating that with the provided data, the network has made a reasonably valid prediction. Conversely, for an untrained network, $y^*$ is not likely to be "similar" to $y$ at all, indicating that the network has made a poor prediction. 
 
 \paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the model \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
 
@@ -545,6 +543,11 @@ Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of 
 \label{subsubsec-BackProp}
 
 \paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-LayerFunction}). Additionally, we recall that each layer itself is made up two steps which produce linear activations such as in Eq. (\ref{eqn-LinearTransform}) and non-linear activations, as in Eq. (\ref{eqn-elementActivation}). Therefore, to understand back propagation, it is helpful to examine the flow of information within each layer. Consider a simplified neural network model visualized in Fig. (\ref{fig-ComputationalGraph})
+
+\paragraph*{}Note that we indicate the cost as $J(\Theta)$. This is an allusion to the fact that $J$ depends of both the labels $y$, and the predictions $y^*$. Where $y^*$ is a function of all of the previous layer activation, which are in turn functions of each weight bias element, i.e. the contents of the $\Theta$ object, in Eq. (\ref{eqn-Theta}). This is why we are able to compute the gradient with respect to $\Theta$ as in Eq. (\ref{eqn-CostGradient}).
+
+\paragraph*{}Raw information is presented as $x^{(0)}$ at the top of the figure, and and output is returned as $x^{(L-1)}$ at the bottom. Arrows represent the flow of information. As expressed in Eq. (\ref{eqn-CXELoss}), we compute the cost of a sample, or batch of samples by comparing the difference between $y^*$ (which is $x^{(L-1)}$) and $y$. Given this graph chain and it's numerical nature, we cannot compute each element in the gradient vector through conventional symbolic calculus \cite{Loy}. We must instead use the chain rule for partial derivatives to begin at the final output of the network and successively work our way forward to the entry layer to compute the numerical derivative with respect to each parameter. This process is called \textit{back-propagation} \cite{Geron,Goodfellow}.
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{../Figures/LayerGraph}
@@ -552,9 +555,6 @@ Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of 
 \caption{A visual representation of a simplified neural network as a computational graph}
 \label{fig-ComputationalGraph}
 \end{figure}
-Note that we indicate the cost as $J(\Theta)$. This is an allusion to the fact that $J$ depends of both the labels $y$, and the predictions $y^*$. Where $y^*$ is a function of all of the previous layer activation, which are in turn functions of each weight bias element, i.e. the contents of the $\Theta$ object, in Eq. (\ref{eqn-Theta}). This is why we are able to compute the gradient with respect to $\Theta$ as in Eq. (\ref{eqn-CostGradient}).
-
-\paragraph*{}Raw information is presented as $x^{(0)}$ at the top of the figure, and and output is returned as $x^{(L-1)}$ at the bottom. Arrows represent the flow of information. As expressed in Eq. (\ref{eqn-CXELoss}), we compute the cost of a sample, or batch of samples by comparing the difference between $y^*$ (which is $x^{(L-1)}$) and $y$. Given this graph chain and it's numerical nature, we cannot compute each element in the gradient vector through conventional symbolic calculus \cite{Loy}. We must instead use the chain rule for partial derivatives to begin at the final output of the network and successively work our way forward to the entry layer to compute the numerical derivative with respect to each parameter. This process is called \textit{back-propagation} \cite{Geron,Goodfellow}.
 
 \paragraph*{}Suppose we wish to compute the elements of $\frac{\partial J}{\partial W^{(L-1)}}$ and $\frac{\partial J}{\partial b^{(L-1)}}$ for the gradient vector. The flow of information in Fig. (\ref{fig-ComputationalGraph}) indicates that we cannot directly evaluate the derivative because the cost $J$, is a function $x^{(L-1)}$, which is a function of $z^{(L-1)}$, which is a function of elements in $W^{(L-1)}$. Thus, we have:
 \begin{equation}
@@ -579,7 +579,7 @@ Similarly, the partial derivative of the cost with respect to the bias array can
 \begin{equation}
 \label{eqn-CXELossDeriv}
 \frac{\partial J}{\partial x^{(L-1)}} = \frac{\partial J}{\partial y^*} =
-\frac{\partial}{\partial y^*}\Big[ -y \ln (y^*) \Big] = -\frac{1}{y^*_i + \delta}
+\frac{\partial}{\partial y^*}\Big[ -y \ln (y^*) \Big] = -\frac{y}{y^*_i + \delta} = -\frac{1}{y^*_i + \delta}
 \end{equation}
 We often introduce $\delta \approx 10^{-8}$ to prevent possible division by $0$ errors. The value $\partial x^{(L-1)} / \partial z^{(L-1)}$ can be found by differentiating Eq. (\ref{eqn-elementActivation}) with respect to the input activations.
 \begin{equation}
@@ -611,7 +611,7 @@ And
 \nabla_{b^{(l)}}J = \frac{\partial J}{\partial b^{(l)}} = 
 \frac{\partial J}{\partial x^{(l)}}\odot \partial\sigma^{(l)}[ z^{(l)} ]
 \end{equation}
-Where $z^{(l)}$ are the linear activations defined in Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-LinearTransform2}). Note that each $z^{(l)}$ and $x^{(l)}$ are typically stored in memory during the forward pass in Alg. (\ref{algFeedForward}) to prevent the need to recompute them \cite{Geron2,Goodfellow}.
+Where $z^{(l)}$ are the linear activations defined in Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-LinearTransform2}). Note that each $z^{(l)}$ and $x^{(l)}$ are typically stored in memory during the forward pass in Alg. (\ref{alg-FeedForward}) to prevent the need to recompute them \cite{Geron2,Goodfellow}.
 
 
 \begin{algorithm}[H]
@@ -623,7 +623,7 @@ Where $z^{(l)}$ are the linear activations defined in Eq. (\ref{eqn-LinearTransf
 \REQUIRE Set of Layer functions $f^{(i)}$. Each one contains a weighting array $W^{(i)}$, a bias array $b^{(i)}$, and activation function $\sigma^{(i)}$, the activation function derivative, $\sigma^{'(i)}$. In all cases, $i \in \{0,1,....,L-1\}$
 \REQUIRE Set of linear and non-linear activation arrays $z^{(i)}$ and $x^{(i)}$.
 
-Execute forward pass in algorithm (\ref{algFeedForward}) and compute the gradient of the cost with respect to the final layer activations \\
+Execute forward pass in algorithm (\ref{alg-FeedForward}) and compute the gradient of the cost with respect to the final layer activations \\
 $dx \leftarrow \nabla_{(y^*)}J(y,y^*)$ \\
 Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 
@@ -644,12 +644,12 @@ Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph*{}After (i) computing the gradient, we can scale it by a desired learning rate $\alpha$, and (ii) add the gradient vector element-wise to the existing elements in $\Theta$ object. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values across a data set \cite{Geron}. This is called \textit{gradient descent} and is the basis for many optimization algorithms. Let $\bar{J}$ be the avergae cost over a batch of $b$ samples. We show the general update rule on iteration $(i)$ for gradient based learning in Eq. (\ref{eqn-GradientLearning}).
+\paragraph*{}After (i) computing the gradient, we can scale it by a desired learning rate $\alpha$, and (ii) add the gradient vector element-wise to the existing elements in $\Theta$ object. By repeating steps (i) and (ii) in succession, we gradually drive the cost function to produces consistently lower and lower values across a data set \cite{Geron}. This is called \textit{gradient descent} and is the basis for many optimization algorithms. Let $\bar{J}$ be the average cost over a batch of $b$ samples. We show the general update rule on iteration $(i)$ for gradient based learning in Eq. (\ref{eqn-GradientLearning}).
 \begin{equation}
 \label{eqn-GradientLearning}
 \Theta^{(i)} = \Theta^{(i-1)} + (-\alpha) \nabla_{\Theta} \bar{J}
 \end{equation}
-Where $\Theta^{(i)}$ will give the set of new, updated parameters of the network.
+Where $\Theta^{(i)}$ will give the set of new, updated parameters of the network. Note that for Eq. (\ref{eqn-GradientLearning}), all operations are applied element-wise.
 
 % ================================
 
@@ -657,10 +657,9 @@ Where $\Theta^{(i)}$ will give the set of new, updated parameters of the network
 
 \paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to achieve the lowest possible value of the cost function over a data set \cite{Geron}. Some models such as minimizing a \textit{mean-squared error} for linear regression model can be solve analytically, while high dimensional neural networks, such as the one used in this project, outlined in sec. (\ref{subsec-Architecture}), cannot be solved symbolically. Thus, we then employ an iterative gradient method, much like the one in Eq. (\ref{eqn-GradientLearning}). These standard gradient-based learning algorithms are cumbersome and often prone errors such as vanishing or exploding gradients. \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an algorithm that is more stable, and robust in it's ability to drive the cost function to a successively lower value.
 
-\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients (see $s^{(i})$ in Eq. (\ref{eqn-ADAMupdate})), as well as exponentially decaying average of past squared gradients (see $r^{(i})$ in Eq. (\ref{eqn-ADAMupdate}))\cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost.
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients, $s^{(i)}$, and an exponentially decaying average of past squared gradients, $r^{(i)}$ in Eq. (\ref{eqn-ADAMupdate}))\cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost than standard gradient descent.
 
-\paragraph*{}This means that as the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. 
-Note that a superscript $(i)$ or $(i-1)$ gives an iteration index, while the superscript $i$ means to raise a value to the power of $i$. For a given step $(i)$, The ADAM update is given:
+\paragraph*{}As the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. This enables to ADAm to overcome smaller discontunities that may arise in the solution space \cite{Goodfellow}. Note that a superscript $(i)$ or $(i-1)$ gives an iteration index, while the superscript $i$ means to raise a value to the power of $i$. For a given step $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
@@ -715,7 +714,9 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 \paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network is referred to as it's \textit{architecture} \cite{Goodfellow}. 
 
-\paragraph*{}For this project, we have derived features that describe that audio file using two different \textit{modalities}. A modality is a method of describing and interpreting a sample of data \cite{Ngiam}. For example. Humans can be said to experience the world through five modalities - those being our cardinal senses of sight, hearing, taste, smell and touch. The sight and sound of a guitar are two very different ways of experiencing the same thing. One or the other is often enough to identify the guitar - but both together yield an ever higher predictive confidence.
+\paragraph*{}For this project, we have derived features that describe that audio file using two different \textit{modalities}. A modality is a method of describing and interpreting a sample of data \cite{Ngiam}. For example humans can be said to experience the world through five modalities - those being our cardinal senses of sight, hearing, taste, smell and touch. The sight and sound of a guitar are two very different ways of experiencing the same thing. One or the other is often enough to identify the guitar - but both together yield an even higher predictive confidence. Since modalities are \textit{different} by nature, we cannot simply combine them into a single object and present the neural network with it. We must account for the difference by provide two distinct input layers. Consider again the act of seeing any hearing a guitar. Both modalities are captured by two different senses but ultimately processed by the same brain to produce a single prediction.
+
+\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N \times k$ spectrogram matrix, explored in sec. (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-view} learning, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
 
 \begin{figure}[H]
 \begin{center}
@@ -725,51 +726,49 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \label{fig-NetworkArchitecture}
 \end{figure}
 
-\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N \times k$ spectrogram matrix, explored in sec. (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-view} learning, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
+
 
 % ================================
 
 \subsubsection{The Spectrogram Branch}
 
-\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olson,Khan}
-
-\paragraph*{}The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in the image. For this model, we have selected to use $64$ samples per batch, $558$ pixels in width, $256$ pixels in length, and $1$ gray-scale channel. We denote the 4D shape of the design matrix for this branch as:
+\paragraph*{}The spectrogram branch is pictured on the left side of Fig. (\ref{fig-NetworkArchitecture}). A spectrogram is a representation of a sound wave, or signal by representing energy distributions as a function of \textit{time} and \textit{frequency} \cite{White,Olson,Khan}. The input layer of the spectrogram accepts a 4-Dimensional array. The axes, in order of indexing, represents (i) the size of the \textit{mini-batch} of samples, (ii) the pixel width of each sample, (iii) the pixel height of each sample, and (iv) the number of channels in the image. For this model, we have selected to use $64$ samples per batch, $558$ pixels in width, $256$ pixels in length, and $1$ gray-scale channel. We denote the 4D shape of the design matrix for this branch as:
 \begin{equation}
 \label{eqn-shapeX1}
 X_1 \in \mathbb{R}^{(64 \times 558 \times 256 \times 1)}
 \end{equation}
 Any other shape will be rejected, and an error is raised.
 
-\paragraph*{}After the input layer holds store the input activations, $X_1$ and tests for the appropriate shape, the array which is a collection of $64$ spectrograms, is passed into the first of three \textit{Convolution Layer Groups}. These layer groups are inspired from the \textit{VGG-16 Neural Network} architecture \textcolor{red}{[citation needed]}. Each convolution layer group in composed of three individual layers: 
+\paragraph*{}After the input layer holds store the input activations, $X_1$ and tests for the appropriate shape, the array which is a collection of $64$ spectrograms, is passed into the first of three \textit{Convolution Layer Groups}. These layer groups are inspired from the \textit{Visual Geometry Group-16 Neural Network} architecture \cite{Goodfellow,Loy}. Each convolution layer group is composed of three individual layers: 
 \begin{enumerate}
 \item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
 \item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
 \item A 2-Dimensional Maximum Pooling layer, $3 \times 3$ pooling size, Identity activation function
 \end{enumerate}  
-The Convolution layers convoluted over the middle two axes of the data (over space and time in the spectrogram). 
+The Convolution layers convolve over the middle two axes of the data. This corresponds to convolving as weighting kernel over the time and frequency axes.
 
-\paragraph*{}By grouping layers in this structure, we use convolution to reduce the number of features, and then the pooling layer to extract only the largest activations of the remaining values. This ensures that in the full spectrogram image, only the dominant features and feature shapes are preserved and passed into the next layer set for processing. This also allows for positional invariance in features. Regardless of where in space or time a feature is detected, the moving kernel will still allow it to be found \cite{Goodfellow,Loy}.
+\paragraph*{}By grouping layers in this structure, we use convolution to reduce the number of features, and then the pooling layer to extract only the largest activations of the remaining values. This drastically reduces the width of each layer before passing the activations down, and ensures that only the dominant features and characteristic shapes are preserved and passed into the next layer set for processing. This also allows for positional invariance in features. Regardless of where in frequency or time a feature is detected, the moving kernel will still allow it to be found \cite{Goodfellow,Loy}.
 
 % ================
 
 \subsubsection{The Perceptron Branch}
 
-\paragraph*{} The Perceptron branch is picture on the right side of Fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in side and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Kahn,Serizel}. \textcolor{blue}{Details on the creating of these features can be found in the \textit{features} section of this document.}
+\paragraph*{} The Perceptron branch is pictured on the right side of Fig. (\ref{fig-NetworkArchitecture}), notice that it is considerably smaller in depths and complexity than it's neighbor. Rather than accept an image-like input, the perception simply takes a $1 \times p$ vector-like input of properties that are derived from the audio file. We call these properties \textit{features} \cite{Geron,Khan,Serizel}. Details on the natures and selectiosn of these $p$ elements are found in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}).
 
-\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-parameter of $64$ samples per batch, and have developed $20$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
+\paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-parameter of $b = 64$ samples per batch, and have developed $p = 24$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
 \label{eqn-shapeX2}
 X_2 \in \mathbb{R}^{(64 \times 20)}
 \end{equation}
-This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other shape will be rejected by the model, and an error is raised.
+This 2D array is referred to as a \textit{design matrix} \cite{James,Loy}. Any other shape will be rejected by the model, and an error is raised.
 
-\paragraph*{}In perceptron models, scaling the design matrix appropriately drastically improves the classification performance. A design matrix is scaled by taking all samples in a column (a particular feature from each class), subtracting the average, and then scaling it such that it has unit variance \cite{Geron,James}. This ensures that no one feature dominates the performance of the model and that layer activations to not get saturated as data progresses through the network.
+\paragraph*{}In perceptron models, the scaling of the design matrix is vital to classification performance. A design matrix is scaled by taking all samples in a column (a particular feature from each class), subtracting the average, and then scaling it such that it has unit variance \cite{Geron,James}. This ensures that no one feature dominates the performance of the model and that layer activations to not get saturated as data progresses through the network.
 
 % ================
 
 \subsubsection{The Final Output Branch}
 
-\paragraph*{}The last layer in each of the two branches is a ReLU-activated Dense layer containing 64 neurons, represented by a $64 \times 1$ column vectors. We combine these model layers by using a \textit{concatenation layer} to fuse the two column vectors together, "vertically", such that the result is a $128 \times 1$ column vector. This vector is then passed into the final dense layer, which used the softmax activation, and encodes the joint predictions based on both model branches. 
+\paragraph*{}The last layer in each of the two branches is a ReLU-activated Dense layer containing 64 neurons, represented by a $1 \times 64$ vectors. We combine these model layers by using a \textit{concatenation layer} to fuse the two column vectors together, "vertically", such that the result is a $1 \times 128$ vector. This vector is then transformed into the final dense layer, which uses the softmax activation, and encodes the joint predictions based on contributions of both model branches. Again, compare this the the concept of two different bodily senses detecting the same object or environment. Information is produced from a single sources, received through multiple senses, but ultimately those experiences are combined in a such a way to produce a single prediction label.
 
 % ================================================================
 % ================================================================
@@ -784,23 +783,40 @@ This 2D is referred to as a \textit{design matrix} \cite{James,Loy}. Any other s
 
 \begin{figure}[H]
 \begin{center}
-\begin{tabular}{||c|c|c||c|c|c||}
+\begin{tabular}{||c|c|c| |c|c|c||}
 \hline
-\textbf{Class Index} & \textbf{Class Name} & \textbf{Count} & \textbf{Class Index} & \textbf{Class Name} & \textbf{Count} \\
+\textbf{Class Index} & \textbf{Class Name} & \textbf{Counts} & \textbf{Class Index} & \textbf{Class Name} & \textbf{Counts} \\
 \hline \hline
-$0$ & Alto Flute & $72$ & & \\ \hline
-$1$ & Alto Saxophone & 128&  \\ \hline
-$2$ & Banjo &
-$3$
-$4$
-$5$
+$0$ & Alto Flute & $72$ 			& $20$ & Marimba & $364$ \\ \hline
+$1$ & Alto Saxophone & $128$ 		& $21$ & Oboe & $666$  \\ \hline
+$2$ & Banjo & $74$ 					& $22$ & Sawtooth Wave & $200$ \\ \hline
+$3$ & Bass & $1060$ 				& $23$ & Tenor Saxophone & $732$ \\ \hline
+$4$ & Bass Clarinet & $1036$ 		& $24$ & Sine Wave & $200$ \\ \hline
+
+$5$ & Bass Flute & $76$ 			& $25$ & Soprano Saxophone & $128$\\ \hline
+$6$ & Bassoon & $800$ 				& $26$ & Square Wave & $200$ \\ \hline
+$7$ & Bass Trombone & $54$ 			& $27$ & Tenor Trombone & $66$ \\ \hline
+$8$ & $B\flat$ Clarinet & $938$ 	& $28$ & Triangle Wave & $200$ \\ \hline
+$9$ & Bells & $164$ 				& $29$ & Trombone & $831$ \\ \hline
+
+$10$ & Violoncello & $1079$ 		& $30$ & $B\flat$ Trumpet & $627$ \\ \hline
+$11$ & Contrabassoon & $710$ 		& $31$ & Tuba & $1046$ \\ \hline
+$12$ & Crotale & $50$ 				& $32$ & Vibraphone & $334$ \\ \hline
+$13$ & $E\flat$ Clarinet & $78$ 	& $33$ & Viola & $1173$ \\ \hline
+$14$ & English Horn & $1382$ 		& $34$ & Violin & $787$ \\ \hline
+
+$15$ & Flute & $1032$ 				& $35$ & Whitenoise & $200$ \\ \hline
+$16$ & Guitar & $106$ 				& $36$ & Xylophone & $176$ \\ \hline
+$17$ & Hihat & $10$ 				& $37$ & & \\ \hline
+$18$ & French Horn & $740$ 			& $38$ & & \\ \hline
+$19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 
 \end{tabular}
 \end{center}
-\caption{Instruments categories used in the classification task. Note that the network uses only integers to indentify sources while the }
+\caption{Instruments categories used in the classification task. Note that the network uses only integers given by "Class index" to indentify sources. The string "Class Name" is keep for human readability}
 \end{figure}
 
-\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instruments by using the \textit{Hornbostel-Sachs} system \textit{red}{Citation needed!}. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) idiophones, (ii) membranophones, (iii) chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
+\paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instruments by using the \textit{Hornbostel-Sachs} organization system. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) idiophones, (ii) membranophones, (iii) chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
 
 
 % ================================================================
@@ -966,7 +982,7 @@ x(t) \approx \sum_{n = 1}^{\infty} \frac{1}{2n-1} \sin \bigg( 2 \pi (2n - 1)f_0 
 \section{Feature Selections}
 \label{sec-Features}
 
-\paragraph*{}Classification tasks require a set of inputs called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. A features is a quantitative, low-dimensional representation of a sample that conveys key characteristics of it. For example, in classifying types of animals, a feature could be the mass, mass volume or number of teeth on the animal. Typically, we produce a set of features $p$ for each sample and assemble them into a $1 \times p$ vector called a \textit{feature vector} which acts as a list of descriptive qualities of the sample \cite{Geron,James}.
+\paragraph*{}Classification tasks require a set of inputs called \textit{predictors} or \textit{features} \cite{James,Loy,Serizel}. A features is a quantitative, low-dimensional representation of a sample that conveys key characteristics of it. For example, in classifying types of animals, a feature could be the mass, volume or number of teeth on the animal. Typically, we produce a set of features $p$ for each sample and assemble them into a $1 \times p$ vector called a \textit{feature vector} which acts as a list of descriptive qualities of the sample \cite{Geron,James}.
 Audio machine learning researchers M. Kashif Saeed Khan and Wasfi G. Al-Khatib discusses the vitality of feature selection \cite{Khan}:
 \begin{quote}
 The data reduction stage which is also called feature extraction, consists of discovering a few important facts about each class. The choice of features is critical as it greatly affects the accuracy of audio classification. 
@@ -981,19 +997,21 @@ An adequate selection features is vital to the process of training and evaluatio
 
 \subsection{Feature Space}
 
-\paragraph*{}From each audio file sample, we derive an identical set of $p$ predictors that will be use for classification. For this multi-modal neural network, the $p$ predictors are arranged into two separated structures, each called a \textit{design matrix}, described in sec. (\ref{subsubsec-DesignMatrix}) \cite{Goodfellow,Geron}.
+\paragraph*{}From each audio file sample, we calculate the same predictors that will be use for classification. The predictors are arranged into two separated structures, each called a \textit{design matrix}, described in sec. (\ref{subsubsec-DesignMatrix}) \cite{Goodfellow,Geron}. Each sample in the design matrix $X_1$ contains $N \times k$ predictors, and the matrix $X_2$ contains $1 \times p$ predictors. For the purposes of exploring the properties of feature space, we consider the $p$ predictors for each sample in $X_2$.
 
-\paragraph*{}Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
+\paragraph*{}Feature space is a $p$ dimensional vector space where each basis vector represents a predictor \cite{Goodfellow,James}. The value that we compute for each predictor is the the value of that component in the space. This means that each sample can be described by this $p$-dimensional vector, given by each row of the design matrix $X_2$. For samples $x^{(a)}$ and $x^{(b)}$ that belong to the same class, we expect the quantity $||x^{(a)} - x^{(b)}||_{2}$ to be reasonably small, indicating that the two sample lie "close together" in space. Similarly, for samples $x^{(c)}$ and $x^{(d)}$ that belong to different classes, we expect the quantity $||x^{(c)} - x^{(d)}||_{2}$ to be comparably large, indicating that the two sample lie "far apart" in space.
+
+\paragraph*{}We can expand this idea by considering by how features should behave within each class, and between each class. Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
 \begin{quote}
 For recognition algorithms, the necessary property of the acoustic features is low variability among features extracted from examples assigned to the same class, and at the same time high variability allowing distinction between features extracted from examples assigned to different classes.
 \end{quote}
-
+This is to say, features should \textit{ideally} form non-overlapping groups or bubbles that allows classifiers to effectively differentiate categories. Given the complexity of real-world problems, this is an often unrealistic goal \cite{Goodfellow,James}. However under the right circumstances, classifiers can still produce parameters that allow for reasonable performance \cite{Geron,Loy}. In practice, a neural network does not rely on comparing the norms of different samples in feature space, but rather uses something called a \textit{decision boundary}.
 
 \subsubsection{Decision Boundaries}
 
 \paragraph*{}A trained classifier makes a prediction in the form of a statistical likelihood of a sample belonging to a particular class \cite{Goodfellow,James}. A $k$- categories classifier contains $k$ output neurons, each one representing a class. When a set of features is presented to the classifier, the value contained within each neuron is the "confidence" on the interval $[0,1]$ that a sample belongs to that class. For example, if neuron $q$ has an activation value of $0.25$, we say that there is a $25\%$ chance that the sample belongs to class $q$. Most commonly, we take the neuron with the highest activation value to be the chosen class, even if the next highest activation is a close second \cite{Loy}. 
 
-\paragraph*{}This concept stems from the idea that when a trained neural network classifier makes a prediction, it is doing so based on a set of generated \textit{decision boundaries} \cite{Geron,James}.
+\paragraph*{}This concept stems from the idea that when a trained neural network classifier makes a prediction, it is doing so based on a set of generated \textit{decision boundaries} \cite{Geron,James}. To explore decision boundaries, consider a simplified 2D feature space.
 
 
 % ================================
@@ -1462,15 +1480,6 @@ FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \end{center}
 \caption{A comparison of the frequency center-of-mass for each class using box-and-whisker plots}
 \end{figure}
-
-% ================================================================
-
-\subsection{Assembling the Design Matrices}
-\label{subsec-AssembleXs}
-
-\textcolor{blue}{I would like to use some figures here to graphically represent how the feature vectors and spectrograms are concatenated into the design matrices. I may help with the geometry of the situation}
-
-
 
 % ================================================================
 % ================================================================
