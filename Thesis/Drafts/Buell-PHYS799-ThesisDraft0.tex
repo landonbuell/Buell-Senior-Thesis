@@ -92,12 +92,10 @@
 \section{Introduction}
 \label{sec-Introduction}
 
-\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}. These signals can take the form of day-to-day topics such as weather measurements, financial reports, or audio-visual media, and extend into disciplines of medicine, physics, and digital signal processing. In all cases, we explore a problem where the task to categorize the sample, or subset of the sample into one of $k$ \textit{bins} called classes \cite{Mierswa,Virtanen,Geron}.
-
-\paragraph*{}For this classification task, we have developed an automated model (called a \textit{classifier}) which can process information from a time-series audio file, and group the file based on it's prediction of what produced the sound in that file. For example, classifying an audio file which contains the waveform of a clarinet sustaining a single note should return the classification prediction of "clarinet" and so forth. This non-trivial task requires developing a model
+\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}. These signals can take the form of day-to-day topics such as weather measurements, financial reports, or audio-visual media, and extend into more niche disciplines of medicine, physics, and digital signal processing. 
 
 
- Developments in computational efficiency and the age of \textit{Big Data} has lead to a staggering increase in the utilization
+\paragraph*{}Recent progress in high performance computing and computational efficiency have given rise to another burst 
 
 % ================================================================
 % ================================================================
@@ -127,6 +125,7 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 \paragraph*{}In order to train the Multimodal neural network to identify musical instrument sources, we need a suitable data set to present to the model as training data. University of Iowa Electronic Music Studio, and the London-Based Philharmonia Orchestra each have a large collection of publicly available audio files \textcolor{blue}{Citations!}. These contain short segments of musical instruments performing a single note or a collection of notes in succession. Each sound file is labeled according to the instrument that is producing that sound.
 
 \paragraph*{}To ensure that these data sets are formatted consistently, we read each sample from it's original format, \textit{.AIF}, \textit{.MP3}, or similar, and rewrite the data as a new \textit{.WAV} files, sampled at 44.1 kHz with a 16 bit depth. This ensures that all data will have a consistent format when features are extracted. This stage is detailed in sec.(\ref{subsubsec-Preprocessing}).
+
 % ================================================================
 
 \subsection{Designing Classification Features}
@@ -249,16 +248,14 @@ Where $W^{(l)} x^{(l-1)}$ denotes a matrix-vector product, and $\big(W^{(l)} * x
 \label{eqn-elementActivation}
 x^{(l)} = \sigma^{(l)} \big[ z^{(l)} \big]
 \end{equation}
-Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-LinearTransform}). $\sigma^{(l)}$ is some activation function which introduces the ability to account for non-linearity in the 
-
-\paragraph*{}The combination of Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-elementActivation}), for a layer $l$ , make up the function represented by that layer, as in Eq. (\ref{eqn-altLayerFunction}). Below, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
+Where $x^{(l)}$ is the final activations for layer $l$ and $z^{(l)}$ is given in equation (\ref{eqn-LinearTransform}). $\sigma^{(l)}$ is some activation function which introduces the ability to account for non-linearity in the decision boundaries. The combination of Eq. (\ref{eqn-LinearTransform}) and Eq. (\ref{eqn-elementActivation}), for a layer $l$ , make up the function represented by that layer, as in Eq. (\ref{eqn-altLayerFunction}). In this, we discuss and describe the types of layer functions that are used to produce the classification model in this project.
 
 % ================================
 
 \subsubsection{Dense Layer}
 \label{subsubsec-DenseLayer}
 
-\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer, was one of the earliest function types used in artificial neural network models \cite{Geron2,Loy,McCulloch}. They are among the most commonly used layer types. A dense layer is composed of a layer of \textit{artificial neurons}, each of which holds a numerical value within it, (usual a double-precision floating point number) called the \textit{activation} of that neuron. This idea was developed from McCulloch and Pitts' work \cite{McCulloch} in attempting to model cognitive processes as mathematical functions, and was expanded upon by Frank Rosenblatt in  1957 by combining many dense layers together to form a multilayer perceptron (MLP) \cite{Geron,Loy,Levine}.
+\paragraph*{}The Linear Dense Layer, often just called a \textit{Dense} Layer, or \textit{Fully-Connected} layer, was one of the earliest and most common function types used in artificial neural network models \cite{Geron2,Loy,McCulloch}. A dense layer is composed of a layer of \textit{artificial neurons}, each of which holds a numerical value within it, (usually a double-precision floating point number) called the \textit{activation} of that neuron. This idea was developed from McCulloch and Pitts' work \cite{McCulloch} in attempting to model cognitive processes as mathematical functions, and was expanded upon by Frank Rosenblatt in  1957 by combining many dense layers together to form a multilayer perceptron (MLP) \cite{Geron,Loy,Levine}.
 
 \paragraph*{}We model a layer of neurons as a vector of floating-point numbers. By convention, the array is an $n$-dimensional column vector, where $n$ is number of nodes in that layer. Suppose a layer $(l)$ contains $n$ artificial neurons- we denote the array that hold those activations as $x^{(l)}$ and is given by:
 \begin{equation}
@@ -297,7 +294,9 @@ or more compactly:
 \label{eqn-DenseFeedForward}
 x^{(l)} = \sigma^{(l)} \Big( W^{(l)} x^{(l-1)} + b^{(l)} \Big)
 \end{equation}
-Eq. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. \textcolor{red}{How Do I finish this section? Uses of Dens layer, physical meaning?} 
+Eq. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. 
+
+\paragraph*{}The dense layer acts as an 
 
 % ================================
 
