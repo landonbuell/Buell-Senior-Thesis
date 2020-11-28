@@ -136,6 +136,7 @@ class AnalyzeModels:
         avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
         
         
+        """
         ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
         ClassifierMetrics.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
@@ -145,7 +146,7 @@ class AnalyzeModels:
         ClassifierMetrics.PlotConfusion(avgHitsWeightedConfMat,self.n_classes,avgHitMatName)
         ClassifierMetrics.PlotConfusion(avgScrsWeightedConfMat,self.n_classes,avgScrMatName)
         os.chdir(homePath)
-        
+        """
 
         # Compute metrics avg. across all classes
         self.ConfusionMatrix = avgStandardConfMat
@@ -237,12 +238,18 @@ class ClassifierMetrics :
             recl[i]+= r                         # add to total
         return recl                             # avg over classes
 
+    def F1Score (self,prec,recl):       
+        """ Compute Micro-F1 Score (per each class) """
+        F1 = 2 * (prec * recl) / (prec + recl)
+        return F1
+
     def MetricScores(self,confMat):
         """ Collect All metric Scores in one arrays """
-        scoreMatrix = np.zeros(shape=(3,self.n_classes))
+        scoreMatrix = np.zeros(shape=(4,self.n_classes))
         scoreMatrix[0] = self.AccuracyScore(confMat)
         scoreMatrix[1] = self.PrecisionScore(confMat)
         scoreMatrix[2] = self.RecallScore(confMat)
+        scoreMatrix[3] = self.F1Score(scoreMatrix[1],scoreMatrix[2])
         return scoreMatrix
 
     ### Include prediction threshold???
