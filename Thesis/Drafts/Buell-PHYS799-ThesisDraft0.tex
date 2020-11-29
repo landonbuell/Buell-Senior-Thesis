@@ -162,15 +162,15 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 \subsection{An Introduction to Neural Networks}
 \label{subsec-NerualNetworkIntro}
 
-\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound recognition, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an solution that allows for a computer to \textit{learn} from labeled training examples in order \textit{teach} itself. One such an algorithm that has been used for this type of task is a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine,Virtanen}.
+\paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound recognition, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an solution that allows for a computer to \textit{learn} from labeled training examples in order \textit{teach} itself \cite{Bishop,Mitchell}. One such an algorithm that has been used for this type of task is a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
 
 \paragraph*{}As the name implies, Early neural networks were inspired from from the human brain. Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
-The result of such an analogy is a computer program that is reminiscent of the a brain in that the program can \textit{learn} in a sense. Where a biological brain uses connections of chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Geron,Levine}. 
+The result of such an analogy is a computer program that is reminiscent of the a brain in that the program can \textit{learn} in a sense. Where a biological brain uses connections of chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Geron,Levine,Bishop}. 
 
-\paragraph*{}When a listener hears a sound, millions of neurons in their brain exchanges those chemical and electrical signals in such a way as to be able to identify the source of that sound \cite{Geron,Virtanen}. More conceptually, we can say that a listener is presented with a set of information $x$, which is air molecules vibrating near their tympanic membrane \cite{White}. That information is then passed into the brain where some function $F$ is used to model the incredibly complex set of neural connections. The output of that function is some label $y$, which the listener associates with a particular source \cite{Olson}. Similarly, we construct a neural network to accept a set of predictors $x$, which is passed into a function $F^*$ that is use to approximate $F$, and produce an output $y^*$, which predicts the source of the audio sample.
+\paragraph*{}When a listener hears a sound, millions of neurons in their brain exchanges those chemical and electrical signals in such a way as to be able to identify the source of that sound \cite{Geron,Virtanen}. More conceptually, we can say that a listener is presented with a set of information $x$, which is air molecules vibrating near their tympanic membrane \cite{White,Olson}. That information is then passed into the brain where some function $F$ is used to model the incredibly complex set of neural connections. The output of that function is some label $y$, which the listener associates with a particular source \cite{Olson}. Similarly, we construct a neural network to accept a set of predictors $x$, which is passed into a function $F^*$ that is use to approximate $F$, and produce an output $y^*$, which predicts the source of the audio sample.
 
 \paragraph*{}A neural network can then be considered as mathematical function that seeks to produce an approximation $F^*$, of some the usually unknown function $F$. The function $F^*$ uses a set of parameters $\Theta$, to map a series of inputs, $x$ (called \textit{features}) to a series of outputs, $y$ (called \textit{predictions}) \cite{Goodfellow,James,Virtanen}. Over the course of their development, humans will be able to learn to match sounds to sources with relative ease, given the appropriate labels. In a similar manner, out neural network is present a collection of sound files and predictors and a complementary set of labels indicating the source of each sound.
 
@@ -294,9 +294,29 @@ or more compactly:
 \label{eqn-DenseFeedForward}
 x^{(l)} = \sigma^{(l)} \Big( W^{(l)} x^{(l-1)} + b^{(l)} \Big)
 \end{equation}
-Eq. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. 
+Eq. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense layer feed-forward equation} \cite{Goodfellow}. Below, we detail pseudo-code for what a "Call" method for a dense layer node in a computational graph may look like \cite{Geron,Tensorflow} Compare this process with Eq. (\ref{eqn-DenseFeedForward}).
 
-\paragraph*{}The dense layer acts as an 
+\begin{algorithm}[H]
+\caption{Typical "Call" method for a dense layer in a neural network that contains $n$ neurons/nodes. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.}
+\label{alg-CallDense}
+
+\begin{algorithmic}
+\REQUIRE $x^{(l-1)} \leftarrow$ Input activations shaped into $(m \times 1)$ column vector
+\REQUIRE $n \leftarrow$ Number of nodes in this dense layer
+\REQUIRE $\sigma^{(l)} \leftarrow$ Activation function for this layer
+\REQUIRE $W \leftarrow$ a $(n \times m)$ matrix of weights
+\REQUIRE $b \leftarrow$ a $(m \times 1)$ vector of bias values
+
+Evaluate linear activation values by computing the standard matrix-vector produce of $W^{(l)}$ and $x^{(l-1)}$:\\
+$z[i] \leftarrow b[i] + \sum_{j=0}^{n-1} W[i,j] x^{(l-1)}[j]$ \\
+Evaluate output activation values by applying the activation function to each element in the linear activation column vector $z$:\\
+$x^{(l)}[i] \leftarrow \sigma^{(l)}\big[ z[i] \big]$ \\
+
+Store both activation arrays for back-propagation. Return the output activations:\\
+\RETURN $x^{(l)}$
+
+\end{algorithmic}
+\end{algorithm}
 
 % ================================
 
@@ -346,12 +366,38 @@ Note that formal implementations include a bias vector and an activation functio
 \paragraph*{}For 2D convolution over input $x^{(l-1)}$ with feature map $W^{(l)}_k$, producing activations $x^{(l)}$, we compute the activations $x^{(l)}_{k}$ as \cite{Goodfellow}
 \begin{equation}
 \label{eqn-ConvFeedForward}
-x^{(l)}_k = \sigma^{(l)}\bigg[ \Big( \sum_{u=0}^{m-1} \sum_{v=0}^{n-1} x^{(l-1)}(i,j) W^{(l)}_k(i - u,j - v) \Big) + b^{(l)}_k \bigg]
+x^{(l)}_k(i,j) = \sigma^{(l)}\bigg[ \Big( \sum_{u=0}^{m-1} \sum_{v=0}^{n-1} W^{(l)}(i,j) x^{(l-1)}_k(i - u,j - v) \Big) + b^{(l)}_k \bigg]
 \end{equation}
-\textcolor{red}{Please check my math here!}
 This operation repeats for each of the $K$ feature maps. Each maps has it's own $n \times m$ weighting matrix and appropriately shaped bias .
 
-\paragraph*{}The convolution layers allows for several advantages. Among these are (i) \textit{sparse-connectivity}: not every single activation (pixel) is connect to every single output pixel, so it is more computationally efficient, (ii) \textit{positional invariance}: key features can be identified regardless of where they are in the layer, and (iii.) \textit{Automatic feature detection} as the training process will update the filters to identify dominant features in the data without human instruction \cite{Geron,Goodfellow,Loy}.
+\paragraph*{}The convolution layers allows for several advantages. Among these are (i) \textit{sparse-connectivity}: not every single activation (pixel) is connect to every single output pixel, so it is more computationally efficient, (ii) \textit{positional invariance}: key features can be identified regardless of where they are in the layer, and (iii.) \textit{Automatic feature detection} as the training process will update the filters to identify dominant features in the data without human instruction \cite{Geron,Goodfellow,Loy}. Below we detail what the "Call" method for a 2-dimensional convolutional neural network may look like. Compare this procedure with Eq. (\ref{eqn-ConvFeedForward}).
+
+\begin{algorithm}[H]
+\caption{Typical "Call" method for a 2-Dimensional Convolutional layer in a neural network that uses $K$ filters, of $n \times m$ kernels, with an assumed stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.}
+\label{alg-CallConv2D}
+
+\begin{algorithmic}
+\REQUIRE $x^{(l-1)} \leftarrow$ Input activations shaped into $(N \times M)$ matrix
+\REQUIRE $K \leftarrow$ The number of filters (feature maps) to be used.
+\REQUIRE $\sigma \leftarrow$ Activation function for this layer
+\REQUIRE $W_{k} \leftarrow$ a $(n \times m)$ matrix of weights 
+(called a weighting kernel in this case), $k \in [0,...,k-1]$
+\REQUIRE $b_{k} \leftarrow$ a $(m \times 1)$ vector of bias values, $k \in [0,...,k-1]$ \\
+
+\FOR {Each feature map, $k \in [0,1,2,...,k-2,k-1]$}
+	\item Evaluate linear activation values by computing the 2D convolution-product of 
+	$W_{k}$ and $x^{(l-1)}_{k}$:\\
+	\item $z_{k}[i,j] \leftarrow b_{k} + 
+	\sum_{i=0}^{N-1}\sum_{j=0}^{M-1} W_{k}[u,v] x^{(l-1)}_{k}[u-i,v-j]$ \\
+	\item Evaluate output activation values by applying the activation function to each element in the linear activation 			matrix $z$:\\
+	$x^{(l)}_{k}[i,j] \leftarrow \sigma\big[ z_{k}[i,j] \big]$ \\
+\ENDFOR
+
+Store both activation arrays for back-propagation. Return the output activations from each of the $K$ filters:\\
+\RETURN $x^{(l)}$
+
+\end{algorithmic}
+\end{algorithm}
 
 % ================================
 
@@ -360,11 +406,12 @@ This operation repeats for each of the $K$ feature maps. Each maps has it's own 
 
 \paragraph*{}A Maximum Pooling layers simply returns the maximum neuron activation in a group of neurons. In the case of 2D Max Pooling, we choose a kernel size to be $m \times n$, just like in the 2D Convolution layer, and extract the maximum value in each window, and then step along accrdoing to the chosen stride size \cite{Loy,Goodfellow}.As an example, consider again figure (\ref{fig-2DConvExample}a). Using the $2 \times 2$ kernel on the $3 \times 4$ input, each box would then contain the maximum value of the input activations. We detail this in Fig. (\ref{fig-2DMaxPool}):
 \begin{figure}[h]
-\label{fig-2DMaxPool}
+
 \begin{center}
 \includegraphics[scale=0.6]{../figures/2DConvExample(d)}
 \end{center}
 \caption{The result of 2D maximum-pooling an input array. This image was adapted from Loy, pg. 126 \cite{Loy}}
+\label{fig-2DMaxPool}
 \end{figure} 
 
 \paragraph*{}Pooling layers, such as maximum pooling, average pooling, or similar are typically placed after a layer or a set of layers of convolution. The purpose of this arrangement is to reduce the number of weights, thereby dropping the complexity of the model and ensuring only features with large activation values are preserved \cite{Geron,Loy,Goodfellow}.
@@ -479,7 +526,7 @@ The arrays $W^{(l)}$and bias vectors $b^{(l)}$ are not trainable parameters them
 
 \paragraph*{}To quantify the difference between the model's prediction, $y^*$ and the expected output, $y$, we introduce a \textit{cost function}, $J(y^*,y)$, to the model \cite{Goodfellow,James}. The cost function, also called a \textit{loss} or \textit{objective} function, compares the neural networks output, $y^*$ and the expected output $y$. It returns a single floating-point number which measures the \textit{poorness} of the prediction. A high cost value indicates a \textit{poor} prediction, and a low cost indicates a reasonable prediction. 
 
-\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use the \textit{Categorical Crossentropy} (CXE) cost function. For a sample labeled by the one-hot-encoded vector $y$ and corresponding prediction vector $y^*$, the CXE cost for a single sample is given by \cite{Goodfellow,Virtanen}:
+\paragraph*{}$J(y^*,y)$ can take many forms and is often dependent on particular task or data set provided \cite{James}. For this $k$-classes classification task, we choose to use the \textit{Categorical Crossentropy} (CXE) cost function. For a sample labeled by the one-hot-encoded vector $y$ and corresponding prediction vector $y^*$, the CXE cost for a single sample is given by \cite{Goodfellow,Virtanen,Bishop}:
 \begin{equation}
 \label{eqn-CXELoss}
 \text{CXE}\big[ y , y^* \big] = - \sum_{i=0}^{k-1} y_i \ln(y^*_i) 
@@ -506,7 +553,7 @@ Thus the sum in Eq. (\ref{eqn-CXELoss}) contains mostly zero terms, with the onl
 \label{fig-CXELoss}
 \end{figure}
 
-\paragraph*{}By optimizing the parameters $\Theta$ in the network model, we allow for the output of a consistently low cost function to be produced across all samples in the data set. When a model produces consistently low cost values across new unseen samples, we consider this to be a \textit{trained} or \textit{fit} model \cite{Goodfellow}.
+\paragraph*{}By optimizing the parameters $\Theta$ in the network model, we allow for the output of a consistently low cost function to be produced across all samples in the data set. When a model produces consistently low cost values across new unseen samples, we consider this to be a \textit{trained} or \textit{fitted} model \cite{Goodfellow,Loy,Mitchell}.
 
 % ================================
 
@@ -998,7 +1045,7 @@ An adequate selection features is vital to the process of training and evaluatio
 
 \paragraph*{}From each audio file sample, we calculate the same predictors that will be use for classification. The predictors are arranged into two separated structures, each called a \textit{design matrix}, described in sec. (\ref{subsubsec-DesignMatrix}) \cite{Goodfellow,Geron}. Each sample in the design matrix $X_1$ contains $N \times k$ predictors, and the matrix $X_2$ contains $1 \times p$ predictors. For the purposes of exploring the properties of feature space, we consider the $p$ predictors for each sample in $X_2$.
 
-\paragraph*{}Feature space is a $p$ dimensional vector space where each basis vector represents a predictor \cite{Goodfellow,James}. The value that we compute for each predictor is the the value of that component in the space. This means that each sample can be described by this $p$-dimensional vector, given by each row of the design matrix $X_2$. For samples $x^{(a)}$ and $x^{(b)}$ that belong to the same class, we expect the quantity $||x^{(a)} - x^{(b)}||_{2}$ to be reasonably small, indicating that the two sample lie "close together" in space. Similarly, for samples $x^{(c)}$ and $x^{(d)}$ that belong to different classes, we expect the quantity $||x^{(c)} - x^{(d)}||_{2}$ to be comparably large, indicating that the two sample lie "far apart" in space.
+\paragraph*{}Feature space is a $p$ dimensional vector space where each basis vector represents a predictor \cite{Goodfellow,James}. Each sample can be described by this $p$-dimensional vector, given by each row of the design matrix $X_2$. For samples $x^{(a)}$ and $x^{(b)}$ that belong to the same class, we expect the quantity $||x^{(a)} - x^{(b)}||_{2}$ to be reasonably small, indicating that the two sample lie "close together" in space. Similarly, for samples $x^{(c)}$ and $x^{(d)}$ that belong to different classes, we expect the quantity $||x^{(c)} - x^{(d)}||_{2}$ to be comparably large, indicating that the two sample lie "far apart" in space. Not that this is an idealization, and not always the defining case for the decision behavior.
 
 \paragraph*{}We can expand this idea by considering by how features should behave within each class, and between each class. Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features must be chosen \cite{Virtanen}:
 \begin{quote}
@@ -1007,27 +1054,63 @@ For recognition algorithms, the necessary property of the acoustic features is l
 This is to say, features should \textit{ideally} form non-overlapping groups or bubbles that allows classifiers to effectively differentiate categories. Given the complexity of real-world problems, this is an often unrealistic goal \cite{Goodfellow,James}. However under the right circumstances, classifiers can still produce parameters that allow for reasonable performance \cite{Geron,Loy}. In practice, a neural network does not rely on comparing the norms of different samples in feature space, but rather uses something called a \textit{decision boundary}.
 
 \subsubsection{Decision Boundaries}
+\label{subsubsec-Decision}
 
 \paragraph*{}A trained classifier makes a prediction in the form of a statistical likelihood of a sample belonging to a particular class \cite{Goodfellow,James}. A $k$- categories classifier contains $k$ output neurons, each one representing a class. When a set of features is presented to the classifier, the value contained within each neuron is the "confidence" on the interval $[0,1]$ that a sample belongs to that class. For example, if neuron $q$ has an activation value of $0.25$, we say that there is a $25\%$ chance that the sample belongs to class $q$. Most commonly, we take the neuron with the highest activation value to be the chosen class, even if the next highest activation is a close second \cite{Loy}. 
 
-\paragraph*{}This concept stems from the idea that when a trained neural network classifier makes a prediction, it is doing so based on a set of generated \textit{decision boundaries} \cite{Geron,James}. To explore decision boundaries, consider a simplified 2D feature space.
+\paragraph*{}This concept stems from the idea that when a trained neural network classifier makes a prediction, it is doing so based on a set of generated \textit{decision boundaries} \cite{Geron,James}. To explore decision boundaries, consider a simplified \textit{toy data set} with a 2D feature space for a classifier that must only discern between \textit{Class A} and \textit{Class B}. We can visualize each sample in this 2D space, and color-code (and shape-code) each sample according according to it's class label as in Fig. (\ref{fig-LinSep1}).
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{../MakeFigures/LinearSeparable1}
+\end{center}
+\caption{Feature Space with Linear separability between two classes}
+\label{fig-LinSep1}
+\end{figure} 
+
+\paragraph*{}In the case of these chosen, features, we can see a clear, well-defined separation between samples in each class. In practice, this is rarely the case, but shows graphically an example where a linear decision boundary arises \cite{James}. Notice how we can also use "box-and-whisker plots" to neatly summarize how each feature (each component) behaves by dividing the samples for each class based into quartiles. Notice how on the right of Fig.(\ref{fig-LinSep1}) the box plots for feature 2 show no overlap, but the box plots for feature 1, at the top show very similar behavior between classes. Despite this, a classifier can produce a clean boundary to separate the two classes. Note that this may not be the exact boundary used by a model, but it represents an ideal case.
+
+\paragraph*{}We can also explore an example where both features have mutual overlap between classes, but we can still form a reasonable decision boundary in the space. Consider Fig. (\ref{fig-LinSep2}) and Fig. (\ref{fig-LinNonSep}). In both cases, we see the box plot for each feature overlap considerably, and we also see sample that appear to "cross" the decision boundary. This crossing the boundary is why it is so useful that we choose an activation function that encode the output of the neural network as a probability of being in either class as opposed to a hard prediction \cite{Loy,Geron}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{../MakeFigures/LinearSeparable2}
+\end{center}
+\caption{Feature Space with near linear separability between two classes}
+\label{fig-LinSep2}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{../MakeFigures/LinearNonSeparable}
+\end{center}
+\caption{Feature Space with near linear non-separability between two classes}
+\label{fig-LinNonSep}
+\end{figure}
+
+\paragraph*{}Samples that appear very near to decision boundary will likely have almost equal probability of occurring in either class, and samples that appear very far from the decision boundary will likely have very much larger probability of occurring in one class or the other \cite{Bishop,James}. 
+
+\paragraph*{}Note that these are over-idealized cases, constrained to two classes in two dimensions. The classifier implemented in this project uses $24$ classes in a single branch and outlines a probabilty estimate over $37$ classes. Given the related nature of many of the categories, (i.e. belonging to similar Hornbostel-Sachs groups), such well-defined decision boundaries are unlikely to be produced. Note also that the examples provided showed only \textit{linear} boundaries, where the inclusion of non-linear activation functions will create far more complex systems in a far higher-dimensional space.
+
+\paragraph*{}From these examples, we conclude the mathematical nature of features allow each sample to be characterized by a vector in $p$-dimensional feature-space\cite{Goodfellow}. We expect feature of the same class to exhibit similar behaviors as to allow a trained classifier to develop multiple decision boundaries in the higher-dimensional space \cite{James,Bishop}. As a consequence, we derive the predictors from the physical mechanical nature of each instrument or sound-source.
 
 % ================================
 
 \subsubsection{The Design Matrix}
 \label{subsubsec-DesignMatrix}
 
-\paragraph*{}From each training audio file, we produce a spectrogram matrix explored in sec. (\ref{subsec-Spectrogram}) and a feature vector, as well as a target label for training purpose. From a collection of multiple samples, the spectrograms are concatenated into a single object $X_1$, and the feature vectors are concatenated into an object, $X_2$. Each objects is a multidimensional array called a \textit{design matrix} \cite{Geron,Goodfellow,Loy,Zerizel}. For any machine learning task, a  design matrix is an object that contains real floating-point numbers that store the features in a convenient way for the neural network to digest. For this hybrid neural-network, we use two matrices, $X_1$ and $X_2$, each containing data from $b$ audio file samples. Each has shape given by:
+\paragraph*{}Each audio sample is given by an $N \times k$ spectrogram matrix explored in sec. (\ref{subsec-Spectrogram}), a $1 \times p$ feature vector, and a target label, $y$ for training purpose. As explored in sec. (\ref{subsubsec-Decision}), each sample can be associated with a vector in feature-space. In order to efficiently present the information to the model for training or predicting, we extract a batch of $b$ samples and produce the two arrays form each.
+
+\paragraph*{}Since the spectrogram and feature vector represent different \textit{modalities}, we construct two separate \textit{design matrices}, $X_1$ and $X_2$ \cite{Geron,Li,Ngiam}. Each has shape given by:
 \begin{equation}
 \label{eqn-X1Shape}
-X_1 \in \mathbb{R}^{(b \times N' \times k)}
+X_1 \in \mathbb{R}^{(b \times N \times k)}
 \end{equation}
 \begin{equation}
 \label{eqn-X2Shape}
 X_2 \in \mathbb{R}^{(b \times p)}
 \end{equation}
-Where $N' \times k$ gives the shape of the spectrogram matrix $S$ from a single sample, described in sect. (\ref{subsec-spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in sec. (\ref{subsec-time}) and sec.(\ref{subsec-frequency}). The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. 
+Where $N \times k$ gives the shape of the spectrogram matrix $S$ from a single sample, described in sect. (\ref{subsec-spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in sec. (\ref{subsec-time}) and sec.(\ref{subsec-frequency}). The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. Organizing the samples in this fashion allows for both easy machine and human interpretation of each axis or index.
 
 \paragraph*{}A design matrix is typically accompanied by a \textit{target matrix} $Y$, which indicates the class that the particular sample belongs to. For a classifier with $\kappa$ classes, each sample labeled by a one-hot-encoded vector for shape $1 \times \kappa$ \cite{Tensorflow,Loy}. Thus, for the design matrices $X_1$ and $X_2$, we have a corresponding target matrix given by:
 \begin{equation}
@@ -1054,6 +1137,8 @@ Note that different projects may require a different set of requirement from pre
 \item All audio is sampled at $44,100$ Hz and \textcolor{blue}{Bit depth needed - 16? 24?}
 \item All audio has been down-mixed into mono-channel waveforms.
 \end{enumerate}
+
+\paragraph*{}Given these standardization methods, we can exact the predictors for each sample and explore how they behave mathematically, and what they represent physically.
 
 % ================================================================
 
@@ -1147,7 +1232,7 @@ We show the effect of a Hanning window on an analysis frame:
 \subsubsection{Discrete Fourier Transform}
 \label{subsubsec-DFT}
 
-\paragraph*{}With this final change, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross,Virtanen}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space signal containing $N$ samples
+\paragraph*{}With this final change, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross,Virtanen}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space signal containing $N$ samples is given by \cite{Taylor,Virtanen}
 \begin{equation}
 \label{eqn-DFTMatrix}
 \mathbb{W} = \frac{1}{\sqrt{N}}
@@ -1744,6 +1829,9 @@ we produce a neural network \textit{ChaoticSynthClassifier} and train it on the 
 \begin{thebibliography}{9}
 \bibliographystyle{apalike}
 
+\bibitem{Bishop}
+Bishop, Christopher M. \textit{Pattern Recognition and Machine Learning}. Springer New York, 2016. 
+
 \bibitem{Geron}
 Geron, Aurelien. \textit{Hands-on Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems}. O'Reilly, 2017.
 
@@ -1810,7 +1898,7 @@ Short, K. and Garcia R.A. 2006. "Signal Analysis Using the Complex Spectral Phas
 \bibitem{Taylor}
 “Continuum Mechanics.” \textit{Classical Mechanics}, by John Robert Taylor, University Science Books, 2005, pp. 681–738. 
 
-\bibitem{Tenorflow}
+\bibitem{Tensorflow}
 TensorFlow: Large-scale machine learning on heterogeneous systems,
 2015. Software available from tensorflow.org.
 
