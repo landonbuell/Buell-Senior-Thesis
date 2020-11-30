@@ -4,13 +4,16 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0a229545-9c85-4053-b7d1-3517821b6e76</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ClassifierPerceptron.py</StartupFile>
+    <StartupFile>ClassifierPerceptronMain.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>ClassifierPerceptron</Name>
     <RootNamespace>ClassifierPerceptron</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <CommandLineArguments>"C:\\Users\\Landon\\Documents\\GitHub\Buell-Senior-Thesis\\SignalClassifier\\Target-Data" "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Output-Data"  "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Model-Data" "train-predict" "TestMLPAlpha" True</CommandLineArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +24,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ClassifierPerceptron.py" />
+    <Compile Include="ClassifierPerceptronMain.py" />
+    <Compile Include="FeatureUtilities.py" />
+    <Compile Include="MachineLearningUtilities.py" />
+    <Compile Include="MathUtilities.py" />
+    <Compile Include="ModeUtilities.py" />
+    <Compile Include="NeuralNetworkUtilities.py" />
+    <Compile Include="PlottingUtilities.py" />
+    <Compile Include="SystemUtilities.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
