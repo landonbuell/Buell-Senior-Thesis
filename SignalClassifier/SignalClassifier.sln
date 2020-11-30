@@ -7,6 +7,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierHybrid", "Classif
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ClassifierPerceptron", "ClassifierPerceptron\ClassifierPerceptron.pyproj", "{0A229545-9C85-4053-B7D1-3517821B6E76}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ConvolutionClassifier", "ConvolutionClassifier\ConvolutionClassifier.pyproj", "{17A7AE89-3B12-45DE-9C1A-197230620967}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{6CBEC399-1331-4A41-BDA4-13F8118BEAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A229545-9C85-4053-B7D1-3517821B6E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A229545-9C85-4053-B7D1-3517821B6E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17A7AE89-3B12-45DE-9C1A-197230620967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17A7AE89-3B12-45DE-9C1A-197230620967}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
