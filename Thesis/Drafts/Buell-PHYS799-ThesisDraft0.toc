@@ -64,11 +64,13 @@
 \contentsline {subsubsection}{\numberline {6.2.1}Confusion Matrix}{56}% 
 \contentsline {subsubsection}{\numberline {6.2.2}Precision Score}{57}% 
 \contentsline {subsubsection}{\numberline {6.2.3}Recall Score}{58}% 
-\contentsline {subsubsection}{\numberline {6.2.4}Micro F1-Score}{58}% 
-\contentsline {subsubsection}{\numberline {6.2.5}Accuracy Score \&}{58}% 
+\contentsline {subsubsection}{\numberline {6.2.4}F1-Score}{58}% 
+\contentsline {subsubsection}{\numberline {6.2.5}Accuracy Score}{59}% 
 \contentsline {subsection}{\numberline {6.3}Tracking Metrics over a Period of Training}{59}% 
-\contentsline {paragraph}{}{59}% 
-\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{60}% 
-\contentsline {section}{\numberline {7}Experimental Results}{61}% 
-\contentsline {section}{\numberline {8}Conclusion}{62}% 
-\contentsline {section}{\numberline {9}Acknowledgments}{63}% 
+\contentsline {paragraph}{}{60}% 
+\contentsline {subsection}{\numberline {6.4}Boosted Aggregation}{61}% 
+\contentsline {section}{\numberline {7}Experimental Results}{62}% 
+\contentsline {subsection}{\numberline {7.1}Executing Cross Validation}{62}% 
+\contentsline {subsection}{\numberline {7.2}\IeC {\textbullet }}{65}% 
+\contentsline {section}{\numberline {8}Conclusion}{66}% 
+\contentsline {section}{\numberline {9}Acknowledgments}{67}% 

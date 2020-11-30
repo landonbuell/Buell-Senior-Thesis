@@ -68,14 +68,26 @@ class AnalyzeModels:
                 pathList.append(fullPath)
         return pathList
 
-    def ExportMetrics(self,outputPath):
+    def ExportMetricsBySplit(self,outputPath):
         """ Export Metrics Array to Local path """
-        colNames = ["Accuracy","Precision","Recall"]
+        colNames = ["Accuracy","Precision","Recall","F1"]
         outputFrame = pd.DataFrame(data=None,index=None)
         outputFrame["CLF"] = [x.split("\\")[-1] for x in self.predictionFiles]
+        outputArray = np.average(self.metricsArray,axis=-1)
         for i in range(len(colNames)):
-            outputFrame[colNames[i]] = self.metricsArray[:,i]
-        outputPath = os.path.join(outputPath,self.outputFile)
+            outputFrame[colNames[i]] = outputArray[:,i]
+        outputPath = os.path.join(outputPath,"BySplit"+self.outputFile)
+        outputFrame.to_csv(outputPath,index=False)
+
+    def ExportMetricsByClass(self,outputPath):
+        """ Export Metrics Array to Local path """
+        colNames = ["Accuracy","Precision","Recall","F1"]
+        outputFrame = pd.DataFrame(data=None,index=None)
+        outputFrame["Class"] = [x for x in range(self.n_classes)]
+        outputArray = np.average(self.metricsArray,axis=0)
+        for i in range(len(colNames)):
+            outputFrame[colNames[i]] = outputArray[i]
+        outputPath = os.path.join(outputPath,"ByClass"+self.outputFile)
         outputFrame.to_csv(outputPath,index=False)
 
     def __Call__(self,exptPath):
@@ -86,16 +98,16 @@ class AnalyzeModels:
         self.classDictionary = self.GetKeywordFiles("Categories")[-1]
         homePath = os.getcwd()
 
-        nRows = len(self.predictionFiles)
-        nCols = 3
-        self.metricsArray = np.empty(shape=(nRows,nCols))
+        nFiles = len(self.predictionFiles)
+        nMetrics = 4
+        self.metricsArray = np.empty(shape=(nFiles,nMetrics,self.n_classes))
 
         # Initialize 3 Average Confusion matrices
         avgStandardConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
         avgHitsWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
         avgScrsWeightedConfMat = np.zeros(shape=(self.n_classes,self.n_classes))
 
-        # Iterate through predictions
+        # Iterate through each file
         for i,predFile in enumerate(self.predictionFiles):
 
             # Gather all metrics for each Classfier
@@ -103,12 +115,8 @@ class AnalyzeModels:
             labels = data["Int Label"].to_numpy()
             predns = data["Int Prediction"].to_numpy()
             scores = data["Confidence"].to_numpy()
-            ComputeMetrics = ClassifierMetrics(self.n_classes,labels,predns,scores) 
 
-            # Create & Names for Confusion matrices
-            stdMatName =  self.modelName + str(i) + " Standard Confusion"
-            hitsMatName =  self.modelName + str(i) + " Hits Weighted Confusion"
-            scrsMatName =  self.modelName + str(i) + " Score Weighted Confusion"
+            ComputeMetrics = ClassifierMetrics(self.n_classes,labels,predns,scores) 
 
             # Create the matricies
             standardConfMat = ComputeMetrics.StandardConfusion()
@@ -116,9 +124,7 @@ class AnalyzeModels:
             scrsWghtConfMat = ComputeMetrics.ScoreWeightedConfusion()
 
             # Compute Metrics for this split
-            
             metrics = ComputeMetrics.MetricScores(standardConfMat)
-            metrics = np.mean(metrics,axis=1)
             self.metricsArray[i] = metrics
 
             # Add To average Conf Mats
@@ -127,30 +133,27 @@ class AnalyzeModels:
             avgScrsWeightedConfMat += scrsWghtConfMat
 
         # scale Avg Conf Mats
-        avgStandardConfMat /= nRows
-        avgHitsWeightedConfMat /= nRows
-        avgScrsWeightedConfMat /= nRows
+        avgStandardConfMat /= nFiles
+        avgHitsWeightedConfMat /= nFiles
+        avgScrsWeightedConfMat /= nFiles
 
         avgStdMatName =  self.modelName + " Avg Standard Confusion"
         avgHitMatName =  self.modelName + " Avg Hits Weighted Confusion"
         avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
         
-        
-        """
-        ClassifierMetrics.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
-        ClassifierMetrics.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
-        ClassifierMetrics.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
+
+        ExportAndPlot.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
+        ExportAndPlot.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
+        ExportAndPlot.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
 
         os.chdir(exptPath)
-        ClassifierMetrics.PlotConfusion(avgStandardConfMat,self.n_classes,avgStdMatName)
-        ClassifierMetrics.PlotConfusion(avgHitsWeightedConfMat,self.n_classes,avgHitMatName)
-        ClassifierMetrics.PlotConfusion(avgScrsWeightedConfMat,self.n_classes,avgScrMatName)
+        ExportAndPlot.PlotConfusion(avgStandardConfMat,self.n_classes,avgStdMatName,False)
+        ExportAndPlot.PlotConfusion(avgHitsWeightedConfMat,self.n_classes,avgHitMatName,False)
+        ExportAndPlot.PlotConfusion(avgScrsWeightedConfMat,self.n_classes,avgScrMatName,False)
         os.chdir(homePath)
-        """
 
         # Compute metrics avg. across all classes
-        self.ConfusionMatrix = avgStandardConfMat
-       
+        self.ConfusionMatrix = avgStandardConfMat       
         return self
 
 class ClassifierMetrics :
@@ -208,10 +211,12 @@ class ClassifierMetrics :
     def AccuracyScore (self,confMat):
         """ Compute Recall Score of Data """    
         accy = np.zeros(shape=self.n_classes)   # store accuracy scores
+        sumRow = np.sum(confMat,axis=1)         # sum across rows
+        sumCol = np.sum(confMat,axis=0)         # sum across cols
+        sumDiag = np.sum([confMat[j,j] for j in range(self.n_classes)])
         for i in range(self.n_classes):         # number of classes
-            accy[i] = confMat[i,i]              # True pos.
-        _sum = np.sum(confMat)
-        accy /= _sum                            # divide by all predictions
+            diag = confMat[i,i]                 # diagonal element
+            accy[i] = sumDiag / (sumRow[i] + sumCol[i] + sumDiag - 2*diag)
         return accy                             # return accuracy
 
     def PrecisionScore(self,confMat):
@@ -240,7 +245,8 @@ class ClassifierMetrics :
 
     def F1Score (self,prec,recl):       
         """ Compute Micro-F1 Score (per each class) """
-        F1 = 2 * (prec * recl) / (prec + recl)
+        delta = 1e-8
+        F1 = 2 * (prec * recl) / (prec + recl + delta)
         return F1
 
     def MetricScores(self,confMat):
@@ -252,7 +258,8 @@ class ClassifierMetrics :
         scoreMatrix[3] = self.F1Score(scoreMatrix[1],scoreMatrix[2])
         return scoreMatrix
 
-    ### Include prediction threshold???
+class ExportAndPlot :
+    """ Methods to Export and Plot Data """
 
     @staticmethod
     def PlotConfusion(X,n_classes,title="",show=True,save=True):
@@ -265,26 +272,6 @@ class ClassifierMetrics :
         plt.tight_layout()
         if save == True:
             plt.savefig(title.replace(" ","_")+".png")
-        if show == True:
-            plt.show()
-        plt.close()
-        return None
-
-
-    @staticmethod
-    def PlotMetricsForClass(X,namesave="",show=True,save=True):
-        """ Plot Accuracy, Precision, Recall for A Given Class """
-        plt.figure(figsize=(8,6))
-        plt.bar(["Accuracy","Precision","Recall"],height=X,
-                width=0.4,color=['r','g','b'])
-
-        plt.yticks(np.arange(0,1.1,0.1),size=20,weight='bold')
-        plt.xticks(size=20,weight='bold')
-
-        plt.grid()
-        plt.tight_layout()
-        if save == True:
-            plt.savefig(namesave.replace(" ","_")+".png")
         if show == True:
             plt.show()
         plt.close()

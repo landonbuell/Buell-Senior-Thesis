@@ -661,8 +661,8 @@ Where $z^{(l)}$ are the linear activations defined in Eq. (\ref{eqn-LinearTransf
 
 
 \begin{algorithm}[H]
-\caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.}
-\label{algBackProp}
+\caption{Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit{for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays in a given layer $(l)$. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.}
+\label{alg-BackProp}
 
 \begin{algorithmic}
 \REQUIRE Cost/Objective function $J$.
@@ -673,7 +673,7 @@ Execute forward pass in algorithm (\ref{alg-FeedForward}) and compute the gradie
 $dx \leftarrow \nabla_{(y^*)}J(y,y^*)$ \\
 Initialize $\nabla J$ as output object, should have same shape as $\Theta$
 
-\FOR {$L-1,L-2,...,2,1$}
+\FOR {$l \in [L-1,L-2,...,2,1]$}
 	\item Compute gradient w.r.t pre-nonlinear activation portion of layer function
 	\item $dx^{(l)} \leftarrow \nabla_{Z^{(l)}}J = dx^{(l)} \odot \partial\sigma^{(l)}[ Z^{(l)} ]$
 	\item Compute gradient w.r.t weighting and bias elements
@@ -726,8 +726,8 @@ r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^i} \\
 \begin{algorithmic}
 \REQUIRE Step size $\alpha$
 \REQUIRE Small constant $\delta$ for numerical stabilization, usually about $10^{-7}$.
-\REQUIRE constants $\rho_1$, $\rho_2$ used got exponential decay rates, usually $0.9$ and $0.999$ respectively.
-\REQUIRE Subroutine/function to compute gradient of cost function.
+\REQUIRE Constants $\rho_1$, $\rho_2$ used track exponential decay rates, usually $0.9$ and $0.999$ respectively.
+\REQUIRE Subroutine/function to compute gradient of cost function See Alg. (\ref{alg-BackProp})
 \REQUIRE Mini-batch size, $m$
 \REQUIRE Stopping criterion $S$
 
@@ -804,7 +804,7 @@ The Convolution layers convolve over the middle two axes of the data. This corre
 \paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-parameter of $b = 64$ samples per batch, and have developed $p = 24$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
 \label{eqn-shapeX2}
-X_2 \in \mathbb{R}^{(64 \times 20)}
+X_2 \in \mathbb{R}^{(64 \times 24)}
 \end{equation}
 This 2D array is referred to as a \textit{design matrix} \cite{James,Loy}. Any other shape will be rejected by the model, and an error is raised.
 
@@ -860,6 +860,7 @@ $19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 \end{tabular}
 \end{center}
 \caption{Instruments categories used in the classification task. Note that the network uses only integers given by "Class index" to indentify sources. The string "Class Name" is keep for human readability}
+\label{fig-ClassList}
 \end{figure}
 
 \paragraph*{}Rather than explore each class individually, we can examine the properties of groupings of musical instruments by using the \textit{Hornbostel-Sachs} organization system. In this syetem, musical instruments or sound sources can be divided up into four broad categories based on the nature of the sound-producing material. These categories are (i) idiophones, (ii) membranophones, (iii) chordophones, and (iv) aerophones. In this section, we explore the mechanical properties of each group and show how the physics of the source instrument influences our feature choice.
@@ -1341,7 +1342,7 @@ Where $Q$ gives the number of sample sin each analysis frame (number of sample s
 
 \subsubsection{Zero Crossing Rate}
 
-\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform \cite{Kahn,Liu,Zhang} that musical instruments do. 
+\paragraph*{}The zero crossing rate (ZXR) of a signal or frame is use to measure how many times that a signal crosses it's equilibrium point. This can be computed per total sound wave, per analysis-frame, or per unit time. This feature is most commonly associated with differentiating speech from music, because speech presents a more jagged and often less periodic waveform that musical instruments do \cite{Khan,Liu,Zhang} . 
 
 \paragraph*{}We adapt this feature to \textbf{compute the zero crossing rate for the full waveform}. Signals with a high ZXR can be representative of classes that often have additional noise and signals with a low ZXR, can indicate signals with more stable, periodic behavior. The ZXR for the full waveform $s$ is given by \cite{Serizel,Liu}
 \begin{equation}
@@ -1457,7 +1458,7 @@ For each feature, we detail the physical significance and provide a visualizatio
 
 \paragraph*{}MEl Filter Bank Energies are not used directly as features, but are used in computing Mel Frequency Cepstrum Coefficient (MFCC's) so we describe them here. Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping bins \cite{Sahidullah,Serizel}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, covering a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
 
-\paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Kahn}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Kahn}:
+\paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Khan}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Kahn}:
 \begin{equation}
 \label{eqn-HztoMel}
 M_f[h] = 2595 \log_{10}\big(1+ \frac{h}{700}\big)
@@ -1663,7 +1664,7 @@ Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indi
 
 \paragraph*{}In addition to the standard confusion matrix, we can also weight entries by prediction score. Rather than adding $+1$ to each entry $C_{i,j}$ where appropriate, we instead add the \textit{probability} value, which is bounded $[0,1]$ (See softmax activation function in sec. \ref{subsubsec-Softmax})). This allows us to bake in the predictive \textit{confidence} into the confusion matrix. For example, two correct predictions with a score $0.2$ are weighted equally to a single incorrect prediction of $0.4$. This is useful for identifying a classifier that makes correct predictions, but only by smaller threshold. This can almost be through of as assigning "partial credit" to each prediction.
 
-\paragraph*{}However, it is more useful to weight the confusion matrix according to class occurrence. For example, if we had a $2 \times 2$ matrix with entries $100$ and $20$ in the main diagonal, it seems that class $A$ has a much higher prediction success than class $B$. However, if there are $200$ elements in class $A$, and only $21$ in class $B$, then we see that class $A$ has a $50\%$ classification rate, while class $B$ has a $95\%$ classification rate, To Combat this, we typically normalize each confusion matrix by the number of samples in each "actual" class. Put simply, we all elements in a given row by the sum of that row.
+\paragraph*{}However, it is more useful to weight the confusion matrix according to class occurrence. For example, if we had a $2 \times 2$ matrix with entries $100$ and $20$ in the main diagonal, it seems that class $A$ has a much higher prediction success than class $B$. However, if there are $200$ elements in class $A$, and only $21$ in class $B$, then we see that class $A$ has a $50\%$ classification rate, while class $B$ has a $95\%$ classification rate. Consider the list of instrument classes in Fig.(\ref{fig-ClassList}) and notice how all instruments are not equally represented. This creates a training bias such that the model is more heavily trained on a particular class compared to others. This may also show when making predictions, where the classifier is more likely to predict samples that it has been trained on more \cite{James,Loy}. To Combat this, we typically normalize each confusion matrix by the number of samples in each "actual" class. Put simply, we divide each element in a given row by the \textit{sum} of that row.
 
 \paragraph*{}The confusion matrix can be a cumbersome, so often it is useful to express the performance in terms of more concise quantities. For this we use \textit{accuracy score}, \textit{precision score}, \textit{F1-score}, and \textit{recall score}. These metrics are standard in the field of machine-learning classification and are often useful for identifying different strengths and weaknesses in each model \cite{Geron,James}.
 
@@ -1701,11 +1702,19 @@ In the case of a multi-class classifier, the recall score also represents an\tex
 
 % ================================================================
 
-\subsubsection{Micro F1-Score}
+\subsubsection{F1-Score}
+
+\paragraph*{}F1-score (also called F-score) is the harmonic mean of precision and recall scores and it also bounded on $[0,1]$ with a higher score being favorable \cite{Geron}. Often, the two metrics can be through of as somewhat \textit{exclusive} to each other - the higher one, the lower the other. Compare this with the idea that the more \textit{sensitive} the model is, the less \textit{specific} it is, and vice-versa. This phenomenon is called the \textit{precision-recall tradeoff} \cite{Geron,James}. We compute the $F1$ score for a class $k$ as:
+\begin{equation}
+\label{eqn-F1Score}
+\text{F1}_{j} = 2 \times \frac{\text{Prec}_j + \text{Recall}_j}{\text{Prec}_j \times \text{Recall}_j}
+\end{equation}
+
+\paragraph*{}The $F1$ favors models with both a high precision and high recall score. Some models allow for the ability to adjust the threshold of the decision function. This means that by changing a few parameters that are external to the classifier itself, we can change how sensitive or specific a model is when making it's class decision. In the case of this multi-category classifier, this is somewhat like modifying the generated decision boundaries as to change the outputted probability distribution. In case cases, it is useful to use the $F1$ score to find the set of hyper-parameters that allow for the classifier to produce both the highest possible precision \textit{and} recall score.
 
 % ================================
 
-\subsubsection{Accuracy Score \&}
+\subsubsection{Accuracy Score}
 
 \paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron}.
 
@@ -1717,12 +1726,17 @@ In the case of a multi-class classifier, the recall score also represents an\tex
 \text{Accuracy} = \frac{TP + FN}{TP + FP + FN + FP}
 \end{equation}
 
-\paragraph*{}For a multi-class problem, we present accuracy over \textit{all} classes simultaneously. It is the ratio of the sum of the main diagonal to the sum or all entries in the matrix:
+\paragraph*{}For a multi-class problem, present accuracy over each individual class, called \textit{micro-accuracy} \cite{James}. The accuracy for a class $j$ is the correct predictions related to the class divided by the total predictions and total counts of the class. We express this mathematically by using sums over each row, each column, and the main diagonal as such:
 \begin{equation}
-\label{eqn-AvgAccuracy}
-\text{Accuracy} = \frac{\sum_{i}C_{i,i}}{\sum_{i}\sum_{j}C_{i,j}}
+\label{eqn-Accuracy}
+\text{Accuracy}_j = \frac{\sum_{i}C_{i,i}}{\sum_{i}C_{i,i} + \sum_{i \neq j}C_{i,j} + \sum_{i \neq j}C_{j,i}}
 \end{equation}
 Where all sum indexes goes from $0$ to $k-1$.
+
+\paragraph*{}We can also present \textit{global accuracy} or \textit{macro accuracy} by computing the acurracy over the full confusion matrix. This would then by the ratio of all correct predictions (the main diagonal) to all predictions (the sum of the matrix). We can express this as:
+\begin{equation}
+\text{Accuracy} = \frac{\sum_{i}C_{i,i}}{\sum_{i}\sum_{j}C_{i,j}}
+\end{equation}
 
 % ================================================================
 
@@ -1752,9 +1766,7 @@ similarly, we can visualize the precision score and recall score at each trainin
 
 \begin{figure}[h]
 \begin{center}
-%\includegraphics[scale=0.2]{•}
-\textcolor{red}{Precision Score Goes Here}
-\textcolor{red}{Recall Score Goes Here}
+
 \end{center}
 \caption{The precision score (a) and recall score (b) increases with each training step}
 \label{fig-PrecisionRecallScores}
@@ -1783,11 +1795,165 @@ We could then aggregate the parameters according to a weighted average to create
 \section{Experimental Results}
 \label{sec-Results}
 
-\paragraph*{}To formally produce classification predictions on the chaotic synthesizer wave forms, we must use all of the principles outlined in the previous sections. Using the described features in sec. (\ref{sec-Features}) and appropriate architecture sec. (\ref{subsec-Architecture}), We run a 
+\subsection{Executing Cross Validation}
 
+\paragraph*{}To formally produce classification predictions on the chaotic synthesizer wave forms, we must use all of the principles outlined in the previous sections. Using the described features in sec. (\ref{sec-Features}) and appropriate architecture sec. (\ref{subsec-Architecture}), We run a $K=10$ folds cross validation program as in Alg.(\ref{alg-CrossValidation}). For each of the $10$ models, we produce a standard confusion matrix, an compute the (i) accuracy score, (ii) precision score, (iii) recall score, and (iv) F1 score. For each of the $37$ classes, we compute the arithmetic mean of the metrics across the $10$ folds. We show the results of this in Figs. (\ref{fig-HighWindsScores}), (\ref{fig-LowWindsScores}), (\ref{fig-BrassScores})
 
+\paragraph*{}Additionally, we report the average of each four metrics across all classes for each of the $10$ splits in Fig. (\ref{fig-ValidationTable}). We also present a more condensed version of the data by showing the average, minimum, maximum, and variance of each score in Fig. (\ref{fig-ValidationStats}). Each value is on the interval $[0,1]$, with higher values being more favorable.
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Split Index} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\ \hline
+$0$ & 0.992969341 & 0.849762613	& 0.853483643 & 0.838007935 \\ \hline
+$1$ & 0.993086645 & 0.857063114	& 0.865737308 & 0.854069688 \\ \hline
+$2$ & 0.994175444 & 0.858936065	& 0.854231756 & 0.851319866 \\ \hline
+$3$ & 0.993883291 & 0.887070101	& 0.901606142 & 0.882074022 \\ \hline
+$4$ & 0.992941956 & 0.884115922	& 0.902609597 & 0.884775112 \\ \hline
+$5$ & 0.992941956 & 0.884115922	& 0.902609597 & 0.884775112 \\ \hline
+$6$ & 0.994315799 & 0.856425689	& 0.842680234 & 0.834139910 \\ \hline
+$7$ & 0.993057475 & 0.869049669	& 0.867171387 & 0.856152544 \\ \hline
+$8$ & 0.992979711 & 0.843322939	& 0.866599329 & 0.846637817 \\ \hline
+$9$ & 0.992799981 & 0.842635691	& 0.877821096 & 0.832496007 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Metrics averaged over all classes for $K=10$ validation splits}
+\label{fig-ValidationTable}
+\end{figure}
 
-we produce a neural network \textit{ChaoticSynthClassifier} and train it on the roughly $18,000$ audio files that serve as the training set.
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Measure} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\ \hline
+\textbf{Average} & 0.993385794 & 0.860133646 & 0.872055273 & 0.853799365 \\ \hline
+\textbf{Minimum} & 0.992799981 & 0.842635691 & 0.842680234 & 0.832496007 \\ \hline
+\textbf{Maximum} & 0.994315799 & 0.887070101 & 0.902609597 & 0.884775112 \\ \hline
+\textbf{Variance}& 2.88066E-07 & 0.000215270 & 0.000373321 & 0.000293214 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Metric statisitcs over all classes  and all validation splits}
+\label{fig-ValidationStats}
+\end{figure}
+
+\begin{figure}[H]
+
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/AltoFlute}
+	\caption{Alto Flute}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/AltoSax}
+	\caption{Alto Saxophone}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/BbClarinet}
+	\caption{$B\flat$ Clarinet}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/EbClarinet}
+	\caption{$E\flat$ Clarinet}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/EnglishHorn}
+	\caption{English Horn}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Flute}
+	\caption{Flute}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Oboe}
+	\caption{Oboe}
+	\end{subfigure}		
+	\begin{subfigure}[b]{0.45 \textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/SopSax}
+	\caption{Soprano Saxophone}
+	\end{subfigure}
+	
+\caption{Performance Metrics Across all High Ranged Woodwind Instruments}
+\label{fig-HighWindsScores}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/BassClarinet}
+	\caption{Bass Clarinet}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/BassFlute}
+	\caption{Bass Flute}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Bassoon}
+	\caption{Bassoon}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/ContraBassoon}
+	\caption{Contra Bassoon}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Saxophone}
+	\caption{Tenor Saxophone}
+	\end{subfigure}
+\caption{Performance Metrics Across all Mid and Low Ranged Woodwind Instruments}
+\label{fig-LowWindsScores}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/BassTrombone}
+	\caption{Bass Trombone}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Horn}
+	\caption{French Horn}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/TenorTrombone}
+	\caption{Tenor Trombone}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Trombone}
+	\caption{Trombone}
+	\end{subfigure}	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Trumpet}
+	\caption{$B\flat$ Trumpet}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Tuba}
+	\caption{Tuba}
+	\end{subfigure}
+\caption{Performance Metrics Across all Brass Instruments}
+\label{fig-BrassScores}
+\end{figure}
+
+\paragraph*{}With cross validation completed and the results 
+
+% ================================================================
+
+\subsection{•}
+
 
 
 % ================================================================
