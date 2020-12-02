@@ -21,13 +21,13 @@ if __name__ == "__main__":
     # HARD-CODE VARIABLES FOR DEVELOPMENT
     parent = 'C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis'
     read = os.path.join(parent,'SignalClassifier','Target-Data')   
-    modelName = "XValAlphaCLF"
+    modelName = "XValGammaCNN"
     nSplits = 10
     export = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Output-Data')
     model = os.path.join(parent,'SignalClassifier-CrossValidation',modelName+'-Model-Data')
    
-    scriptPath = os.path.join(parent,'SignalClassifier','ClassifierHybrid')
-    scriptName = "ClassifierHybridMain.py"
+    scriptPath = os.path.join(parent,'SignalClassifier','ConvolutionClassifier')
+    scriptName = "ClassifierConvolutionMain.py"
 
     # HANDLE LOCAL DIRECTORIES
     homePath = os.getcwd()
