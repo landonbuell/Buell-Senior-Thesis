@@ -48,7 +48,7 @@
 	\begin{center}
    		\vspace*{1cm}
        	\begin{LARGE}
-       	\textbf{Classifying Chaotic Synthesizers with a Multimodal Neural Network} \\
+       	\textbf{Mapping Chaotically Generated Synthesizers to Real World Instruments with Machine Learning and Harmonic Analysis} \\
        	\end{LARGE}
        	\vspace{1cm}
        	\begin{Large}
@@ -92,10 +92,10 @@
 \section{Introduction}
 \label{sec-Introduction}
 
-\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}. These signals can take the form of day-to-day topics such as weather measurements, financial reports, or audio-visual media, and extend into more niche disciplines of medicine, physics, and digital signal processing. 
+\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}.Whether its climate measurements, financial reports, audio-visual media, or medicine complex signal surround the modern world at every corner.  
 
 
-\paragraph*{}Recent progress in high performance computing and computational efficiency have given rise to another burst 
+\paragraph*{}Recent progress in high performance computing and computational efficiency have given rise to another burst in the 
 
 % ================================================================
 % ================================================================
@@ -825,7 +825,7 @@ This 2D array is referred to as a \textit{design matrix} \cite{James,Loy}. Any o
 
 \paragraph*{}As discussed in Sec. (\ref{sec-TheNeuralNetwork}), performance quality of a neural network is greatly dependent on the properties of the chosen features \cite{Virtanen,Liu}. To ensure that a the classifier model performs adequately and consistently, we must choose these features to have high variance between classes, and low variance within each class. This enables a neural network to development clear decision boundaries between each unique class \cite{James,Serizel}. To develop this set of features, we explore the physical and mechanical properties of musical instruments and the sounds that they create.
 
-\paragraph*{}We have assembled training data samples than can be grouping in 38 classes of unique sources listed below:
+\paragraph*{}We have assembled training data samples than can be grouping into $37$ classes of unique sources listed below:
 
 \begin{figure}[H]
 \begin{center}
@@ -887,12 +887,12 @@ $19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 
 \subsubsection{The 1-Dimensional Vibrating String}
 
-\paragraph*{}We can model a chordophone as having a string of length $L$, with a constant linear mass density, $\mu$, subject to a tension force $F_T$. The string is flexible, and free to vibrate in a single dimension. We describe the state of string over space and time with a function $U(x,t)$. The behavior of the string can be modeled by D'Alembert's 1-dimensional wave equation \cite{Haberman,Taylor}:
+\paragraph*{}We can model a chordophone as having a string of length $L$, with a constant linear mass density, $\mu$, subject to a tension force $F_T$. The string is flexible, and free to vibrate in a single dimension. We describe the state of string over space and time with a function $U(x,t)$. The behavior of the string can be modeled by D'Alembert's 1-dimensional wave equation \cite{Haberman,Hunter,Taylor}:
 \begin{equation}
 \label{eqn-1DWaveEqn}
 \frac{\partial^2 U}{\partial t^2} = v^2 \frac{\partial^2 U}{\partial x^2}
 \end{equation}
-Where $v$ is the wave propagation velocity, given by $\sqrt{\frac{F_T}{\mu}}$. Additionally, the string is fixed in place at both ends, with a nut at $x = 0$ and a bridge at $x = L$, which can be modeled by the boundary conditions \cite{Olson,White,Haberman}:
+Where $v$ is the wave propagation velocity, given by $\sqrt{\frac{F_T}{\mu}}$. D'Alembert's equation indicates that the acceleration of any point on a string is directly proportional to the rate of change of the slope of the string at that point. Additionally, the string is fixed in place at both ends, with a nut at $x = 0$ and a bridge at $x = L$, which can be modeled by the boundary conditions \cite{Olson,White,Haberman}:
 \begin{equation}
 U(0,t) = 0 
 	\text{\hspace*{2cm} and \hspace*{2cm}}
@@ -905,41 +905,23 @@ U(x,0) = f(x)
 	\text{\hspace*{2cm} and \hspace*{2cm}}
 \frac{\partial U}{\partial t}(x,0) = g(x)
 \end{equation}
-Depending on the exact nature of the source instrument, $f(x)$ and $g(x)$ can take on different forms. For example, for plucked stringed instruments, $f(x)$ may appear to be as triangle-like function, with a peak at some position $0 < x_0 < L$ where then string was struck. $g(x)$
+Depending on the exact nature of the source instrument, $f(x)$ and $g(x)$ can take on different forms. For example, for plucked stringed instruments, $f(x)$ may appear to be as triangle-like function, with a peak at some position $0 < x_0 < L$ where then string was struck. It is these initial conditions that allow for the drastically different timbres that arise in the wave forms.
 
-\paragraph*{}We explore solutions that take the form \cite{Haberman}:
-\begin{equation}
-U(x,t) = \psi(x)h(t)
-\end{equation}
-From this separation, we find that $\psi(x)$ and $h(t)$ each are composed of a linear combination of orthogonal trigonometric functions. Applying the boundary and initial conditions to the system allows for a linear combination of solutions \cite{Haberman}:
-\begin{equation}
-U(x,t) = 
-\sum_{n=1}^{\infty} \bigg( A_n \sin\big(\frac{n\pi x}{L}\big)\cos\big(\frac{n\pi vt}{L}\big)
-+ B_n \sin\big(\frac{n\pi x}{L}\big)\sin\big(\frac{n\pi vt}{L}\big) \bigg)
-\end{equation}
-The initial conditions are satisfied if:
-\begin{equation}
-\begin{array}{ll}
-    f(x) = \sum_{n=1}^{\infty} A_n \sin\big(\frac{n\pi x}{L}\big) \\
-    g(x) = \sum_{n=1}^{\infty} B_n\big(\frac{n\pi v}{L}\big)
-    			\sin\big(\frac{n\pi x}{L}\big)
-\end{array} 
-\end{equation}
-Where $A_n$ and $B_n$ are given by:
-\begin{equation}
-\begin{array}{ll}
-    A_n = \frac{2}{L} \int_{0}^{L} f(x) \sin\big(\frac{n\pi x}{L}\big) dx \\
-    B_n = \frac{2}{n\pi v} \int_{0}^{L} g(x) \sin\big(\frac{n\pi x}{L}\big) dx \\
-\end{array} 
-\end{equation} 
+\paragraph*{}Despite these differences, the wave equation is a \textit{linear} partial differential equation which allows for the fact that a linear combination of solutions is also a valid solution. In the case of the taught finite string that is fixed at both ends, such a guitar, viola or cello, the a solution tends to take the form of a sinusoidal function such a sine or cosine \cite{Hunter, Taylor, White}.
 
-\subsubsection{Consequences of the Wave Equation}
+\paragraph*{}The boundary continuations, and most forms of standard initial conditions allow for the each sinusoidal to fit exactly an integer wavelengths into the region $[0,L]$ \cite{Haberman,Hunter}. Physically, this corresponds to having the string vibrate with some fundamental frequency $f_0$, which represents it's lowest possible note,and a linear combination of higher harmonics, $n \times f_0$, where $n \in \mathbb{Z}$ \cite{Olson,Taylor,White}.
 
-\paragraph*{}The solution that we have derived from the wave equation shows that the behavior of $U(x,t)$ is greatly dependent on the nature of the string's initial shape, $f(x)$, when struck. In the case of picked or plucked instruments, the initial shape of $f(x)$ would be something like a "ramp function":
-\begin{equation}
-\label{eqn-RampFunc}
-f(x) =
-\end{equation}
+\begin{figure}[H]
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/CELLO-F4}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Guitar-B2}
+	\end{subfigure}
+\end{figure}
+
 
 % ================================================================
 
@@ -2009,6 +1991,9 @@ Goodfellow, Ian, et al.\textit{Deep Learning}. MIT Press, 2017.
 
 \bibitem{Haberman}
 “Wave Equation: Vibrating Strings and Membranes.” \textit{Applied Partial Differential Equations with Fourier Series and Boundary Value Problems}, by Richard Haberman, Pearson, 2019, pp. 130–150. 
+
+\bibitem{Hunter}
+Hunter, Joseph L. \textit{Acoutics}. Prentice Hall, 1957. 
 
 \bibitem{James}
 James, Gareth, et al. \textit{An Introduction to Statistical Learning with Applications in R}. Springer, 2017.

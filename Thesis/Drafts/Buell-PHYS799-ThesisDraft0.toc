@@ -32,10 +32,9 @@
 \contentsline {subsection}{\numberline {4.2}Membranophones}{30}% 
 \contentsline {subsection}{\numberline {4.3}Chordophones}{30}% 
 \contentsline {subsubsection}{\numberline {4.3.1}The 1-Dimensional Vibrating String}{30}% 
-\contentsline {subsubsection}{\numberline {4.3.2}Consequences of the Wave Equation}{31}% 
 \contentsline {subsection}{\numberline {4.4}Aerophones}{31}% 
 \contentsline {subsection}{\numberline {4.5}Other Generated Sounds}{31}% 
-\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{32}% 
+\contentsline {subsubsection}{\numberline {4.5.1}Sine Wave}{31}% 
 \contentsline {subsubsection}{\numberline {4.5.2}Sawtooth Wave}{32}% 
 \contentsline {subsubsection}{\numberline {4.5.3}Square Wave}{32}% 
 \contentsline {subsubsection}{\numberline {4.5.4}Triangle Wave}{32}% 
