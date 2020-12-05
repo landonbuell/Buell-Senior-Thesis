@@ -1,7 +1,7 @@
 % ================================
 % Landon Buell
 % Kevin Short
-% Physics 799%
+% Physics 799
 % 26 September 2020
 % ================================
 
@@ -52,7 +52,7 @@
        	\end{LARGE}
        	\vspace{1cm}
        	\begin{Large}
-       	\textcolor{red}{Thesis Subtitle}
+       	Multimodal Classification of Digital Signal
        	\end{Large}             
        	\vspace{1.5cm}
 
@@ -92,7 +92,13 @@
 \section{Introduction}
 \label{sec-Introduction}
 
+% ================================================================
+
+\subsection{Introduction}
+
 \paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}.Whether its climate measurements, financial reports, audio-visual media, or medicine complex signal surround the modern world at every corner.  
+
+\paragraph*{}Consider the task of identifying the source of a sound. 
 
 
 \paragraph*{}Recent progress in high performance computing and computational efficiency have given rise to another burst in the 
@@ -101,14 +107,14 @@
 % ================================================================
 
 \newpage
-\section{Methodology}
+\subsection{Methodology}
 \label{sec-Methodology}
 
 \paragraph*{}This project includes a great number of steps to ensure it's completion. Here we show a high-level outline of the pieces involved.
 
 % ================================================================
 
-\subsection{Designing the Function}
+\subsubsection{Designing the Function}
 
 \paragraph*{}Consider the biological process of hearing a sound wave and matching it to a source. We can model this behavior by some unknown function $F$ and approximate it with the function $F^*$. This can map the contents of a sound file to a potential source as to mimic $F$. For a set of inputs (called features or predictors) $\vec{x} = \big\{ x_0 , x_1 , x_2 , ... , x_{p-1} \big\}$ and a set of classes $0$ through $k-1$, we denote this function as:
 \begin{equation}
@@ -120,7 +126,7 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 
 % ================================================================
 
-\subsection{Collecting and Pre-processing Raw Data}
+\subsubsection{Collecting and Pre-processing Raw Data}
 
 \paragraph*{}In order to train the Multimodal neural network to identify musical instrument sources, we need a suitable data set to present to the model as training data. University of Iowa Electronic Music Studio, and the London-Based Philharmonia Orchestra each have a large collection of publicly available audio files \textcolor{blue}{Citations!}. These contain short segments of musical instruments performing a single note or a collection of notes in succession. Each sound file is labeled according to the instrument that is producing that sound.
 
@@ -128,25 +134,25 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 
 % ================================================================
 
-\subsection{Designing Classification Features}
+\subsubsection{Designing Classification Features}
 
 \paragraph*{}The performance of a neural network is largely dependent of designing an appropriate set of classification features. These are properties of wave forms that can be represented by a numerical value or several numerical values and are used as the primary tool in classification. We detail these features in sec. (\ref{sec-Features}). These are used in place of a full waveform to represent a file's contents in a low-dimensional array. We use tools from physics, mathematics, and signal processing to define and explore a comprehensive set of features that enables a high performance of the classifier. 
 
 % ================================================================
 
-\subsection{Designing A Complementary Network Architecture}
+\subsubsection{Designing A Complementary Network Architecture}
 
 \paragraph*{}With the appropriate set of features designed, and the number of output determined, we can organize the structure of the neural network function. We construct a multimodal neural network, explored in sec. (\ref{sec-Architecture}), that processes two input arrays derived from the same audio sample. This network is designed to handle and process each respective input independently, and concatenate the results to produce a single output. 
 
 % ================================================================
 
-\subsection{Testing and Evaluating Network Performance}
+\subsubsection{Testing and Evaluating Network Performance}
 
 \paragraph*{}We divide the raw data set up into a training and testing sets. We employ cross-validation and compute the results of performance metrics to ensure that out model is making reliable predictions, and generalize appropriately. In this stage, we also choose the value of hyper-parameters, activation functions and layer widths to best compliment the chosen features. This process is repeated and expanded upon until we have produced a model with a sufficient performance.
 
 % ================================================================
 
-\subsection{Running Predictions of Chaotic Synthesizer Files}
+\subsubsection{Running Predictions of Chaotic Synthesizer Files}
 
 \paragraph*{}Once we have established a suitable performance of the model, we allow the model to run predictions on the un-labeled chaotic synthesizer wave forms. We output the prediction results to a file, and compare the neural network predictions against human predictions. If further corrections are needed, we revert and re-deign the features, architecture, or hyper-parameters as needed.
 
@@ -1218,7 +1224,7 @@ We show the effect of a Hanning window on an analysis frame:
 \paragraph*{}With this final change, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross,Virtanen}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted at $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space signal containing $N$ samples is given by \cite{Taylor,Virtanen}
 \begin{equation}
 \label{eqn-DFTMatrix}
-\mathbb{W} = \frac{1}{\sqrt{N}}
+\mathbb{W} = \frac{1}{N}
 \begin{bmatrix}
 1 & 1 & 1 & 1 & \hdots & 1 \\
 1 & \omega		& \omega^2 & \omega^3 & \hdots & \omega^{N-1} \\
@@ -1234,7 +1240,7 @@ Each column of the matrix is a complex sinusoidal oscillating with an integer nu
 \text{DFT}\big[ \widetilde{A} \big] = \mathbb{W}\widetilde{A}^T
 \end{equation}
 
-\paragraph*{}Most standard implementations of neural network models have all activations, weights, and biases to be real floating-point numbers cite{Levine,Loy,Tensorflow}. Since the elements of the DFT matrix lie on the complex unit circle, each real-valued analysis frame will be moved into complex space. This means we compute the element-wise product of the transformed signal matrix and it's complex-conjugate matrix. This is the $N \times k$
+\paragraph*{}Most standard implementations of neural network models have all activations, weights, and biases to be real floating-point numbers \cite{Levine,Loy,Tensorflow}. Since the elements of the DFT matrix lie on the complex unit circle, each real-valued analysis frame will be moved into complex space. This means we compute the element-wise product of the transformed signal matrix and it's complex-conjugate matrix. This is the $N \times k$
 spectrogram matrix, where each element is a real-values number. Matrix $S$ is defined:
 \begin{equation}
 \label{eqn-Spectrogram}
@@ -1250,21 +1256,21 @@ S_{i,j} = S[i][j] = S[i,j]
 
 \paragraph*{}Each column of the $S$ matrix is now a single analysis frame that has been moved into a frequency-space representation of itself. There are $k$ columns, just as there were $k$ time-series frames, and $N$ rows since there were $N$ samples per row. Given the discrete nature of digital audio, the frequency-space representation is not a continuous function, but rather a column vector, where the frequency has been assigned to one of $N$ bins, ranging from $-f_s / 2$ to $+f_s/2$. To ensure homogeneous input sizes between all samples, we zero-pad the matrix $S$ with additional columns until $k = 256$. Recall that wave forms were truncated to ensure that $k \leq 256$ analysis frames.
 
-\paragraph*{}Standard western musical instruments seldom have fundamental frequencies that extend above $6$ kHz \cite{Olson,Virtanen,White}. This means that when constructing the spectrogram, we will rarely see significant energy present above this frequency at any time, and the $S$ matrix will contain mostly zero, or zero-like entries. To condense the size of the matrix, we select only the frequency bins (rows) that correspond to energies between $0$ Hz and $6000$ Hz. This makes the input array smaller, and eliminates redundant and non-useful information. The number rows in the $S$ matrix is reduced from $N$ down to $N'$. 
+\paragraph*{}Standard western musical instruments seldom have fundamental frequencies that extend above $6$ kHz \cite{Olson,Virtanen,White}. This means that when constructing the spectrogram, we will rarely see significant energy present above this frequency at any time, and the $S$ matrix will contain mostly zero, or zero-like entries. To condense the size of the matrix, we select only the frequency bins (rows) that correspond to energies between $0$ Hz and $12,000$ Hz. This makes the input array smaller, and eliminates redundant and non-useful information. The number rows in the $S$ matrix is reduced from $N$ down to $N'$. 
 
-\paragraph*{}Each spectrogram is now $N' \times k$ and effectively encodes the energy distribution of the waveform as a function of both time and frequency. The spectrogram makes up each sample in the first design matrix $X_1$, Eq.(\ref{eqn-ShapeX1}) used in this model. For this classifier, we have chosen $N' = 558$ and $k = 256$. For training, a batch of $b$ samples are concatenated into a single array object. For a batch of $b$ samples of $N' \times k \times 1$ spectrograms, we shape $X_1$ such that:
+\paragraph*{}Each spectrogram is now $N' \times k$ and effectively encodes the energy distribution of the waveform as a function of both time and frequency. The spectrogram makes up each sample in the first design matrix $X_1$, Eq.(\ref{eqn-X1Shape}) used in this model. For this classifier, we have chosen $N' = 558$ and $k = 256$. For training, a batch of $b$ samples are concatenated into a single array object. For a batch of $b$ samples of $N' \times k \times 1$ spectrograms, we shape $X_1$ such that:
 \begin{equation}
 \label{eqn-X1}
 X_1 = \big\{ S^{(0)},S^{(1)},S^{(2)}, ... , S^{(b-1)} \big\} \in \mathbb{R}^{(b \times N' \times k)}
 \end{equation}
-Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-X1Shape}). This matrix is presented to the \textit{Convolution} branch of the neural network for processing.
+Which is consistent with the shape of the $X_1$ matrix outlined in Eq. (\ref{eqn-X1Shape}). This matrix is presented to the \textit{Convolution} branch of the neural network for processing.
 
 % ================================================================
 
 \subsection{Time-Space Features}
 \label{subsec-TimeFeatures}
 
-\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. The number of samples $M$ is chosen to correspond the number of sample needed to make the $N \times k$ spectrogram matrix. This way,t he spectrogram and time-series features are representative of the same time interval in the file sample. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
+\paragraph*{}The features described in this section are derived from time-domain representations of each audio sample. Each feature is one element in the feature vector for the particular sample. For consistency between samples, each waveform is padded or truncated to contain the same number of samples $M$. The number of samples $M$ is chosen to correspond the number of sample needed to make the $N \times k$ spectrogram matrix. This way, the spectrogram and time-series features are representative of the same time interval in the file sample. Time space is indexed by $s[i]$ with $i \in [0,1,2,3,...,M-2,M-1]$
 
 \paragraph*{}From time space, we use the following $11$ features:
 \begin{itemize}
@@ -1282,16 +1288,34 @@ Which is consistent with the shape of the $X_1$ matrix outlined in eqn(\ref{eqn-
 
 \paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude, i.e. the signal has not started or is decaying. The small size of each analysis frame makes computing a TDE for each impractical, and create a very high-dimensional feature vector. This would also cause problems as some waveforms may have an initial attack that differs in time by a few analysis frames. Computing TDE for each frame would therefore introduce temporal bias, as the same waveform delayed by a few milliseconds would generate a wildly different set of predictor values \cite{Serizel}. 
 
-\paragraph*{}One way to mitigate this is to group analysis frames together and compute the TDE of a collection of frames. This way, small most waveforms will produce an identical set of features to a time-delayed version of itself. By choosing a sufficiently large number of TDE values, we can also generate n approximation of than amplitude envelope of the time-series waveform. This comes at a higher computational cost, and a previously mentioned higher dimensional feature vector
+\paragraph*{}One way to mitigate this is to group analysis frames together and compute the TDE of a collection of frames. This way,  almost all waveforms will produce an identical set of features to a short time-delayed version of itself. By choosing a sufficiently large number of TDE values, we can also generate an approximation of than amplitude envelope of the time-series waveform. This comes at a higher computational cost, and a previously mentioned higher dimensional feature vector
 
-\paragraph*{}We adapt this TDE to \textbf{compute the time domain envelope over $5$ non-overlapping analysis frames}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE represents a consistent measurement of energy in each waveform subset. \cite{Liu}. The TDE is computed as the RMS-Energy of the waveform, $s$ and the $j$-th TDE value is given by \cite{Olson,Serizel}:
+\paragraph*{}We adapt this TDE to \textbf{compute the time domain envelope over $5$ non-overlapping analysis frames}. Since the maximum amplitude of each waveform array has been normalized to $\pm 1$, the TDE represents a consistent measurement of energy in each waveform subset \cite{Liu}. The TDE is computed as the RMS-Energy of the waveform, $s$ and the $j$-th TDE value is given by \cite{Olson,Serizel}:
 \begin{equation}
 \label{eqn-RMS}
 \text{TDE}_j\big[ s \big] = \sqrt{\frac{1}{Q} \sum_{i=n}^{n+Q} s[i]^2}
 \end{equation}
-Where $Q$ gives the number of sample sin each analysis frame (number of sample sin waveform divided by number of frames), and $n$ gives the index where the $j$-th frame begins.
+Where $Q$ gives the number of sample sin each analysis frame (number of sample sin waveform divided by number of frames), and $n$ gives the index where the $j$-th frame begins. We provide a graphic representation of how the TDE compares to the amplitude of sections of a waveform in Fig. (\ref{fig-ExampleTDE}).
 
-\paragraph*{}These uniformly size analysis frames let us create an naive envelope of the waveform, but will allow it to generalize between classes. For example, this allows for a crude approximation of the energy in the attack, decay, sustain, and release energies in a waveform \cite{Virtanen,Olson}. For instruments with heavier attacks, we expect the TDE in the $1$-st frame to be comparably large, see Fig. (\ref{fig-FeatureTDE}a). Instruments with a heavy decay will likely have little energy in the $2$-nd or higher frames, indicating that the amplitude has substantially died off as in Fig. (\ref{fig-FeatureTDE}b). Conversely, instruments with longer sustain such as upper woodwinds, vibraphones or strings will container relatively higher TDE values for the later analysis frames as seen in Fig. (\ref{fig-FeatureTDE}c). Instruments with little or no waveform envelope, such as the synthesized waveforms and the whitenoise show constant TDE values across each frame as expected.
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{center}
+	\includegraphics[width=1.0\linewidth]{../FiguresSpectrogram/GUITAR-B2_TDE}
+	\caption{Guitar - B2}
+	\end{center}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{center}
+	\includegraphics[width=1.0\linewidth]{../FiguresSpectrogram/Tuba-A2_TDE}
+	\caption{Tuba - A2}
+	\end{center}
+	\end{subfigure}
+	\caption{TDE Envelope values for musical instruments}
+	\label{fig-ExampleTDE}
+\end{figure}
+
+\paragraph*{}The uniformly sized analysis frames let us create an naive envelope of the waveform, but will allow it to generalize between classes. For example, this allows for a crude approximation of the energy in the attack, decay, sustain, and release portion of the signal \cite{Virtanen,Olson}. For instruments with heavier attacks, we expect the TDE in the $1$-st frame to be comparably large, see Fig. (\ref{fig-FeatureTDE}a). Instruments with a heavy decay will likely have little energy in the $2$-nd or higher frames, indicating that the amplitude has substantially died off as in Fig. (\ref{fig-FeatureTDE}b). Conversely, instruments with longer sustain such as upper woodwinds, vibraphones or strings will container relatively higher TDE values for the later analysis frames as seen in Fig. (\ref{fig-FeatureTDE}c). Instruments with little or no waveform envelope, such as the synthesized waveforms and the whitenoise show constant TDE values across each frame as expected.
 
 \begin{figure}[H]
 
@@ -1337,7 +1361,6 @@ Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZX
 
 \begin{figure}[H]
 \begin{center}
-%\textcolor{red}{PLOT OF ZXR FEATURES HERE}
 \includegraphics[scale=0.3]{../FiguresFeatures/ZXR}
 \end{center}
 \caption{A comparison of the Zero-Crossing Rate for each class using a box-and-whisker plot}
@@ -1356,7 +1379,25 @@ The TCM of that waveform is then given:
 {\sum_{i=0}^{M-1}\big|s[i]\big|}
 \end{equation}
 
-\paragraph*{}TCM condenses the idea of the amplitude envelope into a single value. It allows for the quick measurement of where in the time most of the energy of the signal lies. For percussive instruments with short attack and release times, such as bells or xylophones, we expect a very low TCM. Instruments with plucked strings, but longer release times such as mandolins and guitars should have similarly low values. Instruments in the woodwind and brass family generally have longer sustain and release times, giving them a slightly higher center of mass. Strings and undampened percussion have notoriously long sustain and release times giving them much higher TCM values \cite{Olson,White}. Finally, the synthetic wave forms have no characteristic  envelope shape (due to their synthetic nature). This gives a centrally located TCM, very close to $M/2$.
+\paragraph*{}TCM condenses the idea of the amplitude envelope into a single scalar value. It allows for the quick measurement of where in the time most of the energy of the signal lies. For percussive instruments with short attack and release times, such as bells or xylophones, we expect a very low TCM. Instruments with plucked strings, but longer release times such as mandolins and guitars should have similarly low values. See Fig. (\ref{fig-ExampleTCM}) for examples.
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{center}
+	\includegraphics[width=1.0\linewidth]{../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM}
+	\caption{Vibraphone - A5}
+	\end{center}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{center}
+	\includegraphics[width=1.0\linewidth]{../FiguresSpectrogram/CELLO-F4_TCM}
+	\caption{Cello - F4}
+	\end{center}
+	\end{subfigure}
+	\caption{TCM values for musical instruments}
+	\label{fig-ExampleTCM}
+\end{figure}
+Instruments in the woodwind and brass family generally have longer sustain and release times, giving them a slightly higher center of mass. Strings and undampened percussion have notoriously long sustain and release times giving them much higher TCM values \cite{Olson,White}. Finally, the synthetic wave forms have no characteristic  envelope shape (due to their synthetic nature). This gives a centrally located TCM, very close to $M/2$.
 
 \begin{figure}[H]
 \begin{center}
@@ -1379,11 +1420,11 @@ The TCM of that waveform is then given:
 \sqrt{\sum_{i=0}^{M-k-1}s^2[i+k]}}
 \end{equation}
 
-\paragraph*{}\textcolor{red}{I need to complete my discussion of ACC's here!}
+\paragraph*{}Physically, the numerator of the ACC representing computing the dot product of the signal, $s[i]$ with a time-delayed version of itself $s[i+k]$, and  the denominator provides a normalization for the value. Dotting the signal and the time delay allows us to introduce a synthetic phase shift and compare the resulting relationship. If we chose $k$ to be equal, or similar to the number of samples that make-up a period or half-period of the waveform, then $s[i] \approx s[i+k]$ and then $\text{ACC}_k \rightarrow 1$. Alternatively, for many other values of $k$, frequent multiplication and summation of samples that are approximately zero result in $\text{ACC}_k << 1$. This make auto-correlation coefficients extremely useful for detecting periodicity in time-space \cite{Serizel}.
 
 \begin{figure}[H]
 \begin{center}
-%\textcolor{red}{PLOT OF ACC FEATURES HERE}
+
 
 	\begin{subfigure}{1.0\textwidth}
 	\centering
@@ -1414,7 +1455,7 @@ The TCM of that waveform is then given:
 	\end{subfigure}	
 	
 \end{center}
-\caption{A comparison of the the first four auto correlation coefficents in each class using a box-and-whisker plot}
+\caption{A comparison of the the first four auto correlation coefficients in each class using a box-and-whisker plot}
 \label{fig-FeatureACC}
 \end{figure}
 
@@ -1454,9 +1495,9 @@ Where $M_f$ is the frequency in units of Mels, given $[h]$, a frequency in Hertz
 
 \begin{figure}[H]
 \begin{center}
-\textcolor{red}{Figure of a few Mel Filter Banks goes here}
+\includegraphics[scale=0.28]{../FiguresSpectrogram/MelFilterBanks}
 \end{center}
-\caption{Mel Filter Banks shown in frequency space with units of (a) Mels and (b)Hertz}
+\caption{Mel Filter Banks shown in frequency space with units of Hertz}
 \label{fig-MelFilterBanks}
 \end{figure}
 
@@ -1482,13 +1523,10 @@ Matrix $B$ has shape $k \times R$.
 \end{equation}
 Where $\widetilde{B}$ is the column average of the Mel filter bank energies computed in Eq. (\ref{eqn-FilterBanks}), and $R$ is the number of filter banks used.
 
-\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal\cite{Virtanen}. Cepstrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. 
-
-\paragraph*{}As the frequency bin index increases, the width of the bin in frequency space increases. \textcolor{red}{Finish this! What does a MFCC tell us with words!}
+\paragraph*{}Physically, MFCC's are a transform of a transform. This allows us to investigate the periodicity of the frequency spectrum, which highlights phenomena such as overtones or echoes in the signal \cite{Virtanen}. Cepstrum coefficients are commonly used to speech identification and are very prolific in sound recognition tasks \cite{Serizel,Sahidullah,Liu}. We show a feature-space representation of MFCC's for a selection of coefficients in Fig. (\ref{fig-FeatureMFCCs}).
 
 \begin{figure}[H]
 \begin{center}
-%\textcolor{red}{PLOT OF MFCC FEATURES HERE}
 
 \begin{subfigure}{1.0\textwidth}
 	\centering
