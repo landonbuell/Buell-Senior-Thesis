@@ -395,7 +395,7 @@ This operation repeats for each of the $K$ feature maps. Each maps has it's own 
 	$W_{k}$ and $x^{(l-1)}_{k}$:\\
 	\item $z_{k}[i,j] \leftarrow b_{k} + 
 	\sum_{i=0}^{N-1}\sum_{j=0}^{M-1} W_{k}[u,v] x^{(l-1)}_{k}[u-i,v-j]$ \\
-	\item Evaluate output activation values by applying the activation function to each element in the linear activation 			matrix $z$:\\
+	\item Evaluate output activation values by applying the activation function to each element in the linear activation matrix $z$:\\
 	$x^{(l)}_{k}[i,j] \leftarrow \sigma\big[ z_{k}[i,j] \big]$ \\
 \ENDFOR
 
@@ -459,7 +459,7 @@ The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 
 f^{(l)} : x^{(l-1)}_{a} \in \mathbb{R}^{(1 \times \alpha)} , x^{(l-1)}_{b} \in \mathbb{R}^{(1 \times \beta)} , ....  \rightarrow
 x^{(l)}_{z} \in \mathbb{R}^{(1 \times \alpha + \beta + ...)}
 \end{equation}
-The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we use it to combine the outputs that result from the convolution branch and the perceptron branch tp produce an single aggregated output. This process is detailed further in sec. (\ref{sec-Architecture}).
+The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we use it to combine the outputs that result from the convolution branch and the perceptron branch tp produce an single aggregated output. This process is detailed further in sec. (\ref{sec-NetworkArchitecture}).
 
 % ================================================================
 
@@ -1690,6 +1690,32 @@ Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indi
 
 % ================================
 
+\subsubsection{Accuracy Score}
+
+\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron}.
+
+\paragraph*{}For example, we could develop a model that uses a few predictors from every human currently alive and determine which of them has walked on the moon. There are roughly 7 billion humans alive, four of which have been on out moon. Simply guess \textit{no} for every human, our model would have more than a $99.9999\%$ accuracy. However, we would argue that this model does not perform well seeing as it has a $0 \%$ recall score, and and a $0 \%$ precision score.
+
+\paragraph*{}Accuracy score of model is defined:
+\begin{equation}
+\label{eqn-BinaryAccuracy}
+\text{Accuracy} = \frac{TP + FN}{TP + FP + FN + FP}
+\end{equation}
+
+\paragraph*{}For a multi-class problem, present accuracy over each individual class, called \textit{micro-accuracy} \cite{James}. The accuracy for a class $j$ is the correct predictions related to the class divided by the total predictions and total counts of the class. We express this mathematically by using sums over each row, each column, and the main diagonal as such:
+\begin{equation}
+\label{eqn-Accuracy}
+\text{Accuracy}_j = \frac{\sum_{i}C_{i,i}}{\sum_{i}C_{i,i} + \sum_{i \neq j}C_{i,j} + \sum_{i \neq j}C_{j,i}}
+\end{equation}
+Where all sum indexes goes from $0$ to $k-1$.
+
+\paragraph*{}We can also present \textit{global accuracy} or \textit{macro accuracy} by computing the acurracy over the full confusion matrix. This would then by the ratio of all correct predictions (the main diagonal) to all predictions (the sum of the matrix). We can express this as:
+\begin{equation}
+\text{Accuracy} = \frac{\sum_{i}C_{i,i}}{\sum_{i}\sum_{j}C_{i,j}}
+\end{equation}
+
+% ================================
+
 \subsubsection{Precision Score}
 
 \paragraph*{}Precision score (also called \textit{specificity} or \textit{positive predictive value}) is the ratio of chosen elements to all relevant elements. This bounds precision to the range $(0,1)$, with a higher value more desirable. For a classifier with $k = 2$ unique classes, we define the precision score of a model as:
@@ -1732,32 +1758,6 @@ In the case of a multi-class classifier, the recall score also represents an\tex
 
 \paragraph*{}The $F1$ favors models with both a high precision and high recall score. Some models allow for the ability to adjust the threshold of the decision function. This means that by changing a few parameters that are external to the classifier itself, we can change how sensitive or specific a model is when making it's class decision. In the case of this multi-category classifier, this is somewhat like modifying the generated decision boundaries as to change the outputted probability distribution. In case cases, it is useful to use the $F1$ score to find the set of hyper-parameters that allow for the classifier to produce both the highest possible precision \textit{and} recall score.
 
-% ================================
-
-\subsubsection{Accuracy Score}
-
-\paragraph*{}Accuracy score, while not commonly used is the most intuitive of all of the performance metrics. It is the ratio of correct predictions of he total number of predictions. While immediately useful for equally sampled binary classification problems, it looses meaning as the number of classes increases, and epecially if the number of samples per class is not consistent \cite{Geron}.
-
-\paragraph*{}For example, we could develop a model that uses a few predictors from every human currently alive and determine which of them has walked on the moon. There are roughly 7 billion humans alive, four of which have been on out moon. Simply guess \textit{no} for every human, our model would have more than a $99.9999\%$ accuracy. However, we would argue that this model does not perform well seeing as it has a $0 \%$ recall score, and and a $0 \%$ precision score.
-
-\paragraph*{}Accuracy score of model is defined:
-\begin{equation}
-\label{eqn-BinaryAccuracy}
-\text{Accuracy} = \frac{TP + FN}{TP + FP + FN + FP}
-\end{equation}
-
-\paragraph*{}For a multi-class problem, present accuracy over each individual class, called \textit{micro-accuracy} \cite{James}. The accuracy for a class $j$ is the correct predictions related to the class divided by the total predictions and total counts of the class. We express this mathematically by using sums over each row, each column, and the main diagonal as such:
-\begin{equation}
-\label{eqn-Accuracy}
-\text{Accuracy}_j = \frac{\sum_{i}C_{i,i}}{\sum_{i}C_{i,i} + \sum_{i \neq j}C_{i,j} + \sum_{i \neq j}C_{j,i}}
-\end{equation}
-Where all sum indexes goes from $0$ to $k-1$.
-
-\paragraph*{}We can also present \textit{global accuracy} or \textit{macro accuracy} by computing the acurracy over the full confusion matrix. This would then by the ratio of all correct predictions (the main diagonal) to all predictions (the sum of the matrix). We can express this as:
-\begin{equation}
-\text{Accuracy} = \frac{\sum_{i}C_{i,i}}{\sum_{i}\sum_{j}C_{i,j}}
-\end{equation}
-
 % ================================================================
 
 \subsection{Tracking Metrics over a Period of Training}
@@ -1788,25 +1788,9 @@ similarly, we can visualize the precision score and recall score at each trainin
 \begin{center}
 
 \end{center}
-\caption{The precision score (a) and recall score (b) increases with each training step}
+\caption{The precision score (a) and recall score (b) generally increase with each training step}
 \label{fig-PrecisionRecallScores}
 \end{figure}
-
-% ================================================================
-
-\subsection{Boosted Aggregation}
-\label{subsec-Bagging}
-
-\paragraph*{}Many learning models such as neural networks, or decision trees suffer from \textit{high variance} \cite{James}. This means that randomly splitting a full dataset into halves and fitting two different model to each half has the potential to produce wildly different fit parameters. In the case of neural networks, high variance can be amplified by the nature of the randomization in multidimensional optimizer \cite{Geron}. To mitigate this effect, we can employ a variant of the \textit{bagging} algorithm. Bagging uses an average, or weighted average, of parameters in multiple models that have been trained on overlapping data sets.
-
-\paragraph*{}Consider if we have $K$ models, all trained on overlapping training/testing data sets:
-\begin{equation}
-\text{Models} = \Big\{ F^*_{0} , F^*_{1} , F^*_{2} , ... , F^*_{K-2} , F^*_{K-1} \Big\}
-\end{equation}
-Each model contains a corresponding set of parameters, $\Theta^{i}$, $i \in [0,K-1]$.
-We could then aggregate the parameters according to a weighted average to create a new set of paramaters, $\Theta '$ which can be used to construct a new model, $F'$.
-
-\paragraph*{}This algorithm is often used after $K$-Folds Cross validation, as outlined in in subsec. (\ref{subsec-XValidation}). This grants the $K$ models and corresponding parameters that could be used in the bagging technique \cite{James}. \textcolor{blue}{This is very not finished yet!}
 
 % ================================================================
 % ================================================================
@@ -1817,44 +1801,94 @@ We could then aggregate the parameters according to a weighted average to create
 
 \subsection{Executing Cross Validation}
 
-\paragraph*{}To formally produce classification predictions on the chaotic synthesizer wave forms, we must use all of the principles outlined in the previous sections. Using the described features in sec. (\ref{sec-Features}) and appropriate architecture sec. (\ref{subsec-Architecture}), We run a $K=10$ folds cross validation program as in Alg.(\ref{alg-CrossValidation}). For each of the $10$ models, we produce a standard confusion matrix, an compute the (i) accuracy score, (ii) precision score, (iii) recall score, and (iv) F1 score. For each of the $37$ classes, we compute the arithmetic mean of the metrics across the $10$ folds. We show the results of this in Figs. (\ref{fig-HighWindsScores}), (\ref{fig-LowWindsScores}), (\ref{fig-BrassScores})
-
-\paragraph*{}Additionally, we report the average of each four metrics across all classes for each of the $10$ splits in Fig. (\ref{fig-ValidationTable}). We also present a more condensed version of the data by showing the average, minimum, maximum, and variance of each score in Fig. (\ref{fig-ValidationStats}). Each value is on the interval $[0,1]$, with higher values being more favorable.
-\begin{figure}[H]
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{Split Index} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\ \hline
-$0$ & 0.992969341 & 0.849762613	& 0.853483643 & 0.838007935 \\ \hline
-$1$ & 0.993086645 & 0.857063114	& 0.865737308 & 0.854069688 \\ \hline
-$2$ & 0.994175444 & 0.858936065	& 0.854231756 & 0.851319866 \\ \hline
-$3$ & 0.993883291 & 0.887070101	& 0.901606142 & 0.882074022 \\ \hline
-$4$ & 0.992941956 & 0.884115922	& 0.902609597 & 0.884775112 \\ \hline
-$5$ & 0.992941956 & 0.884115922	& 0.902609597 & 0.884775112 \\ \hline
-$6$ & 0.994315799 & 0.856425689	& 0.842680234 & 0.834139910 \\ \hline
-$7$ & 0.993057475 & 0.869049669	& 0.867171387 & 0.856152544 \\ \hline
-$8$ & 0.992979711 & 0.843322939	& 0.866599329 & 0.846637817 \\ \hline
-$9$ & 0.992799981 & 0.842635691	& 0.877821096 & 0.832496007 \\ \hline
-\end{tabular}
-\end{center}
-\caption{Metrics averaged over all classes for $K=10$ validation splits}
-\label{fig-ValidationTable}
-\end{figure}
+\paragraph*{}To formally produce classification predictions on the chaotic synthesizer waveforms, we must use all of the neural network, physics, and statistical principles outlined in the previous sections. Using the described features in sec. (\ref{sec-Features}) and appropriate architecture sec. (\ref{subsec-Architecture}), We run a $K=10$ folds cross validation program as in Alg.(\ref{alg-CrossValidation}). For each of the $10$ models, we produce a standard confusion matrix, and compute the (i) accuracy score, (ii) precision score, (iii) recall score, and (iv) F1 score. In Fig. (\ref{fig-MultimodalXval}) we show how the metrics compare in each the $10$ models by averaging the scores across the $37$ classes.
 
 \begin{figure}[H]
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{Measure} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\ \hline
-\textbf{Average} & 0.993385794 & 0.860133646 & 0.872055273 & 0.853799365 \\ \hline
-\textbf{Minimum} & 0.992799981 & 0.842635691 & 0.842680234 & 0.832496007 \\ \hline
-\textbf{Maximum} & 0.994315799 & 0.887070101 & 0.902609597 & 0.884775112 \\ \hline
-\textbf{Variance}& 2.88066E-07 & 0.000215270 & 0.000373321 & 0.000293214 \\ \hline
-\end{tabular}
+\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Multimodal}
+\caption{Performance metrics across $10$ models and $37$ classes}
+\label{fig-MultimodalXval}
 \end{center}
-\caption{Metric statisitcs over all classes  and all validation splits}
-\label{fig-ValidationStats}
 \end{figure}
+Additionally, we present the average standard confusion matrix, and the hits-weighted confusion matrix in Fig. (\ref{fig-MultimodalConfs}).
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion}
+	\caption{Standard Confusion Matrix}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion}
+	\caption{Occurance Weighted Confusion Matrix}
+	\end{subfigure}	
+
+	\caption{}
+	\label{fig-MultimodalConfs}
+\end{figure}
+
+\paragraph*{}We show the metric values of all splits to show the consistency in performance across all subsets. Notice how the models each perform reasonably well (precision and recall score consistently above 80\%). This indicates that for this data set, architecture, and feature selection, our model can performance reasonably and generalize appropriately. This step is critical in ensuring that there are no major out-liers in the classification results, and that any set of initial conditions can still allow the model to reach an acceptable set of parameters and decision boundaries. The results of cross validation indicate a strong classier that can be implemented to make predictions on other waveforms.
+
+% ================================================================
+
+\subsection{Comparing Results between Architectures}
+
+\paragraph*{}In addition to considering our multimodal network architecture performance, we have also run the identical $K = 10$ folds cross validation program on two uni-modal variants of the model. The first variant contains only the Convolutional branch of the network in Fig. (\ref{fig-NetworkArchitecture}), meaning that we feed the activations from the last dense layer in the left column directly to the output layer. Similarly, the second variant contains only the perceptron branch of the network in Fig. (\ref{fig-NetworkArchitecture}), meaning that we feed the activations from the last dense later in the right column directly to the output layer. For consistency, the same full data set (around $18,000$ samples) was using in the cross validation program. Comparing the performance of the each model gives us an insight as to the predictive contribution of each input branch
+
+\begin{figure}[H]
+	
+	\begin{subfigure}[b]{0.9\textwidth}
+	\centering
+	\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Convolution}
+	\caption{Unimodal Architecture, See left side of Fig. (\ref{fig-NetworkArchitecture})}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.9\textwidth}
+	\centering
+	\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Perceptron}
+	\caption{Unimodal Architecture, See right side of Fig. (\ref{fig-NetworkArchitecture})}
+	\end{subfigure}
+
+	\caption{}
+	\label{fig-UnimodalXVal}
+\end{figure}
+
+\paragraph*{}Compare these unimodal model performances with that of the multimodal network results in Fig. (\ref{fig-MultimodalXval}). Notice how the multimodal network consistently produce superior classification results. Similarly, we present the standard and weighted confusion matrices for both unimodal networks. Compare the results with Fig. (\ref{fig-MultimodalConfs}) and see how the confusion matrix indicates a stronger classifier.
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion}
+	\caption{Standard Confusion Matrix for Convolution Branch}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion}
+	\caption{Occurance Weighted Confusion Matrix for Convolution Branch}
+	\end{subfigure}	
+
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion}
+	\caption{Standard Confusion Matrix for Perceptron Branch}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion}
+	\caption{Occurance Weighted Confusion Matrix for Perceptron Branch}
+	\end{subfigure}	
+	\label{fig-MultimodalConfs}
+\end{figure}
+
+
+% ================================================================
+
+\subsection{Comparing Classification Scores within Each Class}
+
+\paragraph*{}Below we present the average accuracy, precision, recall and F1 score for each class, as averaged across $10$-folds cross validation, comparing the three architectures. These plots represent a more "micro" representation of classification by showing the response and scores within each specific class.
 
 \begin{figure}[H]
 
@@ -1967,13 +2001,6 @@ $9$ & 0.992799981 & 0.842635691	& 0.877821096 & 0.832496007 \\ \hline
 \caption{Performance Metrics Across all Brass Instruments}
 \label{fig-BrassScores}
 \end{figure}
-
-\paragraph*{}With cross validation completed and the results 
-
-% ================================================================
-
-\subsection{•}
-
 
 
 % ================================================================

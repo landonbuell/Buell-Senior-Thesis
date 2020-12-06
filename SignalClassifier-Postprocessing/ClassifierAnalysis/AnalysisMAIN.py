@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     # Establish local Directory Paths
     parent = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis"
-    modelName = "XValAlphaCLF"
+    modelName = "XValGammaCNN"
     dataPath = os.path.join(parent,"SignalClassifier-CrossValidation",modelName+"-Output-Data")
     metricsPath = os.path.join(parent,"Thesis\\FiguresMetrics")    
     figuresPath = os.path.join(parent,"Thesis\\FiguresClasses")    
@@ -33,15 +33,15 @@ if __name__ == '__main__':
     encode,decode = Program.MakeDecodeDictionary()
 
     Program.__Call__(metricsPath)
-    Program.ExportMetricsBySplit(metricsPath)
-    Program.ExportMetricsByClass(metricsPath)
+    #Program.ExportMetricsBySplit(metricsPath)
+    #Program.ExportMetricsByClass(metricsPath)
 
 
     # Prepare Figures
-    classIntegerNames = [x for x in range(n_classes)]
-    classStringNames = [decode[x] for x in range(n_classes)]
+    #classIntegerNames = [x for x in range(n_classes)]
+    #classStringNames = [decode[x] for x in range(n_classes)]
 
-    Figures = Figs.MetricFigures(classIntegerNames,classStringNames,Program.metricsArray)
-    Figures.__Call__(figuresPath)
+    #Figures = Figs.MetricFigures(classIntegerNames,classStringNames,Program.metricsArray)
+    #Figures.__Call__(figuresPath)
 
     print("=)")

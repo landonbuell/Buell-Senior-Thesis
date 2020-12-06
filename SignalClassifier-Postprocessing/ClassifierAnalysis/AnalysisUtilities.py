@@ -142,9 +142,9 @@ class AnalyzeModels:
         avgScrMatName =  self.modelName + " Avg Score Weighted Confusion"
         
 
-        ExportAndPlot.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
-        ExportAndPlot.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
-        ExportAndPlot.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
+        #ExportAndPlot.ExportConfusion(avgStandardConfMat,avgStdMatName,exptPath)
+        #ExportAndPlot.ExportConfusion(avgHitsWeightedConfMat,avgHitMatName,exptPath)
+        #ExportAndPlot.ExportConfusion(avgScrsWeightedConfMat,avgScrMatName,exptPath)
 
         os.chdir(exptPath)
         ExportAndPlot.PlotConfusion(avgStandardConfMat,self.n_classes,avgStdMatName,False)
@@ -265,10 +265,10 @@ class ExportAndPlot :
     def PlotConfusion(X,n_classes,title="",show=True,save=True):
         """ Visualize Confusion with ColorMap """
         plt.figure(figsize=(16,16))
-        plt.title(title,fontsize=20,weight='bold')
+        #plt.title(title,fontsize=20,weight='bold')
         plt.imshow(X,cmap=plt.cm.jet)
-        plt.xticks(np.arange(0,n_classes,1),weight='bold')
-        plt.yticks(np.arange(0,n_classes,1),weight='bold')
+        plt.xticks(np.arange(0,n_classes,1),size=15,weight='bold')
+        plt.yticks(np.arange(0,n_classes,1),size=15,weight='bold')
         plt.tight_layout()
         if save == True:
             plt.savefig(title.replace(" ","_")+".png")

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  5 DEC 2020 14:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  6 DEC 2020 02:05
 entering extended mode
 **./Buell-PHYS799-ThesisDraft0.tex
 (Buell-PHYS799-ThesisDraft0.tex
@@ -296,7 +296,11 @@ s
 \f@nch@O@erf=\skip56
 \f@nch@O@olf=\skip57
 \f@nch@O@orf=\skip58
-) (Buell-PHYS799-ThesisDraft0.aux)
+) (Buell-PHYS799-ThesisDraft0.aux
+
+LaTeX Warning: Label `fig-MultimodalConfs' multiply defined.
+
+)
 \openout1 = `Buell-PHYS799-ThesisDraft0.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
@@ -431,17 +435,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-(Buell-PHYS799-ThesisDraft0.toc
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 73.
-
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 73.
-)
+(Buell-PHYS799-ThesisDraft0.toc)
 \tf@toc=\write3
 \openout3 = `Buell-PHYS799-ThesisDraft0.toc'.
+
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -498,8 +495,8 @@ Package pdftex.def Info: ../figures/2DConvExample(d).png  used on input line 41
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 [11] [12 <../figures/2DConvExample(d).png>]
 
-LaTeX Warning: Reference `sec-Architecture' on page 13 undefined on input line 
-462.
+LaTeX Warning: Reference `sec-NetworkArchitecture' on page 13 undefined on inpu
+t line 462.
 
 
 LaTeX Warning: Reference `sec-Training' on page 13 undefined on input line 469.
@@ -637,8 +634,18 @@ File: ../Figures/WindowedFrame.png Graphic file (type png)
 Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1209.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
- [39] [40 <../Figures/AnalysisFrame.png> <../Figures/WindowedFrame.png>] [41] [
-42]
+ [39] [40 <../Figures/AnalysisFrame.png> <../Figures/WindowedFrame.png>] [41]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1277
+.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1277.
+
+
+[42]
 <../FiguresSpectrogram/GUITAR-B2_TDE.png, id=188, 1156.32pt x 433.62pt>
 File: ../FiguresSpectrogram/GUITAR-B2_TDE.png Graphic file (type png)
 <use ../FiguresSpectrogram/GUITAR-B2_TDE.png>
@@ -678,8 +685,7 @@ File: ../FiguresFeatures/ZXR.png Graphic file (type png)
 <use ../FiguresFeatures/ZXR.png>
 Package pdftex.def Info: ../FiguresFeatures/ZXR.png  used on input line 1364.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
-
-[46 <../FiguresFeatures/ZXR.png>]
+ [46 <../FiguresFeatures/ZXR.png>]
 <../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png, id=212, 1156.32pt x 433
 .62pt>
 File: ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png Graphic file (type 
@@ -798,217 +804,311 @@ Underfull \hbox (badness 2617) in paragraph at lines 1678--1678
 []\OT1/cmr/m/n/10.95 (b) |No di-ag-o-nal dom-i-nance in-di-cates a
  []
 
-[57 <../FiguresMetrics/StdConfA.png> <../FiguresMetrics/StdConfB.png>] [58]
-[59]
-Overfull \hbox (1.65843pt too wide) in paragraph at lines 1749--1750
+[57 <../FiguresMetrics/StdConfA.png> <../FiguresMetrics/StdConfB.png>]
+Overfull \hbox (1.65843pt too wide) in paragraph at lines 1705--1706
  \OT1/cmr/m/n/12 For a multi-class prob-lem, present ac-cu-racy over each in-di
 -vid-ual class, called \OT1/cmr/m/it/12 micro-accuracy
  []
 
-[60] [61] [62]
-<../FiguresClasses/AltoFlute.png, id=293, 867.24pt x 578.16pt>
+[58] [59] [60] [61]
+<../FiguresMetrics/AvgXval-Multimodal.png, id=290, 1445.4pt x 578.16pt>
+File: ../FiguresMetrics/AvgXval-Multimodal.png Graphic file (type png)
+<use ../FiguresMetrics/AvgXval-Multimodal.png>
+Package pdftex.def Info: ../FiguresMetrics/AvgXval-Multimodal.png  used on inpu
+t line 1808.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+
+
+Package caption Warning: \label without proper reference on input line 1883.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-MultimodalConfs' on page 62 undefined on input li
+ne 1813.
+
+<../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png, id=291, 1156.32pt x
+ 1156.32pt>
+File: ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png Graphic file (t
+ype png)
+<use ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.
+png  used on input line 1817.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=292, 1156.3
+2pt x 1156.32pt>
+File: ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png Graphic fi
+le (type png)
+<use ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confu
+sion.png  used on input line 1823.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+[62 <../FiguresMetrics/AvgXval-Multimodal.png>]
+<../FiguresMetrics/AvgXval-Convolution.png, id=297, 1445.4pt x 578.16pt>
+File: ../FiguresMetrics/AvgXval-Convolution.png Graphic file (type png)
+<use ../FiguresMetrics/AvgXval-Convolution.png>
+Package pdftex.def Info: ../FiguresMetrics/AvgXval-Convolution.png  used on inp
+ut line 1843.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+
+Overfull \hbox (8.79813pt too wide) in paragraph at lines 1843--1844
+ [][] 
+ []
+
+<../FiguresMetrics/AvgXval-Perceptron.png, id=298, 1445.4pt x 578.16pt>
+File: ../FiguresMetrics/AvgXval-Perceptron.png Graphic file (type png)
+<use ../FiguresMetrics/AvgXval-Perceptron.png>
+Package pdftex.def Info: ../FiguresMetrics/AvgXval-Perceptron.png  used on inpu
+t line 1849.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+
+Overfull \hbox (8.79813pt too wide) in paragraph at lines 1849--1850
+ [][] 
+ []
+
+[63 <../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png> <../FiguresMetr
+ics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>]
+
+Package caption Warning: \label without proper reference on input line 1883.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig-MultimodalConfs' on page 64 undefined on input li
+ne 1857.
+
+<../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png, id=304, 1156.32pt x
+ 1156.32pt>
+File: ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png Graphic file (t
+ype png)
+<use ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.
+png  used on input line 1862.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png, id=305, 1156.3
+2pt x 1156.32pt>
+File: ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png Graphic fi
+le (type png)
+<use ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confu
+sion.png  used on input line 1868.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png, id=306, 1156.32pt x 
+1156.32pt>
+File: ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png Graphic file (ty
+pe png)
+<use ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.p
+ng  used on input line 1874.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=307, 1156.32
+pt x 1156.32pt>
+File: ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png Graphic fil
+e (type png)
+<use ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confus
+ion.png  used on input line 1880.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+[64 <../FiguresMetrics/AvgXval-Convolution.png> <../FiguresMetrics/AvgXval-Perc
+eptron.png>]
+<../FiguresClasses/AltoFlute.png, id=313, 867.24pt x 578.16pt>
 File: ../FiguresClasses/AltoFlute.png Graphic file (type png)
 <use ../FiguresClasses/AltoFlute.png>
 Package pdftex.def Info: ../FiguresClasses/AltoFlute.png  used on input line 18
-63.
+97.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/AltoSax.png, id=294, 867.24pt x 578.16pt>
+<../FiguresClasses/AltoSax.png, id=314, 867.24pt x 578.16pt>
 File: ../FiguresClasses/AltoSax.png Graphic file (type png)
 <use ../FiguresClasses/AltoSax.png>
-Package pdftex.def Info: ../FiguresClasses/AltoSax.png  used on input line 1868
+Package pdftex.def Info: ../FiguresClasses/AltoSax.png  used on input line 1902
 .
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/BbClarinet.png, id=295, 867.24pt x 578.16pt>
+<../FiguresClasses/BbClarinet.png, id=315, 867.24pt x 578.16pt>
 File: ../FiguresClasses/BbClarinet.png Graphic file (type png)
 <use ../FiguresClasses/BbClarinet.png>
 Package pdftex.def Info: ../FiguresClasses/BbClarinet.png  used on input line 1
-873.
+907.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/EbClarinet.png, id=296, 867.24pt x 578.16pt>
+<../FiguresClasses/EbClarinet.png, id=316, 867.24pt x 578.16pt>
 File: ../FiguresClasses/EbClarinet.png Graphic file (type png)
 <use ../FiguresClasses/EbClarinet.png>
 Package pdftex.def Info: ../FiguresClasses/EbClarinet.png  used on input line 1
-878.
+912.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/EnglishHorn.png, id=297, 867.24pt x 578.16pt>
+<../FiguresClasses/EnglishHorn.png, id=317, 867.24pt x 578.16pt>
 File: ../FiguresClasses/EnglishHorn.png Graphic file (type png)
 <use ../FiguresClasses/EnglishHorn.png>
 Package pdftex.def Info: ../FiguresClasses/EnglishHorn.png  used on input line 
-1883.
+1917.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Flute.png, id=298, 867.24pt x 578.16pt>
+<../FiguresClasses/Flute.png, id=318, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Flute.png Graphic file (type png)
 <use ../FiguresClasses/Flute.png>
-Package pdftex.def Info: ../FiguresClasses/Flute.png  used on input line 1888.
+Package pdftex.def Info: ../FiguresClasses/Flute.png  used on input line 1922.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Oboe.png, id=299, 867.24pt x 578.16pt>
+<../FiguresClasses/Oboe.png, id=319, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Oboe.png Graphic file (type png)
 <use ../FiguresClasses/Oboe.png>
-Package pdftex.def Info: ../FiguresClasses/Oboe.png  used on input line 1893.
+Package pdftex.def Info: ../FiguresClasses/Oboe.png  used on input line 1927.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/SopSax.png, id=300, 867.24pt x 578.16pt>
+<../FiguresClasses/SopSax.png, id=320, 867.24pt x 578.16pt>
 File: ../FiguresClasses/SopSax.png Graphic file (type png)
 <use ../FiguresClasses/SopSax.png>
-Package pdftex.def Info: ../FiguresClasses/SopSax.png  used on input line 1898.
+Package pdftex.def Info: ../FiguresClasses/SopSax.png  used on input line 1932.
 
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1861--1901
+Underfull \hbox (badness 10000) in paragraph at lines 1895--1935
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1861--1901
+Underfull \hbox (badness 10000) in paragraph at lines 1895--1935
 [] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1861--1901
+Underfull \hbox (badness 10000) in paragraph at lines 1895--1935
 [] []
  []
 
-[63]
+[65 <../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png> <../FiguresMetr
+ics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png> <../FiguresMetrics/XValBetaML
+P_Avg_Standard_Confusion.png> <../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_
+Confusion.png>]
 Overfull \vbox (43.86687pt too high) has occurred while \output is active []
 
 
-[64 <../FiguresClasses/AltoFlute.png> <../FiguresClasses/AltoSax.png> <../Figur
+[66 <../FiguresClasses/AltoFlute.png> <../FiguresClasses/AltoSax.png> <../Figur
 esClasses/BbClarinet.png> <../FiguresClasses/EbClarinet.png> <../FiguresClasses
 /EnglishHorn.png> <../FiguresClasses/Flute.png> <../FiguresClasses/Oboe.png> <.
 ./FiguresClasses/SopSax.png>]
-<../FiguresClasses/BassClarinet.png, id=315, 867.24pt x 578.16pt>
+<../FiguresClasses/BassClarinet.png, id=340, 867.24pt x 578.16pt>
 File: ../FiguresClasses/BassClarinet.png Graphic file (type png)
 <use ../FiguresClasses/BassClarinet.png>
 Package pdftex.def Info: ../FiguresClasses/BassClarinet.png  used on input line
- 1909.
+ 1943.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/BassFlute.png, id=316, 867.24pt x 578.16pt>
+<../FiguresClasses/BassFlute.png, id=341, 867.24pt x 578.16pt>
 File: ../FiguresClasses/BassFlute.png Graphic file (type png)
 <use ../FiguresClasses/BassFlute.png>
 Package pdftex.def Info: ../FiguresClasses/BassFlute.png  used on input line 19
-14.
+48.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Bassoon.png, id=317, 867.24pt x 578.16pt>
+<../FiguresClasses/Bassoon.png, id=342, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Bassoon.png Graphic file (type png)
 <use ../FiguresClasses/Bassoon.png>
-Package pdftex.def Info: ../FiguresClasses/Bassoon.png  used on input line 1919
+Package pdftex.def Info: ../FiguresClasses/Bassoon.png  used on input line 1953
 .
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/ContraBassoon.png, id=318, 867.24pt x 578.16pt>
+<../FiguresClasses/ContraBassoon.png, id=343, 867.24pt x 578.16pt>
 File: ../FiguresClasses/ContraBassoon.png Graphic file (type png)
 <use ../FiguresClasses/ContraBassoon.png>
 Package pdftex.def Info: ../FiguresClasses/ContraBassoon.png  used on input lin
-e 1924.
+e 1958.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Saxophone.png, id=319, 867.24pt x 578.16pt>
+<../FiguresClasses/Saxophone.png, id=344, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Saxophone.png Graphic file (type png)
 <use ../FiguresClasses/Saxophone.png>
 Package pdftex.def Info: ../FiguresClasses/Saxophone.png  used on input line 19
-29.
+63.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1907--1932
+Underfull \hbox (badness 10000) in paragraph at lines 1941--1966
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1907--1932
+Underfull \hbox (badness 10000) in paragraph at lines 1941--1966
 [] []
  []
 
-<../FiguresClasses/BassTrombone.png, id=320, 867.24pt x 578.16pt>
+<../FiguresClasses/BassTrombone.png, id=345, 867.24pt x 578.16pt>
 File: ../FiguresClasses/BassTrombone.png Graphic file (type png)
 <use ../FiguresClasses/BassTrombone.png>
 Package pdftex.def Info: ../FiguresClasses/BassTrombone.png  used on input line
- 1939.
+ 1973.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Horn.png, id=321, 867.24pt x 578.16pt>
+<../FiguresClasses/Horn.png, id=346, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Horn.png Graphic file (type png)
 <use ../FiguresClasses/Horn.png>
-Package pdftex.def Info: ../FiguresClasses/Horn.png  used on input line 1944.
+Package pdftex.def Info: ../FiguresClasses/Horn.png  used on input line 1978.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/TenorTrombone.png, id=322, 867.24pt x 578.16pt>
+<../FiguresClasses/TenorTrombone.png, id=347, 867.24pt x 578.16pt>
 File: ../FiguresClasses/TenorTrombone.png Graphic file (type png)
 <use ../FiguresClasses/TenorTrombone.png>
 Package pdftex.def Info: ../FiguresClasses/TenorTrombone.png  used on input lin
-e 1949.
+e 1983.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Trombone.png, id=323, 867.24pt x 578.16pt>
+<../FiguresClasses/Trombone.png, id=348, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Trombone.png Graphic file (type png)
 <use ../FiguresClasses/Trombone.png>
-Package pdftex.def Info: ../FiguresClasses/Trombone.png  used on input line 195
-4.
+Package pdftex.def Info: ../FiguresClasses/Trombone.png  used on input line 198
+8.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Trumpet.png, id=324, 867.24pt x 578.16pt>
+<../FiguresClasses/Trumpet.png, id=349, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Trumpet.png Graphic file (type png)
 <use ../FiguresClasses/Trumpet.png>
-Package pdftex.def Info: ../FiguresClasses/Trumpet.png  used on input line 1959
+Package pdftex.def Info: ../FiguresClasses/Trumpet.png  used on input line 1993
 .
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
-<../FiguresClasses/Tuba.png, id=325, 867.24pt x 578.16pt>
+<../FiguresClasses/Tuba.png, id=350, 867.24pt x 578.16pt>
 File: ../FiguresClasses/Tuba.png Graphic file (type png)
 <use ../FiguresClasses/Tuba.png>
-Package pdftex.def Info: ../FiguresClasses/Tuba.png  used on input line 1964.
+Package pdftex.def Info: ../FiguresClasses/Tuba.png  used on input line 1998.
 (pdftex.def)             Requested size: 212.41261pt x 141.60191pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1937--1967
+Underfull \hbox (badness 10000) in paragraph at lines 1971--2001
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1937--1967
+Underfull \hbox (badness 10000) in paragraph at lines 1971--2001
 [] []
  []
 
-[65 <../FiguresClasses/BassClarinet.png> <../FiguresClasses/BassFlute.png> <../
+[67 <../FiguresClasses/BassClarinet.png> <../FiguresClasses/BassFlute.png> <../
 FiguresClasses/Bassoon.png> <../FiguresClasses/ContraBassoon.png> <../FiguresCl
-asses/Saxophone.png>]
-LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <14.4> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 1975.
-
- [66 <../FiguresClasses/BassTrombone.png> <../FiguresClasses/Horn.png> <../Figu
-resClasses/TenorTrombone.png> <../FiguresClasses/Trombone.png> <../FiguresClass
-es/Trumpet.png> <../FiguresClasses/Tuba.png>] [67]
-[68] [69] [70] (Buell-PHYS799-ThesisDraft0.aux)
+asses/Saxophone.png>] [68 <../FiguresClasses/BassTrombone.png> <../FiguresClass
+es/Horn.png> <../FiguresClasses/TenorTrombone.png> <../FiguresClasses/Trombone.
+png> <../FiguresClasses/Trumpet.png> <../FiguresClasses/Tuba.png>] [69]
+[70] [71] [72] (Buell-PHYS799-ThesisDraft0.aux)
 
 LaTeX Warning: There were undefined references.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5625 strings out of 492895
- 89696 string characters out of 3123268
- 160438 words of memory out of 3000000
- 9392 multiletter control sequences out of 15000+200000
- 12867 words of font info for 48 fonts, out of 3000000 for 9000
+ 5668 strings out of 492895
+ 92070 string characters out of 3123268
+ 160517 words of memory out of 3000000
+ 9427 multiletter control sequences out of 15000+200000
+ 12612 words of font info for 47 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,19n,43p,1101b,510s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmbsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmbx10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Pro
-grams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/App
-Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Us
-ers/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmm
-i12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmmi6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Landon/AppData/Local/P
-rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Landon/Ap
-pData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Us
-ers/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr
+s/cm/cmbx10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Landon/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Use
+rs/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi
 6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmr8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Pro
-grams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppD
-ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Use
-rs/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols
-/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft0.pdf (71 pages, 3837920 bytes).
+fonts/cm/cmmi8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/typ
+e1/public/amsfonts/cm/cmr10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Landon/AppData/Local/Pro
+grams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Landon/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users
+/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.p
+fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Progr
+ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppDa
+ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Buell-PHYS799-ThesisDraft0.pdf (73 pages, 4291973 bytes).
 PDF statistics:
- 415 PDF objects out of 1000 (max. 8388607)
+ 437 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 281 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 326 words of extra memory for PDF output out of 10000 (max. 10000000)
 
