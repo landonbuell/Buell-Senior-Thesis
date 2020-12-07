@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     # Establish local Directory Paths
     parent = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis"
-    modelName = "XValGammaCNN"
+    modelName = "XValAlphaCLF"
     dataPath = os.path.join(parent,"SignalClassifier-CrossValidation",modelName+"-Output-Data")
     metricsPath = os.path.join(parent,"Thesis\\FiguresMetrics")    
     figuresPath = os.path.join(parent,"Thesis\\FiguresClasses")    
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     Program.__Call__(metricsPath)
     #Program.ExportMetricsBySplit(metricsPath)
-    #Program.ExportMetricsByClass(metricsPath)
+    Program.ExportMetricsByClass(metricsPath)
 
 
     # Prepare Figures

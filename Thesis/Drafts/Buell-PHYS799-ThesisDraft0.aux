@@ -107,7 +107,7 @@
 \citation{Loy}
 \citation{Loy}
 \newlabel{eqn-ConvFeedForward}{{14}{11}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Typical "Call" method for a 2-Dimensional Convolutional layer in a neural network that uses $K$ filters, of $n \times m$ kernels, with an assumed stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.\relax }}{11}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Typical "Call" method for a 2-Dimensional Convolutional layer in a neural network that uses $K$ filters, of $m \times n$ kernels, with an assumed stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.\relax }}{11}\protected@file@percent }
 \newlabel{alg-CallConv2D}{{3}{11}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}2-Dimensional Maximum Pooling Layer}{11}\protected@file@percent }
 \newlabel{subsubsec-2DPool}{{2.3.3}{11}}
@@ -116,45 +116,45 @@
 \citation{Goodfellow}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The result of 2D maximum-pooling an input array. This image was adapted from Loy, pg. 126 \cite  {Loy}\relax }}{12}\protected@file@percent }
 \newlabel{fig-2DMaxPool}{{2}{12}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.4}1-Dimensional Flattening Layer}{12}\protected@file@percent }
-\newlabel{subsubsec-1DFlatten}{{2.3.4}{12}}
-\newlabel{eqn-FlattenFunction}{{15}{12}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Typical "Call" method for a 2-Dimensional Maximum Pooling layer in a neural network. We assume 2D input, but a practical implementation may include the need to loop over a high dimensional structure. For simplicity, we assume a stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.\relax }}{12}\protected@file@percent }
+\newlabel{alg-CallPool2D}{{4}{12}}
 \citation{Geron}
 \citation{Loy}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.4}1-Dimensional Flattening Layer}{13}\protected@file@percent }
+\newlabel{subsubsec-1DFlatten}{{2.3.4}{13}}
+\newlabel{eqn-FlattenFunction}{{15}{13}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.5}1-Dimensional Concatenation Layer}{13}\protected@file@percent }
 \newlabel{subsubsec-1DConcat}{{2.3.5}{13}}
 \newlabel{eqn-ConcatenationFunction}{{18}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Activation Functions Used in Network Layers}{13}\protected@file@percent }
-\newlabel{sec-ActivationFunctions}{{2.4}{13}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.1}Rectified Linear Unit}{13}\protected@file@percent }
-\newlabel{eqn-ReLU}{{19}{13}}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Virtanen}
 \citation{Loy}
 \citation{Virtanen}
-\citation{Goodfellow}
-\citation{Mitchell}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Activation Functions Used in Network Layers}{14}\protected@file@percent }
+\newlabel{sec-ActivationFunctions}{{2.4}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.1}Rectified Linear Unit}{14}\protected@file@percent }
+\newlabel{eqn-ReLU}{{19}{14}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Rectifed Linear Unit (ReLU) activation function\relax }}{14}\protected@file@percent }
 \newlabel{fig-ReLU}{{3}{14}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.2}Softmax}{14}\protected@file@percent }
 \newlabel{subsubsec-Softmax}{{2.4.2}{14}}
 \newlabel{eqn-Softmax}{{20}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Training The Model}{14}\protected@file@percent }
-\newlabel{subsec-Training}{{2.5}{14}}
+\citation{Goodfellow}
+\citation{Mitchell}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Levine}
 \citation{Goodfellow}
 \citation{James}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Training The Model}{15}\protected@file@percent }
+\newlabel{subsec-Training}{{2.5}{15}}
+\newlabel{eqn-Theta}{{21}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1}The Cost Function}{15}\protected@file@percent }
 \citation{James}
 \citation{Goodfellow}
 \citation{Virtanen}
 \citation{Bishop}
-\newlabel{eqn-Theta}{{21}{15}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1}The Cost Function}{15}\protected@file@percent }
-\newlabel{eqn-CXELoss}{{22}{15}}
-\newlabel{eqn-CXELossAvg}{{23}{15}}
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Mitchell}
@@ -162,8 +162,8 @@
 \citation{Loy}
 \citation{Goodfellow}
 \citation{Goodfellow}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plot of how $y^*_{j}$ affects the output values of the CXE cost function\relax }}{16}\protected@file@percent }
-\newlabel{fig-CXELoss}{{4}{16}}
+\newlabel{eqn-CXELoss}{{22}{16}}
+\newlabel{eqn-CXELossAvg}{{23}{16}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.2}Gradient Based Learning}{16}\protected@file@percent }
 \citation{Geron}
 \citation{Goodfellow}
@@ -172,12 +172,14 @@
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plot of how $y^*_{j}$ affects the output values of the CXE cost function\relax }}{17}\protected@file@percent }
+\newlabel{fig-CXELoss}{{4}{17}}
 \newlabel{eqn-CostGradient}{{25}{17}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.3}Back-Propagation}{17}\protected@file@percent }
-\newlabel{subsubsec-BackProp}{{2.5.3}{17}}
 \citation{Loy}
 \citation{Geron}
 \citation{Goodfellow}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.3}Back-Propagation}{18}\protected@file@percent }
+\newlabel{subsubsec-BackProp}{{2.5.3}{18}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A visual representation of a simplified neural network as a computational graph\relax }}{19}\protected@file@percent }
 \newlabel{fig-ComputationalGraph}{{5}{19}}
 \newlabel{eqn-dWL1}{{27}{20}}
@@ -188,13 +190,17 @@
 \citation{Geron}
 \newlabel{eqn-dWGeneral}{{34}{21}}
 \newlabel{eqn-dbGeneral}{{35}{21}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit  {for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays in a given layer $(l)$. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.\relax }}{21}\protected@file@percent }
-\newlabel{alg-BackProp}{{4}{21}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces Backwards propagation system, in a standard densely connected deep neural network. Each iteration in the \textit  {for-loop} computes the gradient of the cost function $J$ with respect to the weight and bias arrays in a given layer $(l)$. Each element in those arrays $dW$ and $db$ is the discrete gradient of the cost due to that parameter. A practical application of this algorithm should include batches of samples instead of a single sample and a regularizing function at each step.\relax }}{21}\protected@file@percent }
+\newlabel{alg-BackProp}{{5}{21}}
 \citation{Geron}
+\citation{Goodfellow}
+\citation{James}
+\citation{Loy}
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Loy}
 \citation{Geron}
+\citation{Goodfellow}
 \citation{Goodfellow}
 \citation{Geron}
 \newlabel{eqn-GradientLearning}{{36}{22}}
@@ -207,8 +213,8 @@
 \citation{Geron}
 \citation{Goodfellow}
 \citation{Ngiam}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite  {Goodfellow}\relax }}{23}\protected@file@percent }
-\newlabel{alg-ADAM}{{5}{23}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite  {Goodfellow}\relax }}{23}\protected@file@percent }
+\newlabel{alg-ADAM}{{6}{23}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Multimodal Architecture}{23}\protected@file@percent }
 \newlabel{subsec-Architecture}{{2.6}{23}}
 \citation{Li}
@@ -240,7 +246,7 @@
 \citation{Serizel}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Properties of Musical Instruments}{28}\protected@file@percent }
 \newlabel{sec-Instruments}{{3}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Instruments categories used in the classification task. Note that the network uses only integers given by "Class index" to indentify sources. The string "Class Name" is keep for human readability\relax }}{28}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Instruments categories used in the classification task. Note that the network uses only integers given by "Class index" to identify sources. The string "Class Name" is kept for human readability\relax }}{28}\protected@file@percent }
 \newlabel{fig-ClassList}{{7}{28}}
 \citation{Haberman}
 \citation{Hunter}
@@ -355,44 +361,44 @@
 \citation{Mierswa}
 \citation{Liu}
 \citation{Zhang}
-\citation{Kahn}
+\citation{Khan}
 \citation{Serizel}
-\citation{Liu}
-\citation{Liu}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Spectrogram Features}{38}\protected@file@percent }
 \newlabel{subsec-Spectrogram}{{4.2}{38}}
 \@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Spectrogram representations of various waveforms\relax }}{38}\protected@file@percent }
-\newlabel{fig-spectrograms}{{14}{38}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{38}\protected@file@percent }
-\newlabel{subsubsec-FrameBlocking}{{4.2.1}{38}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces A visualization of how frame-blocking is used to create each analysis frames. This image has been adapted and modified from Liu, et. al. "Audio Feature Extraction and Analysis", Fig. (1). See ref. \cite  {Liu}.\relax }}{38}\protected@file@percent }
-\newlabel{fig-AnalysisFrames}{{15}{38}}
+\newlabel{fig-Spectrograms}{{14}{38}}
+\citation{Liu}
+\citation{Liu}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{39}\protected@file@percent }
+\newlabel{subsubsec-FrameBlocking}{{4.2.1}{39}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces A visualization of how frame-blocking is used to create each analysis frames. This image has been adapted and modified from Liu, et. al. "Audio Feature Extraction and Analysis", Fig. (1). See ref. \cite  {Liu}.\relax }}{39}\protected@file@percent }
+\newlabel{fig-AnalysisFrames}{{15}{39}}
 \newlabel{eqn-FrameMatrix}{{49}{39}}
-\newlabel{eqn-IndexingA}{{50}{39}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{39}\protected@file@percent }
-\newlabel{subsubsec-Windowing}{{4.2.2}{39}}
-\newlabel{eqn-Hanning}{{51}{39}}
-\newlabel{eqn-WindowMatrix}{{52}{39}}
+\newlabel{eqn-IndexingA}{{50}{40}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{40}\protected@file@percent }
+\newlabel{subsubsec-Windowing}{{4.2.2}{40}}
+\newlabel{eqn-Hanning}{{51}{40}}
+\newlabel{eqn-WindowMatrix}{{52}{40}}
 \citation{Virtanen}
 \citation{Olson}
 \citation{Peatross}
 \citation{Virtanen}
 \citation{Taylor}
 \citation{Virtanen}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{40}\protected@file@percent }
-\newlabel{subsubsec-DFT}{{4.2.3}{40}}
 \citation{Short}
 \citation{Peatross}
 \citation{Levine}
 \citation{Loy}
 \citation{Tensorflow}
-\citation{Olson}
-\citation{Virtanen}
-\citation{White}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{41}\protected@file@percent }
+\newlabel{subsubsec-DFT}{{4.2.3}{41}}
 \newlabel{eqn-DFTMatrix}{{53}{41}}
 \newlabel{eqn-DFT}{{54}{41}}
 \newlabel{eqn-Spectrogram}{{55}{41}}
-\newlabel{eqn-IndexingS}{{56}{41}}
+\citation{Olson}
+\citation{Virtanen}
+\citation{White}
+\newlabel{eqn-IndexingS}{{56}{42}}
 \newlabel{eqn-X1}{{57}{42}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Time-Space Features}{42}\protected@file@percent }
 \newlabel{subsec-TimeFeatures}{{4.3}{42}}
@@ -400,12 +406,12 @@
 \citation{Liu}
 \citation{Olson}
 \citation{Serizel}
-\citation{Virtanen}
-\citation{Olson}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Time Domain Envelope}{43}\protected@file@percent }
 \newlabel{eqn-RMS}{{58}{43}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces TDE Envelope values for musical instruments\relax }}{43}\protected@file@percent }
-\newlabel{fig-ExampleTDE}{{17}{43}}
+\citation{Virtanen}
+\citation{Olson}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces TDE Envelope values for musical instruments\relax }}{44}\protected@file@percent }
+\newlabel{fig-ExampleTDE}{{17}{44}}
 \citation{Khan}
 \citation{Liu}
 \citation{Zhang}
@@ -416,22 +422,20 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Zero Crossing Rate}{45}\protected@file@percent }
 \citation{Liu}
 \citation{White}
-\citation{Loy}
-\citation{James}
 \newlabel{eqn-ZXR}{{59}{46}}
 \@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces A comparison of the Zero-Crossing Rate for each class using a box-and-whisker plot\relax }}{46}\protected@file@percent }
 \newlabel{fig-FeatureZXR}{{19}{46}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Temporal Center of Mass}{46}\protected@file@percent }
+\newlabel{eqn-FeatureTCM}{{60}{46}}
 \citation{Olson}
 \citation{White}
 \citation{Serizel}
-\newlabel{eqn-FeatureTCM}{{60}{47}}
 \@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces TCM values for musical instruments\relax }}{47}\protected@file@percent }
 \newlabel{fig-ExampleTCM}{{20}{47}}
 \@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces A comparison of the temporal center mass for each class using a box-and-whisker plot\relax }}{47}\protected@file@percent }
 \newlabel{fig-FeatureTCM}{{21}{47}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{47}\protected@file@percent }
 \citation{Serizel}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{48}\protected@file@percent }
 \newlabel{eqn-FeatureACC}{{61}{48}}
 \@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces A comparison of the the first four auto correlation coefficients in each class using a box-and-whisker plot\relax }}{49}\protected@file@percent }
 \newlabel{fig-FeatureACC}{{22}{49}}
@@ -441,8 +445,9 @@
 \citation{Serizel}
 \citation{Serizel}
 \citation{Khan}
+\citation{Olson}
 \citation{Serizel}
-\citation{Kahn}
+\citation{Khan}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Frequency-Space Features}{50}\protected@file@percent }
 \newlabel{subsec-FreqFeatures}{{4.4}{50}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Mel Filter Bank Energies}{50}\protected@file@percent }
@@ -465,7 +470,7 @@
 \citation{White}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Frequency Center of Mass}{54}\protected@file@percent }
 \newlabel{eqn-FeatureFCM}{{66}{54}}
-\newlabel{fig-FeatureFCM}{{\caption@xref {fig-FeatureFCM}{ on input line 1581}}{54}}
+\newlabel{fig-FeatureFCM}{{\caption@xref {fig-FeatureFCM}{ on input line 1622}}{54}}
 \@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces A comparison of the frequency center-of-mass for each class using box-and-whisker plots\relax }}{54}\protected@file@percent }
 \citation{Geron}
 \citation{Goodfellow}
@@ -484,8 +489,8 @@
 \citation{Geron}
 \citation{Goodfellow}
 \citation{James}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces A $K$-Fold Cross Validation program.\relax }}{56}\protected@file@percent }
-\newlabel{alg-CrossValidation}{{6}{56}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {7}{\ignorespaces A $K$-Fold Cross Validation program.\relax }}{56}\protected@file@percent }
+\newlabel{alg-CrossValidation}{{7}{56}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Performance Metrics}{56}\protected@file@percent }
 \citation{Geron}
 \citation{Geron}
@@ -545,18 +550,34 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Comparing Results between Architectures}{63}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces \relax }}{64}\protected@file@percent }
 \newlabel{fig-UnimodalXVal}{{31}{64}}
-\newlabel{fig-MultimodalConfs}{{\caption@xref {fig-MultimodalConfs}{ on input line 1883}}{65}}
+\@writefile{lof}{\contentsline {figure}{\numberline {32}{\ignorespaces \relax }}{65}\protected@file@percent }
+\newlabel{fig-UnimodalConfs}{{32}{65}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Comparing Classification Scores within Each Class}{65}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces Performance Metrics Across all High Ranged Woodwind Instruments\relax }}{66}\protected@file@percent }
+\newlabel{subsec-ClassScores}{{6.3}{65}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}High Woodwind Scores}{66}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces \relax }}{66}\protected@file@percent }
 \newlabel{fig-HighWindsScores}{{33}{66}}
-\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces Performance Metrics Across all Mid and Low Ranged Woodwind Instruments\relax }}{67}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}Middle and Low Woodwind Scores}{67}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces \relax }}{67}\protected@file@percent }
 \newlabel{fig-LowWindsScores}{{34}{67}}
-\@writefile{lof}{\contentsline {figure}{\numberline {35}{\ignorespaces Performance Metrics Across all Brass Instruments\relax }}{68}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.3}Brass Scores}{68}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {35}{\ignorespaces \relax }}{68}\protected@file@percent }
 \newlabel{fig-BrassScores}{{35}{68}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{69}\protected@file@percent }
-\newlabel{sec-Conclusion}{{7}{69}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Acknowledgments}{70}\protected@file@percent }
-\newlabel{sec-Acknowledge}{{8}{70}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.4}String Scores}{69}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {36}{\ignorespaces \relax }}{69}\protected@file@percent }
+\newlabel{fig-StringScores}{{36}{69}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.5}Percussion Scores}{70}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {37}{\ignorespaces \relax }}{70}\protected@file@percent }
+\newlabel{fig-PercussionScores}{{37}{70}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.6}Synthetic Waveform Scores}{71}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {38}{\ignorespaces \relax }}{71}\protected@file@percent }
+\newlabel{fig-SynthScores}{{38}{71}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Discussion of Results}{71}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Predictions on Chaotic Synthesizers}{72}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{73}\protected@file@percent }
+\newlabel{sec-Conclusion}{{7}{73}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Acknowledgments}{74}\protected@file@percent }
+\newlabel{sec-Acknowledge}{{8}{74}}
 \bibstyle{apalike}
 \bibcite{Bishop}{1}
 \bibcite{Geron}{2}

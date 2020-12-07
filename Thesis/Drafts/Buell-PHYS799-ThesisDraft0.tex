@@ -122,39 +122,39 @@
 F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 \end{equation}
 
-\paragraph*{}In secs. (\ref{subsec-NerualNetworkIntro}) and (\ref{subsec-NetworkStructure}), we introduce the nature and structure of a neural network and how it can use used in part to solve this problem.
+\paragraph*{}In secs. (\ref{subsec-NerualNetworkIntro}) and (\ref{subsec-NetworkStructure}), we introduce the nature and structure of a neural network and how it can use used in part to solve this problem. We discuss it's inspiration from a biological brain, and show how different layers of the neural network compare to functions or processes in the brain.
 
 % ================================================================
 
 \subsubsection{Collecting and Pre-processing Raw Data}
 
-\paragraph*{}In order to train the Multimodal neural network to identify musical instrument sources, we need a suitable data set to present to the model as training data. University of Iowa Electronic Music Studio, and the London-Based Philharmonia Orchestra each have a large collection of publicly available audio files \textcolor{blue}{Citations!}. These contain short segments of musical instruments performing a single note or a collection of notes in succession. Each sound file is labeled according to the instrument that is producing that sound.
+\paragraph*{}In order to train the Multimodal neural network to identify musical instrument sources, we need a suitable data set to present to the model as training data. University of Iowa Electronic Music Studio, and the London-Based Philharmonia Orchestra each have a large collection of publicly available audio files \textcolor{blue}{Citations!}. These files contain short segments of musical instruments performing a single note, and is labeled according to the instrument that produced the sound. The files and labels make up the core of the data set that we use to train the model.
 
-\paragraph*{}To ensure that these data sets are formatted consistently, we read each sample from it's original format, \textit{.AIF}, \textit{.MP3}, or similar, and rewrite the data as a new \textit{.WAV} files, sampled at 44.1 kHz with a 16 bit depth. This ensures that all data will have a consistent format when features are extracted. This stage is detailed in sec.(\ref{subsubsec-Preprocessing}).
+\paragraph*{}To ensure that these data sets are formatted consistently, we read each sample from it's original format, \textit{.AIF}, \textit{.MP3}, or similar, and rewrite the data as a new \textit{.WAV} files, sampled at 44.1 kHz with a 16 bit depth. This ensures that all data will have a consistent format when features are extracted. This stage is detailed in sec. (\ref{subsubsec-Preprocessing}).
 
 % ================================================================
 
 \subsubsection{Designing Classification Features}
 
-\paragraph*{}The performance of a neural network is largely dependent of designing an appropriate set of classification features. These are properties of wave forms that can be represented by a numerical value or several numerical values and are used as the primary tool in classification. We detail these features in sec. (\ref{sec-Features}). These are used in place of a full waveform to represent a file's contents in a low-dimensional array. We use tools from physics, mathematics, and signal processing to define and explore a comprehensive set of features that enables a high performance of the classifier. 
+\paragraph*{}The performance of a neural network is largely dependent of designing an appropriate set of classification features which represent the input given to the neural network. These are properties of wave forms that can be represented by a numerical value or several numerical values and are used as the primary tool in classification. We detail these features in sec. (\ref{sec-Features}). These are used in place of a full waveform to represent a file's contents in a low-dimensional array. We use tools from physics, mathematics, and signal processing to define and explore a comprehensive set of features that enables a high performance of the classifier. 
 
 % ================================================================
 
 \subsubsection{Designing A Complementary Network Architecture}
 
-\paragraph*{}With the appropriate set of features designed, and the number of output determined, we can organize the structure of the neural network function. We construct a multimodal neural network, explored in sec. (\ref{sec-Architecture}), that processes two input arrays derived from the same audio sample. This network is designed to handle and process each respective input independently, and concatenate the results to produce a single output. 
+\paragraph*{}With the appropriate set of features designed, and the number of outputs determined, we can organize the structure of the neural network function. The shape of the network defines the hypothesis space, and a subset of the possible solutions that the trained model could arrive at. We construct a multimodal neural network, explored in sec. (\ref{subsec-Architecture}), that processes two distinct entry points derived from the same audio sample. This network is designed to handle and process each respective input independently, and concatenate the results to produce a single outputted prediction.
 
 % ================================================================
 
 \subsubsection{Testing and Evaluating Network Performance}
 
-\paragraph*{}We divide the raw data set up into a training and testing sets. We employ cross-validation and compute the results of performance metrics to ensure that out model is making reliable predictions, and generalize appropriately. In this stage, we also choose the value of hyper-parameters, activation functions and layer widths to best compliment the chosen features. This process is repeated and expanded upon until we have produced a model with a sufficient performance.
+\paragraph*{}We divide the raw data set up into a training and testing sets. We employ a resampling method called cross-validation and compute the results of various performance metrics to ensure that our model is making reliable predictions, and can generalize appropriately. In this stage, we also choose the value of hyper-parameters, activation functions and layer widths to best compliment the chosen features. This process is repeated and expanded upon until we have produced a model with a sufficient performance. We explore the explore this is sec. (\ref{sec-PerfEval}).
 
 % ================================================================
 
 \subsubsection{Running Predictions of Chaotic Synthesizer Files}
 
-\paragraph*{}Once we have established a suitable performance of the model, we allow the model to run predictions on the un-labeled chaotic synthesizer wave forms. We output the prediction results to a file, and compare the neural network predictions against human predictions. If further corrections are needed, we revert and re-deign the features, architecture, or hyper-parameters as needed.
+\paragraph*{}Once we have established a suitable performance of the model, we allow the model to run predictions on the un-labeled chaotic synthesizer wave forms. We output the prediction results to a file, and compare the neural network predictions against human predictions. If further corrections are needed, we revert and re-deign the features, architecture, or hyper-parameters as needed. We explore thisas part of our conclusions in sec. (\ref{sec-Conclusion}).
 
 % ================================================================
 % ================================================================
@@ -170,7 +170,7 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 
 \paragraph*{}The task of algorithmically matching sound files to musical instrument classes in exceedingly difficult through conventional computer programming techniques. Because of the complexity of sound recognition, the challenge arises as to how to build some sort of program that could function at a level above general procedural or explicit instructional rules. Rather than \textit{hard-coding} a set of conditions or parameters for a classification program, we seek an solution that allows for a computer to \textit{learn} from labeled training examples in order \textit{teach} itself \cite{Bishop,Mitchell}. One such an algorithm that has been used for this type of task is a \textit{Neural Network} \cite{Geron2,Goodfellow,Levine}.
 
-\paragraph*{}As the name implies, Early neural networks were inspired from from the human brain. Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
+\paragraph*{}As the name implies, early neural networks were inspired from from the human brain. Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
 \begin{quote}
 Birds inspired us to fly, burdock plants inspired velcro and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
@@ -187,7 +187,7 @@ The result of such an analogy is a computer program that is reminiscent of the a
 \subsection{The Structure of a Neural Network}
 \label{subsec-NetworkStructure}
 
-\paragraph*{}A Neural Network is a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. The output of one layer is passed forward and use as the input for the next layer. It is this process of transforming inputs successively in a particular order until an output is attained that makes up the core functionality of a neural network \cite{Geron,Loy}. The output of the final layer encodes the "decision" of the model given a particular input.
+\paragraph*{}A Neural Network is a model of a mathematical function, composed of several smaller mathematical functions called \textit{layers} \cite{Goodfellow,Loy}. Each layer represents an operation that takes some real input, typically an array of real double-precision floating-point numbers, and returns a modified array of new double-precision floating-point numbers. The exact nature of this operation can be very different depending on the layer type or where it sits within the network. The output of one layer is passed forward and used as the input for the next layer. It is this process of transforming inputs successively in a particular order until an output is attained that makes up the core functionality of a neural network \cite{Geron,Loy}. The output of the final layer encodes the "decision" of the model given a particular input.
 
 \paragraph*{}Other than inspiration from the brain, Neural Networks are named \textit{networks} due to their successive chained or nested composition nature. A standard representation of a neural network is often a linked list or computational graph structure. This maps out exactly how the repeated compositions are structured and organizes the flow of information in more complicated networks. Each node in the computational graph represents a \textit{layer}, which executes a particular prescribed mathematical function \cite{Goodfellow}. In the case of a \textit{linear, feed-forward} network, information passes in a single direction, to produce an output. We can represent this as a graph:
 \begin{equation}
@@ -201,7 +201,7 @@ or as a nested function:
 F(x) = f^{(L-1)}\big[f^{(L-2)}\big[...f^{(1)}\big[f^{(0)}\big[x]\big]\big]...\big]\big]
 \end{equation}
 The number of layers in a neural network is referred to as the network \textit{depth}. The dimensionality of each layer is referred to as the network \textit{width} \cite{Geron,Loy}.
-A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network, with each layer indexed by a superscipt, $(0)$ through $(L-1)$. Layer $(0)$ is said to be the \textit{input layer} and layer $L-1$ is said to be the \textit{output layer} \cite{Geron,Loy}. 
+A network model that contains $L$ unique layers is said to be an $L$-Layer Neural Network, with each layer indexed by a superscipt, $(0)$ through $(L-1)$. Layer $(0)$ is said to be the \textit{input layer} and layer $(L-1)$ is said to be the \textit{output layer} \cite{Geron,Loy}. 
 
 \paragraph*{}Due to the chained nature of the model, the activations from some layer, $(l-1)$, are used to directly produce the activations for the next successive layer $(l)$. The function that represents a layer $(l)$ is given by:
 \begin{equation}
@@ -210,7 +210,7 @@ f^{(l)} : x^{(l-1)} \in \mathbb{R} \rightarrow x^{(l)} \in \mathbb{R}
 \end{equation}
 The array of activations, $x^{(0)}$, is the raw input given the neural network, called \textit{input} activations. Conversely, $x^{(L-1)}$ is referred to as \textit{output} activations \cite{Geron,James,Loy}.
 
-\paragraph*{}Below we outline a standard "forward pass" algorithm for a general feed-forward deep neural network. We presume each layer to be a node in a computational graph that contains a method "\textit{call}" which executes the layer's main function as in Eq. (\ref{eqn-altLayerFunction}). Each call method is presumed to be composed of two steps: a (i) linear transformation, and a (ii) non-linear activation function. See sec. (\ref{subsec-Layers}) for more detials. Additionally, each node contains a pointer "\textit{next}" which gives the next layer in the network chain. Each layer should also store it's linear activations, $z^{(l)}$ and it's output activations $x^{(l)}$ for training purposes. This algorithm is adapted from Goodfellow, \cite{Goodfellow}.
+\paragraph*{}Below we outline a standard "forward pass" algorithm for a general feed-forward deep neural network. We presume each layer to be a node in a computational graph that contains a method "\textit{call}" which executes the layer's main function as in Eq. (\ref{eqn-altLayerFunction}). Additionally, each node contains a pointer "\textit{next}" which gives the next layer in the network chain. Each layer should also store it's linear activations, $z^{(l)}$ and it's output activations $x^{(l)}$ for training purposes. This algorithm is adapted from Goodfellow, \cite{Goodfellow}.
 
 \begin{algorithm}[H]
 \caption{Forward propagation system in a standard deep neural network. Each layer is presumed to be a node in a linked computational graph. This example has been setup to assume one input layer, and one output layer. Practical implementations should include mini-batches of data as opposed to a single sample.}
@@ -229,7 +229,7 @@ $f^{(i)} \leftarrow f^{(0)}$
 	\item $f^{(i)} \leftarrow f^{(i)}$.next()
 \ENDFOR
 \item Return the network's output, which are the output activation of the final layer \\
-\RETURN $x^{(L-1}$
+\RETURN $x^{(L-1)}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -238,7 +238,7 @@ $f^{(i)} \leftarrow f^{(0)}$
 \subsection{Layers Used in this Classification Model}
 \label{subsec-Layers}
 
-\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into a predictions (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a chain-like computational graph \cite{Goodfellow}. Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
+\paragraph*{}As stated previously, a neural network is composed of a series of functions that are called in succession to transform features (an input) into predictions (an output). As shown in Eq. (\ref{eqn-altLayerFunction}), each function feeds directly into the next as to form a chain-like computational graph \cite{Goodfellow}. Many layer functions can be divided into two portions: (i.) a Linear transformation, with a bias addition, and (ii.) an element-wise activation transformation. This activation function typically is a non-linear function which allows for the modeling of increasingly complex decision-boundaries \cite{Geron,Loy}. The Linear transformation can be given by Eq.(\ref{eqn-LinearTransform}) in the case of a 1D Dense layer (\ref{subsubsec-DenseLayer}) or Eq. (\ref{eqn-LinearTransform2}) in the case of a 2D Convolution layer.
 \begin{equation}
 \label{eqn-LinearTransform}
 z^{(l)} = W^{(l)} x^{(l-1)} + b^{(l)}
@@ -311,12 +311,12 @@ Eq. (\ref{eqn-DenseFeedForward}) is generally referred to as the \textit{dense l
 \REQUIRE $n \leftarrow$ Number of nodes in this dense layer
 \REQUIRE $\sigma^{(l)} \leftarrow$ Activation function for this layer
 \REQUIRE $W \leftarrow$ a $(n \times m)$ matrix of weights
-\REQUIRE $b \leftarrow$ a $(m \times 1)$ vector of bias values
+\REQUIRE $b \leftarrow$ a $(n \times 1)$ vector of bias values
 
-Evaluate linear activation values by computing the standard matrix-vector produce of $W^{(l)}$ and $x^{(l-1)}$:\\
+Evaluate linear activation values by computing the standard matrix-vector product of $W^{(l)}$ and $x^{(l-1)}$, and adding the bias neuron value:\\
 $z[i] \leftarrow b[i] + \sum_{j=0}^{n-1} W[i,j] x^{(l-1)}[j]$ \\
 Evaluate output activation values by applying the activation function to each element in the linear activation column vector $z$:\\
-$x^{(l)}[i] \leftarrow \sigma^{(l)}\big[ z[i] \big]$ \\
+$x^{(l)}[i] \leftarrow \sigma^{(l)}\big( z[i] \big)$ \\
 
 Store both activation arrays for back-propagation. Return the output activations:\\
 \RETURN $x^{(l)}$
@@ -329,38 +329,38 @@ Store both activation arrays for back-propagation. Return the output activations
 \subsubsection{2-Dimensional Convolution Layer}
 \label{subsubsec-Conv2DLayer}
 
-\paragraph*{}Convolution layers emerged from studying the brain's visual cortex, and have been used from image recognition related tasks for around 40 years. \cite{Geron,Loy}). This layer get's it's name from it's implementation of the mathematical \textit{convolution} function. The 2D discrete-convolution of function or 2D array $A[i,j]$ and $B[i,j]$ is given by \cite{Goodfellow}:
+\paragraph*{}Convolution layers emerged from studying the brain's visual cortex, and have been used from image recognition related tasks for around 40 years. \cite{Geron,Loy}. The layer function get's it's name from it's implementation of the mathematical \textit{convolution} operation. The 2D discrete-convolution of function or 2D array $A[i,j]$ and $B[i,j]$ is given by \cite{Goodfellow}:
 \begin{equation}
 \label{eqn-convolution}
 C[i,j] = (A * B)[i,j] = \sum_{u}\sum_{v} A[i,j]B[i - u,j - v]
 \end{equation}
 Note that convolution is commutative: $(A * B) = (B * A)$. We implement a convolutional layer $f^{(l)}$ by creating a series of $K$ weighting matrices, called \textit{filters}, each of size $m \times n$, where $m,n \in \mathbb{Z}$. Often we choose $m = n$ and call the shape the \textit{convolution kernel size} \cite{Loy, Goodfellow}.
 
-\paragraph*{}In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(N \times M)}$, the convolutions filters "step" through the input data and repeatedly compute the element-wise product of each $m \times n$ weighting kernel, and the local activations of the $x^{(l-1)}$ array. The step size in each of the 2-dimension is known as the \textit{stride}. Each of the $K$ filters are used to generate a $m \times n$ feature map from the input activation. For an appropriately trained network, some filters may result in detecting vertical lines, horizontal lines, sharp edges, areas of mostly one color, etc. \cite{Geron,Loy}.
+\paragraph*{}In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(M \times N)}$, the convolutions filters "step" through the input data and repeatedly compute the element-wise product of each $m \times n$ weighting kernel, and the local activations of the $x^{(l-1)}$ array. The step size in each of the 2-dimension is known as the \textit{stride}. Each of the $K$ filters are used to generate a $m \times n$ feature map from the input activation. For an appropriately trained network, some filters may result in detecting vertical lines, horizontal lines, sharp edges, areas of mostly one color, etc. \cite{Geron,Loy}.
 
 \paragraph*{}In general, for an $N \times M$ input, with kernel size $m \times n$, with stride size $1 \times 1$, and $K$ feature maps.
 \begin{equation}
-f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(N \times M)} \rightarrow
-x^{(l)} \in \mathbb{R}^{([N-n+1] \times [M-m+1] \times K)}
+f^{(l)} : x^{(l-1)} \in \mathbb{R}^{(M \times N)} \rightarrow
+x^{(l)} \in \mathbb{R}^{([M-m+1] \times [N-n+1] \times K)}
 \end{equation}
-As an example, consider a single filter map over input $x \in \mathbb{R}^{(4 \times 3)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in Fig. (\ref{fig-2DConvExample}):
+As an example, consider a single filter map over input $x \in \mathbb{R}^{(3 \times 4)}$ and filter map $W \in \mathbb{R}^{(2 \times 2)}$ as shown in Fig. (\ref{fig-2DConvExample}):
 \begin{figure}[H]
 \begin{center}
 
 	\begin{subfigure}{0.45\textwidth}
 	\includegraphics[scale=0.6]{../figures/2DConvExample(a)}
-	\caption{Input Activations}
+	\caption{Input Activations, $x^{(l-1)}$}
 	\end{subfigure}
 	
 	\begin{subfigure}{0.45\textwidth}
 	\includegraphics[scale=0.6]{../figures/2DConvExample(b)}
-	\caption{Convolution Filter}
+	\caption{Convolution Filter, $W^{(l)}_k$}
 	\end{subfigure}
 	
 	\begin{subfigure}{0.9\textwidth}
 	\centering
 	\includegraphics[scale=0.6]{../figures/2DConvExample(c)}
-	\caption{Convolution Result}
+	\caption{Convolution Result, $x^{(l)}_k$}
 	\end{subfigure}
 	
 \end{center}
@@ -372,23 +372,22 @@ Note that formal implementations include a bias vector and an activation functio
 \paragraph*{}For 2D convolution over input $x^{(l-1)}$ with feature map $W^{(l)}_k$, producing activations $x^{(l)}$, we compute the activations $x^{(l)}_{k}$ as \cite{Goodfellow}
 \begin{equation}
 \label{eqn-ConvFeedForward}
-x^{(l)}_k(i,j) = \sigma^{(l)}\bigg[ \Big( \sum_{u=0}^{m-1} \sum_{v=0}^{n-1} W^{(l)}(i,j) x^{(l-1)}_k(i - u,j - v) \Big) + b^{(l)}_k \bigg]
+x^{(l)}_k(i,j) = \sigma^{(l)}\bigg[ \Big( \sum_{u=0}^{m-1} \sum_{v=0}^{n-1} W^{(l)}_k(i,j) x^{(l-1)}_k(i - u,j - v) \Big) + b^{(l)}_k \bigg]
 \end{equation}
 This operation repeats for each of the $K$ feature maps. Each maps has it's own $n \times m$ weighting matrix and appropriately shaped bias .
 
 \paragraph*{}The convolution layers allows for several advantages. Among these are (i) \textit{sparse-connectivity}: not every single activation (pixel) is connect to every single output pixel, so it is more computationally efficient, (ii) \textit{positional invariance}: key features can be identified regardless of where they are in the layer, and (iii.) \textit{Automatic feature detection} as the training process will update the filters to identify dominant features in the data without human instruction \cite{Geron,Goodfellow,Loy}. Below we detail what the "Call" method for a 2-dimensional convolutional neural network may look like. Compare this procedure with Eq. (\ref{eqn-ConvFeedForward}).
 
 \begin{algorithm}[H]
-\caption{Typical "Call" method for a 2-Dimensional Convolutional layer in a neural network that uses $K$ filters, of $n \times m$ kernels, with an assumed stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.}
+\caption{Typical "Call" method for a 2-Dimensional Convolutional layer in a neural network that uses $K$ filters, of $m \times n$ kernels, with an assumed stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.}
 \label{alg-CallConv2D}
 
 \begin{algorithmic}
-\REQUIRE $x^{(l-1)} \leftarrow$ Input activations shaped into $(N \times M)$ matrix
+\REQUIRE $x^{(l-1)} \leftarrow$ Input activations shaped into $(M \times N)$ matrix
 \REQUIRE $K \leftarrow$ The number of filters (feature maps) to be used.
 \REQUIRE $\sigma \leftarrow$ Activation function for this layer
-\REQUIRE $W_{k} \leftarrow$ a $(n \times m)$ matrix of weights 
-(called a weighting kernel in this case), $k \in [0,...,k-1]$
-\REQUIRE $b_{k} \leftarrow$ a $(m \times 1)$ vector of bias values, $k \in [0,...,k-1]$ \\
+\REQUIRE $W \leftarrow$ array of weight kernels containing $W_k, k \in [0,1,...,K-1]$ each shaped $m \times n$ \\
+\REQUIRE $b \leftarrow$ a $(1 \times K)$ vector of bias values, $b_k, k \in [0,...,k-1]$ \\
 
 \FOR {Each feature map, $k \in [0,1,2,...,k-2,k-1]$}
 	\item Evaluate linear activation values by computing the 2D convolution-product of 
@@ -420,7 +419,31 @@ Store both activation arrays for back-propagation. Return the output activations
 \label{fig-2DMaxPool}
 \end{figure} 
 
-\paragraph*{}Pooling layers, such as maximum pooling, average pooling, or similar are typically placed after a layer or a set of layers of convolution. The purpose of this arrangement is to reduce the number of weights, thereby dropping the complexity of the model and ensuring only features with large activation values are preserved \cite{Geron,Loy,Goodfellow}.
+\paragraph*{}Pooling layers, such as maximum pooling, average pooling, or similar are typically placed after a layer or a set of layers of convolution. The purpose of this arrangement is to reduce the number of weights, thereby dropping the complexity of the model and ensuring only features with large activation values are preserved \cite{Geron,Loy,Goodfellow}. This layer "non-trainable" because it does no use any weights or transformations, only a fixed procedure. Below, we detail what the "Call" method for a 2D maximum pooling layer might look like.
+
+\begin{algorithm}[H]
+\caption{Typical "Call" method for a 2-Dimensional Maximum Pooling layer in a neural network. We assume 2D input, but a practical implementation may include the need to loop over a high dimensional structure. For simplicity, we assume a stride size of $1 \times 1$. This example shows the computation over a single input $x^{(l-1)}$ but a practical implementation should include mini-batches of samples.}
+\label{alg-CallPool2D}
+
+\begin{algorithmic}
+\REQUIRE $x^{(l-1)} \leftarrow$ Input activations shaped into $(M \times N)$ matrix
+\REQUIRE $m \times n \leftarrow$ Pool height and width
+\REQUIRE $P \leftarrow$ A temporary pool array of shape $m \times n $ to hold local activationbs
+
+\FOR {$i \in [0,1,...,M-2,M-1$}
+	\FOR {$j \in [0,1,...,N-2,N-1$}
+		\item Collect local activations in $P$, zero pad if necessary
+		\item $P = x^{(l-1)}[i:i+m,j:j+n]$
+		\item Find maximum valie in $P$, and add to output
+		\item $x^{(l)}[i,j] = \max\big( P \big)$
+	\ENDFOR
+\ENDFOR
+
+Store the activation array for back-propagation, and return it
+\RETURN $x^{(l)}$
+
+\end{algorithmic}
+\end{algorithm}
 
 % ================================
 
@@ -435,7 +458,7 @@ x^{(l)} \in \mathbb{R}^{(MN...\times 1)}
 \end{equation}
 The numerical value of each activation is left unchanged. For a layer with activation shape$N \times M$, the resulting activations are reshaped into $NM \times 1$ as shown in Eq.(\ref{eqn-FlattenFunction}).
 
-\paragraph*{}Flattening Layer are most commonly used to prepare activations for entry into dense layer or series of dense layers. For example, 2D or 3D images are typically processed with 2D convolution, which may output a 2D or 3D array of activations. Those values are then flattened to 1 dimensions, which can then be passed into dense layers for further processing.
+\paragraph*{}Flattening Layer are most commonly used to prepare activations for entry into dense layer or series of dense layers. For example, 2D or 3D images are typically processed with 2D convolution, which may output a 2D or 3D array of activations. Those values are then flattened to 1 dimensions, which can then be passed into dense layers for further processing. This layer also is "non-trainable" because it does no use any weights or transformations, only a fixed procedure.
 
 % ================================
 
@@ -459,14 +482,14 @@ The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 
 f^{(l)} : x^{(l-1)}_{a} \in \mathbb{R}^{(1 \times \alpha)} , x^{(l-1)}_{b} \in \mathbb{R}^{(1 \times \beta)} , ....  \rightarrow
 x^{(l)}_{z} \in \mathbb{R}^{(1 \times \alpha + \beta + ...)}
 \end{equation}
-The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we use it to combine the outputs that result from the convolution branch and the perceptron branch tp produce an single aggregated output. This process is detailed further in sec. (\ref{sec-NetworkArchitecture}).
+The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we use it to combine the outputs that result from the convolution branch and the perceptron branch tp produce an single aggregated output. This process is detailed further in sec. (\ref{subsec-Architecture}). This layer also "non-trainable" because it does no use any weights or transformations, only a fixed procedure.
 
 % ================================================================
 
 \subsection{Activation Functions Used in Network Layers}
 \label{sec-ActivationFunctions}
 
-\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{sec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in Eq. (\ref{eqn-LinearTransform}), and then an element-wise activation function as in Eq. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in this classification neural network. 
+\paragraph*{}Activation functions are a key parameter in the behavior of neural networks. As discussed in sec. (\ref{subsec-Training}) a layer function, $f^{(l)}$ is generally composed of a linear transformation, as in Eq. (\ref{eqn-LinearTransform}), and then an element-wise activation function as in Eq. (\ref{eqn-elementActivation}). It is this second step that allows for neural networks to model the incredibly complex decision boundaries that are found in real-world problems \cite{Geron,Loy}. In this section, we detail the activation functions used in this classification neural network. 
 
 \subsubsection{Rectified Linear Unit}
 
@@ -594,7 +617,7 @@ Where $\frac{\partial J}{\partial W^{(l)}}$ is taking the partial derivative of 
 \subsubsection{Back-Propagation}
 \label{subsubsec-BackProp}
 
-\paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-LayerFunction}). Additionally, we recall that each layer itself is made up two steps which produce linear activations such as in Eq. (\ref{eqn-LinearTransform}) and non-linear activations, as in Eq. (\ref{eqn-elementActivation}). Therefore, to understand back propagation, it is helpful to examine the flow of information within each layer. Consider a simplified neural network model visualized in Fig. (\ref{fig-ComputationalGraph})
+\paragraph*{}Recall our model of a neural network as a computational graph as in Eq. (\ref{eqn-FunctionGraph}). Each node of the graph is a layer that represents a mathematical function which takes the activation from the previous layer $x^{(l-1)}$ and transforms them into the activations of the current layer, as in Eq. (\ref{eqn-altLayerFunction}). Additionally, we recall that each layer with trainable parameters is made up two steps which produce linear activations such as in Eq. (\ref{eqn-LinearTransform}) and non-linear activations, as in Eq. (\ref{eqn-elementActivation}). Therefore, to understand back propagation, it is helpful to examine the flow of information within each layer. Consider a simplified neural network model visualized in Fig. (\ref{fig-ComputationalGraph})
 
 \paragraph*{}Note that we indicate the cost as $J(\Theta)$. This is an allusion to the fact that $J$ depends of both the labels $y$, and the predictions $y^*$. Where $y^*$ is a function of all of the previous layer activation, which are in turn functions of each weight bias element, i.e. the contents of the $\Theta$ object, in Eq. (\ref{eqn-Theta}). This is why we are able to compute the gradient with respect to $\Theta$ as in Eq. (\ref{eqn-CostGradient}).
 
@@ -707,11 +730,11 @@ Where $\Theta^{(i)}$ will give the set of new, updated parameters of the network
 
 \subsubsection{The Optimizer}
 
-\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to achieve the lowest possible value of the cost function over a data set \cite{Geron}. Some models such as minimizing a \textit{mean-squared error} for linear regression model can be solve analytically, while high dimensional neural networks, such as the one used in this project, outlined in sec. (\ref{subsec-Architecture}), cannot be solved symbolically. Thus, we then employ an iterative gradient method, much like the one in Eq. (\ref{eqn-GradientLearning}). These standard gradient-based learning algorithms are cumbersome and often prone errors such as vanishing or exploding gradients. \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an algorithm that is more stable, and robust in it's ability to drive the cost function to a successively lower value.
+\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to perform the optimization task and seeks to achieve the lowest possible value of the cost function over a data set \cite{Geron}. Regression models my often used a \textit{mean-squared error} cost function which can often be solved analytically, while high dimensional neural networks, such as the one used in this project, outlined in sec. (\ref{subsec-Architecture}), can only up updated iterativly \cite{Goodfellow,James,Loy}. We employ an iterative gradient-based method, much like the one in Eq. (\ref{eqn-GradientLearning}). These standard gradient-based learning algorithms are cumbersome and often prone errors such as vanishing or exploding gradients \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an algorithm that is more stable, and robust in it's ability to drive the cost function to a successively lower value.
 
-\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer with uses adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients, $s^{(i)}$, and an exponentially decaying average of past squared gradients, $r^{(i)}$ in Eq. (\ref{eqn-ADAMupdate}))\cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost than standard gradient descent.
+\paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimization algorithm, also called \textit{ADAM} for short. It is a powerful optimizer that uses an adaptive learning rate and momentum parameter. ADAM tracks an exponentially decaying average of past gradients, $s^{(i)}$, and an exponentially decaying average of past squared gradients, $r^{(i)}$ in Eq. (\ref{eqn-ADAMupdate}))\cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost than standard gradient descent.
 
-\paragraph*{}As the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. This enables to ADAm to overcome smaller discontunities that may arise in the solution space \cite{Goodfellow}. Note that a superscript $(i)$ or $(i-1)$ gives an iteration index, while the superscript $i$ means to raise a value to the power of $i$. For a given step $(i)$, The ADAM update is given:
+\paragraph*{}As the cost function iterates through each step, the effect will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. This enables to ADAM to overcome smaller discontunities that may arise in the solution space \cite{Goodfellow}. Note that a superscript $(i)$ or $(i-1)$ gives an iteration index, while the superscript $i$ means to raise a value to the power of $i$. For a given step $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
@@ -723,7 +746,7 @@ r'^{(i)} &= \frac{r^{(i)}}{1-\rho_2^i} \\
 \end{split}
 \end{equation}
 
-\paragraph*{}ADAM has experimentally shown to be a very powerful and robust optimizer useful for a wide range of tasks. Because of the two decay constants $\rho_1$ and $\rho_2$, we an compound and accumulate the values of past gradients to continue to push the cost to lower and lower values, even if the magnitude of the gradient becomes very small \cite{Geron}. 
+\paragraph*{}ADAM has experimentally shown to be a very powerful and robust optimizer useful for a wide range of tasks \cite{Goodfellow}. Because of the two decay constants $\rho_1$ and $\rho_2$, we can compound and accumulate the values of past gradients to continue to push the cost to lower and lower values, even if the magnitude of the gradient becomes very small \cite{Geron}. 
 
 \begin{algorithm}[H]
 \caption{Adaptive-Moments (ADAM) optimizer for a neural network. This algorithm is adapted from Goodfellow, \cite{Goodfellow}}
@@ -742,7 +765,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \WHILE {Stopping Criterion $S$ is \FALSE}
 	\item Extract a mini-batch of $m$ samples from larger data set $X$. $[x^{(0)},x^{(1)},...,x^{(m-1)}]$ and corresponding target values 
 	$[y^{(0)},y^{(1)},...,y^{(m-1)}]$.
-	\item Compute numerical gradient estimate of each sample in batch. This can be done with standard back-propagation in algorithm (\ref{algBackProp}) and 			 	normalize by batch size $m$:
+	\item Compute numerical gradient estimate of each sample in batch. This can be done with standard back-propagation in algorithm (\ref{alg-BackProp}) and 			 	normalize by batch size $m$:
 	\item $\nabla \bar{J} \leftarrow \frac{1}{m} \nabla_{\Theta} \Big[\sum_{n=1}^{m} J(y^{*(n)},y^{(n)}) \Big]$
 	
 	\item Compute first bias moment: $s \leftarrow \rho_1 s + (1 - \rho_1) \nabla \bar{J}$
@@ -764,11 +787,11 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 \subsection{Multimodal Architecture}
 \label{subsec-Architecture}
 
-\paragraph*{}In addition to choosing a strong set of features for a classification task, it is also important to combine the predictors with a complementary architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus it's performance in completing any given task \cite{Geron}. The layer structure of the neural network is referred to as it's \textit{architecture} \cite{Goodfellow}. 
+\paragraph*{}In addition to choosing a strong set of features, and an appropriate optimizer for a classification task, it is also important to combine the predictors with a complementary network architecture. Since a neural network is a computational graph with each layer represented by a node, it can take on a nearly infinite number of different shapes and structures \cite{Goodfellow,Virtanen}. The structure of the network defines the composition of it's function, $F^*$ as in Eq.(\ref{eqn-FunctionGraph}), and thus affects it's performance in completing any given task \cite{Geron}. The layer structure of the neural network is referred to as it's \textit{architecture}, and define it's \textit{hypothesis - space} \cite{Goodfellow}. 
 
-\paragraph*{}For this project, we have derived features that describe that audio file using two different \textit{modalities}. A modality is a method of describing and interpreting a sample of data \cite{Ngiam}. For example humans can be said to experience the world through five modalities - those being our cardinal senses of sight, hearing, taste, smell and touch. The sight and sound of a guitar are two very different ways of experiencing the same thing. One or the other is often enough to identify the guitar - but both together yield an even higher predictive confidence. Since modalities are \textit{different} by nature, we cannot simply combine them into a single object and present the neural network with it. We must account for the difference by provide two distinct input layers. Consider again the act of seeing any hearing a guitar. Both modalities are captured by two different senses but ultimately processed by the same brain to produce a single prediction.
+\paragraph*{}For this project, we have derived features that describe that audio file using two different \textit{modalities}. A modality is a method of describing and interpreting a sample of data \cite{Ngiam}. For example humans can be said to experience the world through five modalities - those being our cardinal senses of sight, hearing, taste, smell and touch. The sight and sound of a guitar are two very different ways of experiencing the same thing. One or the other is often enough to identify the guitar - but both together yield an even higher predictive confidence. Since modalities are \textit{different} by nature, we cannot simply combine them into a single object and present the neural network with it. We must account for the difference by provide two distinct input layers.  Modalities of seeing and hearing are captured by two different senses but ultimately processed by the same brain to produce a single prediction.
 
-\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N \times k$ spectrogram matrix, explored in sec. (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-view} learning, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
+\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N' \times k$ spectrogram matrix, explored in sec. (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-view} learning, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
 
 \begin{figure}[H]
 \begin{center}
@@ -865,7 +888,7 @@ $19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 
 \end{tabular}
 \end{center}
-\caption{Instruments categories used in the classification task. Note that the network uses only integers given by "Class index" to indentify sources. The string "Class Name" is keep for human readability}
+\caption{Instruments categories used in the classification task. Note that the network uses only integers given by "Class index" to identify sources. The string "Class Name" is kept for human readability}
 \label{fig-ClassList}
 \end{figure}
 
@@ -1099,7 +1122,7 @@ X_1 \in \mathbb{R}^{(b \times N \times k)}
 \label{eqn-X2Shape}
 X_2 \in \mathbb{R}^{(b \times p)}
 \end{equation}
-Where $N \times k$ gives the shape of the spectrogram matrix $S$ from a single sample, described in sect. (\ref{subsec-spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in sec. (\ref{subsec-time}) and sec.(\ref{subsec-frequency}). The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. Organizing the samples in this fashion allows for both easy machine and human interpretation of each axis or index.
+Where $N \times k$ gives the shape of the spectrogram matrix $S$ from a single sample, described in sect. (\ref{subsec-Spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in sec. (\ref{subsec-TimeFeatures}) and sec.(\ref{subsec-FreqFeatures}). The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. Organizing the samples in this fashion allows for both easy machine and human interpretation of each axis or index.
 
 \paragraph*{}A design matrix is typically accompanied by a \textit{target matrix} $Y$, which indicates the class that the particular sample belongs to. For a classifier with $\kappa$ classes, each sample labeled by a one-hot-encoded vector for shape $1 \times \kappa$ \cite{Tensorflow,Loy}. Thus, for the design matrices $X_1$ and $X_2$, we have a corresponding target matrix given by:
 \begin{equation}
@@ -1136,13 +1159,34 @@ Note that different projects may require a different set of requirement from pre
 \subsection{Spectrogram Features}
 \label{subsec-Spectrogram}
 
-\paragraph*{}The application of neural networks to image-processing and recognition has been well studied and developed in the last few decades \cite{Geron,Goodfellow,Loy,Mierswa}. As a result, model architectures for image processing related tasks are well-explored and have shown experimentally successful behavior. Following this success, it make senses to provide an image-like representation of a sound wave as a feature. We do this in the form of a \textit{spectrogram} matrix. A spectrogram is a representation of the energy distribution of a sound wave as a function of both frequency and time. In a conventional spectrogram, the passing of time is shown along the $x$-axis, and the frequency spectrum is shown on the $y$-axis. Thus each point in the 2-Dimensional space is an energy at a given time and frequency. Examples spectrograms from the wave form data set are shown in Fig. (\ref{fig-spectrograms}).
+\paragraph*{}The application of neural networks to image-processing and recognition has been well studied and developed in the last few decades \cite{Geron,Goodfellow,Loy,Mierswa}. As a result, model architectures for image processing related tasks are well-explored and have shown experimentally successful behavior. Following this success, it make senses to provide an image-like representation of a sound wave as a feature. We do this in the form of a \textit{spectrogram} matrix. A spectrogram is a representation of the energy distribution of a sound wave as a function of both frequency and time. In a conventional spectrogram, the passing of time is shown along the $x$-axis, and the frequency spectrum is shown on the $y$-axis. Thus each point in the 2-Dimensional space is an energy at a given time and frequency. Examples spectrograms from the wave form data set are shown in Fig. (\ref{fig-Spectrograms}).
 \begin{figure}[H]
-\begin{center}
-\textcolor{red}{Insert spectrograms here}
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{../FiguresSpectrogram/Clarinet-Gs5}
+	\caption{$B\flat$ Clarinet playing $G\sharp 5$}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{../FiguresSpectrogram/GUITAR-B2}
+	\caption{Guitar playing $B2$}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{../FiguresSpectrogram/SquareWave-220}
+	\caption{Square Wave at $220$ Hz}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.2]{../FiguresSpectrogram/Tuba-A2}
+	\caption{Tuba playing $A2$}
+	\end{subfigure}
+
 \caption{Spectrogram representations of various waveforms}
-\label{fig-spectrograms}
-\end{center}
+\label{fig-Spectrograms}
 \end{figure}
 
 % ================================
@@ -1150,7 +1194,7 @@ Note that different projects may require a different set of requirement from pre
 \subsubsection{Frame Blocking}
 \label{subsubsec-FrameBlocking}
 
-\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the previous frame. Each of the $k$ frames then allows for a section of the signal to be analyzed in a \textit{quazi-stationary state} \cite{Kahn,Serizel}. Below we visualize how analysis frames are related to the full time-series waveform. 
+\paragraph*{}A spectrogram is produced by the method of \textit{frame-blocking}, which is very prevalent in audio signal classification \cite{Liu,Zhang}. Frame-blocking takes a raw waveform or signal, $s$ and decomposes it into a set of analysis frames, $a_i$, with each being $N$ samples in length, and has a fixed overlap with the previous frame. Each of the $k$ frames then allows for a section of the signal to be analyzed in a \textit{quazi-stationary state} \cite{Khan,Serizel}. Below we visualize how analysis frames are related to the full time-series waveform. 
 
 \begin{figure}[H]
 \begin{center}
@@ -1282,8 +1326,6 @@ Which is consistent with the shape of the $X_1$ matrix outlined in Eq. (\ref{eqn
 
 % ================================
 
-\newpage
-
 \subsubsection{Time Domain Envelope}
 
 \paragraph*{}The time domain envelope (TDE) is a rough measurement of the energy contained in the time domain. If we divide the signal into analysis frames, as in Fig. (\ref{fig-AnalysisFrames}), then the TDE approximates the energy in that frame. A frame with a high TDE indicates a generally large amplitude, and a frame with a low TDE indicates a generally small amplitude, i.e. the signal has not started or is decaying. The small size of each analysis frame makes computing a TDE for each impractical, and create a very high-dimensional feature vector. This would also cause problems as some waveforms may have an initial attack that differs in time by a few analysis frames. Computing TDE for each frame would therefore introduce temporal bias, as the same waveform delayed by a few milliseconds would generate a wildly different set of predictor values \cite{Serizel}. 
@@ -1357,8 +1399,7 @@ Where $Q$ gives the number of sample sin each analysis frame (number of sample s
 \end{equation}
 Where $\sign(x)$ returns $+1$ if $x > 0$, $-1$ if $x < 0$ and $0$ if $x = 0$. ZXR also provides a very rough estimate for the average frequency of the waveform. This allows it to allows be useful in discerning classes with generally higher fundamental frequencies, such as upper woodwinds, against classes with generally lower frequencies, such as low brass \cite{Liu,White}.
 
-\paragraph*{}This behavior becomes apparent when comparing sets of classes in Fig. (\ref{fig-FeatureZXR}). For example, consider the ZXR value of a a bass and cellos against that of bells or a soprano saxophone. The bass and cellos have on average much lower fundamental frequencies than that of bellos of soprano saxophones. In the case of this data set, the ZXR provides a predictor which contains clear separations between classes such as crotales and $E\flat$ clarinets. The large separation gives rise to a distinction decision boundary which means that this classes are not likely to be mistake when predictions are run \cite{Loy,James}.
-
+\paragraph*{}This behavior becomes apparent when comparing sets of classes in Fig. (\ref{fig-FeatureZXR}). For example, consider the ZXR value of a a bass and cellos against that of bells or a soprano saxophone. The bass and cellos have on average much lower fundamental frequencies than that of bellos of soprano saxophones. In the case of this data set, the ZXR provides a predictor which contains clear separations between classes such as crotales and $E\flat$ clarinets. 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../FiguresFeatures/ZXR}
@@ -1466,7 +1507,7 @@ Instruments in the woodwind and brass family generally have longer sustain and r
 \subsection{Frequency-Space Features}
 \label{subsec-FreqFeatures}
 
-\paragraph*{}The features described in this section are derived from the frequency-domain representations of each audio sample. Frequency space is represented by the transposed spectrogram matrix, $S^T$, described in sec. (\ref{subsec-spectrogram}). This is done to ensure that each  row is now an analysis frame, each column is a frequency bin. This gives a similar structure to the time-space analysis frames matrix, $A$, in Eq. (\ref{eqn-FrameMatrix}).
+\paragraph*{}The features described in this section are derived from the frequency-domain representations of each audio sample. Frequency space is represented by the transposed spectrogram matrix, $S^T$, described in sec. (\ref{subsec-Spectrogram}). This is done to ensure that each  row is now an analysis frame, each column is a frequency bin. This gives a similar structure to the time-space analysis frames matrix, $A$, in Eq. (\ref{eqn-FrameMatrix}).
 For each feature, we detail the physical significance and provide a visualization in feature-space.
 
 \paragraph*{}From frequency space, we use the following $13$ features:
@@ -1479,9 +1520,9 @@ For each feature, we detail the physical significance and provide a visualizatio
 
 \subsubsection{Mel Filter Bank Energies}
 
-\paragraph*{}MEl Filter Bank Energies are not used directly as features, but are used in computing Mel Frequency Cepstrum Coefficient (MFCC's) so we describe them here. Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping bins \cite{Sahidullah,Serizel}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, covering a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
+\paragraph*{}Mel Filter Bank Energies (MFBE's) are not used directly as features, but are used in computing Mel Frequency Cepstrum Coefficient (MFCC's) so we describe them here. Mel filter banks are divisions of the frequency spectrum of a signal into $R$ overlapping bins \cite{Sahidullah,Serizel}. These filter banks allows us to group sounds based on their energy distribution in frequency space. Each filter is triangularly shaped, covering a certain band in frequency space, and zero elsewhere. This way, when computing the the dot product of any filter with frequency space, we get an approximation of energy in that filter bank \cite{Sahidullah,Serizel}. 
 
-\paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Khan}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Kahn}:
+\paragraph*{}Rather than producing filter banks based on the linear Hertz scale, the frequency axis of the signal is transformed into units of \textit{Mels}, which is used to account for the non-linearity in human pitch perception \cite{Serizel,Khan,Olson}. Filter banks are produced to be evenly spaced on the Mel scale, and then transformed back into the Hertz scale. This has the effect of producing triangular filter banks with grow in width as the frequency increases. The Hertz to Mel and Mel to Hertz transforms are given \cite{Serizel,Khan}:
 \begin{equation}
 \label{eqn-HztoMel}
 M_f[h] = 2595 \log_{10}\big(1+ \frac{h}{700}\big)
@@ -1502,14 +1543,14 @@ Where $M_f$ is the frequency in units of Mels, given $[h]$, a frequency in Hertz
 \end{figure}
 
 
-\paragraph*{}Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, Eq. (\ref{eqn-Spectrogram}). When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is a filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
+\paragraph*{}Each of the $R$ filters is created to be $N'$ samples long, to match the width of the cropped frequency space in the spectrogram, Eq. (\ref{eqn-Spectrogram}). When applied to an analysis frame in the frequency spectrum, the dot-product between the filter and the spectrum gives an approximation of the energy in that filter bank. Each filter is concatenated into a matrix $M$ of shape $R \times N'$, where each row is one filter. We apply the Mel Filter banks to the spectrogram to create matrix $B$:
 \begin{equation}
 \label{eqn-FilterBanks}
 B = (MS)^T
 \end{equation}
 Matrix $B$ has shape $k \times R$.
 
-\paragraph*{}Tis matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all are used to compute the MFCC's in the next section.
+\paragraph*{}The matrix product in Eq. (\ref{eqn-FilterBanks}) allows that $B_{i,j}$ is the dot product between the $i$-th analysis frame and the $j$-th filter-bank. Finally, we compute the average energy across all $k$ frames, into array $\widetilde{B}$ with shape $1 \times R$. For this project, we have chosen to use $R = 12$ filter-banks, which are all are used to compute the MFCC's in the next section.
 
 % ================================
 
@@ -1841,13 +1882,13 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\begin{subfigure}[b]{0.9\textwidth}
 	\centering
 	\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Convolution}
-	\caption{Unimodal Architecture, See left side of Fig. (\ref{fig-NetworkArchitecture})}
+	\caption{Convolutional Unimodal Architecture, See left side of Fig. (\ref{fig-NetworkArchitecture})}
 	\end{subfigure}	
 	
 	\begin{subfigure}[b]{0.9\textwidth}
 	\centering
 	\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Perceptron}
-	\caption{Unimodal Architecture, See right side of Fig. (\ref{fig-NetworkArchitecture})}
+	\caption{Perceptron Unimodal Architecture, See right side of Fig. (\ref{fig-NetworkArchitecture})}
 	\end{subfigure}
 
 	\caption{}
@@ -1880,15 +1921,21 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion}
 	\caption{Occurance Weighted Confusion Matrix for Perceptron Branch}
 	\end{subfigure}	
-	\label{fig-MultimodalConfs}
+	\caption{}
+	\label{fig-UnimodalConfs}
 \end{figure}
 
 
 % ================================================================
 
 \subsection{Comparing Classification Scores within Each Class}
+\label{subsec-ClassScores}
 
 \paragraph*{}Below we present the average accuracy, precision, recall and F1 score for each class, as averaged across $10$-folds cross validation, comparing the three architectures. These plots represent a more "micro" representation of classification by showing the response and scores within each specific class.
+
+% ================================================================
+
+\subsubsection{High Woodwind Scores}
 
 \begin{figure}[H]
 
@@ -1896,46 +1943,57 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/AltoFlute}
 	\caption{Alto Flute}
-	\end{subfigure}	
+	\end{subfigure}
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/AltoSax}
 	\caption{Alto Saxophone}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/BbClarinet}
 	\caption{$B\flat$ Clarinet}
 	\end{subfigure}	
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/EbClarinet}
 	\caption{$E\flat$ Clarinet}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/EnglishHorn}
 	\caption{English Horn}
 	\end{subfigure}	
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Flute}
 	\caption{Flute}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Oboe}
 	\caption{Oboe}
-	\end{subfigure}		
+	\end{subfigure}
+	\hfill	
 	\begin{subfigure}[b]{0.45 \textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/SopSax}
 	\caption{Soprano Saxophone}
 	\end{subfigure}
 	
-\caption{Performance Metrics Across all High Ranged Woodwind Instruments}
+\caption{}
 \label{fig-HighWindsScores}
 \end{figure}
+
+% ================================================================
+
+\subsubsection{Middle and Low Woodwind Scores}
 
 \begin{figure}[H]
 	\begin{subfigure}[b]{0.45\textwidth}
@@ -1943,29 +2001,38 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\includegraphics[width=\textwidth]{../FiguresClasses/BassClarinet}
 	\caption{Bass Clarinet}
 	\end{subfigure}	
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/BassFlute}
 	\caption{Bass Flute}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Bassoon}
 	\caption{Bassoon}
 	\end{subfigure}	
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/ContraBassoon}
 	\caption{Contra Bassoon}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Saxophone}
 	\caption{Tenor Saxophone}
 	\end{subfigure}
-\caption{Performance Metrics Across all Mid and Low Ranged Woodwind Instruments}
+	
+\caption{}
 \label{fig-LowWindsScores}
 \end{figure}
+
+% ================================================================
+
+\subsubsection{Brass Scores}
 
 \begin{figure}[H]
 	\begin{subfigure}[b]{0.45\textwidth}
@@ -1973,34 +2040,186 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\includegraphics[width=\textwidth]{../FiguresClasses/BassTrombone}
 	\caption{Bass Trombone}
 	\end{subfigure}	
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Horn}
 	\caption{French Horn}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/TenorTrombone}
 	\caption{Tenor Trombone}
 	\end{subfigure}	
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Trombone}
 	\caption{Trombone}
 	\end{subfigure}	
+	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Trumpet}
 	\caption{$B\flat$ Trumpet}
 	\end{subfigure}
+	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{../FiguresClasses/Tuba}
 	\caption{Tuba}
 	\end{subfigure}
-\caption{Performance Metrics Across all Brass Instruments}
+	
+\caption{}
 \label{fig-BrassScores}
 \end{figure}
+
+% ================================================================
+
+\subsubsection{String Scores}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Banjo}
+	\caption{Banjo}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Bass}
+	\caption{Double Bass}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Cello}
+	\caption{Violoncello}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Guitar}
+	\caption{Guitar}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Mandolin}
+	\caption{Mandolin}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Viola}
+	\caption{Viola}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Violin}
+	\caption{Violin}
+	\end{subfigure}
+	
+\caption{}
+\label{fig-StringScores}
+\end{figure}
+
+% ================================================================
+
+\subsubsection{Percussion Scores}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Bells}
+	\caption{Bells}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Crotale}
+	\caption{Crotales}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Hihat}
+	\caption{HiHat}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Marimba}
+	\caption{Marimba}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Vibraphone}
+	\caption{Vibraphone}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/Xylophone}
+	\caption{Xylophone}
+	\end{subfigure}	
+
+\caption{}
+\label{fig-PercussionScores}
+\end{figure}
+
+% ================================================================
+
+\subsubsection{Synthetic Waveform Scores}
+
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/SawtoothWave}
+	\caption{Sawtooth Wave}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/SineWave}
+	\caption{Sine Wave}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/SquareWave}
+	\caption{Square Wave}
+	\end{subfigure}	
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/TriangleWave}
+	\caption{Triangle Wave}
+	\end{subfigure}	
+	
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{../FiguresClasses/WhiteNoise}
+	\caption{White Noise}
+	\end{subfigure}	
+
+
+\caption{}
+\label{fig-SynthScores}
+\end{figure}
+
+% ================================================================
+
+\subsection{Discussion of Results}
+
+\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicate that our model performs very well at the ability to a match sound waves to their sources. We see this behavior in the plots in sec. (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different type of musical instruments reasonably well. Additionally, we show that predictive power of the model improves through our development of the multimodal architecture. By choosing to express the waveform in two different modalities in the form of the spectrogram matrix and the feature vector, the hybrid model demonstrates consistently higher classification performance across the same number of samples and splits. 
+
+% ================================================================
+
+\subsection{Predictions on Chaotic Synthesizers}
 
 
 % ================================================================
@@ -2022,11 +2241,11 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 
 \begin{itemize}
 
+\item[•]Dr. Kevin Short and Dr. Maurik Holtrop for various consultation and guidance throughout this project.
+
 \item[•]Dakota Buell, John Parker, Nathan Richard, Morgan Saidel for consultation on physics, mathematics, and programming topics.
 
 \item[•]Madeline Edwards for differing me to this project, as well as constant support and consultation on mathematical topics.
-
-\item[•]Dr. Kevin Short and Dr. Maurik Holtrop for various consultation and guidance throughout this project.
 
 \item[•]Dr. Kourosh Zarringhalam and Dr. Marek Petrik for additional consultation on machine learning topics.
 

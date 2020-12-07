@@ -14,15 +14,15 @@
 \contentsline {subsubsection}{\numberline {2.3.1}Dense Layer}{8}% 
 \contentsline {subsubsection}{\numberline {2.3.2}2-Dimensional Convolution Layer}{9}% 
 \contentsline {subsubsection}{\numberline {2.3.3}2-Dimensional Maximum Pooling Layer}{11}% 
-\contentsline {subsubsection}{\numberline {2.3.4}1-Dimensional Flattening Layer}{12}% 
+\contentsline {subsubsection}{\numberline {2.3.4}1-Dimensional Flattening Layer}{13}% 
 \contentsline {subsubsection}{\numberline {2.3.5}1-Dimensional Concatenation Layer}{13}% 
-\contentsline {subsection}{\numberline {2.4}Activation Functions Used in Network Layers}{13}% 
-\contentsline {subsubsection}{\numberline {2.4.1}Rectified Linear Unit}{13}% 
+\contentsline {subsection}{\numberline {2.4}Activation Functions Used in Network Layers}{14}% 
+\contentsline {subsubsection}{\numberline {2.4.1}Rectified Linear Unit}{14}% 
 \contentsline {subsubsection}{\numberline {2.4.2}Softmax}{14}% 
-\contentsline {subsection}{\numberline {2.5}Training The Model}{14}% 
+\contentsline {subsection}{\numberline {2.5}Training The Model}{15}% 
 \contentsline {subsubsection}{\numberline {2.5.1}The Cost Function}{15}% 
 \contentsline {subsubsection}{\numberline {2.5.2}Gradient Based Learning}{16}% 
-\contentsline {subsubsection}{\numberline {2.5.3}Back-Propagation}{17}% 
+\contentsline {subsubsection}{\numberline {2.5.3}Back-Propagation}{18}% 
 \contentsline {subsubsection}{\numberline {2.5.4}The Optimizer}{22}% 
 \contentsline {subsection}{\numberline {2.6}Multimodal Architecture}{23}% 
 \contentsline {subsubsection}{\numberline {2.6.1}The Spectrogram Branch}{26}% 
@@ -46,14 +46,14 @@
 \contentsline {subsubsection}{\numberline {4.1.2}The Design Matrix}{36}% 
 \contentsline {subsubsection}{\numberline {4.1.3}Audio Preprocessing}{37}% 
 \contentsline {subsection}{\numberline {4.2}Spectrogram Features}{38}% 
-\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{38}% 
-\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{39}% 
-\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{40}% 
+\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{39}% 
+\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{40}% 
+\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{41}% 
 \contentsline {subsection}{\numberline {4.3}Time-Space Features}{42}% 
 \contentsline {subsubsection}{\numberline {4.3.1}Time Domain Envelope}{43}% 
 \contentsline {subsubsection}{\numberline {4.3.2}Zero Crossing Rate}{45}% 
 \contentsline {subsubsection}{\numberline {4.3.3}Temporal Center of Mass}{46}% 
-\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{48}% 
+\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{47}% 
 \contentsline {subsection}{\numberline {4.4}Frequency-Space Features}{50}% 
 \contentsline {subsubsection}{\numberline {4.4.1}Mel Filter Bank Energies}{50}% 
 \contentsline {subsubsection}{\numberline {4.4.2}Mel Frequency Cepstral Coeffecients}{51}% 
@@ -72,5 +72,13 @@
 \contentsline {subsection}{\numberline {6.1}Executing Cross Validation}{62}% 
 \contentsline {subsection}{\numberline {6.2}Comparing Results between Architectures}{63}% 
 \contentsline {subsection}{\numberline {6.3}Comparing Classification Scores within Each Class}{65}% 
-\contentsline {section}{\numberline {7}Conclusion}{69}% 
-\contentsline {section}{\numberline {8}Acknowledgments}{70}% 
+\contentsline {subsubsection}{\numberline {6.3.1}High Woodwind Scores}{66}% 
+\contentsline {subsubsection}{\numberline {6.3.2}Middle and Low Woodwind Scores}{67}% 
+\contentsline {subsubsection}{\numberline {6.3.3}Brass Scores}{68}% 
+\contentsline {subsubsection}{\numberline {6.3.4}String Scores}{69}% 
+\contentsline {subsubsection}{\numberline {6.3.5}Percussion Scores}{70}% 
+\contentsline {subsubsection}{\numberline {6.3.6}Synthetic Waveform Scores}{71}% 
+\contentsline {subsection}{\numberline {6.4}Discussion of Results}{71}% 
+\contentsline {subsection}{\numberline {6.5}Predictions on Chaotic Synthesizers}{72}% 
+\contentsline {section}{\numberline {7}Conclusion}{73}% 
+\contentsline {section}{\numberline {8}Acknowledgments}{74}% 
