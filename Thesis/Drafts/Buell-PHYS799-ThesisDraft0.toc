@@ -1,84 +1,84 @@
-\contentsline {section}{\numberline {1}Introduction}{2}% 
-\contentsline {subsection}{\numberline {1.1}Introduction}{2}% 
-\contentsline {subsection}{\numberline {1.2}Methodology}{3}% 
-\contentsline {subsubsection}{\numberline {1.2.1}Designing the Function}{3}% 
-\contentsline {subsubsection}{\numberline {1.2.2}Collecting and Pre-processing Raw Data}{3}% 
-\contentsline {subsubsection}{\numberline {1.2.3}Designing Classification Features}{3}% 
-\contentsline {subsubsection}{\numberline {1.2.4}Designing A Complementary Network Architecture}{4}% 
-\contentsline {subsubsection}{\numberline {1.2.5}Testing and Evaluating Network Performance}{4}% 
-\contentsline {subsubsection}{\numberline {1.2.6}Running Predictions of Chaotic Synthesizer Files}{4}% 
-\contentsline {section}{\numberline {2}The Neural Network}{5}% 
-\contentsline {subsection}{\numberline {2.1}An Introduction to Neural Networks}{5}% 
-\contentsline {subsection}{\numberline {2.2}The Structure of a Neural Network}{6}% 
-\contentsline {subsection}{\numberline {2.3}Layers Used in this Classification Model}{7}% 
-\contentsline {subsubsection}{\numberline {2.3.1}Dense Layer}{8}% 
-\contentsline {subsubsection}{\numberline {2.3.2}2-Dimensional Convolution Layer}{9}% 
-\contentsline {subsubsection}{\numberline {2.3.3}2-Dimensional Maximum Pooling Layer}{11}% 
-\contentsline {subsubsection}{\numberline {2.3.4}1-Dimensional Flattening Layer}{13}% 
-\contentsline {subsubsection}{\numberline {2.3.5}1-Dimensional Concatenation Layer}{13}% 
-\contentsline {subsection}{\numberline {2.4}Activation Functions Used in Network Layers}{14}% 
-\contentsline {subsubsection}{\numberline {2.4.1}Rectified Linear Unit}{14}% 
-\contentsline {subsubsection}{\numberline {2.4.2}Softmax}{14}% 
-\contentsline {subsection}{\numberline {2.5}Training The Model}{15}% 
-\contentsline {subsubsection}{\numberline {2.5.1}The Cost Function}{15}% 
-\contentsline {subsubsection}{\numberline {2.5.2}Gradient Based Learning}{16}% 
-\contentsline {subsubsection}{\numberline {2.5.3}Back-Propagation}{18}% 
-\contentsline {subsubsection}{\numberline {2.5.4}The Optimizer}{22}% 
-\contentsline {subsection}{\numberline {2.6}Multimodal Architecture}{23}% 
-\contentsline {subsubsection}{\numberline {2.6.1}The Spectrogram Branch}{26}% 
-\contentsline {subsubsection}{\numberline {2.6.2}The Perceptron Branch}{26}% 
-\contentsline {subsubsection}{\numberline {2.6.3}The Final Output Branch}{27}% 
-\contentsline {section}{\numberline {3}Properties of Musical Instruments}{28}% 
-\contentsline {subsection}{\numberline {3.1}Idiophones}{29}% 
-\contentsline {subsection}{\numberline {3.2}Membranophones}{29}% 
-\contentsline {subsection}{\numberline {3.3}Chordophones}{29}% 
-\contentsline {subsubsection}{\numberline {3.3.1}The 1-Dimensional Vibrating String}{29}% 
-\contentsline {subsection}{\numberline {3.4}Aerophones}{30}% 
-\contentsline {subsection}{\numberline {3.5}Other Generated Sounds}{30}% 
-\contentsline {subsubsection}{\numberline {3.5.1}Sine Wave}{30}% 
-\contentsline {subsubsection}{\numberline {3.5.2}Sawtooth Wave}{31}% 
-\contentsline {subsubsection}{\numberline {3.5.3}Square Wave}{31}% 
-\contentsline {subsubsection}{\numberline {3.5.4}Triangle Wave}{31}% 
-\contentsline {subsubsection}{\numberline {3.5.5}White Noise}{31}% 
-\contentsline {section}{\numberline {4}Feature Selections}{32}% 
-\contentsline {subsection}{\numberline {4.1}Feature Space}{32}% 
-\contentsline {subsubsection}{\numberline {4.1.1}Decision Boundaries}{33}% 
-\contentsline {subsubsection}{\numberline {4.1.2}The Design Matrix}{36}% 
-\contentsline {subsubsection}{\numberline {4.1.3}Audio Preprocessing}{37}% 
-\contentsline {subsection}{\numberline {4.2}Spectrogram Features}{38}% 
-\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{39}% 
-\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{40}% 
-\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{41}% 
-\contentsline {subsection}{\numberline {4.3}Time-Space Features}{42}% 
-\contentsline {subsubsection}{\numberline {4.3.1}Time Domain Envelope}{43}% 
-\contentsline {subsubsection}{\numberline {4.3.2}Zero Crossing Rate}{45}% 
-\contentsline {subsubsection}{\numberline {4.3.3}Temporal Center of Mass}{46}% 
-\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{47}% 
-\contentsline {subsection}{\numberline {4.4}Frequency-Space Features}{50}% 
-\contentsline {subsubsection}{\numberline {4.4.1}Mel Filter Bank Energies}{50}% 
-\contentsline {subsubsection}{\numberline {4.4.2}Mel Frequency Cepstral Coeffecients}{51}% 
-\contentsline {subsubsection}{\numberline {4.4.3}Frequency Center of Mass}{54}% 
-\contentsline {section}{\numberline {5}Evaluating Model Performance}{55}% 
-\contentsline {subsection}{\numberline {5.1}K-Folds Cross Validation}{55}% 
-\contentsline {subsection}{\numberline {5.2}Performance Metrics}{56}% 
-\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{57}% 
-\contentsline {subsubsection}{\numberline {5.2.2}Accuracy Score}{58}% 
-\contentsline {subsubsection}{\numberline {5.2.3}Precision Score}{59}% 
-\contentsline {subsubsection}{\numberline {5.2.4}Recall Score}{59}% 
-\contentsline {subsubsection}{\numberline {5.2.5}F1-Score}{60}% 
-\contentsline {subsection}{\numberline {5.3}Tracking Metrics over a Period of Training}{60}% 
-\contentsline {paragraph}{}{60}% 
-\contentsline {section}{\numberline {6}Experimental Results}{62}% 
-\contentsline {subsection}{\numberline {6.1}Executing Cross Validation}{62}% 
-\contentsline {subsection}{\numberline {6.2}Comparing Results between Architectures}{63}% 
-\contentsline {subsection}{\numberline {6.3}Comparing Classification Scores within Each Class}{65}% 
-\contentsline {subsubsection}{\numberline {6.3.1}High Woodwind Scores}{66}% 
-\contentsline {subsubsection}{\numberline {6.3.2}Middle and Low Woodwind Scores}{67}% 
-\contentsline {subsubsection}{\numberline {6.3.3}Brass Scores}{68}% 
-\contentsline {subsubsection}{\numberline {6.3.4}String Scores}{69}% 
-\contentsline {subsubsection}{\numberline {6.3.5}Percussion Scores}{70}% 
-\contentsline {subsubsection}{\numberline {6.3.6}Synthetic Waveform Scores}{71}% 
-\contentsline {subsection}{\numberline {6.4}Discussion of Results}{71}% 
-\contentsline {subsection}{\numberline {6.5}Predictions on Chaotic Synthesizers}{72}% 
-\contentsline {section}{\numberline {7}Conclusion}{73}% 
-\contentsline {section}{\numberline {8}Acknowledgments}{74}% 
+\contentsline {section}{\numberline {1}Introduction}{3}% 
+\contentsline {subsection}{\numberline {1.1}Introduction}{3}% 
+\contentsline {subsection}{\numberline {1.2}Methodology}{4}% 
+\contentsline {subsubsection}{\numberline {1.2.1}Designing the Function}{4}% 
+\contentsline {subsubsection}{\numberline {1.2.2}Collecting and Pre-processing Raw Data}{4}% 
+\contentsline {subsubsection}{\numberline {1.2.3}Designing Classification Features}{4}% 
+\contentsline {subsubsection}{\numberline {1.2.4}Designing A Complementary Network Architecture}{5}% 
+\contentsline {subsubsection}{\numberline {1.2.5}Testing and Evaluating Network Performance}{5}% 
+\contentsline {subsubsection}{\numberline {1.2.6}Running Predictions of Chaotic Synthesizer Files}{5}% 
+\contentsline {section}{\numberline {2}The Neural Network}{6}% 
+\contentsline {subsection}{\numberline {2.1}An Introduction to Neural Networks}{6}% 
+\contentsline {subsection}{\numberline {2.2}The Structure of a Neural Network}{7}% 
+\contentsline {subsection}{\numberline {2.3}Layers Used in this Classification Model}{8}% 
+\contentsline {subsubsection}{\numberline {2.3.1}Dense Layer}{9}% 
+\contentsline {subsubsection}{\numberline {2.3.2}2-Dimensional Convolution Layer}{10}% 
+\contentsline {subsubsection}{\numberline {2.3.3}2-Dimensional Maximum Pooling Layer}{12}% 
+\contentsline {subsubsection}{\numberline {2.3.4}1-Dimensional Flattening Layer}{14}% 
+\contentsline {subsubsection}{\numberline {2.3.5}1-Dimensional Concatenation Layer}{14}% 
+\contentsline {subsection}{\numberline {2.4}Activation Functions Used in Network Layers}{15}% 
+\contentsline {subsubsection}{\numberline {2.4.1}Rectified Linear Unit}{15}% 
+\contentsline {subsubsection}{\numberline {2.4.2}Softmax}{15}% 
+\contentsline {subsection}{\numberline {2.5}Training The Model}{16}% 
+\contentsline {subsubsection}{\numberline {2.5.1}The Cost Function}{16}% 
+\contentsline {subsubsection}{\numberline {2.5.2}Gradient Based Learning}{17}% 
+\contentsline {subsubsection}{\numberline {2.5.3}Back-Propagation}{19}% 
+\contentsline {subsubsection}{\numberline {2.5.4}The Optimizer}{23}% 
+\contentsline {subsection}{\numberline {2.6}Multimodal Architecture}{24}% 
+\contentsline {subsubsection}{\numberline {2.6.1}The Spectrogram Branch}{27}% 
+\contentsline {subsubsection}{\numberline {2.6.2}The Perceptron Branch}{27}% 
+\contentsline {subsubsection}{\numberline {2.6.3}The Final Output Branch}{28}% 
+\contentsline {section}{\numberline {3}Properties of Musical Instruments}{29}% 
+\contentsline {subsection}{\numberline {3.1}Idiophones}{30}% 
+\contentsline {subsection}{\numberline {3.2}Membranophones}{30}% 
+\contentsline {subsection}{\numberline {3.3}Chordophones}{30}% 
+\contentsline {subsubsection}{\numberline {3.3.1}The 1-Dimensional Vibrating String}{30}% 
+\contentsline {subsection}{\numberline {3.4}Aerophones}{31}% 
+\contentsline {subsection}{\numberline {3.5}Other Generated Sounds}{31}% 
+\contentsline {subsubsection}{\numberline {3.5.1}Sine Wave}{31}% 
+\contentsline {subsubsection}{\numberline {3.5.2}Sawtooth Wave}{32}% 
+\contentsline {subsubsection}{\numberline {3.5.3}Square Wave}{32}% 
+\contentsline {subsubsection}{\numberline {3.5.4}Triangle Wave}{32}% 
+\contentsline {subsubsection}{\numberline {3.5.5}White Noise}{32}% 
+\contentsline {section}{\numberline {4}Feature Selections}{33}% 
+\contentsline {subsection}{\numberline {4.1}Feature Space}{33}% 
+\contentsline {subsubsection}{\numberline {4.1.1}Decision Boundaries}{34}% 
+\contentsline {subsubsection}{\numberline {4.1.2}The Design Matrix}{37}% 
+\contentsline {subsubsection}{\numberline {4.1.3}Audio Preprocessing}{38}% 
+\contentsline {subsection}{\numberline {4.2}Spectrogram Features}{39}% 
+\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{40}% 
+\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{41}% 
+\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{42}% 
+\contentsline {subsection}{\numberline {4.3}Time-Space Features}{43}% 
+\contentsline {subsubsection}{\numberline {4.3.1}Time Domain Envelope}{44}% 
+\contentsline {subsubsection}{\numberline {4.3.2}Zero Crossing Rate}{46}% 
+\contentsline {subsubsection}{\numberline {4.3.3}Temporal Center of Mass}{47}% 
+\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{48}% 
+\contentsline {subsection}{\numberline {4.4}Frequency-Space Features}{51}% 
+\contentsline {subsubsection}{\numberline {4.4.1}Mel Filter Bank Energies}{51}% 
+\contentsline {subsubsection}{\numberline {4.4.2}Mel Frequency Cepstral Coeffecients}{52}% 
+\contentsline {subsubsection}{\numberline {4.4.3}Frequency Center of Mass}{55}% 
+\contentsline {section}{\numberline {5}Evaluating Model Performance}{56}% 
+\contentsline {subsection}{\numberline {5.1}K-Folds Cross Validation}{56}% 
+\contentsline {subsection}{\numberline {5.2}Performance Metrics}{57}% 
+\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{58}% 
+\contentsline {subsubsection}{\numberline {5.2.2}Accuracy Score}{59}% 
+\contentsline {subsubsection}{\numberline {5.2.3}Precision Score}{60}% 
+\contentsline {subsubsection}{\numberline {5.2.4}Recall Score}{60}% 
+\contentsline {subsubsection}{\numberline {5.2.5}F1-Score}{61}% 
+\contentsline {subsection}{\numberline {5.3}Tracking Metrics over a Period of Training}{61}% 
+\contentsline {paragraph}{}{61}% 
+\contentsline {section}{\numberline {6}Experimental Results}{64}% 
+\contentsline {subsection}{\numberline {6.1}Executing Cross Validation}{64}% 
+\contentsline {subsection}{\numberline {6.2}Comparing Results between Architectures}{65}% 
+\contentsline {subsection}{\numberline {6.3}Comparing Classification Scores within Each Class}{67}% 
+\contentsline {subsubsection}{\numberline {6.3.1}High Woodwind Scores}{68}% 
+\contentsline {subsubsection}{\numberline {6.3.2}Middle and Low Woodwind Scores}{69}% 
+\contentsline {subsubsection}{\numberline {6.3.3}Brass Scores}{70}% 
+\contentsline {subsubsection}{\numberline {6.3.4}String Scores}{71}% 
+\contentsline {subsubsection}{\numberline {6.3.5}Percussion Scores}{72}% 
+\contentsline {subsubsection}{\numberline {6.3.6}Synthetic Waveform Scores}{73}% 
+\contentsline {subsection}{\numberline {6.4}Discussion of Results}{73}% 
+\contentsline {subsection}{\numberline {6.5}Predictions on Chaotic Synthesizers}{74}% 
+\contentsline {section}{\numberline {7}Conclusion}{75}% 
+\contentsline {section}{\numberline {8}Acknowledgments}{76}% 

@@ -48,7 +48,7 @@
 	\begin{center}
    		\vspace*{1cm}
        	\begin{LARGE}
-       	\textbf{Mapping Chaotically Generated Synthesizers to Real World Instruments with Machine Learning and Harmonic Analysis} \\
+       	\textbf{Mapping Chaotically Generated Synthesizers to Musical Instruments with Machine Learning and Harmonic Analysis} \\
        	\end{LARGE}
        	\vspace{1cm}
        	\begin{Large}
@@ -84,6 +84,8 @@
 
 \begin{abstract}
 
+The task of recognizing the source of a sound wave is trivial and almost effortless to a human being. 
+
 \end{abstract}
 
 % ================================================================
@@ -96,12 +98,14 @@
 
 \subsection{Introduction}
 
-\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan}.Whether its climate measurements, financial reports, audio-visual media, or medicine complex signal surround the modern world at every corner.  
+\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan,Mierswa}. From climate measurements, to financial reports, to audio-visual media, or to medicine, time-domain signals surround the modern world at every corner \cite{Liu,Zhang}. In each context, the general idea is to place the data or a subset of the data into distinct categories called \textit{classes} based on it's properties. For example, doctors may wish to classify a patient as having a heart condition based on properties of their heartbeat or banks may wish to detect fraudulent transactions based on a history of spending habits. Often, the volume  of information or complexity of the task makes it unreasonable for a human to do unaided by some form of automation.
 
-\paragraph*{}Consider the task of identifying the source of a sound. 
+\paragraph*{}It has long been a goal of computer scientists and engineers alike to develop a program, algorithm, or machine that could perform a certain task to the level of human-being \cite{Bishop,Geron,Loy}. While humans are intricate organisms capable of recognition or classification in many contexts, we are not notorious for the ability to process millions of raw numerical values in the course of a few seconds. Similarly, modern computers are also complex systems that can filter through exabytes of information on a daily basis, but are not generally known for being able to distinguish cats from dogs \cite{Geron}. The compromise between is an algorithm called a \textit{neural network} that combines the computation speed of a computer with the decision-making power of a human \cite{Goodfellow,Levine,Loy}.
 
+\paragraph*{}In this work, we have developed an automated neural network program that can classify digital sound waves based on the musical instrument that produced them. The general use of machine learning algorithms for audio information classification or identification is well explored, and a topic of much modern research \cite{Khan,Liu,Mierswa,Serizel,Zhang}.
 
-\paragraph*{}Recent progress in high performance computing and computational efficiency have given rise to another burst in the 
+\paragraph*{}
+
 
 % ================================================================
 % ================================================================
@@ -1641,7 +1645,7 @@ FCM = \frac{1}{k'}\sum_{i=0}^{k'}\text{FCM}_{i}\big[ s^{(i)} \big]
 \subsection{K-Folds Cross Validation}
 \label{subsec-XValidation}
 
-\paragraph*{}We can expand on the idea of a train/test split with a resampling method called \textit{K-Folds Cross Validation} (Also called X-validation) \cite{Geron,James}. Suppose we have machine learning model $F^*$, with a set of trainable parameters $\Theta$. We also have a data set $X$ and a set of appropriately labeled targets, $Y$, each of which contain $N$ samples. For $K$-folds X-val, we divide the full data set into $K$ subsets (called \textit{folds}), each with size $K/N$:
+\paragraph*{}We can expand on the idea of a train/test split with a resampling method called \textit{K-Folds Cross Validation} (Also called X-validation) \cite{Geron,James}. Suppose we have machine learning model $F^*$, with a set of trainable parameters $\Theta$. We also have a data set $X$ and a set of appropriately labeled targets, $Y$, each of which contain $N$ samples. For $K$-folds X-val, we divide the full data set into $K$ subsets (called \textit{folds}), each with size $N/K$:
 \begin{equation}
 \label{eqn-XValSplit}
 X,Y \rightarrow \Big\{ \big(X^{(0)},Y^{(0)}\big) , \big(X^{(1)},Y^{(1)}\big) , ... , \big(X^{(K-1)},Y^{(K-1)}\big) \Big\}
@@ -1810,14 +1814,13 @@ In the case of a multi-class classifier, the recall score also represents an\tex
 
 \paragraph*{}Large mini-batches require lots of RAM, but prevent the model from being over-fit to to any one sample, or class of samples. Small mini-batches require less RAM, but often may bias the optimizer to over-fit the given samples, and make optimization unstable \cite{Geron,James}. To ensure that the model is optimizing properly, we can track how the metrics behave over a training period. This allows us to monitor the \textit{rate of convergence} of the model. If the cost function is dropping to quickly or slowly, this may indicate that the optimizer learning rate is too high or too low. This may lead to an over-fit or under-fit model, or indicate an inappropriate set of feature is being used \cite{Geron,Goodfellow}. In Some cases, it can be used to initiate \textit{early-stopping}, which halts training when a set of parameters are met. 
 
-\paragraph*{}Given the high dimensionality of this model's parameter space,the large volume of sound files, and the large amount of RAM required to store the spectrogram matrix and the feature vector for each sample, we do not directly load the full data set into memory at once. Instead, we produce a large subset of the full data set of $256$ samples which we dub a \textit{mega-batch}. From this mega-batch, we produce the two deign matrices required for input, and load the corresponding labels. We then use a subset of this group as the \textit{mini-batches} for training. Each mini-batch contains $32$ samples. Once all mini-batches are fit, we discard the design matrices in the mega batch ans repeat for the next $256$ samples. 
+\paragraph*{}Given the high dimensionality of this model's parameter space,the large volume of sound files, and the large amount of RAM required to store the spectrogram matrix and the feature vector for each sample, we do not directly load the full data set into memory at once. Instead, we produce a large subset of the full data set of $256$ samples which we dub a \textit{mega-batch}. From this mega-batch, we produce the two deign matrices required for input, and load the corresponding labels. We then use a subset of this group as the \textit{mini-batches} for training. Each mini-batch contains $32$ samples. Once all mini-batches are fit, we discard the design matrices in the mega batch and repeat for the next $256$ samples. 
 
-\paragraph*{}Along each training step, we record the precision, recall, and loss scores. Our program stores these values locally in a \textit{training-history} file, which we can examine after the program completes. Below, we visualize the value of each metric score at each training epoch. 
+\paragraph*{}With each training step, we have recorded the precision, recall, and loss scores. These scores are computed from the forward pass of the training data before the gradient is computed, and parameters updated, i.e. the program has not seen Our program stores these values locally in a \textit{training-history} file, which we can examine after the program completes. Below, we visualize the evolution of each score as training progresses. These plots are from a model that was trained separately on the full data set after cross validation was performed.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
-%\includegraphics[scale=0.2]{•}
-\textcolor{red}{Loss Score Goes Here}
+\includegraphics[scale=0.3]{../Figures/LossHistory}
 \end{center}
 \caption{The loss function score decreases with each training step, indicating that optimization is performing correctly}
 \label{fig-LossScore}
@@ -1825,13 +1828,15 @@ In the case of a multi-class classifier, the recall score also represents an\tex
 
 similarly, we can visualize the precision score and recall score at each training step.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
-
+\includegraphics[scale=0.3]{../Figures/MetricHistory}
 \end{center}
-\caption{The precision score (a) and recall score (b) generally increase with each training step}
+\caption{The precision score and recall score generally increase with each training step}
 \label{fig-PrecisionRecallScores}
 \end{figure}
+
+\paragraph*{}Notice how loss, precision and recall show a pattern of increasing and decreasing every two steps. This is because we extract a mega-batch of $256$ samples, and perform two epochs of training on the batch. The first step represents the first time the model has seen the data, thus produces a higher cost function value. In the second step, the model has already seen the samples in the batch, and it produces a slightly lower cost value that the first step. The batch is discarded and a new subset of samples is drawn so that the process repeats. With two epochs per mega-batch, and two passes over the full data set (permuted in the middle), the model is effectively trained on the full data set a total of $4$ times.
 
 % ================================================================
 % ================================================================
@@ -1847,7 +1852,7 @@ similarly, we can visualize the precision score and recall score at each trainin
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Multimodal}
-\caption{Performance metrics across $10$ models and $37$ classes}
+\caption{Performance metrics for the multimodal networks across $10$ models, scores are averaged over $37$ classes}
 \label{fig-MultimodalXval}
 \end{center}
 \end{figure}
@@ -1856,20 +1861,19 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion}
-	\caption{Standard Confusion Matrix}
+	\caption{Standard confusion matrix for hybrid network}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion}
-	\caption{Occurance Weighted Confusion Matrix}
+	\caption{Occurrence weighted confusion matrix for hybrid network}
 	\end{subfigure}	
-
-	\caption{}
+	\caption{Confusion matrices, each is averaged over 10 folds of cross validation}
 	\label{fig-MultimodalConfs}
 \end{figure}
 
-\paragraph*{}We show the metric values of all splits to show the consistency in performance across all subsets. Notice how the models each perform reasonably well (precision and recall score consistently above 80\%). This indicates that for this data set, architecture, and feature selection, our model can performance reasonably and generalize appropriately. This step is critical in ensuring that there are no major out-liers in the classification results, and that any set of initial conditions can still allow the model to reach an acceptable set of parameters and decision boundaries. The results of cross validation indicate a strong classier that can be implemented to make predictions on other waveforms.
+\paragraph*{}We show the metric values of all splits to show the consistency in performance across all subsets. Notice how each split shows reasonable performance as given by the precision and recall score consistently above 80\%. This indicates that for this data set, architecture, and feature selection, our model can accurately classify waveforms and generalize appropriately. This step is critical in ensuring that there are no major out-liers in the classification results, and that any set of initial conditions can still allow the model to reach an acceptable set of parameters and decision boundaries. The results of cross validation indicate a strong classier that can be implemented to make predictions on other waveforms.
 
 % ================================================================
 
@@ -1901,27 +1905,27 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion}
-	\caption{Standard Confusion Matrix for Convolution Branch}
+	\caption{Standard confusion Matrix for the convolution branch}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion}
-	\caption{Occurance Weighted Confusion Matrix for Convolution Branch}
+	\caption{Occurrence Weighted confusion matrix for the convolution branch}
 	\end{subfigure}	
 
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion}
-	\caption{Standard Confusion Matrix for Perceptron Branch}
+	\caption{Standard confusion matrix for the perceptron Branch}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion}
-	\caption{Occurance Weighted Confusion Matrix for Perceptron Branch}
+	\caption{Occurrence weighted confusion matrix the for perceptron branch}
 	\end{subfigure}	
-	\caption{}
+	\caption{Performance metrics for the unimodal networks across $10$ models, scores are averaged over $37$ classes}
 	\label{fig-UnimodalConfs}
 \end{figure}
 
@@ -2215,7 +2219,9 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 
 \subsection{Discussion of Results}
 
-\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicate that our model performs very well at the ability to a match sound waves to their sources. We see this behavior in the plots in sec. (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different type of musical instruments reasonably well. Additionally, we show that predictive power of the model improves through our development of the multimodal architecture. By choosing to express the waveform in two different modalities in the form of the spectrogram matrix and the feature vector, the hybrid model demonstrates consistently higher classification performance across the same number of samples and splits. 
+\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicate that our model performs very well at the ability to a match sound waves to their sources. We see this behavior in the plots in sec. (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different type of musical instruments reasonably well. Additionally, we show that predictive power of the model improves through our development of the multimodal architecture. By choosing to express the waveform in two different modalities in the form of the spectrogram matrix and the feature vector, the hybrid model demonstrates a generally higher classification performance across the same number of samples and splits. 
+
+\paragraph*{}Despite the higher average scores in the hybrid network, see Fig. (\ref{fig-MultimodalXval}) compared to each unimodal network, Fig. (\ref{fig-UnimodalXVal}), some exceptions do arise at a micro-level (within each class). Consider the Hi-hat instrument in Fig. (\ref{fig-PercussionScores}c).
 
 % ================================================================
 
