@@ -30,55 +30,49 @@
 \contentsline {subsubsection}{\numberline {2.6.3}The Final Output Branch}{28}% 
 \contentsline {section}{\numberline {3}Properties of Musical Instruments}{29}% 
 \contentsline {subsection}{\numberline {3.1}Idiophones}{30}% 
-\contentsline {subsection}{\numberline {3.2}Membranophones}{30}% 
-\contentsline {subsection}{\numberline {3.3}Chordophones}{30}% 
-\contentsline {subsubsection}{\numberline {3.3.1}The 1-Dimensional Vibrating String}{30}% 
-\contentsline {subsection}{\numberline {3.4}Aerophones}{31}% 
-\contentsline {subsection}{\numberline {3.5}Other Generated Sounds}{31}% 
-\contentsline {subsubsection}{\numberline {3.5.1}Sine Wave}{31}% 
-\contentsline {subsubsection}{\numberline {3.5.2}Sawtooth Wave}{32}% 
-\contentsline {subsubsection}{\numberline {3.5.3}Square Wave}{32}% 
-\contentsline {subsubsection}{\numberline {3.5.4}Triangle Wave}{32}% 
-\contentsline {subsubsection}{\numberline {3.5.5}White Noise}{32}% 
-\contentsline {section}{\numberline {4}Feature Selections}{33}% 
-\contentsline {subsection}{\numberline {4.1}Feature Space}{33}% 
-\contentsline {subsubsection}{\numberline {4.1.1}Decision Boundaries}{34}% 
-\contentsline {subsubsection}{\numberline {4.1.2}The Design Matrix}{37}% 
-\contentsline {subsubsection}{\numberline {4.1.3}Audio Preprocessing}{38}% 
-\contentsline {subsection}{\numberline {4.2}Spectrogram Features}{39}% 
-\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{40}% 
-\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{41}% 
-\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{42}% 
-\contentsline {subsection}{\numberline {4.3}Time-Space Features}{43}% 
-\contentsline {subsubsection}{\numberline {4.3.1}Time Domain Envelope}{44}% 
-\contentsline {subsubsection}{\numberline {4.3.2}Zero Crossing Rate}{46}% 
-\contentsline {subsubsection}{\numberline {4.3.3}Temporal Center of Mass}{47}% 
-\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{48}% 
-\contentsline {subsection}{\numberline {4.4}Frequency-Space Features}{51}% 
-\contentsline {subsubsection}{\numberline {4.4.1}Mel Filter Bank Energies}{51}% 
-\contentsline {subsubsection}{\numberline {4.4.2}Mel Frequency Cepstral Coeffecients}{52}% 
-\contentsline {subsubsection}{\numberline {4.4.3}Frequency Center of Mass}{55}% 
-\contentsline {section}{\numberline {5}Evaluating Model Performance}{56}% 
-\contentsline {subsection}{\numberline {5.1}K-Folds Cross Validation}{56}% 
-\contentsline {subsection}{\numberline {5.2}Performance Metrics}{57}% 
-\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{58}% 
-\contentsline {subsubsection}{\numberline {5.2.2}Accuracy Score}{59}% 
-\contentsline {subsubsection}{\numberline {5.2.3}Precision Score}{60}% 
-\contentsline {subsubsection}{\numberline {5.2.4}Recall Score}{60}% 
-\contentsline {subsubsection}{\numberline {5.2.5}F1-Score}{61}% 
-\contentsline {subsection}{\numberline {5.3}Tracking Metrics over a Period of Training}{61}% 
-\contentsline {paragraph}{}{61}% 
-\contentsline {section}{\numberline {6}Experimental Results}{64}% 
-\contentsline {subsection}{\numberline {6.1}Executing Cross Validation}{64}% 
-\contentsline {subsection}{\numberline {6.2}Comparing Results between Architectures}{65}% 
-\contentsline {subsection}{\numberline {6.3}Comparing Classification Scores within Each Class}{67}% 
-\contentsline {subsubsection}{\numberline {6.3.1}High Woodwind Scores}{68}% 
-\contentsline {subsubsection}{\numberline {6.3.2}Middle and Low Woodwind Scores}{69}% 
-\contentsline {subsubsection}{\numberline {6.3.3}Brass Scores}{70}% 
-\contentsline {subsubsection}{\numberline {6.3.4}String Scores}{71}% 
-\contentsline {subsubsection}{\numberline {6.3.5}Percussion Scores}{72}% 
-\contentsline {subsubsection}{\numberline {6.3.6}Synthetic Waveform Scores}{73}% 
-\contentsline {subsection}{\numberline {6.4}Discussion of Results}{73}% 
-\contentsline {subsection}{\numberline {6.5}Predictions on Chaotic Synthesizers}{74}% 
-\contentsline {section}{\numberline {7}Conclusion}{75}% 
-\contentsline {section}{\numberline {8}Acknowledgments}{76}% 
+\contentsline {subsection}{\numberline {3.2}Membranophones}{31}% 
+\contentsline {subsection}{\numberline {3.3}Chordophones}{32}% 
+\contentsline {subsection}{\numberline {3.4}Aerophones}{34}% 
+\contentsline {subsection}{\numberline {3.5}Other Generated Sounds}{34}% 
+\contentsline {section}{\numberline {4}Feature Selections}{35}% 
+\contentsline {subsection}{\numberline {4.1}Feature Space}{35}% 
+\contentsline {subsubsection}{\numberline {4.1.1}Decision Boundaries}{36}% 
+\contentsline {subsubsection}{\numberline {4.1.2}The Design Matrix}{39}% 
+\contentsline {subsubsection}{\numberline {4.1.3}Audio Preprocessing}{40}% 
+\contentsline {subsection}{\numberline {4.2}Spectrogram Features}{41}% 
+\contentsline {subsubsection}{\numberline {4.2.1}Frame Blocking}{42}% 
+\contentsline {subsubsection}{\numberline {4.2.2}Windowing}{43}% 
+\contentsline {subsubsection}{\numberline {4.2.3}Discrete Fourier Transform}{44}% 
+\contentsline {subsection}{\numberline {4.3}Time-Space Features}{45}% 
+\contentsline {subsubsection}{\numberline {4.3.1}Time Domain Envelope}{46}% 
+\contentsline {subsubsection}{\numberline {4.3.2}Zero Crossing Rate}{48}% 
+\contentsline {subsubsection}{\numberline {4.3.3}Temporal Center of Mass}{49}% 
+\contentsline {subsubsection}{\numberline {4.3.4}Auto Correlation Coefficients}{50}% 
+\contentsline {subsection}{\numberline {4.4}Frequency-Space Features}{53}% 
+\contentsline {subsubsection}{\numberline {4.4.1}Mel Filter Bank Energies}{53}% 
+\contentsline {subsubsection}{\numberline {4.4.2}Mel Frequency Cepstral Coeffecients}{54}% 
+\contentsline {subsubsection}{\numberline {4.4.3}Frequency Center of Mass}{57}% 
+\contentsline {section}{\numberline {5}Evaluating Model Performance}{58}% 
+\contentsline {subsection}{\numberline {5.1}K-Folds Cross Validation}{58}% 
+\contentsline {subsection}{\numberline {5.2}Performance Metrics}{59}% 
+\contentsline {subsubsection}{\numberline {5.2.1}Confusion Matrix}{60}% 
+\contentsline {subsubsection}{\numberline {5.2.2}Accuracy Score}{61}% 
+\contentsline {subsubsection}{\numberline {5.2.3}Precision Score}{62}% 
+\contentsline {subsubsection}{\numberline {5.2.4}Recall Score}{62}% 
+\contentsline {subsubsection}{\numberline {5.2.5}F1-Score}{63}% 
+\contentsline {subsection}{\numberline {5.3}Tracking Metrics over a Period of Training}{63}% 
+\contentsline {paragraph}{}{63}% 
+\contentsline {section}{\numberline {6}Experimental Results}{66}% 
+\contentsline {subsection}{\numberline {6.1}Executing Cross Validation}{66}% 
+\contentsline {subsection}{\numberline {6.2}Comparing Results between Architectures}{67}% 
+\contentsline {subsection}{\numberline {6.3}Comparing Classification Scores within Each Class}{69}% 
+\contentsline {subsubsection}{\numberline {6.3.1}High Woodwind Scores}{70}% 
+\contentsline {subsubsection}{\numberline {6.3.2}Middle and Low Woodwind Scores}{71}% 
+\contentsline {subsubsection}{\numberline {6.3.3}Brass Scores}{72}% 
+\contentsline {subsubsection}{\numberline {6.3.4}String Scores}{73}% 
+\contentsline {subsubsection}{\numberline {6.3.5}Percussion Scores}{74}% 
+\contentsline {subsubsection}{\numberline {6.3.6}Synthetic Waveform Scores}{75}% 
+\contentsline {subsection}{\numberline {6.4}Discussion of Results}{75}% 
+\contentsline {subsection}{\numberline {6.5}Predictions on Chaotic Synthesizers}{76}% 
+\contentsline {section}{\numberline {7}Conclusion}{77}% 
+\contentsline {section}{\numberline {8}Acknowledgments}{78}% 
