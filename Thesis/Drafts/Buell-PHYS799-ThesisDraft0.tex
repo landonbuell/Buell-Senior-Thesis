@@ -907,25 +907,25 @@ $19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 
 \paragraph*{}An idiophone is an instrument that produces sound through the vibration of the full body of the object. This generally includes most percussive instruments excluding drums \cite{Hornbostel}. From the set of classes that we use, bells, crotales, Hi-hats, marimbas, vibraphones, and xylophones are all examples of idiophones. In each case, sound comes from the vibration of the object itself or some subset of the body. In the case of mallet percussion, the wood or metal keys vibrate when struck with a felt or yarn mallet. Sometimes the vibration is amplified by nearby air columns, but it is the vibration of the key itself where the sound originates from \cite{Olson}.
 
-\paragraph*{}Idiophones in particular can be characterized by their \textit{transient response} \cite{White}. The transient response is the time-evolution response of the waveform in time, which we normally break into \textit{attack}, \textit{decay}, \textit{sustain}, and \textit{release}. For most idiophones, the system is struck once and left to a free or dampened vibration; which we can mathematically model as a rigid body reacting to an impulse \cite{Hunter,Olsen}.
+\paragraph*{}Idiophones in particular can be characterized by their \textit{transient response} \cite{White}. The transient response is the time-evolution response of the waveform in time, which we normally break into \textit{attack}, \textit{decay}, \textit{sustain}, and \textit{release}. For most idiophones, the system is struck once and left to a free or dampened vibration; which we can mathematically model as a rigid body reacting to an impulse \cite{Hunter,Olson}.
 
-\begin{figure}
+\begin{figure}[H]
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
-	\textcolor{red}{Idiophone}
-	\caption{•}
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Vibraphone-A5}
+	\caption{Vibraphone playing $A5$}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
-	\textcolor{red}{Idiophone}
-	\caption{•}
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Marimba-C2}
+	\caption{Marimba playing $C2$}
 	\end{subfigure}
 \caption{Spectrogram representation of idiophone waveforms}
 \label{fig-PropertiesIdiophones}
 \end{figure}
 
-\paragraph*{}From the spectrogram representation of idophone waveforms , we can see the majority of energy in the time domain is right at the start of the waveform. This is shown by the vertical bright yellow line at on the left side of each image in Fig. (\ref{fig-PropertiesIdiophones}). When an idiophone is struck, all of the energy for the vibration is delivered up front, and this the amplitude of the waveform can only decay. This gives the resulting transient a very short attack time, followed by a short decay, sustain, and often long release as the last of the energy dies out \cite{White}. While other instruments sch as plucked strings like guitars show similar response, this is a very important property
+\paragraph*{}From the spectrogram representation of idophone waveforms , we can see the majority of energy in the time domain is right at the start of the waveform. This is shown by the vertical bright yellow line at on the left side of each image in Fig. (\ref{fig-PropertiesIdiophones}). When an idiophone is struck, all of the energy for the vibration is delivered up front, and this the amplitude of the waveform can only decay. This gives the resulting transient a very short attack time, followed by a short decay, sustain, and often long release as the last of the energy dies out \cite{White}. While other instruments sch as plucked strings like guitars show similar response, this is a very important property of many idiophones. Notice additionally, that the energy of the higher overtones die out very quickly in each spectrogram, and only the lowest pitch - the fundamental is preserved for much of the duration.
 
 \paragraph*{}This property allows for us to distinguish idiophones from other instruments by an approximation of their amplitude envelope. For example, if we divide the time series waveform into $q$ distinct sections, and compute the RMS energy in each section, we should see a gradual decay of energy with time. More specifically, the energy in some section $q_i$ should be greater than the energy in any subsequent section $q_{i + n}, n \in \mathbb{Z}$. Having this property does not guarantee the source is an idiophone but can we can reasonable state that most idiophones follow this behavior. In addition to the amplitude envelope, we can consider the distribution of time-space energy in the form of a single scalar quantity as the center of mass. If we treat the waveform as a 1D mass distribution, and compute the center of mass, we should see consistently low values because the largest values of amplitudes happen early on in the time-domain.
 
@@ -950,6 +950,7 @@ $19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 \end{equation}
 Where $v$ is the wave propagation velocity, given by $\sqrt{\frac{F_T}{\mu}}$. D'Alembert's equation indicates that the acceleration of any point on a string is directly proportional to the rate of change of the slope of the string at that point. 
 
+
 \paragraph*{}Since the PDE is second order in time, we must also specify two initial conditions being the shape and the derivative of the shape at time $t = 0$.  \cite{Olson,White,Haberman}:
 \begin{equation}
 U(x,0) = f(x) 
@@ -967,18 +968,31 @@ Depending on the exact nature of the source instrument, $f(x)$ and $g(x)$ can ta
 	\begin{subfigure}{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresSpectrogram/CELLO-F4}
+	\caption{Violoncello playing $F4$}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresSpectrogram/Guitar-B2}
+	\caption{Guitar playing $B2$}
+	\end{subfigure}
+	
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Violin-G4}
+	\caption{Violin playing $G4$}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Viola-G4}
+	\caption{Viola playing $G4$}
 	\end{subfigure}
 \caption{Spectrograms for a few Stringed instruments}	
 \label{fig-PropertiesChordophones}
 \end{figure}
 
-\paragraph*{}Despite these differences, the wave equation is still a \textit{linear} partial differential equation which allows for the fact that a linear combination of solutions is also a valid solution. In the case of the taught finite string that is fixed at both ends, such a guitar, viola or cello, the a solution tends to take the form of a sinusoidal function such a sine or cosine \cite{Hunter, Taylor, White}. The boundary continuations, and most forms of standard initial conditions allow for the each sinusoidal to fit exactly an integer wavelengths into the region $0 \leq x \leq L$ \cite{Haberman,Hunter}. Physically, this corresponds to having the string vibrate with some fundamental frequency $f_0$, which represents it's lowest possible note,and a linear combination of higher harmonics, $n \times f_0$, where $n \in \mathbb{Z}$ \cite{Olson,Taylor,White}. In the case of bowed stringed instruments such as cellos or violins, we often see a formant structure marked by fairly uniform amplitude of each harmonic in the frequency spectrum. Observe this behavior in Fig. (\ref{fig-PropertiesChordophones}).
+\paragraph*{}Despite these differences, the wave equation is still a \textit{linear} partial differential equation which allows for a linear combination of solutions to form a sound wave. In the case of the taught finite string that is fixed at both ends, such a guitar, viola or cello, the a solution tends to take the form of a sine or cosine function \cite{Hunter, Taylor, White}. The boundary conditions, and most forms of standard initial conditions allow for the each sinusoidal to fit exactly an integer or half-integer number wavelengths into the region $0 \leq x \leq L$ \cite{Haberman,Hunter}. Players of chordophones change pitch by shortening the length of the vibrating string or applying additional tension to the string. This changes the length of portion of the string that vibrates, and causes the production of a new pitch.
 
-\paragraph*{}Additionally, It is worth noting at each string instrument produces a slightly different frequency spectrum, hence each provides a slightly different timbre to the listener, so differentiating between them is difficult, but possible. Because of this, we find that the spectrogram representation of the waveform is so critical to classification success because the convolution layers allow for the detection of small variations in the frequency-time domain where humans would otherwise be unable to \cite{Loy,Virtanen}. However, the size of the instrument limits the length of the string that vibrates which leads to limitations in the range of the overtones the instruments will produce. For example, a cello playing a low $C1$ will have overtones extenting up into the $12$ kHz range, but the energy will be very low there, thus have a very low frequency center of mass. Compare this with a violin playing a $C6$, will have overtones into the $20$ kHz range, and will produce a very high frequency center of mass. While the ranges of the musical instruments overlap a great deal, the energy distribution in frequency space can be treated as a 1D mass distribution, and the frequency center of masses of instruments with similar timbres can still differ greatly \cite{Serizel}.
+\paragraph*{}It is worth noting at each string instrument do produce a slightly different frequency spectrum, hence each provides a slightly different timbre to the listener, so differentiating between them is difficult, but possible. Because of this, we find that the spectrogram representation of the waveform is so critical to classification success because the convolution layers allow for the detection of small variations in the frequency-time domain where humans would otherwise be unable to \cite{Loy,Virtanen}. However, the size of the instrument limits the length of the string that vibrates which leads to limitations in the range of the overtones the instruments will produce. For example, a cello playing a low $C1$ will have overtones extending up into the $12$ kHz range, but the energy will be very low there, thus have a very low frequency center of mass. Compare this with a violin playing a $C6$, will have overtones into the $20$ kHz range, and will produce a very high frequency center of mass. While the ranges of the musical instruments overlap a great deal, the energy distribution in frequency space can be treated as a 1D mass distribution, and the frequency center of masses of instruments with similar timbres can still differ greatly \cite{Serizel}.
 
 \paragraph*{}Notice as well in the spectrograms of Fig. ({fig-PropertiesChordophones}), how the transient response (the time domain) of chordophones differs wildly from idiophones and membranophones. In the case of bowed instruments, the attack of the stringed instrument is much longer, with a much more gradual sustain decay, and release. Where an idiophone or plucked string has all of the time-domain energy up front, the bowed string waveform continues to build energy as the instrument is bowed, and only loses energy once the bowing stops, and the string is left to vibrate by itself \cite{Hunter}. This causes a bowed stringed instruemnt to present a very different amplitude envelope compared to the other categories of instruments, and a much more centrally located temporal center of mass.
 
@@ -987,17 +1001,108 @@ Depending on the exact nature of the source instrument, $f(x)$ and $g(x)$ can ta
 \subsection{Aerophones}
 \label{subsec-Aerophones}
 
-\paragraph*{}An aerophone is a musical instrument that produces sounds through the vibration of an air molecules in a column-like structure. This is the largest category of instruemnts that we have, and is commonly broken down into smaller subcategories such as \textit{woodwind} and \textit{bass} instruments. From out data set- alto flutes, alto saxophones, bass clarinets, bass flutes, bassoons, $B\flat$ clarinets, contrabassoons, $E\flat$ clarinets, English horns, flutes, oboes, tenor saxophones, and soprano saxophones are all examples of woodwind aerophones. Additionally, bass trombones, french horns, tenor trombones, trombones, $B\flat$ trumpets, and tubas are all examples of brass aerophones \cite{Hornbostel,Olson,White}.
+\paragraph*{}An aerophone is a musical instrument that produces sounds through the vibration of an air molecules in a column-like structure. This is the largest category of instruemnts that we have, and is commonly broken down into smaller subcategories such as \textit{woodwind} and \textit{brass} instruments. From our data set - alto flutes, alto saxophones, bass clarinets, bass flutes, bassoons, $B\flat$ clarinets, contrabassoons, $E\flat$ clarinets, English horns, flutes, oboes, tenor saxophones, and soprano saxophones are all examples of woodwind aerophones. Additionally, bass trombones, french horns, tenor trombones, trombones, $B\flat$ trumpets, and tubas are all examples of brass aerophones \cite{Hornbostel,Olson,White}.
+
+\paragraph*{}Aerophones all produce sound by exciting molecules of air within a column that vibrate in different patterns called \textit{modes} \cite{White}. The nature of modes are determine by the structure of the instruments. Most aerophones such a flutes, clarinets, and saxophones are more much more reminiscent of air columns that are closed at one end and open at the other. The is marked by the presence of a mouth piece at one end where a played blows air fro their lungs to add energy, and a bell at the other end to serve as an amplification structure \cite{Olson}. For a column of length $L$, that is open at one end, the fundamental frequency is given by \cite{Olson}:
+\begin{equation}
+f_0 = \frac{v}{4L} = \frac{v}{\lambda}
+\end{equation}
+where $v$ is the velocity of sound in the medium, and $\lambda$ is the wavelength of the sound wave. This is the lowest pitch that such an instrument can play. Lower woodwinds such as bass clarinets, have a much longer vibrating air column that that of the short piccolo. 
+
+\paragraph*{}To change the pitch, the performer of an aerophone must change the length of the vibrating air column by pressing keys with their fingers. This causes a different number of wavelengths to fit within the column, and thus change the note being played. Shortening the column (reducing $L$) also causes a reduction in the wavelength, and an increase in frequnecy and vice-versa. In Fig. (\ref{fig-PropertiesAerophonesWind}) we show the spectrogram waveforms for a few different woodwind instruments.
+
+\begin{figure}[H]
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/AltoSax-A4}
+	\caption{Alto Saxophone playing $A4$}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Clarinet-Gs5}
+	\caption{$B\flat$ Clarinet playing $G\sharp 5$}
+	\end{subfigure}
+	
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Oboe-Bb4}
+	\caption{Oboe playing $B\flat 4$}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Bassoon-D4}
+	\caption{Bassoon playing $D4$}
+	\end{subfigure}
+\caption{Spectrograms for a few Stringed instruments}	
+\label{fig-PropertiesAerophonesWind}
+\end{figure}
+
+\paragraph*{}In addition to the woodwind instruments described above , we also consider the properties of brass aerophones. As the name implies, brass instruments are usually made of interconnected hollow tubes of brass. as opposed to linear columns of mostly wood. brass instruments are also modeled as open-closes columns that vibrate which are again shortened and lengthened by pressing keys. Brass instruments are generally much longer than woodwinds, and produce sounds at a generally greater volume \cite{Olson}. Despite these differences, brass instruments do generally display a great deal of similarities with wood winds, as we can see in Fig. (\ref{fig-PropertiesAerophonesBrass})
+
+\begin{figure}[H]
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/FRENCHHORN-Cs4}
+	\caption{French horn playing $c\sharp 4$}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/TenorTrombone-F4}
+	\caption{Tenor Trombone playing $F4$}
+	\end{subfigure}
+	
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Trumpet-B3}
+	\caption{$B\flat$ Trumpet playing $B3$}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/Tuba-A2}
+	\caption{Tuba playing $A2$}
+	\end{subfigure}
+\caption{Spectrograms for a few Stringed instruments}	
+\label{fig-PropertiesAerophonesBrass}
+\end{figure}
+
+\paragraph*{}Just like with idiophones and chordophones, the amplitude envelop of a brass instrument is very characteristic. Aerophones require a user to vibrate air with their lungs which gradually adds energy to the waveform. This transfer of energy can take comparably long time, giving aerophones particularity long attack times. The note is sustained as long as a player is vibrating the air, allowing for any length of decay and sustain, but the energy does out very suddenly when the player stops, giving a characteristically short release time \cite{White}. 
 
 % ================================================================
 
 \subsection{Other Generated Sounds}
 \label{subsec-Generated}
 
-\paragraph*{}We group sounds produced from non-physical musical instruments in this final category. Form our data set, this category includes the four simplest waveforms,sine waves, (ii) sawtooth waves, square waves, and triangle waves, as well as any color noises \cite{White}. Since these sounds are only produced synthetically through a MATLAB program, we choose not to include them in the Hornbostel-Sachs grouping above. We explore the properties of each of these generated sounds and how they relate to physical instruments.
+\paragraph*{}We group sounds produced from non-physical musical instruments in this final category. Form our data set, this category includes the four simplest waveforms, sine waves, sawtooth waves, square waves, and triangle waves, as well as any color noises \cite{White}. Since these sounds are only produced synthetically through a MATLAB program, we choose not to include them in the Hornbostel-Sachs grouping above. We explore the properties of each of these generated sounds and how they relate to physical instruments.
 
+\paragraph*{}Each of the five synthetically generated waveforms were produce to be constant with all time. This means that each waveform has no characteristic amplitude envelope and the spectrogram shows no time-evolution of energy in the waveform. Each of the the signals can be composed od a linear combinations of oscillating sinusoidal at various different frequencies and energies. For example, a sine wave conists only of a single oscillating term, while a square wave consists of repeated odd harmonics. These behaviors can be observed in Fig. (\ref{fig-PropertiesSynths}).
 
+\begin{figure}[H]
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/SquareWave-880Hz}
+	\caption{Square Wave at $880$ Hz}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/SawtoothWave-880Hz}
+	\caption{Sawtooth Wave at $880$ Hz}
+	\end{subfigure}
+	
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/SineWave-880Hz}
+	\caption{Sine Wave at $880$ Hz}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[scale=0.18]{../FiguresSpectrogram/WhiteNoise-190}
+	\caption{White Noise}
+	\end{subfigure}
+\caption{Spectrograms for a few Stringed instruments}	
+\label{fig-PropertiesSynths}
+\end{figure}
 
+These waveform were included to our data set to serve primilarly as a control to understand how the chosen features respond to simple waveforms. Additionally, the elementary composition of each waveform allows for it to potentially resemble a wide variety of frequency spectra \cite{White}.
 
 
 % ================================================================
@@ -1142,7 +1247,7 @@ Note that different projects may require a different set of requirement from pre
 	
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
-	\includegraphics[scale=0.2]{../FiguresSpectrogram/SquareWave-220}
+	\includegraphics[scale=0.2]{../FiguresSpectrogram/SquareWave-880Hz}
 	\caption{Square Wave at $220$ Hz}
 	\end{subfigure}
 	\hfill
