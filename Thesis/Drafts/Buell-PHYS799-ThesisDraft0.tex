@@ -82,9 +82,11 @@
 % ================================================================
 % ================================================================
 
+\newpage 
+ 
 \begin{abstract}
 
-The task of recognizing the source of a sound wave is trivial and almost effortless to a human being. 
+The task of recognizing the source of a sound wave in a digital audio file is trivial and almost effortless to a human being, but far more difficult for a computer to do. To execute this task, we have designed and constructed a multimodal neural network, that utilizes two different input branches, one being a convolutional neural network (CNN), and the other, a multilayer perceptron (MLP). The CNN branch accepts input in the form of a two-dimensional spectrogram matrix, which encodes the energy distribution of an audio signal over frequency and time, and the MLP branch accepts input as a one-dimensional array of features derived from the physical nature of the sound wave. The spectrogram is produced by using a concatenation of multiple short-time discrete Fourier transformations (STDFT) of overlapping windowed time-space analysis frames. The feature vector implements techniques from digital signal processing to combine properties of the time-space and frequency-space information. To classify the audio files based on predicted sources, we aggregate the of the activations from the final layers of each branch, and produce a single prediction label. We find that this architecture allows for reasonable classification performance, and demonstrates an average superior classification performance when compared to either of it's constituent unimodal architectures. 
 
 \end{abstract}
 
@@ -98,19 +100,19 @@ The task of recognizing the source of a sound wave is trivial and almost effortl
 
 \subsection{Introduction}
 
-\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan,Mierswa}. From climate measurements, to financial reports, to audio-visual media, or to medicine, time-domain signals surround the modern world at every corner \cite{Virtanen}. In each context, the general idea is to place the data or a subset of the data into distinct categories called \textit{classes} based on it's properties. For example, doctors may wish to classify a patient as having a heart condition based on properties of their heartbeat or banks may wish to detect fraudulent transactions based on a history of spending habits. Often, the volume  of information or complexity of the task makes it unreasonable for a human to do unaided by some form of automation.
+\paragraph*{}The ability to classify time-series data into unique categories has become topic of much attention in the last few decades \cite{Khan,Mierswa}. From climate measurements, to financial reports, to audio-visual media, or to medicine, time-domain signals surround the modern world at every corner \cite{Virtanen}. In each context, the general idea is to place data or a subset of data into distinct categories called \textit{classes} based on it's properties. For example, doctors may wish to classify a patient as having a heart condition based on properties of their heartbeat or banks may wish to classify a purchase as fraudulent based on a history of spending habits. Often, the volume  of information or complexity of the task makes it unreasonable for a human to do unaided by some form of automation.
 
 \paragraph*{}It has long been a goal of computer scientists and engineers alike to develop a program, algorithm, or machine that could perform a certain task to the level of human-being \cite{Bishop,Geron,Loy}. While humans are intricate organisms capable of recognition or classification in many contexts, we are not notorious for the ability to process millions of raw numerical values in the course of a few seconds. Similarly, modern computers are also complex systems that can filter through exabytes of information on a daily basis, but are not generally known for being able to distinguish cats from dogs \cite{Geron}. The compromise between is an algorithm called a \textit{neural network} that combines the computation speed of a computer with the decision-making power of a human \cite{Goodfellow,Levine,Loy}.
 
 \paragraph*{}In this work, we have developed an automated neural network program that can classify digital sound waves as one of $37$ musical instrument that it most closely resembles. The general use of machine learning algorithms for audio information classification or identification is well explored, and a topic of much modern research \cite{Khan,Liu,Mierswa,Serizel,Zhang}. From previous work, it has been found that various types of audio classification are possible, and are still being expanded upon. Some papers details features and performances of attempting to classify speech against music or organize audio-visual media based on content.
 
+\paragraph*{}As the name implies, a neural network is a computation a model or graph that is loosely structured off of the human \cite{Geron,Loy}. Where a biological brain uses physical connects to exchanges chemicals to communicate information, a neural network uses a chain of mathematical operations to communicate information \cite{Goodfellow}. The earliest work on attempting to model cognitive processes goes back to 1943, where Warren McCulloch and Walter Pitts began to develop a mathematical model of the human brain using principles of mathematics \cite{McCulloch,Loy}. Nearly ten years, later, one of the earliest computation neural networks called the \textit{perceptron} was developed by Frank Rosenblatt in 1953, which modeled connections of neurons through principles of linear algebra \cite{Geron}. Another decade after that, inspiration from the visual cortex gave rise to the convolution operation to be applied to digital image processing. 
+
+\paragraph*{}Modern developments in high-performance computing and 
+
 \paragraph*{}It is well know that the choice of inputs, called features is critically important to classification success \cite{Khan,Serizel}. In many cases, we can develop and explore a set of features that allows for the particular classification task to be executed considerably well. In our case, the choice of features is motivated by the physics of each musical instrument class. By exploring the nature of the vibration part of each instrument according to the Hornbostel-Sachs classification system, we can describe some of the mechanical properties and see how they differ between instruments of different types. These differences are key to providing a set of features which allow a neural network to differentiate between classes of instruments \cite{Liu,Zhang}. 
 
-\paragraph*{}The design of the neural function that we have constructed combines two architecture types by using two distinct entry arrays which are processed, and a single output is formed. Thus type of neural network is referred to as a \textit{multimodal} nueral network \cite{Li,Ngiam}.
-
-\paragraph*{}\textcolor{red}{This is not my best into to date}
-
-
+\paragraph*{}The design of our neural function combines two architecture types by using two distinct entry arrays which are processed, and a single output is formed. Thus type of neural network is referred to as a \textit{multimodal} nueral network \cite{Li,Ngiam}. Our multimodal network contains a convolutional neural network (CNN) that processes an image-like representation of an audio waveform, and a multilayer perceptron (MLP) that processes a list-like representation of an audio wave form. Each arm of the network is it's own computuational graph that is designed to process it's respective inputs types and 
 
 % ================================================================
 % ================================================================
@@ -2327,7 +2329,7 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 
 \item[•]Dr. Kevin Short and Dr. Maurik Holtrop for advising this project.
 
-\item[•]Dakota Buell, Tan Dao, John Parker, Nathan Richard, Morgan Saidel for consultation on physics, mathematics, and programming topics.
+\item[•]Dakota Buell, Tan Dao, John Parker, Nathan Richard, and Morgan Saidel for consultation on physics, mathematics, and programming topics.
 
 \item[•]Madeline Edwards for differing me to this project, as well as constant support and consultation on mathematical topics.
 
