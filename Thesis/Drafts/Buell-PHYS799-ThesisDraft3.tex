@@ -80,7 +80,7 @@
  
 \begin{abstract}
 
-The task of recognizing the source of a sound wave in a digital audio file is trivial and almost effortless to a human being, but far more difficult for a computer to do. To execute this task, we have designed and constructed a multimodal neural network, that utilizes two different input branches, one being a convolutional neural network (CNN), and the other, a multilayer perceptron (MLP). The CNN branch accepts input in the form of a two-dimensional spectrogram matrix, which encodes the energy distribution of an audio signal over frequency and time, and the MLP branch accepts input as a one-dimensional array of features derived from the physical nature of the sound wave. The spectrogram is produced by using a concatenation of multiple short-time Fourier transformations (STFT) of overlapping windowed time-space analysis frames. The feature vector implements techniques from digital signal processing to combine more explicit properties of the time-space and frequency-space information. To classify the audio files based on predicted sources, we aggregate the of the activations from the final layers of each branch, and produce a single prediction label. We find that this architecture allows for reasonable classification performance, and demonstrates superior classification performance on average, when compared to either of it's constituent unimodal architectures. Training data for this experiment is from studio recordings of the Philharmonia Symphony Orchestra and University of Iowa's Electronic Music Studios.
+The task of recognizing the source of a sound wave in a digital audio file is trivial and almost effortless to a human being, but far more difficult for a computer to do. To execute this task, we have designed and constructed a multimodal neural network, that utilizes two different input branches, one being a convolutional neural network (CNN), and the other, a multilayer perceptron (MLP). The CNN branch accepts input in the form of a two-dimensional spectrogram matrix, which encodes the energy distribution of an audio signal over frequency and time, and the MLP branch accepts input as a one-dimensional array of features derived from the physical nature of the sound wave. The spectrogram is produced by using a concatenation of multiple short-time Fourier transformations (STFT) of overlapping windowed time-space analysis frames. The feature vector implements techniques from digital signal processing to combine more explicit properties of the time-space and frequency-space information. To classify the audio files based on predicted sources, we aggregate the of the activations from the final layers of each branch, and produce a single prediction label. We find that this architecture allows for reasonable classification performance, and demonstrates superior classification performance on average, when compared to either of it's constituent unimodal architectures. Training data for this experiment is from studio recordings of the Philharmonia Symphony Orchestra and the University of Iowa's Electronic Music Studios.
 
 \end{abstract}
 
@@ -120,7 +120,7 @@ The task of recognizing the source of a sound wave in a digital audio file is tr
 \subsection{Methodology}
 \label{sec-Methodology}
 
-\paragraph*{}This project includes a great number of steps to ensure it's completion. Here we show a high-level outline of the pieces involved.
+\paragraph*{}This project includes a number of steps to ensure it's completion. Here we show a high-level outline of the pieces involved.
 
 % ================================================================
 
@@ -140,31 +140,31 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 
 \paragraph*{}In order to train the neural network to be able to identify musical instrument sources, we need a suitable data set to present to the model as training data. University of Iowa Electronic Music Studio, and the London-Based Philharmonia Orchestra each have a large collection of publicly available audio files (See acknowledgments). These files contain short segments of musical instruments performing a single note, and is labeled according to the instrument that produced the sound. The files and labels make up the core of the data set that we use to train the model.
 
-\paragraph*{}To ensure that these data sets are formatted consistently, we read each sample from it's original format, \textit{.AIF}, \textit{.MP3}, or similar, and rewrite the data as a new \textit{.WAV} files, sampled at 44.1 kHz with a 24-bit depth. This ensures that all data will have a consistent format when features are extracted. This stage is detailed in sec. (\ref{subsubsec-Preprocessing}).
+\paragraph*{}To ensure that these data sets are formatted consistently, we read each sample from it's original format, \textit{.AIF}, \textit{.MP3}, or similar, and rewrite the data as a new \textit{.WAV} files, sampled at 44.1 kHz with a 24-bit depth. This ensures that all data will have a consistent format when features are extracted. This stage is detailed in section (\ref{subsubsec-Preprocessing}).
 
 % ================================================================
 
 \subsubsection{Designing Classification Features}
 
-\paragraph*{}The performance of a neural network is largely dependent of designing an appropriate set of predictors or features which represent the raw input given to the model. These inputs are designed to represent properties of wave forms that can be expressed by a single or multiple numerical values. We detail these features in sec. (\ref{sec-Features}). These are used in place of a full waveform to represent a file's contents in a low-dimensional array. We use tools from physics, mathematics, and signal processing to define and explore a comprehensive set of features that enables a high performance of the classifier. 
+\paragraph*{}The performance of a neural network is largely dependent of designing an appropriate set of predictors or features which represent the raw input given to the model. These inputs are designed to represent properties of wave forms that can be expressed by a single or multiple numerical values. We detail these features in section (\ref{sec-Features}). These are used in place of a full waveform to represent a file's contents in a low-dimensional array. We use tools from physics, mathematics, and signal processing to define and explore a comprehensive set of features that enables a high performance of the classifier. 
 
 % ================================================================
 
 \subsubsection{Designing A Complementary Network Architecture}
 
-\paragraph*{}With the appropriate set of features designed, and the number of output categories determined, we can organize the structure of the neural network function. The shape of the network defines the flow of information, and the hypothesis space. The nature of all possible solutions that the trained model could arrive at is subject to the architecture \cite{Goodfellow,Loy}. We construct a multimodal neural network, explored in sec. (\ref{subsec-Architecture}), that processes two distinct entry points derived from the same audio sample. This network is designed to evaluate each input independently, and concatenate the results to produce a single outputted prediction.
+\paragraph*{}With the appropriate set of features designed, and the number of output categories determined, we can organize the structure of the neural network function. The shape of the network defines the flow of information, and the hypothesis space. The nature of all possible solutions that the trained model could arrive at is subject to the architecture \cite{Goodfellow,Loy}. We construct a multimodal neural network, explored in section (\ref{subsec-Architecture}), that processes two distinct entry points derived from the same audio sample. This network is designed to evaluate each input independently, and concatenate the results to produce a single outputted prediction.
 
 % ================================================================
 
 \subsubsection{Testing and Evaluating Network Performance}
 
-\paragraph*{}We execute a K-Folds cross validation algorithm to evaluate the performance of the neural network across overlapping subsets of data. This ensures that the model can perform consistently and reliably given small changes in initial conditions. In this stage, we also choose the value of hyper-parameters, activation functions and layer widths to best compliment the chosen features. This process is repeated and expanded upon until we have produced a model with a sufficient performance. We explore the explore this is sec. (\ref{sec-PerfEval}).
+\paragraph*{}We execute a K-Folds cross validation algorithm to evaluate the performance of the neural network across overlapping subsets of data. This ensures that the model can perform consistently and reliably given small changes in initial conditions. In this stage, we also choose the value of hyper-parameters, activation functions and layer widths to best compliment the chosen features. This process is repeated and expanded upon until we have produced a model with a sufficient performance. We explore the explore this is section (\ref{sec-PerfEval}).
 
 % ================================================================
 
 \subsubsection{Running Predictions of Chaotic Synthesizer Files}
 
-\paragraph*{}Once we have established a suitable performance of the model, we allow the model to run predictions on the un-labeled chaotic synthesizer wave forms. We output the prediction results to a file, and compare the neural network predictions against human predictions. If further corrections are needed, we revert and re-deign the features, architecture, or hyper-parameters as needed. We explore thisas part of our conclusions in sec. (\ref{sec-Conclusion}).
+\paragraph*{}Once we have established a suitable performance of the model, we allow the model to run predictions on the un-labeled chaotic synthesizer wave forms. We output the prediction results to a file, and compare the neural network predictions against human predictions. If further corrections are needed, we revert and re-deign the features, architecture, or hyper-parameters as needed. We explore thisas part of our conclusions in section (\ref{sec-Conclusion}).
 
 % ================================================================
 % ================================================================
@@ -182,13 +182,13 @@ F^*: \vec{x} \rightarrow \big\{ 0 , 1 , 2 , ... , k-1 \big\}
 
 \paragraph*{}As the name implies, early neural networks were inspired from from the human brain. Former YouTube video classification team lead, and current machine learning consultant, Aurelien Geron writes about the relationship between biological brains and mathematical neural networks \cite{Geron}: 
 \begin{quote}
-Birds inspired us to fly, burdock plants inspired velcro, and nature has inspired many other inventions. It seems only logical then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
+Birds inspired us to fly, burdock plants inspired velcro, and nature has inspired many other inventions. It seems only logical, then, to look to the brain's architecture for inspiration on how to build an intelligent machine.
 \end{quote}
-The result is a computer program that is reminiscent of the a brain in that it structured much like the brain, and can\textit{learn} from new data. Where a biological brain uses connections of chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Levine,Bishop}. Where a brain uses physical connection of neurons through axons, the nueral network uses mathematical connections of neurons through mathematical operations \cite{Geron,Levine}.
+The result is a computer program that is reminiscent of the a brain in that it structured much like the brain, and can\textit{learn} from new data. Where a biological brain uses connections of chemical and electrical exchanges to process input and make decisions, the computational counterpart uses arithmetic and numerical exchanges to similarly process input and make decisions \cite{Levine,Bishop}. Where a brain uses physical connection of neurons through axons, the neural network uses mathematical connections of neurons through mathematical operations \cite{Geron,Levine}.
 
 \paragraph*{}When a listener hears a sound, millions of neurons in their brain exchanges those chemical and electrical signals in such a way as to be able to identify the source of that sound \cite{Geron,Virtanen}. More conceptually, we can say that a listener is presented with a set of information $x$, which is air molecules vibrating near their tympanic membrane \cite{White,Olson}. That information is then passed into the brain where some function $F$ is used to model the incredibly complex set of neural connections. The output of that function is some label $y$, which the listener associates with a particular source \cite{Olson}. Similarly, we construct a neural network to accept a set of predictors $x$, which is passed into a function $F^*$ that is use to approximate $F$, and produce an output $y^*$, which predicts the source of the audio sample.
 
-\paragraph*{}The neural network function $F^*$ uses a set of parameters $\Theta$, to map those inputs, $x$ to outputs, $y$ \cite{Goodfellow,James,Virtanen}. It is the process of updating the elements in the object $\Theta$ which allow us to train a neural network to perform the desired task. Similarly, it is the process of organizing and connecting neurons in the brain that allow humans to perform any specific task \cite{Geron,Levine}. Over the course of their lives, humans will be able to learn to match sounds to sources with relative ease, given the appropriate labels. In a similar manner, our neural network is presented a collection of predictors from sound files and a complementary set of labels indicating the source of each sound. This type of task is called \textit{classification}, which involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument or sound source that could have produced the sound-wave in the audio file \cite{Goodfellow,Loy,Virtanen}. In this section, we explore the motivation, structure, and training process of a neural network.
+\paragraph*{}The neural network function $F^*$ uses a set of parameters $\Theta$, to map those inputs, $x$ to outputs, $y$ \cite{Goodfellow,James,Virtanen}. It is the process of updating the elements in the object $\Theta$ which allow us to train a neural network to perform the desired task. Similarly, it is the process of organizing and connecting neurons in the brain that allow humans to perform any specific task \cite{Geron,Levine}. Over the course of their lives, humans will be able to learn to match sounds to sources with relative ease, given the appropriate labels. In a similar manner, our neural network is presented a collection of predictors from sound files and a complementary set of labels indicating the source of each sound. This type of task is called \textit{classification}, which involves mapping the input data, $x$ to one of $k$ possible \textit{classes}, each represented by an integer, $0$ through $k-1$. Each of the $k$ classes represents a particular musical instrument or sound source that could have produced the sound-wave in the audio file \cite{Goodfellow,Loy,Virtanen}. In this section, we explore the motivation, structure, and training process of a neural network. We implement our neural network with the \textit{Tensorflow} Python package \cite{Tensorflow}.
 
 % ================================================================
 
@@ -491,7 +491,7 @@ The result of the concatenation is a new 1D-array, $\vec{c}^{(l)}$ with size $1 
 f^{(l)} : x^{(l-1)}_{a} \in \mathbb{R}^{(1 \times \alpha)} , x^{(l-1)}_{b} \in \mathbb{R}^{(1 \times \beta)} , ....  \rightarrow
 x^{(l)}_{z} \in \mathbb{R}^{(1 \times \alpha + \beta + ...)}
 \end{equation}
-The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we combine the outputs that result from the convolution branch and the perceptron branch to produce an single aggregated output. This process is detailed further in sec. (\ref{subsec-Architecture}). This layer also "non-trainable" because it does no use any weights or transformations, only a fixed procedure.
+The concatenation layer is used to combine activations from two different layers into a single new layer. In this case of the model used in the project, we combine the outputs that result from the convolution branch and the perceptron branch to produce an single aggregated output. This process is detailed further in section (\ref{subsec-Architecture}). This layer also "non-trainable" because it does no use any weights or transformations, only a fixed procedure.
 
 % ================================================================
 
@@ -664,7 +664,7 @@ We often introduce $\delta \approx 10^{-8}$ to prevent possible division by $0$ 
 \begin{equation}
 \frac{\partial x^{(L-1)}}{\partial z^{(L-1)}} = \sigma^{'(l)} \big[ z^{(L-1)} \big]
 \end{equation}
-For a dense layer as in sec. (\ref{subsubsec-DenseLayer}) or a 2D-convolution layer as in sec. (\ref{subsubsec-Conv2DLayer}) $\partial z^{(L-1)} / \partial W^{(L-1)}$ is given by the derivative of Eq. (\ref{eqn-LinearTransform}) or Eq. (\ref{eqn-LinearTransform2}) with respect to $W^{(l)}$:
+For a dense layer as in section (\ref{subsubsec-DenseLayer}) or a 2D-convolution layer as in section (\ref{subsubsec-Conv2DLayer}) $\partial z^{(L-1)} / \partial W^{(L-1)}$ is given by the derivative of Eq. (\ref{eqn-LinearTransform}) or Eq. (\ref{eqn-LinearTransform2}) with respect to $W^{(l)}$:
 \begin{equation}
 \frac{\partial z^{(L-1)}}{\partial W^{(L-1)}} = 
 \frac{\partial}{W^{(L-1)}}\Big[ W^{(L-1)}x^{(L-2)} + b^{(L-1)}\Big] = x^{(L-2)}
@@ -735,11 +735,11 @@ Where $\Theta^{(i)}$ will give the set of new, updated parameters of the network
 \subsubsection{The Optimizer}
 \label{subsubsec-Optimizer}
 
-\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to perform the optimization task to reduce the cost value after reciveing each new training sample. Regression models may often used a \textit{mean-squared error} cost function which can often be solved analytically, while high dimensional neural networks, such as the one used in this project, outlined in sec. (\ref{subsec-Architecture}), can only up updated iterativly \cite{Goodfellow,James,Loy}. We use a variation of gradient descent much like the one in Eq. (\ref{eqn-GradientLearning}). A standard stochastic gradient-based or batch gradient descent learning algorithm can be fast, but are often prone errors such as vanishing or exploding gradients \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an optimizer that is more stable, and robust in it's ability to drive the cost function to a successively lower value.
+\paragraph*{}An optimizer is the algorithm or procedure that is used by a machine learning model to perform the optimization task to reduce the cost value after reciveing each new training sample. Regression models may often used a \textit{mean-squared error} cost function which can often be solved analytically, while high dimensional neural networks, such as the one used in this project, outlined in section (\ref{subsec-Architecture}), can only up updated iteratively \cite{Goodfellow,James,Loy}. We use a variation of gradient descent much like the one in Eq. (\ref{eqn-GradientLearning}). A standard stochastic gradient-based or batch gradient descent learning algorithm can be fast, but are often prone errors such as vanishing or exploding gradients \cite{Geron,Goodfellow,Loy}. To combat this, model must often implement an optimizer that is more stable, and robust in it's ability to drive the cost function to a successively lower value.
 
 \paragraph*{}For this project, we employ an \textit{Adaptive-Moments} optimizer, also called \textit{ADAM} for short. This is a powerful algorithm that uses an adaptive learning rate and built-in momentum parameter. ADAM records and updates an exponentially decaying average of past gradients, $s^{(i)}$, and an exponentially decaying average of past squared gradients, $r^{(i)}$ in Eq. (\ref{eqn-ADAMupdate}) \cite{Geron}. This produces a far more aggressive optimizer at a higher computational cost than standard gradient descent \cite{Goodfellow}.
 
-\paragraph*{}As the optimizer iterates through each step, the effect of past iterations will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. This enables to ADAM to overcome smaller discontunities that may arise in the solution space \cite{Goodfellow}. For a given step $(i)$, The ADAM update is given:
+\paragraph*{}As the optimizer iterates through each step, the effect of past iterations will tend to "snowball". If the previous step was found to reduce the cost function by a large or small amount, the step size for the previous step will update accordingly. This enables to ADAM to overcome smaller discontinuities that may arise in the model's solution space \cite{Goodfellow}. For a given step $(i)$, The ADAM update is given:
 \begin{equation}
 \label{eqn-ADAMupdate}
 \begin{split}
@@ -795,7 +795,7 @@ Initialize moment variables and iteration counter $s = 0$, $r = 0$, $i = 0$ \\
 
 \paragraph*{}For this project, we have derived features that describe that audio file using two different \textit{modalities}. A modality is a method of describing and interpreting a sample of data \cite{Ngiam}. For example humans can be said to experience the world through five modalities - those being our cardinal senses of sight, hearing, taste, smell and touch. The sight and sound of a guitar are two very different ways of experiencing the same thing. One or the other is often enough to identify the guitar - but both together yield an even higher predictive confidence. Since modalities are \textit{different} by nature, we cannot simply combine them into a single object and present the neural network with it. We must account for the difference by providing two distinct input layers.  Modalities of seeing and hearing are captured by two different senses but ultimately processed by the same brain to produce a single prediction.
 
-\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N' \times k$ spectrogram matrix, explored in sec. (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-representation learning}, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
+\paragraph*{}We can carry this idea over by producing a \textit{multimodal} neural network that accepts two different forms of input for each sample. One input is an $N' \times k$ spectrogram matrix, explored in section (\ref{subsec-Spectrogram}) and the other input is a $1 \times p$ feature vector explored in section (\ref{subsec-TimeFeatures}) and section (\ref{subsec-FreqFeatures}). The spectrogram acts to provide an energy distribution of a signal as a function of frequency and time, while the feature vector provides qualities in a more list-like fashion. This type of supervised learning is referred to as \textit{multi-representation learning}, and we detail a conceptual diagram of the architecture in Fig. (\ref{fig-NetworkArchitecture}) \cite{Li,Ngiam}.
 
 \begin{figure}[H]
 \begin{center}
@@ -824,7 +824,7 @@ Any other shape will be rejected, and an error is raised.
 \item A 2-Dimensional Convolution layer, $32$ filters, $3 \times 3$ kernel, $1 \times 1$ step size, ReLU activation function,
 \item A 2-Dimensional Maximum Pooling layer, $3 \times 3$ pooling size, Identity activation function
 \end{enumerate}  
-The convolution layers iterate over the middle two axes of the data, see sec. (\ref{subsubsec-Conv2DLayer}). Physically, this allows us to search through the frequency and time axes to detect dominant features or shapes.
+The convolution layers iterate over the middle two axes of the data, see section (\ref{subsubsec-Conv2DLayer}). Physically, this allows us to search through the frequency and time axes to detect dominant features or shapes.
 
 \paragraph*{}By grouping layers in this structure, we use convolution to reduce the number of features, and then the pooling layer to extract only the largest activations of the remaining values. This drastically reduces the width of each layer before passing the activations down, and ensures that only the pertinent characteristic shapes are preserved and passed into the next layer set for processing. This also allows for positional invariance in features. Regardless of where in frequency or time a feature is detected, the moving kernel will still allow it to be found \cite{Goodfellow,Loy}.
 
@@ -832,7 +832,7 @@ The convolution layers iterate over the middle two axes of the data, see sec. (\
 
 \subsubsection{The Perceptron Branch}
 
-\paragraph*{}The perceptron branch is pictured on the right side of Fig. (\ref{fig-NetworkArchitecture}) and is an implementation of a \textit{multilayer percepton neural network} (MLP). Rather than accept an image-like input, the perception simply takes a $p$-dimensional vector-like input of properties that are derived from the audio file. We call these properties \textit{features} or \textit{predictors} \cite{Geron,Khan,Serizel}. Details on the natures and selections of these $p$ elements are found in sec. (\ref{subsec-TimeFeatures}) and sec. (\ref{subsec-FreqFeatures}).
+\paragraph*{}The perceptron branch is pictured on the right side of Fig. (\ref{fig-NetworkArchitecture}) and is an implementation of a \textit{multilayer percepton neural network} (MLP). Rather than accept an image-like input, the perception simply takes a $p$-dimensional vector-like input of properties that are derived from the audio file. We call these properties \textit{features} or \textit{predictors} \cite{Geron,Khan,Serizel}. Details on the natures and selections of these $p$ elements are found in section (\ref{subsec-TimeFeatures}) and section (\ref{subsec-FreqFeatures}).
 
 \paragraph*{}The input layer of the perceptron accepts a 2-Dimensional array. The axes, in order of indexing, represent (i) the size of the \textit{mini-batch} of samples, (ii) the number of features for each sample. We use the same model hyper-parameter of $b = 64$ samples per batch, and have developed $p = 24$ unique classification features that have been derived from time-space and frequency-space representations of the audio file data. We can denote the 2D shape if the input object into this branch as:
 \begin{equation}
@@ -841,13 +841,13 @@ X_2 \in \mathbb{R}^{(64 \times 24)}
 \end{equation}
 This 2D array is referred to as a \textit{design matrix} \cite{James,Loy}. Any other shape will be rejected by the model, and an error is raised.
 
-\paragraph*{}In perceptron models, the scaling of the design matrix is vital to classification performance. A design matrix is scaled by taking all samples in a column (a particular feature from each class), subtracting the average, and then scaling it such that it has unit variance \cite{Geron,James}. This ensures that no one feature dominates the performance of the model and that layer activations do not get saturated to extremes as data progresses through the network.
+\paragraph*{}In perceptron models, the scaling of the design matrix is vital to classification performance. A design matrix is scaled by taking all samples in a column (a particular feature from each class), subtracting the average, and then scaling it such that it has unit variance \cite{Geron,James}. This ensures that no one feature dominates the performance of the model and that layer activations do not get saturated to extremes as data progresses through the network. This operation was implemented through the \textit{scikit-learn} Python package \cite{Sklearn}.
 
 % ================
 
 \subsubsection{The Final Output Branch}
 
-\paragraph*{}The last layer in each of the two branches is a ReLU-activated Dense layer containing 64 neurons, represented by a $64$ - dimensional vector. We combine these model layers by using a \textit{concatenation layer} to fuse the arrays together, such that each sample is given by a $128$-dimensional vector. This vector is then transformed into the final dense layer, which uses the softmax activation, and encodes the joint predictions based on contributions of both model branches. In sec. (\ref{sec-Results}) we explore how the predictive power of the network changes when examining the performance of each individual branch compared to the hybrid model.
+\paragraph*{}The last layer in each of the two branches is a ReLU-activated Dense layer containing 64 neurons, represented by a $64$ - dimensional vector. We combine these model layers by using a \textit{concatenation layer} to fuse the arrays together, such that each sample is given by a $128$-dimensional vector. This vector is then transformed into the final dense layer, which uses the softmax activation, and encodes the joint predictions based on contributions of both model branches. In section (\ref{sec-Results}) we explore how the predictive power of the network changes when examining the performance of each individual branch compared to the hybrid model.
 
 % ================================================================
 % ================================================================
@@ -856,9 +856,9 @@ This 2D array is referred to as a \textit{design matrix} \cite{James,Loy}. Any o
 \section{Properties of Musical Instruments}
 \label{sec-Instruments}
 
-\paragraph*{}As discussed in Sec. (\ref{sec-TheNeuralNetwork}), performance quality of a neural network is greatly dependent on the properties of the chosen features \cite{Virtanen,Liu}. To ensure that the classifier model performs adequately and consistently, we must choose these features to have high variance between classes, and low variance within each class. This enables a neural network to development clear decision boundaries between each unique class \cite{James,Serizel}. To develop this set of features, we explore the physical and mechanical properties of musical instruments and the sounds that they create.
+\paragraph*{}As discussed in section (\ref{sec-TheNeuralNetwork}), performance quality of a neural network is greatly dependent on the properties of the chosen features \cite{Virtanen,Liu}. To ensure that the classifier model performs adequately and consistently, we must choose these features to have high variance between classes, and low variance within each class. This enables a neural network to development clear decision boundaries between each unique class \cite{James,Serizel}. To develop this set of features, we explore the physical and mechanical properties of musical instruments and the sounds that they create.
 
-\paragraph*{}Since computer algorithms such are neural networks are built to handle exclusively quantitative information, we must ensure that each property can be represented by a numerical quantity \cite{Geron,Levine}. Where a human would use qualitative adjectives such as \textit{bright} or \textit{harsh} or \textit{percussive} to describe sound, computers require a numerical descriptor instead. The goal of this section is to develop the attributes of sound that enable us to describe a sound wave in a quantitative and compact way. Thus we use values that can be expressed as numbers such as \textit{amplitude envelopes}, \textit{frequency spectra}, or \textit{formant structure}. For this section, we represent waveforms as \textit{spectrograms} to capture the time-space and frequency-space development of energy simultaneously. We motivate and describe the production of a spectrogram in sec. (\ref{subsec-Spectrogram}).
+\paragraph*{}Since computer algorithms such are neural networks are built to handle exclusively quantitative information, we must ensure that each property can be represented by a numerical quantity \cite{Geron,Levine}. Where a human would use qualitative adjectives such as \textit{bright} or \textit{harsh} or \textit{percussive} to describe sound, computers require a numerical descriptor instead. The goal of this section is to develop the attributes of sound that enable us to describe a sound wave in a quantitative and compact way. Thus we use values that can be expressed as numbers such as \textit{amplitude envelopes}, \textit{frequency spectra}, or \textit{formant structure}. For this section, we represent waveforms as \textit{spectrograms} to capture the time-space and frequency-space development of energy simultaneously. We motivate and describe the production of a spectrogram in section (\ref{subsec-Spectrogram}).
 
 \paragraph*{}We have assembled training data samples than can be grouped into $37$ classes of unique sources listed below:
 
@@ -936,7 +936,7 @@ $19$ & Mandolin & $364$ 			& $39$ & & \\ \hline
 
 \paragraph*{}A membranophone is an instrument that produces sound through the vibration of a tight membrane \cite{Hornbostel}. This includes most drum-like instruments While none of the instruments that we classify are membranophones, they do exhibit some noteworthy properties that influence our feature for other instruments. Common examples include the tympani, the bass drum, or the kettle drum. Each of these instruments is composed of a large cylinder or bowl-like structure that serves as an amplifying cavity \cite{Olson,White}. Given that most membranophone instruments are played by striking the membrane with the hand or mallet, the amplitude envelope properties 
 
-\paragraph*{}We model the tight elastic membrane very similarly as that of a tight elastic string, except in two dimensions \cite{White}. Unlike the chordophone sec. (\ref{subsec-chordophones}), the partials for the membrane are not related by integer multiples. This lack of harmonic structure leaves most membranophones to have a sort of "muddled" frequency spectrum where we see a more continuous distribution of constituent frequencies arise as opposed to clean integer related overtones \cite{White,Olson}. This partly why many membranophones have a much more "percussive" sound as opposed to performing any distinct note.
+\paragraph*{}We model the tight elastic membrane very similarly as that of a tight elastic string, except in two dimensions \cite{White}. Unlike the chordophone section (\ref{subsec-chordophones}), the partials for the membrane are not related by integer multiples. This lack of harmonic structure leaves most membranophones to have a sort of "muddled" frequency spectrum where we see a more continuous distribution of constituent frequencies arise as opposed to clean integer related overtones \cite{White,Olson}. This partly why many membranophones have a much more "percussive" sound as opposed to performing any distinct note.
 
 % ================================================================
 
@@ -1131,7 +1131,7 @@ An adequate selection of features is vital to the process of training and evalua
 
 \subsection{Feature Space}
 
-\paragraph*{}From each audio file sample, we calculate the values for the same predictors. The predictors are arranged into two separated structures, each called a \textit{design matrix}, described in sec. (\ref{subsubsec-DesignMatrix}) \cite{Goodfellow,Geron}. For a model with $p$ predictors, feature space is a $p$-dimensional vector space where each basis vector represents a predictor \cite{Goodfellow,James}. Each sample can be described by a $p$-dimensional vector, given by each row of the design matrix $X_2$. For samples $x^{(a)}$ and $x^{(b)}$ that belong to the same class, we expect the vector to be similar, $x^{(a)} \approx x^{(b)}$ in some way. This indicates that the two samples lie "close together" in space. Similarly, for samples $x^{(c)}$ and $x^{(d)}$ that belong to different classes, we expect the vectors to be very different, indicating that the two sample lie "far apart" in space. Note that this is an idealization, and not always the defining case for the decision function behavior.
+\paragraph*{}From each audio file sample, we calculate the values for the same predictors. The predictors are arranged into two separated structures, each called a \textit{design matrix}, described in section (\ref{subsubsec-DesignMatrix}) \cite{Goodfellow,Geron}. For a model with $p$ predictors, feature space is a $p$-dimensional vector space where each basis vector represents a predictor \cite{Goodfellow,James}. Each sample can be described by a $p$-dimensional vector, given by each row of the design matrix $X_2$. For samples $x^{(a)}$ and $x^{(b)}$ that belong to the same class, we expect the vector to be similar, $x^{(a)} \approx x^{(b)}$ in some way. This indicates that the two samples lie "close together" in space. Similarly, for samples $x^{(c)}$ and $x^{(d)}$ that belong to different classes, we expect the vectors to be very different, indicating that the two sample lie "far apart" in space. Note that this is an idealization, and not always the defining case for the decision function behavior.
 
 \paragraph*{}We can expand this idea by considering by how features should behave within each class, and between each class. Tuomas Virtanen, machine learning and audio engineer writes in his book, "Computational Analysis of Sound Scene and Events" about specifically how features should be selected \cite{Virtanen}:
 \begin{quote}
@@ -1185,7 +1185,7 @@ This is to say, features should \textit{ideally} form non-overlapping groups or 
 \subsubsection{The Design Matrix}
 \label{subsubsec-DesignMatrix}
 
-\paragraph*{}Each audio sample is represented by an $N' \times k$ spectrogram matrix explored in sec. (\ref{subsec-Spectrogram}), a $1 \times p$ feature vector, and a  one-hot-encoded target label, $y$. In order to efficiently present the information to the model for training or predicting, we extract a batch of $b$ samples and produce the two arrays form each. Since the spectrogram and feature vector represent different \textit{modalities}, we construct two separate \textit{design matrices}, $X_1$ and $X_2$ \cite{Geron,Li,Ngiam}. Each has shape given by:
+\paragraph*{}Each audio sample is represented by an $N' \times k$ spectrogram matrix explored in section (\ref{subsec-Spectrogram}), a $1 \times p$ feature vector, and a  one-hot-encoded target label, $y$. In order to efficiently present the information to the model for training or predicting, we extract a batch of $b$ samples and produce the two arrays form each. Since the spectrogram and feature vector represent different \textit{modalities}, we construct two separate \textit{design matrices}, $X_1$ and $X_2$ \cite{Geron,Li,Ngiam}. Each has shape given by:
 \begin{equation}
 \label{eqn-X1Shape}
 X_1 \in \mathbb{R}^{(b \times N' \times k)}
@@ -1194,7 +1194,7 @@ X_1 \in \mathbb{R}^{(b \times N' \times k)}
 \label{eqn-X2Shape}
 X_2 \in \mathbb{R}^{(b \times p)}
 \end{equation}
-Where $N' \times k$ gives the shape of the spectrogram matrix $S$ from a single sample, described in sec. (\ref{subsec-Spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in sec. (\ref{subsec-TimeFeatures}) and sec.(\ref{subsec-FreqFeatures}). The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. Organizing the samples in this fashion allows for easy machine and human interpretation of each axis and index.
+Where $N' \times k$ gives the shape of the spectrogram matrix $S$ from a single sample, described in section (\ref{subsec-Spectrogram}). Similarly, $p$ is the number of predictors extracted from each sample, outlined in section (\ref{subsec-TimeFeatures}) and section(\ref{subsec-FreqFeatures}). The first axis, with size $b$ indicates that there are $b$ audio file samples stored in that design matrix. Organizing the samples in this fashion allows for easy machine and human interpretation of each axis and index.
 
 \paragraph*{}A design matrix is typically accompanied by a \textit{target matrix} $Y$, which indicates the class that the particular sample belongs to. For a classifier with $\kappa$ classes, each sample labeled by a one-hot-encoded vector for shape $1 \times \kappa$ \cite{Tensorflow,Loy}. Thus, for the design matrices $X_1$ and $X_2$, we have a corresponding target matrix given by:
 \begin{equation}
@@ -1340,7 +1340,7 @@ We show the effect of a Hanning window applied to an analysis frame:
 \paragraph*{}With this final change, we perform a \textit{Discrete Fourier Transform} (DFT) to bring each analysis frame from a time domain into a frequency domain \cite{Olson,Peatross,Virtanen}. The Discrete Fourier Transform is applied by producing an $N \times N$ \textit{transform matrix}, often noted as $\mathbb{W}$. Let $\omega^k = e^{\frac{-2\pi i}{N}k}$, then the DFT matrix for a time-space signal containing $N$ samples is given by \cite{Taylor,Peatross,Virtanen}:
 \begin{equation}
 \label{eqn-DFTMatrix}
-\mathbb{W} = \frac{1}{N}
+\mathbb{W} = 
 \begin{bmatrix}
 1 & 1 & 1 & 1 & \hdots & 1 \\
 1 & \omega		& \omega^2 & \omega^3 & \hdots & \omega^{N-1} \\
@@ -1794,7 +1794,7 @@ Thus, indexes where $i = j$ represents a correct prediction, and $i \neq k$ indi
 \label{fig-DummyConfMat}
 \end{figure}
 
-\paragraph*{}In addition to the standard confusion matrix, we can also weight entries by prediction score. Rather than adding $+1$ to each entry $C_{i,j}$ where appropriate, we instead add the \textit{probability} value, which is bounded $[0,1]$ (See softmax activation function in sec. \ref{subsubsec-Softmax})). This allows us to bake in the predictive \textit{confidence} into the confusion matrix. For example, two correct predictions with a score $0.2$ are weighted equally to a single incorrect prediction of $0.4$. This is useful for identifying a classifier that makes correct predictions, but only by smaller threshold. This can almost be through of as assigning "partial credit" to each prediction.
+\paragraph*{}In addition to the standard confusion matrix, we can also weight entries by prediction score. Rather than adding $+1$ to each entry $C_{i,j}$ where appropriate, we instead add the \textit{probability} value, which is bounded $[0,1]$ (See softmax activation function in section \ref{subsubsec-Softmax})). This allows us to bake in the predictive \textit{confidence} into the confusion matrix. For example, two correct predictions with a score $0.2$ are weighted equally to a single incorrect prediction of $0.4$. This is useful for identifying a classifier that makes correct predictions, but only by smaller threshold. This can almost be through of as assigning "partial credit" to each prediction.
 
 \paragraph*{}However, it is more useful to weight the confusion matrix according to class occurrence. For example, if we had a $2 \times 2$ matrix with entries $100$ and $20$ in the main diagonal, it seems that class $A$ has a much higher prediction success than class $B$. However, if there are $200$ elements in class $A$, and only $21$ in class $B$, then we see that class $A$ has a $50\%$ classification rate, while class $B$ has a $95\%$ classification rate. Consider the list of instrument classes in Fig.(\ref{fig-ClassList}) and notice how all instruments are not equally represented. This creates a training bias such that the model is more heavily trained on a particular class compared to others. This may also show when making predictions, where the classifier is more likely to predict samples that it has been trained on more \cite{James,Loy}. To Combat this, we typically normalize each confusion matrix by the number of samples in each "actual" class. Put simply, we divide each element in a given row by the \textit{sum} of that row.
 
@@ -1875,7 +1875,7 @@ In the case of a multi-class classifier, the recall score also represents a \tex
 \subsection{Tracking Metrics over a Period of Training}
 \label{subsec-TrainingMetrics}
 
-\paragraph*{}A period of training is characterized by fitting the parameters $\Theta$ of a model $F^*$ to a set of data $X$ and corresponding labels $Y$ \cite{Goodfellow,Virtanen}. This is done by passing subsets of data, called \textit{mini-batches}, into the neural network for training. The average cost for the mini-batch is then used to compute the gradient vector $\nabla_{\Theta}J$, and subsequently update the model according to the optimizer chosen \cite{Geron,Goodfellow}. Recall we implement an ADAM optimizer as outlined in sec. (\ref{subsubsec-Optimizer}).
+\paragraph*{}A period of training is characterized by fitting the parameters $\Theta$ of a model $F^*$ to a set of data $X$ and corresponding labels $Y$ \cite{Goodfellow,Virtanen}. This is done by passing subsets of data, called \textit{mini-batches}, into the neural network for training. The average cost for the mini-batch is then used to compute the gradient vector $\nabla_{\Theta}J$, and subsequently update the model according to the optimizer chosen \cite{Geron,Goodfellow}. Recall we implement an ADAM optimizer as outlined in section (\ref{subsubsec-Optimizer}).
 
 \paragraph{}We execute training computations in batches to reduce the amount of memory required for the operation. Pushing a full data set through a model at one time would require more RAM than is usually available so we use repeating, non-overlapping subsets of data called mini-batches to avoid memory exhaustion errors. Each mini-batch used equates to one step in the optimizer update rule in Eq. (\ref{eqn-ADAMupdate}) \cite{Goodfellow}. Thus, a single pass over a full data set allows for multiple iterations of the optimizer to reduce the value of the cost function. This can be combined with multiple passes over the full data set, called \textit{epochs} \cite{James,Loy}.
 
@@ -1912,7 +1912,7 @@ similarly, we can visualize the precision score and recall score at each trainin
 
 \subsection{Executing Cross Validation}
 
-\paragraph*{}To formally produce classification predictions on the chaotic synthesizer waveforms, we must use all of the neural network, physics, and statistical principles outlined in the previous sections. Using the described features in sec. (\ref{sec-Features}) and appropriate architecture sec. (\ref{subsec-Architecture}), We run a $K=10$ folds cross validation program as in Alg.(\ref{alg-CrossValidation}). For each of the $10$ models, we produce a standard confusion matrix, and compute the (i) accuracy score, (ii) precision score, (iii) recall score, and (iv) F1 score. In Fig. (\ref{fig-MultimodalXval}) we show how the metrics compare in each the $10$ models by averaging the scores across the $37$ classes.
+\paragraph*{}To formally produce classification predictions on the chaotic synthesizer waveforms, we must use all of the neural network, physics, and statistical principles outlined in the previous sections. Using the described features in section (\ref{sec-Features}) and appropriate architecture section (\ref{subsec-Architecture}), We run a $K=10$ folds cross validation program as in Alg.(\ref{alg-CrossValidation}). For each of the $10$ models, we produce a standard confusion matrix, and compute the (i) accuracy score, (ii) precision score, (iii) recall score, and (iv) F1 score. In Fig. (\ref{fig-MultimodalXval}) we show how the metrics compare in each the $10$ models by averaging the scores across the $37$ classes.
 
 \begin{figure}[H]
 \begin{center}
@@ -2284,7 +2284,7 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 
 \subsection{Discussion of Results}
 
-\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicate that our model performs very well at the ability to a match sound waves to their sources. We see this behavior in the plots in sec. (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different type of musical instruments reasonably well. Additionally, we show that predictive power of the model improves through our development of the multimodal architecture. By choosing to express the waveform in two different modalities in the form of the spectrogram matrix and the feature vector, the hybrid model demonstrates a generally higher classification performance across the same number of samples and splits. 
+\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicate that our model performs very well at the ability to a match sound waves to their sources. We see this behavior in the plots in section (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different type of musical instruments reasonably well. Additionally, we show that predictive power of the model improves through our development of the multimodal architecture. By choosing to express the waveform in two different modalities in the form of the spectrogram matrix and the feature vector, the hybrid model demonstrates a generally higher classification performance across the same number of samples and splits. 
 
 \paragraph*{}Despite the higher average scores in the hybrid network, see Fig. (\ref{fig-MultimodalXval}) compared to each unimodal network, Fig. (\ref{fig-UnimodalXVal}), some exceptions do arise at a micro-level (within each class). Consider the Hi-hat instrument in Fig. (\ref{fig-PercussionScores}c). over the cross validations, it was found that the multilayer perceptron architecture produced a better precision, recall, and F1 score than either the convolution or the hybrid network architecture. This can be contrasted with most other classes showing hat the hyrbidg model performed better than either individual mode, with the convolution architecture as a close second. 
 
@@ -2381,6 +2381,9 @@ Liu, Zhu, et al. "Audio Feature Extraction and Analysis for Scene Segmentation a
 \bibitem{Loy}
 Loy, James , \textit{Neural Network Projects with Python}. Packt Publishing, 2019
 
+\bibitme{Matplotlib}
+John D. Hunter. Matplotlib: A 2D Graphics Environment, Computing in Science & Engineering, 9, 90-95 (2007), DOI:10.1109/MCSE.2007.55
+
 \bibitem{McCulloch}
 McCulloch, Warren S., and Walter Pitts. "A Logical Calculus of the Ideas Immanent in Nervous Activity." \textit{The Bulletin of Mathematical Biophysics}, vol. 5, no. 4, 1943, pp. 115–133.
 
@@ -2392,6 +2395,9 @@ Mitchell, Tom Michael. Machine Learning. 1st ed., McGraw-Hill, 1997.
 
 \bibitem{Ngiam}
 Ngiam, Jiquan, et al. "Multimodal Deep Learning." 2011. 
+
+\bibitem{Numpy}
+Harris, C.R., Millman, K.J., van der Walt, S.J. et al. Array programming with NumPy. Nature 585, 357–362 (2020). DOI: 0.1038/s41586-020-2649-2. 
 
 \bibitem{Olson}
 Olson, Harry E. \textit{Music, Physics and Engineering}. 2nd ed., Dover Publications, 1967.
@@ -2411,8 +2417,14 @@ Sahidullah, Goutam S. “Design, Analysis and Experimental Evaluation of Block B
 \bibitem{Serizel}
 Serizel, Roman, et al. “Acoustic Features for Environmental Sound Analysis.” Computational Analysis of Sound Scenes and Events, by Tuomas Virtanen, Springer, 2018, pp. 71–101. 
 
+\bibitem{Scipy}
+Pauli Virtanen, et. al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, 17(3), 261-272.
+
 \bibitem{Short}
 Short, K. and Garcia R.A. 2006. "Signal Analysis Using the Complex Spectral Phase Evolution (CSPE) Method." AES: \textit{Audio Engineering Society Convention Paper}.
+
+\bibitem{Sklearn}
+Fabian Pedregosa, et. al. Scikit-learn: Machine Learning in Python, Journal of Machine Learning Research, 12, 2825-2830 (2011) 
 
 \bibitem{Taylor}
 “Continuum Mechanics.” \textit{Classical Mechanics}, by John Robert Taylor, University Science Books, 2005, pp. 681–738. 
