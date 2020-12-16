@@ -128,7 +128,7 @@ All source code and documentation for this project can be found at  \\
 \subsection{Methodology}
 \label{sec-Methodology}
 
-\paragraph*{}This project includes a number of steps from taking raw input data to the final classification task. In this section, we provide a very high level outline of the parts of this projects and show how each one influence the final product. Additionally, we indicate the sections in this thesis where the particular material is introduced and developed much more thoroughly.
+\paragraph*{}This project includes a number of steps from taking raw input data to the final classification program. In this section, we provide a very high level outline of the parts of this projects and show how each one influence the final product. Additionally, we indicate the sections in this thesis where the particular material is introduced and developed much more thoroughly.
 
 % ================================================================
 
@@ -160,13 +160,13 @@ F^*: \vec{x} \rightarrow \big\{ 0, 1, 2, ... ,k-2, k-1 \big\}
 
 \subsubsection{Designing A Complementary Network Architecture}
 
-\paragraph*{}With the appropriate set of features designed, and the number of output categories determined, we can organize the structure of the neural network function. The shape of the network defines the flow of information, and the hypothesis space. The nature of all possible solutions that the trained model could arrive at is subject to the architecture \cite{Goodfellow,Loy}. We construct a multimodal neural network, explored in section (\ref{subsec-Architecture}), that processes two distinct entry points derived from the same audio sample. This network is designed to evaluate each input independently, and concatenate the results to produce a single outputted prediction. Out nueral network was implemented using the tools available with the \textit{Tensorflow} module \cite{Tensorflow}.
+\paragraph*{}With the appropriate set of features designed, and the number of output categories determined, we can organize the structure of the neural network function. The shape of the network defines the flow of information and the hypothesis space. The nature of all possible solutions that the trained model could arrive at is subject to the architecture \cite{Goodfellow}. We construct a multimodal neural network, explored in section (\ref{subsec-Architecture}), that processes two distinct entry points derived from the same audio sample. This network is designed to evaluate each input independently, and concatenate the results to produce a single outputted prediction. This hybrid architecture combines the predictive power of the both a multilayer perceptron and a convolutional neural network. Our neural network was implemented using the tools available with the \textit{Tensorflow} module \cite{Tensorflow}.
 
 % ================================================================
 
 \subsubsection{Testing and Evaluating Network Performance}
 
-\paragraph*{}We execute a K-Folds cross validation algorithm to evaluate the performance of the neural network across overlapping subsets of data. This ensures that the model can perform consistently and reliably given small changes in initial conditions. In this stage, we also choose the value of hyper-parameters, activation functions and layer widths to best compliment the chosen features. This process is repeated and expanded upon until we have produced a model with a sufficient performance. We explore the explore this is section (\ref{sec-PerfEval}). Results of all metrics are computed with the \textit{numpy},\textit{scipy}, and \textit{scikit learn} python modules \cite{numpy,scipy,sklearn}. All performance evaluate visualiztions are produced with the matplotlib python package \cite{matplotlib}.
+\paragraph*{}We execute a K-Folds cross validation algorithm to evaluate the performance of the neural network across overlapping subsets of data. This ensures that the model can perform consistently and reliably given small changes in initial conditions. In this stage, we also examine the value of hyper-parameters, activation functions, and layer widths to best compliment the properties of the data set. This process is repeated and expanded upon until we have produced a model with a sufficient performance. We explore this in section (\ref{sec-PerfEval}). Results of all metrics are computed with the \textit{numpy},\textit{scipy}, and \textit{scikit learn} python modules \cite{numpy,scipy,sklearn}. All performance visualizations are produced with the \textit{matplotlib} python package \cite{matplotlib}.
 
 % ================================================================
 % ================================================================
@@ -1218,7 +1218,7 @@ Y \in \mathbb{R}^{(b \times \kappa)}
 \end{enumerate}
 Note that different projects may require a different set of requirement from preprocessing \cite{Virtanen}. For this project, we have chosen to use the following parameters:
 \begin{enumerate}
-\item Roughly $18,000$ audio files Professionally or semi-professionally recorded in a studio(see acknowldgements) All ampltiudes have been normalized to $\pm 1$ unit.
+\item Roughly $18,000$ audio files Professionally or semi-professionally recorded in a studio \cite{Philharmonia,UnivIowa} All ampltiudes have been normalized to $\pm 1$ unit.
 \item All audio has be converted into \textit{.WAV} files from other formats, such as \textit{.AIF} or \textit{.MP3} using a MATLAB program
 \item All audio is sampled at $44,100$ Hz and $24$-bit depth.
 \item All audio has been down-mixed into mono-channel waveforms.
@@ -1258,8 +1258,7 @@ Note that different projects may require a different set of requirement from pre
 	\includegraphics[scale=0.2]{../FiguresSpectrogram/Tuba-A2}
 	\caption{Tuba playing $A2$}
 	\end{subfigure}
-
-\caption{Spectrogram representations of various waveforms}
+\caption{Spectrogram representations of various waveforms. Note that all spectrograms are color-coded according to the log-power spectrum.}
 \label{fig-Spectrograms}
 \end{figure}
 
@@ -1953,13 +1952,13 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\begin{subfigure}[b]{0.9\textwidth}
 	\centering
 	\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Convolution}
-	\caption{Convolutional Unimodal Architecture, See left side of Fig. (\ref{fig-NetworkArchitecture})}
+	\caption{Convolutional Unimodal Architecture, see left side of Fig. (\ref{fig-NetworkArchitecture})}
 	\end{subfigure}	
 	
 	\begin{subfigure}[b]{0.9\textwidth}
 	\centering
 	\includegraphics[scale=0.3]{../FiguresMetrics/AvgXval-Perceptron}
-	\caption{Perceptron Unimodal Architecture, See right side of Fig. (\ref{fig-NetworkArchitecture})}
+	\caption{Perceptron Unimodal Architecture, see right side of Fig. (\ref{fig-NetworkArchitecture})}
 	\end{subfigure}
 
 	\caption{}
@@ -1972,13 +1971,13 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion}
-	\caption{Standard confusion Matrix for the convolution branch}
+	\caption{Standard confusion matrix for the convolution branch}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 	\centering
 	\includegraphics[scale=0.18]{../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion}
-	\caption{Occurrence Weighted confusion matrix for the convolution branch}
+	\caption{Occurrence weighted confusion matrix for the convolution branch}
 	\end{subfigure}	
 
 	\begin{subfigure}[b]{0.45\textwidth}
@@ -2286,21 +2285,19 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 
 \subsection{Discussion of Results}
 
-\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicate that our model performs very well at the ability to a match sound waves to their sources. We see this behavior in the plots in section (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different type of musical instruments reasonably well. Additionally, we show that predictive power of the model improves through our development of the multimodal architecture. By choosing to express the waveform in two different modalities in the form of the spectrogram matrix and the feature vector, the hybrid model demonstrates a generally higher classification performance across the same number of samples and splits. 
+\paragraph*{}Comparing the results within each class, as averaged over $10$ folds of cross validation indicates that our model performs very well at the ability to a match a sound waves in digital audio files to their sources. We see this behavior in the plots in section (\ref{subsec-ClassScores}) as well as the confusion matrices in Fig. (\ref{fig-MultimodalConfs}). For the chosen set of classes, features and architecture, the model can generalize to new information allowing it to distinguish between different types of musical instruments reasonably well for samples that it has not yet interacted with. Additionally, we show that the predictive power of the model improves through our development of the multimodal architecture. By choosing to express the audio file contents in two different modalities of the spectrogram matrix and the feature vector, the hybrid model demonstrates a generally higher classification performance across the same number of samples and splits. 
 
-\paragraph*{}Despite the higher average scores in the hybrid network, see Fig. (\ref{fig-MultimodalXval}) compared to each unimodal network, Fig. (\ref{fig-UnimodalXVal}), some exceptions do arise at a micro-level (within each class). Consider the Hi-hat instrument in Fig. (\ref{fig-PercussionScores}c). Over the cross validations, it was found that the multilayer perceptron architecture produced a better precision, recall, and F1 score than either the convolution or the hybrid network architecture.
+\paragraph*{}Despite the higher average scores in the hybrid network, see Fig. (\ref{fig-MultimodalXval}) compared to each unimodal network, Fig. (\ref{fig-UnimodalXVal}), some exceptions do arise at a micro-level (within each class). Consider the Hi-hat instrument in Fig. (\ref{fig-PercussionScores}c). Over the cross validations, it was found that the multilayer perceptron architecture produced a better precision, recall, and F1 score than either the convolution or the hybrid network architecture. This can be contrasted with most other classes showing that the hybrid model performed better than either individual mode, with the convolution architecture as a close second. 
 
- This can be contrasted with most other classes showing hat the hybrid model performed better than either individual mode, with the convolution architecture as a close second. 
+\paragraph*{}While the hybrid model can differentiate between many types of instruments, each unimodal variant shows slightly less success over the full data set. In many instances, the MLP-only architecture particularly shows unstable and inconsistent performance. For certain instruments like the $E\flat$ clarinet, tenor saxophone, tenor trombone, and hi-hat, the feature vector does a very poor job of isolating and identifying those classes. However, for instruments such as the soprano saxophone, tuba, and square wave, the feature-vector allows the MLP to perform very reasonably. We see a similar imbalance with the CNN-only architecture where classes such as alto flute, bass flute, bass trombone, and mandolin show poor classification rates. This can be contrasted with English horn, tuba, bells, and double bass, where a much higher classification performance is found. Further exploration is required to provide a full explanation and justification of why this wide range of performance is observed.
 
-\paragraph*{}While the hybrid model can differentiate between many types of instruments, each uni-modal variant shows slightly less success over the full data set. In many instances, the MLP-only architecture particularly shows unstable and inconsistent performance. For certain instruments like the $E\flat$ clarinet, tenor saxophone, tenor trombone, and hi-hat cymbal, the feature vector does a very poor job of isolating and identifying those classes.  However, for instruments such as the soprano saxophone, tuba, and square wave the feature-vector allows the MLP to perform very reasonably. We see a similar imbalance with the CNN-only architecture where classes such as alto flute, bass flute, bass trombone, and mandolin show poor classification rates. This can be contrasted with English horn, tuba, bells, and double bass, where a much higher classification performance is found. Further exploration is required to provide a full explanation and justification of why this wide range of performance is observed.
+\paragraph*{}We can also observe a loose correlation to the number of samples in each class compared to the classification metric scores. When a model is trained on one class more than another we are more likely to generate predictions for that class too. This can be seen in the scores and occurrences of alto flutes (\ref{fig-HighWindsScores}a) with $72$ samples compared to that of English horns (\ref{fig-HighWindsScores}e) with $1382$ samples. In both confusion matrices of Fig. (\ref{fig-MultimodalConfs}), we see a relatively small entry in $C_{0,0}$ (alto flutes) compared to $C_{14,14}$ ( English horn). This indicates that fewer correction predictions were made, and the normalized matrix shows that fewer predictions were made at all. Contrast this with the English horn having a dark red square in both matrices shows many predictions, and many correction predictions. Future work could explore how classification performance would be affected when weighting each class inversely to it's number of samples in the data set. This would allow each class to be weighted uniformly in the training process and may potentially mitigate some of the variability of the performances across classes.
 
-\paragraph*{}We can also observe a loose correlation to the number of samples in each class compared to the classification metric scores. When a model is trained on one class more than another we are more likely to generate predictions in that class too. This can be seen in the scores and occurrences of alto flutes (\ref{fig-HighWindsScores}a) with $72$ samples compared to that of English horns (\ref{fig-HighWindsScores}e) with $1382$ samples. In both confusion matrices of Fig. (\ref{fig-MultimodalConfs}), we see a relatively small entry in $C_{0,0}$ (alto flutes) compared to $C_{14,14}$ ( English horn). This indicates that fewer correction predictions were made, and the normalized matrix shows that fewer predictions were made at all. Contrast this with the English horn having a dark red square in both matrices shows many predictions, and many correction predictions. 
+\paragraph*{}Future work on this project would benefit from a further exploration and development of input features. While the ability to discern classes is present, classification scores are still unstable and we observe a wide range of performances. To combat this, we would produce additional feature that convey characteristic properties of the digital audio files that allow for the generation of more distinctive decision boundaries. In addition to new features, it would be beneficial to further study the distribution of samples in feature space and execute some form of $K$-best features algorithm. This would indicate which of the  chosen predictors consistent or inconsistent with our requirements of intra-class and inter-class variability. 
 
-\paragraph*{}Future work on this project would benefit from a further exploration and development of input features. While the ability to discern classes is present, classification scores are still unstable and we observe a wide range of performances. To combat this, we would produce additional feature that convey characteristic properties of the digital audio files that allow for the generation of more distinctive decision boundaries. In addition to new features, it would be beneficial to further study the distribution of samples in feature space and execute some form of $K$-best features algorithm. This would indicate which are the chosen predictors show properties that are inconsistency with the ideas of intra-class and inter-class variability. 
+\paragraph*{}In addition to input features, it may be beneficial to group for the the related classes together. For example, violins and violas have very similar physical constructions, have very similar formant structures, and thus have very similar behaviors in our feature-space. As a result, some humans may also have difficulty differentiating the two, so it may be forgiven that a classification neural network would do the same. We can also consider grouping range variants of parent instruments such as flutes, alto flutes, bass flutes into a single \textit{flutes} category. It is possible that the new distribution of properties in feature-space may also warrant the development of a new set of predictors again. 
 
-\paragraph*{}In addition to input features, it may be beneficial to group for the the related classes together. For example, violins and violas have very similar physic construction, have very similar formant structures, and thus have very similar behaviors in our feature-space. As a result, some humans may also have difficulty differentiating the two, so it may be forgiven that a classification neural network would do the same. We can also consider grouping range variants of parent instruments together such as flutes, alto flutes, bass flutes into a single \textit{flutes} category. It is possible that the new distribution of properties in feature-space may also warrant the development of a new set of predictors again. It would also be worth exploring how classification performance would be affected when weighting each class inversely to it's number of samples in the data set. This would allow each class to be weighted uniformly in the training process and may potentially mitigate some of the variability of the performances across classes.
-
-\paragraph*{}Finally as a practical demonstration, future work entails the deployment of this classifier to generally unlabeled audio samples, provided that they have the same format. In particular, we would like to explore how classification would behave when testing it on digitally generated chaotic synthesizer wave forms. These signals are representations of chaotic systems that resemble some of the acoustic the periodic properties of acoustic waveforms. By suing the automated classifier, we would like to test the versatility of the classifier when subject to samples that may differ drastically in same ways from the training data set. This demonstration would be a fantastic exploration into the ability for the model to generalize, and the strength of the learned function parameters.
+\paragraph*{}Finally as a practical demonstration, future work entails the deployment of this classifier to generally unlabeled audio samples, provided that they have the same format. In particular, we would like to explore how classification would behave when testing it on digitally generated chaotic synthesizer wave forms. These signals are representations of chaotic systems that resemble some of the acoustic the periodic properties of digital audio waveforms. By using the automated classifier, we would like to test the versatility of the classifier when subject to samples that may differ drastically in oame ways from the training data set. This demonstration would be a fantastic exploration into the ability for the model to generalize, and the strength of the learned function parameters.
 
 % ================================================================
 % ================================================================
@@ -2309,11 +2306,11 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 \section{Conclusion}
 \label{sec-Conclusion}
 
-\paragraph*{}The experimental results show that we have successfully constructed a multimodal neural network that can classify sound waves into one of $37$ categories that it most resembles. Each category is representative of a particular musical instrument, and collectively the categories cover many stringed, woodwind, brass, mallet percussion, and synthetic instruments. From performing a $10$-folds cross validation, we find that given slightly different initial conditions and overlapping subsets of training data, the model produces consistency reasonable classification scores as shown in Fig. (\ref{fig-MultimodalXval}). This behavior indicates a neural network architecture and features that can generalize to unseen data.
+\paragraph*{}The experimental results show that we have successfully constructed a multimodal neural network that can classify sound waves into one of $37$ categories that it most resembles. Each category is representative of a particular musical instrument, and collectively the categories cover many stringed, woodwind, brass, mallet percussion, and synthetic instruments. From performing a $10$-folds cross validation, we find that given slightly different initial conditions and overlapping subsets of training data, the model produces consistency reasonable classification scores as shown in Fig. (\ref{fig-MultimodalXval}). This behavior indicates a neural network architecture and features that can generalize to unseen data samples.
 
-\paragraph*{}Examining the two diagonally dominant confusion matrices in Fig. (\ref{fig-MultimodalConfs}) indicates that the neural network is consistently making correct categorical predictions. The presence of off-diagonal entries in the confusion matrices indicates that misclassifications are a common possibility. Averaged across $37$ classes, we see in Fig. (\ref{fig-MultimodalXval}) that the classification accuracy score averages around $0.98$ and precision and recall scores around $0.83$ and $0.82$ respectively. This means that examining each class in an \textit{one-versus-all} context, the model selects $83\%$ of relevant samples, and $82\%$ of relevant samples are selected. This indicates that the multimodal neural network that can reasonably differentiate between $37$ classes of musical instruments.
+\paragraph*{}Examining the two diagonally dominant confusion matrices in Fig. (\ref{fig-MultimodalConfs}) indicates that the neural network is consistently making correct categorical predictions. The presence of off-diagonal entries in the confusion matrices indicates that misclassifications are a common possibility. Averaged across $37$ classes, we see in Fig. (\ref{fig-MultimodalXval}) that the classification accuracy score averages around $0.98$ and precision and recall scores around $0.83$ and $0.82$ respectively. This means that examining each class in an \textit{one-versus-all} context, the model selects more than $83\%$ of relevant samples, and more than $82\%$ of relevant samples are selected. This indicates that the multimodal neural network that can reasonably differentiate between $37$ classes of musical instruments.
 
-\paragraph*{}We conclude that on average, the hybrid neural network architecture in Fig. (\ref{fig-NetworkArchitecture}) exhibits superior classification performance over either of it's unimodal counterpart architectures. In examining confusion matrices from both unimodal models in Fig. (\ref{fig-UnimodalConfs}), we see the presence of diagonal dominance. However, in comparing this to the multimodal network confusion matrix from Fig. (\ref{fig-MultimodalConfs}), we see that the multimodal network has a much stronger main diagonal entry. This indicates that my aggregating to the output of each modal branch with a concatenation layer, we can benefit from the predictive power of both branches together. This indicates that both a multilayer perceptron and convolutional network are producing generally appropriate classification labels, but an aggregation of two architectures yields and even higher classification performance. 
+\paragraph*{}We conclude that on average, the hybrid neural network architecture in Fig. (\ref{fig-NetworkArchitecture}) exhibits superior classification performance over either of it's unimodal counterpart architectures. In examining confusion matrices from both unimodal models in Fig. (\ref{fig-UnimodalConfs}), we see the presence of diagonal dominance. However, in comparing this to the multimodal network confusion matrix from Fig. (\ref{fig-MultimodalConfs}), we see that the multimodal network has a much more pronounced main diagonal. This indicates that by aggregating to the output of each modal branch with a concatenation layer, we can benefit from the predictive power of both architectures together.
 
 % ================================================================
 % ================================================================
@@ -2322,7 +2319,7 @@ Additionally, we present the average standard confusion matrix, and the hits-wei
 \section{Acknowledgments}
 \label{sec-Acknowledge}
 
-\paragraph*{}The completion of this project would not have been possible without the various contributions from the following people:
+\paragraph*{}The completion of this project would not have been possible without the various contributions from the following people and organizations:
 
 \begin{itemize}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  16 DEC 2020 13:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  16 DEC 2020 15:06
 entering extended mode
 **./Buell-PHYS799-ThesisDraft3.tex
 (Buell-PHYS799-ThesisDraft3.tex
@@ -813,7 +813,12 @@ Package pdftex.def Info: ../MakeFigures/LinearNonSeparable.png  used on input l
 ine 1173.
 (pdftex.def)             Requested size: 423.3379pt x 220.62755pt.
  [45 <../MakeFigures/LinearSeparable2.png> <../MakeFigures/LinearNonSeparable.p
-ng>] [46] [47]
+ng>] [46]
+
+LaTeX Warning: Citation `Philhormonia' on page 47 undefined on input line 1221.
+
+
+[47]
 File: ../FiguresSpectrogram/Clarinet-Gs5.png Graphic file (type png)
 <use ../FiguresSpectrogram/Clarinet-Gs5.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Clarinet-Gs5.png  used on input 
@@ -1370,16 +1375,13 @@ png> <../FiguresClasses/Xylophone.png>] [83 <../FiguresClasses/SawtoothWave.png
 > <../FiguresClasses/SineWave.png> <../FiguresClasses/SquareWave.png> <../Figur
 esClasses/TriangleWave.png> <../FiguresClasses/WhiteNoise.png>] [84] [85]
 [86] [87] [88]
-Underfull \hbox (badness 10000) in paragraph at lines 2447--2448
+Underfull \hbox (badness 10000) in paragraph at lines 2445--2446
 []\OT1/cmr/m/n/12 University of Iowa Elec-tronic Mu-sic Stu-dios home page-
  []
 
 [89] [90] (Buell-PHYS799-ThesisDraft3.aux)
 
 LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
@@ -1409,7 +1411,7 @@ nts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Prog
 rams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft3.pdf (91 pages, 8475264 bytes).
+Output written on Buell-PHYS799-ThesisDraft3.pdf (91 pages, 8475194 bytes).
 PDF statistics:
  564 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
