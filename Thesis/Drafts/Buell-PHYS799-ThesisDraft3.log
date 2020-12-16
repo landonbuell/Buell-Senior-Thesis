@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  14 DEC 2020 00:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  16 DEC 2020 13:27
 entering extended mode
 **./Buell-PHYS799-ThesisDraft3.tex
 (Buell-PHYS799-ThesisDraft3.tex
@@ -441,19 +441,28 @@ This may cause the page layout to be inconsistent, however.
 \tf@toc=\write3
 \openout3 = `Buell-PHYS799-ThesisDraft3.toc'.
 
- [2]
+ [2] [3] [4] [5]
 
-LaTeX Warning: Citation `Virtan' on page 3 undefined on input line 108.
+LaTeX Warning: Citation `numpy' on page 6 undefined on input line 169.
 
-[3] [4] [5] [6] [7] [8] [9] [10] [11]
+
+LaTeX Warning: Citation `scipy' on page 6 undefined on input line 169.
+
+
+LaTeX Warning: Citation `sklearn' on page 6 undefined on input line 169.
+
+
+LaTeX Warning: Citation `matplotlib' on page 6 undefined on input line 169.
+
+[6] [7] [8] [9] [10] [11]
 <../figures/2DConvExample(a).png, id=51, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(a).png Graphic file (type png)
 <use ../figures/2DConvExample(a).png>
-Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 35
-9.
+Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 36
+1.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 359--360
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 361--362
 [][] 
  []
 
@@ -461,28 +470,28 @@ Overfull \hbox (4.39906pt too wide) in paragraph at lines 359--360
 File: ../figures/2DConvExample(b).png Graphic file (type png)
 <use ../figures/2DConvExample(b).png>
 Package pdftex.def Info: ../figures/2DConvExample(b).png  used on input line 36
-3.
+5.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 363--364
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 365--366
 [][] 
  []
 
 <../figures/2DConvExample(c).png, id=54, 361.35pt x 216.81pt>
 File: ../figures/2DConvExample(c).png Graphic file (type png)
 <use ../figures/2DConvExample(c).png>
-Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 36
-8.
+Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 37
+0.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 [12] [13 <../figures/2DConvExample(a).png> <../figures/2DConvExample(b).png> <.
 ./figures/2DConvExample(c).png>]
 File: ../figures/2DConvExample(a).png Graphic file (type png)
 <use ../figures/2DConvExample(a).png>
 Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 42
-0.
+2.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 420--421
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 422--423
 [][] 
  []
 
@@ -490,15 +499,15 @@ Overfull \hbox (4.39906pt too wide) in paragraph at lines 420--421
 File: ../figures/2DConvExample(d).png Graphic file (type png)
 <use ../figures/2DConvExample(d).png>
 Package pdftex.def Info: ../figures/2DConvExample(d).png  used on input line 42
-4.
+6.
 (pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
 
-Overfull \hbox (4.39906pt too wide) in paragraph at lines 424--425
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 426--427
 [][] 
  []
 
 [14 <../figures/2DConvExample(d).png>]
-Overfull \hbox (0.19136pt too wide) in paragraph at lines 467--469
+Overfull \hbox (0.19136pt too wide) in paragraph at lines 469--471
 \OT1/cmr/m/n/12 The nu-mer-i-cal value of each ac-ti-va-tion is left un-changed
 . For a layer with ac-ti-va-tion shape$\OML/cmm/m/it/12 M \OMS/cmsy/m/n/12 
  []
@@ -508,22 +517,22 @@ Overfull \hbox (0.19136pt too wide) in paragraph at lines 467--469
 File: ../Figures/RectifiedLinearUnit.png Graphic file (type png)
 <use ../Figures/RectifiedLinearUnit.png>
 Package pdftex.def Info: ../Figures/RectifiedLinearUnit.png  used on input line
- 518.
+ 520.
 (pdftex.def)             Requested size: 433.61894pt x 144.53964pt.
  [16] [17 <../Figures/RectifiedLinearUnit.png>] [18]
 <../Figures/CXELoss.png, id=87, 1734.48pt x 578.16pt>
 File: ../Figures/CXELoss.png Graphic file (type png)
 <use ../Figures/CXELoss.png>
-Package pdftex.def Info: ../Figures/CXELoss.png  used on input line 587.
+Package pdftex.def Info: ../Figures/CXELoss.png  used on input line 589.
 (pdftex.def)             Requested size: 433.61894pt x 144.53964pt.
  [19 <../Figures/CXELoss.png>] [20]
 <../Figures/LayerGraph.png, id=96, 609.9588pt x 750.6444pt>
 File: ../Figures/LayerGraph.png Graphic file (type png)
 <use ../Figures/LayerGraph.png>
-Package pdftex.def Info: ../Figures/LayerGraph.png  used on input line 632.
+Package pdftex.def Info: ../Figures/LayerGraph.png  used on input line 634.
 (pdftex.def)             Requested size: 487.96771pt x 600.51633pt.
 
-Overfull \hbox (15.93648pt too wide) in paragraph at lines 632--633
+Overfull \hbox (15.93648pt too wide) in paragraph at lines 634--635
  [] 
  []
 
@@ -532,10 +541,16 @@ Overfull \vbox (10.57558pt too high) has occurred while \output is active []
 
 
 [22 <../Figures/LayerGraph.png>]
-Overfull \hbox (5.14052pt too wide) in paragraph at lines 662--664
+Overfull \hbox (5.14052pt too wide) in paragraph at lines 664--666
 \OT1/cmr/m/n/12 We of-ten in-tro-duce $\OML/cmm/m/it/12  \OMS/cmsy/m/n/12  \O
 T1/cmr/m/n/12 10[]$ to pre-vent pos-si-ble di-vi-sion by $0$ er-rors. The value
  $\OML/cmm/m/it/12 @x[]=@z[]$
+ []
+
+
+Overfull \hbox (27.6314pt too wide) in paragraph at lines 668--670
+\OT1/cmr/m/n/12 For a dense layer as in sec-tion (2.3.1[]) or a 2D-convolution 
+layer as in sec-tion (2.3.2[]) $\OML/cmm/m/it/12 @z[]=@W[]$
  []
 
 [23] [24] [25] [26]
@@ -543,11 +558,11 @@ T1/cmr/m/n/12 10[]$ to pre-vent pos-si-ble di-vi-sion by $0$ er-rors. The value
 File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
 <use ../Figures/NeuralNetworkArchitecture.png>
 Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
-t line 802.
+t line 804.
 (pdftex.def)             Requested size: 457.10664pt x 555.75494pt.
  [27] [28 <../Figures/NeuralNetworkArchitecture.png>]
 [29] [30]
-Overfull \hbox (8.86417pt too wide) in paragraph at lines 867--896
+Overfull \hbox (8.86417pt too wide) in paragraph at lines 869--898
  [] 
  []
 
@@ -556,10 +571,10 @@ Overfull \hbox (8.86417pt too wide) in paragraph at lines 867--896
 File: ../FiguresSpectrogram/Vibraphone-A5.png Graphic file (type png)
 <use ../FiguresSpectrogram/Vibraphone-A5.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Vibraphone-A5.png  used on input
- line 915.
+ line 917.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 915--916
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 917--918
  [][] 
  []
 
@@ -567,10 +582,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 915--916
 File: ../FiguresSpectrogram/Marimba-C2.png Graphic file (type png)
 <use ../FiguresSpectrogram/Marimba-C2.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Marimba-C2.png  used on input li
-ne 921.
+ne 923.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 921--922
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 923--924
  [][] 
  []
 
@@ -580,10 +595,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 921--922
 File: ../FiguresSpectrogram/CELLO-F4.png Graphic file (type png)
 <use ../FiguresSpectrogram/CELLO-F4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/CELLO-F4.png  used on input line
- 969.
+ 971.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 969--970
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 971--972
  [][] 
  []
 
@@ -591,10 +606,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 969--970
 File: ../FiguresSpectrogram/Guitar-B2.png Graphic file (type png)
 <use ../FiguresSpectrogram/Guitar-B2.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Guitar-B2.png  used on input lin
-e 975.
+e 977.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 975--976
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 977--978
  [][] 
  []
 
@@ -602,10 +617,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 975--976
 File: ../FiguresSpectrogram/Violin-G4.png Graphic file (type png)
 <use ../FiguresSpectrogram/Violin-G4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Violin-G4.png  used on input lin
-e 981.
+e 983.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 981--982
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 983--984
  [][] 
  []
 
@@ -613,32 +628,32 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 981--982
 File: ../FiguresSpectrogram/Viola-G4.png Graphic file (type png)
 <use ../FiguresSpectrogram/Viola-G4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Viola-G4.png  used on input line
- 987.
+ 989.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 987--988
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 989--990
  [][] 
  []
 
 
 LaTeX Warning: Reference `fig-PropertiesChordophone' on page 35 undefined on in
-put line 994.
+put line 996.
 
 [35 <../FiguresSpectrogram/CELLO-F4.png> <../FiguresSpectrogram/Guitar-B2.png> 
 <../FiguresSpectrogram/Violin-G4.png> <../FiguresSpectrogram/Viola-G4.png>]
 [36]
 
 LaTeX Warning: Citation `eqn-OpenClosedCol' on page 37 undefined on input line 
-1012.
+1014.
 
 <../FiguresSpectrogram/AltoSax-A4.png, id=164, 1156.32pt x 867.24pt>
 File: ../FiguresSpectrogram/AltoSax-A4.png Graphic file (type png)
 <use ../FiguresSpectrogram/AltoSax-A4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/AltoSax-A4.png  used on input li
-ne 1019.
+ne 1021.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1019--1020
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1021--1022
  [][] 
  []
 
@@ -646,10 +661,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1019--1020
 File: ../FiguresSpectrogram/Clarinet-Gs5.png Graphic file (type png)
 <use ../FiguresSpectrogram/Clarinet-Gs5.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Clarinet-Gs5.png  used on input 
-line 1025.
+line 1027.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1025--1026
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1027--1028
  [][] 
  []
 
@@ -657,10 +672,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1025--1026
 File: ../FiguresSpectrogram/Oboe-Bb4.png Graphic file (type png)
 <use ../FiguresSpectrogram/Oboe-Bb4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Oboe-Bb4.png  used on input line
- 1031.
+ 1033.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1031--1032
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1033--1034
  [][] 
  []
 
@@ -668,10 +683,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1031--1032
 File: ../FiguresSpectrogram/Bassoon-D4.png Graphic file (type png)
 <use ../FiguresSpectrogram/Bassoon-D4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Bassoon-D4.png  used on input li
-ne 1037.
+ne 1039.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1037--1038
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1039--1040
  [][] 
  []
 
@@ -680,10 +695,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1037--1038
 File: ../FiguresSpectrogram/FRENCHHORN-Cs4.png Graphic file (type png)
 <use ../FiguresSpectrogram/FRENCHHORN-Cs4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/FRENCHHORN-Cs4.png  used on inpu
-t line 1049.
+t line 1051.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1049--1050
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1051--1052
  [][] 
  []
 
@@ -691,10 +706,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1049--1050
 File: ../FiguresSpectrogram/TenorTrombone-F4.png Graphic file (type png)
 <use ../FiguresSpectrogram/TenorTrombone-F4.png>
 Package pdftex.def Info: ../FiguresSpectrogram/TenorTrombone-F4.png  used on in
-put line 1055.
+put line 1057.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1055--1056
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1057--1058
  [][] 
  []
 
@@ -702,10 +717,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1055--1056
 File: ../FiguresSpectrogram/Trumpet-B3.png Graphic file (type png)
 <use ../FiguresSpectrogram/Trumpet-B3.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Trumpet-B3.png  used on input li
-ne 1061.
+ne 1063.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1061--1062
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1063--1064
  [][] 
  []
 
@@ -713,10 +728,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1061--1062
 File: ../FiguresSpectrogram/Tuba-A2.png Graphic file (type png)
 <use ../FiguresSpectrogram/Tuba-A2.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Tuba-A2.png  used on input line 
-1067.
+1069.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1067--1068
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1069--1070
  [][] 
  []
 
@@ -729,10 +744,10 @@ uba-A2.png>]
 File: ../FiguresSpectrogram/SquareWave-880Hz.png Graphic file (type png)
 <use ../FiguresSpectrogram/SquareWave-880Hz.png>
 Package pdftex.def Info: ../FiguresSpectrogram/SquareWave-880Hz.png  used on in
-put line 1088.
+put line 1090.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1088--1089
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1090--1091
  [][] 
  []
 
@@ -740,10 +755,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1088--1089
 File: ../FiguresSpectrogram/SawtoothWave-880Hz.png Graphic file (type png)
 <use ../FiguresSpectrogram/SawtoothWave-880Hz.png>
 Package pdftex.def Info: ../FiguresSpectrogram/SawtoothWave-880Hz.png  used on 
-input line 1093.
+input line 1095.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1093--1094
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1095--1096
  [][] 
  []
 
@@ -751,10 +766,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1093--1094
 File: ../FiguresSpectrogram/SineWave-880Hz.png Graphic file (type png)
 <use ../FiguresSpectrogram/SineWave-880Hz.png>
 Package pdftex.def Info: ../FiguresSpectrogram/SineWave-880Hz.png  used on inpu
-t line 1099.
+t line 1101.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1099--1100
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1101--1102
  [][] 
  []
 
@@ -762,10 +777,10 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1099--1100
 File: ../FiguresSpectrogram/WhiteNoise-190.png Graphic file (type png)
 <use ../FiguresSpectrogram/WhiteNoise-190.png>
 Package pdftex.def Info: ../FiguresSpectrogram/WhiteNoise-190.png  used on inpu
-t line 1104.
+t line 1106.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1104--1105
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1106--1107
  [][] 
  []
 
@@ -776,17 +791,17 @@ ram/WhiteNoise-190.png>] [41] [42]
 File: ../MakeFigures/LinearSeparable1.png Graphic file (type png)
 <use ../MakeFigures/LinearSeparable1.png>
 Package pdftex.def Info: ../MakeFigures/LinearSeparable1.png  used on input lin
-e 1151.
+e 1153.
 (pdftex.def)             Requested size: 426.14845pt x 223.08678pt.
  [43]
 <../MakeFigures/LinearSeparable2.png, id=211, 1445.4pt x 867.24pt>
 File: ../MakeFigures/LinearSeparable2.png Graphic file (type png)
 <use ../MakeFigures/LinearSeparable2.png>
 Package pdftex.def Info: ../MakeFigures/LinearSeparable2.png  used on input lin
-e 1163.
+e 1165.
 (pdftex.def)             Requested size: 505.89758pt x 303.53854pt.
 
-Overfull \hbox (33.86635pt too wide) in paragraph at lines 1163--1164
+Overfull \hbox (33.86635pt too wide) in paragraph at lines 1165--1166
  [] 
  []
 
@@ -795,17 +810,17 @@ Overfull \hbox (33.86635pt too wide) in paragraph at lines 1163--1164
 File: ../MakeFigures/LinearNonSeparable.png Graphic file (type png)
 <use ../MakeFigures/LinearNonSeparable.png>
 Package pdftex.def Info: ../MakeFigures/LinearNonSeparable.png  used on input l
-ine 1171.
+ine 1173.
 (pdftex.def)             Requested size: 423.3379pt x 220.62755pt.
  [45 <../MakeFigures/LinearSeparable2.png> <../MakeFigures/LinearNonSeparable.p
 ng>] [46] [47]
 File: ../FiguresSpectrogram/Clarinet-Gs5.png Graphic file (type png)
 <use ../FiguresSpectrogram/Clarinet-Gs5.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Clarinet-Gs5.png  used on input 
-line 1238.
+line 1240.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1238--1239
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1240--1241
  [][] 
  []
 
@@ -813,30 +828,30 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1238--1239
 File: ../FiguresSpectrogram/GUITAR-B2.png Graphic file (type png)
 <use ../FiguresSpectrogram/GUITAR-B2.png>
 Package pdftex.def Info: ../FiguresSpectrogram/GUITAR-B2.png  used on input lin
-e 1244.
+e 1246.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1244--1245
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1246--1247
  [][] 
  []
 
 File: ../FiguresSpectrogram/SquareWave-880Hz.png Graphic file (type png)
 <use ../FiguresSpectrogram/SquareWave-880Hz.png>
 Package pdftex.def Info: ../FiguresSpectrogram/SquareWave-880Hz.png  used on in
-put line 1250.
+put line 1252.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1250--1251
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1252--1253
  [][] 
  []
 
 File: ../FiguresSpectrogram/Tuba-A2.png Graphic file (type png)
 <use ../FiguresSpectrogram/Tuba-A2.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Tuba-A2.png  used on input line 
-1256.
+1258.
 (pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
 
-Overfull \hbox (18.84729pt too wide) in paragraph at lines 1256--1257
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1258--1259
  [][] 
  []
 
@@ -844,32 +859,32 @@ Overfull \hbox (18.84729pt too wide) in paragraph at lines 1256--1257
 <../Figures/AnalysisFrames.png, id=234, 804.75656pt x 407.27156pt>
 File: ../Figures/AnalysisFrames.png Graphic file (type png)
 <use ../Figures/AnalysisFrames.png>
-Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1273
+Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1275
 .
 (pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
  [49 <../Figures/AnalysisFrames.png>]
 <../Figures/AnalysisFrame.png, id=239, 1734.48pt x 578.16pt>
 File: ../Figures/AnalysisFrame.png Graphic file (type png)
 <use ../Figures/AnalysisFrame.png>
-Package pdftex.def Info: ../Figures/AnalysisFrame.png  used on input line 1319.
+Package pdftex.def Info: ../Figures/AnalysisFrame.png  used on input line 1321.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../Figures/WindowedFrame.png, id=240, 1734.48pt x 578.16pt>
 File: ../Figures/WindowedFrame.png Graphic file (type png)
 <use ../Figures/WindowedFrame.png>
-Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1325.
+Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1327.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 [50 <../Figures/AnalysisFrame.png> <../Figures/WindowedFrame.png>] [51]
 [52]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1394
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1396
 .
 
 ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1394.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1396.
 
 
 [53]
@@ -877,30 +892,30 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 File: ../FiguresSpectrogram/GUITAR-B2_TDE.png Graphic file (type png)
 <use ../FiguresSpectrogram/GUITAR-B2_TDE.png>
 Package pdftex.def Info: ../FiguresSpectrogram/GUITAR-B2_TDE.png  used on input
- line 1418.
+ line 1420.
 (pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
 <../FiguresSpectrogram/Tuba-A2_TDE.png, id=256, 1156.32pt x 433.62pt>
 File: ../FiguresSpectrogram/Tuba-A2_TDE.png Graphic file (type png)
 <use ../FiguresSpectrogram/Tuba-A2_TDE.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Tuba-A2_TDE.png  used on input l
-ine 1425.
+ine 1427.
 (pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
 <../FiguresFeatures/TDE_1.png, id=257, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TDE_1.png Graphic file (type png)
 <use ../FiguresFeatures/TDE_1.png>
-Package pdftex.def Info: ../FiguresFeatures/TDE_1.png  used on input line 1440.
+Package pdftex.def Info: ../FiguresFeatures/TDE_1.png  used on input line 1442.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/TDE_2.png, id=258, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TDE_2.png Graphic file (type png)
 <use ../FiguresFeatures/TDE_2.png>
-Package pdftex.def Info: ../FiguresFeatures/TDE_2.png  used on input line 1447.
+Package pdftex.def Info: ../FiguresFeatures/TDE_2.png  used on input line 1449.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/TDE_3.png, id=259, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TDE_3.png Graphic file (type png)
 <use ../FiguresFeatures/TDE_3.png>
-Package pdftex.def Info: ../FiguresFeatures/TDE_3.png  used on input line 1454.
+Package pdftex.def Info: ../FiguresFeatures/TDE_3.png  used on input line 1456.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [54 <../FiguresSpectrogram/GUITAR-B2_TDE.png> <../FiguresSpectrogram/Tuba-A2_T
@@ -909,7 +924,7 @@ FiguresFeatures/TDE_3.png>]
 <../FiguresFeatures/ZXR.png, id=272, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ZXR.png Graphic file (type png)
 <use ../FiguresFeatures/ZXR.png>
-Package pdftex.def Info: ../FiguresFeatures/ZXR.png  used on input line 1478.
+Package pdftex.def Info: ../FiguresFeatures/ZXR.png  used on input line 1480.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
 <../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png, id=273, 1156.32pt x 433
 .62pt>
@@ -917,44 +932,44 @@ File: ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png Graphic file (type
 png)
 <use ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png>
 Package pdftex.def Info: ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png 
- used on input line 1500.
+ used on input line 1502.
 (pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
 <../FiguresSpectrogram/CELLO-F4_TCM.png, id=274, 1156.32pt x 433.62pt>
 File: ../FiguresSpectrogram/CELLO-F4_TCM.png Graphic file (type png)
 <use ../FiguresSpectrogram/CELLO-F4_TCM.png>
 Package pdftex.def Info: ../FiguresSpectrogram/CELLO-F4_TCM.png  used on input 
-line 1507.
+line 1509.
 (pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
  [56 <../FiguresFeatures/ZXR.png>]
 <../FiguresFeatures/TCM.png, id=279, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/TCM.png Graphic file (type png)
 <use ../FiguresFeatures/TCM.png>
-Package pdftex.def Info: ../FiguresFeatures/TCM.png  used on input line 1518.
+Package pdftex.def Info: ../FiguresFeatures/TCM.png  used on input line 1520.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [57 <../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png> <../FiguresSpectro
 gram/CELLO-F4_TCM.png> <../FiguresFeatures/TCM.png>]
 <../FiguresFeatures/ACC_1.png, id=286, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_1.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_1.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_1.png  used on input line 1545.
+Package pdftex.def Info: ../FiguresFeatures/ACC_1.png  used on input line 1547.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/ACC_2.png, id=287, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_2.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_2.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_2.png  used on input line 1552.
+Package pdftex.def Info: ../FiguresFeatures/ACC_2.png  used on input line 1554.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/ACC_3.png, id=288, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_3.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_3.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_3.png  used on input line 1559.
+Package pdftex.def Info: ../FiguresFeatures/ACC_3.png  used on input line 1561.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/ACC_4.png, id=289, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/ACC_4.png Graphic file (type png)
 <use ../FiguresFeatures/ACC_4.png>
-Package pdftex.def Info: ../FiguresFeatures/ACC_4.png  used on input line 1566.
+Package pdftex.def Info: ../FiguresFeatures/ACC_4.png  used on input line 1568.
 
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [58]
@@ -967,32 +982,32 @@ atures/ACC_3.png> <../FiguresFeatures/ACC_4.png>]
 File: ../FiguresSpectrogram/MelFilterBanks.png Graphic file (type png)
 <use ../FiguresSpectrogram/MelFilterBanks.png>
 Package pdftex.def Info: ../FiguresSpectrogram/MelFilterBanks.png  used on inpu
-t line 1611.
+t line 1613.
 (pdftex.def)             Requested size: 404.70924pt x 161.8837pt.
  [60] [61 <../FiguresSpectrogram/MelFilterBanks.png>]
 <../FiguresFeatures/MFCC_1.png, id=309, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_1.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1647
+Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1649
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_4.png, id=310, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_4.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1654
+Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1656
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_8.png, id=311, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_8.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1661
+Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1663
 .
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
 <../FiguresFeatures/MFCC_12.png, id=312, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
 <use ../FiguresFeatures/MFCC_12.png>
-Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 166
-8.
+Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 167
+0.
 (pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
  [62]
 Overfull \vbox (7.67204pt too high) has occurred while \output is active []
@@ -1003,23 +1018,23 @@ Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
 <../FiguresFeatures/FCM.png, id=323, 1445.4pt x 578.16pt>
 File: ../FiguresFeatures/FCM.png Graphic file (type png)
 <use ../FiguresFeatures/FCM.png>
-Package pdftex.def Info: ../FiguresFeatures/FCM.png  used on input line 1696.
+Package pdftex.def Info: ../FiguresFeatures/FCM.png  used on input line 1698.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [64 <../FiguresFeatures/FCM.png>] [65] [66]
 <../FiguresMetrics/StdConfA.png, id=335, 867.24pt x 867.24pt>
 File: ../FiguresMetrics/StdConfA.png Graphic file (type png)
 <use ../FiguresMetrics/StdConfA.png>
 Package pdftex.def Info: ../FiguresMetrics/StdConfA.png  used on input line 178
-4.
+6.
 (pdftex.def)             Requested size: 212.41261pt x 212.40288pt.
 <../FiguresMetrics/StdConfB.png, id=336, 867.24pt x 867.24pt>
 File: ../FiguresMetrics/StdConfB.png Graphic file (type png)
 <use ../FiguresMetrics/StdConfB.png>
-Package pdftex.def Info: ../FiguresMetrics/StdConfB.png  used on input line 178
-9.
+Package pdftex.def Info: ../FiguresMetrics/StdConfB.png  used on input line 179
+1.
 (pdftex.def)             Requested size: 212.41261pt x 212.40288pt.
 
-Underfull \hbox (badness 2617) in paragraph at lines 1790--1790
+Underfull \hbox (badness 2617) in paragraph at lines 1792--1792
 []\OT1/cmr/m/n/10.95 (b) |No di-ag-o-nal dom-i-nance in-di-cates a
  []
 
@@ -1028,13 +1043,13 @@ Underfull \hbox (badness 2617) in paragraph at lines 1790--1790
 <../Figures/LossHistory.png, id=351, 1445.4pt x 578.16pt>
 File: ../Figures/LossHistory.png Graphic file (type png)
 <use ../Figures/LossHistory.png>
-Package pdftex.def Info: ../Figures/LossHistory.png  used on input line 1890.
+Package pdftex.def Info: ../Figures/LossHistory.png  used on input line 1892.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [71]
 <../Figures/MetricHistory.png, id=355, 1445.4pt x 578.16pt>
 File: ../Figures/MetricHistory.png Graphic file (type png)
 <use ../Figures/MetricHistory.png>
-Package pdftex.def Info: ../Figures/MetricHistory.png  used on input line 1898.
+Package pdftex.def Info: ../Figures/MetricHistory.png  used on input line 1900.
 
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
  [72 <../Figures/LossHistory.png> <../Figures/MetricHistory.png>] [73]
@@ -1042,7 +1057,7 @@ Package pdftex.def Info: ../Figures/MetricHistory.png  used on input line 1898.
 File: ../FiguresMetrics/AvgXval-Multimodal.png Graphic file (type png)
 <use ../FiguresMetrics/AvgXval-Multimodal.png>
 Package pdftex.def Info: ../FiguresMetrics/AvgXval-Multimodal.png  used on inpu
-t line 1919.
+t line 1921.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
 <../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png, id=366, 1156.32pt x
  1156.32pt>
@@ -1050,7 +1065,7 @@ File: ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png Graphic file (t
 ype png)
 <use ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png>
 Package pdftex.def Info: ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.
-png  used on input line 1928.
+png  used on input line 1930.
 (pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
 <../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=367, 1156.3
 2pt x 1156.32pt>
@@ -1058,17 +1073,17 @@ File: ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png Graphic fi
 le (type png)
 <use ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confu
-sion.png  used on input line 1934.
+sion.png  used on input line 1936.
 (pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
  [74 <../FiguresMetrics/AvgXval-Multimodal.png>]
 <../FiguresMetrics/AvgXval-Convolution.png, id=372, 1445.4pt x 578.16pt>
 File: ../FiguresMetrics/AvgXval-Convolution.png Graphic file (type png)
 <use ../FiguresMetrics/AvgXval-Convolution.png>
 Package pdftex.def Info: ../FiguresMetrics/AvgXval-Convolution.png  used on inp
-ut line 1953.
+ut line 1955.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
 
-Overfull \hbox (8.79813pt too wide) in paragraph at lines 1953--1954
+Overfull \hbox (8.79813pt too wide) in paragraph at lines 1955--1956
  [][] 
  []
 
@@ -1076,10 +1091,10 @@ Overfull \hbox (8.79813pt too wide) in paragraph at lines 1953--1954
 File: ../FiguresMetrics/AvgXval-Perceptron.png Graphic file (type png)
 <use ../FiguresMetrics/AvgXval-Perceptron.png>
 Package pdftex.def Info: ../FiguresMetrics/AvgXval-Perceptron.png  used on inpu
-t line 1959.
+t line 1961.
 (pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
 
-Overfull \hbox (8.79813pt too wide) in paragraph at lines 1959--1960
+Overfull \hbox (8.79813pt too wide) in paragraph at lines 1961--1962
  [][] 
  []
 
@@ -1091,7 +1106,7 @@ File: ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png Graphic file (t
 ype png)
 <use ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png>
 Package pdftex.def Info: ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.
-png  used on input line 1972.
+png  used on input line 1974.
 (pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
 <../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png, id=380, 1156.3
 2pt x 1156.32pt>
@@ -1099,7 +1114,7 @@ File: ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png Graphic fi
 le (type png)
 <use ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confu
-sion.png  used on input line 1978.
+sion.png  used on input line 1980.
 (pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
 <../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png, id=381, 1156.32pt x 
 1156.32pt>
@@ -1107,7 +1122,7 @@ File: ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png Graphic file (ty
 pe png)
 <use ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png>
 Package pdftex.def Info: ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.p
-ng  used on input line 1984.
+ng  used on input line 1986.
 (pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
 <../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=382, 1156.32
 pt x 1156.32pt>
@@ -1115,7 +1130,7 @@ File: ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png Graphic fil
 e (type png)
 <use ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confus
-ion.png  used on input line 1990.
+ion.png  used on input line 1992.
 (pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
  [76 <../FiguresMetrics/AvgXval-Convolution.png> <../FiguresMetrics/AvgXval-Per
 ceptron.png>]
@@ -1123,46 +1138,46 @@ ceptron.png>]
 File: ../FiguresClasses/AltoFlute.png Graphic file (type png)
 <use ../FiguresClasses/AltoFlute.png>
 Package pdftex.def Info: ../FiguresClasses/AltoFlute.png  used on input line 20
-13.
+15.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/AltoSax.png, id=389, 578.16pt x 289.08pt>
 File: ../FiguresClasses/AltoSax.png Graphic file (type png)
 <use ../FiguresClasses/AltoSax.png>
-Package pdftex.def Info: ../FiguresClasses/AltoSax.png  used on input line 2019
+Package pdftex.def Info: ../FiguresClasses/AltoSax.png  used on input line 2021
 .
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/BbClarinet.png, id=390, 578.16pt x 289.08pt>
 File: ../FiguresClasses/BbClarinet.png Graphic file (type png)
 <use ../FiguresClasses/BbClarinet.png>
 Package pdftex.def Info: ../FiguresClasses/BbClarinet.png  used on input line 2
-025.
+027.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/EbClarinet.png, id=391, 578.16pt x 289.08pt>
 File: ../FiguresClasses/EbClarinet.png Graphic file (type png)
 <use ../FiguresClasses/EbClarinet.png>
 Package pdftex.def Info: ../FiguresClasses/EbClarinet.png  used on input line 2
-031.
+033.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/EnglishHorn.png, id=392, 578.16pt x 289.08pt>
 File: ../FiguresClasses/EnglishHorn.png Graphic file (type png)
 <use ../FiguresClasses/EnglishHorn.png>
 Package pdftex.def Info: ../FiguresClasses/EnglishHorn.png  used on input line 
-2037.
+2039.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Flute.png, id=393, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Flute.png Graphic file (type png)
 <use ../FiguresClasses/Flute.png>
-Package pdftex.def Info: ../FiguresClasses/Flute.png  used on input line 2043.
+Package pdftex.def Info: ../FiguresClasses/Flute.png  used on input line 2045.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Oboe.png, id=394, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Oboe.png Graphic file (type png)
 <use ../FiguresClasses/Oboe.png>
-Package pdftex.def Info: ../FiguresClasses/Oboe.png  used on input line 2049.
+Package pdftex.def Info: ../FiguresClasses/Oboe.png  used on input line 2051.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/SopSax.png, id=395, 578.16pt x 289.08pt>
 File: ../FiguresClasses/SopSax.png Graphic file (type png)
 <use ../FiguresClasses/SopSax.png>
-Package pdftex.def Info: ../FiguresClasses/SopSax.png  used on input line 2055.
+Package pdftex.def Info: ../FiguresClasses/SopSax.png  used on input line 2057.
 
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
  [77 <../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png> <../FiguresMet
@@ -1173,31 +1188,31 @@ _Confusion.png>]
 File: ../FiguresClasses/BassClarinet.png Graphic file (type png)
 <use ../FiguresClasses/BassClarinet.png>
 Package pdftex.def Info: ../FiguresClasses/BassClarinet.png  used on input line
- 2070.
+ 2072.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/BassFlute.png, id=404, 578.16pt x 289.08pt>
 File: ../FiguresClasses/BassFlute.png Graphic file (type png)
 <use ../FiguresClasses/BassFlute.png>
 Package pdftex.def Info: ../FiguresClasses/BassFlute.png  used on input line 20
-76.
+78.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Bassoon.png, id=405, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Bassoon.png Graphic file (type png)
 <use ../FiguresClasses/Bassoon.png>
-Package pdftex.def Info: ../FiguresClasses/Bassoon.png  used on input line 2082
+Package pdftex.def Info: ../FiguresClasses/Bassoon.png  used on input line 2084
 .
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/ContraBassoon.png, id=406, 578.16pt x 289.08pt>
 File: ../FiguresClasses/ContraBassoon.png Graphic file (type png)
 <use ../FiguresClasses/ContraBassoon.png>
 Package pdftex.def Info: ../FiguresClasses/ContraBassoon.png  used on input lin
-e 2088.
+e 2090.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Saxophone.png, id=407, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Saxophone.png Graphic file (type png)
 <use ../FiguresClasses/Saxophone.png>
 Package pdftex.def Info: ../FiguresClasses/Saxophone.png  used on input line 20
-94.
+96.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 [78 <../FiguresClasses/AltoFlute.png> <../FiguresClasses/AltoSax.png> <../Figur
 esClasses/BbClarinet.png> <../FiguresClasses/EbClarinet.png> <../FiguresClasses
@@ -1207,35 +1222,35 @@ esClasses/BbClarinet.png> <../FiguresClasses/EbClarinet.png> <../FiguresClasses
 File: ../FiguresClasses/BassTrombone.png Graphic file (type png)
 <use ../FiguresClasses/BassTrombone.png>
 Package pdftex.def Info: ../FiguresClasses/BassTrombone.png  used on input line
- 2109.
+ 2111.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Horn.png, id=421, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Horn.png Graphic file (type png)
 <use ../FiguresClasses/Horn.png>
-Package pdftex.def Info: ../FiguresClasses/Horn.png  used on input line 2115.
+Package pdftex.def Info: ../FiguresClasses/Horn.png  used on input line 2117.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/TenorTrombone.png, id=422, 578.16pt x 289.08pt>
 File: ../FiguresClasses/TenorTrombone.png Graphic file (type png)
 <use ../FiguresClasses/TenorTrombone.png>
 Package pdftex.def Info: ../FiguresClasses/TenorTrombone.png  used on input lin
-e 2121.
+e 2123.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Trombone.png, id=423, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Trombone.png Graphic file (type png)
 <use ../FiguresClasses/Trombone.png>
 Package pdftex.def Info: ../FiguresClasses/Trombone.png  used on input line 212
-7.
+9.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Trumpet.png, id=424, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Trumpet.png Graphic file (type png)
 <use ../FiguresClasses/Trumpet.png>
-Package pdftex.def Info: ../FiguresClasses/Trumpet.png  used on input line 2133
+Package pdftex.def Info: ../FiguresClasses/Trumpet.png  used on input line 2135
 .
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Tuba.png, id=425, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Tuba.png Graphic file (type png)
 <use ../FiguresClasses/Tuba.png>
-Package pdftex.def Info: ../FiguresClasses/Tuba.png  used on input line 2139.
+Package pdftex.def Info: ../FiguresClasses/Tuba.png  used on input line 2141.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
  [79 <../FiguresClasses/BassClarinet.png> <../FiguresClasses/BassFlute.png> <..
 /FiguresClasses/Bassoon.png> <../FiguresClasses/ContraBassoon.png> <../FiguresC
@@ -1243,39 +1258,39 @@ lasses/Saxophone.png>]
 <../FiguresClasses/Banjo.png, id=434, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Banjo.png Graphic file (type png)
 <use ../FiguresClasses/Banjo.png>
-Package pdftex.def Info: ../FiguresClasses/Banjo.png  used on input line 2154.
+Package pdftex.def Info: ../FiguresClasses/Banjo.png  used on input line 2156.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Bass.png, id=435, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Bass.png Graphic file (type png)
 <use ../FiguresClasses/Bass.png>
-Package pdftex.def Info: ../FiguresClasses/Bass.png  used on input line 2160.
+Package pdftex.def Info: ../FiguresClasses/Bass.png  used on input line 2162.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Cello.png, id=436, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Cello.png Graphic file (type png)
 <use ../FiguresClasses/Cello.png>
-Package pdftex.def Info: ../FiguresClasses/Cello.png  used on input line 2166.
+Package pdftex.def Info: ../FiguresClasses/Cello.png  used on input line 2168.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Guitar.png, id=437, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Guitar.png Graphic file (type png)
 <use ../FiguresClasses/Guitar.png>
-Package pdftex.def Info: ../FiguresClasses/Guitar.png  used on input line 2172.
+Package pdftex.def Info: ../FiguresClasses/Guitar.png  used on input line 2174.
 
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Mandolin.png, id=438, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Mandolin.png Graphic file (type png)
 <use ../FiguresClasses/Mandolin.png>
-Package pdftex.def Info: ../FiguresClasses/Mandolin.png  used on input line 217
-8.
+Package pdftex.def Info: ../FiguresClasses/Mandolin.png  used on input line 218
+0.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Viola.png, id=439, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Viola.png Graphic file (type png)
 <use ../FiguresClasses/Viola.png>
-Package pdftex.def Info: ../FiguresClasses/Viola.png  used on input line 2184.
+Package pdftex.def Info: ../FiguresClasses/Viola.png  used on input line 2186.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Violin.png, id=440, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Violin.png Graphic file (type png)
 <use ../FiguresClasses/Violin.png>
-Package pdftex.def Info: ../FiguresClasses/Violin.png  used on input line 2190.
+Package pdftex.def Info: ../FiguresClasses/Violin.png  used on input line 2192.
 
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
  [80 <../FiguresClasses/BassTrombone.png> <../FiguresClasses/Horn.png> <../Figu
@@ -1284,36 +1299,36 @@ es/Trumpet.png> <../FiguresClasses/Tuba.png>]
 <../FiguresClasses/Bells.png, id=450, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Bells.png Graphic file (type png)
 <use ../FiguresClasses/Bells.png>
-Package pdftex.def Info: ../FiguresClasses/Bells.png  used on input line 2205.
+Package pdftex.def Info: ../FiguresClasses/Bells.png  used on input line 2207.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Crotale.png, id=451, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Crotale.png Graphic file (type png)
 <use ../FiguresClasses/Crotale.png>
-Package pdftex.def Info: ../FiguresClasses/Crotale.png  used on input line 2211
+Package pdftex.def Info: ../FiguresClasses/Crotale.png  used on input line 2213
 .
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Hihat.png, id=452, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Hihat.png Graphic file (type png)
 <use ../FiguresClasses/Hihat.png>
-Package pdftex.def Info: ../FiguresClasses/Hihat.png  used on input line 2217.
+Package pdftex.def Info: ../FiguresClasses/Hihat.png  used on input line 2219.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Marimba.png, id=453, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Marimba.png Graphic file (type png)
 <use ../FiguresClasses/Marimba.png>
-Package pdftex.def Info: ../FiguresClasses/Marimba.png  used on input line 2223
+Package pdftex.def Info: ../FiguresClasses/Marimba.png  used on input line 2225
 .
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Vibraphone.png, id=454, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Vibraphone.png Graphic file (type png)
 <use ../FiguresClasses/Vibraphone.png>
 Package pdftex.def Info: ../FiguresClasses/Vibraphone.png  used on input line 2
-229.
+231.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/Xylophone.png, id=455, 578.16pt x 289.08pt>
 File: ../FiguresClasses/Xylophone.png Graphic file (type png)
 <use ../FiguresClasses/Xylophone.png>
 Package pdftex.def Info: ../FiguresClasses/Xylophone.png  used on input line 22
-35.
+37.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
  [81 <../FiguresClasses/Banjo.png> <../FiguresClasses/Bass.png> <../FiguresClas
 ses/Cello.png> <../FiguresClasses/Guitar.png> <../FiguresClasses/Mandolin.png> 
@@ -1322,31 +1337,31 @@ ses/Cello.png> <../FiguresClasses/Guitar.png> <../FiguresClasses/Mandolin.png>
 File: ../FiguresClasses/SawtoothWave.png Graphic file (type png)
 <use ../FiguresClasses/SawtoothWave.png>
 Package pdftex.def Info: ../FiguresClasses/SawtoothWave.png  used on input line
- 2250.
+ 2252.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/SineWave.png, id=467, 578.16pt x 289.08pt>
 File: ../FiguresClasses/SineWave.png Graphic file (type png)
 <use ../FiguresClasses/SineWave.png>
 Package pdftex.def Info: ../FiguresClasses/SineWave.png  used on input line 225
-6.
+8.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/SquareWave.png, id=468, 578.16pt x 289.08pt>
 File: ../FiguresClasses/SquareWave.png Graphic file (type png)
 <use ../FiguresClasses/SquareWave.png>
 Package pdftex.def Info: ../FiguresClasses/SquareWave.png  used on input line 2
-262.
+264.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/TriangleWave.png, id=469, 578.16pt x 289.08pt>
 File: ../FiguresClasses/TriangleWave.png Graphic file (type png)
 <use ../FiguresClasses/TriangleWave.png>
 Package pdftex.def Info: ../FiguresClasses/TriangleWave.png  used on input line
- 2268.
+ 2270.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 <../FiguresClasses/WhiteNoise.png, id=470, 578.16pt x 289.08pt>
 File: ../FiguresClasses/WhiteNoise.png Graphic file (type png)
 <use ../FiguresClasses/WhiteNoise.png>
 Package pdftex.def Info: ../FiguresClasses/WhiteNoise.png  used on input line 2
-274.
+276.
 (pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
 
 [82 <../FiguresClasses/Bells.png> <../FiguresClasses/Crotale.png> <../FiguresCl
@@ -1354,19 +1369,27 @@ asses/Hihat.png> <../FiguresClasses/Marimba.png> <../FiguresClasses/Vibraphone.
 png> <../FiguresClasses/Xylophone.png>] [83 <../FiguresClasses/SawtoothWave.png
 > <../FiguresClasses/SineWave.png> <../FiguresClasses/SquareWave.png> <../Figur
 esClasses/TriangleWave.png> <../FiguresClasses/WhiteNoise.png>] [84] [85]
-[86] [87] [88] (Buell-PHYS799-ThesisDraft3.aux)
+[86] [87] [88]
+Underfull \hbox (badness 10000) in paragraph at lines 2447--2448
+[]\OT1/cmr/m/n/12 University of Iowa Elec-tronic Mu-sic Stu-dios home page-
+ []
+
+[89] [90] (Buell-PHYS799-ThesisDraft3.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 5855 strings out of 492895
- 98293 string characters out of 3123268
- 161543 words of memory out of 3000000
- 9577 multiletter control sequences out of 15000+200000
+ 5861 strings out of 492895
+ 98352 string characters out of 3123268
+ 161567 words of memory out of 3000000
+ 9583 multiletter control sequences out of 15000+200000
  12612 words of font info for 47 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,43p,1567b,568s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,19n,43p,1709b,568s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmbx10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
@@ -1386,9 +1409,9 @@ nts/cm/cmsy6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/Landon/AppData/Local/Prog
 rams/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Buell-PHYS799-ThesisDraft3.pdf (89 pages, 8460987 bytes).
+Output written on Buell-PHYS799-ThesisDraft3.pdf (91 pages, 8475264 bytes).
 PDF statistics:
- 557 PDF objects out of 1000 (max. 8388607)
+ 564 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  511 words of extra memory for PDF output out of 10000 (max. 10000000)
 
