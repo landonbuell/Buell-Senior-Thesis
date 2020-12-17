@@ -1,0 +1,1394 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  17 DEC 2020 00:40
+entering extended mode
+**./Buell-PHYS799-ThesisDraft4.tex
+(Buell-PHYS799-ThesisDraft4.tex
+LaTeX2e <2018-12-01>
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size12.clo"
+File: size12.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsmath.s
+ty"
+Package: amsmath 2018/12/01 v2.17b AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amstext.s
+ty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsgen.st
+y"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks14
+\ex@=\dimen103
+))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsbsy.st
+y"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen104
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsopn.st
+y"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count88
+LaTeX Info: Redefining \frac on input line 223.
+\uproot@=\count89
+\leftroot@=\count90
+LaTeX Info: Redefining \overline on input line 385.
+\classnum@=\count91
+\DOTSCASE@=\count92
+LaTeX Info: Redefining \ldots on input line 482.
+LaTeX Info: Redefining \dots on input line 485.
+LaTeX Info: Redefining \cdots on input line 606.
+\Mathstrutbox@=\box27
+\strutbox@=\box28
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
+\macc@depth=\count93
+\c@MaxMatrixCols=\count94
+\dotsspace@=\muskip10
+\c@parentequation=\count95
+\dspbrk@lvl=\count96
+\tag@help=\toks15
+\row@=\count97
+\column@=\count98
+\maxfields@=\count99
+\andhelp@=\toks16
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks17
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks18
+LaTeX Info: Redefining \[ on input line 2844.
+LaTeX Info: Redefining \] on input line 2845.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amssymb.
+sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amsfonts
+.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/algorithms\algori
+thm.sty"
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count100
+\float@exts=\toks19
+\float@box=\box29
+\@float@everytoks=\toks20
+\@floatcapt=\box30
+) ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen.sty
+"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks21
+\c@algorithm=\count101
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/algorithms\algori
+thmic.sty"
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.s
+ty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks22
+)
+\c@ALC@unique=\count102
+\c@ALC@line=\count103
+\c@ALC@rem=\count104
+\c@ALC@depth=\count105
+\ALC@tlm=\skip46
+\algorithmicindent=\skip47
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\caption.s
+ty"
+Package: caption 2020/09/02 v3.5a Customizing captions (AR)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\caption3.
+sty"
+Package: caption3 2020/08/30 v2.0 caption3 kernel (AR)
+\captionmargin=\dimen112
+\captionmargin@=\dimen113
+\captionwidth=\dimen114
+\caption@tempdima=\dimen115
+\caption@indent=\dimen116
+\caption@parindent=\dimen117
+\caption@hangindent=\dimen118
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count106
+\c@continuedfloat=\count107
+Package caption Info: float package is loaded.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\subcaptio
+n.sty"
+Package: subcaption 2020/08/23 v1.3g Sub-captions (AR)
+\c@subfigure=\count108
+\c@subtable=\count109
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphicx
+.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics
+.sty"
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.sty
+"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\grap
+hics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\pdft
+ex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen119
+\Gin@req@width=\dimen120
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcolor.sty
+"
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\colo
+r.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\multicol.st
+y"
+Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
+\c@tracingmulticols=\count110
+\mult@box=\box31
+\multicol@leftmargin=\dimen121
+\c@unbalance=\count111
+\c@collectmore=\count112
+\doublecol@number=\count113
+\multicoltolerance=\count114
+\multicolpretolerance=\count115
+\full@width=\dimen122
+\page@free=\dimen123
+\premulticols=\dimen124
+\postmulticols=\dimen125
+\multicolsep=\skip48
+\multicolbaselineskip=\skip49
+\partial@page=\box32
+\last@line=\box33
+\maxbalancingoverflow=\dimen126
+\mult@rightbox=\box34
+\mult@grightbox=\box35
+\mult@gfirstbox=\box36
+\mult@firstbox=\box37
+\@tempa=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\c@columnbadness=\count116
+\c@finalcolumnbadness=\count117
+\last@try=\dimen127
+\multicolovershoot=\dimen128
+\multicolundershoot=\dimen129
+\mult@nat@firstbox=\box55
+\colbreak@box=\box56
+\mc@col@check@num=\count118
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
+.sty"
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifpdf.
+sty"
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifvtex
+.sty"
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\ifxetex
+.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count119
+\Gm@cntv=\count120
+\c@Gm@tempcnt=\count121
+\Gm@bindingoffset=\dimen130
+\Gm@wd@mp=\dimen131
+\Gm@odd@mp=\dimen132
+\Gm@even@mp=\dimen133
+\Gm@layoutwidth=\dimen134
+\Gm@layoutheight=\dimen135
+\Gm@layouthoffset=\dimen136
+\Gm@layoutvoffset=\dimen137
+\Gm@dimlist=\toks23
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
+.cfg"))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancyhdr\fancyhdr
+.sty"
+Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
+s
+\f@nch@headwidth=\skip50
+\f@nch@O@elh=\skip51
+\f@nch@O@erh=\skip52
+\f@nch@O@olh=\skip53
+\f@nch@O@orh=\skip54
+\f@nch@O@elf=\skip55
+\f@nch@O@erf=\skip56
+\f@nch@O@olf=\skip57
+\f@nch@O@orf=\skip58
+) (Buell-PHYS799-ThesisDraft4.aux)
+\openout1 = `Buell-PHYS799-ThesisDraft4.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-
+pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count122
+\scratchdimen=\dimen138
+\scratchbox=\box57
+\nofMPsegments=\count123
+\nofMParguments=\count124
+\everyMPshowfont=\toks24
+\MPscratchCnt=\count125
+\MPscratchDim=\dimen139
+\MPnumerator=\count126
+\makeMPintoPDFobject=\count127
+\everyMPtoPDFconversion=\toks25
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\epstopdf
+-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\infwar
+err.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\grfext.s
+ty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvdefi
+nekeys.sty"
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ltxcmd
+s.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\kvoption
+s.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvsetk
+eys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\etexcm
+ds.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifluat
+ex.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+))))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pdftexcmds\pdftex
+cmds.sty"
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty
+"
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: letterpaper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(71.13188pt, 472.03123pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 628.44073pt, 95.39737pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=472.03123pt
+* \textheight=628.44073pt
+* \oddsidemargin=-1.1381pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=44.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 55.
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 55.
+ ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd
+"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [1
+
+{C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+Make it at least 14.49998pt.
+We now make it that large for the rest of the document.
+This may cause the page layout to be inconsistent, however.
+
+[1] (Buell-PHYS799-ThesisDraft4.toc)
+\tf@toc=\write3
+\openout3 = `Buell-PHYS799-ThesisDraft4.toc'.
+
+ [2] [3] [4] [5] [6] [7] [8] [9] [10]
+[11]
+<../figures/2DConvExample(a).png, id=51, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(a).png Graphic file (type png)
+<use ../figures/2DConvExample(a).png>
+Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 36
+1.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 361--362
+[][] 
+ []
+
+<../figures/2DConvExample(b).png, id=53, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(b).png Graphic file (type png)
+<use ../figures/2DConvExample(b).png>
+Package pdftex.def Info: ../figures/2DConvExample(b).png  used on input line 36
+5.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 365--366
+[][] 
+ []
+
+<../figures/2DConvExample(c).png, id=54, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(c).png Graphic file (type png)
+<use ../figures/2DConvExample(c).png>
+Package pdftex.def Info: ../figures/2DConvExample(c).png  used on input line 37
+0.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+[12] [13 <../figures/2DConvExample(a).png> <../figures/2DConvExample(b).png> <.
+./figures/2DConvExample(c).png>]
+File: ../figures/2DConvExample(a).png Graphic file (type png)
+<use ../figures/2DConvExample(a).png>
+Package pdftex.def Info: ../figures/2DConvExample(a).png  used on input line 42
+2.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 422--423
+[][] 
+ []
+
+<../figures/2DConvExample(d).png, id=66, 361.35pt x 216.81pt>
+File: ../figures/2DConvExample(d).png Graphic file (type png)
+<use ../figures/2DConvExample(d).png>
+Package pdftex.def Info: ../figures/2DConvExample(d).png  used on input line 42
+6.
+(pdftex.def)             Requested size: 216.81168pt x 130.08699pt.
+
+Overfull \hbox (4.39906pt too wide) in paragraph at lines 426--427
+[][] 
+ []
+
+[14 <../figures/2DConvExample(d).png>]
+Overfull \hbox (0.19136pt too wide) in paragraph at lines 469--471
+\OT1/cmr/m/n/12 The nu-mer-i-cal value of each ac-ti-va-tion is left un-changed
+. For a layer with ac-ti-va-tion shape$\OML/cmm/m/it/12 M \OMS/cmsy/m/n/12 
+ []
+
+[15]
+<../Figures/RectifiedLinearUnit.png, id=74, 1734.48pt x 578.16pt>
+File: ../Figures/RectifiedLinearUnit.png Graphic file (type png)
+<use ../Figures/RectifiedLinearUnit.png>
+Package pdftex.def Info: ../Figures/RectifiedLinearUnit.png  used on input line
+ 520.
+(pdftex.def)             Requested size: 433.61894pt x 144.53964pt.
+ [16] [17 <../Figures/RectifiedLinearUnit.png>] [18]
+<../Figures/CXELoss.png, id=87, 1734.48pt x 578.16pt>
+File: ../Figures/CXELoss.png Graphic file (type png)
+<use ../Figures/CXELoss.png>
+Package pdftex.def Info: ../Figures/CXELoss.png  used on input line 589.
+(pdftex.def)             Requested size: 433.61894pt x 144.53964pt.
+ [19 <../Figures/CXELoss.png>] [20]
+<../Figures/LayerGraph.png, id=96, 609.9588pt x 750.6444pt>
+File: ../Figures/LayerGraph.png Graphic file (type png)
+<use ../Figures/LayerGraph.png>
+Package pdftex.def Info: ../Figures/LayerGraph.png  used on input line 634.
+(pdftex.def)             Requested size: 487.96771pt x 600.51633pt.
+
+Overfull \hbox (15.93648pt too wide) in paragraph at lines 634--635
+ [] 
+ []
+
+[21]
+Overfull \vbox (10.57558pt too high) has occurred while \output is active []
+
+
+[22 <../Figures/LayerGraph.png>]
+Overfull \hbox (5.14052pt too wide) in paragraph at lines 664--666
+\OT1/cmr/m/n/12 We of-ten in-tro-duce $\OML/cmm/m/it/12  \OMS/cmsy/m/n/12  \O
+T1/cmr/m/n/12 10[]$ to pre-vent pos-si-ble di-vi-sion by $0$ er-rors. The value
+ $\OML/cmm/m/it/12 @x[]=@z[]$
+ []
+
+
+Overfull \hbox (27.6314pt too wide) in paragraph at lines 668--670
+\OT1/cmr/m/n/12 For a dense layer as in sec-tion (2.3.1[]) or a 2D-convolution 
+layer as in sec-tion (2.3.2[]) $\OML/cmm/m/it/12 @z[]=@W[]$
+ []
+
+[23] [24] [25] [26]
+<../Figures/NeuralNetworkArchitecture.png, id=118, 614.295pt x 794.97pt>
+File: ../Figures/NeuralNetworkArchitecture.png Graphic file (type png)
+<use ../Figures/NeuralNetworkArchitecture.png>
+Package pdftex.def Info: ../Figures/NeuralNetworkArchitecture.png  used on inpu
+t line 804.
+(pdftex.def)             Requested size: 460.72011pt x 596.22604pt.
+ [27]
+Overfull \vbox (34.2853pt too high) has occurred while \output is active []
+
+
+[28 <../Figures/NeuralNetworkArchitecture.png>] [29] [30]
+Overfull \hbox (8.86417pt too wide) in paragraph at lines 869--898
+ [] 
+ []
+
+[31] [32]
+<../FiguresSpectrogram/Vibraphone-A5.png, id=139, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Vibraphone-A5.png Graphic file (type png)
+<use ../FiguresSpectrogram/Vibraphone-A5.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Vibraphone-A5.png  used on input
+ line 917.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 917--918
+ [][] 
+ []
+
+<../FiguresSpectrogram/Marimba-C2.png, id=140, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Marimba-C2.png Graphic file (type png)
+<use ../FiguresSpectrogram/Marimba-C2.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Marimba-C2.png  used on input li
+ne 923.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 923--924
+ [][] 
+ []
+
+[33 <../FiguresSpectrogram/Vibraphone-A5.png> <../FiguresSpectrogram/Marimba-C2
+.png>] [34]
+<../FiguresSpectrogram/CELLO-F4.png, id=149, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/CELLO-F4.png Graphic file (type png)
+<use ../FiguresSpectrogram/CELLO-F4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/CELLO-F4.png  used on input line
+ 971.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 971--972
+ [][] 
+ []
+
+<../FiguresSpectrogram/Guitar-B2.png, id=150, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Guitar-B2.png Graphic file (type png)
+<use ../FiguresSpectrogram/Guitar-B2.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Guitar-B2.png  used on input lin
+e 977.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 977--978
+ [][] 
+ []
+
+<../FiguresSpectrogram/Violin-G4.png, id=151, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Violin-G4.png Graphic file (type png)
+<use ../FiguresSpectrogram/Violin-G4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Violin-G4.png  used on input lin
+e 983.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 983--984
+ [][] 
+ []
+
+<../FiguresSpectrogram/Viola-G4.png, id=152, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Viola-G4.png Graphic file (type png)
+<use ../FiguresSpectrogram/Viola-G4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Viola-G4.png  used on input line
+ 989.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 989--990
+ [][] 
+ []
+
+[35 <../FiguresSpectrogram/CELLO-F4.png> <../FiguresSpectrogram/Guitar-B2.png> 
+<../FiguresSpectrogram/Violin-G4.png> <../FiguresSpectrogram/Viola-G4.png>]
+[36]
+<../FiguresSpectrogram/AltoSax-A4.png, id=164, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/AltoSax-A4.png Graphic file (type png)
+<use ../FiguresSpectrogram/AltoSax-A4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/AltoSax-A4.png  used on input li
+ne 1021.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1021--1022
+ [][] 
+ []
+
+<../FiguresSpectrogram/Clarinet-Gs5.png, id=165, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Clarinet-Gs5.png Graphic file (type png)
+<use ../FiguresSpectrogram/Clarinet-Gs5.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Clarinet-Gs5.png  used on input 
+line 1027.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1027--1028
+ [][] 
+ []
+
+<../FiguresSpectrogram/Oboe-Bb4.png, id=166, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Oboe-Bb4.png Graphic file (type png)
+<use ../FiguresSpectrogram/Oboe-Bb4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Oboe-Bb4.png  used on input line
+ 1033.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1033--1034
+ [][] 
+ []
+
+<../FiguresSpectrogram/Bassoon-D4.png, id=167, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Bassoon-D4.png Graphic file (type png)
+<use ../FiguresSpectrogram/Bassoon-D4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Bassoon-D4.png  used on input li
+ne 1039.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1039--1040
+ [][] 
+ []
+
+[37]
+<../FiguresSpectrogram/FRENCHHORN-Cs4.png, id=171, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/FRENCHHORN-Cs4.png Graphic file (type png)
+<use ../FiguresSpectrogram/FRENCHHORN-Cs4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/FRENCHHORN-Cs4.png  used on inpu
+t line 1051.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1051--1052
+ [][] 
+ []
+
+<../FiguresSpectrogram/TenorTrombone-F4.png, id=172, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/TenorTrombone-F4.png Graphic file (type png)
+<use ../FiguresSpectrogram/TenorTrombone-F4.png>
+Package pdftex.def Info: ../FiguresSpectrogram/TenorTrombone-F4.png  used on in
+put line 1057.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1057--1058
+ [][] 
+ []
+
+<../FiguresSpectrogram/Trumpet-B3.png, id=173, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Trumpet-B3.png Graphic file (type png)
+<use ../FiguresSpectrogram/Trumpet-B3.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Trumpet-B3.png  used on input li
+ne 1063.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1063--1064
+ [][] 
+ []
+
+<../FiguresSpectrogram/Tuba-A2.png, id=174, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/Tuba-A2.png Graphic file (type png)
+<use ../FiguresSpectrogram/Tuba-A2.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Tuba-A2.png  used on input line 
+1069.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1069--1070
+ [][] 
+ []
+
+[38 <../FiguresSpectrogram/AltoSax-A4.png> <../FiguresSpectrogram/Clarinet-Gs5.
+png> <../FiguresSpectrogram/Oboe-Bb4.png> <../FiguresSpectrogram/Bassoon-D4.png
+>] [39 <../FiguresSpectrogram/FRENCHHORN-Cs4.png> <../FiguresSpectrogram/TenorT
+rombone-F4.png> <../FiguresSpectrogram/Trumpet-B3.png> <../FiguresSpectrogram/T
+uba-A2.png>]
+<../FiguresSpectrogram/SquareWave-880Hz.png, id=189, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/SquareWave-880Hz.png Graphic file (type png)
+<use ../FiguresSpectrogram/SquareWave-880Hz.png>
+Package pdftex.def Info: ../FiguresSpectrogram/SquareWave-880Hz.png  used on in
+put line 1090.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1090--1091
+ [][] 
+ []
+
+<../FiguresSpectrogram/SawtoothWave-880Hz.png, id=190, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/SawtoothWave-880Hz.png Graphic file (type png)
+<use ../FiguresSpectrogram/SawtoothWave-880Hz.png>
+Package pdftex.def Info: ../FiguresSpectrogram/SawtoothWave-880Hz.png  used on 
+input line 1095.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1095--1096
+ [][] 
+ []
+
+<../FiguresSpectrogram/SineWave-880Hz.png, id=191, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/SineWave-880Hz.png Graphic file (type png)
+<use ../FiguresSpectrogram/SineWave-880Hz.png>
+Package pdftex.def Info: ../FiguresSpectrogram/SineWave-880Hz.png  used on inpu
+t line 1101.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1101--1102
+ [][] 
+ []
+
+<../FiguresSpectrogram/WhiteNoise-190.png, id=192, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/WhiteNoise-190.png Graphic file (type png)
+<use ../FiguresSpectrogram/WhiteNoise-190.png>
+Package pdftex.def Info: ../FiguresSpectrogram/WhiteNoise-190.png  used on inpu
+t line 1106.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1106--1107
+ [][] 
+ []
+
+[40 <../FiguresSpectrogram/SquareWave-880Hz.png> <../FiguresSpectrogram/Sawtoot
+hWave-880Hz.png> <../FiguresSpectrogram/SineWave-880Hz.png> <../FiguresSpectrog
+ram/WhiteNoise-190.png>] [41] [42]
+<../MakeFigures/LinearSeparable1.png, id=207, 1217.54875pt x 637.38126pt>
+File: ../MakeFigures/LinearSeparable1.png Graphic file (type png)
+<use ../MakeFigures/LinearSeparable1.png>
+Package pdftex.def Info: ../MakeFigures/LinearSeparable1.png  used on input lin
+e 1153.
+(pdftex.def)             Requested size: 426.14845pt x 223.08678pt.
+ [43]
+<../MakeFigures/LinearSeparable2.png, id=211, 1445.4pt x 867.24pt>
+File: ../MakeFigures/LinearSeparable2.png Graphic file (type png)
+<use ../MakeFigures/LinearSeparable2.png>
+Package pdftex.def Info: ../MakeFigures/LinearSeparable2.png  used on input lin
+e 1165.
+(pdftex.def)             Requested size: 505.89758pt x 303.53854pt.
+
+Overfull \hbox (33.86635pt too wide) in paragraph at lines 1165--1166
+ [] 
+ []
+
+[44 <../MakeFigures/LinearSeparable1.png>]
+<../MakeFigures/LinearNonSeparable.png, id=216, 1209.51875pt x 630.355pt>
+File: ../MakeFigures/LinearNonSeparable.png Graphic file (type png)
+<use ../MakeFigures/LinearNonSeparable.png>
+Package pdftex.def Info: ../MakeFigures/LinearNonSeparable.png  used on input l
+ine 1173.
+(pdftex.def)             Requested size: 423.3379pt x 220.62755pt.
+ [45 <../MakeFigures/LinearSeparable2.png> <../MakeFigures/LinearNonSeparable.p
+ng>] [46] [47]
+File: ../FiguresSpectrogram/Clarinet-Gs5.png Graphic file (type png)
+<use ../FiguresSpectrogram/Clarinet-Gs5.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Clarinet-Gs5.png  used on input 
+line 1240.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1240--1241
+ [][] 
+ []
+
+<../FiguresSpectrogram/GUITAR-B2.png, id=228, 1156.32pt x 867.24pt>
+File: ../FiguresSpectrogram/GUITAR-B2.png Graphic file (type png)
+<use ../FiguresSpectrogram/GUITAR-B2.png>
+Package pdftex.def Info: ../FiguresSpectrogram/GUITAR-B2.png  used on input lin
+e 1246.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1246--1247
+ [][] 
+ []
+
+File: ../FiguresSpectrogram/SquareWave-880Hz.png Graphic file (type png)
+<use ../FiguresSpectrogram/SquareWave-880Hz.png>
+Package pdftex.def Info: ../FiguresSpectrogram/SquareWave-880Hz.png  used on in
+put line 1252.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1252--1253
+ [][] 
+ []
+
+File: ../FiguresSpectrogram/Tuba-A2.png Graphic file (type png)
+<use ../FiguresSpectrogram/Tuba-A2.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Tuba-A2.png  used on input line 
+1258.
+(pdftex.def)             Requested size: 231.2599pt x 173.44493pt.
+
+Overfull \hbox (18.84729pt too wide) in paragraph at lines 1258--1259
+ [][] 
+ []
+
+[48 <../FiguresSpectrogram/GUITAR-B2.png>]
+<../Figures/AnalysisFrames.png, id=234, 804.75656pt x 407.27156pt>
+File: ../Figures/AnalysisFrames.png Graphic file (type png)
+<use ../Figures/AnalysisFrames.png>
+Package pdftex.def Info: ../Figures/AnalysisFrames.png  used on input line 1274
+.
+(pdftex.def)             Requested size: 362.1371pt x 183.2705pt.
+ [49 <../Figures/AnalysisFrames.png>]
+<../Figures/AnalysisFrame.png, id=239, 1734.48pt x 578.16pt>
+File: ../Figures/AnalysisFrame.png Graphic file (type png)
+<use ../Figures/AnalysisFrame.png>
+Package pdftex.def Info: ../Figures/AnalysisFrame.png  used on input line 1320.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../Figures/WindowedFrame.png, id=240, 1734.48pt x 578.16pt>
+File: ../Figures/WindowedFrame.png Graphic file (type png)
+<use ../Figures/WindowedFrame.png>
+Package pdftex.def Info: ../Figures/WindowedFrame.png  used on input line 1326.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+[50 <../Figures/AnalysisFrame.png> <../Figures/WindowedFrame.png>] [51]
+[52]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 1395
+.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1395.
+
+
+[53]
+<../FiguresSpectrogram/GUITAR-B2_TDE.png, id=255, 1156.32pt x 433.62pt>
+File: ../FiguresSpectrogram/GUITAR-B2_TDE.png Graphic file (type png)
+<use ../FiguresSpectrogram/GUITAR-B2_TDE.png>
+Package pdftex.def Info: ../FiguresSpectrogram/GUITAR-B2_TDE.png  used on input
+ line 1419.
+(pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
+<../FiguresSpectrogram/Tuba-A2_TDE.png, id=256, 1156.32pt x 433.62pt>
+File: ../FiguresSpectrogram/Tuba-A2_TDE.png Graphic file (type png)
+<use ../FiguresSpectrogram/Tuba-A2_TDE.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Tuba-A2_TDE.png  used on input l
+ine 1426.
+(pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
+<../FiguresFeatures/TDE_1.png, id=257, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/TDE_1.png Graphic file (type png)
+<use ../FiguresFeatures/TDE_1.png>
+Package pdftex.def Info: ../FiguresFeatures/TDE_1.png  used on input line 1441.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/TDE_2.png, id=258, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/TDE_2.png Graphic file (type png)
+<use ../FiguresFeatures/TDE_2.png>
+Package pdftex.def Info: ../FiguresFeatures/TDE_2.png  used on input line 1448.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/TDE_3.png, id=259, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/TDE_3.png Graphic file (type png)
+<use ../FiguresFeatures/TDE_3.png>
+Package pdftex.def Info: ../FiguresFeatures/TDE_3.png  used on input line 1455.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+ [54 <../FiguresSpectrogram/GUITAR-B2_TDE.png> <../FiguresSpectrogram/Tuba-A2_T
+DE.png>] [55 <../FiguresFeatures/TDE_1.png> <../FiguresFeatures/TDE_2.png> <../
+FiguresFeatures/TDE_3.png>]
+<../FiguresFeatures/ZXR.png, id=272, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/ZXR.png Graphic file (type png)
+<use ../FiguresFeatures/ZXR.png>
+Package pdftex.def Info: ../FiguresFeatures/ZXR.png  used on input line 1479.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+<../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png, id=273, 1156.32pt x 433
+.62pt>
+File: ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png Graphic file (type 
+png)
+<use ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png>
+Package pdftex.def Info: ../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png 
+ used on input line 1501.
+(pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
+<../FiguresSpectrogram/CELLO-F4_TCM.png, id=274, 1156.32pt x 433.62pt>
+File: ../FiguresSpectrogram/CELLO-F4_TCM.png Graphic file (type png)
+<use ../FiguresSpectrogram/CELLO-F4_TCM.png>
+Package pdftex.def Info: ../FiguresSpectrogram/CELLO-F4_TCM.png  used on input 
+line 1508.
+(pdftex.def)             Requested size: 212.41261pt x 79.64941pt.
+ [56 <../FiguresFeatures/ZXR.png>]
+<../FiguresFeatures/TCM.png, id=279, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/TCM.png Graphic file (type png)
+<use ../FiguresFeatures/TCM.png>
+Package pdftex.def Info: ../FiguresFeatures/TCM.png  used on input line 1519.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [57 <../FiguresSpectrogram/Vibraphone-sustain-A5-R_TCM.png> <../FiguresSpectro
+gram/CELLO-F4_TCM.png> <../FiguresFeatures/TCM.png>]
+<../FiguresFeatures/ACC_1.png, id=286, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/ACC_1.png Graphic file (type png)
+<use ../FiguresFeatures/ACC_1.png>
+Package pdftex.def Info: ../FiguresFeatures/ACC_1.png  used on input line 1546.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/ACC_2.png, id=287, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/ACC_2.png Graphic file (type png)
+<use ../FiguresFeatures/ACC_2.png>
+Package pdftex.def Info: ../FiguresFeatures/ACC_2.png  used on input line 1553.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/ACC_3.png, id=288, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/ACC_3.png Graphic file (type png)
+<use ../FiguresFeatures/ACC_3.png>
+Package pdftex.def Info: ../FiguresFeatures/ACC_3.png  used on input line 1560.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/ACC_4.png, id=289, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/ACC_4.png Graphic file (type png)
+<use ../FiguresFeatures/ACC_4.png>
+Package pdftex.def Info: ../FiguresFeatures/ACC_4.png  used on input line 1567.
+
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+ [58]
+Overfull \vbox (7.67204pt too high) has occurred while \output is active []
+
+
+[59 <../FiguresFeatures/ACC_1.png> <../FiguresFeatures/ACC_2.png> <../FiguresFe
+atures/ACC_3.png> <../FiguresFeatures/ACC_4.png>]
+<../FiguresSpectrogram/MelFilterBanks.png, id=300, 1445.4pt x 578.16pt>
+File: ../FiguresSpectrogram/MelFilterBanks.png Graphic file (type png)
+<use ../FiguresSpectrogram/MelFilterBanks.png>
+Package pdftex.def Info: ../FiguresSpectrogram/MelFilterBanks.png  used on inpu
+t line 1612.
+(pdftex.def)             Requested size: 404.70924pt x 161.8837pt.
+ [60] [61 <../FiguresSpectrogram/MelFilterBanks.png>]
+<../FiguresFeatures/MFCC_1.png, id=309, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_1.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_1.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_1.png  used on input line 1648
+.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/MFCC_4.png, id=310, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_4.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_4.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_4.png  used on input line 1655
+.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/MFCC_8.png, id=311, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_8.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_8.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_8.png  used on input line 1662
+.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+<../FiguresFeatures/MFCC_12.png, id=312, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/MFCC_12.png Graphic file (type png)
+<use ../FiguresFeatures/MFCC_12.png>
+Package pdftex.def Info: ../FiguresFeatures/MFCC_12.png  used on input line 166
+9.
+(pdftex.def)             Requested size: 472.0211pt x 125.6782pt.
+ [62]
+Overfull \vbox (7.67204pt too high) has occurred while \output is active []
+
+
+[63 <../FiguresFeatures/MFCC_1.png> <../FiguresFeatures/MFCC_4.png> <../Figures
+Features/MFCC_8.png> <../FiguresFeatures/MFCC_12.png>]
+<../FiguresFeatures/FCM.png, id=323, 1445.4pt x 578.16pt>
+File: ../FiguresFeatures/FCM.png Graphic file (type png)
+<use ../FiguresFeatures/FCM.png>
+Package pdftex.def Info: ../FiguresFeatures/FCM.png  used on input line 1697.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [64 <../FiguresFeatures/FCM.png>] [65] [66]
+<../FiguresMetrics/StdConfA.png, id=335, 867.24pt x 867.24pt>
+File: ../FiguresMetrics/StdConfA.png Graphic file (type png)
+<use ../FiguresMetrics/StdConfA.png>
+Package pdftex.def Info: ../FiguresMetrics/StdConfA.png  used on input line 178
+5.
+(pdftex.def)             Requested size: 212.41261pt x 212.40288pt.
+<../FiguresMetrics/StdConfB.png, id=336, 867.24pt x 867.24pt>
+File: ../FiguresMetrics/StdConfB.png Graphic file (type png)
+<use ../FiguresMetrics/StdConfB.png>
+Package pdftex.def Info: ../FiguresMetrics/StdConfB.png  used on input line 179
+0.
+(pdftex.def)             Requested size: 212.41261pt x 212.40288pt.
+
+Underfull \hbox (badness 2617) in paragraph at lines 1791--1791
+[]\OT1/cmr/m/n/10.95 (b) |No di-ag-o-nal dom-i-nance in-di-cates a
+ []
+
+[67 <../FiguresMetrics/StdConfA.png> <../FiguresMetrics/StdConfB.png>] [68]
+[69] [70]
+<../Figures/LossHistory.png, id=351, 1445.4pt x 578.16pt>
+File: ../Figures/LossHistory.png Graphic file (type png)
+<use ../Figures/LossHistory.png>
+Package pdftex.def Info: ../Figures/LossHistory.png  used on input line 1891.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [71]
+<../Figures/MetricHistory.png, id=355, 1445.4pt x 578.16pt>
+File: ../Figures/MetricHistory.png Graphic file (type png)
+<use ../Figures/MetricHistory.png>
+Package pdftex.def Info: ../Figures/MetricHistory.png  used on input line 1899.
+
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+ [72 <../Figures/LossHistory.png> <../Figures/MetricHistory.png>] [73]
+<../FiguresMetrics/AvgXval-Multimodal.png, id=365, 1445.4pt x 578.16pt>
+File: ../FiguresMetrics/AvgXval-Multimodal.png Graphic file (type png)
+<use ../FiguresMetrics/AvgXval-Multimodal.png>
+Package pdftex.def Info: ../FiguresMetrics/AvgXval-Multimodal.png  used on inpu
+t line 1920.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+<../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png, id=366, 1156.32pt x
+ 1156.32pt>
+File: ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png Graphic file (t
+ype png)
+<use ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.
+png  used on input line 1929.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=367, 1156.3
+2pt x 1156.32pt>
+File: ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png Graphic fi
+le (type png)
+<use ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValAlphaCLF_Avg_Hits_Weighted_Confu
+sion.png  used on input line 1935.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+ [74 <../FiguresMetrics/AvgXval-Multimodal.png>]
+<../FiguresMetrics/AvgXval-Convolution.png, id=372, 1445.4pt x 578.16pt>
+File: ../FiguresMetrics/AvgXval-Convolution.png Graphic file (type png)
+<use ../FiguresMetrics/AvgXval-Convolution.png>
+Package pdftex.def Info: ../FiguresMetrics/AvgXval-Convolution.png  used on inp
+ut line 1954.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+
+Overfull \hbox (8.79813pt too wide) in paragraph at lines 1954--1955
+ [][] 
+ []
+
+<../FiguresMetrics/AvgXval-Perceptron.png, id=373, 1445.4pt x 578.16pt>
+File: ../FiguresMetrics/AvgXval-Perceptron.png Graphic file (type png)
+<use ../FiguresMetrics/AvgXval-Perceptron.png>
+Package pdftex.def Info: ../FiguresMetrics/AvgXval-Perceptron.png  used on inpu
+t line 1960.
+(pdftex.def)             Requested size: 433.62335pt x 173.44933pt.
+
+Overfull \hbox (8.79813pt too wide) in paragraph at lines 1960--1961
+ [][] 
+ []
+
+[75 <../FiguresMetrics/XValAlphaCLF_Avg_Standard_Confusion.png> <../FiguresMetr
+ics/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>]
+<../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png, id=379, 1156.32pt x
+ 1156.32pt>
+File: ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png Graphic file (t
+ype png)
+<use ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.
+png  used on input line 1973.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png, id=380, 1156.3
+2pt x 1156.32pt>
+File: ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png Graphic fi
+le (type png)
+<use ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValGammaCNN_Avg_Hits_Weighted_Confu
+sion.png  used on input line 1979.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png, id=381, 1156.32pt x 
+1156.32pt>
+File: ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png Graphic file (ty
+pe png)
+<use ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValBetaMLP_Avg_Standard_Confusion.p
+ng  used on input line 1985.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+<../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=382, 1156.32
+pt x 1156.32pt>
+File: ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png Graphic fil
+e (type png)
+<use ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: ../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted_Confus
+ion.png  used on input line 1991.
+(pdftex.def)             Requested size: 208.12862pt x 208.12862pt.
+ [76 <../FiguresMetrics/AvgXval-Convolution.png> <../FiguresMetrics/AvgXval-Per
+ceptron.png>]
+<../FiguresClasses/AltoFlute.png, id=388, 578.16pt x 289.08pt>
+File: ../FiguresClasses/AltoFlute.png Graphic file (type png)
+<use ../FiguresClasses/AltoFlute.png>
+Package pdftex.def Info: ../FiguresClasses/AltoFlute.png  used on input line 20
+14.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/AltoSax.png, id=389, 578.16pt x 289.08pt>
+File: ../FiguresClasses/AltoSax.png Graphic file (type png)
+<use ../FiguresClasses/AltoSax.png>
+Package pdftex.def Info: ../FiguresClasses/AltoSax.png  used on input line 2020
+.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/BbClarinet.png, id=390, 578.16pt x 289.08pt>
+File: ../FiguresClasses/BbClarinet.png Graphic file (type png)
+<use ../FiguresClasses/BbClarinet.png>
+Package pdftex.def Info: ../FiguresClasses/BbClarinet.png  used on input line 2
+026.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/EbClarinet.png, id=391, 578.16pt x 289.08pt>
+File: ../FiguresClasses/EbClarinet.png Graphic file (type png)
+<use ../FiguresClasses/EbClarinet.png>
+Package pdftex.def Info: ../FiguresClasses/EbClarinet.png  used on input line 2
+032.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/EnglishHorn.png, id=392, 578.16pt x 289.08pt>
+File: ../FiguresClasses/EnglishHorn.png Graphic file (type png)
+<use ../FiguresClasses/EnglishHorn.png>
+Package pdftex.def Info: ../FiguresClasses/EnglishHorn.png  used on input line 
+2038.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Flute.png, id=393, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Flute.png Graphic file (type png)
+<use ../FiguresClasses/Flute.png>
+Package pdftex.def Info: ../FiguresClasses/Flute.png  used on input line 2044.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Oboe.png, id=394, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Oboe.png Graphic file (type png)
+<use ../FiguresClasses/Oboe.png>
+Package pdftex.def Info: ../FiguresClasses/Oboe.png  used on input line 2050.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/SopSax.png, id=395, 578.16pt x 289.08pt>
+File: ../FiguresClasses/SopSax.png Graphic file (type png)
+<use ../FiguresClasses/SopSax.png>
+Package pdftex.def Info: ../FiguresClasses/SopSax.png  used on input line 2056.
+
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+ [77 <../FiguresMetrics/XValGammaCNN_Avg_Standard_Confusion.png> <../FiguresMet
+rics/XValGammaCNN_Avg_Hits_Weighted_Confusion.png> <../FiguresMetrics/XValBetaM
+LP_Avg_Standard_Confusion.png> <../FiguresMetrics/XValBetaMLP_Avg_Hits_Weighted
+_Confusion.png>]
+<../FiguresClasses/BassClarinet.png, id=403, 578.16pt x 289.08pt>
+File: ../FiguresClasses/BassClarinet.png Graphic file (type png)
+<use ../FiguresClasses/BassClarinet.png>
+Package pdftex.def Info: ../FiguresClasses/BassClarinet.png  used on input line
+ 2071.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/BassFlute.png, id=404, 578.16pt x 289.08pt>
+File: ../FiguresClasses/BassFlute.png Graphic file (type png)
+<use ../FiguresClasses/BassFlute.png>
+Package pdftex.def Info: ../FiguresClasses/BassFlute.png  used on input line 20
+77.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Bassoon.png, id=405, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Bassoon.png Graphic file (type png)
+<use ../FiguresClasses/Bassoon.png>
+Package pdftex.def Info: ../FiguresClasses/Bassoon.png  used on input line 2083
+.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/ContraBassoon.png, id=406, 578.16pt x 289.08pt>
+File: ../FiguresClasses/ContraBassoon.png Graphic file (type png)
+<use ../FiguresClasses/ContraBassoon.png>
+Package pdftex.def Info: ../FiguresClasses/ContraBassoon.png  used on input lin
+e 2089.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Saxophone.png, id=407, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Saxophone.png Graphic file (type png)
+<use ../FiguresClasses/Saxophone.png>
+Package pdftex.def Info: ../FiguresClasses/Saxophone.png  used on input line 20
+95.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+[78 <../FiguresClasses/AltoFlute.png> <../FiguresClasses/AltoSax.png> <../Figur
+esClasses/BbClarinet.png> <../FiguresClasses/EbClarinet.png> <../FiguresClasses
+/EnglishHorn.png> <../FiguresClasses/Flute.png> <../FiguresClasses/Oboe.png> <.
+./FiguresClasses/SopSax.png>]
+<../FiguresClasses/BassTrombone.png, id=420, 578.16pt x 289.08pt>
+File: ../FiguresClasses/BassTrombone.png Graphic file (type png)
+<use ../FiguresClasses/BassTrombone.png>
+Package pdftex.def Info: ../FiguresClasses/BassTrombone.png  used on input line
+ 2110.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Horn.png, id=421, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Horn.png Graphic file (type png)
+<use ../FiguresClasses/Horn.png>
+Package pdftex.def Info: ../FiguresClasses/Horn.png  used on input line 2116.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/TenorTrombone.png, id=422, 578.16pt x 289.08pt>
+File: ../FiguresClasses/TenorTrombone.png Graphic file (type png)
+<use ../FiguresClasses/TenorTrombone.png>
+Package pdftex.def Info: ../FiguresClasses/TenorTrombone.png  used on input lin
+e 2122.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Trombone.png, id=423, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Trombone.png Graphic file (type png)
+<use ../FiguresClasses/Trombone.png>
+Package pdftex.def Info: ../FiguresClasses/Trombone.png  used on input line 212
+8.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Trumpet.png, id=424, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Trumpet.png Graphic file (type png)
+<use ../FiguresClasses/Trumpet.png>
+Package pdftex.def Info: ../FiguresClasses/Trumpet.png  used on input line 2134
+.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Tuba.png, id=425, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Tuba.png Graphic file (type png)
+<use ../FiguresClasses/Tuba.png>
+Package pdftex.def Info: ../FiguresClasses/Tuba.png  used on input line 2140.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+ [79 <../FiguresClasses/BassClarinet.png> <../FiguresClasses/BassFlute.png> <..
+/FiguresClasses/Bassoon.png> <../FiguresClasses/ContraBassoon.png> <../FiguresC
+lasses/Saxophone.png>]
+<../FiguresClasses/Banjo.png, id=434, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Banjo.png Graphic file (type png)
+<use ../FiguresClasses/Banjo.png>
+Package pdftex.def Info: ../FiguresClasses/Banjo.png  used on input line 2155.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Bass.png, id=435, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Bass.png Graphic file (type png)
+<use ../FiguresClasses/Bass.png>
+Package pdftex.def Info: ../FiguresClasses/Bass.png  used on input line 2161.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Cello.png, id=436, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Cello.png Graphic file (type png)
+<use ../FiguresClasses/Cello.png>
+Package pdftex.def Info: ../FiguresClasses/Cello.png  used on input line 2167.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Guitar.png, id=437, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Guitar.png Graphic file (type png)
+<use ../FiguresClasses/Guitar.png>
+Package pdftex.def Info: ../FiguresClasses/Guitar.png  used on input line 2173.
+
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Mandolin.png, id=438, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Mandolin.png Graphic file (type png)
+<use ../FiguresClasses/Mandolin.png>
+Package pdftex.def Info: ../FiguresClasses/Mandolin.png  used on input line 217
+9.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Viola.png, id=439, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Viola.png Graphic file (type png)
+<use ../FiguresClasses/Viola.png>
+Package pdftex.def Info: ../FiguresClasses/Viola.png  used on input line 2185.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Violin.png, id=440, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Violin.png Graphic file (type png)
+<use ../FiguresClasses/Violin.png>
+Package pdftex.def Info: ../FiguresClasses/Violin.png  used on input line 2191.
+
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+ [80 <../FiguresClasses/BassTrombone.png> <../FiguresClasses/Horn.png> <../Figu
+resClasses/TenorTrombone.png> <../FiguresClasses/Trombone.png> <../FiguresClass
+es/Trumpet.png> <../FiguresClasses/Tuba.png>]
+<../FiguresClasses/Bells.png, id=450, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Bells.png Graphic file (type png)
+<use ../FiguresClasses/Bells.png>
+Package pdftex.def Info: ../FiguresClasses/Bells.png  used on input line 2206.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Crotale.png, id=451, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Crotale.png Graphic file (type png)
+<use ../FiguresClasses/Crotale.png>
+Package pdftex.def Info: ../FiguresClasses/Crotale.png  used on input line 2212
+.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Hihat.png, id=452, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Hihat.png Graphic file (type png)
+<use ../FiguresClasses/Hihat.png>
+Package pdftex.def Info: ../FiguresClasses/Hihat.png  used on input line 2218.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Marimba.png, id=453, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Marimba.png Graphic file (type png)
+<use ../FiguresClasses/Marimba.png>
+Package pdftex.def Info: ../FiguresClasses/Marimba.png  used on input line 2224
+.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Vibraphone.png, id=454, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Vibraphone.png Graphic file (type png)
+<use ../FiguresClasses/Vibraphone.png>
+Package pdftex.def Info: ../FiguresClasses/Vibraphone.png  used on input line 2
+230.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/Xylophone.png, id=455, 578.16pt x 289.08pt>
+File: ../FiguresClasses/Xylophone.png Graphic file (type png)
+<use ../FiguresClasses/Xylophone.png>
+Package pdftex.def Info: ../FiguresClasses/Xylophone.png  used on input line 22
+36.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+ [81 <../FiguresClasses/Banjo.png> <../FiguresClasses/Bass.png> <../FiguresClas
+ses/Cello.png> <../FiguresClasses/Guitar.png> <../FiguresClasses/Mandolin.png> 
+<../FiguresClasses/Viola.png> <../FiguresClasses/Violin.png>]
+<../FiguresClasses/SawtoothWave.png, id=466, 578.16pt x 289.08pt>
+File: ../FiguresClasses/SawtoothWave.png Graphic file (type png)
+<use ../FiguresClasses/SawtoothWave.png>
+Package pdftex.def Info: ../FiguresClasses/SawtoothWave.png  used on input line
+ 2251.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/SineWave.png, id=467, 578.16pt x 289.08pt>
+File: ../FiguresClasses/SineWave.png Graphic file (type png)
+<use ../FiguresClasses/SineWave.png>
+Package pdftex.def Info: ../FiguresClasses/SineWave.png  used on input line 225
+7.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/SquareWave.png, id=468, 578.16pt x 289.08pt>
+File: ../FiguresClasses/SquareWave.png Graphic file (type png)
+<use ../FiguresClasses/SquareWave.png>
+Package pdftex.def Info: ../FiguresClasses/SquareWave.png  used on input line 2
+263.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/TriangleWave.png, id=469, 578.16pt x 289.08pt>
+File: ../FiguresClasses/TriangleWave.png Graphic file (type png)
+<use ../FiguresClasses/TriangleWave.png>
+Package pdftex.def Info: ../FiguresClasses/TriangleWave.png  used on input line
+ 2269.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+<../FiguresClasses/WhiteNoise.png, id=470, 578.16pt x 289.08pt>
+File: ../FiguresClasses/WhiteNoise.png Graphic file (type png)
+<use ../FiguresClasses/WhiteNoise.png>
+Package pdftex.def Info: ../FiguresClasses/WhiteNoise.png  used on input line 2
+275.
+(pdftex.def)             Requested size: 212.41261pt x 106.20363pt.
+
+[82 <../FiguresClasses/Bells.png> <../FiguresClasses/Crotale.png> <../FiguresCl
+asses/Hihat.png> <../FiguresClasses/Marimba.png> <../FiguresClasses/Vibraphone.
+png> <../FiguresClasses/Xylophone.png>] [83 <../FiguresClasses/SawtoothWave.png
+> <../FiguresClasses/SineWave.png> <../FiguresClasses/SquareWave.png> <../Figur
+esClasses/TriangleWave.png> <../FiguresClasses/WhiteNoise.png>] [84] [85]
+[86] [87] [88]
+Underfull \hbox (badness 10000) in paragraph at lines 2447--2448
+[]\OT1/cmr/m/n/12 University of Iowa Elec-tronic Mu-sic Stu-dios home page-
+ []
+
+[89] [90] (Buell-PHYS799-ThesisDraft4.aux) ) 
+Here is how much of TeX's memory you used:
+ 5860 strings out of 492895
+ 98325 string characters out of 3123268
+ 161567 words of memory out of 3000000
+ 9582 multiletter control sequences out of 15000+200000
+ 12612 words of font info for 47 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 41i,19n,43p,1709b,568s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/Landon/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Landon/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Use
+rs/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex
+10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmmi10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Landon/AppData/Local/
+Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Landon/A
+ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/U
+sers/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+r12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr6.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Pr
+ograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Landon/App
+Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Use
+rs/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti
+12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/am
+sfonts/symbols/msbm10.pfb>
+Output written on Buell-PHYS799-ThesisDraft4.pdf (91 pages, 8473652 bytes).
+PDF statistics:
+ 564 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 511 words of extra memory for PDF output out of 10000 (max. 10000000)
+
