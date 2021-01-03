@@ -1,0 +1,1 @@
+python ClassifierHybridMain.py "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\JMMPaper" "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Output-Data" "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Model-Data\" "predict" "SynthClassifier" False
