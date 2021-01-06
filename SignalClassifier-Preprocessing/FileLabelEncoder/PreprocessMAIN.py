@@ -16,9 +16,9 @@ if __name__ == '__main__':
 
     # ESTABLISH DIRECTORIES
     homePath = os.getcwd()
-    exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
-    dataPath = ["C:\\Users\\Landon\\Documents\\audioWAV1","C:\\Users\\Landon\\Documents\\audioWAV2",
-                "C:\\Users\\Landon\\Documents\\audioNoiseWAV","C:\\Users\\Landon\\Documents\\audioSyntheticWav"]  
+    exptPath = "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
+    dataPath = ["C:\\Users\\lando\\Documents\\audioWAV1","C:\\Users\\lando\\Documents\\audioWAV2",
+                "C:\\Users\\lando\\Documents\\audioNoiseWAV","C:\\Users\\lando\\Documents\\audioSyntheticWav"]  
     exptFile = ["Y1.csv","Y2.csv","Y3.csv","Y4.csv"]
 
     # Iteate through pairs of files / directories
