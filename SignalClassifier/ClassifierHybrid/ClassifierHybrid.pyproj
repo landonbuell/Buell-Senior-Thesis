@@ -12,8 +12,8 @@
     <Name>ClassifierHybrid</Name>
     <RootNamespace>ClassifierHybrid</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>"C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data" "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Output-Data"  "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Model-Data" "train" "SynthClassifier" True</CommandLineArguments>
-    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <CommandLineArguments>"C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data" "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Output-Data"  "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Model-Data" "train" "NewClassifier" True</CommandLineArguments>
+    <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
