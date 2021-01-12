@@ -211,8 +211,8 @@ class NeuralNetworkModels:
         Return complied tf.keras model
         """
         modelCNN = NeuralNetworkModels.ConvolutionalNeuralNetwork2D(inputA,n_classes,
-                        filterSizes=[32,32,32],kernelSizes=[(3,3),(3,3),(3,3)],
-                        poolSizes=[(3,3),(3,3),(3,3)],neurons=[64,64])
+                        filterSizes=[32,32,32,32],kernelSizes=[(3,3),(3,3),(3,3),(3,3)],
+                        poolSizes=[(3,3),(3,3),(3,3),(3,3)],neurons=[64,64])
         modelMLP = NeuralNetworkModels.MultilayerPerceptron(inputB,n_classes)
 
         x = keras.layers.concatenate([modelCNN.output,modelMLP.output])

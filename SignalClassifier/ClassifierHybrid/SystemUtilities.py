@@ -208,9 +208,7 @@ class ArgumentValidator :
         self.MakeArgumentParser()
 
         # Parse & return Args
-        if self.GetParsedArguments() == False:
-            # Can't Get CL-Args, use hardcoded ones
-            self.HardCodedVars()
+        self.GetParsedArguments()
 
         # make Sure Args are in acceptable values
         assert self.modelName not in [None,""," "]
@@ -243,17 +241,15 @@ class ArgumentValidator :
 
     def GetParsedArguments(self):
         """ Collect All Command-Line Parsed Arguments in a List """
-        try:
-            arguments = self.argumentParser.parse_args()
-            self.readPath = arguments.dataPath
-            self.exportPath = arguments.exportPath
-            self.modelPath = arguments.modelPath
-            self.programMode = arguments.programMode
-            self.modelName = arguments.modelName
-            self.newModel = self.StringToBoolean(arguments.newModel)
-            return True
-        except:
-            return False
+        arguments = self.argumentParser.parse_args()
+        self.readPath = arguments.dataPath
+        self.exportPath = arguments.exportPath
+        self.modelPath = arguments.modelPath
+        self.programMode = arguments.programMode
+        self.modelName = arguments.modelName
+        self.newModel = self.StringToBoolean(arguments.newModel)
+        return self
+
 
     def HardCodedVars(self):
         """ These are Hard-coded vars, used only for development """
