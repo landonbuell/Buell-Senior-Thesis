@@ -112,6 +112,7 @@ class TimeSeriesFeatures (BaseFeatures):
         """ Initialize Class Object Instance """
         super().__init__(waveform=waveform,rate=rate,npts=npts,overlap=overlap,
                          n_frames=n_frames,presetFrames=presetFrames)
+        self.frames = None          # no analysis frames? (temp???)
 
     def __Call__(self):
         """
@@ -128,10 +129,10 @@ class TimeSeriesFeatures (BaseFeatures):
         featureVector = np.append(featureVector,self.ZeroCrossingRate())
         featureVector = np.append(featureVector,self.CenterOfMass())       
         featureVector = np.append(featureVector,self.AutoCorrelationCoefficients())
-
         # Crop Waveform if previously Shorter
         if self.oldSamples < self.n_samples:
             self.signal = self.signal[:self.oldSamples]
+
         return featureVector
     
     def TimeDomainEnvelope(self,nSplits=5):
@@ -356,10 +357,10 @@ class FrequencySeriesFeatures (BaseFeatures):
         """
         n_filters = len(melFilterEnergies)
         m = np.arange(0,n_filters)
-        delta = 1e-8
-        MFCCs = np.zeros(shape=(n_filters))         # init MFCC array
+        MFCCs = np.empty(shape=(n_filters))         # init MFCC array
+        eps = 1e-8
         for i in range(n_filters):                  # each MFCC:          
-            _log = np.log10(melFilterEnergies+delta)
+            _log = np.log10(melFilterEnergies+eps)
             _cos = np.cos((i+1)*(m+0.5)*np.pi/(n_filters))
             _coeff = np.dot(_log,_cos)              # compute dot product
             MFCCs[i] = _coeff
@@ -381,4 +382,4 @@ class FrequencySeriesFeatures (BaseFeatures):
         if COM.ndim >= 1:                # more or equal to 1D
             return np.mean(COM)         # return average
         else:                           # scalar
-            return COM/self.n_samples   # divide by n samples 
+            return COM/self.n_samples   # divide by n samples

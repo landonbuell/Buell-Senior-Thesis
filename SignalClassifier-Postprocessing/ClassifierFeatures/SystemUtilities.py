@@ -49,13 +49,11 @@ class FileObject:
 
         # Set Target Int/Str for this File
         try:
-            self.targetInt = int(datarow[1])    # target as int             
-        except:
-            self.targetInt = None    # unknown int
-        try:
+            self.targetInt = int(datarow[1])    # target as int  
             self.targetStr = str(datarow[2])    # target as str
         except:
-            self.targetStr = None    # unknown str
+            self.targetInt = 0             # unknown int
+            self.targetStr = "Unknown"      # unknown str
         
     def ReadFileWAV (self):
         """ Read raw .wav file data from local path """
@@ -169,12 +167,16 @@ class ProgramInitializer:
 
     def FilesByCategory (self,fileObjs):
         """ Group files intoa dictionary by category """
-        #groupedFiles = {{x:[]} for x in range(0,self.n_classes)}
+        #groupedFiles = {{x:[-,-,-,-,-]} for x in range(0,self.n_classes)}
         groupedFiles = {}
         for i in range(self.n_classes):
             groupedFiles.update({i:[]})
+
+        # group by known classes
         for file in fileObjs:
             groupedFiles[file.targetInt].append(file)
+
+        # unknown classes
         return groupedFiles
        
     @property

@@ -22,7 +22,9 @@ class FeatureProcessor:
 
     def __init__(self,X,y,n_classes,n_features):
         """ Initialize Feature Processor Instance """
-        self.X =  StandardScaler().fit_transform(X)
+        self.Scaler = StandardScaler()
+        self.X = self.Scaler.fit_transform(X)
+        #self.X = X
         self.y = y 
         self.nClasses = n_classes
         self.nFeatures = n_features
@@ -38,9 +40,15 @@ class FeatureProcessor:
         names += ["FCM"]                                    
         return names
 
+    def AddUnknownSample (self,features):
+        """ Add Features from unknown sample to compare results """
+        x = self.Scaler.transform(features)
+        self.unknown = x.ravel()
+        return self
+
     def CreateDictionary(self,encdPath):
         """ Handle class dictionary """
-        modelName = "XValGammaCLF"
+        modelName = "HybridClassifier"
         categories = CategoryDictionary(encdPath,modelName)
         self.classNames = categories.encoder.keys()          # get names of categories
             
@@ -55,6 +63,8 @@ class FeatureProcessor:
            
             featureData = self.X[:,i]            # get full col of matrix
             featureName = self.GetFeatureNames[i]
+            print(featureName)
+            print("\tSample value:",self.unknown[i])
 
             self.boxPlotArrays = []
 
@@ -66,7 +76,7 @@ class FeatureProcessor:
 
             # Plot the Data for this class
             os.chdir(exptPath)
-            BoxPlotFigure.BoxPlot(self.boxPlotArrays,featureName,xTickNames,
+            BoxPlotFigure.BoxPlotWithSample(self.boxPlotArrays,self.unknown[i],featureName,xTickNames,
                                   save=True,show=False)
             os.chdir(homePath)
 
@@ -149,4 +159,35 @@ class BoxPlotFigure:
         plt.close()
         return None
 
+    @staticmethod
+    def BoxPlotWithSample(data,dataUnknown,title,xlabels,save=False,show=True):
+        """
+        Create Box Plot Visualization of Features
+        --------------------------------
+        data (list) : List of BoxPlotData instances
+        title (str) : Title of Plot (Feature name)
+        --------------------------------
+        Return None
+        """
+        plt.figure(figsize=(20,8))
+        #plt.title(title,size=60,weight='bold',pad=2.0)
+        
+        boxPlots = [x.data for x in data]
+        plt.boxplot(boxPlots,showfliers=False)
+
+        plt.grid()
+        plt.subplots_adjust(left=0.02, right=0.98, top=0.95, bottom=0.18)
+
+        plt.yticks(weight='bold')
+        plt.xticks(ticks=range(1,len(boxPlots)+1),labels=xlabels,
+                   rotation=80,weight='bold')
+        plt.hlines(dataUnknown,0.5,len(xlabels)+0.5,color='purple')
+        plt.hlines(0,0.5,len(xlabels)+0.5,color='black')
+        
+        if save == True:
+            plt.savefig(title.replace(" ","_")+".png")
+        if show == True:
+            plt.show()
+        plt.close()
+        return None
         

@@ -21,9 +21,9 @@ import PlottingUtilities as plot_utils
 if __name__ == '__main__':
 
     # Initialize Directories
-    dataPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
-    exptPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\Thesis\\FiguresFeatures"
-    mtrxPath = "C:\\Users\\Landon\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix2.csv"
+    dataPath = "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\JMMPaper\\ClassifierTest"
+    exptPath = "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\JMMPaper"
+    mtrxPath = "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\FeatureData\\Matrix3.csv"
 
     # Preprocessing
     n_features = 24
