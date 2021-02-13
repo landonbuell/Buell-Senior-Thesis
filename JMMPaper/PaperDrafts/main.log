@@ -1,0 +1,907 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  9 FEB 2021 11:07
+entering extended mode
+**./main.tex
+(main.tex
+LaTeX2e <2018-12-01>
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\report.cls"
+Document Class: report 2018/09/03 v1.4i Standard LaTeX document class
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size10.clo"
+File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@chapter=\count81
+\c@section=\count82
+\c@subsection=\count83
+\c@subsubsection=\count84
+\c@paragraph=\count85
+\c@subparagraph=\count86
+\c@figure=\count87
+\c@table=\count88
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsmath.s
+ty"
+Package: amsmath 2018/12/01 v2.17b AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amstext.s
+ty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsgen.st
+y"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks14
+\ex@=\dimen103
+))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsbsy.st
+y"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen104
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsopn.st
+y"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count89
+LaTeX Info: Redefining \frac on input line 223.
+\uproot@=\count90
+\leftroot@=\count91
+LaTeX Info: Redefining \overline on input line 385.
+\classnum@=\count92
+\DOTSCASE@=\count93
+LaTeX Info: Redefining \ldots on input line 482.
+LaTeX Info: Redefining \dots on input line 485.
+LaTeX Info: Redefining \cdots on input line 606.
+\Mathstrutbox@=\box27
+\strutbox@=\box28
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
+\macc@depth=\count94
+\c@MaxMatrixCols=\count95
+\dotsspace@=\muskip10
+\c@parentequation=\count96
+\dspbrk@lvl=\count97
+\tag@help=\toks15
+\row@=\count98
+\column@=\count99
+\maxfields@=\count100
+\andhelp@=\toks16
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks17
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks18
+LaTeX Info: Redefining \[ on input line 2844.
+LaTeX Info: Redefining \] on input line 2845.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amssymb.
+sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amsfonts
+.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphicx
+.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.s
+ty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics
+.sty"
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.sty
+"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\grap
+hics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\pdft
+ex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count101
+\float@exts=\toks20
+\float@box=\box29
+\@float@everytoks=\toks21
+\@floatcapt=\box30
+) ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/cite\cite.sty"
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\color.st
+y"
+Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\colo
+r.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/subfigure\subfigu
+re.sty"
+Package: subfigure 2002/07/30 v2.1.4 subfigure package
+\subfigtopskip=\skip46
+\subfigcapskip=\skip47
+\subfigcaptopadj=\dimen114
+\subfigbottomskip=\skip48
+\subfigcapmargin=\dimen115
+\subfiglabelskip=\skip49
+\c@subfigure=\count102
+\c@lofdepth=\count103
+\c@subtable=\count104
+\c@lotdepth=\count105
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/subfigure\subfigu
+re.cfg")
+\subfig@top=\skip50
+\subfig@bottom=\skip51
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
+.sty"
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifpdf.
+sty"
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifvtex
+.sty"
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\ifxetex
+.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count106
+\Gm@cntv=\count107
+\c@Gm@tempcnt=\count108
+\Gm@bindingoffset=\dimen116
+\Gm@wd@mp=\dimen117
+\Gm@odd@mp=\dimen118
+\Gm@even@mp=\dimen119
+\Gm@layoutwidth=\dimen120
+\Gm@layoutheight=\dimen121
+\Gm@layouthoffset=\dimen122
+\Gm@layoutvoffset=\dimen123
+\Gm@dimlist=\toks22
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry
+.cfg"))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancyhdr\fancyhdr
+.sty"
+Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
+s
+\f@nch@headwidth=\skip52
+\f@nch@O@elh=\skip53
+\f@nch@O@erh=\skip54
+\f@nch@O@olh=\skip55
+\f@nch@O@orh=\skip56
+\f@nch@O@elf=\skip57
+\f@nch@O@erf=\skip58
+\f@nch@O@olf=\skip59
+\f@nch@O@orf=\skip60
+)
+
+LaTeX Warning: Unused global option(s):
+    [conference].
+
+No file main.aux.
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-
+pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count109
+\scratchdimen=\dimen124
+\scratchbox=\box31
+\nofMPsegments=\count110
+\nofMParguments=\count111
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count112
+\MPscratchDim=\dimen125
+\MPnumerator=\count113
+\makeMPintoPDFobject=\count114
+\everyMPtoPDFconversion=\toks24
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\epstopdf
+-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\infwar
+err.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\grfext.s
+ty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvdefi
+nekeys.sty"
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ltxcmd
+s.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\kvoption
+s.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvsetk
+eys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\etexcm
+ds.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifluat
+ex.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+))))
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pdftexcmds\pdftex
+cmds.sty"
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty
+"
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: letterpaper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(42.67912pt, 528.93675pt, 42.67912pt)
+* v-part:(T,H,B)=(56.9055pt, 642.66711pt, 95.39737pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=528.93675pt
+* \textheight=642.66711pt
+* \oddsidemargin=-29.59087pt
+* \evensidemargin=-29.59087pt
+* \topmargin=-52.36449pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 40.
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 40.
+ ("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd
+"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [1
+
+{C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+[1]
+
+LaTeX Warning: Citation `James' on page 1 undefined on input line 55.
+
+
+LaTeX Warning: Citation `Khan' on page 1 undefined on input line 55.
+
+
+LaTeX Warning: Citation `Liu' on page 1 undefined on input line 55.
+
+
+LaTeX Warning: Citation `Geron' on page 1 undefined on input line 55.
+
+
+LaTeX Warning: Citation `Geron' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Virtanen' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `James' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Liu' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Mierswa' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Zhang' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Virtanen' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Ngiam' on page 1 undefined on input line 57.
+
+
+LaTeX Warning: Citation `Li' on page 1 undefined on input line 59.
+
+
+LaTeX Warning: Citation `Li' on page 1 undefined on input line 59.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 1 undefined on input line 6
+1.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 1 undefined on input line 6
+1.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 1 undefined on input line 6
+1.
+
+
+LaTeX Warning: Citation `Khan' on page 1 undefined on input line 61.
+
+
+LaTeX Warning: Citation `Li' on page 1 undefined on input line 61.
+
+
+LaTeX Warning: Citation `Liu' on page 1 undefined on input line 61.
+
+
+LaTeX Warning: Citation `Virtanen' on page 1 undefined on input line 61.
+
+
+LaTeX Warning: Citation `Geron' on page 1 undefined on input line 73.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 1 undefined on input line 73.
+
+
+LaTeX Warning: Citation `Levine' on page 1 undefined on input line 73.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 1 undefined on input line 73.
+
+
+LaTeX Warning: Citation `Geron' on page 1 undefined on input line 79.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 1 undefined on input line 79.
+
+[1]
+
+LaTeX Warning: Reference `eqn:LayerChain' on page 2 undefined on input line 86.
+
+
+
+LaTeX Warning: Reference `subsec:CNN' on page 2 undefined on input line 86.
+
+
+LaTeX Warning: Reference `subsec:MLP' on page 2 undefined on input line 86.
+
+
+LaTeX Warning: Reference `eqn:LayerGraph' on page 2 undefined on input line 96.
+
+
+
+LaTeX Warning: Citation `James' on page 2 undefined on input line 103.
+
+
+LaTeX Warning: Citation `Liu' on page 2 undefined on input line 103.
+
+
+LaTeX Warning: Citation `Virtanen' on page 2 undefined on input line 103.
+
+
+LaTeX Warning: Citation `Geron' on page 2 undefined on input line 103.
+
+
+LaTeX Warning: Reference `subsec:FeaturesMLP' on page 2 undefined on input line
+ 103.
+
+
+LaTeX Warning: Reference `subsec:FeaturesCNN' on page 2 undefined on input line
+ 103.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 2 undefined on input line 105.
+
+
+LaTeX Warning: Citation `James' on page 2 undefined on input line 105.
+
+
+LaTeX Warning: Citation `James' on page 2 undefined on input line 119.
+
+
+LaTeX Warning: Citation `Geron' on page 2 undefined on input line 119.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 2 undefined on input line 119.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 2 undefined on input line 119.
+
+
+LaTeX Warning: Citation `Virtanen' on page 2 undefined on input line 119.
+
+[2]
+
+LaTeX Warning: Reference `fig:CXELoss' on page 3 undefined on input line 124.
+
+<figures/CXELoss.png, id=27, 1734.48pt x 578.16pt>
+File: figures/CXELoss.png Graphic file (type png)
+<use figures/CXELoss.png>
+Package pdftex.def Info: figures/CXELoss.png  used on input line 128.
+(pdftex.def)             Requested size: 242.82555pt x 80.94185pt.
+
+LaTeX Warning: Citation `James' on page 3 undefined on input line 133.
+
+
+LaTeX Warning: Citation `Virtanen' on page 3 undefined on input line 133.
+
+
+LaTeX Warning: Citation `Geron' on page 3 undefined on input line 133.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 3 undefined on input line 133.
+
+
+LaTeX Warning: Citation `James' on page 3 undefined on input line 133.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 3 undefined on input line 140.
+
+
+LaTeX Warning: Citation `James' on page 3 undefined on input line 140.
+
+
+LaTeX Warning: Citation `Geron' on page 3 undefined on input line 140.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 3 undefined on input line 140.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 3 undefined on input line 140.
+
+
+LaTeX Warning: Citation `Geron' on page 3 undefined on input line 142.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 3 undefined on input line 142.
+
+
+LaTeX Warning: Reference `eqn:GradDesc' on page 3 undefined on input line 142.
+
+
+LaTeX Warning: Citation `Geron' on page 3 undefined on input line 142.
+
+
+LaTeX Warning: Reference `eqn:LayerChain' on page 3 undefined on input line 142
+.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 3 undefined on input line 142.
+
+
+LaTeX Warning: Citation `Virtanen' on page 3 undefined on input line 142.
+
+
+LaTeX Warning: Citation `James' on page 3 undefined on input line 149.
+
+
+LaTeX Warning: Citation `Geron' on page 3 undefined on input line 149.
+
+
+LaTeX Warning: Reference `eqn:ADAM' on page 3 undefined on input line 149.
+
+[3 <./figures/CXELoss.png>]
+
+LaTeX Warning: Citation `Geron' on page 4 undefined on input line 162.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 4 undefined on input line 162.
+
+
+LaTeX Warning: Citation `Geron' on page 4 undefined on input line 162.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 4 undefined on input line 162.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 4 undefined on input line 1
+69.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 4 undefined on input line 1
+76.
+
+
+LaTeX Warning: Citation `Virtanen' on page 4 undefined on input line 181.
+
+
+LaTeX Warning: Citation `Virtanen' on page 4 undefined on input line 189.
+
+
+LaTeX Warning: Citation `Khan' on page 4 undefined on input line 189.
+
+
+LaTeX Warning: Citation `Zhang' on page 4 undefined on input line 189.
+
+[4]
+
+LaTeX Warning: Citation `Zhang' on page 5 undefined on input line 194.
+
+
+LaTeX Warning: Citation `Virtanen' on page 5 undefined on input line 205.
+
+
+LaTeX Warning: Citation `Sahidullah' on page 5 undefined on input line 213.
+
+
+LaTeX Warning: Citation `Virtanen' on page 5 undefined on input line 213.
+
+
+LaTeX Warning: Citation `Sahidullah' on page 5 undefined on input line 219.
+
+
+LaTeX Warning: Citation `Virtanen' on page 5 undefined on input line 219.
+
+
+LaTeX Warning: Citation `Virtanen' on page 5 undefined on input line 240.
+
+
+LaTeX Warning: Citation `Ngiam' on page 5 undefined on input line 240.
+
+
+LaTeX Warning: Reference `fig:Example Spectrograms' on page 5 undefined on inpu
+t line 240.
+
+[5]
+
+LaTeX Warning: Citation `Liu' on page 6 undefined on input line 242.
+
+
+LaTeX Warning: Citation `Virtanen' on page 6 undefined on input line 242.
+
+<figures/AnalysisFrames.png, id=40, 804.75656pt x 407.27156pt>
+File: figures/AnalysisFrames.png Graphic file (type png)
+<use figures/AnalysisFrames.png>
+Package pdftex.def Info: figures/AnalysisFrames.png  used on input line 245.
+(pdftex.def)             Requested size: 238.01991pt x 120.45479pt.
+
+LaTeX Warning: Citation `Liu' on page 6 undefined on input line 246.
+
+
+LaTeX Warning: Citation `Virtanen' on page 6 undefined on input line 249.
+
+
+LaTeX Warning: Reference `fig:WindowFrame' on page 6 undefined on input line 24
+9.
+
+
+LaTeX Warning: Citation `Sahidullah' on page 6 undefined on input line 249.
+
+<figures/AnalysisFrame.png, id=41, 1734.48pt x 578.16pt>
+File: figures/AnalysisFrame.png Graphic file (type png)
+<use figures/AnalysisFrame.png>
+Package pdftex.def Info: figures/AnalysisFrame.png  used on input line 258.
+(pdftex.def)             Requested size: 238.01991pt x 79.33624pt.
+<figures/WindowedFrame.png, id=42, 1734.48pt x 578.16pt>
+File: figures/WindowedFrame.png Graphic file (type png)
+<use figures/WindowedFrame.png>
+Package pdftex.def Info: figures/WindowedFrame.png  used on input line 259.
+(pdftex.def)             Requested size: 238.01991pt x 79.33624pt.
+[6 <./figures/AnalysisFrames.png> <./figures/AnalysisFrame.png> <./figures/Wind
+owedFrame.png>]
+<figuresSpectrograms/AltoSax-A4.png, id=50, 1156.32pt x 867.24pt>
+File: figuresSpectrograms/AltoSax-A4.png Graphic file (type png)
+<use figuresSpectrograms/AltoSax-A4.png>
+Package pdftex.def Info: figuresSpectrograms/AltoSax-A4.png  used on input line
+ 268.
+(pdftex.def)             Requested size: 238.01991pt x 178.51317pt.
+<figuresSpectrograms/GUITAR-B2.png, id=51, 1156.32pt x 867.24pt>
+File: figuresSpectrograms/GUITAR-B2.png Graphic file (type png)
+<use figuresSpectrograms/GUITAR-B2.png>
+Package pdftex.def Info: figuresSpectrograms/GUITAR-B2.png  used on input line 
+269.
+(pdftex.def)             Requested size: 238.01991pt x 178.51317pt.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 7 undefined on input line 2
+79.
+
+
+LaTeX Warning: Citation `Geron' on page 7 undefined on input line 279.
+
+
+LaTeX Warning: Citation `Goodfellow' on page 7 undefined on input line 279.
+
+
+LaTeX Warning: Citation `James' on page 7 undefined on input line 279.
+
+
+LaTeX Warning: Reference `subsec:FeaturesMLP' on page 7 undefined on input line
+ 281.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 7 undefined on input line 2
+88.
+
+
+LaTeX Warning: Reference `subsec:FeaturesCNN' on page 7 undefined on input line
+ 288.
+
+
+LaTeX Warning: Citation `Geron' on page 7 undefined on input line 288.
+
+[7 <./figuresSpectrograms/AltoSax-A4.png> <./figuresSpectrograms/GUITAR-B2.png>
+]
+<figures/NeuralNetworkArchitecture.png, id=57, 614.295pt x 794.97pt>
+File: figures/NeuralNetworkArchitecture.png Graphic file (type png)
+<use figures/NeuralNetworkArchitecture.png>
+Package pdftex.def Info: figures/NeuralNetworkArchitecture.png  used on input l
+ine 306.
+(pdftex.def)             Requested size: 238.01991pt x 308.02344pt.
+
+
+LaTeX Warning: Citation `Tensorflow' on page 8 undefined on input line 307.
+
+
+LaTeX Warning: Citation `Tensorflow' on page 8 undefined on input line 311.
+
+
+LaTeX Warning: Citation `James' on page 8 undefined on input line 323.
+
+
+LaTeX Warning: Citation `Virtanen' on page 8 undefined on input line 323.
+
+
+LaTeX Warning: Citation `Geron' on page 8 undefined on input line 323.
+
+
+LaTeX Warning: Citation `James' on page 8 undefined on input line 324.
+
+[8 <./figures/NeuralNetworkArchitecture.png>]
+
+LaTeX Warning: Citation `James' on page 9 undefined on input line 326.
+
+
+LaTeX Warning: Citation `Geron' on page 9 undefined on input line 333.
+
+
+LaTeX Warning: Citation `James' on page 9 undefined on input line 333.
+
+
+LaTeX Warning: Reference `fig:XvalScores' on page 9 undefined on input line 333
+.
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 336.
+
+("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 336.
+
+
+LaTeX Warning: Citation `Geron' on page 9 undefined on input line 366.
+
+
+LaTeX Warning: Reference `subsec:Metrics' on page 9 undefined on input line 368
+.
+
+
+LaTeX Warning: Reference `fig:ConfScores' on page 9 undefined on input line 368
+.
+
+[9]
+
+LaTeX Warning: Reference `subsec:Metrics' on page 10 undefined on input line 37
+6.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 10 undefined on input line 
+376.
+
+
+LaTeX Warning: Reference `fig:Architecture' on page 10 undefined on input line 
+376.
+
+<figures/AvgXval-Convolution.png, id=65, 1445.4pt x 578.16pt>
+File: figures/AvgXval-Convolution.png Graphic file (type png)
+<use figures/AvgXval-Convolution.png>
+Package pdftex.def Info: figures/AvgXval-Convolution.png  used on input line 38
+0.
+(pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
+<figures/AvgXval-Perceptron.png, id=66, 1445.4pt x 578.16pt>
+File: figures/AvgXval-Perceptron.png Graphic file (type png)
+<use figures/AvgXval-Perceptron.png>
+Package pdftex.def Info: figures/AvgXval-Perceptron.png  used on input line 381
+.
+(pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
+<figures/AvgXval-Multimodal.png, id=67, 1445.4pt x 578.16pt>
+File: figures/AvgXval-Multimodal.png Graphic file (type png)
+<use figures/AvgXval-Multimodal.png>
+Package pdftex.def Info: figures/AvgXval-Multimodal.png  used on input line 382
+.
+(pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
+
+LaTeX Warning: Reference `fig:XvalScores' on page 10 undefined on input line 38
+7.
+
+
+LaTeX Warning: Reference `fig:XvalScores' on page 10 undefined on input line 38
+7.
+
+
+LaTeX Warning: Reference `fig:XvalScores' on page 10 undefined on input line 38
+7.
+
+
+LaTeX Warning: Reference `fig:XvalScores' on page 10 undefined on input line 38
+9.
+
+
+LaTeX Warning: Reference `fig:XvalScores' on page 10 undefined on input line 38
+9.
+
+
+LaTeX Warning: Reference `fig:XvalScores' on page 10 undefined on input line 38
+9.
+
+[10 <./figures/AvgXval-Convolution.png> <./figures/AvgXval-Perceptron.png> <./f
+igures/AvgXval-Multimodal.png>]
+
+LaTeX Warning: Reference `fig:ConfScores' on page 11 undefined on input line 39
+1.
+
+
+LaTeX Warning: Reference `fig:ConfScores' on page 11 undefined on input line 39
+1.
+
+
+LaTeX Warning: Reference `fig:ConfScores' on page 11 undefined on input line 39
+3.
+
+<figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png, id=74, 1156.32pt x 1156.
+32pt>
+File: figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png Graphic file (type p
+ng)
+<use figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png  
+used on input line 408.
+(pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
+<figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=75, 1156.32pt x 1156.3
+2pt>
+File: figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png Graphic file (type pn
+g)
+<use figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png  u
+sed on input line 409.
+(pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
+<figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=76, 1156.32pt x 1156.
+32pt>
+File: figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png Graphic file (type p
+ng)
+<use figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>
+Package pdftex.def Info: figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png  
+used on input line 410.
+(pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
+[11] [12 <./figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png> <./figures/XV
+alBetaMLP_Avg_Hits_Weighted_Confusion.png> <./figures/XValAlphaCLF_Avg_Hits_Wei
+ghted_Confusion.png>] [13] [14
+
+] (main.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 3512 strings out of 492895
+ 50624 string characters out of 3123268
+ 124412 words of memory out of 3000000
+ 7345 multiletter control sequences out of 15000+200000
+ 12455 words of font info for 48 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 41i,19n,43p,1335b,286s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
+s/cm/cmbx10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Landon/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/User
+s/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10
+.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmr12.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr17.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Landon/AppData/Local/Progr
+ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Landon/AppData
+/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/
+Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.p
+fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmti10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
+/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (16 pages, 1423491 bytes).
+PDF statistics:
+ 137 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+
