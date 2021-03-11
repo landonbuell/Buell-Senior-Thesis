@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  11 OCT 2020 18:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  11 MAR 2021 17:38
 entering extended mode
 **./ClassifierREADME.tex
 (ClassifierREADME.tex
@@ -94,15 +94,15 @@ LaTeX Font Info:    ... okay on input line 14.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(71.13188pt, 472.03123pt, 71.13188pt)
-* v-part:(T,H,B)=(71.13188pt, 628.44073pt, 95.39737pt)
+* h-part:(L,W,R)=(56.9055pt, 500.484pt, 56.9055pt)
+* v-part:(T,H,B)=(56.9055pt, 642.66711pt, 95.39737pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=472.03123pt
-* \textheight=628.44073pt
-* \oddsidemargin=-1.1381pt
-* \evensidemargin=-1.1381pt
-* \topmargin=-38.1381pt
+* \textwidth=500.484pt
+* \textheight=642.66711pt
+* \oddsidemargin=-15.36449pt
+* \evensidemargin=-15.36449pt
+* \topmargin=-52.36449pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
@@ -124,35 +124,24 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 21.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 21.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 47.
-("C:\Users\Landon\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 47.
-
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 51.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 51.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 51.
 [1
 
-{C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Overfull \hbox (40.34215pt too wide) in paragraph at lines 60--62
-\OT1/cmr/m/n/12 Indicates which mode the clas-si-fier pro-gram is ex-e-cuted as
-. Must be in ["train","predict","train-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 60--62
-
- []
-
-[2] (ClassifierREADME.aux) ) 
+{C:/Users/Landon/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+[3] (ClassifierREADME.aux) ) 
 Here is how much of TeX's memory you used:
- 905 strings out of 492895
- 13096 string characters out of 3123268
- 81523 words of memory out of 3000000
- 4871 multiletter control sequences out of 15000+200000
- 7322 words of font info for 26 fonts, out of 3000000 for 9000
+ 906 strings out of 492895
+ 12967 string characters out of 3123268
+ 82511 words of memory out of 3000000
+ 4869 multiletter control sequences out of 15000+200000
+ 10109 words of font info for 35 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 23i,6n,43p,564b,187s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 23i,6n,43p,658b,187s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/
 fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Landon/AppData/Local/Progra
 ms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Landon/AppDat
@@ -160,12 +149,11 @@ a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/
 Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.p
 fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
 ts/cm/cmr17.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Landon/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on ClassifierREADME.pdf (2 pages, 109052 bytes).
+public/amsfonts/cm/cmti10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on ClassifierREADME.pdf (3 pages, 106663 bytes).
 PDF statistics:
- 41 PDF objects out of 1000 (max. 8388607)
+ 40 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

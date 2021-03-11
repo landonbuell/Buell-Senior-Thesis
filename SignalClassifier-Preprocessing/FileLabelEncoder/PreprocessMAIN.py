@@ -16,9 +16,15 @@ if __name__ == '__main__':
 
     # ESTABLISH DIRECTORIES
     homePath = os.getcwd()
+
+    # Where to export the data to?
     exptPath = "C:\\Users\\lando\\Documents\\GitHub\\Buell-Senior-Thesis\\SignalClassifier\\Target-Data"
+
+    # Where the RAW audio files are stored?
     dataPath = ["C:\\Users\\lando\\Documents\\audioWAV1","C:\\Users\\lando\\Documents\\audioWAV2",
                 "C:\\Users\\lando\\Documents\\audioNoiseWAV","C:\\Users\\lando\\Documents\\audioSyntheticWav"]  
+
+    # What the output files will be named?
     exptFile = ["Y1.csv","Y2.csv","Y3.csv","Y4.csv"]
 
     # Iteate through pairs of files / directories

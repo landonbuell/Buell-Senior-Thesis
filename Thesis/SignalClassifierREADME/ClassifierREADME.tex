@@ -7,7 +7,7 @@
 
 \documentclass[12pt,letterpaper]{article}
 
-\usepackage[top=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage[top=2cm,left=2cm,right=2cm]{geometry}
 \usepackage{fancyhdr}
 
 
@@ -21,12 +21,12 @@
 \maketitle
 
 \begin{abstract}
-The \textit{Signal Classifier} program uses a hybrid neural network algorithm to attempt to classify time-series signals to a set of pre-determined classes. For the purpose of the algorithm's development, input samples were assumed to be .wav files of musical instruments performing one note, or several shorter notes in succession- totaling at around 100,000 - 200,000 samples each, sampled at 44.1 kHz.
+The \textit{Signal Classifier} program uses a hybrid neural network architecture to attempt to classify time-series signals to a set of pre-determined classes (defined by the input labels). For the purpose of the algorithm's development, input samples were assumed to be .wav files of musical instruments performing one note, or several shorter notes in succession- totaling at around 100,000 - 200,000 samples each, sampled at 44.1 kHz.
 \end{abstract}
 
 % ================================================================
 
-\subsection{Getting the Signal Classifier on Your Machine}
+\section{Getting the Signal Classifier on Your Machine}
 
 \paragraph*{}The \textit{Signal Classifier} program is stored in a GiHub Repository. As of Fall 2020, the repo can be found at
 \begin{quote}
@@ -34,50 +34,82 @@ https://github.com/landonbuell/Buell-Senior-Thesis
 \end{quote}
 This repository can be pulled to your machine any number of ways, reccommended via github. (Git Clone, GitHub Desktop, etc.) Doing so will create new local directory on your machine. The "MAIN" python program itself is a standard \textit{.py} file located at:
 \begin{quote}
-../Buell-Senior-Thesis/SignalClassifier/ClassifierMain/ClassifierMAIN.py
+.../Buell-Senior-Thesis/SignalClassifier/ClassifierHybrid/ClassifierHybridMain.py
 \end{quote}
 
 % ================================================================
 
-\subsection{Command Line Arguments}
+\section{Command Line Arguments}
 
 \paragraph*{}The Classifier requires 6 command-line arguments to function properly. These are:
-\begin{itemize}
 
-\item[•]\textbf{readPath} (str/path)\\
+
+\subsection{readPath (str/path)}
 The local directory path where "read" data files are stored. Each file in this path is a a particularly formatted csv file. The csv/excel files are formatted as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline \\
+Full (local) directory path to .wav file & Integer Class name & String Class Name \\
+\hline
+\end{tabular}
+\end{center}
+
+The folder should otherwise be empty because CSV Files formatted any other way will not be handled, and the program will crash. As an example, a CSV file may contain a first few lines that resemble:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline \\
+Fullpath	 & Target Int & Target Str \\ \hline
+C:/Users/.../GUITAR.C5.wav	 
+& 16 & GUITAR \\ \hline
+C:/Users/.../BASSCLARINET.As4.wav 
+& 4 & BASSCLARINET \\ \hline
+C:/Users/.../CLARINET.Cs5.wav 
+& 8 & BBCLARINET \\ \hline
+C:/Users/.../VIOLIN.A4.wav	
+& 34 & VIOLIN  \\ \hline
+\end{tabular}
+\end{center}
+
+The repository directory
 \begin{quote}
-(Detail formatting here)
+.../Buell-Senior-Thesis/SignalClassifier/Target-Data
 \end{quote}
-The folder should otherwise be empty.
+is an example of a valid directory, which each file  being well-formatted. There are two a python scripts in:
+\begin{quote}
+.../Buell-Senior-Thesis/SignalClassifier-Preprocessing/FileLabelEncoder
+\end{quote}
+That will help with creating these files. See the "MAIN" file for arguments.
 
-\item[•]\textbf{exportPath} (str/path)\\
-The local directory path where progress data is exported to. When finished, this path will contain \textit{.csv} files detailing the training history of the model at each epoch or the label predictions of each sample.
+\subsection{exportPath (str/path)}
+The local directory path where progress data is exported to. When finished, this path will contain \textit{.csv} files detailing the training history of the model at each epoch as well ads the the label predictions of each sample.
 
-\item[•]\textbf{modelPath} (str/path)\\
+\subsection{modelPath (str/path)}
 The local directory oath where the TensorFlow models are exported to. Each model will be saved in it's own sub-folder. This is where the program will look for the model to re-load it for future train/predict sessions. 
 
-\item[•]\textbf{ProgramMode} (str)\\
-Indicates which mode the classifier program is executed as. Must be in ["train","predict","train-predict"]. \\
-\paragraph*{}In \textit{train} mode, all collected samples will be used to train the classifier model. A "TRAININGHISTORY" file will be exported to "exportPath".  In \textit{predict} mode, all collected samples will be used to run predictions with the classifier model. A "PREDICTIONS" file will be exported to "exportPath". In \textit{train-predict} mode, a 90\% training, and 10\% testing split is made pseudo-randomly. The Classifier then runs \textit{train} mode and \textit{test} mode with the respective data subsets.
+\subsection{ProgramMode (str)}
+Indicates which mode the classifier program is executed as. Must be in ["train","predict","train-predict"].
+\paragraph*{}In \textit{train} mode, all collected samples will be used to train the classifier model. A "TRAININGHISTORY" file will be exported to "exportPath".  In \textit{predict} mode, all collected samples will be used to run predictions with the classifier model. A "PREDICTIONS" file will be exported to "exportPath". In \textit{train-predict} mode, a 90\% training, and 10\% testing split is made pseudo-randomly (This ratio can be changed, by adjusting a hard coded parameter in the train/test mode class). The Classifier then runs \textit{train} mode and \textit{test} mode with the respective data subsets.
 
-\item[•]\textbf{modelName} (str)\\
-String representation used to name the classifier model in a human-readable format.
+\subsection{modelName (str)}
+String representation used to name the classifier model in a human-readable format. Another Tensorflow/Keras script can be used to reload this model in it's trained state for future or external use.
 
-\item[•]\textbf{newModel} (bool)\\
+\subsection{newModel (bool)}
 Determines weather or not to create a NEW model of the given name. If \textit{true}, then any existing model of the same name is overwritten (cannot be recovered easily!). If \textit{False}, the program looks for an existing model of the name to resume training/predictions given last saved state.
 
-
-
-\end{itemize}
 
 % ================================================================
 
 \subsection{When Running}
 
+(I still have to finish this...)
+
 % ================================================================
 
 \subsection{What to do with the Output}
+
+(And this...)
 
 % ================================================================
 
