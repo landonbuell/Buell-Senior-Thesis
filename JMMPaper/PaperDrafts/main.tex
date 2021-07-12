@@ -281,6 +281,8 @@ The perceptron branch is an pictured on the left side of Fig. (\ref{fig:Architec
 
 The input to this branch is a vector of features, described in section (\ref{subsec:FeaturesMLP}), which are transformed through two dense layers, with $64$ neurons each. Passing through these dense layers allows these inputs to be handled just like any other multilayer perceptron model, which have shown experimental success in the last few decades. We choose to implement one here, enabling the training process to learn parameters that can effectively minimize the cost function and sucessfully classify inputs. The output of the last dense layer is provided to the concatenation layer, which merges it with the output of the convolution branch. 
 
+
+
 % ================================================================
 
 \subsection{The Convolution Branch}
