@@ -29,7 +29,7 @@
 \author{Landon H. Buell$^1$ and Kevin M. Short$^2$\\
         $^1$lhb1007@wildcats.unh.edu and 				$^2$kevin.short@unh.edu\\
         $^1$Department of Physics and Astronomy\\
-        $^2$Integrated Applied Mathematics Program, Department of Mathematics and Statistics\\
+        $^2$Founder of Integrated Applied Mathematics Program, Department of Mathematics and Statistics\\
         University of New Hampshire, Durham, New Hampshire, USA\\
        }
         
@@ -68,7 +68,7 @@ To accommodate for this multimodal input, we have constructed a \textit{hybrid n
 % ================================================================
 
 \subsection{Structure}
-\label{subsec:Intro}
+\label{subsec:structure}
 
 A neural network defines a type of machine learning algorithm that is inspired from the human brain \cite{Geron,Goodfellow}. Where biological brains are constructed from neurons and connected through axons, neural networks are constructed from artificial neurons and connected through transformation functions. The numerical value contained within an artificial neuron is the \textit{activation} of that neuron \cite{Levine}. Neurons are organized into groups called \textit{layers}, which interact with other layers through mathematical transformations such as matrix multiplications or convolutions \cite{Goodfellow}. Because of this, each layer $l$ in a network can be considered to as function, $f^{(l)}$ that accepts an array of activations from the previous layer $x^{(l-1)}$ and uses a set of parameters to return an array of modified activations for the current layer, $x^{(l)}$. Thus each layer can be generally characterized by the expression:
 \begin{equation}
@@ -161,6 +161,64 @@ Standard gradient descent optimization is cumbersome, prone to numerical errors,
 \end{equation}
 
 ADAM provides a much more powerful and stable optimization algorithm at a higher computational cost \cite{Geron}. Note that the superscript $(i)$ indicates an iteration index where a superscript $i$ is exponentiation. Typically we initialize $\rho_1 = 0.9$, $\rho_2 = 0.999$, and introduce $\delta \approx 10^{-7}$ to avoid possible division of near-zero values \cite{Goodfellow}. All operations in the final three steps are applied element-wise. ADAM has experimentally shown to be a very effective optimizer and useful for a wide range of data sets and architectures which is why we have chosen to implement it for this task \cite{Geron,Goodfellow}.
+
+% ================================================================
+
+\subsection{Layers Used in this Classification Model}
+\label{sec:LayersUsed}
+
+As mentioned in section \ref{subsec:structure} Eq. \ref{eqn:LayerFunction}), each layer in the neural network acts as it's own self-contained function that operates on the activations of the previous layer to transform them into the activations for the current layer. This function can take many different forms depending on where the layer sits in the chain, the type of information in the previous layer, and the nature of the solution that the neural network is trying to model \cite{Goodfellow,Loy}. For this classification  task, we employ five different layer types - (i) Dense, (ii) 2-dimensional convolution, (iii) 2-dimensional maximum-pooling, (iv) flattening, and (v) concatenation. In this section, we detail the forward-pass process of each layer and in Fig. (\ref{fig:Architecture}) we show how the combination of these layers are used to form the multimodal architecture of this network. 
+
+\begin{enumerate}
+
+\item\textbf{Dense Layer}
+The dense layer, also called \textit{fully-connected} or \textit{affine} layer is one of earliest layer types used in artificial neural networks \cite{Geron,Loy}. A dense layer is composed of a collection of artificial neurons, each of which contains a numerical value within it (usually a floating-point number), called the \textit{activation} of that neuron. To compute the activation of any neuron, $x^{(l)_{i}}$, we take a weighted linear-combination of every neuron in the previous layer and add a constant to it, called a \textit{bias} \cite{Geron,Goodfellow,Loy}. 
+
+It then follows that a full \textit{layer} of activations, is produced from the matrix-vector product of a weight-matrix $W^{(l)}$, and the previous layers of neurons $x^{(l-1)}$, and then added to a bias $b^{(l)}$ \cite{Goodfellow,Tensorflow}. We can model this transformation as :
+\begin{equation}
+\label{eqn:DenseCall}
+x^{(l)} = W^{(l)}x^{(l-1)} + b^{(l)}
+\end{equation}
+Suppose the layer $(l-1)$ contains $m$ neurons, and layer $(l)$ contains $n$ neurons. Each object then belongs to space: $x^{(l)} \in \mathbb{R}^(n \times 1)$, $x^{(l-1)} \in \mathbb{R}^(m \times 1)$, $b^{(l)} \in \mathbb{R}^(n \times 1)$, and $W^{(l)} \in \mathbb{R}^(n \times m)$. This transformation allows for an affine-transformation of activations which enables this layer to learn roughly linear decision boundaries between adjacent layers of neurons. This property of connecting every neuron in one layer to every other neuron in the previous layer is called \textit{dense connectivity} which is what gives this layer its name.
+
+Formal implementations of this the affine transformation layer type introduce non-linearity into the hypothesis space by applying an \textit{activation} function to Eqn. (\ref{eqn:DenseCall}) \cite{Goodfellow}. This enables us to model the far more complicated decision boundaries found in real-world problems. For this classification network, we choose to use the \textit{ReLU} activation function, defined as:
+\begin{equation}
+\label{eqn:ReLU}
+ReLU \big[ x^{(l)} \big] = \text{max} \big( 0, x^{(l)} \big)
+\end{equation} 
+This activation function preserves only the positive portion of each activation. \textcolor{red}{Does this Seem Out of place to you?}
+
+\item\textbf{2-Dimensional Convolution Layer}
+Convolution Layers Emerged from studying the brain's visual cortex, and have been used for image recognition \cite{Geron,Goodfellow,Loy}. The layer gets it's name due to it's implementation of the mathematical 2D \textit{convolution} operation. The 2D discrete convolution of function or 2D array $A$ and $B$ is given by:
+\begin{equation}
+\label{eqn:Conv2D}
+C[i,j]  = (A * B)[i,j] = \sum_{y}\sum_{v} A[i,j]B[i-u,j-v]
+\end{equation} 
+We implement this function in the neural network by creating a series of $K$ weighting matrices, called filters, of size $m \times n$, each to take the place of $A$ above \cite{Geron}. The shape of the filters in referred to as the \textit{convolution filter size}, and step them along in two dimensions according to a set \textit{stride size} \cite{Goodfellow,Loy}.
+
+In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(M \times N)}$, the convolution filters step through the input data and repeatedly compute the element-wise producr of each $m \times n$ filter and the local activations of the $x^{(l)}$ array. Each of the $K$ filters generate a new array of activation. For an appropriately trained neural network, some filters may result in detecting vertical lines, horizontal lines, sharp edges, or areas of mostly one color, etc \cite{Loy}.
+
+Just like the dense layer, we also choose to add a bias term to each output neuron, and can further modify the array by applying a non-linear activation function. for 2D convolution layer $(l)$, given input $x^{(l-1)}$, we compute the actions of the $k$-th filter $x^{(l)}_k$ using filter $W^{(l)}_k$ and bias $b^{(l)}_k$ as \cite{Goodfellow}.
+\begin{equation}
+\label{eqn:Conv2DCall}
+x^{(l-1)}_{k}(i,j) = b^{(l)}_{k} + 
+\sum_{u=0}^{M-1}\sum_{v=0}^{N-1} W^{(l)}_{k}(i,j) x^{(l-1)}_{k}(i-u,j-v)
+\end{equation}
+
+The Convolution layer allows for a few advantages over the dense layer. Among these are (i) \textit{spare-connectivity}: not every input neuron is connected to every single output neuron, so it can be more computationally efficient, (ii) \textit{positional invariance}: key features can be identified regardless of where the are in the input array, and (iii) \textit{Automatic feature detection}: as the weighting kernels are trained, they update as to automatically determine dominant features in the data without explicit human instruction \cite{Geron,Goodfellow,Loy}.
+
+\item\textbf{2-Dimensional Maximum Pooling}
+A maximum-pooling layer returns the value of the maximum neuron activation in a local subset of neurons. In the case of 2D max-pooling, we choose a kernel size $m \times n$, and pass that kernel over the inputs according to a chosen stride size \cite{Tensorflow}. The kernel takes the largest value in that area of inputs, and then places it into the output activations array. This operation is particularly useful for compressing the amount of data down to a computational efficient size.
+
+Pooling layers are typically place after a layer or set of layers of convolution \cite{Loy}. The purpose of this is arrangement is to reduce the width of the model at the pooling layer and ensure that only the dominant features with the largest activations are preserved \cite{Geron,Loy}. This layer is considered to be "non-trainable" because it does not use any adjustable parameters in it's transformation, only a fixed procedure that cannot be updated.
+
+\item\textbf{Flattening}
+A flattening layer is used 
+
+\item\textbf{Concatenation}
+
+
+\end{enumerate}
 
 % ================================================================================================================================
 
