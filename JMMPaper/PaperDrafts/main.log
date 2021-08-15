@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  12 AUG 2021 23:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  15 AUG 2021 11:25
 entering extended mode
 **./main.tex
 (main.tex
@@ -496,7 +496,7 @@ rograms/AltoSax-A4.png> <./figuresSpectrograms/GUITAR-B2.png>]
 File: figures/NeuralNetworkArchitecture.png Graphic file (type png)
 <use figures/NeuralNetworkArchitecture.png>
 Package pdftex.def Info: figures/NeuralNetworkArchitecture.png  used on input l
-ine 367.
+ine 368.
 (pdftex.def)             Requested size: 238.01991pt x 308.02344pt.
  [9 <./figures/NeuralNetworkArchitecture.png>]
 [10]
@@ -504,18 +504,18 @@ ine 367.
 File: figures/AvgXval-Convolution.png Graphic file (type png)
 <use figures/AvgXval-Convolution.png>
 Package pdftex.def Info: figures/AvgXval-Convolution.png  used on input line 44
-1.
+4.
 (pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
 <figures/AvgXval-Perceptron.png, id=65, 1445.4pt x 578.16pt>
 File: figures/AvgXval-Perceptron.png Graphic file (type png)
 <use figures/AvgXval-Perceptron.png>
-Package pdftex.def Info: figures/AvgXval-Perceptron.png  used on input line 442
+Package pdftex.def Info: figures/AvgXval-Perceptron.png  used on input line 445
 .
 (pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
 <figures/AvgXval-Multimodal.png, id=66, 1445.4pt x 578.16pt>
 File: figures/AvgXval-Multimodal.png Graphic file (type png)
 <use figures/AvgXval-Multimodal.png>
-Package pdftex.def Info: figures/AvgXval-Multimodal.png  used on input line 443
+Package pdftex.def Info: figures/AvgXval-Multimodal.png  used on input line 446
 .
 (pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
  [11 <./figures/AvgXval-Convolution.png> <./figures/AvgXval-Perceptron.png> <./
@@ -526,7 +526,7 @@ File: figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png Graphic file (type p
 ng)
 <use figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png  
-used on input line 469.
+used on input line 472.
 (pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
 <figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=74, 1156.32pt x 1156.3
 2pt>
@@ -534,7 +534,7 @@ File: figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png Graphic file (type pn
 g)
 <use figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png  u
-sed on input line 470.
+sed on input line 473.
 (pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
 <figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=75, 1156.32pt x 1156.
 32pt>
@@ -542,7 +542,7 @@ File: figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png Graphic file (type p
 ng)
 <use figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png  
-used on input line 471.
+used on input line 474.
 (pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
  [12 <./figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png> <./figures/XValBe
 taMLP_Avg_Hits_Weighted_Confusion.png> <./figures/XValAlphaCLF_Avg_Hits_Weighte
@@ -566,7 +566,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  4328 strings out of 492895
  67438 string characters out of 3123268
- 143264 words of memory out of 3000000
+ 143258 words of memory out of 3000000
  8153 multiletter control sequences out of 15000+200000
  42866 words of font info for 96 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -591,7 +591,7 @@ ndon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 pe1/urw/times/utmb8a.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fon
 ts/type1/urw/times/utmr8a.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
 9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (13 pages, 1417314 bytes).
+Output written on main.pdf (13 pages, 1417024 bytes).
 PDF statistics:
  137 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

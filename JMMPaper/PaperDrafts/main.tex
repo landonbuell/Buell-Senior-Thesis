@@ -1,8 +1,8 @@
 % ================
 % Landon Buell, Kevin Short
 % JMM Paper
-% PHYS 705.01 - Lab00
-% 21 Sept 2020
+% PHYS 799
+% January Sept 2021
 % ================
 
 \documentclass[conference,onecolumn,letterpaper]{IEEEtran}
@@ -26,8 +26,8 @@
 % ================================================================
 
 \title{Musical Instrument Classification Using a Hybrid Neural Network}
-\author{Landon H. Buell$^1$ and Kevin M. Short$^2$\\
-        $^1$lhb1007@wildcats.unh.edu and 				$^2$kevin.short@unh.edu\\
+\author{Landon H. Buell$^1$ 				and Kevin M. Short$^2$\\
+        $^1$lhb1007@wildcats.unh.edu  		$^2$kevin.short@unh.edu\\
         $^1$Department of Physics and Astronomy\\
         $^2$Founder of Integrated Applied Mathematics Program, Department of Mathematics and Statistics\\
         University of New Hampshire, Durham, New Hampshire, USA\\
@@ -320,7 +320,7 @@ Where $\mathbb{W}$ is the standard \textit{Discrete Fourier Transform} (DFT) mat
     \label{fig:WindowFrame}
 \end{figure}
 
-The standard western concert musical instruments that make up our base data set rarely have fundamental frequencies that extend beyond $6,000$ Hz. Similarly, we rarely find much energy or characteristic behavior above the $12,000$ Hz mark in the spectrograms. For this reason, we choose to crop each matrix as to include only information corresponding to the region of frequency-space form $0$ Hz to $12$ kHz. Since the audio files were all sample at $44.1$ kHz, this nearly quarters the height of the spectrogram and choose to zero pad, or crop matrix $S$ so that there are exactly $k = 256$ columns. This combination of choices drastically reduces the width and complexity of the model at the entry layer saving significant computational resources. The result is an image-like representation of a digital audio file with shape $558 \times 256$, which is passed as a feature to the input of the CNN branch of the HNN. This is the second of the two modalities that we choose to represent our data sample.
+The standard western concert musical instruments that make up our data set rarely have fundamental frequencies that extend beyond $6$ kHz. Similarly, we rarely find much energy or characteristic behavior above the $12$ kHz mark in the spectrograms. For this reason, we choose to crop each matrix as to include only information corresponding to the region of frequency-space form $0$ Hz to $12$ kHz. Since the audio files were all sampled at $44.1$ kHz, this nearly quarters the number of rows in the spectrogram. We have also choosen to zero pad or crop the matrix $S$ so that there are exactly $k = 256$ columns. This combination of choices drastically reduces the width and complexity of the model at the entry layer saving significant computational resources. The result is an image-like representation of a digital audio file with shape $558 \times 256$, which is passed as a feature to the input of the CNN branch of the HNN. This is the second of the two modalities that we choose to represent our data sample.
 
 \begin{figure}[h]
     \centering
@@ -335,9 +335,9 @@ The standard western concert musical instruments that make up our base data set 
 \subsection{The Perceptron Branch}
 \label{subsec:MLP}
 
-The perceptron branch is an pictured on the left side of Fig. (\ref{fig:Architecture}) and is an implementation of multilayer perceptron (MLP) neural network. The MLP processed input by transforming activations through repeated layers of neurons, modeled as vectors of floating-point numbers. Each neurons in a given layer by a linear combination of every neuron in the previous layer. Practical implementations introduce the addition of a constant value to each neuron (called a \textit{bias}), and some form or non-linear activation function \cite{Geron,Goodfellow}. Transformations of this type are called \textit{dense} layers, which when compounded can model that highly non-linear decision boundaries than arise in real world problems \cite{James}.
+The perceptron branch is an pictured on the left side of Fig. (\ref{fig:Architecture}) and is an implementation of multilayer perceptron (MLP) neural network. The MLP processed input by transforming activations through repeated dense layer types explored in sec. (\ref{sec:LayersUsed}.1). The input to this branch is a vector of features, described in section (\ref{subsec:FeaturesMLP}), which are transformed through two dense layers, with $64$ neurons in each. 
 
-The input to this branch is a vector of features, described in section (\ref{subsec:FeaturesMLP}), which are transformed through two dense layers, with $64$ neurons each. Passing through these dense layers allows these inputs to be handled just like any other multilayer perceptron model, which have shown experimental success in the last few decades. We choose to implement one here, enabling the training process to learn parameters that can effectively minimize the cost function and sucessfully classify inputs. The output of the last dense layer is provided to the concatenation layer, which merges it with the output of the convolution branch. 
+\textcolor{red}{FINISH THIS!}
 
 
 
@@ -346,7 +346,7 @@ The input to this branch is a vector of features, described in section (\ref{sub
 \subsection{The Convolution Branch}
 \label{subsec:CNN}
 
-The Convolution branch is pictured on the left side of Fig. (\ref{fig:Architecture}) and is an implementation of a convolutional neural network (CNN), connected to a multilayer perceptron (MLP). This branch accepts 2D image-like input in the form of a spectrogram, described in section (\ref{subsec:FeaturesCNN}). The order and organization of the layers in this branch of the model was inspired from Oxford's \textit{VGG-16} network architecture \cite{Geron}. VGG-16 model uses successive 2D convolutions to identify characteristic features, followed by 2D pooling layers to reduce the size of the activations. Unlike VGG-16, our model does not use padding to keep the image resolution after each convolution layer, and instead the resolution of the image is dropeed with every layer.
+The Convolution branch is pictured on the left side of Fig. (\ref{fig:Architecture}) and is an implementation of a convolutional neural network (CNN), connected to it's own multilayer perceptron (MLP). This branch accepts 2D image-like input in the form of a spectrogram, described in section (\ref{subsec:FeaturesCNN}). The order and organization of the layers in this branch of the model was inspired from Oxford's \textit{VGG-16} network architecture \cite{Geron}\textcolor{red}{Add VGG citation!}. VGG-16 model uses successive 2D convolutions to identify characteristic features, followed by 2D pooling layers to reduce the size of the activations. Unlike VGG-16, our model does not use padding to keep the image resolution after each convolution layer, and instead the resolution of the image is dropped with every layer.
 
 The dominant structure in our convolution branch is the \textit{convolution layer group} with combines three layers in succession:
 \begin{enumerate}
@@ -354,6 +354,7 @@ The dominant structure in our convolution branch is the \textit{convolution laye
     \item \textbf{2D Convolution Layer} - $32$ features feature maps, $3 \times 3$ kernel size, $1 \times 1$ kernel stride, ReLU activation function.
     \item \textbf{2D Maximum Pooling Layer} - $3 \times 3$ kernel size, $1 \times 1$ kernel stride, Identity activation function
 \end{enumerate}
+
 The combination of layers in this order allows for the convolutions to detect characteristic features in the spectrogram, while the pooling allows for minor positional in variance in those features. Additionally, the output of the layer group is smaller is size, causing each layer's activation to take up less memory, and allowing only the most prolific features of each input to survive. At the end of the final layer group, the remaining 2D image contain only a few pixels, and the activation are flattened, by reorganizing each sample such that it is a 1D array. The 1D array is appropriately shaped for processing in the branche own MLP structure. The output of the last dense layer of this MLP is provided to the concatenation layer, which merges it with the output of the Perceptron branch. 
 
 % ================================================================
@@ -382,31 +383,33 @@ The architecture of the HNN enables us to perform classify the contents of digit
 \label{subsec:Resampling}
 
 In the machine learning workflow, it is standard practice to divide a full data set into a \textit{training} subset and a \textit{testing} subset \cite{James,Virtanen}. The training subset is used to optimize the parameters, $\Theta$, in the model as to minimize the cost function, $J$, for the data set. The testing subset is used to evaluate how well the neural network performs on data that it has never interacted with \cite{Geron}. The training subset does contain corresponding labels, but they are withheld from the trained model such that it can make unbiased predictions.
-We can expand this idea to a common resampling method called \textit{K-Folds Cross Validation}, or X-validation for short \cite{James}. X-validation divides a data set into $K$ equally-sized folds. The first $K-1$ folds are used to train the model, and the last fold is used to evaluate how well the network performs on unseen samples. This process repeats of all $K$ folds.
+We can expand this idea to a common resampling method called \textit{K-Folds Cross Validation}, or X-validation for short \cite{James}. X-validation divides a data set into $K$ equally-sized folds. The first $K-1$ folds are used to train the model, and the last fold is used to evaluate how well the network performs on unseen samples. This process repeats of all $K$ folds, on $K$ unique models.
 
-The result of X-validation is $K$ neural network models that have all been trained and evaluated on overlapping subsets of the full data set. Each model contains a set of learned parameters, $\Theta$ that represent a possible outcome if trained on the given data set \cite{James}. By repeating this and comparing the performance across each fold, we understand how the chosen architecture and hyper-parameters influence the stability of the performance of the network. Across each fold, we expect to observe a reasonably high, as well as consistent performance. This is indicates a model that can train effectively, and generalize appropriately. X-validation is critical to ensuring that a model is behaving as expected.
+The result of X-validation is $K$ neural network models that have all been trained and evaluated on overlapping subsets of the full data set. Each model contains a collection of learned parameters, $\Theta$ that represent a possible outcome if trained on the given subset \cite{Geron,James}. By repeating this and comparing the performance across each fold, we understand how the chosen architecture and hyper-parameters influence the stability of the performance of the network. 
+
+Across each fold, we expect to observe a reasonably high, as well as consistent performance. A model that does not perform well on all of the splits indicates a poor choice or architecture or features, and a model that performs inconsistently across the splits indicates a model that suffers from high-variance, where small changes in initial conditions can drastically affect it's classification abilities \cite{James}. When we see consistent and strong performance across multiple splits, we develop confidence that we have a model that can train effectively, and generalize appropriately \cite{Geron}. 
 
 % ================================================================
 
 \subsection{Performance Metrics}
 \label{subsec:Metrics}
 
-We choose the following metrics to evaluate the performance of our HNN. All metrics are define in relation to \textit{true-positive} (TP), \textit{true-negative} (TN), \textit{false-positive} (FP), and \textit{false-negative} (FN) predictions \cite{Geron,James}. These metrics are computed for each of $K$ cross validation folds. We visualize the results of each split in Fig.(\ref{fig:XvalScores}.
+We choose the following metrics to evaluate the performance of our HNN. All metrics are defined in relation to \textit{true-positive} (TP), \textit{true-negative} (TN), \textit{false-positive} (FP), and \textit{false-negative} (FN) predictions \cite{Geron,James}. These metrics are computed for each of $K$ cross validation folds. We visualize the results of each split in Fig.(\ref{fig:XvalScores}.
 
 \begin{itemize}
-    \item \textbf{Accuracy Score} - is the ratio of correct predictions to total predictions made by the model. While accuracy is convenient for quick estimates of performance, it does not provide much statistical information on the nature of predictions made of the model. This is especially true when classes have non-uniform representations in the data set. The accuracy score of a classification algorithm is given by:
+    \item \textbf{Accuracy Score} - is the ratio of correct predictions to total predictions made by the model. While accuracy is convenient for quick estimates of performance, it does not provide much statistical information on the nature of choices made. This is especially true when classes have non-uniform representations in the data set. The accuracy score of a classification algorithm is given by:
     \begin{equation}
         \text{Accuracy} = \frac{TP + FN}{TP + TN + FP + FN}
     \end{equation}
     Accuracy is bound between $0$ and $1$ with a higher score indicating better performance.
     
-    \item \textbf{Precision Score} - is the ratio of correctly identified elements, to all relevant elements in the data set. The higher the score, the \textit{specific} a model is to a particular category. The precision score of a classification algorithm is given by:
+    \item \textbf{Precision Score} - is the fraction of retrieved samples that were relevant. This means that the higher the score, the more \textit{specific} a model is when categorizing. The precision score of a classification algorithm is given by:
     \begin{equation}
         \text{Precision} = \frac{TP}{TP + FP}
     \end{equation}
     This metric determines how many of the selected items are relevant to the problem and is bound between $0$ and $1$ with a higher score indicating better performance.
     
-    \item \textbf{Recall Score} - is the ratio of correctly identified elements, to all relevant elements in the data set. The higher the score, the \textit{sensitive} a model is to a particular category. The recall score of a classification algorithm is given by:
+    \item \textbf{Recall Score} - is the fraction of relevant samples that were retrieved. The higher the score, the \textit{sensitive} a model is to a particular category. The recall score of a classification algorithm is given by:
     \begin{equation}
         \text{Recall} = \frac{TP}{TP + FN}
     \end{equation}
