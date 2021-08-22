@@ -42,7 +42,7 @@
 % ================================================================================================================================
 
 \begin{abstract}
-    Classifying audio signals with machine learning has become an important topic of research in the past few years. Models often involve the input of a 2-D spectrogram or 1-D feature vector into a unimodal network such as a Convolutional Neural Network (CNN) or Multilayer Perceptron (MLP). In this study, we explore automatic classification of musical instruments using new hybrid neural-network (HNN)  architecture that combines the CNN and MLP models and provides superior performance over models that rely solely on one or the other. This hybrid network uses two branches, one being a CNN to process an image-like 2-D spectrogram, and the other being an MLP to process a 1-D feature vector. Within the model, a hidden layer combines activations from the two branches by concatenating them into a single 1-D dense layer, thus all predictions are a product of both branches. We describe in detail the creating of the spectrogram and features, as well as how they influence the chosen network architecture. We finish with a practical demonstration that uses this classifier model to match waveforms from a chaotic music synthesizer to real-world musical instruments. Training data is from studio recordings of the Philharmonia Symphony Orchestra and University of Iowa's Electronic Music Studios
+    Classifying audio signals with machine learning has become an important topic of research in the past few years. Models often involve the input of a 2-D spectrogram or 1-D feature vector into a unimodal network such as a Convolutional Neural Network (CNN) or Multilayer Perceptron (MLP). In this study, we explore automatic classification of musical instruments using new hybrid neural-network (HNN)  architecture that combines the CNN and MLP models and provides superior performance over models that rely solely on one or the other. This hybrid network uses two branches, one being a CNN to process an image-like 2-D spectrogram, and the other being an MLP to process a 1-D feature vector. Within the model, a hidden layer combines activations from the two branches by concatenating them into a single 1-D dense layer, thus all predictions are a product of both branches. We describe in detail the creating of the spectrogram and features, as well as how they influence the chosen network architecture. \textcolor{red}{We finish with a practical demonstration that uses this classifier model to match waveforms from a chaotic music synthesizer to real-world musical instruments.} Training data is from studio recordings of the Philharmonia Symphony Orchestra and University of Iowa's Electronic Music Studios
 \end{abstract}
 
 % ================================================================================================================================
@@ -70,7 +70,7 @@ To account for this multimodal input, we have constructed a \textit{hybrid neura
 \subsection{Structure}
 \label{subsec:structure}
 
-A neural network defines a type of machine learning algorithm that is inspired from the human brain \cite{Geron,Goodfellow}. Where biological brains are constructed from neurons and connected through axons, neural networks are constructed from artificial neurons and connected through transformation functions. The numerical value contained within an artificial neuron is the \textit{activation} of that neuron \cite{Levine}. Neurons are organized into groups called \textit{layers}, which interact with other nuurons in other layers through mathematical transformations such as matrix multiplications or convolutions \cite{Goodfellow}. Because of this interaction, each layer $(l)$ in a network can be considered as function, $f^{(l)}$ that accepts an array (vector,matrix,tensor,etc.) of activations from the \textit{previous} layer $x^{(l-1)}$ and uses a set of \textit{parameters} to return an array of modified activations for the \textit{current} layer, $x^{(l)}$. Thus each layer can be generally characterized by the expression:
+A neural network defines a type of machine learning algorithm that is inspired from the human brain \cite{Geron,Goodfellow}. Where biological brains are constructed from neurons and connected through axons, neural networks are constructed from artificial neurons and connected through transformation functions. The numerical value contained within an artificial neuron its \textit{activation}\cite{Levine}. Neurons are often organized into groups called \textit{layers}, that interact with other neurons in other layers through mathematical transformations such as matrix multiplications or convolutions \cite{Goodfellow}. Because of this interaction, each layer $(l)$ in a network can be considered as function, $f^{(l)}$ that accepts an array (vector,matrix,tensor,etc.) of activations from the \textit{previous} layer $x^{(l-1)}$ and uses a set of \textit{parameters} to return an array of modified activations for the \textit{current} layer, $x^{(l)}$. Thus each layer can be generally characterized by the expression:
 \begin{equation}
     \label{eqn:LayerFunction}
     f^{(l)} : x^{(l-1)} \rightarrow x^{(l)}
@@ -81,9 +81,9 @@ By connecting multiple layers in succession, we form a chain-like structure of l
     \label{eqn:LayerChain}
     x^{(0)} \rightarrow f^{(0)} \rightarrow f^{(1)} \rightarrow ... \rightarrow f^{(L-2)} \rightarrow f^{(L-1)} \rightarrow y^*
 \end{equation}
-The structure of a neural network's layer-chain is often referred to as its \textit{architecture} and chooses the \textit{hypothesis space} of the model. This is the set of all possible functions that the network can choose as a solution \cite{Goodfellow,James}. For deep neural networks this function chain can be dozens of layers long, contain upwards of millions of parameters, may enable the model to cover a much more diverse set of solutions \cite{Geron}. By carefully choosing the architecture to compliment the nature of the problem, we build a preference of solutions into the model which enables it to perform better \cite{Goodfellow}.
+The structure of a neural network's layer-chain is often referred to as its \textit{architecture} and chooses the \textit{hypothesis space} of the model. This is the set of all possible functions that the network can choose as a solution \cite{Goodfellow,James}. For deep neural networks this function chain can be dozens of layers long, contain upwards of millions of parameters, and may enable the model to cover a much more diverse set of solutions \cite{Geron}. By carefully choosing the architecture to compliment the nature of the problem, we build a preference of solutions into the model which enables it to perform better \cite{Goodfellow}.
 
-The hybrid neural network used in this instrument classification task differs from the more standard architecture in Eq. (\ref{eqn:LayerChain}) in that the function chain consists of two input layers, $f_a$ and $f_b$ that receive inputs $x^{(0)}_a$ and $x^{(0)}_b$ respectively. Each layer chain uses a particular arrangement of layers to form a sub-graph that compliments each type of input data. The activations are processed and transformed into compatible 1-dimensional format before they are combined at a designated hidden layer that concatenation them into a new layer. This new layer marks the start of final sub-graph, $f_c$ that leads to the output of the neural network. We represent the layer-chain structure for a generalized double-input HNN, with inputs $x^{(0)}_a$ and $x^{(0)}_b$ and outputs $y^*$ as :
+The hybrid neural network used in this instrument classification task differs from the more standard architecture in Eq. (\ref{eqn:LayerChain}) in that the function chain consists of two input layers, $f_a$ and $f_b$ that receive inputs $x^{(0)}_a$ and $x^{(0)}_b$ respectively. Each chain uses a particular arrangement of layer to form a sub-graph that compliments each type of input data. The activations are processed and transformed into a compatible 1-dimensional format before they are combined at a designated hidden layer, $f_c^{\gamma}$ and then transform again to produce the model's final prediction . We represent the layer-chain structure for a generalized double-input HNN, with inputs $x^{(0)}_a$ and $x^{(0)}_b$ and outputs $y^*$ as :
 
 \begin{equation}
     \label{eqn:LayerGraph}
@@ -101,7 +101,7 @@ The combination of two sub-graphs, $f_a$ and $f_b$, into a third sub-graph, $f_c
 \subsection{Input and Output}
 \label{subsec:InputOutput}
 
-The inputs to a neural network or any machine learning algorithm are called \textit{features} or \textit{predictors} \cite{James}. These are compact, low-dimensional representations of a data sample that reflect its important characteristics \cite{Liu}. Features should be chosen as to have low variance within each class and high variance between classes. For digital audio classification of musical instruments, features of the same musical instruments should exhibit very similar properties, while features from difference musical instruments should exhibit non-similar properties. In any learning algorithm, the role of feature engineering is to translate the raw time-series information from a digital audio file into descriptors that maximize the classification performance \cite{Virtanen}. Although the neural network will classify the musical instrument within the digital audio sample, it will never interact with the waveform directly and instead will rely solely on these features. In a classification model that uses $p$ unique predictors, the features typically usually combined into a single vector-like object for each sample, and then presented as input to the neural network \cite{Geron}. We detail the classification features for this neural network in section (\ref{subsec:FeaturesMLP}) and (\ref{subsec:FeaturesCNN}). 
+The inputs to a neural network or any machine learning algorithm are called \textit{features} or \textit{predictors} \cite{James}. These are compact, low-dimensional representations of a single data sample that reflect its important characteristics \cite{Liu}. Features should be chosen as to have low variance within each class and high variance between classes. We expect features drawn from different samples of the same musical instruments to have very similar properties while features drawn from samples of different musical instruments to exhibit non-similar properties. In any learning algorithm, the role of feature engineering is to translate the raw time-series information from a digital audio file into descriptors that maximize the classification performance \cite{Virtanen}. Although the neural network will classify the musical instrument within the digital audio sample, it will never interact with the waveform directly and instead will rely solely on these features. In a classification model that uses $p$ unique predictors for each sample will typically combined into a single vector-like object which is then presented as input to the neural network \cite{Geron}. We detail the classification features for this neural network in section (\ref{subsec:FeaturesMLP}) and (\ref{subsec:FeaturesCNN}). 
 
 The outputs to a classification neural network encodes the prediction that the model has made given a particular set of inputs from a sample. For a classifier with $k$ classes, there are $k$ neurons in the output layer, each one representing a particular class. These output activations which are transformed such that the sum (or $L-1$ norm) of them is identically $1$ so that they are collectively treated as a discrete probability density \cite{Goodfellow,James}. The neuron with the highest activation value indicates the class that the models predicts in input sample originated from. For classification of musical instruments, each neurons represents a musical instrument type. We use $37$ classes of instruments encapsulating woodwinds, brass, strings, mallet percussion, and synthesizers. 
 
@@ -110,7 +110,7 @@ The outputs to a classification neural network encodes the prediction that the m
 \subsection{The Cost Function}
 \label{subsec:CostFunction}
 
-A neural network that uses $p$ features, $k$ classes, and $b$ samples per batch is trained by providing inputs $X \in \mathbb{R}^{(b \times p)}$, with a corresponding set of labels $Y \in \mathbb{Z}^{(b \times k)}$. Consider a sample $x \in X$ that is expected to produce corresponding label $y \in Y$. When passed into the network, $x$ produces some prediction label denoted as $y^*$. For an untrained network, we anticipate that $y^*$ and $y$ may differ greatly - meaning that the prediction is very different that the expected output, which will lead to poor classification performance. Since we know each sample in the data set to contain one, and only one musical instrument, we \textit{one-hot-encode} the expected label $y$. For any sample $x^{(i)}$ that belongs to class $j$, we have a corresponding target vector $y^{(i)}$ given by:
+Consider a neural network that uses $p$ features, $k$ classes, and $b$ samples per batch is trained by providing inputs $X \in \mathbb{R}^{(b \times p)}$, with a corresponding set of labels $Y \in \mathbb{Z}^{(b \times k)}$. Consider a sample $x \in X$ that is expected to produce corresponding label $y \in Y$. When passed into the network, $x$ produces some prediction label denoted as $y^*$. For an untrained network, we anticipate that $y^*$ and $y$ may differ greatly - meaning that the prediction is very different that the expected output, which will lead to poor classification performance. Since we know each sample in the data set to contain one, and only one musical instrument, we \textit{one-hot-encode} the expected label $y$. For any sample $x^{(i)}$ that belongs to class $j$, we have a corresponding target vector $y^{(i)}$ given by:
 \begin{equation}
     \label{eqn:OneHotEnc}
     y^{(i)} = \big[ y_{0} , y_{1}, ... , y_{j}, ... , y_{k-1} \big] = \big[ 0, 0, ... , 1, ... , 0 \big]
@@ -122,7 +122,7 @@ To quantify the difference between $y$ and $y^*$, we introduce a \textit{cost fu
     \label{eqn:CXELoss}
     \text{CXE}[y,y^*] = - \sum_{n=0}^{k-1} y_{n} \ln(y^*_{n})
 \end{equation}
-Consider again a sample belongs to class $j$. Since $y$ is one-hot-encoded, the only non-zero term in the sum is $y_{j} \ln(y^*_{j})$. Since $y^*_{j} \in [0,1]$, then $\ln(y^*_{j}) < 0$ which we multiply by $-1$ to always yield a positive cost value. When a sample produces $y^*_{j} << 1$, meaning a poor prediction for that class, the CXE cost returns a large value and when $y^*_{j} \approx 1$, meaning a strong prediction for that category, then the CXE cost returns a small value. We provide a visualization of this behavior in Fig. (\ref{fig:CXELoss}).
+Consider again a sample belongs to class $j$. Since $y$ is one-hot-encoded, the only non-zero term in the sum is $y_{j} \ln(y^*_{j})$. Since $y^*_{j} \in [0,1]$, then $\ln(y^*_{j}) < 0$ which we multiply by $-1$ to always yield a positive cost value. When a sample produces $y^*_{j} << 1$, meaning a poor prediction for that category, the CXE cost returns a large value and when $y^*_{j} \approx 1$, meaning a strong prediction for that category, then the CXE cost returns a small value. We provide a visualization of this behavior in Fig. (\ref{fig:CXELoss}).
 
 \begin{figure}[h]
     \centering
@@ -138,14 +138,16 @@ We characterize the cost function as producing a value inversely proportional to
 \subsection{Training and Optimization}
 \label{subsec:Training}
 
-A neural network makes predictions by successive transformations of input features through layer functions until a final output array is produced. Each layer $f^{(l)}$, of the model is a function that contains a set of parameters held within arrays $W^{(l)}$ and $b^{(l)}$ that are used to transform activations through the layer chain \cite{Goodfellow}. The process of training the network is the manipulation of these parameters in each layer, such that each input $x$ can produce a output, $y^*$ that is reasonably close to $y$. Since we can quantify the difference between the expected output and the given output with a cost function, we can use this as a metric for measuring how "trained" a model is \cite{James}. Specifically, we train a neural network by \textit{optimizing} the parameters in each layer to allow for this consistently low cost function value \cite{Geron,Goodfellow}. Note that we optimize the cost function under the assumption that doing so will also improve the classification performance. This is called \textit{indirect optimization} \cite{Goodfellow}.
+A neural network makes predictions by successive transformations of input features through layer functions until a final output array is produced. Each layer $f^{(l)}$, of the model is a function that contains a set of parameters held within arrays $W^{(l)}$ and $b^{(l)}$ that are used to transform activations through the layer chain \cite{Goodfellow}. The process of training the network is the manipulation of these parameters in each layer such that each input $x$ can produce a output, $y^*$ that is reasonably close to $y$ \cite{Geron,Virtanen}. Since we can quantify the difference between $y^*$ and $y$ with a cost function, we use this as a metric for measuring how "trained" a model is \cite{James}. Specifically, we train a neural network by \textit{optimizing} the parameters in each layer to allow for a consistently low cost function value across multiple samples \cite{Geron,Goodfellow}. Note that we optimize the cost function under the assumption that doing so will also improve the classification performance when is a concept called \textit{indirect optimization} \cite{Goodfellow}.
 
-Since a the function chain that comprises a neural network can become exceedingly complicated for deeper and wider networks, producing a single analytical expression for the optimization of every parameter may be either impractical at best or impossible at worst. We instead optimize the network with a numerical iterative method based on \textit{gradient descent} \cite{Geron,Goodfellow}. Gradient descent is the process of (i.) computing the gradient of the cost function with respect to every element in $\Theta$ and (ii.) adjusting each parameter in $\Theta$ according to the elements in that gradient vector, shown in Eq.(\ref{eqn:GradDesc}), often scaled by a \textit{learning rate} $\alpha$. We compute the gradient of the cost function, $\nabla_{\Theta}J$ through a process call \textit{backwards propagation} \cite{Geron}. This algorithms uses the derivative chain-rule from multivariate calculus to begin at the last layer of the network, and work backwards through the layer chain in Eq. (\ref{eqn:LayerChain}) to construct the elements of $\nabla_{\Theta}J$ \cite{Goodfellow,Virtanen}.
+Since a the function chain that comprises a neural network can become exceedingly complicated for deeper and wider networks, producing a single analytical expression for the optimization of every parameter may be either impractical at best or impossible at worst. We instead optimize the network with a numerical iterative method based on \textit{gradient descent} \cite{Geron,Goodfellow}. Gradient descent is the process of repeatedly (i.) computing the gradient vector of the cost function with respect to every element in $\Theta$ and (ii.) adjusting each parameter in $\Theta$ according to the elements in that gradient vector, shown in Eq.(\ref{eqn:GradDesc}). For each iteration, we compute the gradient of the cost function, $\nabla_{\Theta}J$ through a process called \textit{backwards propagation} \cite{Geron}. This algorithm uses the derivative chain-rule from multivariate calculus to begin at the last layer of the network, and work backwards through the layer chain in Eq. (\ref{eqn:LayerChain}) to construct the elements of $\nabla_{\Theta}J$ \cite{Goodfellow,Virtanen}.
 
 \begin{equation}
     \label{eqn:GradDesc}
     \Theta^{(i)} = \Theta^{(i-1)} + (-\alpha)\nabla_{\Theta}J
 \end{equation}
+
+We introduce a parameter $\alpha$ as the \textit{learning rate} of the model. This scales each element in the gradient vector as t control the "step size" taken with each iteration \cite{Geron,Goodfellow,Virtanen}.
 
 Standard gradient descent optimization is cumbersome, prone to numerical errors, and may often become unstable when encountering discontinuities in solution-space \cite{James,Geron}. Because of this, we employ a more robust and aggressive optimization algorithm called \textit{Adaptive-Moments} or ADAM for short. ADAM uses adaptive learning rates, $s^{(i)}$ and $r^{(i)}$, that record and update exponentially decaying averages of past gradients and past squared gradients respectively. The ADAM update is given by Eq. (\ref{eqn:ADAM}).
 
@@ -160,65 +162,90 @@ Standard gradient descent optimization is cumbersome, prone to numerical errors,
         \end{split}
 \end{equation}
 
-ADAM provides a much more powerful and stable optimization algorithm at a higher computational cost \cite{Geron}. Note that the superscript $(i)$ indicates an iteration index where a superscript $i$ is exponentiation. Typically we initialize $\rho_1 = 0.9$, $\rho_2 = 0.999$, and introduce $\delta \approx 10^{-7}$ to avoid possible division of near-zero values \cite{Goodfellow}. All operations in the final three steps are applied element-wise. ADAM has experimentally shown to be a very effective optimizer and useful for a wide range of data sets and architectures which is why we have chosen to implement it for this project \cite{Geron,Goodfellow}.
+ADAM provides a much more powerful and stable optimization algorithm at a higher computational cost \cite{Geron,Tensorflow}. Note that the superscript $(i)$ indicates an iteration index where a superscript $i$ is exponentiation. Typically we initialize $\rho_1 = 0.9$, $\rho_2 = 0.999$, and introduce $\delta \approx 10^{-7}$ to avoid possible division of near-zero values \cite{Goodfellow}. All operations in the final three steps are applied element-wise. ADAM has experimentally shown to be a very effective optimizer and useful for a wide range of data sets and architectures which is why we have chosen to implement it for this project \cite{Geron,Goodfellow}.
 
 % ================================================================
 
 \subsection{Layers Used in this Classification Model}
 \label{sec:LayersUsed}
 
-As mentioned in section \ref{subsec:structure} Eq. \ref{eqn:LayerFunction}), each layer in the neural network acts as it's own self-contained function that operates on the activations of the previous layer to transform them into the activations for the current layer. The combination and arrangement of these layers define the model's hypothesis space which is the set of functions that the network can use as a solution. For this classification task we employ five different layer types detailed below. We also describe the forward-pass process of each layer and in Fig. (\ref{fig:Architecture}) and show how the combination of these layers are used to form the multimodal architecture of this network. 
+As mentioned in sec. (\ref{subsec:structure}) Eq. (\ref{eqn:LayerFunction}), each layer in the neural network acts as it's own self-contained function that operates on the activations of the previous layer to transform them into the activations for the current layer. The combination and arrangement of these layers define the model's hypothesis space which is the set of functions that the network can use as a solution. For this classification task we employ five different layer types detailed below. We also describe the forward-pass process of each layer and in Fig. (\ref{fig:Architecture}) and show how the combination of these layers are used to form the multimodal architecture of this network. 
 
 \begin{enumerate}
 
 \item\textbf{Dense Layer}
-The dense layer, also called \textit{fully-connected} or \textit{affine} layer is one of earliest layer types used in artificial neural networks \cite{Geron}. It is composed of a collection of artificial neurons, each of which contains a numerical value (usually a floating-point number) called the \textit{activation} of that neuron. The activation of any neuron, is computed through a weighted linear-combination of every neuron in the previous layer with a \textit{bias} added as well \cite{Geron,Goodfellow,Tensorflow}. This property of connecting every neuron in one layer to every other neuron in the previous layer is called \textit{dense connectivity} which is what gives this layer its name.
-
-It then follows that a full \textit{layer} of activations is produced from the matrix-vector product of a weight-matrix $W^{(l)}$, and the previous layers of neurons $x^{(l-1)}$, and then added to a bias $b^{(l)}$ \cite{Goodfellow,Tensorflow}. We can model this transformation as :
+The dense layer, also called \textit{fully-connected} or \textit{affine} layer is one of earliest layer types used in artificial neural networks \cite{Geron}. It is composed of a collection of artificial neurons,where the activation of any neuron, is computed through a weighted linear-combination of every neuron in the previous layer with a \textit{bias} added as well \cite{Geron,Goodfellow,Tensorflow}. We can model this transformation as :
 \begin{equation}
 \label{eqn:DenseCall}
 x^{(l)} = W^{(l)}x^{(l-1)} + b^{(l)}
 \end{equation}
-Suppose the layer $(l-1)$ contains $m$ neurons, and layer $(l)$ contains $n$ neurons. Each object then belongs to space: $x^{(l)} \in \mathbb{R}^(n \times 1)$, $x^{(l-1)} \in \mathbb{R}^(m \times 1)$, $b^{(l)} \in \mathbb{R}^(n \times 1)$, and $W^{(l)} \in \mathbb{R}^(n \times m)$. This transformation models an multidimensional affine-transformation which enables this layer to learn roughly linear decision boundaries between adjacent layers of neurons. 
+
+This property of connecting every neuron in one layer to every other neuron in the previous layer is called \textit{dense connectivity} which is what gives this layer its name. This transformation models an multidimensional affine-transformation which enables this layer to learn roughly linear decision boundaries between adjacent layers of neurons. 
 
 \item\textbf{2-Dimensional Convolution Layer}
-Convolution Layers Emerged from studying the brain's visual cortex, and have been used for image recognition \cite{Geron,Goodfellow,Loy}. The layer gets it's name due to it's implementation of the mathematical 2D \textit{convolution} operation. The 2D discrete convolution of function or 2D array $A$ and $B$ is given by:
+Convolution Layers emerged from studying the brain's visual cortex, and have been used for image recognition for decades \cite{Geron,Goodfellow}. The layer gets it's name due to it's implementation of the mathematical 2D \textit{convolution} operation. The 2D discrete convolution of function of arrays $A$ and $B$ is given by:
 \begin{equation}
 \label{eqn:Conv2D}
 C[i,j]  = (A * B)[i,j] = \sum_{y}\sum_{v} A[i,j]B[i-u,j-v]
 \end{equation} 
-We implement this function in the neural network by creating a series of $K$ weighting matrices, called filters, of size $m \times n$, each to take the place of $A$ above \cite{Geron}. The shape of the filters in referred to as the \textit{convolution filter size}, and step them along in two dimensions according to a set \textit{stride size} \cite{Goodfellow,Loy}.
+Where $A$, $B$, and $C$ are also 2D arrays themselves. In a neural network, we implement this function by creating a series of $K$ weighting matrices, called filters, each of size $m \times n$, and the place of $A$ above \cite{Geron}. The shape of the filters in referred to as the \textit{convolution filter size}, and step them along in two dimensions according to a set \textit{stride size} \cite{Goodfellow}.
 
-In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(M \times N)}$, the convolution filters step through the input data and repeatedly compute the element-wise producr of each $m \times n$ filter and the local activations of the $x^{(l)}$ array. Each of the $K$ filters generate a new array of activation. For an appropriately trained neural network, some filters may result in detecting vertical lines, horizontal lines, sharp edges, or areas of mostly one color, etc \cite{Loy}.
+In the case of a 2D input array, $x^{(l-1)} \in \mathbb{R}^{(M \times N)}$, the convolution filters step through the input data and repeatedly compute the element-wise product of each $m \times n$ filter and the local activations of the $x^{(l)}$ array. Each of the $K$ filters generate a new array of activation. For an appropriately trained neural network, some filters may result in detecting vertical lines, horizontal lines, sharp edges, or areas of mostly one color, etc \cite{Geron}.
 
-Just like the dense layer, we also choose to add a bias term to each output neuron, and can further modify the array by applying a non-linear activation function. for 2D convolution layer $(l)$, given input $x^{(l-1)}$, we compute the actions of the $k$-th filter $x^{(l)}_k$ using filter $W^{(l)}_k$ and bias $b^{(l)}_k$ as \cite{Goodfellow}.
+Just like the dense layer, we also choose to add a bias term to each output neuron, and can further modify the array by applying a non-linear activation function. for 2D convolution layer $(l)$, given input $x^{(l-1)}$, we compute the activations of the $k$-th filter $x^{(l)}_k$ using filter $W^{(l)}_k$ and bias $b^{(l)}_k$ as \cite{Goodfellow}.
 \begin{equation}
 \label{eqn:Conv2DCall}
-x^{(l-1)}_{k}(i,j) = b^{(l)}_{k} + 
-\sum_{u=0}^{M-1}\sum_{v=0}^{N-1} W^{(l)}_{k}(i,j) x^{(l-1)}_{k}(i-u,j-v)
+x^{(l)}_{k}(i,j) = b^{(l)}_{k} + 
+\sum_{u=0}^{M-1}\sum_{v=0}^{N-1} W^{(l)}_{k}(i,j) x^{(l-1)}(i-u,j-v)
 \end{equation}
 
 The Convolution layer allows for a few advantages over the dense layer. Among these are (i) \textit{spare-connectivity}: not every input neuron is connected to every single output neuron, so it can be more computationally efficient, (ii) \textit{positional invariance}: key features can be identified regardless of where the are in the input array, and (iii) \textit{Automatic feature detection}: as the weighting kernels are trained, they update as to automatically determine dominant features in the data without explicit human instruction \cite{Geron,Goodfellow}.
 
 \item\textbf{2-Dimensional Maximum Pooling}
-A maximum-pooling layer returns the value of the maximum neuron activation in a local subset of neurons. In the case of 2D max-pooling, we choose a kernel size $m \times n$, and pass that kernel over the inputs according to a chosen stride size \cite{Tensorflow}. The kernel takes the largest value in that area of inputs, and then places it into the output activations array. This operation is particularly useful for compressing the amount of data down to a computational efficient size.
+A maximum-pooling layer returns the value of the maximum neuron activation in a local subset of neurons. In the case of 2D max-pooling, we choose a kernel size $m \times n$, and pass that kernel over the inputs according to a chosen stride size \cite{Tensorflow}. The kernel takes the largest value in that area of inputs, and then places it into the output activations array. This operation is particularly useful for compressing the amount of data down to a more computational efficient size.
 
-Pooling layers are typically places after a layer or set of layers of convolution. The purpose of this is arrangement is to reduce the width of the model at the pooling layer and ensure that only the dominant features with the largest activations are preserved \cite{Geron}. This layer is considered to be "non-trainable" because it does not use any adjustable parameters in it's transformation, only a fixed procedure that cannot be updated.
+Pooling layers are typically placed after a layer or set of layers of convolution. The purpose of this is arrangement is to reduce the width of the model at the pooling layer and ensure that only the dominant features with the largest activations are preserved \cite{Geron}. This layer is considered to be "non-trainable" because it does not use any adjustable parameters in it's transformation, only a fixed procedure that cannot be updated.
 
 \item\textbf{Flattening}
-A flattening layer is used to rearrange the shape of an array of activations without actually changing the values stored within them \cite{Tensorflow}. In particular, we use this layer to transform the 2D output of the convolution and pooling layers into 1D activations which can be passed into a dense layer. For an array of activations , $x^{(l-1)} \in \mathbb{R}^{(m \times n)}$, a flattening layer $f^{(l)}$ transforms them such that $x^{(l)} \in \mathbb{R}^{(1 \times mn)}$. This layer is also considered to be "non-trainable" because it does not use any adjustable parameters.
+A flattening layer is used to rearrange the shape of an array of activations without actually changing the values stored within them \cite{Tensorflow}. In particular, we use this layer to transform the 2D output of the convolution and pooling layers into 1D activations which can be passed into a dense layer. For an array of activations , $x^{(l-1)} \in \mathbb{R}^{(m \times n)}$, a flattening layer $f^{(l)}$ transforms them such that $x^{(l)} \in \mathbb{R}^{(1 \times mn)}$. For example, for 2D input $x^{(l-1)}$, we would return a 1D output $x^{(l)}$:
+\begin{equation}
+\label{eqn:FlattenCall}
+\begin{bmatrix}
+a & b & c \\
+d & e & f \\
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+a & b & c & d & e & f 
+\end{bmatrix}
+\end{equation}
+This layer is also considered to be "non-trainable" because it does not use any adjustable parameters.
 
 \item\textbf{Concatenation}
-
-
+The concatenation layer combines the activations of two similarly-dimensional arrays by concatenating them along a desired axis. In the layer graph shown in Eq. (\ref{eqn:LayerGraph}) this takes the place of layer $f_c^{\gamma}$. The output of the two previous layer chains are merged here before being fed to the output layer chain. This layer is what makes the aggregation of each subgraph possible and how we are able to generate one prediction from two input modalities. For inputs $x_a^{(l-1)}$ and $x_b^{(l-1)}$ this layer will return an output $x_c^{(l)}$:
+\begin{equation}
+\label{eqn:ConcatCall}
+\begin{bmatrix}
+a & b & c
+\end{bmatrix}
+\&
+\begin{bmatrix}
+d & e & f
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+a & b & c & d & e & f
+\end{bmatrix}
+\end{equation}
+This layer is also considered to be "non-trainable" because it does not use any adjustable parameters.
 \end{enumerate}
 
-Formal implementations of the dense layer and 2D convoltional layer types introduce non-linearity into the hypothesis space by applying an \textit{activation} function to Eq. (\ref{eqn:DenseCall}) and Eq (\ref{eqn:Conv2DCall}) \cite{Goodfellow}. For this classification network, we choose to use the \textit{ReLU} activation function, defined as:
+Formal implementations of the dense layer and 2D convoltional layer types introduce non-linearity into the hypothesis space by applying an \textit{activation} function to Eq. (\ref{eqn:DenseCall}) and Eq (\ref{eqn:Conv2DCall}) \cite{Goodfellow,Tensorflow}. For this classification network, we choose to use the \textit{ReLU} activation function, defined as:
 \begin{equation}
 \label{eqn:ReLU}
-ReLU \big[ x^{(l)} \big] = \text{max} \big( 0, x^{(l)} \big)
+ReLU \big[ x^{(l)} \big] = \text{max} \big( 0, x_i) \big)
 \end{equation} 
-Successive use of affine and convolutional transformations combine with non-linear activation functions allow a neural network to model the increasingly complicated decision-boundaries that arise in real-world problems \cite{Geron,Goodfellow}.
+for each element $x_i \in x^{(l)}$. Successive use of affine and convolutional transformations combine with non-linear activation functions allow a neural network to model the increasingly complicated decision-boundaries that arise in real-world problems \cite{Geron,Goodfellow}.
 
 % ================================================================================================================================
 

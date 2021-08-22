@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  15 AUG 2021 11:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.26)  22 AUG 2021 13:33
 entering extended mode
 **./main.tex
 (main.tex
@@ -450,103 +450,100 @@ File: figures/CXELoss.png Graphic file (type png)
 <use figures/CXELoss.png>
 Package pdftex.def Info: figures/CXELoss.png  used on input line 129.
 (pdftex.def)             Requested size: 242.82555pt x 80.94185pt.
- [3 <./figures/CXELoss.png>]
-
-LaTeX Warning: Citation `Loy' on page 4 undefined on input line 185.
-
-[4]
-
-LaTeX Warning: Citation `Loy' on page 5 undefined on input line 190.
-
-
-LaTeX Warning: Citation `Loy' on page 5 undefined on input line 192.
-
-[5] [6]
+ [3 <./figures/CXELoss.png>] [4] [5] [6]
 <figures/AnalysisFrames.png, id=39, 804.75656pt x 407.27156pt>
 File: figures/AnalysisFrames.png Graphic file (type png)
 <use figures/AnalysisFrames.png>
-Package pdftex.def Info: figures/AnalysisFrames.png  used on input line 304.
+Package pdftex.def Info: figures/AnalysisFrames.png  used on input line 331.
 (pdftex.def)             Requested size: 238.01991pt x 120.45479pt.
-<figures/AnalysisFrame.png, id=40, 1734.48pt x 578.16pt>
+ [7]
+<figures/AnalysisFrame.png, id=44, 1734.48pt x 578.16pt>
 File: figures/AnalysisFrame.png Graphic file (type png)
 <use figures/AnalysisFrame.png>
-Package pdftex.def Info: figures/AnalysisFrame.png  used on input line 317.
+Package pdftex.def Info: figures/AnalysisFrame.png  used on input line 344.
 (pdftex.def)             Requested size: 238.01991pt x 79.33624pt.
-<figures/WindowedFrame.png, id=41, 1734.48pt x 578.16pt>
+<figures/WindowedFrame.png, id=45, 1734.48pt x 578.16pt>
 File: figures/WindowedFrame.png Graphic file (type png)
 <use figures/WindowedFrame.png>
-Package pdftex.def Info: figures/WindowedFrame.png  used on input line 318.
+Package pdftex.def Info: figures/WindowedFrame.png  used on input line 345.
 (pdftex.def)             Requested size: 238.01991pt x 79.33624pt.
- [7 <./figures/AnalysisFrames.png>]
-<figuresSpectrograms/AltoSax-A4.png, id=47, 1156.32pt x 867.24pt>
+<figuresSpectrograms/AltoSax-A4.png, id=46, 1156.32pt x 867.24pt>
 File: figuresSpectrograms/AltoSax-A4.png Graphic file (type png)
 <use figuresSpectrograms/AltoSax-A4.png>
 Package pdftex.def Info: figuresSpectrograms/AltoSax-A4.png  used on input line
- 327.
+ 354.
 (pdftex.def)             Requested size: 238.01991pt x 178.51317pt.
-<figuresSpectrograms/GUITAR-B2.png, id=48, 1156.32pt x 867.24pt>
+<figuresSpectrograms/GUITAR-B2.png, id=47, 1156.32pt x 867.24pt>
 File: figuresSpectrograms/GUITAR-B2.png Graphic file (type png)
 <use figuresSpectrograms/GUITAR-B2.png>
 Package pdftex.def Info: figuresSpectrograms/GUITAR-B2.png  used on input line 
-328.
+355.
 (pdftex.def)             Requested size: 238.01991pt x 178.51317pt.
- [8 <./figures/AnalysisFrame.png> <./figures/WindowedFrame.png> <./figuresSpect
-rograms/AltoSax-A4.png> <./figuresSpectrograms/GUITAR-B2.png>]
-<figures/NeuralNetworkArchitecture.png, id=56, 614.295pt x 794.97pt>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[8 <./figures/AnalysisFrames.png> <./figures/AnalysisFrame.png> <./figures/Wind
+owedFrame.png>]
+<figures/NeuralNetworkArchitecture.png, id=54, 614.295pt x 794.97pt>
 File: figures/NeuralNetworkArchitecture.png Graphic file (type png)
 <use figures/NeuralNetworkArchitecture.png>
 Package pdftex.def Info: figures/NeuralNetworkArchitecture.png  used on input l
-ine 368.
+ine 395.
 (pdftex.def)             Requested size: 238.01991pt x 308.02344pt.
- [9 <./figures/NeuralNetworkArchitecture.png>]
-[10]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[9 <./figuresSpectrograms/AltoSax-A4.png> <./figuresSpectrograms/GUITAR-B2.png>
+] [10 <./figures/NeuralNetworkArchitecture.png>]
 <figures/AvgXval-Convolution.png, id=64, 1445.4pt x 578.16pt>
 File: figures/AvgXval-Convolution.png Graphic file (type png)
 <use figures/AvgXval-Convolution.png>
-Package pdftex.def Info: figures/AvgXval-Convolution.png  used on input line 44
-4.
+Package pdftex.def Info: figures/AvgXval-Convolution.png  used on input line 47
+1.
 (pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
 <figures/AvgXval-Perceptron.png, id=65, 1445.4pt x 578.16pt>
 File: figures/AvgXval-Perceptron.png Graphic file (type png)
 <use figures/AvgXval-Perceptron.png>
-Package pdftex.def Info: figures/AvgXval-Perceptron.png  used on input line 445
+Package pdftex.def Info: figures/AvgXval-Perceptron.png  used on input line 472
 .
 (pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
 <figures/AvgXval-Multimodal.png, id=66, 1445.4pt x 578.16pt>
 File: figures/AvgXval-Multimodal.png Graphic file (type png)
 <use figures/AvgXval-Multimodal.png>
-Package pdftex.def Info: figures/AvgXval-Multimodal.png  used on input line 446
+Package pdftex.def Info: figures/AvgXval-Multimodal.png  used on input line 473
 .
 (pdftex.def)             Requested size: 238.01991pt x 95.20702pt.
- [11 <./figures/AvgXval-Convolution.png> <./figures/AvgXval-Perceptron.png> <./
-figures/AvgXval-Multimodal.png>]
-<figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png, id=73, 1156.32pt x 1156.
+ [11]
+<figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png, id=70, 1156.32pt x 1156.
 32pt>
 File: figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png Graphic file (type p
 ng)
 <use figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png  
-used on input line 472.
+used on input line 499.
 (pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
-<figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=74, 1156.32pt x 1156.3
+<figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png, id=71, 1156.32pt x 1156.3
 2pt>
 File: figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png Graphic file (type pn
 g)
 <use figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png  u
-sed on input line 473.
+sed on input line 500.
 (pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
-<figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=75, 1156.32pt x 1156.
+<figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png, id=72, 1156.32pt x 1156.
 32pt>
 File: figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png Graphic file (type p
 ng)
 <use figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>
 Package pdftex.def Info: figures/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png  
-used on input line 474.
+used on input line 501.
 (pdftex.def)             Requested size: 185.13109pt x 185.12083pt.
- [12 <./figures/XValGammaCNN_Avg_Hits_Weighted_Confusion.png> <./figures/XValBe
-taMLP_Avg_Hits_Weighted_Confusion.png> <./figures/XValAlphaCLF_Avg_Hits_Weighte
-d_Confusion.png>]
+ [12 <./figures/AvgXval-Convolution.png> <./figures/AvgXval-Perceptron.png> <./
+figures/AvgXval-Multimodal.png>] [13 <./figures/XValGammaCNN_Avg_Hits_Weighted_
+Confusion.png> <./figures/XValBetaMLP_Avg_Hits_Weighted_Confusion.png> <./figur
+es/XValAlphaCLF_Avg_Hits_Weighted_Confusion.png>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -558,42 +555,38 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[13] (main.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
+[14] (main.aux) ) 
 Here is how much of TeX's memory you used:
- 4328 strings out of 492895
- 67438 string characters out of 3123268
- 143258 words of memory out of 3000000
- 8153 multiletter control sequences out of 15000+200000
+ 4329 strings out of 492895
+ 67466 string characters out of 3123268
+ 144277 words of memory out of 3000000
+ 8154 multiletter control sequences out of 15000+200000
  42866 words of font info for 96 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,19n,43p,1371b,304s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/base/8r.en
-c}<C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmmi10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Landon/AppData/Local/Progr
-ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Landon/AppDat
-a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/
-Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.p
+ 41i,19n,43p,1351b,320s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/d
+vips/base/8r.enc}<C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmex10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Landon/AppData/Local/Pro
+grams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Landon/AppD
+ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/User
+s/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8
+.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmr10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr7.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Landon/AppData/Local/Progra
+ms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppDat
+a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/
+Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.p
 fb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmr8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Landon/AppData/Local/Program
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Landon/AppData/
-Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/La
-ndon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb
-><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
-/symbols/msbm10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
-pe1/urw/times/utmb8a.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fon
-ts/type1/urw/times/utmr8a.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (13 pages, 1417024 bytes).
+ts/cm/cmsy8.pfb><C:/Users/Landon/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
+public/amsfonts/symbols/msbm10.pfb><C:/Users/Landon/AppData/Local/Programs/MiKT
+eX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Landon/AppData/Local/Programs
+/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Landon/AppData/Local/Pro
+grams/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (14 pages, 1418605 bytes).
 PDF statistics:
- 137 PDF objects out of 1000 (max. 8388607)
+ 140 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  66 words of extra memory for PDF output out of 10000 (max. 10000000)
 
