@@ -364,10 +364,6 @@ The standard western concert musical instruments that make up our data set rarel
 
 The perceptron branch is an pictured on the left side of Fig. (\ref{fig:Architecture}) and is an implementation of multilayer perceptron (MLP) neural network. The MLP processed input by transforming activations through repeated dense layer types explored in sec. (\ref{sec:LayersUsed}.1). The input to this branch is a vector of features, described in section (\ref{subsec:FeaturesMLP}), which are transformed through two dense layers, with $64$ neurons in each. 
 
-\textcolor{red}{FINISH THIS!}
-
-
-
 % ================================================================
 
 \subsection{The Convolution Branch}
@@ -389,7 +385,6 @@ The combination of layers in this order allows for the convolutions to detect ch
 \subsection{Multirepresentation Learning}
 \label{subsec:Multimodal}
 
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.45\textwidth]{figures/NeuralNetworkArchitecture.png}
@@ -397,7 +392,7 @@ The combination of layers in this order allows for the convolutions to detect ch
     \label{fig:Architecture}
 \end{figure}
 
-The architecture of the HNN enables us to perform classify the contents of digital audio files as musical instruments through \textit{multimodal} learning. The combined architecture, using Google's \textit{Tensorflow} library for Python allows the model to be trained conveniently as a single object \cite{Tensorflow}. This means that although the HNN is composed of two separate branches, all parameters and layers in the network are included with each back-propagation pass. This HNN contains 319,365 trainable parameters.
+The architecture of the HNN enables us to perform multimodal learning and classification of musical on digital audio samples. The multimodal nature comes from two distinct input layers that each accept information from a different representation of the same sample. These different modes of data are passed through a appropriate designed neural-network that learns a set of parameters to map that mode to an output. This combination of model and modes enables this neural network to learn a more robust set of parameters for clasification of unseen labels \cite{Li}. The combined architecture is implemented using Google's \textit{Tensorflow} library for Pytho and allows the model to be trained conveniently as a single neural network \cite{Tensorflow}. All parameters and layers in the network use the same optimizer, number of epochs, and objetive function. This HNN contains 319,365 trainable parameters stored a single precision floating-point numbers.
 
 % ================================================================================================================================
 
@@ -409,12 +404,13 @@ The architecture of the HNN enables us to perform classify the contents of digit
 \subsection{Resampling}
 \label{subsec:Resampling}
 
-In the machine learning workflow, it is standard practice to divide a full data set into a \textit{training} subset and a \textit{testing} subset \cite{James,Virtanen}. The training subset is used to optimize the parameters, $\Theta$, in the model as to minimize the cost function, $J$, for the data set. The testing subset is used to evaluate how well the neural network performs on data that it has never interacted with \cite{Geron}. The training subset does contain corresponding labels, but they are withheld from the trained model such that it can make unbiased predictions.
-We can expand this idea to a common resampling method called \textit{K-Folds Cross Validation}, or X-validation for short \cite{James}. X-validation divides a data set into $K$ equally-sized folds. The first $K-1$ folds are used to train the model, and the last fold is used to evaluate how well the network performs on unseen samples. This process repeats of all $K$ folds, on $K$ unique models.
+In the \textit{end-to-end machine work flow} it is standard practice to divide a full data set into a \textit{training} subset and a \textit{testing} subset \cite{Geron,James,Virtanen}. The training subset is used to train the model by optimizing the parameters, $\Theta$, as to minimize the cost function, $J$, for that subset. The testing subset is used to evaluate and quantify how well optimization process performed by generating predictions on data that it has never interacted with \cite{Geron}. The training subset does contain corresponding labels but they are withheld from the trained model to make unbiased predictions, while used by the evaluation metrics to gauge performance.
 
-The result of X-validation is $K$ neural network models that have all been trained and evaluated on overlapping subsets of the full data set. Each model contains a collection of learned parameters, $\Theta$ that represent a possible outcome if trained on the given subset \cite{Geron,James}. By repeating this and comparing the performance across each fold, we understand how the chosen architecture and hyper-parameters influence the stability of the performance of the network. 
+We expand this idea to a common resampling method called \textit{K-Folds Cross Validation}, or X-validation for short \cite{James}. X-validation divides a data set into $K$ equally-sized subsets, called folds. The first $K-1$ folds are used to train the model, and the last fold is used as the training set. This process repeats of all $K$ folds, using a freshly 'untrained' model each time, often with slightly different initial parameters as well.
 
-Across each fold, we expect to observe a reasonably high, as well as consistent performance. A model that does not perform well on all of the splits indicates a poor choice or architecture or features, and a model that performs inconsistently across the splits indicates a model that suffers from high-variance, where small changes in initial conditions can drastically affect it's classification abilities \cite{James}. When we see consistent and strong performance across multiple splits, we develop confidence that we have a model that can train effectively, and generalize appropriately \cite{Geron}. 
+The result of X-validation is $K$ neural network models that have all been trained and evaluated on overlapping subsets of the full data set. Each model contains a different collection of learned parameters, $\Theta$ that represent a possible outcome if trained on the given subset \cite{Geron,James}. By repeating this and comparing the performance across each fold, we understand how the chosen architecture and hyper-parameters influence the stability of the performance of the network. 
+
+Across each fold, we expect to observe a reasonably high, and consistent performance. A model that does not perform well on all of the splits indicates a poor choice or architecture or features, and a model that performs inconsistently across the splits indicates a model that suffers from high-variance, where small changes in initial conditions can drastically affect it's performance abilities \cite{James}. When consistent and strong performance across multiple splits is observed, we develop confidence that we have a model that can train effectively, and generalize appropriately \cite{Geron}. 
 
 % ================================================================
 
@@ -424,7 +420,7 @@ Across each fold, we expect to observe a reasonably high, as well as consistent 
 We choose the following metrics to evaluate the performance of our HNN. All metrics are defined in relation to \textit{true-positive} (TP), \textit{true-negative} (TN), \textit{false-positive} (FP), and \textit{false-negative} (FN) predictions \cite{Geron,James}. These metrics are computed for each of $K$ cross validation folds. We visualize the results of each split in Fig.(\ref{fig:XvalScores}.
 
 \begin{itemize}
-    \item \textbf{Accuracy Score} - is the ratio of correct predictions to total predictions made by the model. While accuracy is convenient for quick estimates of performance, it does not provide much statistical information on the nature of choices made. This is especially true when classes have non-uniform representations in the data set. The accuracy score of a classification algorithm is given by:
+    \item \textbf{Accuracy Score} - is the ratio of correct predictions to total predictions made by the model. While accuracy is convenient for quick estimates of performance, it does not provide much statistical information on the nature of choices made. This is especially true when classes have non-uniform representations in the data set \cite{Geron}. The accuracy score of a classification algorithm is given by:
     \begin{equation}
         \text{Accuracy} = \frac{TP + FN}{TP + TN + FP + FN}
     \end{equation}
@@ -454,7 +450,7 @@ We choose the following metrics to evaluate the performance of our HNN. All metr
 \subsection{Confusion Matrices}
 \label{subsec:Confusion}
 
-A confusion matrix is a square array that counts the number of times a sample was predicted to be in a given class. For a $k$-categories classifier, the confusion matrix, $C$ has shape $k \times k$ where $C[i,j]$ is the number of times a sample known to be in class $i$ was predicted to be in class $j$ \cite{Geron}. A value added to the main-diagonal indicates a \textit{correct} classification, while a value on the off-diagonal indicates an \textit{incorrect} classification. We expect a well-performing classifier model to produce a diagonally-dominant confusion matrix.
+A confusion matrix is a square array that counts the number of times a sample from one class was predicted to be another class. For a $k$-categories classifier, the confusion matrix, $C$ has shape $k \times k$ where $C[i,j]$ is the number of times a sample known to be in class $i$ was predicted to be in class $j$ \cite{Geron}. A value added to the main-diagonal indicates a \textit{correct} classification, while a value on the off-diagonal indicates an \textit{incorrect} classification. We expect a well-performing classifier model to produce a diagonally-dominant confusion matrix for it's testing set.
 
 A standard confusion matrix does not account for any non-uniformity in the number of samples in each class in the data set. To combat this, we divide the entries of each row of the confusion matrix by the sum of that row. This has the effect of "normalizing" the confusion matrix according to how often class appears in a data set. Just like the metrics in section (\ref{subsec:Metrics}), we construct the confusion matrix for each fold of cross validation, and then normalize it according to class occurrence. We average the $K$ matrices together and visualize the result in Fig. (\ref{fig:ConfScores}).
 
@@ -464,7 +460,7 @@ A standard confusion matrix does not account for any non-uniformity in the numbe
 \subsection{Cross Validation Results}
 \label{subsec:Results}
 
-We have chosen to run a $K = 10$ fold cross validation program on our model, and compute the value of the each of the four metrics described in section (\ref{subsec:Metrics}). We have also run X-validation on two similar models that represent either mode of the network. The first variant uses just a 2D spectrogram input, fed through an identical CNN + MLP as shown on the left of Fig. (\ref{fig:Architecture}). The activations are passed directly to the output layer where a prediction is made using this mode alone. Similarly, the second variant uses just a 1D feature-vector input, fed through an identical MLP as shown on the right side of Fig.(\ref{fig:Architecture}). The activations bypass the concatenation layer, and are passed directly to the output layer where a prediction is made using this mode alone. This allows us to produce an approximate comparison of how the HNN compares to the CNN or MLP models individually. Cross validation was performed on each model using a different set of random splits from the same data set. The reported scores are averged over all samples in each training data subset.
+We have chosen to run a $K = 10$ fold cross validation program on our model, and compute the value of the each of the four metrics described in section (\ref{subsec:Metrics}). We have also run X-validation on two similar models that represent either mode of the network in isolation. The first variant uses solely a 2D spectrogram input fed through an identical CNN + MLP as shown on the left of Fig. (\ref{fig:Architecture}). The activations are passed directly to the output layer where a prediction is made using this mode alone. Similarly, the second variant uses just a 1D feature-vector input fed through an identical MLP as shown on the right side of Fig.(\ref{fig:Architecture}). The activations also bypass the concatenation layer, and are passed directly to the output layer where a prediction is made using only this mode. This allows us to produce an approximate comparison of how the HNN compares to the CNN and MLP models individually. Cross validation was performed on each model using a different set of random splits from the same data set. The reported scores are averaged over all samples in each training data subset.
 
 \begin{figure}[H]
     \centering
@@ -475,15 +471,13 @@ We have chosen to run a $K = 10$ fold cross validation program on our model, and
     \label{fig:XvalScores}
 \end{figure}
 
-We observe the classification scores for each of the three model variants in Fig. (\ref{fig:XvalScores}). The CNN + MLP variant in (\ref{fig:XvalScores}-a) shows metric scores consistently averaging close to $0.8$. with a few splits above or below this value. Similarly, the MLP variant in (\ref{fig:XvalScores}-b) shows scores all consistently close to $0.7$.  This indicates that each input mode and complementary architecture allows for the optimization of a set of parameters to enable reasonable classification performance on unseen samples. Both models do exhibit fluctuation in the range of scores between each fold, which indicates that each model is vulnerable to small changes in initial conditions. 
+We observe the classification scores for each of the three model variants in Fig. (\ref{fig:XvalScores}). The CNN + MLP variant in (\ref{fig:XvalScores}-a) shows metric scores consistently averaging close to $0.8$. with a few splits above or below this value. Similarly, the MLP variant in (\ref{fig:XvalScores}-b) shows scores all consistently close to $0.7$.  This indicates that each input mode and complementary architecture allows for the optimization of a set of parameters to enable reasonable classification performance on unseen samples. Both models do exhibit fluctuation in the range of scores between each fold, which indicates that each could be vulnerable to small changes in initial conditions. 
 
 The HNN architecture variant in (\ref{fig:XvalScores}-c) shows improved performance when compared to either the CNN or MLP variant alone. Where the single input mode models shows performance scores averaging around $0.8$ and $0.7$, in (\ref{fig:XvalScores}-a) and (\ref{fig:XvalScores}-b) respectivly, the HNN boasts a higher average, around $0.84$ for both precision and recall. We also observe a lower variance between the performances of each split, indicating a more stable architecture that is less susceptible to changes in initial condition. 
 
-We also choose to examine and compare the normalized confusion matrices of the three modal variants. In Fig. (\ref{fig:ConfScores}-a) we see a confusion matrix for the CNN + MLP, which shows a strong main diagonal, indicated by the dark reds, oranges, and yellows which indicated a high-level of correct classifications. We do observe indexes such as $C[0,5]$, $C[0,15]$, $C[7,27]$, and $C[28,24]$ that contain unusually large entries indicated by the bright blue color. In Fig. (\ref{fig:ConfScores}-b) we see a weaker diagonally dominant matrix for the MLP, which displayed even more misclassified samples, spread through the matrix. Note how each confusion matrix represents the average of $10$ confusion matrices produced from cross validation. 
+We also choose to examine and compare the normalized confusion matrices of the three modal variants. In Fig. (\ref{fig:ConfScores}-a) we see a confusion matrix for the CNN + MLP, which shows a strong main diagonal, indicated by the dark reds, oranges, and yellows which indicated a high-level of correct classifications. We do observe indexes such as $C[0,5]$, $C[0,15]$, $C[7,27]$, and $C[28,24]$ that contain unusually large entries indicated by the bright blue color. In Fig. (\ref{fig:ConfScores}-b) we see a weaker diagonally dominant matrix for the MLP, which displayed even more misclassified samples, spread through the matrix. Note that each confusion matrix represents the average of $10$ confusion matrices produced from cross validation. 
 
-Finally, we observe the normalized confusion matrix of the HNN model in Fig. (\ref{fig:ConfScores}-c). This matrix is the most-diagonally dominant, showing only a few commonly confused classes. The smaller number of mis-classifications in this model indicates a greater performance, and a generally stronger classifier. We observe $C[0,15]$, $C[7,27]$, and $C[27,7]$ to have unusually large entries also indicated by the bright blue pixels. Consulting the list of instrument classes reveals that class $0$ and $15$ represent \textit{alto flutes} and \textit{flutes} respectively.  Classes $7$ and $27$ represents \textit{bass trombones} and \textit{tenor trombones}. These pairs of instruments are similar in build and in timbre, meaning that they likely have similar properties in feature space, and that a human listener may also show difficulty differentiating them. 
-
-
+Finally, we observe the normalized confusion matrix of the HNN model in Fig. (\ref{fig:ConfScores}-c). This matrix appears to be the most-diagonally dominant, showing only a few commonly confused entries. The smaller number of mis-classifications in this model indicates a greater performance, and a generally stronger classifier. We observe $C[0,15]$, $C[7,27]$, and $C[27,7]$ to have unusually large entries also indicated by the bright blue pixels. Consulting the list of instrument classes reveals that class $0$ and $15$ represent \textit{alto flutes} and \textit{flutes} respectively.  Classes $7$ and $27$ represents \textit{bass trombones} and \textit{tenor trombones}. These pairs of instruments are similar in build and in timbre, meaning that they likely have similar properties in feature space, and that a human listener may also show difficulty differentiating them. 
 
 % ================================================================
 
@@ -492,7 +486,7 @@ Finally, we observe the normalized confusion matrix of the HNN model in Fig. (\r
 
 As a practical demonstration of the classification ability of the Hybrid Neural Network, we choose to test the model on an unlabeled digital audio file, "\textit{zcombo.wav}". This audio file contains a waveform that is generated through 
 
-\textcolor{red}{I'll need your help to introduce the chaotic Synth files, and address how they are generated, and why we use and "care" about them}
+\textcolor{red}{Should I Keep the details about the Chaotic Synths? It seem's out of place in the scheme of this paper.}
 
 \begin{figure}[H]
     \centering
@@ -508,11 +502,11 @@ As a practical demonstration of the classification ability of the Hybrid Neural 
 \section{Discussion and Conclusion}
 \label{sec:conclusion}
 
-Multimodal learning itself shows great promise to machine learning algorithms in numerous domains. For data sets that lend themselves to multiple representations of a single sample, the ability to use those different modes allows for a more comprehensive representation of data. Across full data set, this will enable a model to generate a more stable set of parameters for classification which has the potential to yield better performance. Multimodal learning does not limit itself to classification of digital audio, but instead opens the door to many genres of machine learning such a medicine, finance, and other media classification.
+Multimodal learning itself shows great promise to machine learning algorithms in numerous domains. For data sets that lend themselves to multiple representations of a single sample, the ability to leverage those different modes allows for a more comprehensive representation of data. Across full data set, this will enable a model to generate a more stable and substantial set of parameters for classification which has the potential to yield better performance. Multimodal learning does not limit itself to classification of digital audio, but instead opens the door to many genres of machine learning such a medicine, finance, and other media classification.
  
-The results of cross validation indicate that we have constructed a hybrid neural network that accept two input modes, and can effectivly classify the contents of a digital audio file as one of $37$ different musial instruments. The design of this HNN enables the input of two non-compatible modal representations of a sample to be processed and combined to form a single output prediction. We find that this model demonstrates better and more consistent performance at musical instrumental classification when compared to that of either the constituent CNN or MLP models. By transforming each input sample into multiple representations of itself, the HNN learns a more robust set of parameters that can more thoroughly differentiate each class. While some common misclassfications are present, many of them are due to the related nature of musical instruments, which may also cause similar confusion in human listeners. 
+The results of cross validation indicate that we have constructed a hybrid neural network that accept two input modes, and can effectively classify the contents of a digital audio file as one of $37$ different musical instruments. The design of this HNN enables the input of two non-compatible modal representations of a sample to be processed and combined to form a single output prediction. We find that this model demonstrates better and more consistent performance at musical instrumental classification when compared to that of either the constituent CNN or MLP models. By transforming each input sample into multiple representations of itself, the HNN learns a more robust set of parameters that can more thoroughly differentiate each class. While some common misclassfications are present, many of them are due to the related nature of musical instruments, which may also cause similar confusion in human listeners. 
 
-\textcolor{red}{I sure cannot write a conclusion to save my life}
+\textcolor{red}{I sure cannot write a conclusion to save my life. Plz Halp.}
 
 
 
