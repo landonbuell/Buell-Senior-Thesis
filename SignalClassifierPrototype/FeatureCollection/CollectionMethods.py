@@ -32,6 +32,6 @@ class CollectionMethod:
 
     # Public Interface
 
-    def invoke(self,signal,*args) -> np.ndarray[float]:
+    def invoke(self,signal,*args):
         """ Run this Collection method """
         return np.array([0.0])

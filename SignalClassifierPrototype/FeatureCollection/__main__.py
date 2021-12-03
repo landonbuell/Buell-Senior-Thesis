@@ -22,4 +22,11 @@ if __name__ == "__main__":
 
     # Build App Settings + App Instance
     appSettings = Administrative.AppSettings.developmentSettingsInstance()
-    appInstance = Administrative.CollectionApplication(Administrative.AppSettings)
+    appInstance = Administrative.CollectionApplicationProtoype(appSettings)
+
+    # Construct The Component Managers
+    appInstance.buildManagers()
+
+
+    # Exit
+    sys.exit(0)

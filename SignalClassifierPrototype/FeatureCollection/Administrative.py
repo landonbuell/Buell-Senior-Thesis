@@ -14,41 +14,70 @@ import os
 import sys
 import datetime
 
+import Managers
+
         #### CLASS DEFINITIONS ####
 
-class CollectionApplication:
+class CollectionApplicationProtoype:
     """ 
     Contains All Application Functions for FeatureCollection
     """
 
     AppInstance = None
 
-    def __new__(cls,appSettings):
-        """ Allocator for CollectionApplication Instance """
-        if (CollectionApplication.AppInstance is not None):
-            # Instance Already Exists
-            errMsg = "\tERROR: Can only have one instance of CollectionApplication at runtime"
-            raise RuntimeError(errMsg)
-        return
-
     def __init__(self,appSettings):
         """ Constructor for CollectionApplication Instance """
+        CollectionApplicationProtoype.AppInstance = self
+
         self._settings          = appSettings 
+        self._logger            = Logger()
+        
         self._sampleManager     = None
         self._collectionManager = None
-        self._exportManager     = None
+        self._dataManager       = None
 
-        CollectionApplication.AppInstance   = self
-
+        
     def __del__(self):
         """ Destructor for CollectionApplication Instance """
-        CollectionApplication.AppInstance = None
-        
+        self.logDestruction()
+        CollectionApplicationProtoype.AppInstance = None
+
+    def constructApp(self,settings):
+        """ Construct the Application """
+        if (CollectionApplicationProtoype.AppInstance is None):
+            CollectionApplicationProtoype.AppInstance = CollectionApplicationProtoype(settings)
+        else:
+            errMsg = "Can only have one instance of CollectionApplicationProtoype at runtime"
+            raise RuntimeError(errMsg)
+        return CollectionApplicationProtoype.AppInstance
+     
     # Getters and Setters
+
+    @staticmethod
+    def getAppInstance():
+        """ Return the application Instance if it exists """
+        if (CollectionApplicationProtoype.AppInstance is None):
+            # App Does not Exist
+            errMsg = "ERROR: CollectionApplicationProtoype has not been instantiated"
+            raise RuntimeError(errMsg)
+        else:
+            return CollectionApplicationProtoype.AppInstance
 
     def getSettings(self):
         """ Return the Settings Instance """
         return self._settings
+
+    def getSampleManager(self):
+        """ Return the Sample Manager """
+        return self._sampleManager
+
+    def getCollectionManager(self):
+        """ Return the Collection Manager """
+        return self._collectionManager
+
+    def getDataManager(self):
+        """ Return the Data Manager """
+        return self._dataManager()
 
     def getCurrentDirectory(self):
         """ Return the Current Working Directory """
@@ -63,27 +92,26 @@ class CollectionApplication:
 
     # Public Interface
 
-    def organizeAllSamples(self):
-        """ Collect and Organize All Input Samples """
-        pass
+    def buildManagers(self):
+        """ Construct all Manager Instance and Run Initialization """
+        
+        # Init the Managers
+        self._sampleManager     = Managers.SampleManager()
+        self._collectionManager = Managers.CollectionManager()
+        self._dataManager       = Managers.MetadataManager()
 
-    def buildCollectionMethods(self):
-        """ Construct the Queue of Collection Functions """
-        pass
+        # Run Each Build Method
+        self._sampleManager.build()
+        self._collectionManager.build()
+        self._dataManager.build()
 
-    def executeFeatureQueue(self):
-        """ Run the Feature Queue on a Batch of Samples """
-        pass
-
-    def exportRemainingData(self):
-        """ Export remaining data and teardown application """
-        pass
+        return self
     
     # Internal Interface
 
-    def logMessage(self,message):
+    def logMessage(self,message,timeStamp=True):
         """ Log Message To User """
-            
+        self._logger.logMessage(message,timeStamp)
         return self
 
     @staticmethod
@@ -94,6 +122,29 @@ class CollectionApplication:
         result = result.replace(":",".")
         result = result.replace(" ",".")
         return result
+
+    def logConstruction(self):
+        """ Log Construction of Sample Manager """
+        msg = "Constructing CollectionApplicationProtoype Instance ..."
+        CollectionApplicationProtoype.AppInstance.logMessage(msg)
+        return None
+
+    def logDestruction(self):
+        """ Log Construction of Sample Manager """
+        msg = "Destroying CollectionApplicationProtoype Instance ..."
+        CollectionApplicationProtoype.AppInstance.logMessage(msg)
+        return None
+
+    # Magic Methods
+
+    def __repr__(self):
+        """ Debugger representation of Instance """
+        if (CollectionApplicationProtoype.AppInstance is None):
+            # Not Yet Initialized
+            return "No Instance"
+        else:
+            memAddress = str(hex(id(CollectionApplicationProtoype.AppInstance)))
+            return "CollectionApplicationProtoype @ " + memAddress
 
 class AppSettings:
     """
@@ -119,7 +170,7 @@ class AppSettings:
 
     # Getters and Setters
 
-    def getInputPaths(self) -> set[str]:
+    def getInputPaths(self) -> set:
         """ Return List of Input Paths """
         return self._pathsInput
 
@@ -139,11 +190,11 @@ class AppSettings:
         """ Return T/F if in Verbose Mode """
         return self._verbose
 
-    def getLogToConsole(self)-> bool:
+    def getLogToConsole(self) -> bool:
         """ Get T/F If Log to Console """
         return self._logToConsole
 
-    def getLogToFile(self)-> bool:
+    def getLogToFile(self) -> bool:
         """ Get T/F IF Log to File """
         return self._logToFile
 
@@ -159,7 +210,7 @@ class AppSettings:
         return False
 
     @staticmethod
-    def developmentSettingsInstance() -> AppSettings:
+    def developmentSettingsInstance():
         """ Build an instance of runtime settings for development """
         result = AppSettings(
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
@@ -187,45 +238,88 @@ class AppSettings:
         self._pathOutput = fullOutput
         return self
 
-
 class Logger:
     """ 
     Handles all runtime Logging 
     """
 
-    Instance = None
-
-    def __new__(cls,appSettings):
-        """ Allocator for Logger Instance """
-        if (Logger.Instance is not None):
-            # Instance Already Exists
-            errMsg = "\tERROR: Can only have one instance of Logger at runtime"
-            raise RuntimeError(errMsg)
-        return
-
     def __init__(self):
-        """ Constructor for Logger Instance """
-        self._path              = None
-        Logger.Instance         = self
+        """ Constructor for Logger Instance """      
+        self._path          = None
+        self._toConsole     = CollectionApplicationProtoype.AppInstance.getSettings().getLogToConsole()
+        self._toFile        = CollectionApplicationProtoype.AppInstance.getSettings().getLogToFile()
+        self.writeHeader()
 
     def __del__(self):
         """ Destructor for Logger Instance """
-        Logger.Instance = None
+        self.writeFooter()
 
     # Public Interface
 
-    def logMessage(self,message):
+    def logMessage(self,message:str,timeStamp=True):
         """ Log Message to Console or Text """
-        now = CollectionApplication.getDateTime()
-        if (CollectionApplication.AppInstance.getSettings().getLogToConsole()):
+        if (timeStamp == True):
+            # Log Message w/ a TimeStamp
+            self.logWithTimeStamp(message)
+        else:
+            # Log Message w/o a TimeStamp
+            self.logWithoutTimeStamp(message)
+        return self
+
+    # Private Interface
+
+    def logWithTimeStamp(self,msg:str):
+        """ Log Message With TimeStamp """
+        now = CollectionApplicationProtoype.getDateTime()
+        if (self._toConsole):
             # Write Message to Console
-            print("\t{0:<32}\t{1:<128}".format(now,message))
-        if (CollectionApplication.AppInstance.getSettings().getLogToFile()):
+            print("\t{0:<32}\t{1:<128}".format(now,msg))
+        if (self._toFile):
             # Write Message to File
             errMsg = "ERROR: Log to File is not Implemented yet"
             raise NotImplementedError(errMsg)
         return self
 
+    def logWithoutTimeStamp(self,msg:str):
+        """ Log Message With TimeStamp """
+        if (self._toConsole):
+            # Write Message to Console
+            print("\t{0:<128}".format(msg))
+        if (self._toFile):
+            # Write Message to File
+            errMsg = "ERROR: Log to File is not Implemented yet"
+            raise NotImplementedError(errMsg)
+        return self
+
+    def writeHeader(self):
+        """ Write Header To Logger """
+        header = [
+            self.spacer(),
+            "CollectionApplicationProtoype",
+            CollectionApplicationProtoype.getDateTime(),
+            self.spacer()
+            ]
+        # Log Each Line of the Header
+        for msg in header:
+            self.logWithoutTimeStamp(msg)
+        return self
+
+    def writeFooter(self):
+        """ Write Footer To Logger """
+        footer = [
+            self.spacer(),
+            "CollectionApplicationProtoype",
+            CollectionApplicationProtoype.getDateTime(),
+            self.spacer()
+            ]
+        # Log Each Line of the Header
+        for msg in footer:
+            self.logWithoutTimeStamp(msg)
+        return self
+
+    def spacer(self,numChars=64):
+        """ Get a Spacer String """
+        return "\n" + ("-" * numChars) + "\n"
     
 
 
