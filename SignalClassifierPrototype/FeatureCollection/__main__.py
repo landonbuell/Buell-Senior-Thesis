@@ -25,8 +25,13 @@ if __name__ == "__main__":
     appInstance = Administrative.CollectionApplicationProtoype(appSettings)
 
     # Construct The Component Managers
-    appInstance.buildManagers()
+    appInstance.startup()
 
+    # Run Feature Collection
+    appInstance.execute()
+
+    # Export All Data
+    appInstance.shutdown()
 
     # Exit
     sys.exit(0)

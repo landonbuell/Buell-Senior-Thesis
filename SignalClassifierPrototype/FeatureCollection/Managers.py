@@ -15,12 +15,15 @@ import sys
 import numpy as np
 import pandas as pd
 
+from abc import ABC
+
 import Administrative
 import CollectionMethods
 import Structural
 
         #### CLASS DEFINITIONS ####
 
+@ABC
 class Manager:
     """
     Manager is an Abstract Base Class in which all managers inherit from
@@ -246,11 +249,20 @@ class CollectionManager (Manager):
     def __init__(self):
         """ Constructor for CollectionManager Instance """
         super().__init__()
+        self._methodQueue = np.array([],dtype=object)
+        self._framesParameters = Structural.AnalysisFramesParameters()
+        self._framesContructor = Structural.AnalysisFramesConstructor()
 
     def __del__(self):
         """ Destructor for CollectionManager Instance """
         super().__del__()
 
+    # Public Interface
+
+    def build(self):
+        """ Build All Data for Feature Collection """
+
+        return self
 
 class MetadataManager (Manager):
     """ MetadataManager Aggregates all data from the Collection process """

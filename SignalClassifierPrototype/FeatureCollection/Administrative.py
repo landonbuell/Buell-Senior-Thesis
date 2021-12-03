@@ -92,8 +92,8 @@ class CollectionApplicationProtoype:
 
     # Public Interface
 
-    def buildManagers(self):
-        """ Construct all Manager Instance and Run Initialization """
+    def startup(self):
+        """ Run Application Startup Sequence """
         
         # Init the Managers
         self._sampleManager     = Managers.SampleManager()
@@ -104,6 +104,16 @@ class CollectionApplicationProtoype:
         self._sampleManager.build()
         self._collectionManager.build()
         self._dataManager.build()
+
+        return self
+
+    def execute(self):
+        """ Run Application Execution Sequence """
+
+        return self
+
+    def shutdown(self):
+        """ Run Application Shutdown Sequence """
 
         return self
     

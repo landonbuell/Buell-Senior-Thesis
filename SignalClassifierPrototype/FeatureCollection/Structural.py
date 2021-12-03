@@ -12,11 +12,10 @@ Date:           December 2021
 
 import os
 import sys
-from typing_extensions import runtime
 import numpy as np
 
 import scipy.io.wavfile as sciowav
-import scipy.fftpack as fftpac
+import scipy.fftpack as fftpack
 
 import Administrative
 import CollectionMethods
@@ -97,18 +96,28 @@ class SignalData:
 
     def __del__(self):
         """ Destructor for SignalData Instance """
-        self._samples               = None
-        self._analysisFramesTime    = None
-        self._analysisFramesFreq    = None
-        self._melFreqCepstrumCoeffs = None
-        self._frameEnergyTime       = None
-        self._frameEnergyFreq       = None
+        self.clear()
        
     # Getters and Setters
 
     def getSampleRate(self):
         """ Get the Sample Rate """
         return self._sampleRate
+
+    def setSampleRate(self,rate):
+        """ Set the Sample Rate """
+        self._sampleRate = rate
+        return self
+
+    def getSamples(self):
+        """ Get the Signal Samples """
+        return self._samples
+
+    def setSamples(self,data):
+        """ Set the Signal Samples """
+        self.clear()
+        self._samples = data
+        return self
 
     def getSampleSpace(self):
         """ Get the Sample Spacing """
@@ -123,3 +132,102 @@ class SignalData:
     def AnalysisFramesTime(self):
         """ Access Time-Series Analysis Frames """
         return self._analysisFramesTime
+
+    @property
+    def AnalysisFramesFreq(self):
+        """ Access Time-Series Analysis Frames """
+        return self._analysisFramesFreq
+
+    @property
+    def MelFreqCepstrumCoeffs(self):
+        """ Access Mel-Cepstrum Frequency Coefficients """
+        return self._melFreqCepstrumCoeffs
+
+    @property
+    def FrameEnergiesTime(self):
+        """ Access Time-Series Frame Energies """
+        return self._frameEnergyTime
+
+    @property
+    def FrameEnergiesFreq(self):
+        """ Access Time-Series Frame Energies """
+        return self._frameEnergyFreq
+
+    # Public Interface
+
+    def clear(self):
+        """ Clear all Fields of the Instance """
+        self._samples               = None
+        self._analysisFramesTime    = None
+        self._analysisFramesFreq    = None
+        self._melFreqCepstrumCoeffs = None
+        self._frameEnergyTime       = None
+        self._frameEnergyFreq       = None
+        return self
+
+    def BuildAnalysisFrames(self,frameParams=None):
+        """ Build Time-Series AnalysisFrames """
+        if (self.Samples is None):
+            # No Signal - Cannot Make Frames
+            errMsg = "ERROR: So signal to make analysis Frames"
+            raise RuntimeError(errMsg)
+
+        # Create the Frames Constructor with Params
+
+        return self
+
+    # Private Interface
+
+class AnalysisFramesParameters:
+    """ AnalysisFramesParamaters contains 
+    values to use when building Analysis Frames """
+
+    def __init__(self,samplesPerFrame=1024,samplesOverlap=768,
+                 headPad=1024,tailPad=2048,maxFrames=256):
+        """ Constructor for AnalysisFramesParameters Instance """
+        self._samplesPerFrame   = samplesPerFrame
+        self._samplesOverlap    = samplesOverlap
+        self._padHead           = headPad
+        self._padTail           = tailPad
+        self._maxFrames         = maxFrames
+        self._framesInUse       = 0
+
+    def __del__(self):
+        """ Destructor for AnalysisFramesParameters Instance """
+        pass
+
+    # Getters and Setters
+
+    def getSamplesPerFrame(self) -> int:
+        """ Get the Number of Samples in Each Frame """
+        return self._samplesPerFrame
+
+    def getSamplesOverlap(self) -> int:
+        """ Get the Number of Overlap Samples in Each Frame """
+        return self._samplesOverlap
+
+    def getSizeHeadPad(self) -> int:
+        """ Get the Size of the Head Pad """
+        return self._padHead
+
+    def getSizeTailPad(self) -> int:
+        """ Get the size of the Tail Pad """
+        return self._padTail
+
+    def getMaxNumFrames(self) -> int:
+        """ Get the Max Number of Frames to Use """
+        return self._maxFrames
+
+    def getNumFramesInUse(self) -> int:
+        """ Get the Number of Frames Currently in use """
+        return self._framesInUse
+
+    def getTotalFrameSize(self) -> int:
+        """ Get total Size of Each Frame including padding """
+        return self._padHead + self._samplesPerFrame + self._padTail
+
+class AnalysisFramesConstructor:
+    """ AnalysisFramesConstructor build time-series analysis frames 
+    from an input signal """
+
+    pass
