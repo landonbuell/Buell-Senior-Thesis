@@ -91,6 +91,8 @@ class SignalData:
         self._analysisFramesTime    = None
         self._analysisFramesFreq    = None
         self._melFreqCepstrumCoeffs = None
+        self._autoCorrelationCoeffs = None
+        self._zeroCrossingsPerFrame = None
         self._frameEnergyTime       = None
         self._frameEnergyFreq       = None
 
@@ -123,6 +125,22 @@ class SignalData:
         """ Get the Sample Spacing """
         return (1/self._sampleRate)
 
+    def getNumAnalysisFramesTime(self):
+        """ Get the Number of Time Series analysis frames """
+        if (self.AnalysisFramesTime is None):
+            return 0
+        else:
+            return self.AnalysisFramesTime.shape[0]
+
+    def getNumAnalysisFramesFreq(self):
+        """ Get the Number of Time Series analysis frames """
+        if (self.AnalysisFramesFreq is None):
+            return 0
+        else:
+            return self.AnalysisFramesFreq.shape[0]
+
+    # Properties to Access Arrays
+
     @property
     def Samples(self):
         """ Access Time-Series Samples """
@@ -142,6 +160,16 @@ class SignalData:
     def MelFreqCepstrumCoeffs(self):
         """ Access Mel-Cepstrum Frequency Coefficients """
         return self._melFreqCepstrumCoeffs
+
+    @property
+    def AutoCorrelationCoeffs(self):
+        """ Acces the Auto-Correlation Coefficients """
+        self._autoCorrelationCoeffs
+
+    @property
+    def ZeroCrossingFrames(self):
+        """ Acces the Zero Crossings Of Each Frame """
+        return self._zeroCrossingsPerFrame
 
     @property
     def FrameEnergiesTime(self):

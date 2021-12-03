@@ -12,6 +12,7 @@ Date:           December 2021
 
 import os
 import sys
+from typing_extensions import runtime
 import numpy as np
 import pandas as pd
 
@@ -106,7 +107,7 @@ class SampleManager (Manager):
         super().__init__()
         self._sampleDataBase    = np.array([],dtype=object)
         self._labelDictionary   = dict({})
-        self._batchIndex        = 0
+        self._batchSizes        = []
 
     def __del__(self):
         """ Destructor for SampleManager Instance """
@@ -114,7 +115,7 @@ class SampleManager (Manager):
         
     # Getters and Setters
 
-    def getTarget(self,targetInt):
+    def getTargetStr(self,targetInt) -> str:
         """ Get Corresponding Target String from Dictionary """
         return self._labelDictionary.get(targetInt)
 
@@ -132,17 +133,13 @@ class SampleManager (Manager):
         self._sampleDataBase[idx] = sample
         return self
 
-    def getNumClasses(self):
+    def getNumClasses(self) -> int:
         """ Get the Number of Classes by entries in the Dictionary """
         return len(self._labelDictionary)
 
-    def getBatchIndex(self):
+    def getBatchIndex(self) -> int:
         """ Get the Current Batch Index """
         return self._batchIndex
-
-    def getBatchSize(self):
-        """ Get the Size of Each Batch from App Settings """
-        return Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getBatchSize()
 
     # Public Interface
 
@@ -151,6 +148,7 @@ class SampleManager (Manager):
         super().build()
 
         self.readInputFiles()
+        self.
         self.describe()
 
         return self
@@ -174,19 +172,18 @@ class SampleManager (Manager):
 
         return self
 
-    def createBatch(self,increment=True):
+    def createBatch(self,batchIndex: int):
         """ Get an Array of Samples for the Next Batch """
         # Create the Batch Subset
         batchSize = self.getBatchSize()
-        indexStart = self._batchIndex * batchSize
+        indexStart = batchIndex * batchSize
         batch = np.empty(shape=(batchSize,),dtype=object)
         
         # Populate Batch w/ Entries from Database
         for i in range(self.getBatchSize()):
             batch[i] = self._sampleDataBase[indexStart + i]
+            self._sampleDataBase[indexStart + i] = None
 
-        if (increment == True):
-            self._batchIndex += 1
         return batch
 
     # Private Interface
@@ -210,8 +207,6 @@ class SampleManager (Manager):
 
         return self
 
-
-
     def createSamplesFromFile(self,filePath):
         """ Read a file, and return an array of samples from it """
         frame = pd.read_csv(filePath,index_col=False)
@@ -232,6 +227,13 @@ class SampleManager (Manager):
 
         return sampleArray
 
+    def createSizeOfEachBatch(self):
+        """ Build a List for the Size of Each Batch """
+        standardBatchSize = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getBatchSize()
+        numSamples = self._sampleDataBase.shape[0]
+
+
+
     # Magic Methods
 
     def __item__(self,idx):
@@ -249,9 +251,10 @@ class CollectionManager (Manager):
     def __init__(self):
         """ Constructor for CollectionManager Instance """
         super().__init__()
-        self._methodQueue = np.array([],dtype=object)
-        self._framesParameters = Structural.AnalysisFramesParameters()
-        self._framesContructor = Structural.AnalysisFramesConstructor()
+        self._methodQueue       = np.array([],dtype=object)
+        self._batchIndex        = 0
+        self._framesParameters  = Structural.AnalysisFramesParameters()
+        self._framesContructor  = Structural.AnalysisFramesConstructor()
 
     def __del__(self):
         """ Destructor for CollectionManager Instance """
@@ -261,8 +264,23 @@ class CollectionManager (Manager):
 
     def build(self):
         """ Build All Data for Feature Collection """
+        super().build()
+
 
         return self
+
+    def call(self):
+        """ The Run the Collection Manager """
+
+        for i in range(self.getNumBatches()):
+            # Each Batch
+            pass
+
+        return self
+
+    # Private Interface
+
+    
 
 class MetadataManager (Manager):
     """ MetadataManager Aggregates all data from the Collection process """
@@ -274,4 +292,9 @@ class MetadataManager (Manager):
     def __del__(self):
         """ Destructor for MetadataManager Instance """
         super().__del__()
+
+    # Getters and Setters
+
+            
+
 
