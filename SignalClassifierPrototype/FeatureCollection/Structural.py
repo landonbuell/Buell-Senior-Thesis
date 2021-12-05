@@ -189,11 +189,13 @@ class SignalData:
         self._analysisFramesTime    = None
         self._analysisFramesFreq    = None
         self._melFreqCepstrumCoeffs = None
+        self._autoCorrelationCoeffs = None
+        self._zeroCrossingsPerFrame = None
         self._frameEnergyTime       = None
         self._frameEnergyFreq       = None
         return self
 
-    def BuildAnalysisFrames(self,frameParams=None):
+    def buildAnalysisFrames(self,frameParams=None):
         """ Build Time-Series AnalysisFrames """
         if (self.Samples is None):
             # No Signal - Cannot Make Frames

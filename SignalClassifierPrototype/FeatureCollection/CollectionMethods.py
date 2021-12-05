@@ -66,6 +66,12 @@ class CollectionMethod:
             raise ValueError(errMsg)
         return True
 
+    # Magic Methods
+
+    def __repr__(self):
+        """ Debugger Representation of Instance """
+        return str(self.__class__) + " @ " + hex(id(self))
+
 class TimeDomainEnvelopPartitions (CollectionMethod):
     """ Computes the Time-Domain-Envelope by breaking Signal into partitions """
 
@@ -138,7 +144,7 @@ class TimeDomainEnvelopFrames(CollectionMethod):
         super().validateParameter()
         return True
 
-class PercentFramesEnergyAboveThreshold(CollectionMethod):
+class PercentFramesAboveEnergyThreshold(CollectionMethod):
     """
     Compute the Number of Frames with energy above threshold% of Maximum energy
     """
@@ -152,6 +158,12 @@ class PercentFramesEnergyAboveThreshold(CollectionMethod):
     def __del__(self):
         """ Destructor for PercentFramesEnergyAboveThreshold Instance """
         pass
+
+    # Getters and Setters
+
+    def getThresholdFactor(self):
+        """ Get the Threshold Factor for this instance """
+        return self._thresholdFactor
 
     # Public Interface
 
@@ -179,9 +191,9 @@ class ZeroCrossingsPerTime(CollectionMethod):
     Compute the total number of zero crossings normalized by signal length
     """
 
-    def __init__(self,param):
+    def __init__(self,param=1):
         """ Constructor for ZeroCrossingsPerTime Instance """
-        super().__init__("ZeroCrossingsPerTime",param)
+        super().__init__("ZeroCrossingsPerTime",1)
         self.validateParameter()
 
     def __del__(self):
@@ -209,12 +221,12 @@ class ZeroCrossingsPerTime(CollectionMethod):
         super().validateParameter()
         return True
 
-class ZeroCrossingsFramesAverage(CollectionMethod):
+class ZeroCrossingsFramesMean(CollectionMethod):
     """
     Compute the average number of zero crossings over all analysis frames
     """
 
-    def __init__(self,param):
+    def __init__(self,param=1):
         """ Constructor for ZeroCrossingsFramesAverage Instance """
         super().__init__("ZeroCrossingsFramesAverage",1)
         self.validateParameter()
@@ -249,7 +261,7 @@ class ZeroCrossingsFramesVariance(CollectionMethod):
     Compute the variance of zero crossings over all analysis frames
     """
 
-    def __init__(self,param):
+    def __init__(self,param=1):
         """ Constructor for ZeroCrossingsFramesVariance Instance """
         super().__init__("ZeroCrossingsFramesVariance",1)
         self.validateParameter()
@@ -525,9 +537,9 @@ class AutoCorrelationCoefficientsDiffMinMax(CollectionMethod):
         super().validateParameter()
         return True
 
-class FreqDomainEnvelop(CollectionMethod):
+class FreqDomainEnvelopPartition(CollectionMethod):
     """
-    Compute the Different of min and max of the first Auto-Correlation-Coefficients
+    Compute the Frequency Domain Envelop of each frame and average down all of them
     """
 
     def __init__(self,param):

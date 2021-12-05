@@ -24,7 +24,6 @@ import Structural
 
         #### CLASS DEFINITIONS ####
 
-@ABC
 class Manager:
     """
     Manager is an Abstract Base Class in which all managers inherit from
@@ -107,7 +106,7 @@ class SampleManager (Manager):
         super().__init__()
         self._sampleDataBase    = np.array([],dtype=object)
         self._labelDictionary   = dict({})
-        self._batchSizes        = []
+        self._batchSizes        = None
 
     def __del__(self):
         """ Destructor for SampleManager Instance """
@@ -133,13 +132,24 @@ class SampleManager (Manager):
         self._sampleDataBase[idx] = sample
         return self
 
+    def getBatchSizes(self):
+        """ Get Array of Each Batch Size """
+        return self._batchSizes
+
     def getNumClasses(self) -> int:
         """ Get the Number of Classes by entries in the Dictionary """
         return len(self._labelDictionary)
 
-    def getBatchIndex(self) -> int:
-        """ Get the Current Batch Index """
-        return self._batchIndex
+    def getNumBatches(self) -> int:
+        """ Get the Number of Batches in this Run """
+        return self._batchSizes.shape[0]
+
+    def getSizeOfBatch(self, batchIndex: int) -> int:
+        """ Get the Size of the i-th batch """
+        if (batchIndex >= self.getNumBatches()):
+            errMsg = "Batch Index is out of range"
+            raise ValueError(errMsg)
+        return self._batchSizes[batchIndex]
 
     # Public Interface
 
@@ -148,7 +158,7 @@ class SampleManager (Manager):
         super().build()
 
         self.readInputFiles()
-        self.
+        self.createSizeOfEachBatch()
         self.describe()
 
         return self
@@ -159,7 +169,8 @@ class SampleManager (Manager):
         # Basic Info
         messages = [
             "Number of Files Found: {0}".format(len(self)),
-            "Entries in target label dictionary: {0}".format(self.getNumClasses())
+            "Entries in target label dictionary: {0}".format(self.getNumClasses()),
+            "Number of Batches: {0}".format(self.getNumBatches())
             ]
         for msg in messages:
             # Log Each String as a Message
@@ -231,6 +242,18 @@ class SampleManager (Manager):
         """ Build a List for the Size of Each Batch """
         standardBatchSize = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getBatchSize()
         numSamples = self._sampleDataBase.shape[0]
+        numBatches = (numSamples // standardBatchSize)
+        allBatchSizes = np.ones(shape=(numBatches,),dtype=int)
+        extraSamples =  (numSamples % standardBatchSize)
+        # Computer the Number of Batches (Include )
+        if (extraSamples != 0):
+            # There are "Extra" Samples
+            allBatchSizes = np.append(allBatchSizes,extraSamples)
+        self._batchSizes = allBatchSizes
+        return self
+           
+
+
 
 
 
@@ -260,25 +283,95 @@ class CollectionManager (Manager):
         """ Destructor for CollectionManager Instance """
         super().__del__()
 
+    # Getters and Setters
+
+    def getSizeOfCurrentBatch(self) -> int:
+        """ Get the Number of Samples in this current Batch """
+        return Administrative.CollectionApplicationProtoype.getSampleManager().getSizeOfBatch(self._batchIndex)
+
+
     # Public Interface
 
     def build(self):
         """ Build All Data for Feature Collection """
         super().build()
 
+        self.createCollectionQueue()
 
         return self
 
     def call(self):
         """ The Run the Collection Manager """
 
-        for i in range(self.getNumBatches()):
-            # Each Batch
-            pass
+        batchSizes = Administrative.CollectionApplicationProtoype.getSampleManager().getBatchSizes()
+        currentBatch = None
+
+        # Iterate Through Each Batch
+        for idx,size in enumerate(batchSizes):
+            self.logCurrentBatch(idx,size)
 
         return self
 
     # Private Interface
+
+    def createCollectionQueue(self):
+        """ Build All Elements in the Collection Queue """
+        numEntries = 32
+        self._methodQueue = np.zeros(shape=(numEntries,),dtype=object)
+        self[0] = CollectionMethods.TimeDomainEnvelopPartitions(12)
+        self[1] = CollectionMethods.TimeDomainEnvelopFrames(1)
+        self[2] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.1)
+        self[3] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.2)
+        self[4] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.3)
+        self[5] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.4)
+        self[6] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.5)
+        self[7] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.6)
+        self[8] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.7)
+        self[9] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.8)
+        self[10] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.9)
+        self[11] = CollectionMethods.ZeroCrossingsPerTime(1)
+        self[12] = CollectionMethods.ZeroCrossingsFramesMean(1)
+        self[13] = CollectionMethods.ZeroCrossingsFramesVariance(1)
+        self[14] = CollectionMethods.ZeroCrossingsFramesDiffMinMax(1)
+        self[15] = CollectionMethods.TemporalCenterOfMassLinear(1)
+        self[16] = CollectionMethods.TemportalCenterOfMassQuadratic(1)
+        self[17] = CollectionMethods.AutoCorrelationCoefficients(12)
+        self[18] = CollectionMethods.AutoCorrelationCoefficientsMean(1)
+        self[19] = CollectionMethods.AutoCorrelationCoefficientsVariance(1)
+        self[20] = CollectionMethods.AutoCorrelationCoefficientsDiffMinMax(1)
+        self[21] = CollectionMethods.FreqDomainEnvelopPartition(12)
+        self[22] = CollectionMethods.FreqDomainEnvelopFrames(1)
+        self[23] = CollectionMethods.FrequencyCenterOfMassLinear(1)
+        self[24] = CollectionMethods.FrequencyCenterOfMassQuadratic(1)
+        self[25] = CollectionMethods.MelFrequencyCempstrumCoeffs(12)
+        self[26] = CollectionMethods.MelFrequencyCempstrumCoeffsMean(1)
+        self[27] = CollectionMethods.MelFrequencyCempstrumCoeffsVariance(1)
+        self[28] = CollectionMethods.MelFrequencyCempstrumCoeffsDiffMinMax(1)
+        return self
+
+    def evaluateQueue(self,signalData):
+        """ Evaluate the Feature Queue """
+
+    def logCurrentBatch(self,index,size):
+        """" Log Current Batch w/ Num Samples """
+        msg = "Running batch {0}, with {1} samples".format(index,size)
+        self.logMessageInterface(msg)
+        return None
+
+    # Magic Methods
+
+    def __len__(self):
+        """ Overload Length Operator """
+        return self._methodQueue.shape[0]
+
+    def __getitem__(self,key):
+        """ Get Item at index """
+        return self._methodQueue[idx]
+
+    def __setitem__(self,key,val):
+        """ Set Item at Index """
+        self._methodQueue[key] = val
+        return self
 
     
 
