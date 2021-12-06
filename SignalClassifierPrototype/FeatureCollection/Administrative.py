@@ -109,6 +109,11 @@ class CollectionApplicationProtoype:
 
     def execute(self):
         """ Run Application Execution Sequence """
+        
+        for idx,size in enumerate(self._sampleManager.getBatchSizes()):
+
+            # Run the Collection Manager on this Batch
+            self._collectionManager.call(idx,size)
 
         return self
 

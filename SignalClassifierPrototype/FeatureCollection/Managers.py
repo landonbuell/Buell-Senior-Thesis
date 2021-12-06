@@ -12,11 +12,8 @@ Date:           December 2021
 
 import os
 import sys
-from typing_extensions import runtime
 import numpy as np
 import pandas as pd
-
-from abc import ABC
 
 import Administrative
 import CollectionMethods
@@ -107,6 +104,7 @@ class SampleManager (Manager):
         self._sampleDataBase    = np.array([],dtype=object)
         self._labelDictionary   = dict({})
         self._batchSizes        = None
+        self._sampleIndex       = 0
 
     def __del__(self):
         """ Destructor for SampleManager Instance """
@@ -132,13 +130,17 @@ class SampleManager (Manager):
         self._sampleDataBase[idx] = sample
         return self
 
-    def getBatchSizes(self):
+    def getBatchSizes(self) -> int:
         """ Get Array of Each Batch Size """
         return self._batchSizes
 
     def getNumClasses(self) -> int:
         """ Get the Number of Classes by entries in the Dictionary """
         return len(self._labelDictionary)
+
+    def getNumSamples(self) -> int:
+        """ Get the Total Number of Samples """
+        return self._sampleDataBase.shape[0]
 
     def getNumBatches(self) -> int:
         """ Get the Number of Batches in this Run """
@@ -150,6 +152,16 @@ class SampleManager (Manager):
             errMsg = "Batch Index is out of range"
             raise ValueError(errMsg)
         return self._batchSizes[batchIndex]
+
+    def getNextSample(self):
+        """ Get the Sample Pointed to by the Index """
+        if (self._sampleIndex <= self.getNumSamples()):
+            result = None
+        else:
+            result = self._sampleDataBase[self._sampleIndex]
+            self._sampleDataBase[self._sampleIndex] = 0
+            self._sampleIndex += 1
+        return result
 
     # Public Interface
 
@@ -192,8 +204,7 @@ class SampleManager (Manager):
         
         # Populate Batch w/ Entries from Database
         for i in range(self.getBatchSize()):
-            batch[i] = self._sampleDataBase[indexStart + i]
-            self._sampleDataBase[indexStart + i] = None
+            batch[i] = self.getNextSample()
 
         return batch
 
@@ -243,7 +254,7 @@ class SampleManager (Manager):
         standardBatchSize = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getBatchSize()
         numSamples = self._sampleDataBase.shape[0]
         numBatches = (numSamples // standardBatchSize)
-        allBatchSizes = np.ones(shape=(numBatches,),dtype=int)
+        allBatchSizes = np.ones(shape=(numBatches,),dtype=int) * standardBatchSize
         extraSamples =  (numSamples % standardBatchSize)
         # Computer the Number of Batches (Include )
         if (extraSamples != 0):
@@ -251,17 +262,8 @@ class SampleManager (Manager):
             allBatchSizes = np.append(allBatchSizes,extraSamples)
         self._batchSizes = allBatchSizes
         return self
-           
-
-
-
-
-
+          
     # Magic Methods
-
-    def __item__(self,idx):
-        """ Overload Index Operator """
-        return self._sampleDataBase[idx];
 
     def __len__(self):
         """ Overload Length Operator """
@@ -274,21 +276,49 @@ class CollectionManager (Manager):
     def __init__(self):
         """ Constructor for CollectionManager Instance """
         super().__init__()
-        self._methodQueue       = np.array([],dtype=object)
         self._batchIndex        = 0
+        self._batchQueue        = np.array([],dtype=object)
+        self._methodQueue       = np.array([],dtype=object)    
+        self._designMatrix      = None
         self._framesParameters  = Structural.AnalysisFramesParameters()
         self._framesContructor  = Structural.AnalysisFramesConstructor()
 
+
     def __del__(self):
         """ Destructor for CollectionManager Instance """
+        self._batchQueue        = None
+        self._methodQueue       = None
+        self._designMatrix      = None
+        self._framesParameters  = None
+        self._framesContructor  = None
         super().__del__()
 
     # Getters and Setters
 
-    def getSizeOfCurrentBatch(self) -> int:
-        """ Get the Number of Samples in this current Batch """
-        return Administrative.CollectionApplicationProtoype.getSampleManager().getSizeOfBatch(self._batchIndex)
+    def getBatchIndex(self) -> int:
+        """ Get the Current Batch Index """
+        return self._batchIndex
 
+    def getBatchQueue(self):
+        """ Get the Current Batch Queue of Audio Files """
+        return self._batchQueue
+
+    def getMethodQueue(self):
+        """ Get the Method Queue for the Collector """
+        return self._methodQueue
+
+    def getDesignMatrix(self):
+        """ Get the Design Matrix """
+        return self._designMatrix
+
+    def getNumFeatures(self):
+        """ Compute the Number of Features from the Method Queue """
+        numFeatures = 0
+        for item in self._methodQueue:
+            if (item == 0):
+                continue
+            numFeatures += item.getReturnSize()
+        return numFeatures
 
     # Public Interface
 
@@ -297,18 +327,29 @@ class CollectionManager (Manager):
         super().build()
 
         self.createCollectionQueue()
+        self.initDesignMatrix()
 
         return self
 
-    def call(self):
+    def call(self,batchIndex,batchSize):
         """ The Run the Collection Manager """
+        super().call()
 
-        batchSizes = Administrative.CollectionApplicationProtoype.getSampleManager().getBatchSizes()
-        currentBatch = None
+        # Log this Batch
+        self.logCurrentBatch(batchIndex,batchSize)
+        self._batchIndex = batchIndex
 
-        # Iterate Through Each Batch
-        for idx,size in enumerate(batchSizes):
-            self.logCurrentBatch(idx,size)
+        # Build the Design Matrix
+        sampleShape = (self.getNumFeatures(),)
+        self._designMatrix = Structural.DesignMatrix(batchSize,sampleShape)
+
+        # Create + Evaluate the Batch
+        self.createBatchQueue(batchIndex)
+        self.evaluateBatchQueue()            
+
+        # Serialize the Design Matrix
+        self._designMatrix.serialize()
+        self._designMatrix.clearData()
 
         return self
 
@@ -349,8 +390,60 @@ class CollectionManager (Manager):
         self[28] = CollectionMethods.MelFrequencyCempstrumCoeffsDiffMinMax(1)
         return self
 
-    def evaluateQueue(self,signalData):
+    def initDesignMatrix(self):
+        """ Initialize the Design Matrix Instance """
+        numSamples = \
+            Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getSizeOfBatch(self._batchIndex)
+        shape = (self.getNumFeatures(),)
+        self._designMatrix = Structural.DesignMatrix(numSamples,shape)
+        return self
+
+    def createBatchQueue(self,idx):
+        """ Create the Current Batch of Samples """      
+        self._batchQueue = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().createBatch()
+        return self
+
+    def evaluateBatchQueue(self):
+        """ Iterate through Batch Queue """
+        shape = (self.getNumFeatures(),)
+        featureVector   = Structural.FeatureVector(shape)
+        sampleData      = None
+        for idx,sample in enumerate(self._batchQueue):
+
+            # Evaluate the Queue on the Samples
+            sampleData = sample.readSignal()
+            self.evaluateMethodQueue(sampleData,featureVector)
+
+            # Add to Batch Design Matrix
+            self._designMatrix[idx] = featureVector
+            featureVector.clearData()
+
+        return self
+
+
+    def evaluateMethodQueue(self,signalData,featureVector):
         """ Evaluate the Feature Queue """
+        featureIndex = 0
+        result = None
+        for idx,item in enumerate(self._methodQueue):
+
+            if (item == 0):
+                # Null Feature
+                continue
+
+            # Evalue the current method
+            result = item.invoke(signalData)
+
+            # Copy Result to the feature vector
+            for i in range(item.getReturnSize()):
+                featureVector[featureIndex] = result[i]
+                featureIndex += 1
+
+        result = None
+        assert(featureIndex == featureVector.getShape()[0] - 1)
+        return self
+
+    
 
     def logCurrentBatch(self,index,size):
         """" Log Current Batch w/ Num Samples """
@@ -366,7 +459,7 @@ class CollectionManager (Manager):
 
     def __getitem__(self,key):
         """ Get Item at index """
-        return self._methodQueue[idx]
+        return self._methodQueue[key]
 
     def __setitem__(self,key,val):
         """ Set Item at Index """
@@ -381,6 +474,9 @@ class MetadataManager (Manager):
     def __init__(self):
         """ Constructor for MetadataManager Instance """
         super().__init__()
+        self._totalNumFeatures  = 0
+        self._featureNames      = []
+        self._batchDataObjs     = []
 
     def __del__(self):
         """ Destructor for MetadataManager Instance """
@@ -388,6 +484,25 @@ class MetadataManager (Manager):
 
     # Getters and Setters
 
+    
+
+    # Public Interface
+
+    def build(self):
+        """ Build the Data Manager Instance """
+        numBatches = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getNumBatches()
+
+        return self
+
+    def call(self,batchData):
+        """ Add A new BatchData Instance to this Manager """
+        self._batchDataObjs.append(batchData,)
+
+        return self
+
+    # Private Interface
+ 
+    
             
 
 
