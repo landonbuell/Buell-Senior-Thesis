@@ -155,7 +155,7 @@ class SampleManager (Manager):
 
     def getNextSample(self):
         """ Get the Sample Pointed to by the Index """
-        if (self._sampleIndex <= self.getNumSamples()):
+        if (self._sampleIndex >= self.getNumSamples()):
             result = None
         else:
             result = self._sampleDataBase[self._sampleIndex]
@@ -198,12 +198,12 @@ class SampleManager (Manager):
     def createBatch(self,batchIndex: int):
         """ Get an Array of Samples for the Next Batch """
         # Create the Batch Subset
-        batchSize = self.getBatchSize()
+        batchSize = self.getSizeOfBatch(batchIndex)
         indexStart = batchIndex * batchSize
         batch = np.empty(shape=(batchSize,),dtype=object)
         
         # Populate Batch w/ Entries from Database
-        for i in range(self.getBatchSize()):
+        for i in range(batchSize):
             batch[i] = self.getNextSample()
 
         return batch
@@ -400,7 +400,7 @@ class CollectionManager (Manager):
 
     def createBatchQueue(self,idx):
         """ Create the Current Batch of Samples """      
-        self._batchQueue = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().createBatch()
+        self._batchQueue = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().createBatch(idx)
         return self
 
     def evaluateBatchQueue(self):
