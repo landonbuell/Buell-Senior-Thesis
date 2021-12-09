@@ -103,6 +103,7 @@ class SampleManager (Manager):
         super().__init__()
         self._sampleDataBase    = np.array([],dtype=object)
         self._labelDictionary   = dict({})
+        self._classCounter      = None
         self._batchSizes        = None
         self._sampleIndex       = 0
 
@@ -171,8 +172,14 @@ class SampleManager (Manager):
 
         self.readInputFiles()
         self.createSizeOfEachBatch()
+        self.initClassCounter()
         self.describe()
 
+        return self
+
+    def initClassCounter(self):
+        """ Count the Number of Samples in Each Class """
+        self._classCounter = np.zeros(shape=(self.getNumClasses(),),dtype=np.uint32)
         return self
 
     def describe(self):
@@ -180,9 +187,9 @@ class SampleManager (Manager):
 
         # Basic Info
         messages = [
-            "Number of Files Found: {0}".format(len(self)),
-            "Entries in target label dictionary: {0}".format(self.getNumClasses()),
-            "Number of Batches: {0}".format(self.getNumBatches())
+            "Total samples: {0}".format(len(self)),
+            "Number of classes: {0}".format(self.getNumClasses()),
+            "Number of batches: {0}".format(self.getNumBatches())
             ]
         for msg in messages:
             # Log Each String as a Message
@@ -208,6 +215,10 @@ class SampleManager (Manager):
 
         return batch
 
+    def updateClassCounter(self,targetInt: int):
+        """ Update Class Counter w/ sample target """
+        pass
+
     # Private Interface
 
     def readInputFiles(self):
@@ -224,7 +235,7 @@ class SampleManager (Manager):
             samplesInFile = self.createSamplesFromFile(path)
             self._sampleDataBase = np.append(self._sampleDataBase,samplesInFile)
             # Log Number of Samples
-            msg = "Found {0} samples".format(samplesInFile.shape[0])
+            msg = "\tFound {0} samples".format(samplesInFile.shape[0])
             self.logMessageInterface(msg)
 
         return self
@@ -348,7 +359,12 @@ class CollectionManager (Manager):
         self.evaluateBatchQueue()            
 
         # Serialize the Design Matrix
-        self._designMatrix.serialize()
+        outputPath = os.path.join(
+            Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath(),
+            "batch{0}.bin".format(batchIndex))
+        self._designMatrix.serialize(outputPath)
+
+        # Compute Meta Data and then Clear
         self._designMatrix.clearData()
 
         return self
@@ -410,14 +426,18 @@ class CollectionManager (Manager):
         sampleData      = None
         for idx,sample in enumerate(self._batchQueue):
 
-            # Evaluate the Queue on the Samples
+            # Set the Label + Read the Raw Samples
+            featureVector.setLabel(sample.getTargetInt())
             sampleData = sample.readSignal()
+            
+            # Use Current Sample to Evaluate the Feature Queue
             self.evaluateMethodQueue(sampleData,featureVector)
 
             # Add to Batch Design Matrix
             self._designMatrix[idx] = featureVector
             featureVector.clearData()
 
+        sampleData = None
         return self
 
 
@@ -439,15 +459,18 @@ class CollectionManager (Manager):
                 featureVector[featureIndex] = result[i]
                 featureIndex += 1
 
+
+
         result = None
-        assert(featureIndex == featureVector.getShape()[0] - 1)
+        assert(featureIndex == featureVector.getShape()[0])
         return self
 
     
 
     def logCurrentBatch(self,index,size):
         """" Log Current Batch w/ Num Samples """
-        msg = "Running batch {0}, with {1} samples".format(index,size)
+        numBatches = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getNumBatches()
+        msg = "Running batch ({0}/{1}), with {2} samples".format(index,numBatches,size)
         self.logMessageInterface(msg)
         return None
 

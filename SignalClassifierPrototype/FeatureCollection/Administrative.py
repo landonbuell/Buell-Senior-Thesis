@@ -172,7 +172,7 @@ class AppSettings:
         self._pathOutput    = None
         self._batchSize     = batchSize
         self._shuffleSeed   = shuffleSeed
-        self._verbose       = True
+        self._verbose       = 1
         self._logToConsole  = True
         self._logToFile     = False
 

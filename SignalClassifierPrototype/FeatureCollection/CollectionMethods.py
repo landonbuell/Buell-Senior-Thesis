@@ -47,10 +47,10 @@ class CollectionMethod:
 
     def invoke(self,signalData,*args):
         """ Run this Collection method """
-        if (Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getVerbose()):
+        if (Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getVerbose() > 1):
             msg = "\t\tInvoking " + self.getMethodName()
             Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg)
-        return np.zeros(shape=(self.getReturnSize(),),dtype=float)
+        return np.ones(shape=(self.getReturnSize(),),dtype=float) * -1
 
     # Protected Interface
 

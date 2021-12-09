@@ -72,7 +72,9 @@ class SampleIO:
     def readFileWav(self):
         """ Read Data From .wav file """
         sampleRate,data = sciowav.read(self._filePath)
-        return SignalData(sampleRate,data)
+        data = data.astype(dtype=np.float32).flatten()
+        waveform = data / np.max(np.abs(data))
+        return SignalData(sampleRate,waveform)
 
     # Magic Methods
     
@@ -87,7 +89,7 @@ class SignalData:
     def __init__(self,sampleRate,samples=None):
         """ Constructor for SignalData Instance """
         self._sampleRate            = sampleRate
-        self._samples               = samples
+        self._waveform               = samples
         self._analysisFramesTime    = None
         self._analysisFramesFreq    = None
         self._melFreqCepstrumCoeffs = None
@@ -113,12 +115,12 @@ class SignalData:
 
     def getSamples(self):
         """ Get the Signal Samples """
-        return self._samples
+        return self._waveform
 
     def setSamples(self,data):
         """ Set the Signal Samples """
         self.clear()
-        self._samples = data
+        self._waveform = data
         return self
 
     def getSampleSpace(self):
@@ -142,9 +144,9 @@ class SignalData:
     # Properties to Access Arrays
 
     @property
-    def Samples(self):
+    def Waveform(self):
         """ Access Time-Series Samples """
-        return self._samples
+        return self._waveform
 
     @property
     def AnalysisFramesTime(self):
@@ -185,7 +187,7 @@ class SignalData:
 
     def clear(self):
         """ Clear all Fields of the Instance """
-        self._samples               = None
+        self._waveform               = None
         self._analysisFramesTime    = None
         self._analysisFramesFreq    = None
         self._melFreqCepstrumCoeffs = None
@@ -197,7 +199,7 @@ class SignalData:
 
     def buildAnalysisFrames(self,frameParams=None):
         """ Build Time-Series AnalysisFrames """
-        if (self.Samples is None):
+        if (self.Waveform is None):
             # No Signal - Cannot Make Frames
             errMsg = "ERROR: So signal to make analysis Frames"
             raise RuntimeError(errMsg)
@@ -265,9 +267,10 @@ class AnalysisFramesConstructor:
 class FeatureVector:
     """ Class to Hold Feature Data for a single Sample """
 
-    def __init__(self,sampleShape):
+    def __init__(self,sampleShape,label=-1):
         """ Constructor for FeatureVector Instance """
         self._sampleShape   = sampleShape
+        self._label         = label
         self._data          = np.zeros(shape=sampleShape,dtype=np.float32)
 
     def __del__(self):
@@ -280,12 +283,38 @@ class FeatureVector:
         """ Get the Shape of this Sample """
         return self._sampleShape
 
+    def getLabel(self):
+        """ Get the Target Label """
+        return self._label
+
+    def setLabel(self,x):
+        """ Set the Target Label """
+        self._label = x
+        return self
+
+    def getData(self):
+        """ Get the underlying Array """
+        return self._data
+
+    def setData(self,x,enforceShape=True):
+        """ Set the Underlying Array, optionally chanign shape """
+        if (enforceShape == True):
+            assert(x.shape == self.getShape())
+            self._data = x
+        else:
+            self._sampleShape = x.shape
+            self._data = x
+        return self
+
     # Public Interface
 
     def clearData(self):
         """ Clear All Entries in this Array """
-        self._data = np.zeros(shape=self._sampleShape,dtype=np.float32)
+        self._label         = -1
+        self._data          = np.zeros(shape=self._sampleShape,dtype=np.float32)
         return self
+
+ 
 
     # Magic Method
 
@@ -315,6 +344,7 @@ class DesignMatrix:
         self._numSamples    = numSamples 
         self._sampleShape   = sampleShape
         self._data          = np.zeros(shape=self.getShape(),dtype=np.float32)
+        self._tgts          = np.zeros(shape=numSamples,dtype=np.int16)
 
     def __del__(self):
         """ Destructor for DesignMatrix Instance """
@@ -336,20 +366,88 @@ class DesignMatrix:
         self.clearData()
         return self
 
+    def getData(self):
+        """ Get Design Matrix as an Array """
+        return self._data
+
+    def setData(self,x):
+        """ Set Design Matrix is an Array """
+        self._numSamples = x.shape[0]
+        self._sampleShape = x.shape[1:]
+        self._data = x
+        return self
+
+    def getLabels(self):
+        """ Get the Labels as an Array """
+        return self._tgts
+
+    def setLabels(self,x):
+        """ Set the Labels as an Array """
+        self._tgts = x
+        return self
+
+    def getUniqueClasses(self):
+        """ Get An Array of the unique classes """
+        return np.unique(self._tgts)
+
+    def getNumClasses(self):
+        """ Get the Number of classes in the data set """
+        return np.max(self._tgt)
+
     # public Interface
 
     def serialize(self,path=None):
         """ Write this design matrix out to a file """
+        writer = DesignMatrix.DesignMatrixSerializer(path)
+        writer.call(self)
         return self
 
     def clearData(self):
         """ Clear All Entries in this Array """
-        self._data = np.zeros(shape=self.getShape(),dtype=np.float32)
+        self._data          = np.zeros(shape=self.getShape(),dtype=np.float32)
+        self._tgts          = np.zeros(shape=self.getNumSamples(),dtype=np.int16)
         return self
+
+    @staticmethod
+    def encodeOneHot(targets,numClasses):
+        """ Get a One-Hot-Encoded Array of targets """
+        numSamples = targets.shape[-1]
+        result = np.zeros(shape=(numSamples,numClasses),dtype=np.int16)   
+        for i in range(numSamples):
+            tgt = targets[i]
+            result[i,tgt] = 1
+        return result
 
     # Private Interface
 
+    class DesignMatrixSerializer:
+        """ Private Class to Serialize a DesignMatrixInstance """
+        
+        def __init__(self,outputPath):
+            """ Constructor for DesignMatrixSerializer Instance """
+            self._outputPath = outputPath
+            self._fileHandle = None
 
+        def __del__(self):
+            """ Destructor for DesignMatrixSerializer Instance """
+            if (self._fileHandle is not None):
+                self._fileHandle.close()
+
+        def call(self,designMatrix):
+            """ Run the Serializer """
+            numSamples = designMatrix.getNumSamples()
+            X = designMatrix.getData()
+            Y = designMatrix.getLabels()
+            # Create + Write to output
+            self._fileHandle = open(self._outputPath,"wb")
+            for i in range(numSamples):
+                tgt = X[i].astype(np.int32).tobytes()
+                row = Y[i].flatten().tobytes()
+                self._fileHandle.write( tgt )
+                self._fileHandle.write( row )
+            # Close + Return
+            self._fileHandle.close()
+            return self
 
     # Magic Methods 
 
@@ -366,11 +464,16 @@ class DesignMatrix:
         if (key < 0 or key >= self._numSamples):
             errMsg = "key index is out of range for " + self.__repr__
             raise IndexError(errMsg)
+        # Make a Feature Vector + Return it
+        featureVector = FeatureVector(self._sampleShape,self._tgts[key])
+        featureVector.setData(self._data[key])
+        return featureVector
 
     def __setitem__(self,key,value):
         """ Set the Item at the Index """
-        value = np.float32(value)   # cast to single-precs
-        self._data[key] = value
+        assert(value.getShape() == self._sampleShape)
+        self._tgts[key] = value.getLabel()
+        self._data[key] = value.getData()
         return self
 
 class BatchData:
@@ -402,12 +505,15 @@ class BatchData:
         """ Get the Number of Features in the Batch """
         return self._numFeatures
 
-    def getMeans(self) -> int:
+    def getMeans(self):
         """ Get the Average of Each Feature """
-        return self._mean
+        return self._means
 
-    def setMeans(self,values):
-        """ Set the mean of Each Feature """
-        if (values.shape[0] != self._numFeatures):
-            errMsg = "Incorrect shape for number of features"
+    def getVariances(self):
+        """ Get the Variance of each Feature """
+        return self._variances
 
+    # Public Interface
+
+
+    # Private Interface
