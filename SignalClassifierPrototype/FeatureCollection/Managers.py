@@ -19,6 +19,8 @@ import Administrative
 import CollectionMethods
 import Structural
 
+import CommonStructures
+
         #### CLASS DEFINITIONS ####
 
 class Manager:
@@ -290,7 +292,8 @@ class CollectionManager (Manager):
         self._batchIndex        = 0
         self._batchQueue        = np.array([],dtype=object)
         self._methodQueue       = np.array([],dtype=object)    
-        self._designMatrix      = None
+        self._designMatrixA     = None
+        self._designMatrixB     = None
         self._framesParameters  = Structural.AnalysisFramesParameters()
         self._framesContructor  = Structural.AnalysisFramesConstructor()
 
@@ -299,7 +302,7 @@ class CollectionManager (Manager):
         """ Destructor for CollectionManager Instance """
         self._batchQueue        = None
         self._methodQueue       = None
-        self._designMatrix      = None
+        self._designMatrixA      = None
         self._framesParameters  = None
         self._framesContructor  = None
         super().__del__()
@@ -320,7 +323,7 @@ class CollectionManager (Manager):
 
     def getDesignMatrix(self):
         """ Get the Design Matrix """
-        return self._designMatrix
+        return self._designMatrixA
 
     def getNumFeatures(self):
         """ Compute the Number of Features from the Method Queue """
@@ -351,8 +354,10 @@ class CollectionManager (Manager):
         self._batchIndex = batchIndex
 
         # Build the Design Matrix
-        sampleShape = (self.getNumFeatures(),)
-        self._designMatrix = Structural.DesignMatrix(batchSize,sampleShape)
+        sampleShapeA = (self.getNumFeatures(),)
+        sampleShapeB = (1,)
+        self._designMatrixA = CommonStructures.DesignMatrix(batchSize,sampleShapeA)
+        self._designMatrixB = CommonStructures.DesignMatrix(batchSize,sampleShapeB)
 
         # Create + Evaluate the Batch
         self.createBatchQueue(batchIndex)
@@ -362,10 +367,11 @@ class CollectionManager (Manager):
         outputPath = os.path.join(
             Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath(),
             "batch{0}.bin".format(batchIndex))
-        self._designMatrix.serialize(outputPath)
+
+        self._designMatrixA.serialize(outputPath)
 
         # Compute Meta Data and then Clear
-        self._designMatrix.clearData()
+        self._designMatrixA.clearData()
 
         return self
 
@@ -411,7 +417,7 @@ class CollectionManager (Manager):
         numSamples = \
             Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getSizeOfBatch(self._batchIndex)
         shape = (self.getNumFeatures(),)
-        self._designMatrix = Structural.DesignMatrix(numSamples,shape)
+        self._designMatrixA = CommonStructures.DesignMatrix(numSamples,shape)
         return self
 
     def createBatchQueue(self,idx):
@@ -422,7 +428,7 @@ class CollectionManager (Manager):
     def evaluateBatchQueue(self):
         """ Iterate through Batch Queue """
         shape = (self.getNumFeatures(),)
-        featureVector   = Structural.FeatureVector(shape)
+        featureVector   = CommonStructures.FeatureVector(shape)
         sampleData      = None
         for idx,sample in enumerate(self._batchQueue):
 
@@ -434,7 +440,7 @@ class CollectionManager (Manager):
             self.evaluateMethodQueue(sampleData,featureVector)
 
             # Add to Batch Design Matrix
-            self._designMatrix[idx] = featureVector
+            self._designMatrixA[idx] = featureVector
             featureVector.clearData()
 
         sampleData = None

@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>76210b0c-9175-4c5f-9c95-ca1fb9cd240b</ProjectGuid>
+    <ProjectGuid>0b3aab92-77da-4d35-8585-318b4458c673</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>__main__.py</StartupFile>
+    <StartupFile>__init__.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>FeatureCollection</Name>
-    <RootNamespace>FeatureCollection</RootNamespace>
+    <Name>CommonUtilities</Name>
+    <RootNamespace>CommonUtilities</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,17 +21,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Administrative.py" />
-    <Compile Include="CollectionMethods.py" />
-    <Compile Include="Managers.py" />
-    <Compile Include="Structural.py" />
+    <Compile Include="CommonStructures.py" />
     <Compile Include="__init__.py" />
-    <Compile Include="__main__.py" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonUtilities\CommonUtilities.pyproj">
-      <Name>CommonUtilities</Name>
-      <Project>{0b3aab92-77da-4d35-8585-318b4458c673}</Project>
+    <ProjectReference Include="..\FeatureCollection\FeatureCollection.pyproj">
+      <Name>FeatureCollection</Name>
+      <Project>{76210b0c-9175-4c5f-9c95-ca1fb9cd240b}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
