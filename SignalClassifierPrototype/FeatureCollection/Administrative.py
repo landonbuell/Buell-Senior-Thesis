@@ -14,6 +14,8 @@ import os
 import sys
 import datetime
 
+from numpy.core.numeric import outer
+
 import Managers
 
         #### CLASS DEFINITIONS ####
@@ -42,8 +44,19 @@ class CollectionApplicationProtoype:
         self.logDestruction()
         CollectionApplicationProtoype.AppInstance = None
 
+    @staticmethod
     def constructApp(self,settings):
         """ Construct the Application """
+        if (CollectionApplicationProtoype.AppInstance is None):
+            CollectionApplicationProtoype.AppInstance = CollectionApplicationProtoype(settings)
+        else:
+            errMsg = "Can only have one instance of CollectionApplicationProtoype at runtime"
+            raise RuntimeError(errMsg)
+        return CollectionApplicationProtoype.AppInstance
+
+    @staticmethod
+    def destroyApp(self):
+        """ Destroy the Aplication """
         if (CollectionApplicationProtoype.AppInstance is None):
             CollectionApplicationProtoype.AppInstance = CollectionApplicationProtoype(settings)
         else:
@@ -98,7 +111,7 @@ class CollectionApplicationProtoype:
         # Init the Managers
         self._sampleManager     = Managers.SampleManager()
         self._collectionManager = Managers.CollectionManager()
-        self._dataManager       = Managers.MetadataManager()
+        self._dataManager       = Managers.RundataManager()
 
         # Run Each Build Method
         self._sampleManager.build()
@@ -115,6 +128,7 @@ class CollectionApplicationProtoype:
             # Run the Collection Manager on this Batch
             self._collectionManager.call(idx,size)
 
+        self._dataManager.call()
         return self
 
     def shutdown(self):
@@ -185,6 +199,10 @@ class AppSettings:
 
     # Getters and Setters
 
+    def getStartupPath(self) -> str:
+        """ Get Application Startup Path """
+        retuen self._pathStartup
+
     def getInputPaths(self) -> set:
         """ Return List of Input Paths """
         return self._pathsInput
@@ -219,17 +237,20 @@ class AppSettings:
         """ Add New Input Path to the Set of Paths """
         fullPath = os.path.abspath(path)
         self._pathsInput.add(fullPath)
+        return self
 
-    def Serialize(self,path)-> bool:
+    def serialize(self)-> bool:
         """ Write the Settings Instance out to a text file """
-        return False
+        writer = AppSettingsSerializer(self,None)
+        writer.call()
+        return True
 
     @staticmethod
     def developmentSettingsInstance():
         """ Build an instance of runtime settings for development """
         result = AppSettings(
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
-            pathOutput=".\\OutputTest_v0",
+            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v0",
             batchSize=32,
             shuffleSeed=-1)
         return result
@@ -252,6 +273,48 @@ class AppSettings:
             os.mkdir(fullOutput)
         self._pathOutput = fullOutput
         return self
+
+class AppSettingsSerializer:
+    """ Class to Serialize AppSettings Instance """
+
+    def __init__(self,settings,path=None):
+        """ Constructor for AppSettingsSerializer Instance """
+        self._settings  = settings
+        self._path      = "-1"
+
+        if (path is None):
+            path = os.path.join(settings.getOutputPath(),"runtimeSettings.txt")
+        else:
+            path = path = os.path.join(path,"runtimeSettings.txt")
+
+    def __del__(self):
+        """ Destructor for AppSettingsSerializer Instance """
+        self._settings = None
+
+    def call(self):
+        """ Serialize the Chosen Instance """
+        path = os.path.join(settings.getOutputPath(),"runtimeSettings.txt")
+        outline = lambda key,val : "{0:<32}\t{1:<128}\n".format(key,val)
+
+        with open(path,"w") as outFileStream:
+        
+            # Write In/Out Paths
+            outFileStream.write( outline("startupPath",settings.getStartupPath() ) )
+            for i,val in enumerate( settings.getInputPaths() ):
+                outFileStream.write( outline("inputPath_" + str(i),settings.getInputPaths()[i] ) )
+            outFileStream.write( outline("outputPath",settings.getOutputPath() ) )
+
+            # Write Collection Settings
+            outFileStream.write( outline("BatchSize",settings.getBatchSize() ) )
+            outFileStream.write( outline("ShuffleSeed",settings.getShuffleSelf() ) )
+            outFileStream.write( outline("Verbose",settings.getVerbose() ) )
+
+            # Write Log Levels
+            outFileStream.write( outline("LogConsole",settings.getLogToConsole() ) )
+            outFileStream.write( outline("LogFile",settings.getLogToFile() ) )
+
+        return self
+            
 
 class Logger:
     """ 

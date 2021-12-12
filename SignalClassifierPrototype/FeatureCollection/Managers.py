@@ -497,8 +497,8 @@ class CollectionManager (Manager):
 
     
 
-class MetadataManager (Manager):
-    """ MetadataManager Aggregates all data from the Collection process """
+class RundataManager (Manager):
+    """ RundataManager Aggregates all important info from the Collection run process """
     
     def __init__(self):
         """ Constructor for MetadataManager Instance """
@@ -513,24 +513,41 @@ class MetadataManager (Manager):
 
     # Getters and Setters
 
-    
+    def getRuntimeSettings(self):
+        """ Get the Runtime Settings from the AppInstance """
+        return Administrative.CollectionApplicationProtoype.AppInstance.getSettings()
 
     # Public Interface
 
     def build(self):
         """ Build the Data Manager Instance """
         numBatches = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getNumBatches()
+        Administrative.CollectionApplicationProtoype.AppInstance.getSettings().serialize()
 
         return self
 
-    def call(self,batchData):
-        """ Add A new BatchData Instance to this Manager """
-        self._batchDataObjs.append(batchData,)
+    def call(self):
+        """ Run this Manager's Execution Method """
+        
+
+
+        return self
+
+    def clean():
+        """ Run Cleaning method on Instance """
+        super().clean()
+        return self
+
+    def addBatchData(self,batchData):
+        """ Add Batch Data Instance to this Instance """
+        self._batchDataObjs.append(batchData)
+
 
         return self
 
     # Private Interface
- 
+
+
     
             
 

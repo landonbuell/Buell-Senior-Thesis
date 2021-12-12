@@ -12,7 +12,6 @@ Date:           December 2021
 
 import numpy as np
 
-
         #### CLASS DEFINITIONS ####
 
 class FeatureVector:
@@ -153,7 +152,7 @@ class DesignMatrix:
 
     def serialize(self,path=None):
         """ Write this design matrix out to a file """
-        writer = DesignMatrix.DesignMatrixSerializer(path,self)
+        writer = DesignMatrixSerializer(path,self)
         writer.call()
         return self
 
@@ -248,10 +247,10 @@ class DesignMatrixSerializer:
 class DesignMatrixDeserializer:
     """ Class to Serialize a DesignMatrix Instance """
 
-    def __init__(self,localPath):
+    def __init__(self,localPath,matrix):
         """ Constructor for DesignMatrixSerializer Instance """
         self._outputPath    = localPath
-        self._matrix        =
+        self._matrix        = matrix
         self._fileHandle    = None
 
     def __del__(self):
@@ -264,3 +263,22 @@ class DesignMatrixDeserializer:
         """ Run the Serializer """
 
         return self
+
+class RunInformation:
+    """
+    Class to Hold and Use all Metadata related to a feature collection Run
+    """
+
+    def __init__(self,runPath):
+        """ Constructor for RunInformation Instance """
+        self._path      = runPath
+
+
+    def __del__(self):
+        """ Destructor for RunInformation Instance """
+        pass
+
+    # Getters and Setters
+
+    def getInfoPath(self):
+        """ Get the Path to the RunInfo Metadata """

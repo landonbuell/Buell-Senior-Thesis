@@ -15,7 +15,12 @@
       "ProjectGuid": "0b3aab92-77da-4d35-8585-318b4458c673",
       "DisplayName": "CommonUtilities",
       "ColorIndex": 1
+    },
+    "1f9c8e99-6523-4eea-99fb-29a84b9e0ebd": {
+      "ProjectGuid": "1f9c8e99-6523-4eea-99fb-29a84b9e0ebd",
+      "DisplayName": "FeatureEngineering",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 2
+  "NextColorIndex": 3
 }

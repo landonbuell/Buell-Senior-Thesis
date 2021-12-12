@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0b3aab92-77da-4d35-8585-318b4458c673</ProjectGuid>
+    <ProjectGuid>1f9c8e99-6523-4eea-99fb-29a84b9e0ebd</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>__init__.py</StartupFile>
+    <StartupFile>__main__.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>CommonUtilities</Name>
-    <RootNamespace>CommonUtilities</RootNamespace>
+    <Name>FeatureEngineering</Name>
+    <RootNamespace>FeatureEngineering</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,8 +21,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommonStructures.py" />
+    <Compile Include="Adminstrative.py" />
     <Compile Include="__init__.py" />
+    <Compile Include="__main__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonUtilities\CommonUtilities.pyproj">
+      <Name>CommonUtilities</Name>
+      <Project>{0b3aab92-77da-4d35-8585-318b4458c673}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
