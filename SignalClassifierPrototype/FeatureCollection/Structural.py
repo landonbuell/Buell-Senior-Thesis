@@ -270,8 +270,10 @@ class BatchData:
     def __init__(self,batchIndex,numSamples,numFeatures):
         """ Constructor for BatchDataInstance """
         self._batchIndex    = batchIndex
-        self._numSamples    = numSamples
-        self._numFeatures   = numFeatures
+
+        self._numSamplesExpt    = 0
+        self._numSamplesRead    = 0
+
         self._means         = np.zeros(shape=(numFeatures),dtype=float)
         self._variances     = np.zeros(shape=(numFeatures),dtype=float)
         
@@ -285,13 +287,13 @@ class BatchData:
         """ Get the Index of this Batch """
         return self._batchIndex
 
-    def getNumSamples(self) -> int:
-        """ Get the Number of Samples in the Batch """
-        return self._numSamples
+    def getExpectedNumSamples(self):
+        """ Get the number of samples expected to process """
+        return self._numSamplesExpt
 
-    def getNumFeatures(self) -> int:
-        """ Get the Number of Features in the Batch """
-        return self._numFeatures
+    def getActualNumSamples(self):
+        """ Get the number of samples actually processed """
+        return self._numSamplesRead
 
     def getMeans(self):
         """ Get the Average of Each Feature """
@@ -303,6 +305,7 @@ class BatchData:
 
     # Public Interface
 
-    def export(self,):
+    def export(self,path):
+        """ Write out the Batch's Data to a specified file """
 
     # Private Interface

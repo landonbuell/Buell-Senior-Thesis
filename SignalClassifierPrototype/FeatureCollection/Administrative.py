@@ -36,7 +36,7 @@ class CollectionApplicationProtoype:
         
         self._sampleManager     = None
         self._collectionManager = None
-        self._dataManager       = None
+        self._rundataManager    = None
 
         
     def __del__(self):
@@ -88,9 +88,9 @@ class CollectionApplicationProtoype:
         """ Return the Collection Manager """
         return self._collectionManager
 
-    def getDataManager(self):
+    def getRundataManager(self):
         """ Return the Data Manager """
-        return self._dataManager()
+        return self._rundataManager()
 
     def getCurrentDirectory(self):
         """ Return the Current Working Directory """
@@ -111,12 +111,12 @@ class CollectionApplicationProtoype:
         # Init the Managers
         self._sampleManager     = Managers.SampleManager()
         self._collectionManager = Managers.CollectionManager()
-        self._dataManager       = Managers.RundataManager()
+        self._rundataManager       = Managers.RundataManager()
 
         # Run Each Build Method
         self._sampleManager.build()
         self._collectionManager.build()
-        self._dataManager.build()
+        self._rundataManager.build()
 
         return self
 
@@ -128,7 +128,7 @@ class CollectionApplicationProtoype:
             # Run the Collection Manager on this Batch
             self._collectionManager.call(idx,size)
 
-        self._dataManager.call()
+        self._rundataManager.call()
         return self
 
     def shutdown(self):
@@ -201,7 +201,7 @@ class AppSettings:
 
     def getStartupPath(self) -> str:
         """ Get Application Startup Path """
-        retuen self._pathStartup
+        return self._pathStartup
 
     def getInputPaths(self) -> set:
         """ Return List of Input Paths """
@@ -250,7 +250,7 @@ class AppSettings:
         """ Build an instance of runtime settings for development """
         result = AppSettings(
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v0",
+            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v1",
             batchSize=32,
             shuffleSeed=-1)
         return result
@@ -293,25 +293,25 @@ class AppSettingsSerializer:
 
     def call(self):
         """ Serialize the Chosen Instance """
-        path = os.path.join(settings.getOutputPath(),"runtimeSettings.txt")
+        path = os.path.join(self._settings.getOutputPath(),"runtimeSettings.txt")
         outline = lambda key,val : "{0:<32}\t{1:<128}\n".format(key,val)
 
         with open(path,"w") as outFileStream:
         
             # Write In/Out Paths
-            outFileStream.write( outline("startupPath",settings.getStartupPath() ) )
-            for i,val in enumerate( settings.getInputPaths() ):
-                outFileStream.write( outline("inputPath_" + str(i),settings.getInputPaths()[i] ) )
-            outFileStream.write( outline("outputPath",settings.getOutputPath() ) )
+            outFileStream.write( outline("startupPath",self._settings.getStartupPath() ) )
+            for i,val in enumerate( self._settings.getInputPaths() ):
+                outFileStream.write( outline("inputPath_" + str(i),self._settings.getInputPaths()[i] ) )
+            outFileStream.write( outline("outputPath",self._settings.getOutputPath() ) )
 
             # Write Collection Settings
-            outFileStream.write( outline("BatchSize",settings.getBatchSize() ) )
-            outFileStream.write( outline("ShuffleSeed",settings.getShuffleSelf() ) )
-            outFileStream.write( outline("Verbose",settings.getVerbose() ) )
+            outFileStream.write( outline("BatchSize",self._settings.getBatchSize() ) )
+            outFileStream.write( outline("ShuffleSeed",self._settings.getShuffleSelf() ) )
+            outFileStream.write( outline("Verbose",self._settings.getVerbose() ) )
 
             # Write Log Levels
-            outFileStream.write( outline("LogConsole",settings.getLogToConsole() ) )
-            outFileStream.write( outline("LogFile",settings.getLogToFile() ) )
+            outFileStream.write( outline("LogConsole",self._settings.getLogToConsole() ) )
+            outFileStream.write( outline("LogFile",self._settings.getLogToFile() ) )
 
         return self
             

@@ -106,9 +106,13 @@ class DesignMatrix:
 
     # Getters and Setters
 
-    def getShape(self) -> int:
+    def getShape(self):
         """ Get Total Shape of Design Matrix """
         return ((self._numSamples,) + self._sampleShape)
+
+    def getSampleShape(self):
+        """ Get the Shape of Each Sample in the Design Matrix """
+        return self._sampleShape
 
     def getNumSamples(self) -> int:
         """ Get the Number of Samples in the Design Matrix """
@@ -269,9 +273,18 @@ class RunInformation:
     Class to Hold and Use all Metadata related to a feature collection Run
     """
 
-    def __init__(self,runPath):
+    def __init__(self,inputPaths,outputPath):
         """ Constructor for RunInformation Instance """
-        self._path      = runPath
+        self._pathsInput        = inputPaths
+        self._pathOutput        = outputPath
+
+        self._numSamplesExpt    = 0
+        self._numSamplesRead    = 0
+
+        self._shapeSampleA      = []
+        self._shapeSampleB      = []
+
+        self._batchSizes        = []
 
 
     def __del__(self):
@@ -282,3 +295,54 @@ class RunInformation:
 
     def getInfoPath(self):
         """ Get the Path to the RunInfo Metadata """
+        return self._path
+
+    def getExpectedNumSamples(self):
+        """ Get the number of samples expected to process """
+        return self._numSamplesExpt
+
+    def getActualNumSamples(self):
+        """ Get the number of samples actually processed """
+        return self._numSamplesRead
+
+    def getShapeSampleA(self):
+        """ Get the shape of samples in design matrix A """
+        return self._shapeSampleA
+
+    def getShapeSampleB(self):
+        """ Get the shape of samples in design matrix B """
+        return self._shapeSampleB
+
+    def getBatchSizes(self):
+        """ Get the Sizes of all Batches """
+        return self._batchSizes
+
+    def getNumBatches(self):
+        """ Get the Number of Batches in the run """
+        return len(self._batchSizes)
+
+    def getSizeSampleA(self):
+        """ Get the size of each sample in design matrix A """
+        size = 1
+        for x in self._shapeSampleA:
+            size *= x
+        return size
+
+    def getSizeSampleB(self):
+        """ Get the size of each sample in design matrix B """
+        size = 1
+        for x in self._shapeSampleB:
+            size *= x
+        return size
+    
+    # Public Interface 
+
+    def serialize(self,path):
+        """ Serialize this Instance to specified Path """
+
+        pass
+
+    @staticmethod
+    def deserialize(path):
+        """ Deserialize this instance from specified path """
+        pass

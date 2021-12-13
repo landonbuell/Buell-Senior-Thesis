@@ -38,6 +38,22 @@ class Manager:
 
     # Getters and Setters
 
+    def getRuntimeSettings(self):
+        """ Get a reference to the Runtime Settings from the AppInstance """
+        return Administrative.CollectionApplicationProtoype.AppInstance.getSettings()
+
+    def getSampleManager(self):
+        """ Get a reference to the Sample Manager form the AppInstance """
+        return Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager()
+
+    def getCollectionManager(self):
+        """ Get a reference to the collection Manager from the AppInstance """
+        return Administrative.CollectionApplicationProtoype.AppInstance.getCollectionManager()
+
+    def getDataManager(self):
+        """ Get a reference to the Rundata Manager from the the AppInstance """
+        return Administrative.CollectionApplicationProtoype.AppInstance.getRundataManager()
+
     # Public Interface
 
     def build(self):
@@ -133,7 +149,7 @@ class SampleManager (Manager):
         self._sampleDataBase[idx] = sample
         return self
 
-    def getBatchSizes(self) -> int:
+    def getBatchSizes(self):
         """ Get Array of Each Batch Size """
         return self._batchSizes
 
@@ -225,7 +241,7 @@ class SampleManager (Manager):
 
     def readInputFiles(self):
         """ Read Through All Input Files and Add to Sample Database """
-        inputFiles = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getInputPaths()
+        inputFiles = self.getRuntimeSettings().getInputPaths()
         samplesInFile = None
         
         # Visit Each Input File + Get All Samples
@@ -321,9 +337,13 @@ class CollectionManager (Manager):
         """ Get the Method Queue for the Collector """
         return self._methodQueue
 
-    def getDesignMatrix(self):
-        """ Get the Design Matrix """
+    def getDesignMatrixA(self):
+        """ Get the Design Matrix A"""
         return self._designMatrixA
+
+    def getDesignMatrixB(self):
+        """ Get the Design Matrix B"""
+        return self._designMatrixB
 
     def getNumFeatures(self):
         """ Compute the Number of Features from the Method Queue """
@@ -342,6 +362,7 @@ class CollectionManager (Manager):
 
         self.createCollectionQueue()
         self.initDesignMatrix()
+
 
         return self
 
@@ -414,10 +435,11 @@ class CollectionManager (Manager):
 
     def initDesignMatrix(self):
         """ Initialize the Design Matrix Instance """
-        numSamples = \
-            Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getSizeOfBatch(self._batchIndex)
-        shape = (self.getNumFeatures(),)
-        self._designMatrixA = CommonStructures.DesignMatrix(numSamples,shape)
+        numSamples = self.getSampleManager().getSizeOfBatch(self._batchIndex)
+        shapeA = (self.getNumFeatures(),)
+        shapeB = (1,)
+        self._designMatrixA = CommonStructures.DesignMatrix(numSamples,shapeA)
+        self._designMatrixB = CommonStructures.DesignMatrix(numSamples,shapeB)
         return self
 
     def createBatchQueue(self,idx):
@@ -443,6 +465,12 @@ class CollectionManager (Manager):
             self._designMatrixA[idx] = featureVector
             featureVector.clearData()
 
+        # Update the Batch's Meta Data
+        batchData = Structural.BatchData(
+            self.getBatchIndex(),
+            len(self._batchQueue),
+            self.getNumFeatures() )
+        self.getDataManager().addBatchData(batchData)
         sampleData = None
         return self
 
@@ -503,8 +531,7 @@ class RundataManager (Manager):
     def __init__(self):
         """ Constructor for MetadataManager Instance """
         super().__init__()
-        self._totalNumFeatures  = 0
-        self._featureNames      = []
+        self._runInfo           = None
         self._batchDataObjs     = []
 
     def __del__(self):
@@ -513,24 +540,29 @@ class RundataManager (Manager):
 
     # Getters and Setters
 
-    def getRuntimeSettings(self):
-        """ Get the Runtime Settings from the AppInstance """
-        return Administrative.CollectionApplicationProtoype.AppInstance.getSettings()
+    def getRunInfo(self):
+        """ Get RunInformation """
+        return self._runInfo
 
     # Public Interface
 
     def build(self):
         """ Build the Data Manager Instance """
-        numBatches = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getNumBatches()
-        Administrative.CollectionApplicationProtoype.AppInstance.getSettings().serialize()
+
+        self.getRuntimeSettings().serialize()
+             
+        self._runInfo = CommonStructures.RunInformation( 
+            self.getRuntimeSettings().getInputPaths(),
+            self.getRuntimeSettings().getOutputPath() )
+
+        self.initSampleShapeSizes()
+        self.initBatchSizeData()
 
         return self
 
     def call(self):
         """ Run this Manager's Execution Method """
         
-
-
         return self
 
     def clean():
@@ -541,14 +573,32 @@ class RundataManager (Manager):
     def addBatchData(self,batchData):
         """ Add Batch Data Instance to this Instance """
         self._batchDataObjs.append(batchData)
-
-
+        self._runInfo.getExpectedNumSamples() += batchData.getExpectedNumSamples()
+        self._runInfo.getActualNumSamples() += batchData.getActualNumSamples()
         return self
 
     # Private Interface
 
+    def initSampleShapeSizes(self):
+        """ Set the Sample Shape Sizes """
+        shapeSampleA = self.getCollectionManager().getDesignMatrixA().getSampleShape()
+        shapeSampleB = self.getCollectionManager().getDesignMatrixB().getSampleShape()
+        
+        # Copy Shapes Over
+        for i in range(len(shapeSampleA)):
+            self._runInfo.getShapeSampleA().append( shapeSampleA[i] )
 
-    
+        for j in range(len(shapeSampleB)):
+            self._runInfo.getShapeSampleB().append( shapeSampleB[j] )
+
+        # Return
+        return self
             
+    def initBatchSizeData(self):
+        """ Inititalize Data related to batch Sizes """
+        batchSizes = self.getSampleManager().getBatchSizes()
+        for i in range(len(batchSizes)):
+            self._runInfo.getBatchSizes().append( batchSizes[i] )
+        return self
 
 
