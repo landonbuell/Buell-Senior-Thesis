@@ -30,6 +30,7 @@ class SampleIO:
         self._filePath      = path
         self._targetInt     = targetInt
         self._targetStr     = targetStr
+        self._reqSamples    = int(2**18)
 
     def __del__(self):
         """ Destructor for SampleIO Instance """
@@ -74,7 +75,22 @@ class SampleIO:
         sampleRate,data = sciowav.read(self._filePath)
         data = data.astype(dtype=np.float32).flatten()
         waveform = data / np.max(np.abs(data))
+        waveform = self.padWaveform(waveform)
         return SignalData(sampleRate,waveform)
+
+    def padWaveform(self,waveform):
+        """ Pad or Crop Waveform if too long or too short """
+        if (waveform.shape[0] < self._reqSamples):
+            # Too few samples
+            deficit = self._reqSample - waveform.shape[0]
+            waveform = np.append(waveform,np.zeros(shape=deficit,dtype=np.float32))
+        elif (waveform.shape[0] > self._reqSamples):
+            # Too many samples
+            waveform = waveform[0:self._reqSamples]
+        else:
+            # Exactly the right number of samples - do nothing
+            pass
+        return waveform
 
     # Magic Methods
     
@@ -89,7 +105,7 @@ class SignalData:
     def __init__(self,sampleRate,samples=None):
         """ Constructor for SignalData Instance """
         self._sampleRate            = sampleRate
-        self._waveform               = samples
+        self._waveform              = samples
         self._analysisFramesTime    = None
         self._analysisFramesFreq    = None
         self._melFreqCepstrumCoeffs = None
@@ -187,7 +203,7 @@ class SignalData:
 
     def clear(self):
         """ Clear all Fields of the Instance """
-        self._waveform               = None
+        self._waveform              = None
         self._analysisFramesTime    = None
         self._analysisFramesFreq    = None
         self._melFreqCepstrumCoeffs = None
@@ -254,6 +270,10 @@ class AnalysisFramesParameters:
         """ Get the Number of Frames Currently in use """
         return self._framesInUse
 
+    def getSampleStep(self) -> int:
+        """ Get the Sample Step Between adjacent analysis frames """
+        return (self._samplesPerFrame - self._samplesOverlap)
+
     def getTotalFrameSize(self) -> int:
         """ Get total Size of Each Frame including padding """
         return self._padHead + self._samplesPerFrame + self._padTail
@@ -271,7 +291,7 @@ class BatchData:
         """ Constructor for BatchDataInstance """
         self._batchIndex    = batchIndex
 
-        self._numSamplesExpt    = 0
+        self._numSamplesExpt    = numSamples
         self._numSamplesRead    = 0
 
         self._means         = np.zeros(shape=(numFeatures),dtype=float)
@@ -303,9 +323,15 @@ class BatchData:
         """ Get the Variance of each Feature """
         return self._variances
 
+    def incrementNumSamplesRead(self,amount):
+        """ Increment the Number of Samples Read in this Batch """
+        self._numSamplesRead += amount
+        return self
+
     # Public Interface
 
     def export(self,path):
         """ Write out the Batch's Data to a specified file """
+        return self
 
     # Private Interface

@@ -408,7 +408,7 @@ class CollectionManager (Manager):
         """ Build All Elements in the Collection Queue """
         numEntries = 32
         self._methodQueue = np.zeros(shape=(numEntries,),dtype=object)
-        self[0] = CollectionMethods.TimeDomainEnvelopPartitions(12)
+        self[0] = CollectionMethods.TimeDomainEnvelopPartitions(8)
         self[1] = CollectionMethods.TimeDomainEnvelopFrames(1)
         self[2] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.1)
         self[3] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.2)
@@ -437,6 +437,9 @@ class CollectionManager (Manager):
         self[26] = CollectionMethods.MelFrequencyCempstrumCoeffsMean(1)
         self[27] = CollectionMethods.MelFrequencyCempstrumCoeffsVariance(1)
         self[28] = CollectionMethods.MelFrequencyCempstrumCoeffsDiffMinMax(1)
+        self[29] = 0
+        self[30] = 0
+        self[31] = 0
         return self
 
     def initDesignMatrix(self):
@@ -498,10 +501,9 @@ class CollectionManager (Manager):
             for i in range(item.getReturnSize()):
                 featureVector[featureIndex] = result[i]
                 featureIndex += 1
+            result = None
 
-
-
-        result = None
+        # Sanity Check
         assert(featureIndex == featureVector.getShape()[0])
         return self
 

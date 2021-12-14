@@ -13,6 +13,7 @@ Date:           December 2021
 import os
 import sys
 import numpy as np
+from numpy.core.fromnumeric import partition
 
 import Administrative
 import Structural
@@ -50,7 +51,7 @@ class CollectionMethod:
         if (Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getVerbose() > 1):
             msg = "\t\tInvoking " + self.getMethodName()
             Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg)
-        return np.ones(shape=(self.getReturnSize(),),dtype=float) * -1
+        return np.ones(shape=(self.getReturnSize(),),dtype=np.float32) * -1
 
     # Protected Interface
 
@@ -88,17 +89,25 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signalData)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)  
+        sizeOfPartition = signalData.Waveform.shape[0] // self._parameter
+        # Iterate Through Each Parition
+        startIndex = 0
+        for i in range(self._parameter):    
+            part = signalData.Waveform[ startIndex : startIndex + sizeOfPartition]
+            result[i] = np.sum(np.abs(part**2),dtype=np.float32)
+            startIndex += sizeOfPartition
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.Samples is None):
+        if (signalData.Waveform is None):
             errMsg = "Signal.Samples must not be None"
             raise ValueError(errMsg)
-        if (signalData.Samples.shape[0] < 2* self._parameter):
+        if (signalData.Waveform.shape[0] < 2* self._parameter):
             errMsg = "Signal.Samples is too small to compute TDE"
             raise ValueError(errMsg)
         return True
@@ -211,7 +220,7 @@ class ZeroCrossingsPerTime(CollectionMethod):
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.Samples is None):
+        if (signalData.Waveform is None):
             errMsg = "Signal.Samples must not be None"
             raise ValueError(errMsg)
         return True
@@ -352,7 +361,7 @@ class TemporalCenterOfMassLinear(CollectionMethod):
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.Samples is None):
+        if (signalData.Waveform is None):
             errMsg = "Signal.Samples must not be None"
             raise ValueError(errMsg)
         return True
@@ -387,7 +396,7 @@ class TemportalCenterOfMassQuadratic(CollectionMethod):
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.Samples is None):
+        if (signalData.Waveform is None):
             errMsg = "Signal.Samples must not be None"
             raise ValueError(errMsg)
         return True
@@ -422,7 +431,7 @@ class AutoCorrelationCoefficients(CollectionMethod):
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.Samples is None):
+        if (signalData.Waveform is None):
             errMsg = "Signal.Samples must not be None"
             raise ValueError(errMsg)
         return True

@@ -138,6 +138,8 @@ class CollectionApplicationProtoype:
         self._collectionManager.clean()
         self._rundataManager.clean()
 
+        self._logger = None
+
         return self
     
     # Internal Interface
