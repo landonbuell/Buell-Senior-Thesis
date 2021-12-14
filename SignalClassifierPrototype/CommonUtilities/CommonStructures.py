@@ -10,9 +10,86 @@ Date:           December 2021
 
         #### IMPORTS ####
 
+import os
+import sys
 import numpy as np
 
         #### CLASS DEFINITIONS ####
+
+class Serializer:
+    """ Abstract Base Class for all Serializer Classes """
+
+    def __init__(self,data,path):
+        """ Constructor for Serializer Abstract Class """
+        self._data              = data
+        self._outputPath        = path
+        self._outFileStream     = None
+        self._outFmtStr         = lambda key,val :  "{0:<32}\t{1:<128}\n".format(key,val)
+
+    def __del__(self):
+        """ Destructor for Serializer Abstract Class """
+        if (self._outFileStream is not None):
+            self._outFileStream.close()
+        return
+
+    def call(self):
+        """ Write Object to OutputStream """
+
+        return False
+
+    def listToString(self,inputList,delimiter=" "):
+        """ Convert Elements of list to string w/ delimiter """
+        outputString = ""
+        for item in inputList:
+            outputString += str(item) + delimiter
+        return outputString.strip()
+
+    def writeHeader(self):
+        """ Add Header To Output """
+        self._outFileStream.write(self.__repr__() + "\n")
+        self._outFileStream.write("-"*64 + "\n")
+        return self
+
+    def writeFooter(self):
+        """ Add Header To Output """
+        self._outFileStream.write("-"*64 + "\n")
+        self._outFileStream.write(self.__repr__() + "\n")
+        return self
+
+    def __repr__(self):
+        """ Debugger Representation of Instance """
+        return str(self.__class__) + " @ " + str(hex(id(self)))
+
+class Deserializer:
+    """ Abstract Base Class for all Deserializer Classes """
+
+    def __init__(self,path):
+        """ Constructor for Deserializer Abstract Class """
+        self._data              = None
+        self._inputPath         = path
+        self._inFileStream      = None
+
+    def __del__(self):
+        """ Destructor for Deserializer Abstract Class """
+        self._data = None
+        if (self._inFileStream is not None):
+            self._inFileStream.close()
+        return
+
+    def call(self):
+        """ Read Object From inputStream """
+
+        return False
+
+    def stringToList(self,inputString,delimiter=" ",outType=None):
+        """ Convert Elements of list to string w/ delimiter """
+        outputList = inputString.split(delimiter)
+        outputList = [outType(x) for x in outputList]
+        return outputList
+
+    def __repr__(self):
+        """ Debugger Representation of Instance """
+        return str(self.__class__) + " @ " + str(hex(id(self)))
 
 class FeatureVector:
     """ Class to Hold Feature Data for a single Sample """
@@ -156,9 +233,14 @@ class DesignMatrix:
 
     def serialize(self,path=None):
         """ Write this design matrix out to a file """
-        writer = DesignMatrixSerializer(path,self)
-        writer.call()
-        return self
+        writer = DesignMatrix.DesignMatrixSerializer(self,path)
+        success = True
+        try:
+            writer.call()
+        except Exception as err:
+            print("\t\tDesignMatrix.serialize()" + err)
+            success = False
+        return success
 
     @staticmethod
     def deserialize(self,path):
@@ -183,8 +265,50 @@ class DesignMatrix:
 
     # Private Interface
 
-    
+    class DesignMatrixSerializer(Serializer):
+        """ Class to Serialize a DesignMatrixInstance """
+        
+        def __init__(self,matrix,path):
+            """ Constructor for DesignMatrixSerializer Instance """
+            super().__init__(matrix,path)
 
+        def __del__(self):
+            """ Destructor for DesignMatrixSerializer Instance """
+            super().__del__()
+
+        def call(self):
+            """ Run the Serializer """
+            numSamples = self._data.getNumSamples()
+            X = self._data.getData()
+            Y = self._data.getLabels()
+            # Create + Write to output
+            self._outFileStream = open(self._outputPath,"wb")
+            for i in range(numSamples):
+                tgt = X[i].astype(np.int32).tobytes()
+                row = Y[i].flatten().tobytes()
+                self._outFileStream.write( tgt )
+                self._outFileStream.write( row )
+            # Close + Return
+            self._outFileStream.close()
+            return self
+
+    class DesignMatrixDeserializer(Deserializer):
+        """ Class to Serialize a DesignMatrix Instance """
+
+        def __init__(self,path,numSamples,sampleShape):
+            """ Constructor for DesignMatrixSerializer Instance """
+            super().__init__(path)
+            self._data = DesignMatrix(numSamples,sampleShape)
+
+        def __del__(self):
+            """ Destructor for DesignMatrixSerializer Instance """
+            super().__del__()
+
+        def call(self):
+            """ Run the Deserializer """
+
+            return False
+    
     # Magic Methods 
 
     def __str__(self):
@@ -217,56 +341,7 @@ class DesignMatrix:
         self._data[key] = value.getData()
         return self
 
-class DesignMatrixSerializer:
-    """ Class to Serialize a DesignMatrixInstance """
-        
-    def __init__(self,outputPath,matrix):
-        """ Constructor for DesignMatrixSerializer Instance """
-        self._outputPath    = outputPath
-        self._matrix        = matrix
-        self._fileHandle     = None
 
-    def __del__(self):
-        """ Destructor for DesignMatrixSerializer Instance """
-        self._matrix = None
-        if (self._fileHandle is not None):
-            self._fileHandle.close()
-
-    def call(self):
-        """ Run the Serializer """
-        numSamples = self._matrix.getNumSamples()
-        X = self._matrix.getData()
-        Y = self._matrix.getLabels()
-        # Create + Write to output
-        self._fileHandle = open(self._outputPath,"wb")
-        for i in range(numSamples):
-            tgt = X[i].astype(np.int32).tobytes()
-            row = Y[i].flatten().tobytes()
-            self._fileHandle.write( tgt )
-            self._fileHandle.write( row )
-        # Close + Return
-        self._fileHandle.close()
-        return self
-
-class DesignMatrixDeserializer:
-    """ Class to Serialize a DesignMatrix Instance """
-
-    def __init__(self,localPath,matrix):
-        """ Constructor for DesignMatrixSerializer Instance """
-        self._outputPath    = localPath
-        self._matrix        = matrix
-        self._fileHandle    = None
-
-    def __del__(self):
-        """ Destructor for DesignMatrixSerializer Instance """
-        self._matrix = None
-        if (self._fileHandle is not None):
-            self._fileHandle.close()
-
-    def call(self):
-        """ Run the Serializer """
-
-        return self
 
 class RunInformation:
     """
@@ -293,9 +368,17 @@ class RunInformation:
 
     # Getters and Setters
 
-    def getInfoPath(self):
+    def getRunInfoPath(self):
         """ Get the Path to the RunInfo Metadata """
-        return self._path
+        return os.path.join(self._pathOutput,"runInformation.txt")
+
+    def getInputPaths(self) -> set:
+        """ Return List of Input Paths """
+        return self._pathsInput
+
+    def getOutputPath(self) -> str:
+        """ Return Output Path """
+        return self._pathOutput
 
     def getExpectedNumSamples(self):
         """ Get the number of samples expected to process """
@@ -304,6 +387,16 @@ class RunInformation:
     def getActualNumSamples(self):
         """ Get the number of samples actually processed """
         return self._numSamplesRead
+
+    def incrementExpectedNumSamples(self,amount):
+        """ Increment the Expected number of Samples by the amount """
+        self._numSamplesExpt += amount
+        return self
+
+    def incrementActualNumSamples(self,amount):
+        """ Increment the Actual number of Samples by the amount """
+        self._numSamplesRead += amount
+        return self
 
     def getShapeSampleA(self):
         """ Get the shape of samples in design matrix A """
@@ -337,12 +430,86 @@ class RunInformation:
     
     # Public Interface 
 
-    def serialize(self,path):
+    def serialize(self,path=None):
         """ Serialize this Instance to specified Path """
+        if (path is None):
+            path = self.getRunInfoPath()
+        writer = RunInformation.RunInformationSerializer(self,path)
+        success = True
+        try:
+            writer.call()
+        except Exception as err:
+            print("\t\tRunInformation.serialize()" + err)
+            success = False
+        return success
 
-        pass
 
     @staticmethod
     def deserialize(path):
         """ Deserialize this instance from specified path """
-        pass
+        return False
+
+
+    # Private Interface
+
+    class RunInformationSerializer(Serializer):
+        """ Class to Serialize Run Information to a Local Path """
+
+        def __init__(self,runInfo,path):
+            """ Constructor for RunInformationSerializer Instance """
+            super().__init__(runInfo,path)
+
+        def __del__(self):
+            """ Destructor for DesignMatrixSerializer Instance """
+            super().__del__()
+
+        def call(self):
+            """ Serialize the RunInfo Instance """          
+
+            self._outFileStream = open(self._outputPath,"w")
+            self.writeHeader()
+
+            # Write Paths
+            for i,path in enumerate(self._data.getInputPaths()):
+                self._outFileStream.write( self._outFmtStr("InputPath_" + str(i),path ) )
+            self._outFileStream.write( self._outFmtStr("OutputPath",self._data.getOutputPath() ) )
+
+            # Write Sample Details
+            self._outFileStream.write( self._outFmtStr("ExpectedSamples",self._data.getExpectedNumSamples() ) )
+            self._outFileStream.write( self._outFmtStr("ProcessedSamples",self._data.getActualNumSamples() ) )
+
+            # Write Sample Shape Detials
+            shapeSampleA = self.listToString(self._data.getShapeSampleA(),",")
+            shapeSampleB = self.listToString(self._data.getShapeSampleB(),",")
+            self._outFileStream.write( self._outFmtStr("ShapeSampleA",shapeSampleA ) )
+            self._outFileStream.write( self._outFmtStr("ShapeSampleB",shapeSampleB ) )
+
+            # Write Batch Details
+            batchSizes = self.listToString(self._data.getBatchSizes(),",")
+            self._outFileStream.write( self._outFmtStr("BatchSizes",batchSizes ) )
+
+            # Close + Return
+            self.writeFooter()
+            self._outFileStream.close()
+            return True
+
+    class RunInformationDeserializer(Deserializer):
+        """ Class to Deserialize Run Information from a Local Path """
+
+        def __init__(self,path):
+            """ Constructor for RunInformationSerializer Instance """
+            super().__init__(path)
+
+        def __del__(self):
+            """ Destructor for DesignMatrixSerializer Instance """
+            super().__del__()
+
+        def call(self):
+            """ Serialize the RunInfo Instance """          
+            return True
+
+    # Magic Methods
+
+    def __repr__(self):
+        """ Debug Representation of Instance """
+        return str(self.__class___) + " @ " + str(hex(id(self)))

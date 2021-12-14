@@ -14,9 +14,9 @@ import os
 import sys
 import datetime
 
-from numpy.core.numeric import outer
-
 import Managers
+
+import CommonStructures
 
         #### CLASS DEFINITIONS ####
 
@@ -90,7 +90,7 @@ class CollectionApplicationProtoype:
 
     def getRundataManager(self):
         """ Return the Data Manager """
-        return self._rundataManager()
+        return self._rundataManager
 
     def getCurrentDirectory(self):
         """ Return the Current Working Directory """
@@ -134,6 +134,10 @@ class CollectionApplicationProtoype:
     def shutdown(self):
         """ Run Application Shutdown Sequence """
 
+        self._sampleManager.clean()
+        self._collectionManager.clean()
+        self._rundataManager.clean()
+
         return self
     
     # Internal Interface
@@ -173,7 +177,7 @@ class CollectionApplicationProtoype:
             return "No Instance"
         else:
             memAddress = str(hex(id(CollectionApplicationProtoype.AppInstance)))
-            return "CollectionApplicationProtoype @ " + memAddress
+            return str(self.__class__) + " @ " + memAddress
 
 class AppSettings:
     """
@@ -215,7 +219,7 @@ class AppSettings:
         """ Return the Batch Size """
         return self._batchSize
 
-    def getShuffleSelf(self) -> int:
+    def getShuffleSeed(self) -> int:
         """ Return the Sufffle Seed """
         return self._shuffleSeed
 
@@ -241,9 +245,14 @@ class AppSettings:
 
     def serialize(self)-> bool:
         """ Write the Settings Instance out to a text file """
-        writer = AppSettingsSerializer(self,None)
-        writer.call()
-        return True
+        writer = AppSettings.AppSettingsSerializer(self,None)
+        success = True
+        try:
+            writer.call()
+        except Exception as err:
+            print("\t\tAppSettings.serialize() " + err)
+            success = False
+        return success
 
     @staticmethod
     def developmentSettingsInstance():
@@ -274,46 +283,50 @@ class AppSettings:
         self._pathOutput = fullOutput
         return self
 
-class AppSettingsSerializer:
-    """ Class to Serialize AppSettings Instance """
+    class AppSettingsSerializer(CommonStructures.Serializer):
+        """ Class to Serialize AppSettings Instance """
 
-    def __init__(self,settings,path=None):
-        """ Constructor for AppSettingsSerializer Instance """
-        self._settings  = settings
-        self._path      = "-1"
+        def __init__(self,settings,path=None):
+            """ Constructor for AppSettingsSerializer Instance """
+            super().__init__(settings,path)
+            if (path is None):
+                self._outputPath = os.path.join(self._data.getOutputPath(),"runtimeSettings.txt")
 
-        if (path is None):
-            path = os.path.join(settings.getOutputPath(),"runtimeSettings.txt")
-        else:
-            path = path = os.path.join(path,"runtimeSettings.txt")
+        def __del__(self):
+            """ Destructor for AppSettingsSerializer Instance """
+            super().__del__()
 
-    def __del__(self):
-        """ Destructor for AppSettingsSerializer Instance """
-        self._settings = None
+        def call(self):
+            """ Serialize the Chosen Instance """
 
-    def call(self):
-        """ Serialize the Chosen Instance """
-        path = os.path.join(self._settings.getOutputPath(),"runtimeSettings.txt")
-        outline = lambda key,val : "{0:<32}\t{1:<128}\n".format(key,val)
-
-        with open(path,"w") as outFileStream:
-        
-            # Write In/Out Paths
-            outFileStream.write( outline("startupPath",self._settings.getStartupPath() ) )
-            for i,val in enumerate( self._settings.getInputPaths() ):
-                outFileStream.write( outline("inputPath_" + str(i),self._settings.getInputPaths()[i] ) )
-            outFileStream.write( outline("outputPath",self._settings.getOutputPath() ) )
+            self._outFileStream = open(self._outputPath,"w")
+            self.writeHeader()
+            # Write In/Out P    aths
+            
+            self._outFileStream.write( self._outFmtStr("startupPath",self._data.getStartupPath() ) )
+            for i,path in enumerate(self._data.getInputPaths()):
+                self._outFileStream.write( self._outFmtStr("InputPath_" + str(i),path ) )
+            self._outFileStream.write( self._outFmtStr("outputPath",self._data.getOutputPath() ) )
 
             # Write Collection Settings
-            outFileStream.write( outline("BatchSize",self._settings.getBatchSize() ) )
-            outFileStream.write( outline("ShuffleSeed",self._settings.getShuffleSelf() ) )
-            outFileStream.write( outline("Verbose",self._settings.getVerbose() ) )
+            self._outFileStream.write( self._outFmtStr("BatchSize",self._data.getBatchSize() ) )
+            self._outFileStream.write( self._outFmtStr("ShuffleSeed",self._data.getShuffleSeed() ) )
+            self._outFileStream.write( self._outFmtStr("Verbose",self._data.getVerbose() ) )
 
             # Write Log Levels
-            outFileStream.write( outline("LogConsole",self._settings.getLogToConsole() ) )
-            outFileStream.write( outline("LogFile",self._settings.getLogToFile() ) )
+            self._outFileStream.write( self._outFmtStr("LogConsole",self._data.getLogToConsole() ) )
+            self._outFileStream.write( self._outFmtStr("LogFile",self._data.getLogToFile() ) )
 
-        return self
+            # Close Output + Return
+            self.writeFooter()
+            self._outFileStream.close()
+            return self
+
+    # Magic Methods
+
+    def __repr__(self):
+        """ Debugger Representation of Instance """
+        return str(self.__class__) + " @ " + str(hex(id(self)))
             
 
 class Logger:

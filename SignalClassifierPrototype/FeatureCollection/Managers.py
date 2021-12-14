@@ -111,7 +111,13 @@ class Manager:
         msg = "Destroying " + str(self.__class__) + " Instance..."
         self.logMessageInterface(msg)
         return None
-        
+
+    # Magic Methods
+
+    def __repr__(self):
+        """ Debug Representation of Instance """
+        return str(self.__class___) + " @ " + str(hex(id(self)))
+
 
 class SampleManager (Manager):
     """ SampleManager collects and organizes all data samples """
@@ -565,16 +571,17 @@ class RundataManager (Manager):
         
         return self
 
-    def clean():
+    def clean(self):
         """ Run Cleaning method on Instance """
+        self._runInfo.serialize()
         super().clean()
         return self
 
     def addBatchData(self,batchData):
         """ Add Batch Data Instance to this Instance """
         self._batchDataObjs.append(batchData)
-        self._runInfo.getExpectedNumSamples() += batchData.getExpectedNumSamples()
-        self._runInfo.getActualNumSamples() += batchData.getActualNumSamples()
+        self._runInfo.incrementExpectedNumSamples( batchData.getExpectedNumSamples() )
+        self._runInfo.incrementActualNumSamples( batchData.getActualNumSamples() )
         return self
 
     # Private Interface
