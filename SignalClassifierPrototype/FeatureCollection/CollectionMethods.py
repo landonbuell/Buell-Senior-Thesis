@@ -136,7 +136,8 @@ class TimeDomainEnvelopFrames(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signal)
+        result = super().invoke(signal) 
         return result
 
     # Protected Interface
@@ -144,7 +145,7 @@ class TimeDomainEnvelopFrames(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AnalysisFramesTime is None):
-            errMsg = "Signal.SaAnalysisFramesTimemples must not be None"
+            errMsg = "Signal.AnalysisFramesTime must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -178,7 +179,9 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
+        self.validateInputSignal(signal)
         result = super().invoke(signal)   
+
         return result
 
     # Protected Interface
@@ -186,7 +189,7 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AnalysisFramesTime is None):
-            errMsg = "Signal.SaAnalysisFramesTimemples must not be None"
+            errMsg = "Signal.AnalysisFramesTime must not be None"
             raise ValueError(errMsg)
         return True
 

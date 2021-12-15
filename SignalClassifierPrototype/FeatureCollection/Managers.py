@@ -50,7 +50,7 @@ class Manager:
         """ Get a reference to the collection Manager from the AppInstance """
         return Administrative.CollectionApplicationProtoype.AppInstance.getCollectionManager()
 
-    def getDataManager(self):
+    def getRundataManager(self):
         """ Get a reference to the Rundata Manager from the the AppInstance """
         return Administrative.CollectionApplicationProtoype.AppInstance.getRundataManager()
 
@@ -116,7 +116,7 @@ class Manager:
 
     def __repr__(self):
         """ Debug Representation of Instance """
-        return str(self.__class___) + " @ " + str(hex(id(self)))
+        return str(self.__class__) + " @ " + str(hex(id(self)))
 
 
 class SampleManager (Manager):
@@ -316,10 +316,7 @@ class CollectionManager (Manager):
         self._methodQueue       = np.array([],dtype=object)    
         self._designMatrixA     = None
         self._designMatrixB     = None
-        self._framesParameters  = Structural.AnalysisFramesParameters()
-        self._framesContructor  = Structural.AnalysisFramesConstructor()
-
-
+        
     def __del__(self):
         """ Destructor for CollectionManager Instance """
         self._batchQueue        = None
@@ -463,10 +460,17 @@ class CollectionManager (Manager):
         sampleData      = None
         for idx,sample in enumerate(self._batchQueue):
 
+            # Log this Sample
+            self.logCurrentSample(idx,len(self._batchQueue))
+            
             # Set the Label + Read the Raw Samples
             featureVector.setLabel(sample.getTargetInt())
             sampleData = sample.readSignal()
-            
+
+            # Construct Analysis Frames
+            sampleData = sampleData.makeAnalysisFramesTime(
+                self.getRundataManager().getFrameParams() )
+
             # Use Current Sample to Evaluate the Feature Queue
             self.evaluateMethodQueue(sampleData,featureVector)
 
@@ -479,7 +483,7 @@ class CollectionManager (Manager):
             self.getBatchIndex(),
             len(self._batchQueue),
             self.getNumFeatures() )
-        self.getDataManager().addBatchData(batchData)
+        self.getRundataManager().addBatchData(batchData)
         sampleData = None
         return self
 
@@ -516,6 +520,12 @@ class CollectionManager (Manager):
         self.logMessageInterface(msg)
         return None
 
+    def logCurrentSample(self,index,size):
+        """ Log Current Sample in Batch """
+        msg = "\tProcessing sample ({0}/{1})".format(index,size)
+        self.logMessageInterface(msg)
+        return None
+
     # Magic Methods
 
     def __len__(self):
@@ -541,6 +551,7 @@ class RundataManager (Manager):
         super().__init__()
         self._runInfo           = None
         self._batchDataObjs     = []
+        self._frameParams       = None
 
     def __del__(self):
         """ Destructor for MetadataManager Instance """
@@ -551,6 +562,10 @@ class RundataManager (Manager):
     def getRunInfo(self):
         """ Get RunInformation """
         return self._runInfo
+
+    def getFrameParams(self):
+        """ Return AnalysisFrameParameters Structure """
+        return self._frameParams
 
     # Public Interface
 
@@ -565,6 +580,7 @@ class RundataManager (Manager):
 
         self.initSampleShapeSizes()
         self.initBatchSizeData()
+        self.initAnalysisFrameParams()
 
         return self
 
@@ -610,4 +626,12 @@ class RundataManager (Manager):
             self._runInfo.getBatchSizes().append( batchSizes[i] )
         return self
 
-
+    def initAnalysisFrameParams(self):
+        """ Initialize Analysis Frames Paramaters Structure """
+        self._frameParams = Structural.AnalysisFramesParameters(
+            samplesPerFrame=1024,
+            samplesOverlap=768,
+            headPad=1024,
+            tailPad=2048,
+            maxFrames=256)
+        return self
