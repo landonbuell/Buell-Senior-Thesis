@@ -231,11 +231,11 @@ class DesignMatrix:
 
     # public Interface
 
-    def serialize(self,path=None):
-        """ Write this design matrix out to a file """
-        writer = DesignMatrix.DesignMatrixSerializer(self,path)
+    def serialize(self,pathX=None,pathY=None):
+        """ Write this design matrix out to a file """   
+        writer = DesignMatrix.DesignMatrixSerializer(self,pathX,pathY)
         success = True
-        try:
+        try:          
             writer.call()
         except Exception as err:
             print("\t\tDesignMatrix.serialize()" + err)
@@ -268,29 +268,62 @@ class DesignMatrix:
     class DesignMatrixSerializer(Serializer):
         """ Class to Serialize a DesignMatrixInstance """
         
-        def __init__(self,matrix,path):
+        def __init__(self,matrix,pathX=None,pathY=None):
             """ Constructor for DesignMatrixSerializer Instance """
-            super().__init__(matrix,path)
-
+            super().__init__(matrix,None)
+            self._pathX =   pathX
+            self._pathY =   pathY
+            
+            
         def __del__(self):
             """ Destructor for DesignMatrixSerializer Instance """
             super().__del__()
 
         def call(self):
             """ Run the Serializer """
+            self.validateOutputs()
+            if (self._pathX is not None):
+                self.writeDataX()
+            if (self._pathY is not None):
+                self.writeDataY()
+            return self
+
+        def writeDataX(self):
+            """ Write the Design Matrix Data """
             numSamples = self._data.getNumSamples()
             X = self._data.getData()
-            Y = self._data.getLabels()
-            # Create + Write to output
-            self._outFileStream = open(self._outputPath,"wb")
+            self._outFileStream = open(self._pathX,"wb")
             for i in range(numSamples):
-                tgt = X[i].astype(np.int32).tobytes()
-                row = Y[i].flatten().tobytes()
-                self._outFileStream.write( tgt )
+                row = X[i].flatten().tobytes()
                 self._outFileStream.write( row )
             # Close + Return
             self._outFileStream.close()
             return self
+
+        def writeDataY(self):
+            """ Write the Design Matrix Labels """
+            numSamples = self._data.getNumSamples()
+            Y = self._data.getLabels()
+            self._outFileStream = open(self._pathY,"wb")
+            for i in range(numSamples):
+                row = Y[i].flatten().tobytes().astype("uint16")
+                self._outFileStream.write( row )
+            # Close + Return
+            self._outFileStream.close()
+            return self
+
+        def validateOutputs(self):
+            """ Validate that Both Output Paths Make Sense """
+            if (self._pathX is None and self._pathY is None):
+                # Both Cannot be none - Nothing will be written
+                errMsg = "Both X and Y export paths cannot be None"
+                raise ValueError(errMsg)
+            elif (self._pathX == self._pathY):
+                # Both cannot be the same - will overwrite each other
+                errMsg = "X and Y paths cannot be indentical"
+                raise ValueError(errMsg)
+            else:
+                return self
 
     class DesignMatrixDeserializer(Deserializer):
         """ Class to Serialize a DesignMatrix Instance """

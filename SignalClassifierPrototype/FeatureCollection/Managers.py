@@ -388,14 +388,17 @@ class CollectionManager (Manager):
         self.evaluateBatchQueue()            
 
         # Serialize the Design Matrix
-        outputPath = os.path.join(
-            Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath(),
-            "batch{0}.bin".format(batchIndex))
+        outputPath = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()
+        outXa   = os.path.join("batch{0}_Xa.bin".format(batchIndex))
+        outXb   = os.path.join("batch{0}_Xb.bin".format(batchIndex))
+        outY    = os.path.join("batch{0}_Y.bin".format(batchIndex))
 
-        self._designMatrixA.serialize(outputPath)
+        self._designMatrixA.serialize(outXa,outY)
+        self._designMatrixA.serialize(outXb,None)
 
         # Compute Meta Data and then Clear
         self._designMatrixA.clearData()
+        self._designMatrixB.clearData()
 
         return self
 
