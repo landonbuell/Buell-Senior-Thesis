@@ -96,7 +96,7 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
         startIndex = 0
         for i in range(self._parameter):    
             part = signalData.Waveform[ startIndex : startIndex + sizeOfPartition]
-            result[i] = np.sum(np.abs(part**2),dtype=np.float32)
+            result[i] = np.sum((part**2),dtype=np.float32)
             startIndex += sizeOfPartition
         return result
 
@@ -118,15 +118,21 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
         if (self._parameter < 2 or self._parameter > 32):
             # Param should be greater than 1 and less than 33
             errMsg = "numParitions should be greater than 2 and less than 33"
+            raise ValueError(errMsg)
         return True
 
 class TimeDomainEnvelopFrames(CollectionMethod):
     """ Computes the TimeDomainEnvelop of Each Time-Series Analysis Frame """
 
-    def __init__(self,maxFrames=256):
+    def __init__(self,startFrame=0,endFrame=256,skip=1):
         """ Constructor for TimeDomainEnvelopFrames Instance """
-        super().__init__("TimeDomainEnvelopFrames",maxFrames)
+        numFrames = int(endFrame - startFrame) // skip
+        super().__init__("TimeDomainEnvelopFrames",numFrames)
         self.validateParameter()
+        self._numFrames     = numFrames
+        self._frameStart    = startFrame
+        self._frameEnd      = endFrame
+        self._skip          = skip
 
     def __del__(self):
         """ Destructor for TimeDomainEnvelopFrames Instance """
@@ -138,6 +144,12 @@ class TimeDomainEnvelopFrames(CollectionMethod):
         """ Run this Collection method """
         self.validateInputSignal(signal)
         result = super().invoke(signal) 
+        index = 0
+        # Go through the Analysis Frames
+        for i in range(self._frameStart,self._frameEnd,self._skip):
+            result[index] = \
+                np.sum((signal.AnalysisFramesTime[i]**2),dtype=np.float32))
+            index += 1
         return result
 
     # Protected Interface

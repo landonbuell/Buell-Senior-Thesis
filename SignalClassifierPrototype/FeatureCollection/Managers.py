@@ -408,8 +408,9 @@ class CollectionManager (Manager):
         """ Build All Elements in the Collection Queue """
         numEntries = 32
         self._methodQueue = np.zeros(shape=(numEntries,),dtype=object)
+        # Populate with Elements
         self[0] = CollectionMethods.TimeDomainEnvelopPartitions(8)
-        self[1] = CollectionMethods.TimeDomainEnvelopFrames(1)
+        self[1] = CollectionMethods.TimeDomainEnvelopFrames(0,256,32)
         self[2] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.1)
         self[3] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.2)
         self[4] = CollectionMethods.PercentFramesAboveEnergyThreshold(0.3)
