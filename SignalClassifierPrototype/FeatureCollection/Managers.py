@@ -384,7 +384,7 @@ class CollectionManager (Manager):
         self._designMatrixB = CommonStructures.DesignMatrix(batchSize,sampleShapeB)
 
         # Create + Evaluate the Batch
-        self.createBatchQueue(batchIndex)
+        self.createBatchQueue(batchIndex)      
         self.evaluateBatchQueue()            
 
         # Serialize the Design Matrix
@@ -401,6 +401,10 @@ class CollectionManager (Manager):
         self._designMatrixB.clearData()
 
         return self
+
+    def clean(self):
+        """ Final Cleanup on the Collection Manager """
+        return super().clean()
 
     # Private Interface
 
@@ -459,28 +463,40 @@ class CollectionManager (Manager):
 
     def evaluateBatchQueue(self):
         """ Iterate through Batch Queue """
-        shape = (self.getNumFeatures(),)
-        featureVector   = CommonStructures.FeatureVector(shape)
+
         sampleData      = None
+
+        # Build the Feature Vectors for Each Sample
+        shapeA = (self.getNumFeatures(),)
+        shapeB = (1,)
+        featureVectorA   = CommonStructures.FeatureVector(shapeA)
+        featureVectorB   = CommonStructures.FeatureVector(shapeB)
+            
+        # Iterate Through Each Sample
         for idx,sample in enumerate(self._batchQueue):
 
             # Log this Sample
             self.logCurrentSample(idx,len(self._batchQueue))
             
             # Set the Label + Read the Raw Samples
-            featureVector.setLabel(sample.getTargetInt())
+            featureVectorA.setLabel(sample.getTargetInt())
+            featureVectorB.setLabel(sample.getTargetInt())
+            
+            # Read Raw samples + Make all fields
             sampleData = sample.readSignal()
-
-            # Construct Analysis Frames
-            sampleData = sampleData.makeAnalysisFramesTime(
+            sampleData = sampleData.makeAnalysisFramesTime( 
                 self.getRundataManager().getFrameParams() )
+            #sampleData = sampleData.makeAllFields()
 
             # Use Current Sample to Evaluate the Feature Queue
-            self.evaluateMethodQueue(sampleData,featureVector)
+            self.evaluateMethodQueueA(sampleData,featureVectorA)
+            self.evaluateMethodQueueB(sampleData,featureVectorB)
 
-            # Add to Batch Design Matrix
-            self._designMatrixA[idx] = featureVector
-            featureVector.clearData()
+            # Add to Samples to Design Matrices
+            self._designMatrixA[idx] = featureVectorA
+            self._designMatrixB[idx] = featureVectorB
+            featureVectorA.clearData()
+            featureVectorB.clearData()
 
         # Update the Batch's Meta Data
         batchData = Structural.BatchData(
@@ -491,15 +507,14 @@ class CollectionManager (Manager):
         sampleData = None
         return self
 
-
-    def evaluateMethodQueue(self,signalData,featureVector):
+    def evaluateMethodQueueA(self,signalData,featureVector):
         """ Evaluate the Feature Queue """
         featureIndex = 0
         result = None
         for idx,item in enumerate(self._methodQueue):
 
-            if (item == 0):
-                # Null Feature
+            # Handle Empty Slot
+            if (item == 0):             
                 continue
 
             # Evalue the current method
@@ -515,7 +530,38 @@ class CollectionManager (Manager):
         assert(featureIndex == featureVector.getShape()[0])
         return self
 
-    
+    def evaluateMethodQueueB(self,signalData,featureVector):
+        """ Evaluate the Feature Queue """
+        featureIndex = 0
+        result = None
+        return self
+
+    def makeAllFields(self,signalData,framesTime=True,framesFreq=True,
+                      MFCCs=True,ACCs=True,ZXRs=True,
+                      energyTimeFrames=True,energyFreqFrames=True):
+        """ Make all Required fields for Feature Extraction """
+        if (framesTime == True):
+            # Make Time-Series Analysis Frames
+            signalData.makeAnalysisFramesTime( self.getRundataManager().getFrameParams() )
+        if (framesFreq == True):
+            # Make Freq-Series Analysis Frames
+            signalData.makeAnalysisFramesFreq()
+        if (MFCCs == True):
+            # Make Mel-Freq Cepstrum Coeffs
+            signalData.makeMelFreqCepstrumCoeffs()
+        if (ACCs == True):
+            # Make the Auto-Correlation Coeffcicients
+            signalData.makeAutoCorrelationCoeffs()
+        if (ZXRs == True):
+            # Make the Zero-Crossing Rate Methods
+            signalData.makeZeroCrossingRate()
+        if (energyTimeFrames == True):
+            # Make the Energy in Each Time-Frame
+            signalData.makeEnergiesFramesTime()
+        if (energyFreqFrames == True):
+            # Make the Energy in Each Freq-Frame
+            signalData.makeEnergiesFramesFreq()
+        return self
 
     def logCurrentBatch(self,index,size):
         """" Log Current Batch w/ Num Samples """

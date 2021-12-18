@@ -20,6 +20,7 @@ import scipy.fftpack as fftpack
 import scipy.signal as scisig
 
 import Administrative
+import Managers
 import CollectionMethods
 
         #### CLASS DEFINITIONS ####
@@ -179,13 +180,23 @@ class SignalData:
         """ Build Time-Series AnalysisFrames """
         if (self.Waveform is None):
             # No Signal - Cannot Make Frames
-            errMsg = "ERROR: So signal to make analysis Frames"
+            errMsg = "ERROR: need signal to make analysis Frames"
             raise RuntimeError(errMsg)
 
         # Create the Frames Constructor with Params
         constructor = AnalysisFramesConstructor(self,frameParams)
         constructor.call()
 
+        return self
+
+    def makeFrameEnergiesTime(self):
+        """ Make Time-Series Energiees for Each Analysis Frame """
+        if (self.AnalysisFramesTime is None):
+            # No Analysis Frames - Cannot Make Energies
+            errMsg = "ERROR: need analysis frames to make analysis Frames"
+            raise RuntimeError(errMsg)
+        result = np.sum(self.AnalysisFramesTime**2,axis=0,dtype=np.int32)
+        self.FrameEnergyTime = result
         return self
 
     # Private Interface
