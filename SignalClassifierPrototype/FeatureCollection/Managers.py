@@ -463,7 +463,6 @@ class CollectionManager (Manager):
 
     def evaluateBatchQueue(self):
         """ Iterate through Batch Queue """
-
         sampleData      = None
 
         # Build the Feature Vectors for Each Sample
@@ -484,8 +483,9 @@ class CollectionManager (Manager):
             
             # Read Raw samples + Make all fields
             sampleData = sample.readSignal()
-            sampleData = sampleData.makeAnalysisFramesTime( 
+            sampleData.makeAnalysisFramesTime( 
                 self.getRundataManager().getFrameParams() )
+            # Generate Each Common Field as needed by method
             #sampleData = sampleData.makeAllFields()
 
             # Use Current Sample to Evaluate the Feature Queue
@@ -511,7 +511,7 @@ class CollectionManager (Manager):
         """ Evaluate the Feature Queue """
         featureIndex = 0
         result = None
-        for idx,item in enumerate(self._methodQueue):
+        for item in self._methodQueue:
 
             # Handle Empty Slot
             if (item == 0):             
@@ -557,10 +557,10 @@ class CollectionManager (Manager):
             signalData.makeZeroCrossingRate()
         if (energyTimeFrames == True):
             # Make the Energy in Each Time-Frame
-            signalData.makeEnergiesFramesTime()
+            signalData.makeFrameEnergiesTime()
         if (energyFreqFrames == True):
             # Make the Energy in Each Freq-Frame
-            signalData.makeEnergiesFramesFreq()
+            signalData.makeFrameEnergiesFreq()
         return self
 
     def logCurrentBatch(self,index,size):

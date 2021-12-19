@@ -76,10 +76,11 @@ class SampleIO:
     def readFileWav(self):
         """ Read Data From .wav file """
         sampleRate,data = sciowav.read(self._filePath)
-        data = data.astype(dtype=np.float32).flatten()
-        waveform = data / np.max(np.abs(data))
-        waveform = self.padWaveform(waveform)
-        return SignalData(sampleRate,waveform)
+        waveform = data.astype(dtype=np.float32).flatten()
+        waveform -= np.mean(waveform)
+        waveform /= np.max(np.abs(waveform))       
+        waveform = self.padWaveform(waveform)    
+        return SignalData(sampleRate,waveform,self._targetStr)
 
     def padWaveform(self,waveform):
         """ Pad or Crop Waveform if too long or too short """
@@ -105,15 +106,16 @@ class SampleIO:
 class SignalData:
     """ Contain all signal Data (NOT ENCAPSULATED) """
 
-    def __init__(self,sampleRate,samples=None):
+    def __init__(self,sampleRate,samples=None,className="-1"):
         """ Constructor for SignalData Instance """
         self._sampleRate            = sampleRate
+        self._className             = className
         self.Waveform               = samples
         self.AnalysisFramesTime     = None
         self.AnalysisFramesFreq     = None
         self.MelFreqCepstrumCoeffs  = None
         self.AutoCorrelationCoeffs  = None
-        self.ZeroCrossingsPerFrame  = None
+        self.FrameZeroCrossings     = None
         self.FrameEnergyTime        = None
         self.FrameEnergyFreq        = None
 
@@ -132,15 +134,19 @@ class SignalData:
         self._sampleRate = rate
         return self
 
-    def getSamples(self):
+    def getWaveform(self):
         """ Get the Signal Samples """
         return self._waveform
 
-    def setSamples(self,data):
+    def setWaveform(self,data):
         """ Set the Signal Samples """
         self.clear()
-        self._waveform = data
+        self.Waveform = data
         return self
+
+    def getNumSamples(self):
+        """ Get the Number of samples in the waveform """
+        return self.Waveform.shape[0]
 
     def getSampleSpace(self):
         """ Get the Sample Spacing """
@@ -160,20 +166,16 @@ class SignalData:
         else:
             return self.AnalysisFramesFreq.shape[0]
 
-    # Properties to Access Arrays
-
     # Public Interface
 
     def clear(self):
         """ Clear all Fields of the Instance """
-        self._waveform              = None
-        self._analysisFramesTime    = None
-        self._analysisFramesFreq    = None
-        self._melFreqCepstrumCoeffs = None
-        self._autoCorrelationCoeffs = None
-        self._zeroCrossingsPerFrame = None
-        self._frameEnergyTime       = None
-        self._frameEnergyFreq       = None
+        self.AnalysisFramesTime     = None
+        self.AnalysisFramesFreq     = None
+        self.MelFreqCepstrumCoeffs  = None
+        self.AutoCorrelationCoeffs  = None
+        self.FrameZeroCrossings     = None
+        self.FrameEnergyTime        = None
         return self
 
     def makeAnalysisFramesTime(self,frameParams=None):
@@ -186,7 +188,52 @@ class SignalData:
         # Create the Frames Constructor with Params
         constructor = AnalysisFramesConstructor(self,frameParams)
         constructor.call()
+        return self
 
+    def makeAnalysisFramesFreq(self):
+        """ Make Frequncy-Series Analysis Frames """
+        if (self.AnalysisFramesTime is None):
+            # No Analysis Frames - Cannot Make Energies
+            errMsg = "ERROR: need analysis frames time to make analysis frames frequency"
+            raise RuntimeError(errMsg)
+        self.AnalysisFramesFreq = fftpack.fft(
+            self.AnalysisFramesTime,self.getSampleSpace(),axis=-1)
+
+        return self
+
+    def makeMelFreqCepstrumCoeffs(self,num):
+        """ Make All Mel-Cepstrum Frequency Coefficients """
+
+        return self
+
+    def makeAutoCorrelationCoeffs(self,num):
+        """ Make All Auto-Correlation Coefficients """
+
+        return self
+
+    def makeZeroCrossingRate(self):
+        """ Make Zero Crossing Rate of Each Frame """
+        if (self.AnalysisFramesTime is None):
+            # No Analysis Frames - Raise Error
+            errMsg = "SignalData.makeZeroCrossingRate() - Need Time Series Analysis Frames"
+            raise RuntimeWarning(errMsg)
+        # Compute Sign of Each Element
+        signs = np.sign(self.AnalysisFramesTime)
+        numRows = self.AnalysisFramesTime.shape[0]
+        numCols = self.AnalysisFramesTime.shape[1]
+        result = np.zeros(shape=(numRows,),dtype=np.float32)
+
+        # Compute Zero Crossings Within Each Frame
+        for i in range(numRows):
+            
+            # ZXR of this Frame
+            zxr = 0
+            for j in range(1,numCols):
+                 zxr += np.abs(signs[i,j] - signs[i,j-1])
+            result[i] = zxr
+
+        # Attach Result to Self
+        self.FrameZeroCrossings = result
         return self
 
     def makeFrameEnergiesTime(self):
@@ -195,7 +242,7 @@ class SignalData:
             # No Analysis Frames - Cannot Make Energies
             errMsg = "ERROR: need analysis frames to make analysis Frames"
             raise RuntimeError(errMsg)
-        result = np.sum(self.AnalysisFramesTime**2,axis=0,dtype=np.int32)
+        result = np.sum(self.AnalysisFramesTime**2,axis=-1,dtype=np.float32)
         self.FrameEnergyTime = result
         return self
 
@@ -205,7 +252,7 @@ class SignalData:
 
     def __repr__(self):
         """ Debug Representation of Instance """
-        return str(self.__class__) + " @ " + str(hex(id(self)))
+        return str(self.__class__) + " " + self._className + " @ " + str(hex(id(self)))
 
 class AnalysisFramesParameters:
     """ AnalysisFramesParamaters contains 

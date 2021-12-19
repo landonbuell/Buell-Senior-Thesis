@@ -130,9 +130,9 @@ class TimeDomainEnvelopFrames(CollectionMethod):
         super().__init__("TimeDomainEnvelopFrames",numFrames)
         self.validateParameter()
         self._numFrames     = numFrames
-        self._frameStart    = startFrame
-        self._frameEnd      = endFrame
-        self._skip          = skip
+        self._start         = startFrame
+        self._stop          = endFrame
+        self._step          = skip
 
     def __del__(self):
         """ Destructor for TimeDomainEnvelopFrames Instance """
@@ -144,21 +144,19 @@ class TimeDomainEnvelopFrames(CollectionMethod):
         """ Run this Collection method """
         self.validateInputSignal(signal)
         result = super().invoke(signal) 
-        index = 0
-        # Go through the Analysis Frames
-        for i in range(self._frameStart,self._frameEnd,self._skip):
-            result[index] = \
-                np.sum((signal.AnalysisFramesTime[i]**2),dtype=np.float32))
-            index += 1
+        idx = 0
+        for i in range(self._start,self._stop,self._step):
+            result[idx] = signal.FrameEnergyTime[i]
+            idx += 1
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.AnalysisFramesTime is None):
-            errMsg = "Signal.AnalysisFramesTime must not be None"
-            raise ValueError(errMsg)
+        if (signalData.FrameEnergyTime is None):
+            # Make the Frame Energies
+            signalData.makeFrameEnergiesTime()
         return True
 
     def validateParameter(self):
@@ -194,15 +192,29 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
         self.validateInputSignal(signal)
         result = super().invoke(signal)   
 
+        # Get Max Frame Energy + Find Threshold to beat
+        maxEnergy = np.max(signal.FrameEnergyTime)
+        threshold = maxEnergy * self.getThresholdFactor()
+        numFrames = 0       # number of frames above the threshold
+        totFrames = signal.FrameEnergyTime.shape[0]
+
+        # Iterate through the Frame Energies
+        for item in signal.FrameEnergyTime:
+            if (item > threshold):
+                # Meets the energy criteria
+                numFrames += 1
+
+        # Get Number of Frames as a percentage
+        result[0] = (numFrames / totFrames)
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.AnalysisFramesTime is None):
-            errMsg = "Signal.AnalysisFramesTime must not be None"
-            raise ValueError(errMsg)
+        if (signalData.FrameEnergyTime is None):
+            # Make the Frame Energies
+            signalData.makeFrameEnergiesTime()
         return True
 
     def validateParameter(self):
@@ -228,7 +240,17 @@ class ZeroCrossingsPerTime(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signal)
+        result = super().invoke(signal)  
+        
+        numSamples = signal.getNumSamples()
+        sign = np.sign(signal.Waveform)
+        ZXR = 0
+
+        # Iterate through Sampeles
+        for i in range(1,numSamples):
+            ZXR += np.abs(sign[i] - sign[i-1])
+        result[0] = ZXR / 2
         return result
 
     # Protected Interface
@@ -236,7 +258,7 @@ class ZeroCrossingsPerTime(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.Waveform is None):
-            errMsg = "Signal.Samples must not be None"
+            errMsg = "Signal.Waveform must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -263,16 +285,18 @@ class ZeroCrossingsFramesMean(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signal)
+        result = super().invoke(signal)  
+
+        result[0] = np.mean(signal.FrameZeroCrossings)
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.ZeroCrossingFrames is None):
-            errMsg = "Signal.ZeroCrossingFrames must not be None"
-            raise ValueError(errMsg)
+        if (signalData.FrameZeroCrossings is None):
+            signal.makeZeroCrossingRate()
         return True
 
     def validateParameter(self):
@@ -298,7 +322,9 @@ class ZeroCrossingsFramesVariance(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signal)
+        result = super().invoke(signal)
+
         return result
 
     # Protected Interface
