@@ -186,19 +186,21 @@ class SignalData:
             raise RuntimeError(errMsg)
 
         # Create the Frames Constructor with Params
-        constructor = AnalysisFramesConstructor(self,frameParams)
-        constructor.call()
+        constructor = AnalysisFramesTimeConstructor(frameParams)
+        constructor.call(self)
+        constructor = None
         return self
 
-    def makeAnalysisFramesFreq(self):
+    def makeAnalysisFramesFreq(self,frameParams=None):
         """ Make Frequncy-Series Analysis Frames """
         if (self.AnalysisFramesTime is None):
             # No Analysis Frames - Cannot Make Energies
             errMsg = "ERROR: need analysis frames time to make analysis frames frequency"
             raise RuntimeError(errMsg)
-        self.AnalysisFramesFreq = fftpack.fft(
-            self.AnalysisFramesTime,self.getSampleSpace(),axis=-1)
-
+        # Apply window Function + Fourier Transform
+        constructor = AnalysisFramesFreqConstructor(frameParams)
+        constructor.call(self)
+        constructor = None
         return self
 
     def makeMelFreqCepstrumCoeffs(self,num):
@@ -261,12 +263,19 @@ class AnalysisFramesParameters:
     def __init__(self,samplesPerFrame=1024,samplesOverlap=768,
                  headPad=1024,tailPad=2048,maxFrames=256):
         """ Constructor for AnalysisFramesParameters Instance """
+
+        # For Time Series Frames
         self._samplesPerFrame   = samplesPerFrame
         self._samplesOverlap    = samplesOverlap
         self._padHead           = headPad
         self._padTail           = tailPad
         self._maxFrames         = maxFrames
         self._framesInUse       = 0
+
+        # For Frequency Series Frames
+        self._windowFunction    = "Hanning"
+        self._freqLowHz         = 0
+        self._freqHighHz        = 12000
 
     def __del__(self):
         """ Destructor for AnalysisFramesParameters Instance """
@@ -277,21 +286,19 @@ class AnalysisFramesParameters:
     def __repr__(self):
         """ Debug Representation of Instance """
         return str(self.__class__) + " @ " + str(hex(id(self)))
-    
-class AnalysisFramesConstructor:
-    """ AnalysisFramesConstructor build time-series analysis frames 
-    from an input signal """
 
-    def __init__(self,signalData,frameParams):
-        """ Constructor for AnalysisFramesConstructor using AnalysisFramesParameters """
-        self._signalData    = signalData
-        self._params        = frameParams
-        self._window        = None
+class AnalysisFramesConstructor:
+    """ Abstract Base Class for Construting Time/Freq Analysis Frames """
+
+    def __init__(self,frameParams):
+        """ Constructor for AnalysisFramesConstructor Base Class """
+        self._params    = frameParams
+        self._signal    = None
 
     def __del__(self):
         """ Destructor for AnalysisFramesConstructor Instance """
-        self._signalData    = None
-        self._params        = None
+        self._params    = None
+        self._signal    = None
 
     # Getters and Setters
 
@@ -337,19 +344,49 @@ class AnalysisFramesConstructor:
     
     # Public Interface
 
-    def call(self):
-        """ Convert Signal to Analysis Frames """
-        self._signalData.AnalysisFramesTime = \
-            np.zeros(shape=self.getFramesShape(),dtype=np.float32)
-        self.buildAnalysisFrames()
+    def emptyFrames(self):
+        """ Return Empty 2D array that frames will occupy """
+        return np.zeros(shape=self.getFramesShape(),dtype=np.float32)
 
+    def call(self,signalData):
+        """ Run Frames Constructor Instance w/ signal Data instance """
+       
+        # Attach a refrence of the signal to self (save typing)
+        self._signalData = signalData
+        return signalData
+
+    # Magic Methods
+
+    def __repr__(self):
+        """ Debug Representation of Instance """
+        return str(self.__class__) + " @ " + str(hex(id(self)))
+
+class AnalysisFramesTimeConstructor(AnalysisFramesConstructor):
+    """ FrameParameters Structure to Create Freq-Series AnalysisFrames """
+
+    def __init__(self,frameParams):
+        """ Constructor for AnalysisFramesTimeConstructor Instance """
+        super().__init__(frameParams)
+
+    def __del__(self):
+        """ Destructor for AnalysisFramesTimeConstructor Instance """
+        super().__del__()
+
+    # Public Interface
+    
+    def call(self,signalData):
+        """ Convert Signal to Analysis Frames """
+        super().call(signalData)
+        self._signalData.AnalysisFramesTime = self.emptyFrames()
+        self.buildFramesTime()
+        self._signalData = None         # remove refrence
         # Return the New Signal Data Object
-        return self._signalData
+        return signalData
 
     # Private Interface
 
-    def buildAnalysisFrames(self):
-        """ Construct Analysis Frames """
+    def buildFramesTime(self):
+        """ Construct Analysis Time-Series Frames """
         startIndex = 0
         numSamples = self._signalData.Waveform.shape[0]
         padHead = self.getSizeHeadPad()
@@ -374,11 +411,57 @@ class AnalysisFramesConstructor:
       
         return self
 
-    # Magic Methods
+class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
+    """ Create Freq-Series AnalysisFrames """
 
-    def __repr__(self):
-        """ Debug Representation of Instance """
-        return str(self.__class__) + " @ " + str(hex(id(self)))
+    def __init__(self,frameParams):
+        """ Constructor for AnalysisFramesFreqConstructor Instance """
+        super().__init__(frameParams)
+
+    def __del__(self):
+        """ Destructor for AnalysisFramesFreqConstructor Instance """
+        super().__del__()
+
+    # Public Interface 
+
+    def call(self,signalData):
+        """ Convert Signal to Analysis Frames """
+        super().call(signalData)
+        if (signalData.AnalysisFramesTime is None):
+            errMsg = "signalData.AnalysisFramesTime must not be None"
+            raise ValueError(errMsg)
+        self.buildFramesFreq()
+        self._signalData = None         # remove refrence
+        # Return the New Signal Data Object
+        return signalData
+
+    # Private Interface
+
+    def buildFramesFreq(self):
+        """ Construct Analysis Time-Series Frames """
+        # Get the winow and apply to each frame
+        window = WindowFunctions.getHanning(
+            self.getSamplesPerFrame(),self.getSizeHeadPad(),self.getSizeTailPad())
+        frames = self._signalData.AnalysisFramesTime * window
+
+        # Apply the DFT to the frames matrix
+        frames = fftpack.fft(frames,axis=-1)
+        frames = frames / frames.shape[1]
+        frames = np.abs(frames)**2
+        
+        # Crop the Frames to the Frequency Spectrum subset
+
+        return self
+
+    def getFrequencyAxis(self,sampleSpacing=1):
+        """ Get the Frequnecy-Space Axis for the Analysis Frames """
+        space = fftpack.fftfreq(self.getTotalFrameSize(),sampleSpacing)
+        mask = np.where(
+            (space>=self._params._freqLowHz) & 
+            (space<=self._params._freqHighHz) )[0]   # get slices
+        space = space[mask]
+        return space,mask
+
 
 class BatchData:
     """ Class To Hold Data for Each Batch of Samples """

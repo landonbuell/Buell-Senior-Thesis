@@ -13,7 +13,6 @@ Date:           December 2021
 import os
 import sys
 import numpy as np
-from numpy.core.fromnumeric import partition
 
 import Administrative
 import Structural
@@ -105,10 +104,10 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.Waveform is None):
-            errMsg = "Signal.Samples must not be None"
+            errMsg = "signalData.Waveform must not be None"
             raise ValueError(errMsg)
         if (signalData.Waveform.shape[0] < 2* self._parameter):
-            errMsg = "Signal.Samples is too small to compute TDE"
+            errMsg = "signalData.Waveform is too small to compute TDE"
             raise ValueError(errMsg)
         return True
 
@@ -287,7 +286,6 @@ class ZeroCrossingsFramesMean(CollectionMethod):
         """ Run this Collection method """
         self.validateInputSignal(signal)
         result = super().invoke(signal)  
-
         result[0] = np.mean(signal.FrameZeroCrossings)
         return result
 
@@ -296,7 +294,7 @@ class ZeroCrossingsFramesMean(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.FrameZeroCrossings is None):
-            signal.makeZeroCrossingRate()
+            signalData.makeZeroCrossingRate()
         return True
 
     def validateParameter(self):
@@ -324,16 +322,15 @@ class ZeroCrossingsFramesVariance(CollectionMethod):
         """ Run this Collection method """
         self.validateInputSignal(signal)
         result = super().invoke(signal)
-
+        result[0] = np.var(signal.FrameZeroCrossings)
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.ZeroCrossingFrames is None):
-            errMsg = "Signal.ZeroCrossingFrames must not be None"
-            raise ValueError(errMsg)
+        if (signalData.FrameZeroCrossings is None):
+            signalData.makeZeroCrossingRate()
         return True
 
     def validateParameter(self):
@@ -360,16 +357,19 @@ class ZeroCrossingsFramesDiffMinMax(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signal)
+        result = super().invoke(signal) 
+        minVal = np.min(signal.FrameZeroCrossings)
+        maxVal = np.max(signal.FrameZeroCrossings)
+        result[0] = maxVal - minVal
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.ZeroCrossingFrames is None):
-            errMsg = "Signal.ZeroCrossingFrames must not be None"
-            raise ValueError(errMsg)
+        if (signalData.FrameZeroCrossings is None):
+            signalData.makeZeroCrossingRate()
         return True
 
     def validateParameter(self):
@@ -377,60 +377,37 @@ class ZeroCrossingsFramesDiffMinMax(CollectionMethod):
         super().validateParameter()
         return True
 
-class TemporalCenterOfMassLinear(CollectionMethod):
-    """
-    Compute the Temporal Center of Mass, weighted linearly
-    """
-
-    def __init__(self,param):
-        """ Constructor for TemporalCenterOfMassLinear Instance """
-        super().__init__("TemporalCenterOfMassLinear",1)
-        self.validateParameter()
-
-    def __del__(self):
-        """ Destructor for TemporalCenterOfMassLinear Instance """
-        pass
-
-    # Public Interface
-
-    def invoke(self, signal, *args):
-        """ Run this Collection method """
-        result = super().invoke(signal)   
-        return result
-
-    # Protected Interface
-
-    def validateInputSignal(self,signalData):
-        """ Validate Input Signal Everything that we need """
-        if (signalData.Waveform is None):
-            errMsg = "Signal.Samples must not be None"
-            raise ValueError(errMsg)
-        return True
-
-    def validateParameter(self):
-        """ Validate that Parameter Values Makes Sense """
-        super().validateParameter()
-        return True
-
-class TemportalCenterOfMassQuadratic(CollectionMethod):
+class TemporalCenterOfMass(CollectionMethod):
     """
     Compute the Temporal Center of Mass, weighted Quadratically
     """
 
     def __init__(self,param):
-        """ Constructor for TemportalCenterOfMassQuadratic Instance """
-        super().__init__("TemportalCenterOfMassQuadratic",1)
+        """ Constructor for TemporalCenterOfMass Instance """
+        super().__init__("TemportalCenterOfMassQuadratic",param)
         self.validateParameter()
 
     def __del__(self):
-        """ Destructor for TemportalCenterOfMassQuadratic Instance """
-        pass
+        """ Destructor for TemporalCenterOfMass Instance """
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
+        self.validateInputSignal(signal)
         result = super().invoke(signal)   
+
+        # Compute Total Mass + Weights
+        massTotal = np.sum(signal.Waveform)
+        weights = np.arange(0,signal.getNumSamples())**(self._parameter)
+        # Compute Center of Mass (By Weights)
+        massCenter = np.dot(weights,signal.Waveform);
+        massCenter /= massTotal
+        massCenter /= signal.getNumSamples()
+
+        # Apply Result + Return 
+        result[0] = massCenter
         return result
 
     # Protected Interface
@@ -658,7 +635,7 @@ class FreqDomainEnvelopFrames(CollectionMethod):
         super().validateParameter()
         return True
 
-class FrequencyCenterOfMassLinear(CollectionMethod):
+class FrequencyCenterOfMass(CollectionMethod):
     """
     Compute the Frequency Center of Mass over all frames weighted linearly
     """
@@ -676,42 +653,15 @@ class FrequencyCenterOfMassLinear(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
+        self.validateInputSignal(signal)
         result = super().invoke(signal)   
-        return result
 
-    # Protected Interface
+        # Compute Mass of Each Frame
+        sizeOfFrame = signal.AnalysisFramesFreq.shape[1]
+        massTotal = np.sum(signal.AnalysisFramesFreq,axis=-1)
+        
 
-    def validateInputSignal(self,signalData):
-        """ Validate Input Signal Everything that we need """
-        if (signalData.AnalysisFramesFreq is None):
-            errMsg = "Signal.AnalysisFramesFreq must not be None"
-            raise ValueError(errMsg)
-        return True
 
-    def validateParameter(self):
-        """ Validate that Parameter Values Makes Sense """
-        super().validateParameter()
-        return True
-
-class FrequencyCenterOfMassQuadratic(CollectionMethod):
-    """
-    Compute the frequency Center of Mass over all frames, weighted Quadratically
-    """
-
-    def __init__(self,param):
-        """ Constructor for FrequencyCenterOfMassQuadratic Instance """
-        super().__init__("FrequencyCenterOfMassQuadratic",1)
-        self.validateParameter()
-
-    def __del__(self):
-        """ Destructor for FrequencyCenterOfMassQuadratic Instance """
-        pass
-
-    # Public Interface
-
-    def invoke(self, signal, *args):
-        """ Run this Collection method """
-        result = super().invoke(signal)   
         return result
 
     # Protected Interface

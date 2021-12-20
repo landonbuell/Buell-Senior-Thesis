@@ -319,11 +319,10 @@ class CollectionManager (Manager):
         
     def __del__(self):
         """ Destructor for CollectionManager Instance """
-        self._batchQueue        = None
-        self._methodQueue       = None
-        self._designMatrixA      = None
-        self._framesParameters  = None
-        self._framesContructor  = None
+        self._batchQueue            = None
+        self._methodQueue           = None
+        self._designMatrixA         = None
+        self._designMatrixB         = None
         super().__del__()
 
     # Getters and Setters
@@ -363,9 +362,8 @@ class CollectionManager (Manager):
         """ Build All Data for Feature Collection """
         super().build()
 
-        self.createCollectionQueue()
+        self.initCollectionQueue()
         self.initDesignMatrix()
-
 
         return self
 
@@ -408,7 +406,7 @@ class CollectionManager (Manager):
 
     # Private Interface
 
-    def createCollectionQueue(self):
+    def initCollectionQueue(self):
         """ Build All Elements in the Collection Queue """
         numEntries = 32
         self._methodQueue = np.zeros(shape=(numEntries,),dtype=object)
@@ -428,16 +426,16 @@ class CollectionManager (Manager):
         self[12] = CollectionMethods.ZeroCrossingsFramesMean(1)
         self[13] = CollectionMethods.ZeroCrossingsFramesVariance(1)
         self[14] = CollectionMethods.ZeroCrossingsFramesDiffMinMax(1)
-        self[15] = CollectionMethods.TemporalCenterOfMassLinear(1)
-        self[16] = CollectionMethods.TemportalCenterOfMassQuadratic(1)
+        self[15] = CollectionMethods.TemporalCenterOfMass(1)
+        self[16] = CollectionMethods.TemporalCenterOfMass(2)
         self[17] = CollectionMethods.AutoCorrelationCoefficients(12)
         self[18] = CollectionMethods.AutoCorrelationCoefficientsMean(1)
         self[19] = CollectionMethods.AutoCorrelationCoefficientsVariance(1)
         self[20] = CollectionMethods.AutoCorrelationCoefficientsDiffMinMax(1)
         self[21] = CollectionMethods.FreqDomainEnvelopPartition(12)
         self[22] = CollectionMethods.FreqDomainEnvelopFrames(1)
-        self[23] = CollectionMethods.FrequencyCenterOfMassLinear(1)
-        self[24] = CollectionMethods.FrequencyCenterOfMassQuadratic(1)
+        self[23] = CollectionMethods.FrequencyCenterOfMass(1)
+        self[24] = CollectionMethods.FrequencyCenterOfMass(2)
         self[25] = CollectionMethods.MelFrequencyCempstrumCoeffs(12)
         self[26] = CollectionMethods.MelFrequencyCempstrumCoeffsMean(1)
         self[27] = CollectionMethods.MelFrequencyCempstrumCoeffsVariance(1)
@@ -481,9 +479,11 @@ class CollectionManager (Manager):
             featureVectorA.setLabel(sample.getTargetInt())
             featureVectorB.setLabel(sample.getTargetInt())
             
-            # Read Raw samples + Make all fields
+            # Read Raw samples + Make Analysis Frames
             sampleData = sample.readSignal()
             sampleData.makeAnalysisFramesTime( 
+                self.getRundataManager().getFrameParams() )
+            sampleData.makeAnalysisFramesFreq(
                 self.getRundataManager().getFrameParams() )
             # Generate Each Common Field as needed by method
             #sampleData = sampleData.makeAllFields()
@@ -590,8 +590,6 @@ class CollectionManager (Manager):
         """ Set Item at Index """
         self._methodQueue[key] = val
         return self
-
-    
 
 class RundataManager (Manager):
     """ RundataManager Aggregates all important info from the Collection run process """
