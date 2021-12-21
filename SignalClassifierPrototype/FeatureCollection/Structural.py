@@ -117,7 +117,7 @@ class SignalData:
         self.AutoCorrelationCoeffs  = None
         self.FrameZeroCrossings     = None
         self.FrameEnergyTime        = None
-        self.FrameEnergyFreq        = None
+        self.FrequencyAxis          = None
 
     def __del__(self):
         """ Destructor for SignalData Instance """
@@ -281,6 +281,11 @@ class AnalysisFramesParameters:
         """ Destructor for AnalysisFramesParameters Instance """
         pass
 
+    def reset(self):
+        """ Clear the State of the Instance, reset to Construction """
+        self._framesInUse       = 0
+        return self
+
     # Magic Methods
 
     def __repr__(self):
@@ -352,7 +357,7 @@ class AnalysisFramesConstructor:
         """ Run Frames Constructor Instance w/ signal Data instance """
        
         # Attach a refrence of the signal to self (save typing)
-        self._signalData = signalData
+        self._signal = signalData
         return signalData
 
     # Magic Methods
@@ -377,9 +382,9 @@ class AnalysisFramesTimeConstructor(AnalysisFramesConstructor):
     def call(self,signalData):
         """ Convert Signal to Analysis Frames """
         super().call(signalData)
-        self._signalData.AnalysisFramesTime = self.emptyFrames()
+        self._signal.AnalysisFramesTime = self.emptyFrames()
         self.buildFramesTime()
-        self._signalData = None         # remove refrence
+        self._signal = None         # remove refrence
         # Return the New Signal Data Object
         return signalData
 
@@ -388,7 +393,7 @@ class AnalysisFramesTimeConstructor(AnalysisFramesConstructor):
     def buildFramesTime(self):
         """ Construct Analysis Time-Series Frames """
         startIndex = 0
-        numSamples = self._signalData.Waveform.shape[0]
+        numSamples = self._signal.Waveform.shape[0]
         padHead = self.getSizeHeadPad()
         frameSize = self.getSamplesPerFrame()
 
@@ -397,8 +402,8 @@ class AnalysisFramesTimeConstructor(AnalysisFramesConstructor):
         
             # Copy slice to padded row
             np.copyto(
-                dst=self._signalData.AnalysisFramesTime[i,padHead:padHead + frameSize],
-                src=self._signalData.Waveform[startIndex:startIndex + frameSize],
+                dst=self._signal.AnalysisFramesTime[i,padHead:padHead + frameSize],
+                src=self._signal.Waveform[startIndex:startIndex + frameSize],
                 casting='no')
             
             # Increment
@@ -408,7 +413,12 @@ class AnalysisFramesTimeConstructor(AnalysisFramesConstructor):
             if (startIndex + frameSize > numSamples):
                 # That was just the last frame
                 break
-      
+        
+        if (self.getNumFramesInUse() < self.getMaxNumFrames()):
+            # Crop Unused Frames
+            self._signal.AnalysisFramesTime = \
+                self._signal.AnalysisFramesTime[0:self._params._framesInUse]
+        # Return Instance
         return self
 
 class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
@@ -431,8 +441,13 @@ class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
             errMsg = "signalData.AnalysisFramesTime must not be None"
             raise ValueError(errMsg)
         self.buildFramesFreq()
-        self._signalData = None         # remove refrence
+        self._signal = None         # remove refrence
         # Return the New Signal Data Object
+        for i in range(self.getMaxNumFrames()):
+            plt.plot(signalData.FrequencyAxis,
+                     signalData.AnalysisFramesFreq[i])
+            plt.show()
+
         return signalData
 
     # Private Interface
@@ -442,18 +457,21 @@ class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
         # Get the winow and apply to each frame
         window = WindowFunctions.getHanning(
             self.getSamplesPerFrame(),self.getSizeHeadPad(),self.getSizeTailPad())
-        frames = self._signalData.AnalysisFramesTime * window
+        frames = self._signal.AnalysisFramesTime * window
 
         # Apply the DFT to the frames matrix
-        frames = fftpack.fft(frames,axis=-1)
+        frames = fftpack.fft(frames,axis=-1,)
         frames = frames / frames.shape[1]
-        frames = np.abs(frames)**2
+        frames = np.abs(frames,dtype=np.float32)**2
         
         # Crop the Frames to the Frequency Spectrum subset
-
+        freqAxis,mask = self.frequencyAxis(self._signal.getSampleSpace())
+        frames = frames[:,mask];
+        self._signal.AnalysisFramesFreq = frames
+        self._signal.FrequencyAxis = freqAxis
         return self
 
-    def getFrequencyAxis(self,sampleSpacing=1):
+    def frequencyAxis(self,sampleSpacing=1):
         """ Get the Frequnecy-Space Axis for the Analysis Frames """
         space = fftpack.fftfreq(self.getTotalFrameSize(),sampleSpacing)
         mask = np.where(

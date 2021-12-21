@@ -499,6 +499,7 @@ class CollectionManager (Manager):
             featureVectorB.clearData()
 
         # Update the Batch's Meta Data
+        self.getRundataManager().getFrameParams().reset()
         batchData = Structural.BatchData(
             self.getBatchIndex(),
             len(self._batchQueue),
