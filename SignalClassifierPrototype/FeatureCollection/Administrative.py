@@ -260,7 +260,8 @@ class AppSettings:
     def developmentSettingsInstance():
         """ Build an instance of runtime settings for development """
         result = AppSettings(
-            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
+            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
+            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
             pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v1",
             batchSize=32,
             shuffleSeed=-1)

@@ -14,6 +14,7 @@ import os
 import sys
 import numpy as np
 import pandas as pd
+from scipy import signal
 
 import Administrative
 import CollectionMethods
@@ -313,14 +314,16 @@ class CollectionManager (Manager):
         super().__init__()
         self._batchIndex        = 0
         self._batchQueue        = np.array([],dtype=object)
-        self._methodQueue       = np.array([],dtype=object)    
+        self._methodQueueA      = np.array([],dtype=object)    
+        self._methodQueueB      = np.array([],dtype=object)    
         self._designMatrixA     = None
         self._designMatrixB     = None
         
     def __del__(self):
         """ Destructor for CollectionManager Instance """
         self._batchQueue            = None
-        self._methodQueue           = None
+        self._methodQueueA          = None
+        self._methodQueueB          = None
         self._designMatrixA         = None
         self._designMatrixB         = None
         super().__del__()
@@ -337,7 +340,7 @@ class CollectionManager (Manager):
 
     def getMethodQueue(self):
         """ Get the Method Queue for the Collector """
-        return self._methodQueue
+        return self._methodQueueA
 
     def getDesignMatrixA(self):
         """ Get the Design Matrix A"""
@@ -350,7 +353,7 @@ class CollectionManager (Manager):
     def getNumFeatures(self):
         """ Compute the Number of Features from the Method Queue """
         numFeatures = 0
-        for item in self._methodQueue:
+        for item in self._methodQueueA:
             if (item == 0):
                 continue
             numFeatures += item.getReturnSize()
@@ -409,7 +412,7 @@ class CollectionManager (Manager):
     def initCollectionQueue(self):
         """ Build All Elements in the Collection Queue """
         numEntries = 32
-        self._methodQueue = np.zeros(shape=(numEntries,),dtype=object)
+        self._methodQueueA = np.zeros(shape=(numEntries,),dtype=object)
         # Populate with Elements
         self[0] = CollectionMethods.TimeDomainEnvelopPartitions(8)
         self[1] = CollectionMethods.TimeDomainEnvelopFrames(0,256,32)
@@ -461,7 +464,7 @@ class CollectionManager (Manager):
 
     def evaluateBatchQueue(self):
         """ Iterate through Batch Queue """
-        sampleData      = None
+        signalData      = None
 
         # Build the Feature Vectors for Each Sample
         shapeA = (self.getNumFeatures(),)
@@ -480,39 +483,39 @@ class CollectionManager (Manager):
             featureVectorB.setLabel(sample.getTargetInt())
             
             # Read Raw samples + Make Analysis Frames
-            sampleData = sample.readSignal()
-            sampleData.makeAnalysisFramesTime( 
+            signalData = sample.readSignal()
+            signalData.makeAnalysisFramesTime( 
                 self.getRundataManager().getFrameParams() )
-            sampleData.makeAnalysisFramesFreq(
+            signalData.makeAnalysisFramesFreq(
                 self.getRundataManager().getFrameParams() )
             # Generate Each Common Field as needed by method
             #sampleData = sampleData.makeAllFields()
 
             # Use Current Sample to Evaluate the Feature Queue
-            self.evaluateMethodQueueA(sampleData,featureVectorA)
-            self.evaluateMethodQueueB(sampleData,featureVectorB)
+            self.evaluateMethodQueueA(signalData,featureVectorA)
+            self.evaluateMethodQueueB(signalData,featureVectorB)
 
             # Add to Samples to Design Matrices
             self._designMatrixA[idx] = featureVectorA
             self._designMatrixB[idx] = featureVectorB
             featureVectorA.clearData()
             featureVectorB.clearData()
+            self.getRundataManager().getFrameParams().reset()
 
-        # Update the Batch's Meta Data
-        self.getRundataManager().getFrameParams().reset()
+        # Update the Batch's Meta Data       
         batchData = Structural.BatchData(
             self.getBatchIndex(),
             len(self._batchQueue),
             self.getNumFeatures() )
         self.getRundataManager().addBatchData(batchData)
-        sampleData = None
+        signalData = None
         return self
 
     def evaluateMethodQueueA(self,signalData,featureVector):
         """ Evaluate the Feature Queue """
         featureIndex = 0
         result = None
-        for item in self._methodQueue:
+        for item in self._methodQueueA:
 
             # Handle Empty Slot
             if (item == 0):             
@@ -535,6 +538,12 @@ class CollectionManager (Manager):
         """ Evaluate the Feature Queue """
         featureIndex = 0
         result = None
+        if(signalData.AnalysisFramesFreq is None):
+            # No Analysis Frames Freq? -> Make them
+            signalData.makeAnalysisFramesFreq(
+                self.getRundataManager().getFrameParams() )
+        result = signalData.AnalysisFramesFreq.flatten()
+        
         return self
 
     def makeAllFields(self,signalData,framesTime=True,framesFreq=True,
@@ -581,15 +590,15 @@ class CollectionManager (Manager):
 
     def __len__(self):
         """ Overload Length Operator """
-        return self._methodQueue.shape[0]
+        return self._methodQueueA.shape[0]
 
     def __getitem__(self,key):
         """ Get Item at index """
-        return self._methodQueue[key]
+        return self._methodQueueA[key]
 
     def __setitem__(self,key,val):
         """ Set Item at Index """
-        self._methodQueue[key] = val
+        self._methodQueueA[key] = val
         return self
 
 class RundataManager (Manager):

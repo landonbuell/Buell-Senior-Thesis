@@ -286,6 +286,28 @@ class AnalysisFramesParameters:
         self._framesInUse       = 0
         return self
 
+    # Getters and Setters
+
+    def getMaxNumFrames(self) -> int:
+        """ Get the Max Number of Frames to Use """
+        return self._params._maxFrames
+
+    def getNumFramesInUse(self) -> int:
+        """ Get the Number of Frames Currently in use """
+        return self._params._framesInUse
+
+    def getTotalFrameSize(self) -> int:
+        """ Get total Size of Each Frame including padding """
+        result = 0
+        result += self._padHead
+        result += self._samplesPerFrame 
+        result += self._padTail
+        return result
+
+    def getFramesShape(self):
+        """ Get the Shape of the Analysis Frames Matrix """
+        return ( self.getMaxNumFrames(), self.getTotalFrameSize(), )
+
     # Magic Methods
 
     def __repr__(self):
@@ -438,16 +460,10 @@ class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
         """ Convert Signal to Analysis Frames """
         super().call(signalData)
         if (signalData.AnalysisFramesTime is None):
-            errMsg = "signalData.AnalysisFramesTime must not be None"
-            raise ValueError(errMsg)
+            signalData.
         self.buildFramesFreq()
         self._signal = None         # remove refrence
         # Return the New Signal Data Object
-        for i in range(self.getMaxNumFrames()):
-            plt.plot(signalData.FrequencyAxis,
-                     signalData.AnalysisFramesFreq[i])
-            plt.show()
-
         return signalData
 
     # Private Interface
