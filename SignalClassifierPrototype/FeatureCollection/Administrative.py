@@ -282,7 +282,7 @@ class AppSettings:
             # Content may be overwritten
             msg = "WARNING: Output path exists. Contents may be over written"
         else:
-            os.mkdir(fullOutput)
+            os.makedirs(fullOutput)
         self._pathOutput = fullOutput
         return self
 

@@ -460,7 +460,9 @@ class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
         """ Convert Signal to Analysis Frames """
         super().call(signalData)
         if (signalData.AnalysisFramesTime is None):
-            signalData.
+            # Must have time-Frames
+            errMsg = "AnalysisFramesFreqConstructor.call() - Must have Time-Frames to make Freq-Frames"
+            raise RuntimeError(errMsg)
         self.buildFramesFreq()
         self._signal = None         # remove refrence
         # Return the New Signal Data Object

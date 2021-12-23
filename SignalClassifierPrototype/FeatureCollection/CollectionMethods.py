@@ -442,6 +442,7 @@ class AutoCorrelationCoefficients(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
+        self.validateInputSignal(signal)
         result = super().invoke(signal)   
         return result
 
@@ -659,9 +660,12 @@ class FrequencyCenterOfMass(CollectionMethod):
         # Compute Mass of Each Frame
         sizeOfFrame = signal.AnalysisFramesFreq.shape[1]
         massTotal = np.sum(signal.AnalysisFramesFreq,axis=-1)
-        
+        weights = np.arange(0,sizeOfFrame,1)**(self._parameter)
+        centerOfMasses = np.matmul(signal.AnalysisFramesFreq,weights)
+        centerOfMasses /= massTotal
 
-
+        # Add the Average of all frames, and put into result
+        result[0] = np.mean(centerOfMass)
         return result
 
     # Protected Interface
