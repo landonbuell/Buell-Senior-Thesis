@@ -139,13 +139,13 @@ class TimeDomainEnvelopFrames(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal) 
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData) 
         idx = 0
         for i in range(self._start,self._stop,self._step):
-            result[idx] = signal.FrameEnergyTime[i]
+            result[idx] = signalData.FrameEnergyTime[i]
             idx += 1
         return result
 
@@ -186,19 +186,19 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
 
         # Get Max Frame Energy + Find Threshold to beat
-        maxEnergy = np.max(signal.FrameEnergyTime)
+        maxEnergy = np.max(signalData.FrameEnergyTime)
         threshold = maxEnergy * self.getThresholdFactor()
         numFrames = 0       # number of frames above the threshold
-        totFrames = signal.FrameEnergyTime.shape[0]
+        totFrames = signalData.FrameEnergyTime.shape[0]
 
         # Iterate through the Frame Energies
-        for item in signal.FrameEnergyTime:
+        for item in signalData.FrameEnergyTime:
             if (item > threshold):
                 # Meets the energy criteria
                 numFrames += 1
@@ -237,13 +237,13 @@ class ZeroCrossingsPerTime(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)  
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)  
         
-        numSamples = signal.getNumSamples()
-        sign = np.sign(signal.Waveform)
+        numSamples = signalData.getNumSamples()
+        sign = np.sign(signalData.Waveform)
         ZXR = 0
 
         # Iterate through Sampeles
@@ -257,7 +257,7 @@ class ZeroCrossingsPerTime(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.Waveform is None):
-            errMsg = "Signal.Waveform must not be None"
+            errMsg = "signalData.Waveform must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -282,11 +282,11 @@ class ZeroCrossingsFramesMean(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)  
-        result[0] = np.mean(signal.FrameZeroCrossings)
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)  
+        result[0] = np.mean(signalData.FrameZeroCrossings)
         return result
 
     # Protected Interface
@@ -318,11 +318,11 @@ class ZeroCrossingsFramesVariance(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)
-        result[0] = np.var(signal.FrameZeroCrossings)
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)
+        result[0] = np.var(signalData.FrameZeroCrossings)
         return result
 
     # Protected Interface
@@ -355,12 +355,12 @@ class ZeroCrossingsFramesDiffMinMax(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal) 
-        minVal = np.min(signal.FrameZeroCrossings)
-        maxVal = np.max(signal.FrameZeroCrossings)
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData) 
+        minVal = np.min(signalData.FrameZeroCrossings)
+        maxVal = np.max(signalData.FrameZeroCrossings)
         result[0] = maxVal - minVal
         return result
 
@@ -393,18 +393,18 @@ class TemporalCenterOfMass(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
 
         # Compute Total Mass + Weights
-        massTotal = np.sum(signal.Waveform)
-        weights = np.arange(0,signal.getNumSamples())**(self._parameter)
+        massTotal = np.sum(signalData.Waveform)
+        weights = np.arange(0,signalData.getNumSamples())**(self._parameter)
         # Compute Center of Mass (By Weights)
-        massCenter = np.dot(weights,signal.Waveform);
+        massCenter = np.dot(weights,signalData.Waveform);
         massCenter /= massTotal
-        massCenter /= signal.getNumSamples()
+        massCenter /= signalData.getNumSamples()
 
         # Apply Result + Return 
         result[0] = massCenter
@@ -415,7 +415,7 @@ class TemporalCenterOfMass(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.Waveform is None):
-            errMsg = "Signal.Samples must not be None"
+            errMsg = "signalData.Samples must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -440,10 +440,17 @@ class AutoCorrelationCoefficients(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+
+        #Check is ACC's exist - make them if not
+        if (signalData.AutoCorrelationCoeffs is None):
+            signalData.makeAutoCorrelationCoeffs(self._parameter)
+
+        # Copy the ACC's the the result + Return
+        np.copyto(result,signalData.AutoCorrelationCoeffs)
         return result
 
     # Protected Interface
@@ -451,7 +458,7 @@ class AutoCorrelationCoefficients(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.Waveform is None):
-            errMsg = "Signal.Samples must not be None"
+            errMsg = "signalData.Samples must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -476,9 +483,13 @@ class AutoCorrelationCoefficientsMean(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+
+        # Get the Average of the AutoCorrelation Coefficients
+        result[0] = np.mean(signalData.AutoCorrelationCoeffs)
         return result
 
     # Protected Interface
@@ -486,7 +497,7 @@ class AutoCorrelationCoefficientsMean(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AutoCorrelationCoeffs is None):
-            errMsg = "Signal.AutoCorrelationCoeffs must not be None"
+            errMsg = "signalData.AutoCorrelationCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -511,9 +522,13 @@ class AutoCorrelationCoefficientsVariance(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData) 
+        
+        # Compute the Variance
+        result[0] = np.var(signalData.AutoCorrelationCoeffs)
         return result
 
     # Protected Interface
@@ -521,7 +536,7 @@ class AutoCorrelationCoefficientsVariance(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AutoCorrelationCoeffs is None):
-            errMsg = "Signal.AutoCorrelationCoeffs must not be None"
+            errMsg = "signalData.AutoCorrelationCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -546,9 +561,14 @@ class AutoCorrelationCoefficientsDiffMinMax(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData) 
+        # Compute Difference between Min and Max
+        minVal = np.min(signalData.AutoCorrelationCoeffs)
+        maxVal = np.max(signalData.AutoCorrelationCoeffs)
+        result[0] = maxVal - minVal
         return result
 
     # Protected Interface
@@ -556,7 +576,7 @@ class AutoCorrelationCoefficientsDiffMinMax(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AutoCorrelationCoeffs is None):
-            errMsg = "Signal.AutoCorrelationCoeffs must not be None"
+            errMsg = "signalData.AutoCorrelationCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -572,7 +592,7 @@ class FreqDomainEnvelopPartition(CollectionMethod):
 
     def __init__(self,param):
         """ Constructor for AutoCorrelationCoefficientsDiffMinMax Base Class """
-        super().__init__("AutoCorrelationCoefficientsDiffMinMax",1)
+        super().__init__("FreqDomainEnvelopPartition",1)
         self.validateParameter()
 
     def __del__(self):
@@ -581,9 +601,11 @@ class FreqDomainEnvelopPartition(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
+        self.validateInputSignal(signal);
         result = super().invoke(signal)   
+        raise NotImplementedError(str(self.__class__) + " is not implemented")
         return result
 
     # Protected Interface
@@ -591,7 +613,7 @@ class FreqDomainEnvelopPartition(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AutoCorrelationCoeffs is None):
-            errMsg = "Signal.AutoCorrelationCoeffs must not be None"
+            errMsg = "signalData.AutoCorrelationCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -617,9 +639,20 @@ class FreqDomainEnvelopFrames(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+        raise NotImplementedError(str(self.__class__) + " is not implemented")
+
+        sizeOfPartition = signalData.AnalysisFramesFreq.shape[-1] // self._parameter
+        # Iterate Through Each Parition
+        startIndex = 0
+        for i in range(self._parameter):    
+            part = signalData.AnalysisFramesFreq[:, startIndex : startIndex + sizeOfPartition]
+            part = np.sum(part**2,axis=1,dtype=np.float32)
+            result[i] = np.mean(part)
+            startIndex += sizeOfPartition
         return result
 
     # Protected Interface
@@ -627,7 +660,7 @@ class FreqDomainEnvelopFrames(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AnalysisFramesFreq is None):
-            errMsg = "Signal.AnalysisFramesFreq must not be None"
+            errMsg = "signalData.AnalysisFramesFreq must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -652,20 +685,20 @@ class FrequencyCenterOfMass(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal)
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
 
         # Compute Mass of Each Frame
-        sizeOfFrame = signal.AnalysisFramesFreq.shape[1]
-        massTotal = np.sum(signal.AnalysisFramesFreq,axis=-1)
+        sizeOfFrame = signalData.AnalysisFramesFreq.shape[1]
+        massTotal = np.sum(signalData.AnalysisFramesFreq,axis=-1)
         weights = np.arange(0,sizeOfFrame,1)**(self._parameter)
-        centerOfMasses = np.matmul(signal.AnalysisFramesFreq,weights)
+        centerOfMasses = np.matmul(signalData.AnalysisFramesFreq,weights)
         centerOfMasses /= massTotal
 
         # Add the Average of all frames, and put into result
-        result[0] = np.mean(centerOfMass)
+        result[0] = np.mean(centerOfMasses)
         return result
 
     # Protected Interface
@@ -673,7 +706,7 @@ class FrequencyCenterOfMass(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AnalysisFramesFreq is None):
-            errMsg = "Signal.AnalysisFramesFreq must not be None"
+            errMsg = "signalData.AnalysisFramesFreq must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -700,7 +733,15 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
 
     def invoke(self, signal, *args):
         """ Run this Collection method """
+        self.validateInputSignal(signalData)
         result = super().invoke(signal)   
+
+        # Check if We have MFCC's - Create if we don't
+        if (signalData.MelFreqCepstrumCoeffs is None):
+            signalData.makeMelFreqCepstrumCoeffs(self._parameter)
+
+        # Copy to result + return
+        np.copyto(result,signalData.makeMelFreqCepstrumCoeffs)
         return result
 
     # Protected Interface
@@ -708,7 +749,7 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.AnalysisFramesFreq is None):
-            errMsg = "Signal.AnalysisFramesFreq must not be None"
+            errMsg = "signalData.AnalysisFramesFreq must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -733,9 +774,12 @@ class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+        # Compute Mean of MFCC's
+        result[0] = np.mean(signalData.MelFreqCepstrumCoeffs)
         return result
 
     # Protected Interface
@@ -743,7 +787,7 @@ class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.MelFreqCepstrumCoeffs is None):
-            errMsg = "Signal.MelFreqCepstrumCoeffs must not be None"
+            errMsg = "signalData.MelFreqCepstrumCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -768,9 +812,12 @@ class MelFrequencyCempstrumCoeffsVariance(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+        # Compute Variance of MFCC's
+        result[0] = np.var(signalData.MelFreqCepstrumCoeffs)
         return result
 
     # Protected Interface
@@ -778,7 +825,7 @@ class MelFrequencyCempstrumCoeffsVariance(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.MelFreqCepstrumCoeffs is None):
-            errMsg = "Signal.MelFreqCepstrumCoeffs must not be None"
+            errMsg = "signalData.MelFreqCepstrumCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -803,9 +850,14 @@ class MelFrequencyCempstrumCoeffsDiffMinMax(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+        # Compute Diff of min and max of MFCC's
+        minVal = np.min(signalData.MelFreqCepstrumCoeffs)
+        maxVal = np.max(signalData.MelFreqCepstrumCoeffs)
+        result[0] = maxVal - minVal
         return result
 
     # Protected Interface
@@ -813,7 +865,7 @@ class MelFrequencyCempstrumCoeffsDiffMinMax(CollectionMethod):
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
         if (signalData.MelFreqCepstrumCoeffs is None):
-            errMsg = "Signal.MelFreqCepstrumCoeffs must not be None"
+            errMsg = "signalData.MelFreqCepstrumCoeffs must not be None"
             raise ValueError(errMsg)
         return True
 

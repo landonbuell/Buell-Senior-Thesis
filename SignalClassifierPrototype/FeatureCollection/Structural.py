@@ -102,7 +102,6 @@ class SampleIO:
         """ Debug representation of instance """
         return "Sample: " + self.getPathExtension() + " " + self.getTargetStr()
 
-
 class SignalData:
     """ Contain all signal Data (NOT ENCAPSULATED) """
 
@@ -203,13 +202,37 @@ class SignalData:
         constructor = None
         return self
 
-    def makeMelFreqCepstrumCoeffs(self,num):
+    def makeMelFreqCepstrumCoeffs(self,numCoeffs):
         """ Make All Mel-Cepstrum Frequency Coefficients """
+        if (self.AnalysisFramesFreq is None):
+            # No Waveform - Cannot make MFCC's
+            errMsg = "ERROR: need analysis frames time to make analysis frames frequency"
+            raise RuntimeError(errMsg)
 
+        # Create + Call the MFCC builder
+        constructor = MelFrequnecyCepstrumCoeffsConstructor(numCoeffs)
+        constructor.call(self)
+        constructor = None
         return self
 
-    def makeAutoCorrelationCoeffs(self,num):
+    def makeAutoCorrelationCoeffs(self,numCoeffs):
         """ Make All Auto-Correlation Coefficients """
+        if (self.Waveform is None):
+            # No Waveform - Cannot make ACC's
+            errMsg = "ERROR: need analysis frames time to make analysis frames frequency"
+            raise RuntimeError(errMsg)
+
+        # Make the auto-correlation Coeffs
+        self.AutoCorrelationCoeffs = np.zeros(shape=(numCoeffs,),dtype=np.float32)
+        for k in range(1,numCoeffs+1,1):
+            # Each ACC
+            alpha = self.Waveform[0:-k]
+            beta = self.Waveform[k:]
+            sumA = np.dot(alpha,beta)
+            sumB = np.dot(alpha,alpha)
+            sumC = np.dot(beta,beta)
+            acc = sumA / (np.sqrt(sumB) * np.sqrt(sumC))
+            self.AutoCorrelationCoeffs[k - 1] = acc
 
         return self
 
@@ -497,6 +520,29 @@ class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
             (space<=self._params._freqHighHz) )[0]   # get slices
         space = space[mask]
         return space,mask
+
+class MelFrequnecyCepstrumCoeffsConstructor:
+    """ Class the Handle the Creation of all Mel-Frequency-Cepstrum Coeffs """
+
+    def __init__(self,numCoeffs,freqLowHz=0,freqHighHz=22050):
+        """ Constructor for MelFrequnecyCepstrumCoeffsConstructor Instance """
+        self._numCoeffs = numCoeffs
+        self._freqLowHz = freqLowHz
+        self._freqHighHz = freqHighHz
+        self._signal = None
+
+    def __del__(self):
+        """ Destructor for MelFrequnecyCepstrumCoeffsConstructor Instance """
+        self._numCoeffs = 0
+        self._signal = None
+
+    def call(self,signalData):
+        """ Create Mel-Freqency Cepstrum Coeffs from Analysis Frames """
+        self._signal = signalData
+
+
+        self._signal = None
+        return signalData
 
 
 class BatchData:

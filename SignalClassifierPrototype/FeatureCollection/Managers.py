@@ -435,17 +435,17 @@ class CollectionManager (Manager):
         self[18] = CollectionMethods.AutoCorrelationCoefficientsMean(1)
         self[19] = CollectionMethods.AutoCorrelationCoefficientsVariance(1)
         self[20] = CollectionMethods.AutoCorrelationCoefficientsDiffMinMax(1)
-        self[21] = CollectionMethods.FreqDomainEnvelopPartition(12)
-        self[22] = CollectionMethods.FreqDomainEnvelopFrames(1)
+        #self[21] = CollectionMethods.FreqDomainEnvelopPartition(12)
+        #self[22] = CollectionMethods.FreqDomainEnvelopFrames(12)
         self[23] = CollectionMethods.FrequencyCenterOfMass(1)
         self[24] = CollectionMethods.FrequencyCenterOfMass(2)
         self[25] = CollectionMethods.MelFrequencyCempstrumCoeffs(12)
         self[26] = CollectionMethods.MelFrequencyCempstrumCoeffsMean(1)
         self[27] = CollectionMethods.MelFrequencyCempstrumCoeffsVariance(1)
         self[28] = CollectionMethods.MelFrequencyCempstrumCoeffsDiffMinMax(1)
-        self[29] = 0
-        self[30] = 0
-        self[31] = 0
+        #self[29] = 0
+        #self[30] = 0
+        #self[31] = 0
         return self
 
     def initDesignMatrix(self):
