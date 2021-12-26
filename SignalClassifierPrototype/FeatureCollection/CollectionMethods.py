@@ -731,17 +731,17 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
 
     # Public Interface
 
-    def invoke(self, signal, *args):
+    def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signal)   
+        result = super().invoke(signalData)   
 
         # Check if We have MFCC's - Create if we don't
         if (signalData.MelFreqCepstrumCoeffs is None):
             signalData.makeMelFreqCepstrumCoeffs(self._parameter)
 
         # Copy to result + return
-        np.copyto(result,signalData.makeMelFreqCepstrumCoeffs)
+        np.copyto(result,signalData.MelFreqCepstrumCoeffs)
         return result
 
     # Protected Interface

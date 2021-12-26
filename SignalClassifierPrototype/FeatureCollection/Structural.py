@@ -539,26 +539,25 @@ class MelFrequnecyCepstrumCoeffsConstructor:
     def call(self,signalData):
         """ Create Mel-Freqency Cepstrum Coeffs from Analysis Frames """
         self._signal = signalData
-
-
+        self._signal.MelFreqCepstrumCoeffs = np.zeros(shape=(self._numCoeffs,),dtype=np.float32)
         self._signal = None
         return signalData
-
 
 class BatchData:
     """ Class To Hold Data for Each Batch of Samples """
         
-    def __init__(self,batchIndex,numSamples,numFeatures):
+    def __init__(self,batchIndex,designMatrix,exptMeans=True,exptVars=True):
         """ Constructor for BatchDataInstance """
         self._batchIndex        = batchIndex
-        self._numSamplesExpt    = numSamples
-        self._numSamplesRead    = 0
+        self._designMatrix      = designMatrix
         self._means             = np.zeros(shape=(numFeatures),dtype=float)
         self._variances         = np.zeros(shape=(numFeatures),dtype=float)
-        
+        self._exportMeans       = exptMeans
+        self._exportVaris       = exptVars
+
     def __del__(self):
         """ Destructor for BatchData Instance """
-        pass
+        self._designMatrix = None
 
     # Getters and Setters
 
@@ -566,14 +565,14 @@ class BatchData:
         """ Get the Index of this Batch """
         return self._batchIndex
 
-    def getExpectedNumSamples(self):
-        """ Get the number of samples expected to process """
-        return self._numSamplesExpt
+    def getNumSamples(self) -> int:
+        """ Get the Number of Samples in this Design Matrix """
+        return self._designMatrix.getNumSamples()
 
-    def getActualNumSamples(self):
-        """ Get the number of samples actually processed """
-        return self._numSamplesRead
-
+    def getNumFeatures(self) -> int:
+        """ Get the number of features in this Design Matrix """
+        return self._designMatrix.getNumFeatures()
+    
     def getMeans(self):
         """ Get the Average of Each Feature """
         return self._means

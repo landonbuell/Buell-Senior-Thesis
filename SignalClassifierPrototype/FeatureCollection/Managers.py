@@ -503,11 +503,11 @@ class CollectionManager (Manager):
             self.getRundataManager().getFrameParams().reset()
 
         # Update the Batch's Meta Data       
-        batchData = Structural.BatchData(
-            self.getBatchIndex(),
-            len(self._batchQueue),
-            self.getNumFeatures() )
-        self.getRundataManager().addBatchData(batchData)
+        batchDataA = Structural.BatchData(self.getBatchIndex(), self._designMatrixA)
+        batchDataB = Structural.BatchData(self.getBatchIndex(), self._designMatrixB)
+
+        self.getRundataManager().addBatchData(batchDataA)
+        
         signalData = None
         return self
 
