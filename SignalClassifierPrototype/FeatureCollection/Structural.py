@@ -327,9 +327,21 @@ class AnalysisFramesParameters:
         result += self._padTail
         return result
 
-    def getFramesShape(self):
-        """ Get the Shape of the Analysis Frames Matrix """
+    def getTimeFramesShape(self):
+        """ Get the Shape of the Time-Series Analysis Frames Matrix """
         return ( self.getMaxNumFrames(), self.getTotalFrameSize(), )
+
+    def getFreqFramesShape(self,sampleRate=44100):
+        """ Get the size of each Freq-Series Frames """
+        fftAxis = fftpack.fftfreq(self.getTotalFrameSize,1/sampleRate)
+        mask = np.where(
+            (fftAxis>=self._freqLowHz) & 
+            (fftAxis<=self._freqHighHz) )[0]   # get slices    
+        return np.sum(mask)
+
+    def getFreqFramesShape(self,sampleRate=44100):
+        """ Get the Shape of the Freq-Series Analysis Frames Matrix """
+        return (self.getMaxNumFrames(), self.getFreqFramesShape(), )
 
     # Magic Methods
 

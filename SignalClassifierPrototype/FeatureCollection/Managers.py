@@ -350,15 +350,6 @@ class CollectionManager (Manager):
         """ Get the Design Matrix B"""
         return self._designMatrixB
 
-    def getNumFeatures(self):
-        """ Compute the Number of Features from the Method Queue """
-        numFeatures = 0
-        for item in self._methodQueueA:
-            if (item == 0):
-                continue
-            numFeatures += item.getReturnSize()
-        return numFeatures
-
     # Public Interface
 
     def build(self):
@@ -379,10 +370,10 @@ class CollectionManager (Manager):
         self._batchIndex = batchIndex
 
         # Build the Design Matrix
-        sampleShapeA = (self.getNumFeatures(),)
-        sampleShapeB = (1,)
-        self._designMatrixA = CommonStructures.DesignMatrix(batchSize,sampleShapeA)
-        self._designMatrixB = CommonStructures.DesignMatrix(batchSize,sampleShapeB)
+        shapeA = (self.getNumFeaturesA(), )
+        shapeB = (self.getNumFeaturesB()[0] * self.getNumFeaturesB()[1], )
+        self._designMatrixA = CommonStructures.DesignMatrix(batchSize,shapeA)
+        self._designMatrixB = CommonStructures.DesignMatrix(batchSize,shapeB)
 
         # Create + Evaluate the Batch
         self.createBatchQueue(batchIndex)      
@@ -451,10 +442,8 @@ class CollectionManager (Manager):
     def initDesignMatrix(self):
         """ Initialize the Design Matrix Instance """
         numSamples = self.getSampleManager().getSizeOfBatch(self._batchIndex)
-        shapeA = (self.getNumFeatures(),)
-        shapeB = (1,)
-        self._designMatrixA = CommonStructures.DesignMatrix(numSamples,shapeA)
-        self._designMatrixB = CommonStructures.DesignMatrix(numSamples,shapeB)
+        self._designMatrixA = CommonStructures.DesignMatrix(numSamples,self.getRundataManager().getShapeSampleA() )
+        self._designMatrixB = CommonStructures.DesignMatrix(numSamples,self.getRundataManager().getShapeSampleB() )
         return self
 
     def createBatchQueue(self,idx):
@@ -467,8 +456,8 @@ class CollectionManager (Manager):
         signalData      = None
 
         # Build the Feature Vectors for Each Sample
-        shapeA = (self.getNumFeatures(),)
-        shapeB = (1,)
+        shapeA = self.getRundataManager().getShapeSampleA()
+        shapeB = self.getRundataManager().getShapeSampleB()
         featureVectorA   = CommonStructures.FeatureVector(shapeA)
         featureVectorB   = CommonStructures.FeatureVector(shapeB)
             
@@ -543,7 +532,6 @@ class CollectionManager (Manager):
             signalData.makeAnalysisFramesFreq(
                 self.getRundataManager().getFrameParams() )
         result = signalData.AnalysisFramesFreq.flatten()
-        
         return self
 
     def makeAllFields(self,signalData,framesTime=True,framesFreq=True,
@@ -624,6 +612,21 @@ class RundataManager (Manager):
     def getFrameParams(self):
         """ Return AnalysisFrameParameters Structure """
         return self._frameParams
+
+    def getShapeSampleA(self):
+        """ Get the Shape of the Samples in Data A """
+        size = 0
+        for item in self.getCollectionManager().getMethodQueue():
+            if (item == 0):
+                continue
+            size += item.getReturnSize()
+        return size
+
+    def getShapeSampleB(self,sampleRate):
+        """ Get the Shape of the Samples in Data B """
+        size = None
+
+        return size
 
     # Public Interface
 
