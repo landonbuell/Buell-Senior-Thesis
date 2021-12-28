@@ -284,7 +284,8 @@ class AnalysisFramesParameters:
     values to use when building Analysis Frames """
 
     def __init__(self,samplesPerFrame=1024,samplesOverlap=768,
-                 headPad=1024,tailPad=2048,maxFrames=256):
+                 headPad=1024,tailPad=2048,maxFrames=256,
+                 window="hanning",freqLowHz=0,freqHighHz=12000):
         """ Constructor for AnalysisFramesParameters Instance """
 
         # For Time Series Frames
@@ -296,9 +297,9 @@ class AnalysisFramesParameters:
         self._framesInUse       = 0
 
         # For Frequency Series Frames
-        self._windowFunction    = "Hanning"
-        self._freqLowHz         = 0
-        self._freqHighHz        = 12000
+        self._windowFunction    = window
+        self._freqLowHz         = freqLowHz
+        self._freqHighHz        = freqHighHz
 
     def __del__(self):
         """ Destructor for AnalysisFramesParameters Instance """
@@ -313,35 +314,37 @@ class AnalysisFramesParameters:
 
     def getMaxNumFrames(self) -> int:
         """ Get the Max Number of Frames to Use """
-        return self._params._maxFrames
+        return self._maxFrames
 
     def getNumFramesInUse(self) -> int:
         """ Get the Number of Frames Currently in use """
-        return self._params._framesInUse
+        return self._framesInUse
 
-    def getTotalFrameSize(self) -> int:
-        """ Get total Size of Each Frame including padding """
+    def getTotalTimeFrameSize(self) -> int:
+        """ Get total Size of Each Time Frame including padding """
         result = 0
         result += self._padHead
         result += self._samplesPerFrame 
         result += self._padTail
         return result
 
+    def getTotalFreqFrameSize(self,sampleRate=44100):
+        """ Get total Size of Each Frequency Frame including padding """
+        fftAxis = fftpack.fftfreq(self.getTotalTimeFrameSize(),1/sampleRate)
+        mask = np.zeros(shape=(fftAxis.shape[0],),dtype=np.int32)
+        for i,item in enumerate(fftAxis):
+            if (item >= self._freqLowHz) and (item <= self._freqHighHz):
+                mask[i] = 1
+        size = np.sum(mask)
+        return size
+
     def getTimeFramesShape(self):
         """ Get the Shape of the Time-Series Analysis Frames Matrix """
-        return ( self.getMaxNumFrames(), self.getTotalFrameSize(), )
-
-    def getFreqFramesShape(self,sampleRate=44100):
-        """ Get the size of each Freq-Series Frames """
-        fftAxis = fftpack.fftfreq(self.getTotalFrameSize,1/sampleRate)
-        mask = np.where(
-            (fftAxis>=self._freqLowHz) & 
-            (fftAxis<=self._freqHighHz) )[0]   # get slices    
-        return np.sum(mask)
+        return ( self.getMaxNumFrames(), self.getTotalTimeFrameSize(), )
 
     def getFreqFramesShape(self,sampleRate=44100):
         """ Get the Shape of the Freq-Series Analysis Frames Matrix """
-        return (self.getMaxNumFrames(), self.getFreqFramesShape(), )
+        return (self.getMaxNumFrames(), self.getTotalFreqFrameSize(), )
 
     # Magic Methods
 

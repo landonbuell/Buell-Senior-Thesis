@@ -185,7 +185,10 @@ class DesignMatrix:
 
     def getShape(self):
         """ Get Total Shape of Design Matrix """
-        return ((self._numSamples,) + self._sampleShape)
+        shape = [self._numSamples]
+        for item in self._sampleShape:
+            shape.append(item)
+        return tuple(shape)
 
     def getSampleShape(self):
         """ Get the Shape of Each Sample in the Design Matrix """

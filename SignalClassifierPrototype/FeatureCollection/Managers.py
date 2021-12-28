@@ -442,8 +442,10 @@ class CollectionManager (Manager):
     def initDesignMatrix(self):
         """ Initialize the Design Matrix Instance """
         numSamples = self.getSampleManager().getSizeOfBatch(self._batchIndex)
-        self._designMatrixA = CommonStructures.DesignMatrix(numSamples,self.getRundataManager().getShapeSampleA() )
-        self._designMatrixB = CommonStructures.DesignMatrix(numSamples,self.getRundataManager().getShapeSampleB() )
+        shapeA = self.getRundataManager().getShapeSampleA()
+        shapeB = self.getRundataManager().getShapeSampleB()
+        self._designMatrixA = CommonStructures.DesignMatrix(numSamples, shapeA)
+        self._designMatrixB = CommonStructures.DesignMatrix(numSamples, shapeB)
         return self
 
     def createBatchQueue(self,idx):
@@ -620,13 +622,13 @@ class RundataManager (Manager):
             if (item == 0):
                 continue
             size += item.getReturnSize()
-        return size
+        return (size,)
 
-    def getShapeSampleB(self,sampleRate):
+    def getShapeSampleB(self,sampleRate=44100):
         """ Get the Shape of the Samples in Data B """
-        size = None
-
-        return size
+        if (self._frameParams is None):
+            self.initAnalysisFrameParams()
+        return self.getFrameParams().getFreqFramesShape()
 
     # Public Interface
 
@@ -694,5 +696,8 @@ class RundataManager (Manager):
             samplesOverlap=768,
             headPad=1024,
             tailPad=2048,
-            maxFrames=256)
+            maxFrames=256,
+            window="hanning",
+            freqLowHz=0,
+            freqHighHz=12000)
         return self

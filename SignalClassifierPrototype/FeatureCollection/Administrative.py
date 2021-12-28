@@ -109,15 +109,16 @@ class CollectionApplicationProtoype:
         """ Run Application Startup Sequence """
         
         # Init the Managers
-        self._sampleManager     = Managers.SampleManager()
-        self._collectionManager = Managers.CollectionManager()
-        self._rundataManager       = Managers.RundataManager()
+        self._sampleManager         = Managers.SampleManager()
+        self._collectionManager     = Managers.CollectionManager()
+        self._rundataManager        = Managers.RundataManager()
 
         # Run Each Build Method
         self._sampleManager.build()
         self._collectionManager.build()
         self._rundataManager.build()
-
+        
+        
         return self
 
     def execute(self):
