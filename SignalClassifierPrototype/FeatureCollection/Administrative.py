@@ -200,7 +200,7 @@ class AppSettings:
         self._shuffleSeed   = shuffleSeed
         self._verbose       = 1
         self._logToConsole  = True
-        self._logToFile     = False
+        self._logToFile     = True
 
         self.initInputPaths(pathsInput)
         self.initOutputPath(pathOutput)
@@ -352,50 +352,43 @@ class Logger:
     def __init__(self):
         """ Constructor for Logger Instance """      
         self._path          = None
+        self._outFile       = None
         self._toConsole     = CollectionApplicationProtoype.AppInstance.getSettings().getLogToConsole()
         self._toFile        = CollectionApplicationProtoype.AppInstance.getSettings().getLogToFile()
+        
+        if (self._toFile):
+            self._outFile = open("logger.txt",w)
         self.writeHeader()
 
     def __del__(self):
-        """ Destructor for Logger Instance """
         self.writeFooter()
+        """ Destructor for Logger Instance """
+        if (self._outFile is not None):
+            if (self._outFile.closed() == False):
+                self._outFile.close()
+        self._outFile = None
 
     # Public Interface
 
     def logMessage(self,message:str,timeStamp=True):
         """ Log Message to Console or Text """
+        formattedMessage = None
         if (timeStamp == True):
             # Log Message w/ a TimeStamp
-            self.logWithTimeStamp(message)
+            now = CollectionApplicationProtoype.getDateTime()
+            formattedMessage = "\t{0:<32}\t{1:<128}".format(now,msg)
         else:
             # Log Message w/o a TimeStamp
-            self.logWithoutTimeStamp(message)
+            formattedMessage = "\t{0:<128}".format(msg)
+
+        # Write the Message to Console and/or to File
+        if (self._toConsole == True):
+            print(formattedMessage)
+        if (self._toFile == True):
+            self._outFile.write(formattedMessage)
         return self
 
     # Private Interface
-
-    def logWithTimeStamp(self,msg:str):
-        """ Log Message With TimeStamp """
-        now = CollectionApplicationProtoype.getDateTime()
-        if (self._toConsole):
-            # Write Message to Console
-            print("\t{0:<32}\t{1:<128}".format(now,msg))
-        if (self._toFile):
-            # Write Message to File
-            errMsg = "ERROR: Log to File is not Implemented yet"
-            raise NotImplementedError(errMsg)
-        return self
-
-    def logWithoutTimeStamp(self,msg:str):
-        """ Log Message With TimeStamp """
-        if (self._toConsole):
-            # Write Message to Console
-            print("\t{0:<128}".format(msg))
-        if (self._toFile):
-            # Write Message to File
-            errMsg = "ERROR: Log to File is not Implemented yet"
-            raise NotImplementedError(errMsg)
-        return self
 
     def writeHeader(self):
         """ Write Header To Logger """
