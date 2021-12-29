@@ -331,11 +331,10 @@ class AnalysisFramesParameters:
     def getTotalFreqFrameSize(self,sampleRate=44100):
         """ Get total Size of Each Frequency Frame including padding """
         fftAxis = fftpack.fftfreq(self.getTotalTimeFrameSize(),1/sampleRate)
-        mask = np.zeros(shape=(fftAxis.shape[0],),dtype=np.int32)
-        for i,item in enumerate(fftAxis):
-            if (item >= self._freqLowHz) and (item <= self._freqHighHz):
-                mask[i] = 1
-        size = np.sum(mask)
+        mask = np.where(
+            (fftAxis>=self._freqLowHz) & 
+            (fftAxis<=self._freqHighHz) )[0]   # get slices
+        size = mask.shape[0]
         return size
 
     def getTimeFramesShape(self):
@@ -565,10 +564,13 @@ class BatchData:
         """ Constructor for BatchDataInstance """
         self._batchIndex        = batchIndex
         self._designMatrix      = designMatrix
-        self._means             = np.zeros(shape=(numFeatures),dtype=float)
-        self._variances         = np.zeros(shape=(numFeatures),dtype=float)
+        self._means             = None
+        self._varis             = None
         self._exportMeans       = exptMeans
         self._exportVaris       = exptVars
+
+        self.initMeans()
+        self.initVaris()
 
     def __del__(self):
         """ Destructor for BatchData Instance """
@@ -594,7 +596,7 @@ class BatchData:
 
     def getVariances(self):
         """ Get the Variance of each Feature """
-        return self._variances
+        return self._varis
 
     def incrementNumSamplesRead(self,amount):
         """ Increment the Number of Samples Read in this Batch """
@@ -608,6 +610,22 @@ class BatchData:
         return self
 
     # Private Interface
+
+    def initMeans(self):
+        """ Initialize the Means Array """
+        if (self._exportMeans == True):
+            # Store the Average of Each Feature
+            numFeatures = self._designMatrix.getNumFeatures()
+            self._means = np.zeros(shape=(numFeatures,),dtype=np.float32)
+        return self
+
+    def initVaris(self):
+        """ Initialize the Means Array """
+        if (self._exportVaris == True):
+            # Store the Average of Each Feature
+            numFeatures = self._designMatrix.getNumFeatures()
+            self._varis = np.zeros(shape=(numFeatures,),dtype=np.float32)
+        return self
 
 class WindowFunctions:
     """ Static Class to Hold All Window Functions """

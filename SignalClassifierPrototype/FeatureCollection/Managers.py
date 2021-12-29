@@ -370,8 +370,8 @@ class CollectionManager (Manager):
         self._batchIndex = batchIndex
 
         # Build the Design Matrix
-        shapeA = (self.getNumFeaturesA(), )
-        shapeB = (self.getNumFeaturesB()[0] * self.getNumFeaturesB()[1], )
+        shapeA = self.getRundataManager().getShapeSampleA()
+        shapeB = self.getRundataManager().getShapeSampleB()
         self._designMatrixA = CommonStructures.DesignMatrix(batchSize,shapeA)
         self._designMatrixB = CommonStructures.DesignMatrix(batchSize,shapeB)
 
@@ -381,12 +381,12 @@ class CollectionManager (Manager):
 
         # Serialize the Design Matrix
         outputPath = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()
-        outXa   = os.path.join("batch{0}_Xa.bin".format(batchIndex))
-        outXb   = os.path.join("batch{0}_Xb.bin".format(batchIndex))
-        outY    = os.path.join("batch{0}_Y.bin".format(batchIndex))
+        outXa   = os.path.join(outputPath,"batch{0}_Xa.bin".format(batchIndex))
+        outXb   = os.path.join(outputPath,"batch{0}_Xb.bin".format(batchIndex))
+        outY    = os.path.join(outputPath,"batch{0}_Y.bin".format(batchIndex))
 
         self._designMatrixA.serialize(outXa,outY)
-        self._designMatrixA.serialize(outXb,None)
+        self._designMatrixB.serialize(outXb,None)
 
         # Compute Meta Data and then Clear
         self._designMatrixA.clearData()
@@ -497,7 +497,8 @@ class CollectionManager (Manager):
         batchDataA = Structural.BatchData(self.getBatchIndex(), self._designMatrixA)
         batchDataB = Structural.BatchData(self.getBatchIndex(), self._designMatrixB)
 
-        self.getRundataManager().addBatchData(batchDataA)
+        self.getRundataManager().addBatchData(batchDataA,increment=True)
+        self.getRundataManager().addBatchData(batchDataB,increment=False)
         
         signalData = None
         return self
@@ -533,8 +534,8 @@ class CollectionManager (Manager):
             # No Analysis Frames Freq? -> Make them
             signalData.makeAnalysisFramesFreq(
                 self.getRundataManager().getFrameParams() )
-        result = signalData.AnalysisFramesFreq.flatten()
-        return self
+        # Input for CNN is the Freq-Series AnalysisFrames
+        return signalData.AnalysisFramesFreq
 
     def makeAllFields(self,signalData,framesTime=True,framesFreq=True,
                       MFCCs=True,ACCs=True,ZXRs=True,
@@ -658,11 +659,12 @@ class RundataManager (Manager):
         super().clean()
         return self
 
-    def addBatchData(self,batchData):
+    def addBatchData(self,batchData,increment):
         """ Add Batch Data Instance to this Instance """
         self._batchDataObjs.append(batchData)
-        self._runInfo.incrementExpectedNumSamples( batchData.getExpectedNumSamples() )
-        self._runInfo.incrementActualNumSamples( batchData.getActualNumSamples() )
+        if (increment == True):
+            self._runInfo.incrementExpectedNumSamples( batchData.getNumSamples() )
+            self._runInfo.incrementActualNumSamples( batchData.getNumSamples() )
         return self
 
     # Private Interface

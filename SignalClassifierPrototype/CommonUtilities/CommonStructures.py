@@ -186,13 +186,20 @@ class DesignMatrix:
     def getShape(self):
         """ Get Total Shape of Design Matrix """
         shape = [self._numSamples]
-        for item in self._sampleShape:
-            shape.append(item)
+        for axisShape in self._sampleShape:
+            shape.append(axisShape)
         return tuple(shape)
 
     def getSampleShape(self):
         """ Get the Shape of Each Sample in the Design Matrix """
         return self._sampleShape
+
+    def getNumFeatures(self):
+        """ Get the Total Number of Features for each sample """
+        numFeatures = 1
+        for axisSize in self._sampleShape:
+            numFeatures *= axisSize
+        return numFeatures
 
     def getNumSamples(self) -> int:
         """ Get the Number of Samples in the Design Matrix """
@@ -211,7 +218,7 @@ class DesignMatrix:
     def setData(self,x):
         """ Set Design Matrix is an Array """
         self._numSamples = x.shape[0]
-        self._sampleShape = x.shape[1:]
+        self._sampleShape = tuple(x.shape[1:])
         self._data = x
         return self
 
@@ -309,7 +316,7 @@ class DesignMatrix:
             Y = self._data.getLabels()
             self._outFileStream = open(self._pathY,"wb")
             for i in range(numSamples):
-                row = Y[i].flatten().tobytes().astype("uint16")
+                row = Y[i].flatten().tobytes()
                 self._outFileStream.write( row )
             # Close + Return
             self._outFileStream.close()

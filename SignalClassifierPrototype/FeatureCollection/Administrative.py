@@ -124,10 +124,14 @@ class CollectionApplicationProtoype:
     def execute(self):
         """ Run Application Execution Sequence """
         
+        batchLimit = self.getSettings().getBatchLimit()
         for idx,size in enumerate(self._sampleManager.getBatchSizes()):
 
             # Run the Collection Manager on this Batch
             self._collectionManager.call(idx,size)
+            if (idx == batchLimit):
+                # Maximum number of batches reached
+                break   
 
         self._rundataManager.call()
         return self
@@ -186,12 +190,13 @@ class AppSettings:
     """
     Contains all runtime settings for duration of application
     """
-    def __init__(self,pathsInput,pathOutput,batchSize=32,shuffleSeed=-1):
+    def __init__(self,pathsInput,pathOutput,batchSize=32,batchLimit=-1,shuffleSeed=-1):
         """ Constructor for AppSettings Instance """
         self._pathStartup   = os.getcwd()
         self._pathsInput    = set()
         self._pathOutput    = None
         self._batchSize     = batchSize
+        self._batchLimit    = batchLimit
         self._shuffleSeed   = shuffleSeed
         self._verbose       = 1
         self._logToConsole  = True
@@ -221,6 +226,10 @@ class AppSettings:
     def getBatchSize(self) -> int:
         """ Return the Batch Size """
         return self._batchSize
+
+    def getBatchLimit(self) -> int:
+        """ Return the batch counter limit """
+        return self._batchLimit
 
     def getShuffleSeed(self) -> int:
         """ Return the Sufffle Seed """
@@ -263,7 +272,7 @@ class AppSettings:
         result = AppSettings(
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
             #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v1",
+            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v2",
             batchSize=32,
             shuffleSeed=-1)
         return result
@@ -282,6 +291,7 @@ class AppSettings:
         if (os.path.isdir(fullOutput)):
             # Content may be overwritten
             msg = "WARNING: Output path exists. Contents may be over written"
+            # Cannot Log Message yet - no app instance
         else:
             os.makedirs(fullOutput)
         self._pathOutput = fullOutput
@@ -314,6 +324,7 @@ class AppSettings:
 
             # Write Collection Settings
             self._outFileStream.write( self._outFmtStr("BatchSize",self._data.getBatchSize() ) )
+            self._outFileStream.write( self._outFmtStr("BatchLimit",self._data.getBatchLimit() ) )
             self._outFileStream.write( self._outFmtStr("ShuffleSeed",self._data.getShuffleSeed() ) )
             self._outFileStream.write( self._outFmtStr("Verbose",self._data.getVerbose() ) )
 
@@ -416,10 +427,3 @@ class Logger:
         """ Get a Spacer String """
         return "\n" + ("-" * numChars) + "\n"
     
-
-
-        
-
-
-
-
