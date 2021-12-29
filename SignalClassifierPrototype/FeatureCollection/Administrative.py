@@ -272,7 +272,7 @@ class AppSettings:
         result = AppSettings(
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
             #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v2",
+            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v3",
             batchSize=32,
             shuffleSeed=-1)
         return result
