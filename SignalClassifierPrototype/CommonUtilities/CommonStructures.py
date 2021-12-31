@@ -82,9 +82,15 @@ class Deserializer:
         return False
 
     def stringToList(self,inputString,delimiter=" ",outType=None):
-        """ Convert Elements of list to string w/ delimiter """
+        """ Convert string to list of type """
         outputList = inputString.split(delimiter)
-        outputList = [outType(x) for x in outputList]
+        if outType is not None:
+            outputList = [outType(x) for x in outputList]
+        return outputList
+
+    def stringToIntList(self,inputString,delimiter):
+        """ Convert string to list of type """
+        outputList = []
         return outputList
 
     def __repr__(self):
@@ -255,6 +261,7 @@ class DesignMatrix:
     @staticmethod
     def deserialize(self,path):
         """ Read this design matrix from a file """
+
         return self
 
     def clearData(self):
@@ -391,7 +398,8 @@ class RunInformation:
     Class to Hold and Use all Metadata related to a feature collection Run
     """
 
-    def __init__(self,inputPaths,outputPath):
+    def __init__(self,inputPaths,outputPath,
+                 numSamplesExpected=0,numSamplesRead=0):
         """ Constructor for RunInformation Instance """
         self._pathsInput        = inputPaths
         self._pathOutput        = outputPath
@@ -427,9 +435,19 @@ class RunInformation:
         """ Get the number of samples expected to process """
         return self._numSamplesExpt
 
+    def setExpectedNumSamples(self,num):
+        """ Set the number of samples expected to process """
+        self._numSamplesExpt = num
+        return self
+
     def getActualNumSamples(self):
         """ Get the number of samples actually processed """
         return self._numSamplesRead
+
+    def setActualNumSamples(self,num):
+        """ Set the number of samples actually processed """
+        self._numSamplesRead = num
+        return self
 
     def incrementExpectedNumSamples(self,amount):
         """ Increment the Expected number of Samples by the amount """
@@ -445,13 +463,28 @@ class RunInformation:
         """ Get the shape of samples in design matrix A """
         return self._shapeSampleA
 
+    def setShapeSampleA(self,shape):
+        """ Set the Shape of samples in design matrix A """
+        self._shapeSampleA = shape
+        return self
+
     def getShapeSampleB(self):
         """ Get the shape of samples in design matrix B """
         return self._shapeSampleB
 
+    def setShapeSampleB(self,shape):
+        """ Set the Shape of samples in design matrix B """
+        self._shapeSampleB = shape
+        return self
+
     def getBatchSizes(self):
         """ Get the Sizes of all Batches """
         return self._batchSizes
+
+    def setBatchSizes(self,sizes):
+        """ Set the Sizes of all batches """
+        self._batchSizes = sizes
+        return self
 
     def getNumBatches(self):
         """ Get the Number of Batches in the run """
@@ -490,7 +523,14 @@ class RunInformation:
     @staticmethod
     def deserialize(path):
         """ Deserialize this instance from specified path """
-        return False
+        runInfoPath = os.path.join(path,"runInformation.txt")
+        if (os.path.isfile(runInfoPath) == False):
+            # RunInfo File
+            errMsg = "ERROR: run information file not found at '{0}' ".format(runInfoPath)
+            FileNotFoundError(errMsg)
+        reader = RunInformation.RunInformationDeserializer(runInfoPath)
+        runInfo = reader.call()
+        return runInfo
 
 
     # Private Interface
@@ -542,14 +582,62 @@ class RunInformation:
         def __init__(self,path):
             """ Constructor for RunInformationSerializer Instance """
             super().__init__(path)
+            self._inFileContents = None
 
         def __del__(self):
             """ Destructor for DesignMatrixSerializer Instance """
             super().__del__()
+            self._inFileContents = None
 
         def call(self):
-            """ Serialize the RunInfo Instance """          
-            return True
+            """ Serialize the RunInfo Instance """    
+            self._inFileStream = open(self._inputPath,"r")
+            self._inFileContents = self._inFileStream.readlines()
+            
+            # Find all of the Necessary parts
+            runInfo = self.parseAllFeilds()
+            return runInfo
+
+        # Private Interface
+
+        def parseAllFeilds(self):
+            """ Find all of the Feilds to Create the RunInformation Instance """
+            
+            # Parse the feilds from the RunInfo File
+            pathsInput      = self.findAndParseStrs("InputPath")
+            pathOutput      = self.findAndParseStrs("OutputPath")[-1]
+            samplesExpected = self.findAndParseInts("ExpectedSamples")[-1]
+            samplesActual   = self.findAndParseInts("ProcessedSamples")[-1]
+            shapeSampleA    = self.findAndParseInts("ShapeSampleA")
+            shapeSampleB    = self.findAndParseInts("ShapeSampleB")
+            batchSizes      = self.findAndParseInts("BatchSizes")
+            
+            # Assign the Feilds to the instance
+            runInfo = RunInformation(pathsInput,pathOutput)
+            runInfo.setExpectedNumSamples(samplesExpected)
+            runInfo.setActualNumSamples(samplesActual)
+            runInfo.setShapeSampleA(shapeSampleA)
+            runInfo.setShapeSampleB(shapeSampleB)
+            runInfo.setBatchSizes(batchSizes)
+            return runInfo
+
+        def findAndParseStrs(self,keyword,):
+            """ Find All words with token and return as list of Strings"""
+            result = []
+            for line in self._inFileContents:
+                tokens = line.split()
+                if tokens[0].startswith(keyword):
+                    result.append(tokens[-1].strip())
+            return result
+
+        def findAndParseInts(self,keyword):
+            """ Find All words with token and return as list of Strings"""
+            result = self.findAndParseStrs(keyword)
+            result = result[0].split(',')
+            result = ["".join(ch for ch in x if ch.isdigit()) for x in result]
+            result = [int(x) for x in result if x != '']
+            return result
+        
 
     # Magic Methods
 
