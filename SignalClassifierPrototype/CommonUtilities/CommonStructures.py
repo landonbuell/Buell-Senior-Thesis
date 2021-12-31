@@ -12,6 +12,7 @@ Date:           December 2021
 
 import os
 import sys
+from typing import overload
 import numpy as np
 
         #### CLASS DEFINITIONS ####
@@ -217,11 +218,11 @@ class DesignMatrix:
         self.clearData()
         return self
 
-    def getData(self):
+    def getFeatures(self):
         """ Get Design Matrix as an Array """
         return self._data
 
-    def setData(self,x):
+    def setFeatures(self,x):
         """ Set Design Matrix is an Array """
         self._numSamples = x.shape[0]
         self._sampleShape = tuple(x.shape[1:])
@@ -259,10 +260,12 @@ class DesignMatrix:
         return success
 
     @staticmethod
-    def deserialize(self,path):
-        """ Read this design matrix from a file """
-
-        return self
+    def deserialize(pathX,pathY,numSamples,shape):
+        """ Read a design matrix from a file """
+        reader = DesignMatrix.DesignMatrixDeserializer(
+            pathX,pathY,numSamples,shape)
+        matrix = reader.call()
+        return matrix
 
     def clearData(self):
         """ Clear All Entries in this Array """
@@ -345,9 +348,11 @@ class DesignMatrix:
     class DesignMatrixDeserializer(Deserializer):
         """ Class to Serialize a DesignMatrix Instance """
 
-        def __init__(self,path,numSamples,sampleShape):
+        def __init__(self,pathX,pathY,numSamples,sampleShape):
             """ Constructor for DesignMatrixSerializer Instance """
-            super().__init__(path)
+            super().__init__("-1")
+            self._pathX = pathX
+            self._pathY = pathY
             self._data = DesignMatrix(numSamples,sampleShape)
 
         def __del__(self):
@@ -356,9 +361,41 @@ class DesignMatrix:
 
         def call(self):
             """ Run the Deserializer """
+            self.validateInputPaths()
+            self._data.setFeatures( self.readFeatures() )
+            self._data.setLabels( self.readLabels() )
+            return self._data
 
-            return False
-    
+        # Private Interface
+
+        def validateInputPaths(self):
+            """ Check that Input Directories Exists """
+            if (os.path.isfile(self._pathX) == False):
+                # Path does not Exist
+                FileNotFoundError(self._pathX)
+            if (os.path.isfile(self._pathY) == False):
+                # Path does not Exist
+                FileNotFoundError(self._pathY)
+            return True
+
+        def readFeatures(self):
+            """ Read the Feature Data from the File into the Design Matrix """
+            shape = self._data.getShape()
+            self._inFileStream = open(self._pathX,"rb")
+            fileContents = self._inFileStream.read()
+            self._inFileStream.close()
+            array = np.frombuffer(fileContents,dtype=np.float32)         
+            array = array.reshape( shape )         
+            return array
+
+        def readLabels(self):
+            """ Read the Feature Data from the File into the Design Matrix """
+            self._inFileStream = open(self._pathY,"rb")
+            fileContents = self._inFileStream.read()
+            self._inFileStream.close()
+            array = np.frombuffer(fileContents,dtype=np.int16)               
+            return array
+ 
     # Magic Methods 
 
     def __str__(self):
@@ -505,6 +542,20 @@ class RunInformation:
         return size
     
     # Public Interface 
+
+    def loadBatch(self,index):
+        """ Load In All Data from a chosen batch Index """
+        numSamples = self._batchSizes[index]
+        # Set the Matrix Paths
+        name = lambda idx,descp : "batch" + str(idx) + "_" + str(descp) + ".bin"
+        pathXa  = os.path.join(self._pathOutput, name(index,"Xa") )
+        pathXb  = os.path.join(self._pathOutput, name(index,"Xb") )
+        pathY   = os.path.join(self._pathOutput, name(index,"Y") )
+
+        # Load in the matrices
+        matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
+        matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
+        return (matrixA,matrixB,)
 
     def serialize(self,path=None):
         """ Serialize this Instance to specified Path """
