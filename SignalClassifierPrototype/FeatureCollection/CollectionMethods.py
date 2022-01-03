@@ -603,8 +603,8 @@ class FreqDomainEnvelopPartition(CollectionMethod):
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
-        self.validateInputSignal(signal);
-        result = super().invoke(signal)   
+        self.validateInputSignal(signalData);
+        result = super().invoke(signalData)   
         raise NotImplementedError(str(self.__class__) + " is not implemented")
         return result
 
@@ -739,9 +739,10 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
         # Check if We have MFCC's - Create if we don't
         if (signalData.MelFreqCepstrumCoeffs is None):
             signalData.makeMelFreqCepstrumCoeffs(self._parameter)
+        avgMFCCs = np.mean(signalData.MelFreqCepstrumCoeffs,axis=0)
 
         # Copy to result + return
-        np.copyto(result,signalData.MelFreqCepstrumCoeffs)
+        np.copyto(result,avgMFCCs)
         return result
 
     # Protected Interface
@@ -757,6 +758,48 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
         """ Validate that Parameter Values Makes Sense """
         super().validateParameter()
         return True
+
+    # Static Interface
+
+    @staticmethod
+    def melsToHertz(freqMels):
+        """ Cast Mels Samples to Hertz Samples """
+        return 700 * ( 10** (freqMels / 2595) -1 )
+
+    @staticmethod
+    def hertzToMels(freqHz):
+        """ Cast Hertz Samples to Mels Samples """
+        return 2595 * np.log10(1 + freqHz / 700)
+
+    @staticmethod
+    def melFilterBanks(numFilters,sampleRate=44100):
+        """ Build the Mel-Filter Bank Arrays """
+        frameParams = Administrative.CollectionApplicationProtoype.AppInstance.getRundataManager().getFrameParams()
+        freqBoundsHz = frameParams.getFreqBoundHz()
+        freqBoundsMels = MelFrequencyCempstrumCoeffs.hertzToMels(freqBoundsHz)
+        numSamplesTime = frameParams.getTotalTimeFrameSize()       
+
+        freqAxisMels = np.linspace(freqBoundsMels[0],freqBoundsMels[1],numFilters+2)
+        freqAxisHz = MelFrequencyCempstrumCoeffs.melsToHertz(freqAxisMels)
+        bins = np.floor((numSamplesTime+1)*freqAxisHz/sampleRate)
+        filterBanks = np.zeros(shape=(numFilters,numSamplesTime),dtype=np.float32)
+
+        # Iterate through filters
+        for i in range (1,numFilters + 1,1):
+            freqLeft = int(bins[i-1])
+            freqCenter = int(bins[i])
+            freqRight = int(bins[i+1])
+
+            for j in range(freqLeft,freqCenter):
+                filterBanks[i-1,j] = (j - freqLeft) / (freqCenter - freqLeft)
+            for j in range(freqCenter,freqRight):
+                filterBanks[i-1,j] = (freqRight - j) / (freqRight - freqCenter)
+
+        # Crop to Subset of Frequency Space
+        numSamplesFreq = frameParams.getFreqFramesShape()[1]
+        filterBanks = filterBanks[:,:numSamplesFreq]
+        return filterBanks
+
 
 class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
     """
@@ -779,7 +822,8 @@ class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
         self.validateInputSignal(signalData)
         result = super().invoke(signalData)   
         # Compute Mean of MFCC's
-        result[0] = np.mean(signalData.MelFreqCepstrumCoeffs)
+        avgMFCCs = np.mean(signalData.MelFreqCepstrumCoeffs,axis=0)
+        result[0] = np.mean(avgMFCCs)
         return result
 
     # Protected Interface
@@ -817,7 +861,8 @@ class MelFrequencyCempstrumCoeffsVariance(CollectionMethod):
         self.validateInputSignal(signalData)
         result = super().invoke(signalData)   
         # Compute Variance of MFCC's
-        result[0] = np.var(signalData.MelFreqCepstrumCoeffs)
+        avgMFCCs = np.mean(signalData.MelFreqCepstrumCoeffs,axis=0)
+        result[0] = np.var(avgMFCCs)
         return result
 
     # Protected Interface
@@ -855,8 +900,9 @@ class MelFrequencyCempstrumCoeffsDiffMinMax(CollectionMethod):
         self.validateInputSignal(signalData)
         result = super().invoke(signalData)   
         # Compute Diff of min and max of MFCC's
-        minVal = np.min(signalData.MelFreqCepstrumCoeffs)
-        maxVal = np.max(signalData.MelFreqCepstrumCoeffs)
+        avgMFCCs = np.mean(signalData.MelFreqCepstrumCoeffs,axis=0)
+        minVal = np.min(avgMFCCs)
+        maxVal = np.max(avgMFCCs)
         result[0] = maxVal - minVal
         return result
 

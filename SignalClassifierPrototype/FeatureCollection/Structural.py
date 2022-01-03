@@ -320,6 +320,10 @@ class AnalysisFramesParameters:
         """ Get the Number of Frames Currently in use """
         return self._framesInUse
 
+    def getFreqBoundHz(self):
+        """ Get the Low + High Freq Bound in Hz """
+        return np.array([self._freqLowHz, self._freqHighHz])
+
     def getTotalTimeFrameSize(self) -> int:
         """ Get total Size of Each Time Frame including padding """
         result = 0
@@ -538,12 +542,14 @@ class AnalysisFramesFreqConstructor(AnalysisFramesConstructor):
 class MelFrequnecyCepstrumCoeffsConstructor:
     """ Class the Handle the Creation of all Mel-Frequency-Cepstrum Coeffs """
 
-    def __init__(self,numCoeffs,freqLowHz=0,freqHighHz=22050):
+    def __init__(self,numCoeffs,freqLowHz=0,freqHighHz=22050,sampleRate=44100):
         """ Constructor for MelFrequnecyCepstrumCoeffsConstructor Instance """
         self._numCoeffs = numCoeffs
         self._freqLowHz = freqLowHz
         self._freqHighHz = freqHighHz
-        self._signal = None
+        self._sampleRate = sampleRate
+        self._melFilterBanks = self.buildMelFilterBanks()
+       
 
     def __del__(self):
         """ Destructor for MelFrequnecyCepstrumCoeffsConstructor Instance """
@@ -552,10 +558,23 @@ class MelFrequnecyCepstrumCoeffsConstructor:
 
     def call(self,signalData):
         """ Create Mel-Freqency Cepstrum Coeffs from Analysis Frames """
-        self._signal = signalData
-        self._signal.MelFreqCepstrumCoeffs = np.zeros(shape=(self._numCoeffs,),dtype=np.float32)
-        self._signal = None
+        signalData.MelFreqCepstrumCoeffs = np.empty(
+            shape=(signalData.AnalysisFramesFreq.shape[0],self._numCoeffs),
+            dtype=np.float32)
+        # Compute the MFCCs for Each Freq-Series Analysis Frames
+        filtersTransp = self._melFilterBanks.transpose()
+        np.matmul(signalData.AnalysisFramesFreq,
+                  filtersTransp,
+                  out=signalData.MelFreqCepstrumCoeffs)        
         return signalData
+
+    # Private Interface
+
+    def buildMelFilterBanks(self):
+        """ Construct the Mel Filter Bank Envelopes """
+        filters = CollectionMethods.MelFrequencyCempstrumCoeffs.melFilterBanks(
+            self._numCoeffs,self._sampleRate)
+        return filters
 
 class BatchData:
     """ Class To Hold Data for Each Batch of Samples """

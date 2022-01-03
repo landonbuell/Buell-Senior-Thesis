@@ -357,7 +357,7 @@ class Logger:
         self._toFile        = CollectionApplicationProtoype.AppInstance.getSettings().getLogToFile()
         
         if (self._toFile):
-            self._outFile = open("logger.txt",w)
+            self._outFile = open("logger.txt","w")
         self.writeHeader()
 
     def __del__(self):
@@ -376,10 +376,10 @@ class Logger:
         if (timeStamp == True):
             # Log Message w/ a TimeStamp
             now = CollectionApplicationProtoype.getDateTime()
-            formattedMessage = "\t{0:<32}\t{1:<128}".format(now,msg)
+            formattedMessage = "\t{0:<32}\t{1:<128}".format(now,message)
         else:
             # Log Message w/o a TimeStamp
-            formattedMessage = "\t{0:<128}".format(msg)
+            formattedMessage = "\t{0:<128}".format(message)
 
         # Write the Message to Console and/or to File
         if (self._toConsole == True):
@@ -400,7 +400,7 @@ class Logger:
             ]
         # Log Each Line of the Header
         for msg in header:
-            self.logWithoutTimeStamp(msg)
+            self.logMessage(msg,False)
         return self
 
     def writeFooter(self):
