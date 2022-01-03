@@ -311,7 +311,7 @@ class DesignMatrix:
         def writeDataX(self):
             """ Write the Design Matrix Data """
             numSamples = self._data.getNumSamples()
-            X = self._data.getData()
+            X = self._data.getFeatures()
             self._outFileStream = open(self._pathX,"wb")
             for i in range(numSamples):
                 row = X[i].flatten().tobytes()
@@ -542,6 +542,25 @@ class RunInformation:
         return size
     
     # Public Interface 
+
+    def loadAllSamples(self,maxSamples=65536):
+        """ Load All Samples From All batches """
+        sampleIndex = 0
+        matrixA = DesignMatrix(self._numSamplesRead,self._shapeSampleA)
+        matrixB = DesignMatrix(self._numSamplesRead,self._shapeSampleB)
+        
+        # Iterate through Each Batch
+        for batchIndex,numSamples in enumerate(self._batchSizes):
+            batchMatricies = self.loadBatch(batchIndex)
+            # Copy Into parent Matrices
+            for sample in range(numSamples):
+                matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
+                matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
+                sampleIndex += 1
+        # Loaded All Batches - Return Total Design Matrices
+        return (matrixA,matrixB,)
+
+
 
     def loadBatch(self,index):
         """ Load In All Data from a chosen batch Index """
