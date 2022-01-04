@@ -112,7 +112,7 @@ class SignalData:
         self.Waveform               = samples
         self.AnalysisFramesTime     = None
         self.AnalysisFramesFreq     = None
-        self.MelFreqCepstrumCoeffs  = None
+        self.MelFilterBankEnergies  = None
         self.AutoCorrelationCoeffs  = None
         self.FrameZeroCrossings     = None
         self.FrameEnergyTime        = None
@@ -171,7 +171,7 @@ class SignalData:
         """ Clear all Fields of the Instance """
         self.AnalysisFramesTime     = None
         self.AnalysisFramesFreq     = None
-        self.MelFreqCepstrumCoeffs  = None
+        self.MelFilterBankEnergies         = None
         self.AutoCorrelationCoeffs  = None
         self.FrameZeroCrossings     = None
         self.FrameEnergyTime        = None
@@ -202,7 +202,7 @@ class SignalData:
         constructor = None
         return self
 
-    def makeMelFreqCepstrumCoeffs(self,numCoeffs):
+    def makeMelFilterBankEnergies(self,numCoeffs):
         """ Make All Mel-Cepstrum Frequency Coefficients """
         if (self.AnalysisFramesFreq is None):
             # No Waveform - Cannot make MFCC's
@@ -558,21 +558,21 @@ class MelFrequnecyCepstrumCoeffsConstructor:
 
     def call(self,signalData):
         """ Create Mel-Freqency Cepstrum Coeffs from Analysis Frames """
-        signalData.MelFreqCepstrumCoeffs = np.empty(
+        signalData.MelFilterBankEnergies = np.empty(
             shape=(signalData.AnalysisFramesFreq.shape[0],self._numCoeffs),
             dtype=np.float32)
         # Compute the MFCCs for Each Freq-Series Analysis Frames
         filtersTransp = self._melFilterBanks.transpose()
         np.matmul(signalData.AnalysisFramesFreq,
                   filtersTransp,
-                  out=signalData.MelFreqCepstrumCoeffs)        
+                  out=signalData.MelFilterBankEnergies)        
         return signalData
 
     # Private Interface
 
     def buildMelFilterBanks(self):
         """ Construct the Mel Filter Bank Envelopes """
-        filters = CollectionMethods.MelFrequencyCempstrumCoeffs.melFilterBanks(
+        filters = CollectionMethods.MelFilterBankEnergies.melFilters(
             self._numCoeffs,self._sampleRate)
         return filters
 

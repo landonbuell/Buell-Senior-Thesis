@@ -430,10 +430,10 @@ class CollectionManager (Manager):
         #self[22] = CollectionMethods.FreqDomainEnvelopFrames(12)
         self[23] = CollectionMethods.FrequencyCenterOfMass(1)
         self[24] = CollectionMethods.FrequencyCenterOfMass(2)
-        self[25] = CollectionMethods.MelFrequencyCempstrumCoeffs(12)
-        self[26] = CollectionMethods.MelFrequencyCempstrumCoeffsMean(1)
-        self[27] = CollectionMethods.MelFrequencyCempstrumCoeffsVariance(1)
-        self[28] = CollectionMethods.MelFrequencyCempstrumCoeffsDiffMinMax(1)
+        self[25] = CollectionMethods.MelFilterBankEnergies(12)
+        self[26] = CollectionMethods.MelFilterBankEnergiesMean(1)
+        self[27] = CollectionMethods.MelFilterBankEnergiesVariance(1)
+        self[28] = CollectionMethods.MelFilterBankEnergiesDiffMinMax(1)
         #self[29] = 0
         #self[30] = 0
         #self[31] = 0
@@ -645,6 +645,7 @@ class RundataManager (Manager):
         self.initSampleShapeSizes()
         self.initBatchSizeData()
         self.initAnalysisFrameParams()
+        self.initFeatureNamesMatrixA()
 
         return self
 
@@ -702,4 +703,18 @@ class RundataManager (Manager):
             window="hanning",
             freqLowHz=0,
             freqHighHz=12000)
+        return self
+
+    def initFeatureNamesMatrixA(self):
+        """ Initialize the List of all Feature Names for Design Matrix A """
+        runQueue = self.getCollectionManager().getMethodQueue()
+        featureNames = []
+        for item in runQueue:
+            # Visit Each Item in the Queue
+            if (item == 0):
+                # Skip this
+                continue
+            featureNames += item.featureNames()
+        # Attatch to Self + return
+        self._runInfo.setFeatureNamesA(featureNames)
         return self

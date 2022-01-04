@@ -99,7 +99,7 @@ class CollectionApplicationProtoype:
     def setCurrentDirectory(self,path):
         """ Set the Current Working Directory """
         if (os.path.isdir(path) == False):
-            raise IsADirectoryError()
+            raise NotADirectoryError()
         os.chdir(path)
         return self
 
@@ -142,8 +142,6 @@ class CollectionApplicationProtoype:
         self._sampleManager.clean()
         self._collectionManager.clean()
         self._rundataManager.clean()
-
-        self._logger = None
 
         return self
     

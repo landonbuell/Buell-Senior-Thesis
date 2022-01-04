@@ -38,11 +38,16 @@ class Serializer:
 
         return False
 
-    def listToString(self,inputList,delimiter=" "):
+    def listToString(self,inputList,delimiter=","):
         """ Convert Elements of list to string w/ delimiter """
         outputString = ""
-        for item in inputList:
-            outputString += str(item) + delimiter
+        if len(inputList) == 0:
+            # No Items in the Input List
+            outputString += "-1,"
+        else:
+            # Items in the Input List
+            for item in inputList:
+                outputString += str(item) + delimiter
         return outputString.strip()
 
     def writeHeader(self):
@@ -244,9 +249,17 @@ class DesignMatrix:
 
     def getNumClasses(self):
         """ Get the Number of classes in the data set """
-        return np.max(self._tgt)
+        return np.max(self._tgts)
 
     # public Interface
+
+    def averageOfFeatures(self):
+        """ Compute the Average of the Design Matrix Along each Feature """
+        return np.mean(self._data,axis=0,dtype=np.float32)
+
+    def varianceOfFeatures(self):
+        """ Compute the Variance of the Design Matrix Along each Feature """
+        return np.var(self._data,axis=0,dtype=np.float32)
 
     def serialize(self,pathX=None,pathY=None):
         """ Write this design matrix out to a file """   
@@ -447,6 +460,9 @@ class RunInformation:
         self._shapeSampleA      = []
         self._shapeSampleB      = []
 
+        self._featureNamesA     = []
+        self._featureNamesB     = []
+
         self._batchSizes        = []
 
 
@@ -512,6 +528,24 @@ class RunInformation:
     def setShapeSampleB(self,shape):
         """ Set the Shape of samples in design matrix B """
         self._shapeSampleB = shape
+        return self
+
+    def getFeatureNamesA(self):
+        """ Get the List of Feature names for Matrix A """
+        return self._featureNamesA
+
+    def setFeatureNamesA(self,names):
+        """ Set the List of Feature names for Matrix A """
+        self._featureNamesA = names
+        return self
+
+    def getFeatureNamesB(self):
+        """ Get the List of Feature names for Matrix B """
+        return self._featureNamesB
+
+    def setFeatureNamesB(self,names):
+        """ Set the List of Feature names for Matrix B """
+        self._featureNamesB = names
         return self
 
     def getBatchSizes(self):
@@ -636,6 +670,12 @@ class RunInformation:
             shapeSampleB = self.listToString(self._data.getShapeSampleB(),",")
             self._outFileStream.write( self._outFmtStr("ShapeSampleA",shapeSampleA ) )
             self._outFileStream.write( self._outFmtStr("ShapeSampleB",shapeSampleB ) )
+
+            # Write Feature Name Details
+            featureNamesA = self.listToString(self._data.getFeatureNamesA(),",")
+            featureNamesB = self.listToString(self._data.getFeatureNamesB(),",")
+            self._outFileStream.write( self._outFmtStr("FeatureNamesA", featureNamesA))
+            self._outFileStream.write( self._outFmtStr("FeatureNamesB", featureNamesB))
 
             # Write Batch Details
             batchSizes = self.listToString(self._data.getBatchSizes(),",")
