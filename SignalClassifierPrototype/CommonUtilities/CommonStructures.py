@@ -178,7 +178,6 @@ class FeatureVector:
         self._data[key] = value
         return self
 
-
 class DesignMatrix:
     """ Class To hold Design Matrix """
 
@@ -457,7 +456,44 @@ class DesignMatrix:
         self._data[key] = value.getData()
         return self
 
+class ClassOccuranceData:
+    """ Store and Export Inforamtion on the Occurance of Each Class """
 
+    def __init__(self):
+        """ Constructor for ClassOccuranceData Instance """
+        self._targetInts = None
+        self._targetStrs = None
+        self._targetCnts = None
+
+    def __del__(self):
+        """ Destructor for ClassOccuranceData Instance """
+        pass
+
+    # Getters and Setters
+
+    def getTargetInts(self):
+        """ Get an array of all rargets as integers """
+        return self._targetInts
+
+    def getTargetsStrs(self):
+        """ Get an array of all targets as strings """
+        return self._targetStrs
+
+    def getTargetCounts(self):
+        """ Get an array of the Counts of Each Target """
+        return self._targetCnts
+
+    # Public Interface
+
+    def serialize(self,path):
+        """ Serialize this Instance to Local Path """
+        
+        return self
+    
+    @staticmethod
+    def deserialize(path):
+        """ Deserialize an Instance from local path """
+        return self
 
 class RunInformation:
     """

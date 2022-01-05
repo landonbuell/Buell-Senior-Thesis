@@ -127,8 +127,7 @@ class SampleManager (Manager):
         """ Constructor for SampleManager Instance """
         super().__init__()
         self._sampleDataBase    = np.array([],dtype=object)
-        self._labelDictionary   = dict({})
-        self._classCounter      = dict({})
+        self._occuranceData     = CommonStructures.ClassOccuranceData()
         self._batchSizes        = None
         self._sampleIndex       = 0
 
