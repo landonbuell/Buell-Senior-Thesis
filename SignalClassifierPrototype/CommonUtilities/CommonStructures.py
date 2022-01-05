@@ -253,6 +253,22 @@ class DesignMatrix:
 
     # public Interface
 
+    def samplesInClass(self,classIndex):
+        """ Create New Design Matrix of Samples that all belong to one class """
+        if (classIndex not in self.getUniqueClasses()):
+            # Not a Valid Class
+            return DesignMatrix(1,self.getSampleShape())
+        # Find where targets matches index
+        mask = np.where(self._tgts == classIndex)[0]
+        newTgts = self._tgts[mask]
+        newData = self._data[mask]
+        # Create the new Design Matrix, attach values + Return
+        result = DesignMatrix(len(mask),self.getSampleShape())
+        result.setLabels(newTgts)
+        result.setFeatures(newData)
+        return result
+
+
     def averageOfFeatures(self):
         """ Compute the Average of the Design Matrix Along each Feature """
         return np.mean(self._data,axis=0,dtype=np.float32)

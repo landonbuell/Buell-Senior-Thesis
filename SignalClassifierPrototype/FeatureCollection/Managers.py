@@ -128,7 +128,7 @@ class SampleManager (Manager):
         super().__init__()
         self._sampleDataBase    = np.array([],dtype=object)
         self._labelDictionary   = dict({})
-        self._classCounter      = None
+        self._classCounter      = dict({})
         self._batchSizes        = None
         self._sampleIndex       = 0
 
@@ -182,7 +182,8 @@ class SampleManager (Manager):
     def getNextSample(self):
         """ Get the Sample Pointed to by the Index """
         if (self._sampleIndex >= self.getNumSamples()):
-            result = None
+            # Reset the Sample Counter
+            sampleIndex = 0
         else:
             result = self._sampleDataBase[self._sampleIndex]
             self._sampleDataBase[self._sampleIndex] = 0
@@ -197,14 +198,7 @@ class SampleManager (Manager):
 
         self.readInputFiles()
         self.createSizeOfEachBatch()
-        self.initClassCounter()
         self.describe()
-
-        return self
-
-    def initClassCounter(self):
-        """ Count the Number of Samples in Each Class """
-        self._classCounter = np.zeros(shape=(self.getNumClasses(),),dtype=np.uint32)
         return self
 
     def describe(self):
@@ -222,7 +216,8 @@ class SampleManager (Manager):
 
         # Log the Label Dictionary
         for (key,val) in self._labelDictionary.items():
-            msg = "{0:<32}\t{1:<16}\t{2:<32}".format(" ",key,val)
+            count = self._classCounter[key]
+            msg = "{0:<32}{1:<16}{2:<32}{3:<32}".format(" ",key,val,count)
             self.logMessageInterface(msg,False)
 
         return self
@@ -242,7 +237,12 @@ class SampleManager (Manager):
 
     def updateClassCounter(self,targetInt: int):
         """ Update Class Counter w/ sample target """
-        pass
+        if (targetInt not in self._classCounter.keys()):
+            # Not Currently in Dict
+            self._classCounter.update({targetInt:0})
+        # Increment
+        self._classCounter[targetInt] += 1
+        return self
 
     # Private Interface
 
@@ -280,6 +280,7 @@ class SampleManager (Manager):
             # Create the SampleIO Instance + Update Int -> Str Map
             sample = Structural.SampleIO(samplePath,tgtInt,tgtStr)
             self.setTarget(tgtInt,tgtStr)
+            self.updateClassCounter(tgtInt)
             # Add the Sample
             sampleArray[i] = sample
 
@@ -426,17 +427,17 @@ class CollectionManager (Manager):
         self[18] = CollectionMethods.AutoCorrelationCoefficientsMean(1)
         self[19] = CollectionMethods.AutoCorrelationCoefficientsVariance(1)
         self[20] = CollectionMethods.AutoCorrelationCoefficientsDiffMinMax(1)
-        #self[21] = CollectionMethods.FreqDomainEnvelopPartition(12)
-        #self[22] = CollectionMethods.FreqDomainEnvelopFrames(12)
-        self[23] = CollectionMethods.FrequencyCenterOfMass(1)
-        self[24] = CollectionMethods.FrequencyCenterOfMass(2)
-        self[25] = CollectionMethods.MelFilterBankEnergies(12)
-        self[26] = CollectionMethods.MelFilterBankEnergiesMean(1)
-        self[27] = CollectionMethods.MelFilterBankEnergiesVariance(1)
-        self[28] = CollectionMethods.MelFilterBankEnergiesDiffMinMax(1)
-        #self[29] = 0
-        #self[30] = 0
-        #self[31] = 0
+        self[21] = CollectionMethods.FrequencyCenterOfMass(1)
+        self[22] = CollectionMethods.FrequencyCenterOfMass(2)
+        self[23] = CollectionMethods.MelFilterBankEnergies(12)
+        self[24] = CollectionMethods.MelFilterBankEnergiesMean(1)
+        self[25] = CollectionMethods.MelFilterBankEnergiesVariance(1)
+        self[26] = CollectionMethods.MelFilterBankEnergiesDiffMinMax(1)
+        self[27] = CollectionMethods.MelFrequencyCepstrumCoefficients(12)
+        self[28] = 0
+        self[29] = 0
+        self[30] = 0
+        self[31] = 0
         return self
 
     def initDesignMatrix(self):
