@@ -81,6 +81,8 @@ class Manager:
 
     def describe(self):
         """ Log Description of the Current State of this Instance """
+        msg = "Description of " + repr(self)
+        self.logMessageInterface(msg,True)
         return self
 
     def logConstruction(self):
@@ -127,7 +129,6 @@ class SampleManager (Manager):
         """ Constructor for SampleManager Instance """
         super().__init__()
         self._sampleDataBase    = np.array([],dtype=object)
-        self._occuranceData     = CommonStructures.ClassOccuranceData()
         self._batchSizes        = None
         self._sampleIndex       = 0
 
@@ -136,15 +137,6 @@ class SampleManager (Manager):
         super().__del__()
         
     # Getters and Setters
-
-    def getTargetStr(self,targetInt) -> str:
-        """ Get Corresponding Target String from Dictionary """
-        return self._labelDictionary.get(targetInt)
-
-    def setTarget(self,intTgt,strTgt):
-        """ Update Label Dictionary w/ int:str pair """
-        self._labelDictionary.update({intTgt:strTgt})
-        return self
 
     def getSample(self,idx):
         """ Get Sample From Database at Index """
@@ -158,10 +150,6 @@ class SampleManager (Manager):
     def getBatchSizes(self):
         """ Get Array of Each Batch Size """
         return self._batchSizes
-
-    def getNumClasses(self) -> int:
-        """ Get the Number of Classes by entries in the Dictionary """
-        return len(self._labelDictionary)
 
     def getNumSamples(self) -> int:
         """ Get the Total Number of Samples """
@@ -191,34 +179,25 @@ class SampleManager (Manager):
 
     # Public Interface
 
-    def build(self):
-        """ Gather + Organize all Audio Samples """
-        super().build()
-
-        self.readInputFiles()
-        self.createSizeOfEachBatch()
-        self.describe()
-        return self
-
     def describe(self):
-        """ Log description of state of this instance """
-
-        # Basic Info
+        """ Export Description of this Instance """
+        super().describe()
         messages = [
             "Total samples: {0}".format(len(self)),
-            "Number of classes: {0}".format(self.getNumClasses()),
+            "Number of classes: {0}".format(self.getRundataManager().getNumClasses()),
             "Number of batches: {0}".format(self.getNumBatches())
             ]
         for msg in messages:
             # Log Each String as a Message
-            self.logMessageInterface(msg)
-
-        # Log the Label Dictionary
-        for (key,val) in self._labelDictionary.items():
-            count = self._classCounter[key]
-            msg = "{0:<32}{1:<16}{2:<32}{3:<32}".format(" ",key,val,count)
             self.logMessageInterface(msg,False)
+        return self
 
+    def build(self):
+        """ Gather + Organize all Audio Samples """
+        super().build()
+        self.readInputFiles()
+        self.createSizeOfEachBatch()
+        self.describe()
         return self
 
     def createBatch(self,batchIndex: int):
@@ -233,15 +212,6 @@ class SampleManager (Manager):
             batch[i] = self.getNextSample()
 
         return batch
-
-    def updateClassCounter(self,targetInt: int):
-        """ Update Class Counter w/ sample target """
-        if (targetInt not in self._classCounter.keys()):
-            # Not Currently in Dict
-            self._classCounter.update({targetInt:0})
-        # Increment
-        self._classCounter[targetInt] += 1
-        return self
 
     # Private Interface
 
@@ -278,8 +248,6 @@ class SampleManager (Manager):
             tgtStr      = row[2]
             # Create the SampleIO Instance + Update Int -> Str Map
             sample = Structural.SampleIO(samplePath,tgtInt,tgtStr)
-            self.setTarget(tgtInt,tgtStr)
-            self.updateClassCounter(tgtInt)
             # Add the Sample
             sampleArray[i] = sample
 
@@ -304,6 +272,20 @@ class SampleManager (Manager):
     def __len__(self):
         """ Overload Length Operator """
         return self._sampleDataBase.shape[0]
+
+    def __iter__(self):
+        """ Forward Iterator """
+        for item in self._sampleDataBase:
+            yield item
+
+    def __getitem__(self,key):
+        """ Get Item at Index """
+        return self._sampleDataBase[key]
+
+    def __setitem__(self,key,val):
+        """ Set Item at Index """
+        self._sampleDataBase[key] = val
+        return self
 
     
 class CollectionManager (Manager):
@@ -355,10 +337,8 @@ class CollectionManager (Manager):
     def build(self):
         """ Build All Data for Feature Collection """
         super().build()
-
         self.initCollectionQueue()
         self.initDesignMatrix()
-
         return self
 
     def call(self,batchIndex,batchSize):
@@ -567,13 +547,13 @@ class CollectionManager (Manager):
     def logCurrentBatch(self,index,size):
         """" Log Current Batch w/ Num Samples """
         numBatches = Administrative.CollectionApplicationProtoype.AppInstance.getSampleManager().getNumBatches()
-        msg = "Running batch ({0}/{1}), with {2} samples".format(index,numBatches,size)
+        msg = "Running batch ({0}/{1}), with {2} samples".format(index+1,numBatches,size)
         self.logMessageInterface(msg)
         return None
 
     def logCurrentSample(self,index,size):
         """ Log Current Sample in Batch """
-        msg = "\tProcessing sample ({0}/{1})".format(index,size)
+        msg = "\tProcessing sample ({0}/{1})".format(index+1,size)
         self.logMessageInterface(msg)
         return None
 
@@ -600,6 +580,7 @@ class RundataManager (Manager):
         super().__init__()
         self._runInfo           = None
         self._batchDataObjs     = []
+        self._occuranceData     = CommonStructures.ClassOccuranceData()
         self._frameParams       = None
 
     def __del__(self):
@@ -611,6 +592,10 @@ class RundataManager (Manager):
     def getRunInfo(self):
         """ Get RunInformation """
         return self._runInfo
+
+    def getOccuranceData(self):
+        """ Get the occurance of each class """
+        return self._occuranceData
 
     def getFrameParams(self):
         """ Return AnalysisFrameParameters Structure """
@@ -631,11 +616,16 @@ class RundataManager (Manager):
             self.initAnalysisFrameParams()
         return self.getFrameParams().getFreqFramesShape()
 
+    def getNumClasses(self):
+        """ Get the Number of Unqiue Classes """
+        return len(self._occuranceData.getUniqueClassInts())
+
+
     # Public Interface
 
     def build(self):
         """ Build the Data Manager Instance """
-
+        super().build()
         self.getRuntimeSettings().serialize()
              
         self._runInfo = CommonStructures.RunInformation( 
@@ -646,17 +636,21 @@ class RundataManager (Manager):
         self.initBatchSizeData()
         self.initAnalysisFrameParams()
         self.initFeatureNamesMatrixA()
+        self.initSampleOccuranceData()
 
+        self.describe()
+        
         return self
 
     def call(self):
         """ Run this Manager's Execution Method """
-        
+        super().call()
         return self
 
     def clean(self):
         """ Run Cleaning method on Instance """
         self._runInfo.serialize()
+        self._occuranceData.serialize()
         super().clean()
         return self
 
@@ -669,6 +663,17 @@ class RundataManager (Manager):
         return self
 
     # Private Interface
+
+    def describe(self):
+        """ Log description of state of this instance """
+        super().describe()
+        msg = "{0:<16}{1:<32}{2:<16}".format("Int","Name","Count")
+        self.logMessageInterface(msg,False)
+        for items in self.getOccuranceData():
+            msg = "{0:<16}{1:<32}{2:<16}".format(items[0],items[1],items[2])
+            self.logMessageInterface(msg,False)
+        # Return
+        return self
 
     def initSampleShapeSizes(self):
         """ Set the Sample Shape Sizes """
@@ -717,4 +722,12 @@ class RundataManager (Manager):
             featureNames += item.featureNames()
         # Attatch to Self + return
         self._runInfo.setFeatureNamesA(featureNames)
+        return self
+
+    def initSampleOccuranceData(self):
+        """ Initialize the Sample Occurance Data """
+        for sample in self.getSampleManager():
+            # Iterate through Samples
+            self.getOccuranceData().update(
+                sample.getTargetInt(),sample.getTargetStr())
         return self

@@ -270,7 +270,7 @@ class AppSettings:
         result = AppSettings(
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
             #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv0",
+            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv1",
             batchSize=32,
             shuffleSeed=-1)
         return result
@@ -374,10 +374,10 @@ class Logger:
         if (timeStamp == True):
             # Log Message w/ a TimeStamp
             now = CollectionApplicationProtoype.getDateTime()
-            formattedMessage = "\t{0:<32}\t{1:<128}".format(now,message)
         else:
             # Log Message w/o a TimeStamp
-            formattedMessage = "\t{0:<128}".format(message)
+            now = ""
+        formattedMessage = "\t{0:<32}\t{1:<128}".format(now,message)
 
         # Write the Message to Console and/or to File
         if (self._toConsole == True):

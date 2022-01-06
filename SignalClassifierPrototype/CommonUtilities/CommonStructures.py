@@ -461,9 +461,8 @@ class ClassOccuranceData:
 
     def __init__(self):
         """ Constructor for ClassOccuranceData Instance """
-        self._targetInts = None
-        self._targetStrs = None
-        self._targetCnts = None
+        self._labelNames = dict({})
+        self._labelOccurances = dict({})
 
     def __del__(self):
         """ Destructor for ClassOccuranceData Instance """
@@ -471,19 +470,49 @@ class ClassOccuranceData:
 
     # Getters and Setters
 
-    def getTargetInts(self):
-        """ Get an array of all rargets as integers """
-        return self._targetInts
+    def getNameFromInt(self,labelInt):
+        """ Get the Class Name From an Integer """
+        try:
+            return self._labelNames[labelInt]
+        except KeyError:
+            return "unknown"
 
-    def getTargetsStrs(self):
-        """ Get an array of all targets as strings """
-        return self._targetStrs
+    def getIntFromName(self,labelStr):
+        """ Get the Class Index from a Name """
+        for (key,val) in self._labelNames.items():
+            # Each Key-Val Pair
+            if (val == labelStr):
+                return key
+        # Did not Find Int
+        return -1
 
-    def getTargetCounts(self):
-        """ Get an array of the Counts of Each Target """
-        return self._targetCnts
+    def getUniqueClassInts(self):
+        """ Get All Unique Classes as Ints """
+        return self._labelNames.keys()
+
+    def getUniqueClassStrs(self):
+        """ Get All Unique Classes as Strs """
+        return self._labelNames.values()
 
     # Public Interface
+
+    def update(self,targetInt,targetStr=None):
+        """ Update the Internal Dictionarys """
+        if (targetInt not in self._labelNames.keys()):
+            # Not in Dictionary
+            if (targetStr is not None):
+                # Target String Label is given
+                self._labelNames.update({targetInt:targetStr})
+                self._labelOccurances.update({targetInt:0})
+            else:
+                # Target String Label is not given
+                self._labelNames.update({targetInt:"NONE"})
+                self._labelOccurances.update({targetInt:0})
+      
+        # Now Update the Counter
+        self._labelOccurances[targetInt] += 1
+        return self
+
 
     def serialize(self,path):
         """ Serialize this Instance to Local Path """
@@ -494,6 +523,15 @@ class ClassOccuranceData:
     def deserialize(path):
         """ Deserialize an Instance from local path """
         return self
+
+    # Magic Methods:
+
+    def __iter__(self):
+        """ Forward Iterator over samples """
+        for labelInt in self.getUniqueClassInts():
+            labelStr = self._labelNames[labelInt]
+            labelCnt = self._labelOccurances[labelInt]
+            yield (labelInt,labelStr,labelCnt)
 
 class RunInformation:
     """
