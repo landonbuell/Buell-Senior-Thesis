@@ -26,23 +26,16 @@ class EngineeringApplicationPrototype:
 
     AppInstance = None
 
-    def __init__(self,pathInput,pathOutput):
+    def __init__(self,runPath):
         """ Constructor for EngineeringApplicationPrototype Instance """
-        self._pathInput     = pathInput
-        self._pathOutput    = pathOutput
+        self._runPath = runPath
+        self._runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
-        self._databaseManager   = DatabaseManager(pathInput)
 
     def __del__(self):
         """ Destructor for EngineeringApplicationPrototype Instance """
-        self._databaseManager = None
+        pass
 
 
 
-class DatabaseManager:
-    """ Class To Contain all databases """
 
-    def __init__(self,collectionRunPath):
-        """ Constructor for DatabaseManager Instance """
-        self._path  = collectionRunPath
-        self._batches

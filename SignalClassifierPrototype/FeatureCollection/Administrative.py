@@ -99,7 +99,7 @@ class CollectionApplicationProtoype:
     def setCurrentDirectory(self,path):
         """ Set the Current Working Directory """
         if (os.path.isdir(path) == False):
-            raise IsADirectoryError()
+            raise NotADirectoryError()
         os.chdir(path)
         return self
 
@@ -129,7 +129,7 @@ class CollectionApplicationProtoype:
 
             # Run the Collection Manager on this Batch
             self._collectionManager.call(idx,size)
-            if (idx == batchLimit):
+            if (idx >= batchLimit - 1):
                 # Maximum number of batches reached
                 break   
 
@@ -142,8 +142,6 @@ class CollectionApplicationProtoype:
         self._sampleManager.clean()
         self._collectionManager.clean()
         self._rundataManager.clean()
-
-        self._logger = None
 
         return self
     
@@ -270,10 +268,14 @@ class AppSettings:
     def developmentSettingsInstance():
         """ Build an instance of runtime settings for development """
         result = AppSettings(
-            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
-            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\outputTest_v3",
-            batchSize=32,
+            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
+            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv",
+                        "..\\lib\\DemoTargetData\\Y3.csv",
+                        "..\\lib\\DemoTargetData\\Y2.csv",
+                        "..\\lib\\DemoTargetData\\Y1.csv",],
+            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv2",
+            batchSize=8,
+            batchLimit=2,
             shuffleSeed=-1)
         return result
 
@@ -357,7 +359,7 @@ class Logger:
         self._toFile        = CollectionApplicationProtoype.AppInstance.getSettings().getLogToFile()
         
         if (self._toFile):
-            self._outFile = open("logger.txt",w)
+            self._outFile = open("logger.txt","w")
         self.writeHeader()
 
     def __del__(self):
@@ -376,10 +378,10 @@ class Logger:
         if (timeStamp == True):
             # Log Message w/ a TimeStamp
             now = CollectionApplicationProtoype.getDateTime()
-            formattedMessage = "\t{0:<32}\t{1:<128}".format(now,msg)
         else:
             # Log Message w/o a TimeStamp
-            formattedMessage = "\t{0:<128}".format(msg)
+            now = ""
+        formattedMessage = "\t{0:<32}\t{1:<128}".format(now,message)
 
         # Write the Message to Console and/or to File
         if (self._toConsole == True):
@@ -400,7 +402,7 @@ class Logger:
             ]
         # Log Each Line of the Header
         for msg in header:
-            self.logWithoutTimeStamp(msg)
+            self.logMessage(msg,False)
         return self
 
     def writeFooter(self):

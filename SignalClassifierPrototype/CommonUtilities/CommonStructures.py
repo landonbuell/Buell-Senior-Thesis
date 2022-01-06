@@ -12,6 +12,7 @@ Date:           December 2021
 
 import os
 import sys
+from typing import overload
 import numpy as np
 
         #### CLASS DEFINITIONS ####
@@ -37,11 +38,16 @@ class Serializer:
 
         return False
 
-    def listToString(self,inputList,delimiter=" "):
+    def listToString(self,inputList,delimiter=","):
         """ Convert Elements of list to string w/ delimiter """
         outputString = ""
-        for item in inputList:
-            outputString += str(item) + delimiter
+        if len(inputList) == 0:
+            # No Items in the Input List
+            outputString += "-1,"
+        else:
+            # Items in the Input List
+            for item in inputList:
+                outputString += str(item) + delimiter
         return outputString.strip()
 
     def writeHeader(self):
@@ -82,9 +88,15 @@ class Deserializer:
         return False
 
     def stringToList(self,inputString,delimiter=" ",outType=None):
-        """ Convert Elements of list to string w/ delimiter """
+        """ Convert string to list of type """
         outputList = inputString.split(delimiter)
-        outputList = [outType(x) for x in outputList]
+        if outType is not None:
+            outputList = [outType(x) for x in outputList]
+        return outputList
+
+    def stringToIntList(self,inputString,delimiter):
+        """ Convert string to list of type """
+        outputList = []
         return outputList
 
     def __repr__(self):
@@ -166,7 +178,6 @@ class FeatureVector:
         self._data[key] = value
         return self
 
-
 class DesignMatrix:
     """ Class To hold Design Matrix """
 
@@ -211,11 +222,11 @@ class DesignMatrix:
         self.clearData()
         return self
 
-    def getData(self):
+    def getFeatures(self):
         """ Get Design Matrix as an Array """
         return self._data
 
-    def setData(self,x):
+    def setFeatures(self,x):
         """ Set Design Matrix is an Array """
         self._numSamples = x.shape[0]
         self._sampleShape = tuple(x.shape[1:])
@@ -237,9 +248,33 @@ class DesignMatrix:
 
     def getNumClasses(self):
         """ Get the Number of classes in the data set """
-        return np.max(self._tgt)
+        return np.max(self._tgts)
 
     # public Interface
+
+    def samplesInClass(self,classIndex):
+        """ Create New Design Matrix of Samples that all belong to one class """
+        if (classIndex not in self.getUniqueClasses()):
+            # Not a Valid Class
+            return DesignMatrix(1,self.getSampleShape())
+        # Find where targets matches index
+        mask = np.where(self._tgts == classIndex)[0]
+        newTgts = self._tgts[mask]
+        newData = self._data[mask]
+        # Create the new Design Matrix, attach values + Return
+        result = DesignMatrix(len(mask),self.getSampleShape())
+        result.setLabels(newTgts)
+        result.setFeatures(newData)
+        return result
+
+
+    def averageOfFeatures(self):
+        """ Compute the Average of the Design Matrix Along each Feature """
+        return np.mean(self._data,axis=0,dtype=np.float32)
+
+    def varianceOfFeatures(self):
+        """ Compute the Variance of the Design Matrix Along each Feature """
+        return np.var(self._data,axis=0,dtype=np.float32)
 
     def serialize(self,pathX=None,pathY=None):
         """ Write this design matrix out to a file """   
@@ -253,9 +288,12 @@ class DesignMatrix:
         return success
 
     @staticmethod
-    def deserialize(self,path):
-        """ Read this design matrix from a file """
-        return self
+    def deserialize(pathX,pathY,numSamples,shape):
+        """ Read a design matrix from a file """
+        reader = DesignMatrix.DesignMatrixDeserializer(
+            pathX,pathY,numSamples,shape)
+        matrix = reader.call()
+        return matrix
 
     def clearData(self):
         """ Clear All Entries in this Array """
@@ -301,7 +339,7 @@ class DesignMatrix:
         def writeDataX(self):
             """ Write the Design Matrix Data """
             numSamples = self._data.getNumSamples()
-            X = self._data.getData()
+            X = self._data.getFeatures()
             self._outFileStream = open(self._pathX,"wb")
             for i in range(numSamples):
                 row = X[i].flatten().tobytes()
@@ -338,9 +376,11 @@ class DesignMatrix:
     class DesignMatrixDeserializer(Deserializer):
         """ Class to Serialize a DesignMatrix Instance """
 
-        def __init__(self,path,numSamples,sampleShape):
+        def __init__(self,pathX,pathY,numSamples,sampleShape):
             """ Constructor for DesignMatrixSerializer Instance """
-            super().__init__(path)
+            super().__init__("-1")
+            self._pathX = pathX
+            self._pathY = pathY
             self._data = DesignMatrix(numSamples,sampleShape)
 
         def __del__(self):
@@ -349,9 +389,41 @@ class DesignMatrix:
 
         def call(self):
             """ Run the Deserializer """
+            self.validateInputPaths()
+            self._data.setFeatures( self.readFeatures() )
+            self._data.setLabels( self.readLabels() )
+            return self._data
 
-            return False
-    
+        # Private Interface
+
+        def validateInputPaths(self):
+            """ Check that Input Directories Exists """
+            if (os.path.isfile(self._pathX) == False):
+                # Path does not Exist
+                FileNotFoundError(self._pathX)
+            if (os.path.isfile(self._pathY) == False):
+                # Path does not Exist
+                FileNotFoundError(self._pathY)
+            return True
+
+        def readFeatures(self):
+            """ Read the Feature Data from the File into the Design Matrix """
+            shape = self._data.getShape()
+            self._inFileStream = open(self._pathX,"rb")
+            fileContents = self._inFileStream.read()
+            self._inFileStream.close()
+            array = np.frombuffer(fileContents,dtype=np.float32)         
+            array = array.reshape( shape )         
+            return array
+
+        def readLabels(self):
+            """ Read the Feature Data from the File into the Design Matrix """
+            self._inFileStream = open(self._pathY,"rb")
+            fileContents = self._inFileStream.read()
+            self._inFileStream.close()
+            array = np.frombuffer(fileContents,dtype=np.int16)               
+            return array
+ 
     # Magic Methods 
 
     def __str__(self):
@@ -384,14 +456,131 @@ class DesignMatrix:
         self._data[key] = value.getData()
         return self
 
+class ClassOccuranceData:
+    """ Store and Export Inforamtion on the Occurance of Each Class """
 
+    def __init__(self):
+        """ Constructor for ClassOccuranceData Instance """
+        self._labelNames = dict({})
+        self._expectedCount = dict({})
+        self._actualCount = dict({})
+
+    def __del__(self):
+        """ Destructor for ClassOccuranceData Instance """
+        pass
+
+    # Getters and Setters
+
+    def getNameFromInt(self,labelInt):
+        """ Get the Class Name From an Integer """
+        try:
+            return self._labelNames[labelInt]
+        except KeyError:
+            return "unknown"
+
+    def getIntFromName(self,labelStr):
+        """ Get the Class Index from a Name """
+        for (key,val) in self._labelNames.items():
+            # Each Key-Val Pair
+            if (val == labelStr):
+                return key
+        # Did not Find Int
+        return -1
+
+    def getUniqueClassInts(self):
+        """ Get All Unique Classes as Ints """
+        return self._labelNames.keys()
+
+    def getUniqueClassStrs(self):
+        """ Get All Unique Classes as Strs """
+        return self._labelNames.values()
+
+    # Public Interface
+
+    def updateExpected(self,targetInt,targetStr=None):
+        """ Update the Internal Dictionarys """
+        if (targetInt not in self._labelNames.keys()):
+            # Not in Dictionary
+            if (targetStr is not None):
+                # Target String Label is given
+                self._labelNames.update({targetInt:targetStr})
+            else:
+                # Target String Label is not given
+                self._labelNames.update({targetInt:"NONE"})
+            self._expectedCount.update({targetInt:0})
+            self._actualCount.update({targetInt:0})
+      
+        # Now Update the Counter
+        self._expectedCount[targetInt] += 1
+        return self
+
+    def updateActual(self,targetInt):
+        """ Update the Internal Dictionarys """
+        if (targetInt not in self._actualCount.keys()):
+            # Not in Dictionary          
+            self._actualCount.update({targetInt:0})    
+        # Now Update the Counter
+        self._actualCount[targetInt] += 1
+        return self
+
+
+    def serialize(self,path):
+        """ Serialize this Instance to Local Path """
+        writer = ClassOccuranceData.ClassOccuranceDataSerializer(self,path)
+        writer.call()
+        return self
+    
+    @staticmethod
+    def deserialize(path):
+        """ Deserialize an Instance from local path """
+        return True
+
+    # Private Interface
+
+    class ClassOccuranceDataSerializer(Serializer):
+        """ Class to Serialize Occurance Data """
+        
+        def __init__(self,data,path):
+            """ Constructor for ClassOccuranceDataSerializer Instance """
+            super().__init__(data,path)
+
+        def __del__(self):
+            """ Destructor for ClassOccuranceDataSerializer Instance """
+            super().__del__()
+
+        def call(self):
+            """ Serialize the Instance """
+            self._outFileStream = open(self._outputPath,"w")
+            self.writeHeader()
+            header = "\t{0:<16}{1:<32}{2:<16}\n".format("Int","Name","Count")
+            self._outFileStream.write( header )
+
+            # Write Body
+            for row in self._data:
+                msg = "\t{0:<16}{1:<32}{2:<16}\n".format(row[0],row[1],row[2])
+                self._outFileStream.write( msg )
+
+            # Close + Exit
+            self.writeFooter()
+            self._outFileStream.close()
+            return self
+
+    # Magic Methods:
+
+    def __iter__(self):
+        """ Forward Iterator over samples """
+        for labelInt in self.getUniqueClassInts():
+            labelStr = self._labelNames[labelInt]
+            labelCnt = self._expectedCount[labelInt]
+            yield (labelInt,labelStr,labelCnt)
 
 class RunInformation:
     """
     Class to Hold and Use all Metadata related to a feature collection Run
     """
 
-    def __init__(self,inputPaths,outputPath):
+    def __init__(self,inputPaths,outputPath,
+                 numSamplesExpected=0,numSamplesRead=0):
         """ Constructor for RunInformation Instance """
         self._pathsInput        = inputPaths
         self._pathOutput        = outputPath
@@ -401,6 +590,9 @@ class RunInformation:
 
         self._shapeSampleA      = []
         self._shapeSampleB      = []
+
+        self._featureNamesA     = []
+        self._featureNamesB     = []
 
         self._batchSizes        = []
 
@@ -427,9 +619,19 @@ class RunInformation:
         """ Get the number of samples expected to process """
         return self._numSamplesExpt
 
+    def setExpectedNumSamples(self,num):
+        """ Set the number of samples expected to process """
+        self._numSamplesExpt = num
+        return self
+
     def getActualNumSamples(self):
         """ Get the number of samples actually processed """
         return self._numSamplesRead
+
+    def setActualNumSamples(self,num):
+        """ Set the number of samples actually processed """
+        self._numSamplesRead = num
+        return self
 
     def incrementExpectedNumSamples(self,amount):
         """ Increment the Expected number of Samples by the amount """
@@ -445,13 +647,46 @@ class RunInformation:
         """ Get the shape of samples in design matrix A """
         return self._shapeSampleA
 
+    def setShapeSampleA(self,shape):
+        """ Set the Shape of samples in design matrix A """
+        self._shapeSampleA = shape
+        return self
+
     def getShapeSampleB(self):
         """ Get the shape of samples in design matrix B """
         return self._shapeSampleB
 
+    def setShapeSampleB(self,shape):
+        """ Set the Shape of samples in design matrix B """
+        self._shapeSampleB = shape
+        return self
+
+    def getFeatureNamesA(self):
+        """ Get the List of Feature names for Matrix A """
+        return self._featureNamesA
+
+    def setFeatureNamesA(self,names):
+        """ Set the List of Feature names for Matrix A """
+        self._featureNamesA = names
+        return self
+
+    def getFeatureNamesB(self):
+        """ Get the List of Feature names for Matrix B """
+        return self._featureNamesB
+
+    def setFeatureNamesB(self,names):
+        """ Set the List of Feature names for Matrix B """
+        self._featureNamesB = names
+        return self
+
     def getBatchSizes(self):
         """ Get the Sizes of all Batches """
         return self._batchSizes
+
+    def setBatchSizes(self,sizes):
+        """ Set the Sizes of all batches """
+        self._batchSizes = sizes
+        return self
 
     def getNumBatches(self):
         """ Get the Number of Batches in the run """
@@ -473,11 +708,44 @@ class RunInformation:
     
     # Public Interface 
 
-    def serialize(self,path=None):
+    def loadAllSamples(self,maxSamples=65536):
+        """ Load All Samples From All batches """
+        sampleIndex = 0
+        matrixA = DesignMatrix(self._numSamplesRead,self._shapeSampleA)
+        matrixB = DesignMatrix(self._numSamplesRead,self._shapeSampleB)
+        
+        # Iterate through Each Batch
+        for batchIndex,numSamples in enumerate(self._batchSizes):
+            batchMatricies = self.loadBatch(batchIndex)
+            # Copy Into parent Matrices
+            for sample in range(numSamples):
+                matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
+                matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
+                sampleIndex += 1
+        # Loaded All Batches - Return Total Design Matrices
+        return (matrixA,matrixB,)
+
+
+
+    def loadBatch(self,index):
+        """ Load In All Data from a chosen batch Index """
+        numSamples = self._batchSizes[index]
+        # Set the Matrix Paths
+        name = lambda idx,descp : "batch" + str(idx) + "_" + str(descp) + ".bin"
+        pathXa  = os.path.join(self._pathOutput, name(index,"Xa") )
+        pathXb  = os.path.join(self._pathOutput, name(index,"Xb") )
+        pathY   = os.path.join(self._pathOutput, name(index,"Y") )
+
+        # Load in the matrices
+        matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
+        matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
+        return (matrixA,matrixB,)
+
+    def serialize(self,path=None,batchLimit=-1):
         """ Serialize this Instance to specified Path """
         if (path is None):
             path = self.getRunInfoPath()
-        writer = RunInformation.RunInformationSerializer(self,path)
+        writer = RunInformation.RunInformationSerializer(self,path,batchLimit)
         success = True
         try:
             writer.call()
@@ -490,7 +758,14 @@ class RunInformation:
     @staticmethod
     def deserialize(path):
         """ Deserialize this instance from specified path """
-        return False
+        runInfoPath = os.path.join(path,"runInformation.txt")
+        if (os.path.isfile(runInfoPath) == False):
+            # RunInfo File
+            errMsg = "ERROR: run information file not found at '{0}' ".format(runInfoPath)
+            FileNotFoundError(errMsg)
+        reader = RunInformation.RunInformationDeserializer(runInfoPath)
+        runInfo = reader.call()
+        return runInfo
 
 
     # Private Interface
@@ -498,9 +773,10 @@ class RunInformation:
     class RunInformationSerializer(Serializer):
         """ Class to Serialize Run Information to a Local Path """
 
-        def __init__(self,runInfo,path):
+        def __init__(self,runInfo,path,batchLimit=-1):
             """ Constructor for RunInformationSerializer Instance """
             super().__init__(runInfo,path)
+            self._batchLimit = batchLimit
 
         def __del__(self):
             """ Destructor for DesignMatrixSerializer Instance """
@@ -518,7 +794,7 @@ class RunInformation:
             self._outFileStream.write( self._outFmtStr("OutputPath",self._data.getOutputPath() ) )
 
             # Write Sample Details
-            self._outFileStream.write( self._outFmtStr("ExpectedSamples",self._data.getExpectedNumSamples() ) )
+            self._outFileStream.write( self._outFmtStr("TotalNumSamples",self._data.getExpectedNumSamples() ) )
             self._outFileStream.write( self._outFmtStr("ProcessedSamples",self._data.getActualNumSamples() ) )
 
             # Write Sample Shape Detials
@@ -527,8 +803,15 @@ class RunInformation:
             self._outFileStream.write( self._outFmtStr("ShapeSampleA",shapeSampleA ) )
             self._outFileStream.write( self._outFmtStr("ShapeSampleB",shapeSampleB ) )
 
+            # Write Feature Name Details
+            featureNamesA = self.listToString(self._data.getFeatureNamesA(),",")
+            featureNamesB = self.listToString(self._data.getFeatureNamesB(),",")
+            self._outFileStream.write( self._outFmtStr("FeatureNamesA", featureNamesA))
+            self._outFileStream.write( self._outFmtStr("FeatureNamesB", featureNamesB))
+
             # Write Batch Details
-            batchSizes = self.listToString(self._data.getBatchSizes(),",")
+            usedBatchSizes = self._data.getBatchSizes()[:self._batchLimit]
+            batchSizes = self.listToString(usedBatchSizes,",")
             self._outFileStream.write( self._outFmtStr("BatchSizes",batchSizes ) )
 
             # Close + Return
@@ -542,14 +825,62 @@ class RunInformation:
         def __init__(self,path):
             """ Constructor for RunInformationSerializer Instance """
             super().__init__(path)
+            self._inFileContents = None
 
         def __del__(self):
             """ Destructor for DesignMatrixSerializer Instance """
             super().__del__()
+            self._inFileContents = None
 
         def call(self):
-            """ Serialize the RunInfo Instance """          
-            return True
+            """ Serialize the RunInfo Instance """    
+            self._inFileStream = open(self._inputPath,"r")
+            self._inFileContents = self._inFileStream.readlines()
+            
+            # Find all of the Necessary parts
+            runInfo = self.parseAllFeilds()
+            return runInfo
+
+        # Private Interface
+
+        def parseAllFeilds(self):
+            """ Find all of the Feilds to Create the RunInformation Instance """
+            
+            # Parse the feilds from the RunInfo File
+            pathsInput      = self.findAndParseStrs("InputPath")
+            pathOutput      = self.findAndParseStrs("OutputPath")[-1]
+            samplesExpected = self.findAndParseInts("ExpectedSamples")[-1]
+            samplesActual   = self.findAndParseInts("ProcessedSamples")[-1]
+            shapeSampleA    = self.findAndParseInts("ShapeSampleA")
+            shapeSampleB    = self.findAndParseInts("ShapeSampleB")
+            batchSizes      = self.findAndParseInts("BatchSizes")
+            
+            # Assign the Feilds to the instance
+            runInfo = RunInformation(pathsInput,pathOutput)
+            runInfo.setExpectedNumSamples(samplesExpected)
+            runInfo.setActualNumSamples(samplesActual)
+            runInfo.setShapeSampleA(shapeSampleA)
+            runInfo.setShapeSampleB(shapeSampleB)
+            runInfo.setBatchSizes(batchSizes)
+            return runInfo
+
+        def findAndParseStrs(self,keyword,):
+            """ Find All words with token and return as list of Strings"""
+            result = []
+            for line in self._inFileContents:
+                tokens = line.split()
+                if tokens[0].startswith(keyword):
+                    result.append(tokens[-1].strip())
+            return result
+
+        def findAndParseInts(self,keyword):
+            """ Find All words with token and return as list of Strings"""
+            result = self.findAndParseStrs(keyword)
+            result = result[0].split(',')
+            result = ["".join(ch for ch in x if ch.isdigit()) for x in result]
+            result = [int(x) for x in result if x != '']
+            return result
+        
 
     # Magic Methods
 

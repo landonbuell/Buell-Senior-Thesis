@@ -13,6 +13,7 @@ Date:           December 2021
 import os
 import sys
 import numpy as np
+import scipy.fftpack as fftpack
 
 import Administrative
 import Structural
@@ -52,6 +53,10 @@ class CollectionMethod:
             Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg)
         return np.ones(shape=(self.getReturnSize(),),dtype=np.float32) * -1
 
+    def featureNames(self):
+        """ Get List of Names for Each element in Result Array """
+        return [self._methodName + str(i) for i in range(self.getReturnSize())]
+    
     # Protected Interface
 
     def validateInputSignal(self,signalData):
@@ -98,6 +103,7 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
             result[i] = np.sum((part**2),dtype=np.float32)
             startIndex += sizeOfPartition
         return result
+
 
     # Protected Interface
 
@@ -585,90 +591,6 @@ class AutoCorrelationCoefficientsDiffMinMax(CollectionMethod):
         super().validateParameter()
         return True
 
-class FreqDomainEnvelopPartition(CollectionMethod):
-    """
-    Compute the Frequency Domain Envelop of each frame and average down all of them
-    """
-
-    def __init__(self,param):
-        """ Constructor for AutoCorrelationCoefficientsDiffMinMax Base Class """
-        super().__init__("FreqDomainEnvelopPartition",1)
-        self.validateParameter()
-
-    def __del__(self):
-        """ Destructor for AutoCorrelationCoefficientsDiffMinMax Base Class """
-        pass
-
-    # Public Interface
-
-    def invoke(self, signalData, *args):
-        """ Run this Collection method """
-        self.validateInputSignal(signal);
-        result = super().invoke(signal)   
-        raise NotImplementedError(str(self.__class__) + " is not implemented")
-        return result
-
-    # Protected Interface
-
-    def validateInputSignal(self,signalData):
-        """ Validate Input Signal Everything that we need """
-        if (signalData.AutoCorrelationCoeffs is None):
-            errMsg = "signalData.AutoCorrelationCoeffs must not be None"
-            raise ValueError(errMsg)
-        return True
-
-    def validateParameter(self):
-        """ Validate that Parameter Values Makes Sense """
-        super().validateParameter()
-        return True
-
-class FreqDomainEnvelopFrames(CollectionMethod):
-    """ 
-    Computes the Frequency Domain Envelope of each Freq Analysis Frame
-    and then average each partition across all frames    
-    """
-
-    def __init__(self,numPartitions):
-        """ Constructor for TimeDomainEnvelopFrames Instance """
-        super().__init__("TimeDomainEnvelopFrames",numPartitions)
-        self.validateParameter()
-
-    def __del__(self):
-        """ Destructor for TimeDomainEnvelopFrames Instance """
-        pass
-
-    # Public Interface
-
-    def invoke(self, signalData, *args):
-        """ Run this Collection method """
-        self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
-        raise NotImplementedError(str(self.__class__) + " is not implemented")
-
-        sizeOfPartition = signalData.AnalysisFramesFreq.shape[-1] // self._parameter
-        # Iterate Through Each Parition
-        startIndex = 0
-        for i in range(self._parameter):    
-            part = signalData.AnalysisFramesFreq[:, startIndex : startIndex + sizeOfPartition]
-            part = np.sum(part**2,axis=1,dtype=np.float32)
-            result[i] = np.mean(part)
-            startIndex += sizeOfPartition
-        return result
-
-    # Protected Interface
-
-    def validateInputSignal(self,signalData):
-        """ Validate Input Signal Everything that we need """
-        if (signalData.AnalysisFramesFreq is None):
-            errMsg = "signalData.AnalysisFramesFreq must not be None"
-            raise ValueError(errMsg)
-        return True
-
-    def validateParameter(self):
-        """ Validate that Parameter Values Makes Sense """
-        super().validateParameter()
-        return True
-
 class FrequencyCenterOfMass(CollectionMethod):
     """
     Compute the Frequency Center of Mass over all frames weighted linearly
@@ -715,14 +637,14 @@ class FrequencyCenterOfMass(CollectionMethod):
         super().validateParameter()
         return True
 
-class MelFrequencyCempstrumCoeffs(CollectionMethod):
+class MelFilterBankEnergies(CollectionMethod):
     """
     Compute K Mel Frequency Cepstrum Coefficients
     """
 
     def __init__(self,numCoeffs):
         """ Constructor for MelFrequencyCempstrumCoeffs Instance """
-        super().__init__("MelFrequencyCempstrumCoeffs",numCoeffs)
+        super().__init__("MelFilterBankEnergies",numCoeffs)
         self.validateParameter()
 
     def __del__(self):
@@ -737,11 +659,12 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
         result = super().invoke(signalData)   
 
         # Check if We have MFCC's - Create if we don't
-        if (signalData.MelFreqCepstrumCoeffs is None):
-            signalData.makeMelFreqCepstrumCoeffs(self._parameter)
+        if (signalData.MelFilterBankEnergies is None):
+            signalData.makeMelFilterBankEnergies(self._parameter)
+        avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
 
         # Copy to result + return
-        np.copyto(result,signalData.MelFreqCepstrumCoeffs)
+        np.copyto(result,avgMFBEs)
         return result
 
     # Protected Interface
@@ -758,14 +681,56 @@ class MelFrequencyCempstrumCoeffs(CollectionMethod):
         super().validateParameter()
         return True
 
-class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
+    # Static Interface
+
+    @staticmethod
+    def melsToHertz(freqMels):
+        """ Cast Mels Samples to Hertz Samples """
+        return 700 * ( 10** (freqMels / 2595) -1 )
+
+    @staticmethod
+    def hertzToMels(freqHz):
+        """ Cast Hertz Samples to Mels Samples """
+        return 2595 * np.log10(1 + freqHz / 700)
+
+    @staticmethod
+    def melFilters(numFilters,sampleRate=44100):
+        """ Build the Mel-Filter Bank Arrays """
+        frameParams = Administrative.CollectionApplicationProtoype.AppInstance.getRundataManager().getFrameParams()
+        freqBoundsHz = frameParams.getFreqBoundHz()
+        freqBoundsMels = MelFilterBankEnergies.hertzToMels(freqBoundsHz)
+        numSamplesTime = frameParams.getTotalTimeFrameSize()       
+
+        freqAxisMels = np.linspace(freqBoundsMels[0],freqBoundsMels[1],numFilters+2)
+        freqAxisHz = MelFilterBankEnergies.melsToHertz(freqAxisMels)
+        bins = np.floor((numSamplesTime+1)*freqAxisHz/sampleRate)
+        filterBanks = np.zeros(shape=(numFilters,numSamplesTime),dtype=np.float32)
+
+        # Iterate through filters
+        for i in range (1,numFilters + 1,1):
+            freqLeft = int(bins[i-1])
+            freqCenter = int(bins[i])
+            freqRight = int(bins[i+1])
+
+            for j in range(freqLeft,freqCenter):
+                filterBanks[i-1,j] = (j - freqLeft) / (freqCenter - freqLeft)
+            for j in range(freqCenter,freqRight):
+                filterBanks[i-1,j] = (freqRight - j) / (freqRight - freqCenter)
+
+        # Crop to Subset of Frequency Space
+        numSamplesFreq = frameParams.getFreqFramesShape()[1]
+        filterBanks = filterBanks[:,:numSamplesFreq]
+        return filterBanks
+
+
+class MelFilterBankEnergiesMean(CollectionMethod):
     """
     Compute Average of Mel Frequency Cepstrum Coefficients
     """
 
     def __init__(self,numCoeffs):
         """ Constructor for MelFrequencyCempstrumCoeffsMean Instance """
-        super().__init__("MelFrequencyCempstrumCoeffsMean",numCoeffs)
+        super().__init__("MelFilterBankEnergiesMean",numCoeffs)
         self.validateParameter()
 
     def __del__(self):
@@ -779,15 +744,16 @@ class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
         self.validateInputSignal(signalData)
         result = super().invoke(signalData)   
         # Compute Mean of MFCC's
-        result[0] = np.mean(signalData.MelFreqCepstrumCoeffs)
+        avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
+        result[0] = np.mean(avgMFBEs)
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.MelFreqCepstrumCoeffs is None):
-            errMsg = "signalData.MelFreqCepstrumCoeffs must not be None"
+        if (signalData.MelFilterBankEnergies is None):
+            errMsg = "signalData.MelFilterBankEnergies must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -796,14 +762,14 @@ class MelFrequencyCempstrumCoeffsMean(CollectionMethod):
         super().validateParameter()
         return True
 
-class MelFrequencyCempstrumCoeffsVariance(CollectionMethod):
+class MelFilterBankEnergiesVariance(CollectionMethod):
     """
     Compute variance of Mel Frequency Cepstrum Coefficients
     """
 
     def __init__(self,param):
         """ Constructor for MelFrequencyCempstrumCoeffsVariance Instance """
-        super().__init__("MelFrequencyCempstrumCoeffsVariance",1)
+        super().__init__("MelFilterBankEnergiesVariance",1)
         self.validateParameter()
 
     def __del__(self):
@@ -817,15 +783,16 @@ class MelFrequencyCempstrumCoeffsVariance(CollectionMethod):
         self.validateInputSignal(signalData)
         result = super().invoke(signalData)   
         # Compute Variance of MFCC's
-        result[0] = np.var(signalData.MelFreqCepstrumCoeffs)
+        avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
+        result[0] = np.var(avgMFBEs)
         return result
 
     # Protected Interface
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.MelFreqCepstrumCoeffs is None):
-            errMsg = "signalData.MelFreqCepstrumCoeffs must not be None"
+        if (signalData.MelFilterBankEnergies is None):
+            errMsg = "signalData.MelFilterBankEnergies must not be None"
             raise ValueError(errMsg)
         return True
 
@@ -834,14 +801,14 @@ class MelFrequencyCempstrumCoeffsVariance(CollectionMethod):
         super().validateParameter()
         return True
 
-class MelFrequencyCempstrumCoeffsDiffMinMax(CollectionMethod):
+class MelFilterBankEnergiesDiffMinMax(CollectionMethod):
     """
     Compute difference of min and max Mel Frequency Cepstrum Coefficients
     """
 
     def __init__(self,param):
         """ Constructor for MelFrequencyCempstrumCoeffsDiffMinMax Instance """
-        super().__init__("MelFrequencyCempstrumCoeffsDiffMinMax",1)
+        super().__init__("MelFilterBankEnergiesDiffMinMax",1)
         self.validateParameter()
 
     def __del__(self):
@@ -855,8 +822,9 @@ class MelFrequencyCempstrumCoeffsDiffMinMax(CollectionMethod):
         self.validateInputSignal(signalData)
         result = super().invoke(signalData)   
         # Compute Diff of min and max of MFCC's
-        minVal = np.min(signalData.MelFreqCepstrumCoeffs)
-        maxVal = np.max(signalData.MelFreqCepstrumCoeffs)
+        avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
+        minVal = np.min(avgMFBEs)
+        maxVal = np.max(avgMFBEs)
         result[0] = maxVal - minVal
         return result
 
@@ -864,8 +832,49 @@ class MelFrequencyCempstrumCoeffsDiffMinMax(CollectionMethod):
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
-        if (signalData.MelFreqCepstrumCoeffs is None):
-            errMsg = "signalData.MelFreqCepstrumCoeffs must not be None"
+        if (signalData.MelFilterBankEnergies is None):
+            errMsg = "signalData.MelFilterBankEnergies must not be None"
+            raise ValueError(errMsg)
+        return True
+
+    def validateParameter(self):
+        """ Validate that Parameter Values Makes Sense """
+        super().validateParameter()
+        return True
+
+class MelFrequencyCepstrumCoefficients(CollectionMethod):
+    """
+    Compute the Mel-Frequency Cepstrum Coeffs
+    """
+
+    def __init__(self,param):
+        """ Constructor for MelFrequencyCempstrumCoeffsDiffMinMax Instance """
+        super().__init__("MelFrequencyCepstrumCoefficients",param)
+        self.validateParameter()
+
+    def __del__(self):
+        """ Destructor for MelFrequencyCempstrumCoeffsDiffMinMax Instance """
+        pass
+
+    # Public Interface
+
+    def invoke(self, signalData, *args):
+        """ Run this Collection method """
+        self.validateInputSignal(signalData)
+        result = super().invoke(signalData)   
+        # Compute Diff of min and max of MFCC's
+        logFilterBanks = np.log(signalData.MelFilterBankEnergies)
+        MFCCs = fftpack.idct(logFilterBanks,type=2,axis=-1)
+        avgMFCCs = np.mean(MFCCs,axis=0)
+        np.copyto(result,avgMFCCs)
+        return result
+
+    # Protected Interface
+
+    def validateInputSignal(self,signalData):
+        """ Validate Input Signal Everything that we need """
+        if (signalData.MelFilterBankEnergies is None):
+            errMsg = "signalData.MelFilterBankEnergies must not be None"
             raise ValueError(errMsg)
         return True
 
