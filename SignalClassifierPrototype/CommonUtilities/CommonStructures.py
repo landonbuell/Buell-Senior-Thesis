@@ -552,12 +552,12 @@ class ClassOccuranceData:
             """ Serialize the Instance """
             self._outFileStream = open(self._outputPath,"w")
             self.writeHeader()
-            header = "\t{0:<16}{1:<32}{2:<16}\n".format("Int","Name","Count")
+            header = "\t{0:<16}{1:<32}{2:<16}{3:<16}\n".format("Int","Name","Processed","Total")
             self._outFileStream.write( header )
 
             # Write Body
             for row in self._data:
-                msg = "\t{0:<16}{1:<32}{2:<16}\n".format(row[0],row[1],row[2])
+                msg = "\t{0:<16}{1:<32}{2:<16}{3:<16}\n".format(row[0],row[1],row[2],row[3])
                 self._outFileStream.write( msg )
 
             # Close + Exit
@@ -570,9 +570,10 @@ class ClassOccuranceData:
     def __iter__(self):
         """ Forward Iterator over samples """
         for labelInt in self.getUniqueClassInts():
-            labelStr = self._labelNames[labelInt]
-            labelCnt = self._expectedCount[labelInt]
-            yield (labelInt,labelStr,labelCnt)
+            labelStr    = self._labelNames[labelInt]
+            actual      = self._actualCount[labelInt]
+            expect      = self._expectedCount[labelInt]
+            yield (labelInt,labelStr,actual,expect)
 
 class RunInformation:
     """
@@ -886,4 +887,4 @@ class RunInformation:
 
     def __repr__(self):
         """ Debug Representation of Instance """
-        return str(self.__class___) + " @ " + str(hex(id(self)))
+        return str(self.__class__) + " @ " + str(hex(id(self)))

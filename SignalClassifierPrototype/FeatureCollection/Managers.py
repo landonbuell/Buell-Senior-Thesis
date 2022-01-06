@@ -197,6 +197,7 @@ class SampleManager (Manager):
         super().build()
         self.readInputFiles()
         self.createSizeOfEachBatch()
+        self.shuffle()
         self.describe()
         return self
 
@@ -267,6 +268,17 @@ class SampleManager (Manager):
         self._batchSizes = allBatchSizes
         return self
           
+    def shuffle(self):
+        """ Shuffle Samples in Place According to Seed """
+        seed = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getShuffleSeed()
+        if (seed <= -1):
+            # Negative seed - do not shuffle
+            return self
+        # Non-Negative Seed - Shuffle in place
+        np.random.set_state(seed)
+        self._sampleDataBase = np.random.shuffle(self._sampleDataBase)
+        return self
+
     # Magic Methods
 
     def __len__(self):
@@ -673,10 +685,10 @@ class RundataManager (Manager):
     def describe(self):
         """ Log description of state of this instance """
         super().describe()
-        msg = "{0:<16}{1:<32}{2:<16}".format("Int","Name","Count")
+        msg = "{0:<16}{1:<32}{2:<16}".format("Int","Name","Total")
         self.logMessageInterface(msg,False)
         for items in self.getOccuranceData():
-            msg = "{0:<16}{1:<32}{2:<16}".format(items[0],items[1],items[2])
+            msg = "{0:<16}{1:<32}{2:<16}".format(items[0],items[1],items[3])
             self.logMessageInterface(msg,False)
         # Return
         return self
@@ -713,7 +725,7 @@ class RundataManager (Manager):
             maxFrames=256,
             window="hanning",
             freqLowHz=0,
-            freqHighHz=12000)
+            freqHighHz=16000)
         return self
 
     def initFeatureNamesMatrixA(self):

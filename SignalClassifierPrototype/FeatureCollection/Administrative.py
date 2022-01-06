@@ -125,15 +125,17 @@ class CollectionApplicationProtoype:
         """ Run Application Execution Sequence """
         
         batchLimit = self.getSettings().getBatchLimit()
+
         for idx,size in enumerate(self._sampleManager.getBatchSizes()):
+          
+            if (idx >= batchLimit):
+                # Maximum number of batches reached
+                break  
 
             # Run the Collection Manager on this Batch
-            self._collectionManager.call(idx,size)
-            if (idx >= batchLimit - 1):
-                # Maximum number of batches reached
-                break   
+            self._collectionManager.call(idx,size)             
+            self._rundataManager.call()
 
-        self._rundataManager.call()
         return self
 
     def shutdown(self):
@@ -273,8 +275,8 @@ class AppSettings:
                         "..\\lib\\DemoTargetData\\Y3.csv",
                         "..\\lib\\DemoTargetData\\Y2.csv",
                         "..\\lib\\DemoTargetData\\Y1.csv",],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv2",
-            batchSize=8,
+            pathOutput="..\\..\\..\\..\\audioFeatures\\devRunv0",
+            batchSize=16,
             batchLimit=2,
             shuffleSeed=-1)
         return result
