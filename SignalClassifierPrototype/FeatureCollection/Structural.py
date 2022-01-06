@@ -579,14 +579,14 @@ class MelFrequnecyCepstrumCoeffsConstructor:
 class BatchData:
     """ Class To Hold Data for Each Batch of Samples """
         
-    def __init__(self,batchIndex,designMatrix,exptMeans=True,exptVars=True):
+    def __init__(self,batchIndex,designMatrix,exptMeans=False,exptVaris=False):
         """ Constructor for BatchDataInstance """
         self._batchIndex        = batchIndex
         self._designMatrix      = designMatrix
         self._means             = None
         self._varis             = None
         self._exportMeans       = exptMeans
-        self._exportVaris       = exptVars
+        self._exportVaris       = exptVaris
 
         self.initMeans()
         self.initVaris()

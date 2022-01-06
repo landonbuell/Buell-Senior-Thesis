@@ -649,8 +649,9 @@ class RundataManager (Manager):
 
     def clean(self):
         """ Run Cleaning method on Instance """
-        self._runInfo.serialize()
-        self._occuranceData.serialize()
+        runOutputFolder = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()     
+        self._runInfo.serialize(os.path.join(runOutputFolder,"runInformation.txt"))
+        self._occuranceData.serialize(os.path.join(runOutputFolder,"classData.txt"))
         super().clean()
         return self
 

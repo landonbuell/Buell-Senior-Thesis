@@ -516,13 +516,44 @@ class ClassOccuranceData:
 
     def serialize(self,path):
         """ Serialize this Instance to Local Path """
-        
+        writer = ClassOccuranceData.ClassOccuranceDataSerializer(self,path)
+        writer.call()
         return self
     
     @staticmethod
     def deserialize(path):
         """ Deserialize an Instance from local path """
         return self
+
+    # Private Interface
+
+    class ClassOccuranceDataSerializer(Serializer):
+        """ Class to Serialize Occurance Data """
+        
+        def __init__(self,data,path):
+            """ Constructor for ClassOccuranceDataSerializer Instance """
+            super().__init__(data,path)
+
+        def __del__(self):
+            """ Destructor for ClassOccuranceDataSerializer Instance """
+            super().__del__()
+
+        def call(self):
+            """ Serialize the Instance """
+            self._outFileStream = open(self._outputPath,"w")
+            self.writeHeader()
+            header = "\t{0:<16}{1:<32}{2:<16}\n".format("Int","Name","Count")
+            self._outFileStream.write( header )
+
+            # Write Body
+            for row in self._data:
+                msg = "{0:<16}{1:<32}{2:<16}\n".format(row[0],row[1],row[2])
+                self._outFileStream.write( msg )
+
+            # Close + Exit
+            self.writeFooter()
+            self._outFileStream.close()
+            return self
 
     # Magic Methods:
 

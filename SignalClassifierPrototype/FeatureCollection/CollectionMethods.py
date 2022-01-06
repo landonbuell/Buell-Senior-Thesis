@@ -849,7 +849,7 @@ class MelFrequencyCepstrumCoefficients(CollectionMethod):
 
     def __init__(self,param):
         """ Constructor for MelFrequencyCempstrumCoeffsDiffMinMax Instance """
-        super().__init__("MelFrequencyCepstrumCoefficients",1)
+        super().__init__("MelFrequencyCepstrumCoefficients",param)
         self.validateParameter()
 
     def __del__(self):

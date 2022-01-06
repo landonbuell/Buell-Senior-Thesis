@@ -129,7 +129,7 @@ class CollectionApplicationProtoype:
 
             # Run the Collection Manager on this Batch
             self._collectionManager.call(idx,size)
-            if (idx == batchLimit):
+            if (idx >= batchLimit - 1):
                 # Maximum number of batches reached
                 break   
 
@@ -268,10 +268,14 @@ class AppSettings:
     def developmentSettingsInstance():
         """ Build an instance of runtime settings for development """
         result = AppSettings(
-            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
-            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv","..\\lib\\DemoTargetData\\Y3.csv"],
+            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
+            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv",
+                        "..\\lib\\DemoTargetData\\Y3.csv",
+                        "..\\lib\\DemoTargetData\\Y2.csv",
+                        "..\\lib\\DemoTargetData\\Y1.csv",],
             pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv1",
             batchSize=32,
+            batchLimit=16,
             shuffleSeed=-1)
         return result
 
