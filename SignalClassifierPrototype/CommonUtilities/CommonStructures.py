@@ -462,7 +462,8 @@ class ClassOccuranceData:
     def __init__(self):
         """ Constructor for ClassOccuranceData Instance """
         self._labelNames = dict({})
-        self._labelOccurances = dict({})
+        self._expectedCount = dict({})
+        self._actualCount = dict({})
 
     def __del__(self):
         """ Destructor for ClassOccuranceData Instance """
@@ -496,21 +497,30 @@ class ClassOccuranceData:
 
     # Public Interface
 
-    def update(self,targetInt,targetStr=None):
+    def updateExpected(self,targetInt,targetStr=None):
         """ Update the Internal Dictionarys """
         if (targetInt not in self._labelNames.keys()):
             # Not in Dictionary
             if (targetStr is not None):
                 # Target String Label is given
                 self._labelNames.update({targetInt:targetStr})
-                self._labelOccurances.update({targetInt:0})
             else:
                 # Target String Label is not given
                 self._labelNames.update({targetInt:"NONE"})
-                self._labelOccurances.update({targetInt:0})
+            self._expectedCount.update({targetInt:0})
+            self._actualCount.update({targetInt:0})
       
         # Now Update the Counter
-        self._labelOccurances[targetInt] += 1
+        self._expectedCount[targetInt] += 1
+        return self
+
+    def updateActual(self,targetInt):
+        """ Update the Internal Dictionarys """
+        if (targetInt not in self._actualCount.keys()):
+            # Not in Dictionary          
+            self._actualCount.update({targetInt:0})    
+        # Now Update the Counter
+        self._actualCount[targetInt] += 1
         return self
 
 
@@ -523,7 +533,7 @@ class ClassOccuranceData:
     @staticmethod
     def deserialize(path):
         """ Deserialize an Instance from local path """
-        return self
+        return True
 
     # Private Interface
 
@@ -547,7 +557,7 @@ class ClassOccuranceData:
 
             # Write Body
             for row in self._data:
-                msg = "{0:<16}{1:<32}{2:<16}\n".format(row[0],row[1],row[2])
+                msg = "\t{0:<16}{1:<32}{2:<16}\n".format(row[0],row[1],row[2])
                 self._outFileStream.write( msg )
 
             # Close + Exit
@@ -561,7 +571,7 @@ class ClassOccuranceData:
         """ Forward Iterator over samples """
         for labelInt in self.getUniqueClassInts():
             labelStr = self._labelNames[labelInt]
-            labelCnt = self._labelOccurances[labelInt]
+            labelCnt = self._expectedCount[labelInt]
             yield (labelInt,labelStr,labelCnt)
 
 class RunInformation:
@@ -731,11 +741,11 @@ class RunInformation:
         matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
         return (matrixA,matrixB,)
 
-    def serialize(self,path=None):
+    def serialize(self,path=None,batchLimit=-1):
         """ Serialize this Instance to specified Path """
         if (path is None):
             path = self.getRunInfoPath()
-        writer = RunInformation.RunInformationSerializer(self,path)
+        writer = RunInformation.RunInformationSerializer(self,path,batchLimit)
         success = True
         try:
             writer.call()
@@ -763,9 +773,10 @@ class RunInformation:
     class RunInformationSerializer(Serializer):
         """ Class to Serialize Run Information to a Local Path """
 
-        def __init__(self,runInfo,path):
+        def __init__(self,runInfo,path,batchLimit=-1):
             """ Constructor for RunInformationSerializer Instance """
             super().__init__(runInfo,path)
+            self._batchLimit = batchLimit
 
         def __del__(self):
             """ Destructor for DesignMatrixSerializer Instance """
@@ -783,7 +794,7 @@ class RunInformation:
             self._outFileStream.write( self._outFmtStr("OutputPath",self._data.getOutputPath() ) )
 
             # Write Sample Details
-            self._outFileStream.write( self._outFmtStr("ExpectedSamples",self._data.getExpectedNumSamples() ) )
+            self._outFileStream.write( self._outFmtStr("TotalNumSamples",self._data.getExpectedNumSamples() ) )
             self._outFileStream.write( self._outFmtStr("ProcessedSamples",self._data.getActualNumSamples() ) )
 
             # Write Sample Shape Detials
@@ -799,7 +810,8 @@ class RunInformation:
             self._outFileStream.write( self._outFmtStr("FeatureNamesB", featureNamesB))
 
             # Write Batch Details
-            batchSizes = self.listToString(self._data.getBatchSizes(),",")
+            usedBatchSizes = self._data.getBatchSizes()[:self._batchLimit]
+            batchSizes = self.listToString(usedBatchSizes,",")
             self._outFileStream.write( self._outFmtStr("BatchSizes",batchSizes ) )
 
             # Close + Return

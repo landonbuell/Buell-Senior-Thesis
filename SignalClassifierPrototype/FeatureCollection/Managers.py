@@ -359,19 +359,6 @@ class CollectionManager (Manager):
         self.createBatchQueue(batchIndex)      
         self.evaluateBatchQueue()            
 
-        # Serialize the Design Matrix
-        outputPath = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()
-        outXa   = os.path.join(outputPath,"batch{0}_Xa.bin".format(batchIndex))
-        outXb   = os.path.join(outputPath,"batch{0}_Xb.bin".format(batchIndex))
-        outY    = os.path.join(outputPath,"batch{0}_Y.bin".format(batchIndex))
-
-        self._designMatrixA.serialize(outXa,outY)
-        self._designMatrixB.serialize(outXb,None)
-
-        # Compute Meta Data and then Clear
-        self._designMatrixA.clearData()
-        self._designMatrixB.clearData()
-
         return self
 
     def clean(self):
@@ -448,6 +435,7 @@ class CollectionManager (Manager):
 
             # Log this Sample
             self.logCurrentSample(idx,len(self._batchQueue))
+            self.getRundataManager().getOccuranceData().updateActual(sample.getTargetInt())
             
             # Set the Label + Read the Raw Samples
             featureVectorA.setLabel(sample.getTargetInt())
@@ -460,7 +448,6 @@ class CollectionManager (Manager):
             signalData.makeAnalysisFramesFreq(
                 self.getRundataManager().getFrameParams() )
             # Generate Each Common Field as needed by method
-            #sampleData = sampleData.makeAllFields()
 
             # Use Current Sample to Evaluate the Feature Queue
             self.evaluateMethodQueueA(signalData,featureVectorA)
@@ -644,13 +631,32 @@ class RundataManager (Manager):
 
     def call(self):
         """ Run this Manager's Execution Method """
+
         super().call()
+        
+        # Serialize the Design Matrix
+        batchIndex = self.getCollectionManager().getBatchIndex()
+        outputPath = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()
+        
+        outXa   = os.path.join(outputPath,"batch{0}_Xa.bin".format(batchIndex))
+        outXb   = os.path.join(outputPath,"batch{0}_Xb.bin".format(batchIndex))
+        outY    = os.path.join(outputPath,"batch{0}_Y.bin".format(batchIndex))
+
+        # Write the Data Out
+        self.getCollectionManager().getDesignMatrixA().serialize(outXa,outY)
+        self.getCollectionManager().getDesignMatrixB().serialize(outXb,None)
+
+        # Compute Meta Data and then Clear
+        self.getCollectionManager().getDesignMatrixA().clearData()
+        self.getCollectionManager().getDesignMatrixB().clearData()
+
         return self
 
     def clean(self):
         """ Run Cleaning method on Instance """
         runOutputFolder = Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()     
-        self._runInfo.serialize(os.path.join(runOutputFolder,"runInformation.txt"))
+        self._runInfo.serialize(os.path.join(runOutputFolder,"runInformation.txt"),
+            Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getBatchLimit())
         self._occuranceData.serialize(os.path.join(runOutputFolder,"classData.txt"))
         super().clean()
         return self
@@ -659,7 +665,6 @@ class RundataManager (Manager):
         """ Add Batch Data Instance to this Instance """
         self._batchDataObjs.append(batchData)
         if (increment == True):
-            self._runInfo.incrementExpectedNumSamples( batchData.getNumSamples() )
             self._runInfo.incrementActualNumSamples( batchData.getNumSamples() )
         return self
 
@@ -729,6 +734,9 @@ class RundataManager (Manager):
         """ Initialize the Sample Occurance Data """
         for sample in self.getSampleManager():
             # Iterate through Samples
-            self.getOccuranceData().update(
+            self.getOccuranceData().updateExpected(
                 sample.getTargetInt(),sample.getTargetStr())
+
+        # Add total number of samples
+        self._runInfo.setExpectedNumSamples(len(self.getSampleManager()))
         return self

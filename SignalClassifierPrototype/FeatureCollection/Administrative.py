@@ -273,9 +273,9 @@ class AppSettings:
                         "..\\lib\\DemoTargetData\\Y3.csv",
                         "..\\lib\\DemoTargetData\\Y2.csv",
                         "..\\lib\\DemoTargetData\\Y1.csv",],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv1",
-            batchSize=32,
-            batchLimit=16,
+            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv2",
+            batchSize=8,
+            batchLimit=2,
             shuffleSeed=-1)
         return result
 

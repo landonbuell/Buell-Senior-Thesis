@@ -10,8 +10,6 @@ Date:           December 2021
 
         #### IMPORTS ####
 
-import os
-import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -86,7 +84,7 @@ class SampleIO:
         """ Pad or Crop Waveform if too long or too short """
         if (waveform.shape[0] < self._reqSamples):
             # Too few samples
-            deficit = self._reqSample - waveform.shape[0]
+            deficit = self._reqSamples - waveform.shape[0]
             waveform = np.append(waveform,np.zeros(shape=deficit,dtype=np.float32))
         elif (waveform.shape[0] > self._reqSamples):
             # Too many samples
