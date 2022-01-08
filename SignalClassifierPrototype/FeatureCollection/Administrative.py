@@ -125,7 +125,10 @@ class CollectionApplicationProtoype:
         """ Run Application Execution Sequence """
         
         batchLimit = self.getSettings().getBatchLimit()
-
+        if (batchLimit < 0):
+            batchLimit = self.getSampleManager().getNumBatches() - batchLimit
+            
+        # Visit Each Applicaable Batch
         for idx,size in enumerate(self._sampleManager.getBatchSizes()):
           
             if (idx >= batchLimit):
@@ -276,8 +279,8 @@ class AppSettings:
                         "..\\lib\\DemoTargetData\\Y2.csv",
                         "..\\lib\\DemoTargetData\\Y1.csv",],
             pathOutput="..\\..\\..\\..\\audioFeatures\\devRunv0",
-            batchSize=16,
-            batchLimit=2,
+            batchSize=64,
+            batchLimit=-1,
             shuffleSeed=-1)
         return result
 

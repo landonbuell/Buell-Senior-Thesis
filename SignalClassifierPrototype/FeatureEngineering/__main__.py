@@ -25,13 +25,7 @@ if __name__ == "__main__":
 
     # Path to each Design Matrix
     batchIndex = 0
-    runData = runInfo.loadAllSamples()
-    designMatrixA = runData[0]
-    designMatrixB = runData[1]
-    
-    # Check Means + Variances
-    means = designMatrixA.averageOfFeatures()
-    varis = designMatrixA.varianceOfFeatures()
+    designMatrices = runInfo.loadBatch(batchIndex,)
 
     # Return 
     sys.exit(0)

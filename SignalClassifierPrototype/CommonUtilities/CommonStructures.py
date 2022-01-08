@@ -709,28 +709,36 @@ class RunInformation:
     
     # Public Interface 
 
-    def loadAllSamples(self,maxSamples=65536):
+    def loadAllSamples(self,loadA=True,loadB=True):
         """ Load All Samples From All batches """
         sampleIndex = 0
-        matrixA = DesignMatrix(self._numSamplesRead,self._shapeSampleA)
-        matrixB = DesignMatrix(self._numSamplesRead,self._shapeSampleB)
+        matrices = []
+        if (loadA == True):
+            matrixA = DesignMatrix(self._numSamplesRead,self._shapeSampleA)
+        if (loadB == True):
+            matrixB = DesignMatrix(self._numSamplesRead,self._shapeSampleB)
         
         # Iterate through Each Batch
         for batchIndex,numSamples in enumerate(self._batchSizes):
             batchMatricies = self.loadBatch(batchIndex)
             # Copy Into parent Matrices
             for sample in range(numSamples):
-                matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
-                matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
+                if (loadA == True):
+                    matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
+                if (loadB == True):
+                    matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
                 sampleIndex += 1
         # Loaded All Batches - Return Total Design Matrices
+         if (loadA == True):
+            matrices.append(matrixA)
+        if (loadB == True):
+            matrices.append(matrixB)
         return (matrixA,matrixB,)
 
-
-
-    def loadBatch(self,index):
+    def loadBatch(self,index,loadA=True,loadB=True):
         """ Load In All Data from a chosen batch Index """
         numSamples = self._batchSizes[index]
+        matricies = []
         # Set the Matrix Paths
         name = lambda idx,descp : "batch" + str(idx) + "_" + str(descp) + ".bin"
         pathXa  = os.path.join(self._pathOutput, name(index,"Xa") )
@@ -738,9 +746,13 @@ class RunInformation:
         pathY   = os.path.join(self._pathOutput, name(index,"Y") )
 
         # Load in the matrices
-        matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
-        matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
-        return (matrixA,matrixB,)
+        if (loadA == True):
+            matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
+            matricies.append(matrixA)
+        if (loadB == True):
+            matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
+            matricies.append(matrixB)
+        return matrices
 
     def serialize(self,path=None,batchLimit=-1):
         """ Serialize this Instance to specified Path """
