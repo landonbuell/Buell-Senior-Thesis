@@ -20,12 +20,12 @@ import CommonStructures
 if __name__ == "__main__":
 
     # Parse User Arguments
-    runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\devTestv0"
+    runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\devRunv0"
     runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
     # Path to each Design Matrix
     batchIndex = 0
-    designMatrices = runInfo.loadBatch(batchIndex,)
+    designMatrices = runInfo.loadBatch(batchIndex,True,False)
 
     # Return 
     sys.exit(0)

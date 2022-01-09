@@ -729,7 +729,7 @@ class RunInformation:
                     matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
                 sampleIndex += 1
         # Loaded All Batches - Return Total Design Matrices
-         if (loadA == True):
+        if (loadA == True):
             matrices.append(matrixA)
         if (loadB == True):
             matrices.append(matrixB)
@@ -738,7 +738,7 @@ class RunInformation:
     def loadBatch(self,index,loadA=True,loadB=True):
         """ Load In All Data from a chosen batch Index """
         numSamples = self._batchSizes[index]
-        matricies = []
+        matrices = []
         # Set the Matrix Paths
         name = lambda idx,descp : "batch" + str(idx) + "_" + str(descp) + ".bin"
         pathXa  = os.path.join(self._pathOutput, name(index,"Xa") )
@@ -748,10 +748,10 @@ class RunInformation:
         # Load in the matrices
         if (loadA == True):
             matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
-            matricies.append(matrixA)
+            matrices.append(matrixA)
         if (loadB == True):
             matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
-            matricies.append(matrixB)
+            matrices.append(matrixB)
         return matrices
 
     def serialize(self,path=None,batchLimit=-1):
@@ -862,10 +862,12 @@ class RunInformation:
             # Parse the feilds from the RunInfo File
             pathsInput      = self.findAndParseStrs("InputPath")
             pathOutput      = self.findAndParseStrs("OutputPath")[-1]
-            samplesExpected = self.findAndParseInts("ExpectedSamples")[-1]
+            samplesExpected = self.findAndParseInts("TotalNumSamples")[-1]
             samplesActual   = self.findAndParseInts("ProcessedSamples")[-1]
             shapeSampleA    = self.findAndParseInts("ShapeSampleA")
             shapeSampleB    = self.findAndParseInts("ShapeSampleB")
+            featureNamesA   = self.findAndParseStrs("FeatureNamesA")[-1].split(",")
+            featureNamesB   = self.findAndParseStrs("FeatureNamesB")
             batchSizes      = self.findAndParseInts("BatchSizes")
             
             # Assign the Feilds to the instance
@@ -874,6 +876,8 @@ class RunInformation:
             runInfo.setActualNumSamples(samplesActual)
             runInfo.setShapeSampleA(shapeSampleA)
             runInfo.setShapeSampleB(shapeSampleB)
+            runInfo.setFeatureNamesA(featureNamesA)
+            runInfo.setFeatureNamesB(featureNamesB)
             runInfo.setBatchSizes(batchSizes)
             return runInfo
 
