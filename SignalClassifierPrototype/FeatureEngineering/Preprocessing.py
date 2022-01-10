@@ -30,6 +30,7 @@ class FeatureScaler:
         """ Constructor for FeatureScaler Instance """
         self._sampleShape = []
         self._matrixType = "-1"
+        self._isFitted = False
         self._means = np.array([])
         self._varis = np.array([])
 
@@ -72,13 +73,29 @@ class FeatureScaler:
         self._sampleShape = designMatrix.getSampleShape()
         self._means = np.mean(designMatrix.getFeatures(),axis=0,dtype=np.float32)
         self._varis = np.var(designMatrix.getFeatures(),axis=0,dtype=np.float32)
+        self._isFitted = True
         return self
+
+    def transform(self,designMatrix,verbose=True):
+        """ Transform Design Matrix According to Scaling Parameters """
+        if (self._isFitted == False):
+            raise RuntimeError("Scaler not yet fit")
+        dataRef = designMatrix.getFeatures()
+        dataRef = (dataRef - self._means) / np.sqrt(self._varis)
+        designMatrix.setFeatures(dataRef)
+
+        # Print to Console?
+        if (verbose == True):
+            print(np.mean(designMatrix.getFeatures(),axis=0,dtype=np.float32))
+            print(np.var(designMatrix.getFeatures(),axis=0,dtype=np.float32))
+        return designMatrix
 
 
     def clear(self):
         """ Reset the State of the Instance """
         self._sampleShape = []
         self._matrixType = "-1"
+        self._isFitted = False
         self._means = np.array([])
         self._varis = np.array([])
         return self
