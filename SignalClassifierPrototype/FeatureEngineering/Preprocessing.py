@@ -12,7 +12,7 @@ Date:           January 2022
 
 import numpy as np
 
-from CommonStructures import DesignMatrix
+import CommonStructures
 
         #### CLASS DEFINTIONS ####
 
