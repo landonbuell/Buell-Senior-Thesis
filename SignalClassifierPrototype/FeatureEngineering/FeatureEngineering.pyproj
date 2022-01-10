@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="Adminstrative.py" />
     <Compile Include="FeatureSpace.py" />
+    <Compile Include="Preprocessing.py" />
     <Compile Include="__init__.py" />
     <Compile Include="__main__.py" />
   </ItemGroup>

@@ -29,6 +29,7 @@ class CollectionMethod:
         """ Constructor for CollectionMethod Base Class """
         self._methodName    = name
         self._parameter     = param
+        self._result        = np.empty(shape=(param,),dtype=np.float32)
 
     def __del__(self):
         """ Destructor for CollectionMethod Base Class """

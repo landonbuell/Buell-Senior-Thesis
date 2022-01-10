@@ -252,6 +252,30 @@ class DesignMatrix:
 
     # public Interface
 
+    def dropNaNs(self):
+        """ Drop All Rows with NaNs in them """
+        sumOfRows = np.sum(self._data,axis=1)
+        saveRows = []
+        for idx,item in enumerate(sumOfRows):
+            if np.isnan(item) == False:
+                saveRows.append(idx)
+        newNumSamples = len(saveRows)
+        newMatrix = DesignMatrix(newNumSamples,self.getSampleShape())
+        
+        # Copy Each Row to the Output
+        sampleIndex = 0
+        for row in saveRows:
+            newMatrix._data[sampleIndex] = self._data[row]
+            newMatrix._tgts[sampleIndex] = self._tgts[row]
+            sampleIndex += 1
+        
+        # Reatattch data to self
+        self.setNumSamples(newNumSamples)
+        self.setFeatures( newMatrix.getFeatures() )
+        self.setLabels( newMatrix.getLabels() )
+        newMatrix = None
+        return self
+
     def samplesInClass(self,classIndex):
         """ Create New Design Matrix of Samples that all belong to one class """
         if (classIndex not in self.getUniqueClasses()):
@@ -725,18 +749,21 @@ class RunInformation:
             for sample in range(numSamples):
                 if (loadA == True):
                     matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
+                    matrixA._tgts[sampleIndex] = batchMatricies[0]._tgts[sample]
                 if (loadB == True):
-                    matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
+                    matrixB._data[sampleIndex] = batchMatricies[-1]._data[sample]
+                    matrixB._tgts[sampleIndex] = batchMatricies[-1]._tgts[sample]
                 sampleIndex += 1
         # Loaded All Batches - Return Total Design Matrices
         if (loadA == True):
             matrices.append(matrixA)
         if (loadB == True):
             matrices.append(matrixB)
-        return (matrixA,matrixB,)
+        return matrices
 
     def loadBatch(self,index,loadA=True,loadB=True):
         """ Load In All Data from a chosen batch Index """
+        print("RunInformation.loadBatch(): Loading Batch {0}...".format(index))
         numSamples = self._batchSizes[index]
         matrices = []
         # Set the Matrix Paths

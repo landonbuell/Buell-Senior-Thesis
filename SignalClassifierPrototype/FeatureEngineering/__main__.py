@@ -13,6 +13,7 @@ Date:           December 2021
 import os
 import sys
 
+import Preprocessing
 import CommonStructures
 
         #### MAIN EXECUTABLE ####
@@ -24,8 +25,14 @@ if __name__ == "__main__":
     runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
     # Path to each Design Matrix
-    batchIndex = 0
-    designMatrices = runInfo.loadBatch(batchIndex,True,False)
+    batchIndex = 255
+    designMatrices = runInfo.loadAllSamples(True,False)
+    
+    designMatrixA = designMatrices[0]
+    designMatrixA.dropNaNs()
+
+    scaler = Preprocessing.FeatureScaler()
+    scaler.fitDesignMatrix()
 
     # Return 
     sys.exit(0)
