@@ -9,6 +9,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CommonUtilities", "CommonUt
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FeatureEngineering", "FeatureEngineering\FeatureEngineering.pyproj", "{1F9C8E99-6523-4EEA-99FB-29A84B9E0EBD}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NeuralNetworkModels", "NeuralNetworkModels\NeuralNetworkModels.pyproj", "{D369C612-0ECC-43E4-9549-94F6F4C44055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{0B3AAB92-77DA-4D35-8585-318B4458C673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F9C8E99-6523-4EEA-99FB-29A84B9E0EBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1F9C8E99-6523-4EEA-99FB-29A84B9E0EBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D369C612-0ECC-43E4-9549-94F6F4C44055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D369C612-0ECC-43E4-9549-94F6F4C44055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
