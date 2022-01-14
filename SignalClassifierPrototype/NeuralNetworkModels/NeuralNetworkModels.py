@@ -39,7 +39,7 @@ class IdentityLayer(tf.keras.layers.Layer):
 
     def __init__(self,name):
         """ Constructor for IdentityLayer Instance """
-        super().__init__(trainable=False,name=name,dtyp=tf.float32)
+        super().__init__(trainable=False,name=name,dtype=tf.float32)
 
     def __del__(self):
         """ Destructor for IdentityLayer Instance """
@@ -52,12 +52,18 @@ class IdentityLayer(tf.keras.layers.Layer):
 class TensorflowMultilayerPerceptron:
     """ Construct Tensorflow Multilayer Perceptron Instance """
 
-    def __init__(self,numFeatures,numClasses,neurons,activationFunction="relu",name="defaultMLP"):
+    def __init__(self,
+                 numFeatures,
+                 numClasses=None,
+                 neurons=[96,128,128,96,96,64],
+                 activationFunction="relu",
+                 name="defaultMLP"):
         """ Construct TensorflowMultilayerPerceptron Instance """
         self._numFeatures = numFeatures
         self._numClasses = numClasses
         self._layerWidths = neurons
         self._activationFunction = activationFunction
+        self._name = name
         self._model = None
 
     def __del__(self):
@@ -70,17 +76,25 @@ class TensorflowMultilayerPerceptron:
 
     def assembleModel(self):
         """ Construct the tensorflow model """
-        modelInput = tf.keras.layers.InputLayer(
-            input_shape=(self._numFeatures,),
+        modelInput = tf.keras.Input(
+            shape=(self._numFeatures,),
             dtype=tf.float32,
             name="inputMLP")
         x = IdentityLayer("identityA")(modelInput)
+
         # Add Dense Layers
         for i,nodes in enumerate(self._layerWidths):
             x = tf.keras.layers.Dense(
                 units=nodes,
                 activation=self._activationFunction,
-                name="denseMlp" + str(i))
+                name="denseMlp" + str(i))(x)
+
+        if (self._numClasses is not None):
+            x = tf.keras.layers.Dense(
+                units=self._numClasses,
+                activation='softmax',
+                name="outputMlp")(x)
+
         # Assemble the Model
         self._model = tf.keras.Model(inputs=modelInput,outputs=x,name=self._name)
         return self
@@ -88,16 +102,24 @@ class TensorflowMultilayerPerceptron:
 class TensorflowConvolutionNeuralNetwork:
     """ Construct Tensorflow Convolutional Neural Network """
 
-    def __init__(self,inputShape,outputShape,filterSizes=[32,32],
-                 kernelSizes=[(3,3),(3,3)],poolSizes=[(3,3),(3,3)],
-                 neurons=[64,64]):
+    def __init__(self,
+                 inputShape,
+                 numClasses=None,
+                 filterSizes=[32,32],
+                 kernelSizes=[(3,3),(3,3)],
+                 poolSizes=[(3,3),(3,3)],
+                 neurons=[64,64],
+                 activationFunction='relu',
+                 name="defaultCnn"):
         """ Constructor for TensorflowConvolutionNeuralNetwork Instance """
         self._inputShape = inputShape
-        self._outputShape = outputShape
+        self._numClasses = numClasses
         self._filterSizes = filterSizes
         self._kernelSizes = kernelSizes
         self._poolSizes = poolSizes
         self._layerWidths = neurons
+        self._activationFunction = activationFunction
+        self._name = name
         self._model = None
 
     def __del__(self):
@@ -110,7 +132,7 @@ class TensorflowConvolutionNeuralNetwork:
 
     def assembleModel(self):
         """ Construct the Tensorflow Model """
-        modelInput = tf.keras.layers.InputLayer(
+        modelInput = tf.keras.Input(
             shape=self._inputShape,
             dtype=tf.float32,
             name="inputCNN")
@@ -125,10 +147,77 @@ class TensorflowConvolutionNeuralNetwork:
         # Flatter + Add Dense Nodes
         x = tf.keras.layers.Flatten(name="F1")(x)          
         for i,nodes in enumerate(self._layerWidths):
-            x = tf.keras.layers.Dense(units=nodes,activation='relu',name='denseCnn'+str(i))(x)
+            x = tf.keras.layers.Dense(
+                units=nodes,
+                activation='relu',
+                name='denseCnn'+str(i))(x)
+        
+        if (self._numClasses is not None):
+            x = tf.keras.layers.Dense(
+                units=self._numClasses,
+                activation='softmax',
+                name="outputCnn")(x)    
+            
         self._model = tf.keras.Model(inputs=modelInput,outputs=x,name="ConvolutionalNetwork2D")
         return self
 
+class HybridNeuralNetwork:
+    """ Construct Tensorflow Hybrid Neural Network """
+
+    def __init__(self,
+                 numClasses,
+                 tfMLP,
+                 tfCNN,
+                 neurons=[64,64]):
+        """ Constructor for HybridNeuralNetwork Instance """
+        self._numClasses = numClasses
+        self._tfMLP = tfMLP
+        self._tfCNN = tfCNN
+        self._layerWidths = neurons
+        self._model = None
+
+    def __del__(self):
+        """ Destructor for HybridNeuralNetwork Instance """
+        self._tfMLP = None
+        self._tfCNN = None
+        self._model = None
+
+    def getModel(self):
+        """ Return the Tensorflow Model Instance """
+        return self._model
+    
+    def assembleModel(self):
+        """ Create the two sub-models + join then """
+        self._tfMLP.assembleModel()
+        self._tfCNN.assembleModel()
+        modelMLP = self._tfMLP.getModel()
+        modelCNN = self._tfCNN.getModel()
+
+        # Join the Models
+        x = tf.keras.layers.concatenate(
+            inputs=[modelMLP.output,modelCNN.output],
+            axis=-1,
+            name='concat')
+
+        # Add Dense Layers
+        for i,nodes in enumerate(self._layerWidths):
+            x = tf.keras.layers.Dense(
+                units=nodes,
+                activation='relu',
+                name='denseHnn'+str(i))(x)
+
+        # Create the output layer
+        x = tf.keras.layers.Dense(
+            units=self._numClasses,
+            activation='softmax',
+            name="outputHybrid")(x)  
+
+        self._model = tf.keras.Model(
+            inputs=[modelMLP.input,modelCNN.input],
+            outputs=x,
+            name="ConvolutionalNetwork2D")
+
+        return self
 
 
 
