@@ -22,13 +22,13 @@ class PreprocessingTool:
 
     def __init__(self,toolName):
         """ Constructor for PreprocessingTool Abstract Class """
+        self._matrix = None
         self._toolName = toolName
         self._timesFit = 0
-        self._sampleShape = []
         
     def __del__(self):
         """ Destruction for PreprocessingTool Abstract Class """
-        pass
+        self._matrix = None
 
     # Getters and Setters
 
@@ -46,23 +46,49 @@ class PreprocessingTool:
 
     def getSampleShape(self):
         """ Get the Shape of Each Sample """
-        return self._sampleShape
+        if (self._matrix is not None):
+            return self._matrix.getSampleShape()
+        else:
+            return []
+
+    def setMatrix(self,designMatrix):
+        """ Set the Current Design Matrix to Operate On """
+        self.checkShape(designMatrix)
+        self._matrix = designMatrix
+        return self
 
     # Public Interfacce
 
     def fit(self,designMatrix):
         """ Fit the Preprocessing Tool w/ a design matrix Object """
+        self.setMatrix(designMatrix)
         return self
 
     def transform(self,designMatrix):
         """ Transform a design matrix with the fir params """
+        self.setMatrix(designMatrix)
         return designMatrix
 
     def reset(self):
         """ Reset the state of the tool """
+        self._matrix = None
         self._timesFit = 0
-        self._sampleShape = []
         return self
+
+    # Protected Interface
+
+    def checkShape(self,designMatrix):
+        """ Check that the Design Matrix has the correct shape """
+        if (self._timesFit == 0):
+            # No Sample Shape Yet, just assign Matrix?
+            return True
+
+        if (designMatrix.getSampleShape() != self.getSampleShape()):
+            # Shape mismatch
+            errMsg = "The sample shape of the design matrix does not match that of the fit tool"
+            raise RuntimeError(errMsg)
+        return True
+
 
     # Magic Methods
 
@@ -70,7 +96,7 @@ class PreprocessingTool:
         """ Return Debugger Representation of Instance """
         return str(self.__class__) + " @ " + str(hex(id(self)))
 
-class SelectKBest:
+class SelectKBest(PreprocessingTool):
     """ Select K Features that score best by metric """
     
     def __init__(self,scoringCallback):
@@ -83,7 +109,7 @@ class SelectKBest:
         pass
 
 
-class FeatureScaler:
+class FeatureScaler(PreprocessingTool):
     """ Scales each Feature of a Design Matrix to Have Zero Mean and Unit Variance """
 
     def __init__(self):
@@ -158,4 +184,112 @@ class FeatureScaler:
         self._varis.reshape(newShape)
         return self
 
+class MinMaxVarianceSelector(PreprocessingTool):
+    """
+    Select Features Based in Minimum Intra-Class Variance and Maximum Extra-Class Variance 
+    """
+
+    def __init__(self):
+        """ Constructor for SelectKBest """
+        super().__init__("MinMaxVarianceSelector")
+        self._classesToUse      = None
+        self._featuresToUse     = None
+        self._varianceMatrix    = None
+
+    def __del__(self):
+        """ Destructor for FeatureScaler Instance """
+        pass
+
+    # Getters and Setters
+
+    def getUniqueClasses(self):
+        """ Get Array of Unique Classes """
+        if (self._matrix is None):
+            return np.array([],dtype=np.int16)
+        else:
+            return self._matrix.getUniqueClasses()
+
+    def getClasses(self):
+        """ Get the Classes by Int index To Process With  """
+        return self._classesToUse
+
+    def getFeatures(self):
+         """ Get the Features by Int index To Process With  """
+         return self._featuresToUse
+
+    def setClasses(self,classes=None):
+        """ Get the Classes by Int index To Process With  """
+        if (self._classesToUse is not None):
+            self._classesToUse = classes
+        elif (self._matrix is not None):
+            self._classesToUse = self._matrix.getUniqueClasses()
+        else:
+            self._classesToUse = np.array([],dtype=np.int16)
+        return
+
+    def setFeatures(self,features=None):
+        """ Get the Classes by Int index To Process With  """
+        if (self._featuresToUse is not None):
+            self._featuresToUse = features
+        elif (self._matrix is not None):
+            self._featuresToUse = np.arange(self._matrix.getNumFeatures(),dtype=np.int16)
+        else:
+            self._featuresToUse = np.array([],dtype=np.int16)
+        return
+
+    # Public Interface
+
+    def fit(self,designMatrix,classesToUse=None,featuresToUse=None):
+        """ Fit the Tool Given the Design Matrix """
+        super().fit(designMatrix)
+        self.setClasses(classesToUse)
+        self.setFeatures(featuresToUse)
+
+        # Preallocate Variance Matrix + Fill In Values
+        self.buildVarianceMatrix()
+        self.invoke()
+      
+        self._matrix = None
+        return self._varianceMatrix
+
+    def transform(self, designMatrix):
+        """ Transform the Design Matrix w/ the Tool's Parameters """
+        super().transform(designMatrix)
+
+        return self
+
+    def reset(self):
+        """ Reset This Instance to Construction State """
+        super().reset()
+        self._classesToUse      = None
+        self._featuresToUse     = None
+        self._varianceMatrix    = None
+        return self
+
+    # Private Interface
+
+    def buildVarianceMatrix(self):
+        """ Construct + Assign the Variance Matrix """
+        numClasses = self._matrix.getUniqueClasses().shape[0]
+        # Variance Matrix has shape (num classes x num Features)       
+        varShape = [numClasses] + [x for x in self._matrix.getShape()]
+        self._varianceMatrix = np.zeros(shape=varShape,dtype=np.float32)
+        return self
+
+    def invoke(self):
+        """ Proccess All Features in One class """
+        
+        for ii in self._classesToUse:
+            # Isolate all samples of class + Compute Variance
+            subsetMatrix = self._matrix.samplesInClass(ii)
+            variances = subsetMatrix.varianceOfFeatures()
+            
+            # Copy Variances to Output Matrix
+            np.copyto(self._varianceMatrix[ii],variances)
+
+        return self
+
+
+
+    # Magic Methods
 
