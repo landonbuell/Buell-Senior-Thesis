@@ -375,6 +375,13 @@ class Logger:
                 self._outFile.close()
         self._outFile = None
 
+    # Getters and Setters
+
+    def getLoggerPath(self):
+        """ Return the Path to the logger text output file """
+        outpath = CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()
+        return os.path.join(outpath,"logger.txt")
+
     # Public Interface
 
     def logMessage(self,message:str,timeStamp=True):
@@ -391,8 +398,11 @@ class Logger:
         # Write the Message to Console and/or to File
         if (self._toConsole == True):
             print(formattedMessage)
+
         if (self._toFile == True):
+            self._outFile = open(self.getLoggerPath(),"a")
             self._outFile.write(formattedMessage)
+            self._outFile.close()
         return self
 
     # Private Interface
