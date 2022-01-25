@@ -25,10 +25,10 @@ if __name__ == "__main__":
     runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
     # Path to each Design Matrix
-    batchIndex = 2
-    designMatrices = runInfo.loadBatch(batchIndex)
+    batches = range(0,runInfo.getNumBatches(),3)
+    designMatrices = runInfo.loadBatches(batches,True,False)
 
-    matrixA = designMatrices[0]
+    matrixA = designMatrices[0].dropNaNs()
     
     tool = Preprocessing.MinMaxVarianceSelector()
     tool.fit(matrixA)

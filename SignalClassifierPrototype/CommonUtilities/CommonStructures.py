@@ -230,6 +230,7 @@ class DesignMatrix:
         """ Set Design Matrix is an Array """
         self._numSamples = x.shape[0]
         self._sampleShape = tuple(x.shape[1:])
+        self._data = None
         self._data = x
         return self
 
@@ -276,6 +277,27 @@ class DesignMatrix:
         newMatrix = None
         return self
 
+    def concat(self,otherMatrix):
+        """ Concatenate Another Design Matrix to the End of this One (SLOW) """
+        if (otherMatrix.getSampleShape() != self.getSampleShape()):
+            # Shapes Not Equal
+            raise ValueError("Shape Mismatch!")
+        totalNumSamples = self.getNumSamples() + otherMatrix.getNumSamples()
+        shapeNewMatrix = [totalNumSamples] + [x for x in self.getSampleShape()]
+        newFeatureArr = np.empty(shape=shapeNewMatrix,dtype=np.float32)
+        # Copy Features to New Array
+        sampleIndex = 0
+        for smpl in self._data:
+            newFeatureArr[sampleIndex] = smpl
+            sampleIndex += 1
+        for smpl in otherMatrix._data:
+            newFeatureArr[sampleIndex] = smpl
+            sampleIndex += 1
+        # Add to New Design Matrix + Append Target Vector
+        self.setFeatures(newFeatureArr)
+        self.setLabels(np.append(self._tgts,otherMatrix._tgts))
+        return self
+
     def samplesInClass(self,classIndex):
         """ Create New Design Matrix of Samples that all belong to one class """
         if (classIndex not in self.getUniqueClasses()):
@@ -290,7 +312,6 @@ class DesignMatrix:
         result.setLabels(newTgts)
         result.setFeatures(newData)
         return result
-
 
     def averageOfFeatures(self):
         """ Compute the Average of the Design Matrix Along each Feature """
@@ -781,6 +802,21 @@ class RunInformation:
             matrices.append(matrixB)
         return matrices
 
+    def loadBatches(self,batchIndicies,loadA=True,loadB=True):
+        """ Load In All Data from a subet of batches by Index """
+        batchIndicies = np.unique(batchIndicies)
+        matrices = self.loadBatch(batchIndicies[0],loadA,loadB)
+         
+        # Load the Rest of the Data + Concatenate
+        for i in range(1,len(batchIndicies)):
+            batchMatrices = self.loadBatch(batchIndicies[i],loadA,loadB)
+            if (loadA == True):
+                matrices[0] = matrices[0].concat(batchMatrices[0])
+            if (loadB == True):
+                matrices[-1] = matrices[-1].concat(batchMatrices[-1])
+
+        return matrices
+
     def serialize(self,path=None,batchLimit=-1):
         """ Serialize this Instance to specified Path """
         if (path is None):
@@ -793,7 +829,6 @@ class RunInformation:
             print("\t\tRunInformation.serialize()" + err)
             success = False
         return success
-
 
     @staticmethod
     def deserialize(path):
@@ -823,6 +858,12 @@ class RunInformation:
             super().__del__()
 
         def call(self):
+            """ Serialize the RunInfo Instance """
+            self.writeStandardInfo()
+            self.writeFeatureNames()
+            return self
+
+        def writeStandardInfo(self):
             """ Serialize the RunInfo Instance """          
 
             self._outFileStream = open(self._outputPath,"w")
@@ -843,12 +884,6 @@ class RunInformation:
             self._outFileStream.write( self._outFmtStr("ShapeSampleA",shapeSampleA ) )
             self._outFileStream.write( self._outFmtStr("ShapeSampleB",shapeSampleB ) )
 
-            # Write Feature Name Details
-            featureNamesA = self.listToString(self._data.getFeatureNamesA(),",")
-            featureNamesB = self.listToString(self._data.getFeatureNamesB(),",")
-            self._outFileStream.write( self._outFmtStr("FeatureNamesA", featureNamesA))
-            self._outFileStream.write( self._outFmtStr("FeatureNamesB", featureNamesB))
-
             # Write Batch Details
             usedBatchSizes = self._data.getBatchSizes()[:self._batchLimit]
             batchSizes = self.listToString(usedBatchSizes,",")
@@ -858,6 +893,22 @@ class RunInformation:
             self.writeFooter()
             self._outFileStream.close()
             return True
+
+        def writeFeatureNames(self):
+            """ Write out the Name of Features """
+            outpath = os.path.split(self._outputPath)
+            self._outFileStream = open(os.path.join(outpath[0],"featureNames.txt"),"w")
+            self.writeHeader()
+
+            # Write Each Feature Name
+            for idx,name in enumerate(self._data.getFeatureNamesA()):
+                outLine = self._outFmtStr(str(idx),name)
+                self._outFileStream.write(outLine)
+
+            self.writeFooter()
+            self._outFileStream.close()
+            return True
+
 
     class RunInformationDeserializer(Deserializer):
         """ Class to Deserialize Run Information from a Local Path """

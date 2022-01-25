@@ -400,7 +400,7 @@ class CollectionManager (Manager):
         self[13] = CollectionMethods.ZeroCrossingsFramesVariance(1)
         self[14] = CollectionMethods.ZeroCrossingsFramesDiffMinMax(1)
         self[15] = CollectionMethods.TemporalCenterOfMass(1)
-        self[16] = CollectionMethods.TemporalCenterOfMass(2)
+        self[16] = CollectionMethods.TemporalCenterOfMass(3)
         self[17] = CollectionMethods.AutoCorrelationCoefficients(12)
         self[18] = CollectionMethods.AutoCorrelationCoefficientsMean(1)
         self[19] = CollectionMethods.AutoCorrelationCoefficientsVariance(1)

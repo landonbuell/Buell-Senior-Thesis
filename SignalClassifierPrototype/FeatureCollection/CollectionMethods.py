@@ -418,6 +418,12 @@ class TemporalCenterOfMass(CollectionMethod):
         """ Destructor for TemporalCenterOfMass Instance """
         super().__del__()
 
+    # Getters and Setters
+
+    def getReturnSize(self) -> int:
+        """ Get the Number of Features that we expect to Return """
+        return 1
+
     # Public Interface
 
     def invoke(self, signalData, *args):
@@ -427,7 +433,7 @@ class TemporalCenterOfMass(CollectionMethod):
 
         # Compute Total Mass + Weights
         massTotal = np.sum(signalData.Waveform)
-        weights = np.arange(0,signalData.getNumSamples())**(self._parameter)
+        weights = self.kernelFunction(signalData.getNumSamples())
         # Compute Center of Mass (By Weights)
         massCenter = np.dot(weights,signalData.Waveform);
         massCenter /= massTotal
@@ -438,7 +444,35 @@ class TemporalCenterOfMass(CollectionMethod):
         self.checkForNaNs()
         return self._result
 
+    def featureNames(self):
+        """ Get List of Names for Each element in Result Array """
+        return [self._methodName + self.kernelName() + str(i) for i in range(self.getReturnSize())]
+
     # Protected Interface
+
+    def kernelFunction(self,numSamples):
+        """ Set the Kernel Function based on the parameter """
+        kernel = np.arange(0,numSamples,1)
+        if (self._parameter == 1):
+            pass                    # Linear Kernel
+        elif (self._parameter == 2):
+            kernel = kernel ** 2    # Quadratic
+        elif (self._parameter == 3):
+            kernel = np.log(kernel) # Nat log
+        else:
+            pass
+        return kernel
+
+    def kernelName(self):
+        """ Set the Kernel Function based on the parameter """
+        if (self._parameter == 1):
+            return "Linear"                    # Linear Kernel
+        elif (self._parameter == 2):
+           return "Quadratic"
+        elif (self._parameter == 3):
+            return "NaturalLog"
+        else:
+            return "Linear"
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """

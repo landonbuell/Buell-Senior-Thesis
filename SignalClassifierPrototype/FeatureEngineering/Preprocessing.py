@@ -11,7 +11,8 @@ Date:           January 2022
         #### IMPORTS ####
 
 import numpy as np
-from numpy.lib.function_base import average
+import matplotlib.pyplot as plt
+import pandas as pd
 
 import CommonStructures
 
@@ -220,9 +221,9 @@ class MinMaxVarianceSelector(PreprocessingTool):
     def setClasses(self,classes=None):
         """ Get the Classes by Int index To Process With  """
         if (self._classesToUse is not None):
-            self._classesToUse = classes
+            self._classesToUse = np.sort(classes)
         elif (self._matrix is not None):
-            self._classesToUse = self._matrix.getUniqueClasses()
+            self._classesToUse = np.sort(self._matrix.getUniqueClasses())
         else:
             self._classesToUse = np.array([],dtype=np.int16)
         return
@@ -239,7 +240,7 @@ class MinMaxVarianceSelector(PreprocessingTool):
 
     # Public Interface
 
-    def fit(self,designMatrix,classesToUse=None,featuresToUse=None):
+    def fit(self,designMatrix,classesToUse=None,featuresToUse=None,runInfo=None):
         """ Fit the Tool Given the Design Matrix """
         super().fit(designMatrix)
         self.setClasses(classesToUse)
@@ -248,7 +249,9 @@ class MinMaxVarianceSelector(PreprocessingTool):
         # Preallocate Variance Matrix + Fill In Values
         self.buildVarianceMatrix()
         self.invoke()
-      
+        self.plotVarianceMatrix("VarianceMatrix")
+        self.exportVarianceMatrix()
+
         self._matrix = None
         return self._varianceMatrix
 
@@ -270,22 +273,57 @@ class MinMaxVarianceSelector(PreprocessingTool):
 
     def buildVarianceMatrix(self):
         """ Construct + Assign the Variance Matrix """
-        numClasses = self._matrix.getUniqueClasses().shape[0]
+        numClasses = self._classesToUse.shape[0]
         # Variance Matrix has shape (num classes x num Features)       
-        varShape = [numClasses] + [x for x in self._matrix.getShape()]
+        varShape = [numClasses] + [x for x in self._matrix.getSampleShape()]
         self._varianceMatrix = np.zeros(shape=varShape,dtype=np.float32)
         return self
 
     def invoke(self):
         """ Proccess All Features in One class """
         
+        rowIndex = 0
         for ii in self._classesToUse:
             # Isolate all samples of class + Compute Variance
             subsetMatrix = self._matrix.samplesInClass(ii)
             variances = subsetMatrix.varianceOfFeatures()
             
             # Copy Variances to Output Matrix
-            np.copyto(self._varianceMatrix[ii],variances)
+            np.copyto(self._varianceMatrix[rowIndex],variances)
+            rowIndex += 1
+
+        return self
+
+    def plotVarianceMatrix(self,title,save=False,show=True,featureNames=None,classNames=None):
+        """ Create a Colormap plot of the Variance Matrix """
+        plt.figure(figsize=(16,8),edgecolor='gray')
+        plt.title(title,size=24,weight='bold')
+        plt.xlabel("Feature Index",size=16,weight='bold')
+        plt.ylabel("Class Index",size=16,weight='bold')
+        
+        normalizedMatrix = np.divide(self._varianceMatrix,1.0)
+        plt.pcolormesh(normalizedMatrix,
+                       cmap=plt.cm.jet)
+
+        xTickLabels = featureNames if featureNames is not None else self._featuresToUse
+        yTickLabels = classNames if classNames is not None else self._classesToUse      
+        plt.xticks(ticks=np.arange(self._featuresToUse.shape[0]),
+                   labels=xTickLabels)
+        plt.yticks(ticks=np.arange(self._classesToUse.shape[0]),
+                   labels=yTickLabels)
+
+        plt.grid()
+
+        if (save == True):
+            plt.savefig(title + ".png")
+        if (show == True):
+            plt.show()
+        plt.close()
+        return None
+
+    def exportVarianceMatrix(self):
+        """ Export the Variance Matrix """
+        frame = pd.DataFrame()
 
         return self
 
