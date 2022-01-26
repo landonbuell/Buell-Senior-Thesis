@@ -21,14 +21,12 @@ import CommonStructures
 if __name__ == "__main__":
 
     # Parse User Arguments
-    runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\devRunv1"
+    runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\simpleSignalsV1"
     runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
     # Path to each Design Matrix
-    batches = range(0,runInfo.getNumBatches(),3)
-    designMatrices = runInfo.loadBatches(batches,True,False)
-
-    matrixA = designMatrices[0].dropNaNs()
+    designMatrices = runInfo.loadAllSamples(True,False)
+    matrixA = designMatrices[0].dropNaNsAndInfs()
     
     tool = Preprocessing.MinMaxVarianceSelector()
     tool.fit(matrixA)

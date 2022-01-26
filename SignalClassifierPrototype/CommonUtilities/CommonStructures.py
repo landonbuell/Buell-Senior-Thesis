@@ -253,13 +253,16 @@ class DesignMatrix:
 
     # public Interface
 
-    def dropNaNs(self):
+    def dropNaNsAndInfs(self):
         """ Drop All Rows with NaNs in them """
         sumOfRows = np.sum(self._data,axis=1)
         saveRows = []
         for idx,item in enumerate(sumOfRows):
-            if np.isnan(item) == False:
-                saveRows.append(idx)
+            if np.isnan(item) == True:
+                continue
+            if np.isinf(item) == True:
+                continue
+            saveRows.append(idx)
         newNumSamples = len(saveRows)
         newMatrix = DesignMatrix(newNumSamples,self.getSampleShape())
         
@@ -315,11 +318,17 @@ class DesignMatrix:
 
     def averageOfFeatures(self):
         """ Compute the Average of the Design Matrix Along each Feature """
-        return np.mean(self._data,axis=0,dtype=np.float32)
+        means = np.mean(self._data,axis=0,dtype=np.float32)
+        if (mask is not None):
+            means = means[mask]
+        return means
 
-    def varianceOfFeatures(self):
+    def varianceOfFeatures(self,mask=None):
         """ Compute the Variance of the Design Matrix Along each Feature """
-        return np.var(self._data,axis=0,dtype=np.float32)
+        varis = np.var(self._data,axis=0,dtype=np.float32)
+        if (mask is not None):
+            varis = varis[mask]
+        return varis
 
     def serialize(self,pathX=None,pathY=None):
         """ Write this design matrix out to a file """   
@@ -925,12 +934,36 @@ class RunInformation:
 
         def call(self):
             """ Serialize the RunInfo Instance """    
+            self.readStandardInfo()
+            self.readFeatureNames()
+            return self._data
+
+        def readStandardInfo(self):
+            """ Read All Standard Run Information + Populate Self """
             self._inFileStream = open(self._inputPath,"r")
             self._inFileContents = self._inFileStream.readlines()
             
             # Find all of the Necessary parts
-            runInfo = self.parseAllFeilds()
-            return runInfo
+            self._data = self.parseAllFeilds()
+
+            # Close + De Allocate
+            self._inFileStream.close()
+            self._inFileContents = None
+            return self
+
+        def readFeatureNames(self):
+            """ Read in the name of each Feature """
+            inPath = os.path.split(self._inputPath)
+            self._inFileStream = open(os.path.join(inPath[0],"featureNames.txt"),"r")
+            self._inFileContents = self._inFileStream.readlines()
+
+            # Fin all of the Neccessary Parts
+            self.loadFeatureNamesA()
+
+            # Close + De Allocate
+            self._inFileStream.close()
+            self._inFileContents = None
+            return self
 
         # Private Interface
 
@@ -944,8 +977,8 @@ class RunInformation:
             samplesActual   = self.findAndParseInts("ProcessedSamples")[-1]
             shapeSampleA    = self.findAndParseInts("ShapeSampleA")
             shapeSampleB    = self.findAndParseInts("ShapeSampleB")
-            featureNamesA   = self.findAndParseStrs("FeatureNamesA")[-1].split(",")
-            featureNamesB   = self.findAndParseStrs("FeatureNamesB")
+            #featureNamesA   = self.findAndParseStrs("FeatureNamesA")[-1].split(",")
+            #featureNamesB   = self.findAndParseStrs("FeatureNamesB")
             batchSizes      = self.findAndParseInts("BatchSizes")
             
             # Assign the Feilds to the instance
@@ -954,12 +987,40 @@ class RunInformation:
             runInfo.setActualNumSamples(samplesActual)
             runInfo.setShapeSampleA(shapeSampleA)
             runInfo.setShapeSampleB(shapeSampleB)
-            runInfo.setFeatureNamesA(featureNamesA)
-            runInfo.setFeatureNamesB(featureNamesB)
+            #runInfo.setFeatureNamesA(featureNamesA)
+            #runInfo.setFeatureNamesB(featureNamesB)
             runInfo.setBatchSizes(batchSizes)
             return runInfo
 
-        def findAndParseStrs(self,keyword,):
+        def loadFeatureNamesA(self):
+            """ Find all of the feature Names """
+            numFeatures = self._data.getShapeSampleA()[0]
+            numLines = len(self._inFileContents)
+            nameList = ["p" + str(x) for x in range(numFeatures)]
+            
+            for line in self._inFileContents:
+
+                if (line.startswith("-") or line.startswith("<")):
+                    # Check for header or footer
+                    continue
+
+                try:
+                    # Tokenize + Assign by index
+                    tokens = line.split()
+                    index = int(tokens[0])
+                    name = tokens[1]
+                    nameList[index] = name
+
+                except Exception as err:
+                    # Note a problem?
+                    print(err)
+                    continue               
+            # attach to name list to the internal struct
+            self._data.setFeatureNamesA(nameList)
+            return self
+
+
+        def findAndParseStrs(self,keyword):
             """ Find All words with token and return as list of Strings"""
             result = []
             for line in self._inFileContents:

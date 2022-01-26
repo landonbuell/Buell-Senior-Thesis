@@ -193,9 +193,12 @@ class MinMaxVarianceSelector(PreprocessingTool):
     def __init__(self):
         """ Constructor for SelectKBest """
         super().__init__("MinMaxVarianceSelector")
-        self._classesToUse      = None
-        self._featuresToUse     = None
-        self._varianceMatrix    = None
+        self._featureMask = None
+        self._classMask = None
+        self._featureNames = None
+        self._classNames = None
+        self._save = False
+        self._show = True
 
     def __del__(self):
         """ Destructor for FeatureScaler Instance """
@@ -203,54 +206,42 @@ class MinMaxVarianceSelector(PreprocessingTool):
 
     # Getters and Setters
 
-    def getUniqueClasses(self):
-        """ Get Array of Unique Classes """
-        if (self._matrix is None):
-            return np.array([],dtype=np.int16)
+    def setFeatureMask(self,mask):
+        """ Set mask of features to Use for processing """
+        if (mask is None):
+            self._featureMask = np.ones(
+                shape=self._matrix.getSampleShape(),
+                dtype=np.bool8)
+        elif (mask.shape != self._matrix.getSampleShape() ):
+            raise ValueError("Shape mismatch for feature mask array")
         else:
-            return self._matrix.getUniqueClasses()
+            self._featureMask = mask
+        return self
 
-    def getClasses(self):
-        """ Get the Classes by Int index To Process With  """
-        return self._classesToUse
-
-    def getFeatures(self):
-         """ Get the Features by Int index To Process With  """
-         return self._featuresToUse
-
-    def setClasses(self,classes=None):
-        """ Get the Classes by Int index To Process With  """
-        if (self._classesToUse is not None):
-            self._classesToUse = np.sort(classes)
-        elif (self._matrix is not None):
-            self._classesToUse = np.sort(self._matrix.getUniqueClasses())
+    def setClassMask(self,mask):
+        """ Set mask of classes to use for processing """
+        if (mask is None):
+            self._classMask = np.ones(
+                shape=self._matrix.getUniqueClasses().shape,
+                dtype=np.bool8)
+        elif (mask.shape != self._matrix.getUniqueClasses() ):
+            raise ValueError("Shape mismatch for class mask array")
         else:
-            self._classesToUse = np.array([],dtype=np.int16)
-        return
-
-    def setFeatures(self,features=None):
-        """ Get the Classes by Int index To Process With  """
-        if (self._featuresToUse is not None):
-            self._featuresToUse = features
-        elif (self._matrix is not None):
-            self._featuresToUse = np.arange(self._matrix.getNumFeatures(),dtype=np.int16)
-        else:
-            self._featuresToUse = np.array([],dtype=np.int16)
-        return
+            self.classMask = mask
+        return self
 
     # Public Interface
 
-    def fit(self,designMatrix,classesToUse=None,featuresToUse=None,runInfo=None):
+    def fit(self,designMatrix,featureMask=None,classMask=None,
+            featureNames=None,classNames=None,save=None,show=True):
         """ Fit the Tool Given the Design Matrix """
         super().fit(designMatrix)
-        self.setClasses(classesToUse)
-        self.setFeatures(featuresToUse)
-
-        # Preallocate Variance Matrix + Fill In Values
+        self.setFeatureMask(featureMask)
+        self.setClassMask(classMask)
         self.buildVarianceMatrix()
+
+        # Compute The Variance for Each Feature
         self.invoke()
-        self.plotVarianceMatrix("VarianceMatrix")
-        self.exportVarianceMatrix()
 
         self._matrix = None
         return self._varianceMatrix
@@ -264,18 +255,26 @@ class MinMaxVarianceSelector(PreprocessingTool):
     def reset(self):
         """ Reset This Instance to Construction State """
         super().reset()
-        self._classesToUse      = None
-        self._featuresToUse     = None
-        self._varianceMatrix    = None
+        self._featureMask = None
+        self._classMask = None
+        self._featureNames = None
+        self._classNames = None
+        self._save = False
+        self._show = True
         return self
 
     # Private Interface
 
     def buildVarianceMatrix(self):
         """ Construct + Assign the Variance Matrix """
-        numClasses = self._classesToUse.shape[0]
+        if (self._matrix is None):
+            raise ValueError("Must provide Design Matrix to build Variance Matrix")
+
+        numClasses = np.sum(self._classMask)
+        numFeatures = np.sum(self._featureMask)
+         
         # Variance Matrix has shape (num classes x num Features)       
-        varShape = [numClasses] + [x for x in self._matrix.getSampleShape()]
+        varShape = [numClasses, numFeatures] # Only 2D Arrays right now?
         self._varianceMatrix = np.zeros(shape=varShape,dtype=np.float32)
         return self
 
@@ -283,10 +282,15 @@ class MinMaxVarianceSelector(PreprocessingTool):
         """ Proccess All Features in One class """
         
         rowIndex = 0
-        for ii in self._classesToUse:
+        unqiueClasses = self._matrix.getUniqueClasses()
+        for classIndex,useClass in zip(unqiueClasses,self._classMask):
+            # Skip Classes that we don't case about
+            if (useClass == False):
+                continue
+
             # Isolate all samples of class + Compute Variance
-            subsetMatrix = self._matrix.samplesInClass(ii)
-            variances = subsetMatrix.varianceOfFeatures()
+            subsetMatrix = self._matrix.samplesInClass(classIndex)
+            variances = subsetMatrix.varianceOfFeatures(self._featureMask)
             
             # Copy Variances to Output Matrix
             np.copyto(self._varianceMatrix[rowIndex],variances)
