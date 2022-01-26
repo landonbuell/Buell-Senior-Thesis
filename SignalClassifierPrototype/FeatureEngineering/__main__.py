@@ -21,7 +21,7 @@ import CommonStructures
 if __name__ == "__main__":
 
     # Parse User Arguments
-    runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\simpleSignalsV1"
+    runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\simpleSignalsV2"
     runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
     # Path to each Design Matrix

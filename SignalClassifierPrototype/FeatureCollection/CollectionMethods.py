@@ -32,7 +32,7 @@ class CollectionMethod:
         self._methodName    = name
         self._parameter     = param
         self._result        = np.empty(shape=(param,),dtype=np.float32)
-
+       
     def __del__(self):
         """ Destructor for CollectionMethod Base Class """
         self._result = None
@@ -75,13 +75,17 @@ class CollectionMethod:
             raise ValueError(errMsg)
         return True
 
-    def checkForNaNs(self):
-        """ Check To See if Any Entries in the result contain NaN values """
+    def checkForNaNsAndInfs(self):
+        """ Check To See if Any Entries in the result contain NaN or Inf values """
         sumOfResult = np.sum(self._result)
         if np.isnan(sumOfResult):
             # Result contains NaN's
             msg = "\t\tMethod: {0} got result w/ NaN value(s)".format(self.getMethodName())
             Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg,False)
+        if np.isinf(sumOfResult):
+            # Result contains NaN's
+            msg = "\t\tMethod: {0} got result w/ Inf value(s)".format(self.getMethodName())
+            Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg,False)        
         return self
 
     # Magic Methods
@@ -115,7 +119,7 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
             part = signalData.Waveform[ startIndex : startIndex + sizeOfPartition]
             self._result[i] = np.sum((part**2),dtype=np.float32)
             startIndex += sizeOfPartition
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
 
@@ -167,7 +171,7 @@ class TimeDomainEnvelopFrames(CollectionMethod):
         for i in range(self._start,self._stop,self._step):
             self._result[idx] = signalData.FrameEnergyTime[i]
             idx += 1
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -226,7 +230,7 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
 
         # Get Number of Frames as a percentage
         self._result[0] = (numFrames / totFrames)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -272,7 +276,7 @@ class ZeroCrossingsPerTime(CollectionMethod):
         for i in range(1,numSamples):
             ZXR += np.abs(sign[i] - sign[i-1])
         self._result[0] = ZXR / 2
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -310,7 +314,7 @@ class ZeroCrossingsFramesMean(CollectionMethod):
         self.validateInputSignal(signalData)
         super().invoke(signalData)  
         self._result[0] = np.mean(signalData.FrameZeroCrossings)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -347,7 +351,7 @@ class ZeroCrossingsFramesVariance(CollectionMethod):
         self.validateInputSignal(signalData)
         super().invoke(signalData)
         self._result[0] = np.var(signalData.FrameZeroCrossings)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -388,7 +392,7 @@ class ZeroCrossingsFramesDiffMinMax(CollectionMethod):
         maxVal = np.max(signalData.FrameZeroCrossings)
         
         self._result[0] = maxVal - minVal
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -441,7 +445,7 @@ class TemporalCenterOfMass(CollectionMethod):
 
         # Apply Result + Return 
         self._result[0] = massCenter
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     def featureNames(self):
@@ -458,7 +462,7 @@ class TemporalCenterOfMass(CollectionMethod):
         elif (self._parameter == 2):
             kernel = kernel ** 2    # Quadratic
         elif (self._parameter == 3):
-            kernel = np.log(kernel) # Nat log
+            kernel = np.log(kernel + EPSILON[0]) # Nat log
         else:
             pass
         return kernel
@@ -513,7 +517,7 @@ class AutoCorrelationCoefficients(CollectionMethod):
 
         # Copy the ACC's the the result + Return
         np.copyto(self._result,signalData.AutoCorrelationCoeffs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -553,7 +557,7 @@ class AutoCorrelationCoefficientsMean(CollectionMethod):
 
         # Get the Average of the AutoCorrelation Coefficients
         self._result[0] = np.mean(signalData.AutoCorrelationCoeffs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -593,7 +597,7 @@ class AutoCorrelationCoefficientsVariance(CollectionMethod):
         
         # Compute the Variance
         self._result[0] = np.var(signalData.AutoCorrelationCoeffs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -634,7 +638,7 @@ class AutoCorrelationCoefficientsDiffMinMax(CollectionMethod):
         minVal = np.min(signalData.AutoCorrelationCoeffs)
         maxVal = np.max(signalData.AutoCorrelationCoeffs)
         self._result[0] = maxVal - minVal
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -681,7 +685,7 @@ class FrequencyCenterOfMass(CollectionMethod):
 
         # Add the Average of all frames, and put into result
         self._result[0] = np.mean(centerOfMasses)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -726,7 +730,7 @@ class MelFilterBankEnergies(CollectionMethod):
 
         # Copy to result + return
         np.copyto(self._result,avgMFBEs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -808,7 +812,7 @@ class MelFilterBankEnergiesMean(CollectionMethod):
         # Compute Mean of MFCC's
         avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
         self._result[0] = np.mean(avgMFBEs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -848,7 +852,7 @@ class MelFilterBankEnergiesVariance(CollectionMethod):
         # Compute Variance of MFCC's
         avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
         self._result[0] = np.var(avgMFBEs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -891,7 +895,7 @@ class MelFilterBankEnergiesDiffMinMax(CollectionMethod):
         maxVal = np.max(avgMFBEs)
 
         self._result[0] = maxVal - minVal
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface
@@ -934,7 +938,7 @@ class MelFrequencyCepstrumCoefficients(CollectionMethod):
 
         avgMFCCs = np.mean(MFCCs,axis=0)
         np.copyto(self._result,avgMFCCs)
-        self.checkForNaNs()
+        self.checkForNaNsAndInfs()
         return self._result
 
     # Protected Interface

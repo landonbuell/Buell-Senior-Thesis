@@ -278,7 +278,7 @@ class AppSettings:
             #            "..\\lib\\DemoTargetData\\Y2.csv",
             #            "..\\lib\\DemoTargetData\\Y1.csv",],
             pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\simpleSignalsV1",
+            pathOutput="..\\..\\..\\..\\audioFeatures\\simpleSignalsV2",
             batchSize=64,
             batchLimit=-1,
             shuffleSeed=-1)

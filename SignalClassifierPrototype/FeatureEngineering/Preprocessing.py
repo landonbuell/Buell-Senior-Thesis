@@ -243,6 +243,12 @@ class MinMaxVarianceSelector(PreprocessingTool):
         # Compute The Variance for Each Feature
         self.invoke()
 
+        if (save is not None or show == True):
+            # Plot and save and/or show the figure
+            self.plotVarianceMatrix("VarianceMatrix"
+                                    featureNames=featureNames,
+                                    classNames=classNames)
+
         self._matrix = None
         return self._varianceMatrix
 
