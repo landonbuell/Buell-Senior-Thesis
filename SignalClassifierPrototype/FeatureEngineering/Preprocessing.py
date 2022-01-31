@@ -14,6 +14,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+EPSILON = np.array([1e-6],dtype=np.float32)
+
 import CommonStructures
 
         #### CLASS DEFINTIONS ####
@@ -201,8 +203,8 @@ class MinMaxVarianceSelector(PreprocessingTool):
         self._featureMask = None
         self._classMask = None
         
-        self._save = False
-        self._show = True
+        self._save = save
+        self._show = show
 
     def __del__(self):
         """ Destructor for FeatureScaler Instance """
@@ -215,7 +217,8 @@ class MinMaxVarianceSelector(PreprocessingTool):
         if (self._featureNames is not None):
             if (self._featureMask is not None):
                 # Need a double list comprehension here?
-                return self._featureNames[self._featureMask.tolist()]
+                result = [x for (x,y) in zip(self._featureNames,self._featureMask) if y == True]
+                return result
             else:
                 return self._featureNames
         else:
@@ -226,7 +229,8 @@ class MinMaxVarianceSelector(PreprocessingTool):
         if (self._classNames is not None):
             if (self._classMask is not None):
                 # Need a double list comprehension here?
-                return self._classNames[self._classMask.tolist()]
+                result = [x for (x,y) in zip(self._classNames,self._classMask) if y == True]
+                return result
             else:
                 return self._classNames
         else:
@@ -271,7 +275,9 @@ class MinMaxVarianceSelector(PreprocessingTool):
         if (self._save is not None or 
             self._show == True):
             # Plot and save and/or show the figure
-            self.plotVarianceMatrix(title="VarianceMatrix")
+            self.plotVarianceMatrix(title="LogVarianceMatrix")
+
+        self.printMatrix()
 
         self._matrix = None
         return self._varianceMatrix
@@ -313,6 +319,7 @@ class MinMaxVarianceSelector(PreprocessingTool):
         
         rowIndex = 0
         unqiueClasses = self._matrix.getUniqueClasses()
+        overallVariances = self._matrix.varianceOfFeatures(self._featureMask)
         for classIndex,useClass in zip(unqiueClasses,self._classMask):
             # Skip Classes that we don't case about
             if (useClass == False):
@@ -322,27 +329,30 @@ class MinMaxVarianceSelector(PreprocessingTool):
             subsetMatrix = self._matrix.samplesInClass(classIndex)
             variances = subsetMatrix.varianceOfFeatures(self._featureMask)
             
-            # Copy Variances to Output Matrix
+            # Copy Variances to Output Matrix and scale
             np.copyto(self._varianceMatrix[rowIndex],variances)
+            self._varianceMatrix[rowIndex] /= overallVariances
             rowIndex += 1
 
         return self
 
-    def plotVarianceMatrix(self,title):
+    def plotVarianceMatrix(self,title,log=True):
         """ Create a Colormap plot of the Variance Matrix """
         plt.figure(figsize=(16,8),edgecolor='gray')
         plt.title(title,size=24,weight='bold')
         plt.xlabel("Feature Index",size=16,weight='bold')
         plt.ylabel("Class Index",size=16,weight='bold')
         
-        #normalizedMatrix = np.divide(self._varianceMatrix,1.0)
-        plt.pcolormesh(self._varianceMatrix,
-                       cmap=plt.cm.jet)
+        normalizedMatrix = np.log(self._varianceMatrix + EPSILON)
+        plt.matshow(normalizedMatrix,fignum=0)
 
-        plt.xticks(ticks=np.arange(self.getFeatureNames().shape[0]),
-                   labels=self.getFeatureNames())
-        plt.yticks(ticks=np.arange(self.getClassNames().shape[0]),
-                   labels=self.getClassNames())
+        featureNames = self.getFeatureNames()
+        classNames = self.getClassNames()
+        plt.xticks(ticks=np.arange(len(featureNames)),
+                   labels=featureNames,
+                   rotation=90)
+        plt.yticks(ticks=np.arange(len(classNames)),
+                   labels=classNames)
 
         plt.grid()
 
@@ -352,6 +362,12 @@ class MinMaxVarianceSelector(PreprocessingTool):
             plt.show()
         plt.close()
         return None
+
+    def printMatrix(self):
+        """ Print the Variance Matrix to the Console """
+        for row in self._varianceMatrix:
+            print(row)
+        return self
 
     def exportVarianceMatrix(self):
         """ Export the Variance Matrix """

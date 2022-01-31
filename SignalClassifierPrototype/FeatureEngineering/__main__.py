@@ -12,7 +12,6 @@ Date:           December 2021
 
 import os
 import sys
-from typing_extensions import runtime
 
 import Preprocessing
 import CommonStructures
@@ -31,7 +30,8 @@ if __name__ == "__main__":
     
     tool = Preprocessing.MinMaxVarianceSelector(
         featureNames=runInfo.getFeatureNamesA(),
-        classNames=["0","1","2","3"])
+        classNames=["0","1","2","3"],
+        show=True)
     tool.fit(matrixA)
 
 
