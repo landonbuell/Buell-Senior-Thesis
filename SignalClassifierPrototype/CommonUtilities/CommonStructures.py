@@ -316,7 +316,7 @@ class DesignMatrix:
         result.setFeatures(newData)
         return result
 
-    def averageOfFeatures(self):
+    def averageOfFeatures(self,mask=None):
         """ Compute the Average of the Design Matrix Along each Feature """
         means = np.mean(self._data,axis=0,dtype=np.float32)
         if (mask is not None):

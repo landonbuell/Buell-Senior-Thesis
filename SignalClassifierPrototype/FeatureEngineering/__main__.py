@@ -12,6 +12,7 @@ Date:           December 2021
 
 import os
 import sys
+from typing_extensions import runtime
 
 import Preprocessing
 import CommonStructures
@@ -28,7 +29,9 @@ if __name__ == "__main__":
     designMatrices = runInfo.loadAllSamples(True,False)
     matrixA = designMatrices[0].dropNaNsAndInfs()
     
-    tool = Preprocessing.MinMaxVarianceSelector()
+    tool = Preprocessing.MinMaxVarianceSelector(
+        featureNames=runInfo.getFeatureNamesA(),
+        classNames=["0","1","2","3"])
     tool.fit(matrixA)
 
 

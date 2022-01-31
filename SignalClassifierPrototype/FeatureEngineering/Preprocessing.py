@@ -190,13 +190,17 @@ class MinMaxVarianceSelector(PreprocessingTool):
     Select Features Based in Minimum Intra-Class Variance and Maximum Extra-Class Variance 
     """
 
-    def __init__(self):
+    def __init__(self,featureNames,classNames,
+                 featureMask=None,classMask=None,
+                 save=False,show=True):
         """ Constructor for SelectKBest """
         super().__init__("MinMaxVarianceSelector")
+        self._featureNames = featureNames
+        self._classNames = classNames
+
         self._featureMask = None
         self._classMask = None
-        self._featureNames = None
-        self._classNames = None
+        
         self._save = False
         self._show = True
 
@@ -205,6 +209,28 @@ class MinMaxVarianceSelector(PreprocessingTool):
         pass
 
     # Getters and Setters
+
+    def getFeatureNames(self):
+        """ Return List of Feature Names """
+        if (self._featureNames is not None):
+            if (self._featureMask is not None):
+                # Need a double list comprehension here?
+                return self._featureNames[self._featureMask.tolist()]
+            else:
+                return self._featureNames
+        else:
+            return []
+
+    def getClassNames(self):
+        """ Return List of Feature Names """
+        if (self._classNames is not None):
+            if (self._classMask is not None):
+                # Need a double list comprehension here?
+                return self._classNames[self._classMask.tolist()]
+            else:
+                return self._classNames
+        else:
+            return []
 
     def setFeatureMask(self,mask):
         """ Set mask of features to Use for processing """
@@ -232,8 +258,7 @@ class MinMaxVarianceSelector(PreprocessingTool):
 
     # Public Interface
 
-    def fit(self,designMatrix,featureMask=None,classMask=None,
-            featureNames=None,classNames=None,save=None,show=True):
+    def fit(self,designMatrix,featureMask=None,classMask=None):
         """ Fit the Tool Given the Design Matrix """
         super().fit(designMatrix)
         self.setFeatureMask(featureMask)
@@ -243,11 +268,10 @@ class MinMaxVarianceSelector(PreprocessingTool):
         # Compute The Variance for Each Feature
         self.invoke()
 
-        if (save is not None or show == True):
+        if (self._save is not None or 
+            self._show == True):
             # Plot and save and/or show the figure
-            self.plotVarianceMatrix("VarianceMatrix"
-                                    featureNames=featureNames,
-                                    classNames=classNames)
+            self.plotVarianceMatrix(title="VarianceMatrix")
 
         self._matrix = None
         return self._varianceMatrix
@@ -304,29 +328,27 @@ class MinMaxVarianceSelector(PreprocessingTool):
 
         return self
 
-    def plotVarianceMatrix(self,title,save=False,show=True,featureNames=None,classNames=None):
+    def plotVarianceMatrix(self,title):
         """ Create a Colormap plot of the Variance Matrix """
         plt.figure(figsize=(16,8),edgecolor='gray')
         plt.title(title,size=24,weight='bold')
         plt.xlabel("Feature Index",size=16,weight='bold')
         plt.ylabel("Class Index",size=16,weight='bold')
         
-        normalizedMatrix = np.divide(self._varianceMatrix,1.0)
-        plt.pcolormesh(normalizedMatrix,
+        #normalizedMatrix = np.divide(self._varianceMatrix,1.0)
+        plt.pcolormesh(self._varianceMatrix,
                        cmap=plt.cm.jet)
 
-        xTickLabels = featureNames if featureNames is not None else self._featuresToUse
-        yTickLabels = classNames if classNames is not None else self._classesToUse      
-        plt.xticks(ticks=np.arange(self._featuresToUse.shape[0]),
-                   labels=xTickLabels)
-        plt.yticks(ticks=np.arange(self._classesToUse.shape[0]),
-                   labels=yTickLabels)
+        plt.xticks(ticks=np.arange(self.getFeatureNames().shape[0]),
+                   labels=self.getFeatureNames())
+        plt.yticks(ticks=np.arange(self.getClassNames().shape[0]),
+                   labels=self.getClassNames())
 
         plt.grid()
 
-        if (save == True):
+        if (self._save == True):
             plt.savefig(title + ".png")
-        if (show == True):
+        if (self._show == True):
             plt.show()
         plt.close()
         return None
