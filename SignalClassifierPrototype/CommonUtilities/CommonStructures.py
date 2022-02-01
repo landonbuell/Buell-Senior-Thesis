@@ -253,6 +253,36 @@ class DesignMatrix:
 
     # public Interface
 
+    def splitIntoBatches(self,batchSize,eraseData=True):
+        """ Split this Design Matrix into smaller batches """
+        batches = []
+        totalSamples = self.getNumSamples()
+        sampleIndex = 0
+        currentBatchSize = batchSize
+        leftOver = lambda : totalSamples - sampleIndex
+
+        while (sampleIndex < totalSamples):
+            
+            # Create Sub-batch
+            batchMatrix = DesignMatrix(currentBatchSize,self.getSampleShape())
+            for row in range(currentBatchSize):
+                np.copyto(batchMatrix._data[row],self._data[sampleIndex])
+                batchMatrix._tgts[row] = self._tgts[sampleIndex]
+                sampleIndex += 1
+            batches.append(batchMatrix)
+            
+            # Check Size of Next Batch
+            if (leftOver() < batchSize):
+                currentBatchSize = leftOver();
+
+        # Done w/ All SubBatches
+        if eraseData == True:
+            self._data = None
+            self._tgts = None
+        return batches
+
+
+
     def dropNaNsAndInfs(self):
         """ Drop All Rows with NaNs in them """
         sumOfRows = np.sum(self._data,axis=1)
@@ -835,7 +865,7 @@ class RunInformation:
         try:
             writer.call()
         except Exception as err:
-            print("\t\tRunInformation.serialize()" + err)
+            print("\t\tRunInformation.serialize()" + str(err))
             success = False
         return success
 

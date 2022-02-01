@@ -13,6 +13,7 @@ Date:           December 2021
 import os
 import sys
 
+import Adminstrative
 import Preprocessing
 import CommonStructures
 
@@ -22,20 +23,16 @@ if __name__ == "__main__":
 
     # Parse User Arguments
     runPath = "C:\\Users\\lando\\Documents\\audioFeatures\\simpleSignalsV2"
+    outPath = "C:\\Users\\lando\\Documents\\audioFeatures\\simpleSignalsV2Cleaned"
     runInfo = CommonStructures.RunInformation.deserialize(runPath)
 
-    # Path to each Design Matrix
-    designMatrices = runInfo.loadAllSamples(True,False)
-    matrixA = designMatrices[0].dropNaNsAndInfs()
+    # Set Up the Processing pipeline
+    queue = Adminstrative.PreprocessingQueue()
+    queue.enqueue(Preprocessing.FeatureScaler())
     
-    tool = Preprocessing.MinMaxVarianceSelector(
-        featureNames=runInfo.getFeatureNamesA(),
-        classNames=["0","1","2","3"],
-        show=True)
-    tool.fit(matrixA)
-
-
-
+    # Proceess Full Output
+    queue.processCollectionRun(runInfo,outPath)
+   
 
     # Return 
     sys.exit(0)

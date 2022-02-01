@@ -14,6 +14,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from sklearn.preprocessing import StandardScaler
+
 EPSILON = np.array([1e-6],dtype=np.float32)
 
 import CommonStructures
@@ -118,33 +120,25 @@ class FeatureScaler(PreprocessingTool):
     def __init__(self):
         """ Constructor for FeatureScaler Instance """
         super().__init__("FeatureScaler")
-        self._historicalWeights
-        self._means = np.array([],dtype=np.float32)
-        self._varis = np.array([],dtype=np.float32)
+        self._scaler = StandardScaler()
+
 
     def __del__(self):
         """ Destructor for FeatureScaler Instance """
+        self._scaler = None
+        
         pass
 
     # Getters and Setters
 
-    def getAverageOfMeans(self):
-        """ Compute the Average of all batch means """
-        return np.mean(self._means,axis=0,dtype=np.float32)
-
-    def getAverageOfVariances(self):
-        """ Compute the Average of all batch variances """
-        return np.mean(self._varis,axis=0,dtype=np.float32)
+    
 
     # Public Interface
 
     def fit(self,designMatrix):
         """ Fit the Preprocessing Tool w/ a design matrix Object """
-        featureMeans = self.computeBatchMeans(designMatrix)
-        featureVaris = self.computeBatchVaris(designMatrix)
-        self.storeBatchMeans(featureMeans)
-        self.storeBatchVaris(featureVaris)
-        
+        self._scaler.fit(
+            designMatrix.getFetures())
         self._timesFit += 1
         return self
 
@@ -153,6 +147,9 @@ class FeatureScaler(PreprocessingTool):
         if (self.getIsFit() == False):
             # Tool not yet Fit
             raise RuntimeError(repr(self) + " is not yet fit")
+        newFeatures = self._scaler.transform(
+            designMatrix.getFeatures())
+        designMatrix.setFeatures(newFeatures)
         return designMatrix
 
     # Private Interface

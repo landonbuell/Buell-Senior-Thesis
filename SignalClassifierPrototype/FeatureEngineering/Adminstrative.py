@@ -56,15 +56,41 @@ class PreprocessingQueue:
         """ Fit each queue item w/ a design Matrix """
         for item in self._data:
             if (item == 0):
-                item.fit(designMatrix)
+                continue
+            item.fit(designMatrix)
         return self
 
     def transformAll(self,designMatrix):
         """ Transform design matrix w/ each queue item """
         for item in self._data:
             if (item == 0):
-                designMatrix = item.transform(designMatrix)
+                continue
+            designMatrix = item.transform(designMatrix)
         return designMatrix
+
+    def processCollectionRun(self,runInfo,outputPath):
+        """ Wrapper to Enable the Processing of a whole collection run """
+        os.makedirs(outputPath,exist_ok=True)
+        runInfoPath = os.path.join(outputPath,"runInformation.txt")
+        runInfo.serialize(runInfoPath,batchLimit=-1)
+        # Get all data = fit to preprocess
+        allBatches = runInfo.loadAllSamples(True,False)
+        matrixA = allBatches[0]
+
+        # Fit all of the Data
+        self.fitAll(matrixA)
+
+        # Break into Batches
+        batchesMatrixA = matrixA.splitIntoBatches(64)
+        matrixA = None
+
+        # Transform All + Export
+        for batch in batchesMatrixA:
+            self.transformAll(batch)
+            batch.serialize()
+        
+        
+        return self
     
     # Private Interface
     
