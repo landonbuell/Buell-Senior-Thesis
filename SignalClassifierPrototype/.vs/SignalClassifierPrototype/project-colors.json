@@ -20,7 +20,12 @@
       "ProjectGuid": "1f9c8e99-6523-4eea-99fb-29a84b9e0ebd",
       "DisplayName": "FeatureEngineering",
       "ColorIndex": 2
+    },
+    "d369c612-0ecc-43e4-9549-94f6f4c44055": {
+      "ProjectGuid": "d369c612-0ecc-43e4-9549-94f6f4c44055",
+      "DisplayName": "NeuralNetworkModels",
+      "ColorIndex": 3
     }
   },
-  "NextColorIndex": 3
+  "NextColorIndex": 4
 }

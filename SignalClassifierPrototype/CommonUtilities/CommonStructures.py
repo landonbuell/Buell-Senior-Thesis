@@ -230,6 +230,7 @@ class DesignMatrix:
         """ Set Design Matrix is an Array """
         self._numSamples = x.shape[0]
         self._sampleShape = tuple(x.shape[1:])
+        self._data = None
         self._data = x
         return self
 
@@ -252,6 +253,84 @@ class DesignMatrix:
 
     # public Interface
 
+    def splitIntoBatches(self,batchSize,eraseData=True):
+        """ Split this Design Matrix into smaller batches """
+        batches = []
+        totalSamples = self.getNumSamples()
+        sampleIndex = 0
+        currentBatchSize = batchSize
+        leftOver = lambda : totalSamples - sampleIndex
+
+        while (sampleIndex < totalSamples):
+            
+            # Create Sub-batch
+            batchMatrix = DesignMatrix(currentBatchSize,self.getSampleShape())
+            for row in range(currentBatchSize):
+                np.copyto(batchMatrix._data[row],self._data[sampleIndex])
+                batchMatrix._tgts[row] = self._tgts[sampleIndex]
+                sampleIndex += 1
+            batches.append(batchMatrix)
+            
+            # Check Size of Next Batch
+            if (leftOver() < batchSize):
+                currentBatchSize = leftOver();
+
+        # Done w/ All SubBatches
+        if eraseData == True:
+            self._data = None
+            self._tgts = None
+        return batches
+
+
+
+    def dropNaNsAndInfs(self):
+        """ Drop All Rows with NaNs in them """
+        sumOfRows = np.sum(self._data,axis=1)
+        saveRows = []
+        for idx,item in enumerate(sumOfRows):
+            if np.isnan(item) == True:
+                continue
+            if np.isinf(item) == True:
+                continue
+            saveRows.append(idx)
+        newNumSamples = len(saveRows)
+        newMatrix = DesignMatrix(newNumSamples,self.getSampleShape())
+        
+        # Copy Each Row to the Output
+        sampleIndex = 0
+        for row in saveRows:
+            newMatrix._data[sampleIndex] = self._data[row]
+            newMatrix._tgts[sampleIndex] = self._tgts[row]
+            sampleIndex += 1
+        
+        # Reatattch data to self
+        self.setNumSamples(newNumSamples)
+        self.setFeatures( newMatrix.getFeatures() )
+        self.setLabels( newMatrix.getLabels() )
+        newMatrix = None
+        return self
+
+    def concat(self,otherMatrix):
+        """ Concatenate Another Design Matrix to the End of this One (SLOW) """
+        if (otherMatrix.getSampleShape() != self.getSampleShape()):
+            # Shapes Not Equal
+            raise ValueError("Shape Mismatch!")
+        totalNumSamples = self.getNumSamples() + otherMatrix.getNumSamples()
+        shapeNewMatrix = [totalNumSamples] + [x for x in self.getSampleShape()]
+        newFeatureArr = np.empty(shape=shapeNewMatrix,dtype=np.float32)
+        # Copy Features to New Array
+        sampleIndex = 0
+        for smpl in self._data:
+            newFeatureArr[sampleIndex] = smpl
+            sampleIndex += 1
+        for smpl in otherMatrix._data:
+            newFeatureArr[sampleIndex] = smpl
+            sampleIndex += 1
+        # Add to New Design Matrix + Append Target Vector
+        self.setFeatures(newFeatureArr)
+        self.setLabels(np.append(self._tgts,otherMatrix._tgts))
+        return self
+
     def samplesInClass(self,classIndex):
         """ Create New Design Matrix of Samples that all belong to one class """
         if (classIndex not in self.getUniqueClasses()):
@@ -267,14 +346,19 @@ class DesignMatrix:
         result.setFeatures(newData)
         return result
 
-
-    def averageOfFeatures(self):
+    def averageOfFeatures(self,mask=None):
         """ Compute the Average of the Design Matrix Along each Feature """
-        return np.mean(self._data,axis=0,dtype=np.float32)
+        means = np.mean(self._data,axis=0,dtype=np.float32)
+        if (mask is not None):
+            means = means[mask]
+        return means
 
-    def varianceOfFeatures(self):
+    def varianceOfFeatures(self,mask=None):
         """ Compute the Variance of the Design Matrix Along each Feature """
-        return np.var(self._data,axis=0,dtype=np.float32)
+        varis = np.var(self._data,axis=0,dtype=np.float32)
+        if (mask is not None):
+            varis = varis[mask]
+        return varis
 
     def serialize(self,pathX=None,pathY=None):
         """ Write this design matrix out to a file """   
@@ -552,12 +636,12 @@ class ClassOccuranceData:
             """ Serialize the Instance """
             self._outFileStream = open(self._outputPath,"w")
             self.writeHeader()
-            header = "\t{0:<16}{1:<32}{2:<16}\n".format("Int","Name","Count")
+            header = "\t{0:<16}{1:<32}{2:<16}{3:<16}\n".format("Int","Name","Processed","Total")
             self._outFileStream.write( header )
 
             # Write Body
             for row in self._data:
-                msg = "\t{0:<16}{1:<32}{2:<16}\n".format(row[0],row[1],row[2])
+                msg = "\t{0:<16}{1:<32}{2:<16}{3:<16}\n".format(row[0],row[1],row[2],row[3])
                 self._outFileStream.write( msg )
 
             # Close + Exit
@@ -570,9 +654,10 @@ class ClassOccuranceData:
     def __iter__(self):
         """ Forward Iterator over samples """
         for labelInt in self.getUniqueClassInts():
-            labelStr = self._labelNames[labelInt]
-            labelCnt = self._expectedCount[labelInt]
-            yield (labelInt,labelStr,labelCnt)
+            labelStr    = self._labelNames[labelInt]
+            actual      = self._actualCount[labelInt]
+            expect      = self._expectedCount[labelInt]
+            yield (labelInt,labelStr,actual,expect)
 
 class RunInformation:
     """
@@ -708,28 +793,39 @@ class RunInformation:
     
     # Public Interface 
 
-    def loadAllSamples(self,maxSamples=65536):
+    def loadAllSamples(self,loadA=True,loadB=True):
         """ Load All Samples From All batches """
         sampleIndex = 0
-        matrixA = DesignMatrix(self._numSamplesRead,self._shapeSampleA)
-        matrixB = DesignMatrix(self._numSamplesRead,self._shapeSampleB)
+        matrices = []
+        if (loadA == True):
+            matrixA = DesignMatrix(self._numSamplesRead,self._shapeSampleA)
+        if (loadB == True):
+            matrixB = DesignMatrix(self._numSamplesRead,self._shapeSampleB)
         
         # Iterate through Each Batch
         for batchIndex,numSamples in enumerate(self._batchSizes):
             batchMatricies = self.loadBatch(batchIndex)
             # Copy Into parent Matrices
             for sample in range(numSamples):
-                matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
-                matrixB._data[sampleIndex] = batchMatricies[1]._data[sample]
+                if (loadA == True):
+                    matrixA._data[sampleIndex] = batchMatricies[0]._data[sample]
+                    matrixA._tgts[sampleIndex] = batchMatricies[0]._tgts[sample]
+                if (loadB == True):
+                    matrixB._data[sampleIndex] = batchMatricies[-1]._data[sample]
+                    matrixB._tgts[sampleIndex] = batchMatricies[-1]._tgts[sample]
                 sampleIndex += 1
         # Loaded All Batches - Return Total Design Matrices
-        return (matrixA,matrixB,)
+        if (loadA == True):
+            matrices.append(matrixA)
+        if (loadB == True):
+            matrices.append(matrixB)
+        return matrices
 
-
-
-    def loadBatch(self,index):
+    def loadBatch(self,index,loadA=True,loadB=True):
         """ Load In All Data from a chosen batch Index """
+        print("RunInformation.loadBatch(): Loading Batch {0}...".format(index))
         numSamples = self._batchSizes[index]
+        matrices = []
         # Set the Matrix Paths
         name = lambda idx,descp : "batch" + str(idx) + "_" + str(descp) + ".bin"
         pathXa  = os.path.join(self._pathOutput, name(index,"Xa") )
@@ -737,9 +833,28 @@ class RunInformation:
         pathY   = os.path.join(self._pathOutput, name(index,"Y") )
 
         # Load in the matrices
-        matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
-        matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
-        return (matrixA,matrixB,)
+        if (loadA == True):
+            matrixA = DesignMatrix.deserialize(pathXa,pathY,numSamples,self.getShapeSampleA() )
+            matrices.append(matrixA)
+        if (loadB == True):
+            matrixB = DesignMatrix.deserialize(pathXb,pathY,numSamples,self.getShapeSampleB() )
+            matrices.append(matrixB)
+        return matrices
+
+    def loadBatches(self,batchIndicies,loadA=True,loadB=True):
+        """ Load In All Data from a subet of batches by Index """
+        batchIndicies = np.unique(batchIndicies)
+        matrices = self.loadBatch(batchIndicies[0],loadA,loadB)
+         
+        # Load the Rest of the Data + Concatenate
+        for i in range(1,len(batchIndicies)):
+            batchMatrices = self.loadBatch(batchIndicies[i],loadA,loadB)
+            if (loadA == True):
+                matrices[0] = matrices[0].concat(batchMatrices[0])
+            if (loadB == True):
+                matrices[-1] = matrices[-1].concat(batchMatrices[-1])
+
+        return matrices
 
     def serialize(self,path=None,batchLimit=-1):
         """ Serialize this Instance to specified Path """
@@ -750,10 +865,9 @@ class RunInformation:
         try:
             writer.call()
         except Exception as err:
-            print("\t\tRunInformation.serialize()" + err)
+            print("\t\tRunInformation.serialize()" + str(err))
             success = False
         return success
-
 
     @staticmethod
     def deserialize(path):
@@ -783,6 +897,12 @@ class RunInformation:
             super().__del__()
 
         def call(self):
+            """ Serialize the RunInfo Instance """
+            self.writeStandardInfo()
+            self.writeFeatureNames()
+            return self
+
+        def writeStandardInfo(self):
             """ Serialize the RunInfo Instance """          
 
             self._outFileStream = open(self._outputPath,"w")
@@ -803,12 +923,6 @@ class RunInformation:
             self._outFileStream.write( self._outFmtStr("ShapeSampleA",shapeSampleA ) )
             self._outFileStream.write( self._outFmtStr("ShapeSampleB",shapeSampleB ) )
 
-            # Write Feature Name Details
-            featureNamesA = self.listToString(self._data.getFeatureNamesA(),",")
-            featureNamesB = self.listToString(self._data.getFeatureNamesB(),",")
-            self._outFileStream.write( self._outFmtStr("FeatureNamesA", featureNamesA))
-            self._outFileStream.write( self._outFmtStr("FeatureNamesB", featureNamesB))
-
             # Write Batch Details
             usedBatchSizes = self._data.getBatchSizes()[:self._batchLimit]
             batchSizes = self.listToString(usedBatchSizes,",")
@@ -818,6 +932,22 @@ class RunInformation:
             self.writeFooter()
             self._outFileStream.close()
             return True
+
+        def writeFeatureNames(self):
+            """ Write out the Name of Features """
+            outpath = os.path.split(self._outputPath)
+            self._outFileStream = open(os.path.join(outpath[0],"featureNames.txt"),"w")
+            self.writeHeader()
+
+            # Write Each Feature Name
+            for idx,name in enumerate(self._data.getFeatureNamesA()):
+                outLine = self._outFmtStr(str(idx),name)
+                self._outFileStream.write(outLine)
+
+            self.writeFooter()
+            self._outFileStream.close()
+            return True
+
 
     class RunInformationDeserializer(Deserializer):
         """ Class to Deserialize Run Information from a Local Path """
@@ -834,12 +964,36 @@ class RunInformation:
 
         def call(self):
             """ Serialize the RunInfo Instance """    
+            self.readStandardInfo()
+            self.readFeatureNames()
+            return self._data
+
+        def readStandardInfo(self):
+            """ Read All Standard Run Information + Populate Self """
             self._inFileStream = open(self._inputPath,"r")
             self._inFileContents = self._inFileStream.readlines()
             
             # Find all of the Necessary parts
-            runInfo = self.parseAllFeilds()
-            return runInfo
+            self._data = self.parseAllFeilds()
+
+            # Close + De Allocate
+            self._inFileStream.close()
+            self._inFileContents = None
+            return self
+
+        def readFeatureNames(self):
+            """ Read in the name of each Feature """
+            inPath = os.path.split(self._inputPath)
+            self._inFileStream = open(os.path.join(inPath[0],"featureNames.txt"),"r")
+            self._inFileContents = self._inFileStream.readlines()
+
+            # Fin all of the Neccessary Parts
+            self.loadFeatureNamesA()
+
+            # Close + De Allocate
+            self._inFileStream.close()
+            self._inFileContents = None
+            return self
 
         # Private Interface
 
@@ -849,10 +1003,12 @@ class RunInformation:
             # Parse the feilds from the RunInfo File
             pathsInput      = self.findAndParseStrs("InputPath")
             pathOutput      = self.findAndParseStrs("OutputPath")[-1]
-            samplesExpected = self.findAndParseInts("ExpectedSamples")[-1]
+            samplesExpected = self.findAndParseInts("TotalNumSamples")[-1]
             samplesActual   = self.findAndParseInts("ProcessedSamples")[-1]
             shapeSampleA    = self.findAndParseInts("ShapeSampleA")
             shapeSampleB    = self.findAndParseInts("ShapeSampleB")
+            #featureNamesA   = self.findAndParseStrs("FeatureNamesA")[-1].split(",")
+            #featureNamesB   = self.findAndParseStrs("FeatureNamesB")
             batchSizes      = self.findAndParseInts("BatchSizes")
             
             # Assign the Feilds to the instance
@@ -861,10 +1017,40 @@ class RunInformation:
             runInfo.setActualNumSamples(samplesActual)
             runInfo.setShapeSampleA(shapeSampleA)
             runInfo.setShapeSampleB(shapeSampleB)
+            #runInfo.setFeatureNamesA(featureNamesA)
+            #runInfo.setFeatureNamesB(featureNamesB)
             runInfo.setBatchSizes(batchSizes)
             return runInfo
 
-        def findAndParseStrs(self,keyword,):
+        def loadFeatureNamesA(self):
+            """ Find all of the feature Names """
+            numFeatures = self._data.getShapeSampleA()[0]
+            numLines = len(self._inFileContents)
+            nameList = ["p" + str(x) for x in range(numFeatures)]
+            
+            for line in self._inFileContents:
+
+                if (line.startswith("-") or line.startswith("<")):
+                    # Check for header or footer
+                    continue
+
+                try:
+                    # Tokenize + Assign by index
+                    tokens = line.split()
+                    index = int(tokens[0])
+                    name = tokens[1]
+                    nameList[index] = name
+
+                except Exception as err:
+                    # Note a problem?
+                    print(err)
+                    continue               
+            # attach to name list to the internal struct
+            self._data.setFeatureNamesA(nameList)
+            return self
+
+
+        def findAndParseStrs(self,keyword):
             """ Find All words with token and return as list of Strings"""
             result = []
             for line in self._inFileContents:
@@ -886,4 +1072,4 @@ class RunInformation:
 
     def __repr__(self):
         """ Debug Representation of Instance """
-        return str(self.__class___) + " @ " + str(hex(id(self)))
+        return str(self.__class__) + " @ " + str(hex(id(self)))

@@ -125,15 +125,20 @@ class CollectionApplicationProtoype:
         """ Run Application Execution Sequence """
         
         batchLimit = self.getSettings().getBatchLimit()
+        if (batchLimit < 0):
+            batchLimit = self.getSampleManager().getNumBatches() - batchLimit
+            
+        # Visit Each Applicaable Batch
         for idx,size in enumerate(self._sampleManager.getBatchSizes()):
+          
+            if (idx >= batchLimit):
+                # Maximum number of batches reached
+                break  
 
             # Run the Collection Manager on this Batch
-            self._collectionManager.call(idx,size)
-            if (idx >= batchLimit - 1):
-                # Maximum number of batches reached
-                break   
+            self._collectionManager.call(idx,size)             
+            self._rundataManager.call()
 
-        self._rundataManager.call()
         return self
 
     def shutdown(self):
@@ -268,14 +273,14 @@ class AppSettings:
     def developmentSettingsInstance():
         """ Build an instance of runtime settings for development """
         result = AppSettings(
-            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
-            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv",
-                        "..\\lib\\DemoTargetData\\Y3.csv",
-                        "..\\lib\\DemoTargetData\\Y2.csv",
-                        "..\\lib\\DemoTargetData\\Y1.csv",],
-            pathOutput="..\\..\\..\\..\\audioFeatures\\devTestv2",
-            batchSize=8,
-            batchLimit=2,
+            #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv",
+            #            "..\\lib\\DemoTargetData\\Y3.csv",
+            #            "..\\lib\\DemoTargetData\\Y2.csv",
+            #            "..\\lib\\DemoTargetData\\Y1.csv",],
+            pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
+            pathOutput="..\\..\\..\\..\\audioFeatures\\simpleSignalsV2",
+            batchSize=64,
+            batchLimit=-1,
             shuffleSeed=-1)
         return result
 
@@ -370,6 +375,13 @@ class Logger:
                 self._outFile.close()
         self._outFile = None
 
+    # Getters and Setters
+
+    def getLoggerPath(self):
+        """ Return the Path to the logger text output file """
+        outpath = CollectionApplicationProtoype.AppInstance.getSettings().getOutputPath()
+        return os.path.join(outpath,"logger.txt")
+
     # Public Interface
 
     def logMessage(self,message:str,timeStamp=True):
@@ -386,8 +398,11 @@ class Logger:
         # Write the Message to Console and/or to File
         if (self._toConsole == True):
             print(formattedMessage)
+
         if (self._toFile == True):
+            self._outFile = open(self.getLoggerPath(),"a")
             self._outFile.write(formattedMessage)
+            self._outFile.close()
         return self
 
     # Private Interface

@@ -1,0 +1,38 @@
+Landon Buell
+18 January 2022
+
+"Minimum-Maximum Variance Feature Selector" Method
+
+Goal:
+	Identify what features in a design matrix contain the lowest intra-class variance and the highest extra-class variance
+
+
+Method:
+
+	require: X - design Matrix w/ shape: (numSamples x numFeatures)
+	require: Y - target Vector w/ shape: (numSamples x 1)
+	
+	Initialize Output Matrix 'Z' which has shape (numClasses x numFeatures)
+	Z <- 2D matrix of floats
+
+	for i = 0,1,2,...,numClasses - 1:
+		
+		create "a" which is a subset of "X" containing only samples that belong to class "i"
+		If 'n' samples belong to class 'i', then 'a' has shape (n x numFeatures)
+		a <- X where (Y == i)
+
+		for j = 0,1,2,....,numFeatures - 1:
+			
+			compute the variance of each feature in 'a'
+			v <- has shape (numClasses x 1)
+
+			Copy Elements of v into output matrix, Z
+
+	return Z
+			
+	
+Result:
+
+	A Matrix 'Z' with shape (numClasses x numFeatures)
+
+	

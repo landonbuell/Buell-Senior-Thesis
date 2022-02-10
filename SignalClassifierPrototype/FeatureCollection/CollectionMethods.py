@@ -18,6 +18,8 @@ import scipy.fftpack as fftpack
 import Administrative
 import Structural
 
+EPSILON = np.array([1e-6],dtype=np.float32)
+
             #### CLASS DEFINIIONS ####
 
 class CollectionMethod:
@@ -29,10 +31,11 @@ class CollectionMethod:
         """ Constructor for CollectionMethod Base Class """
         self._methodName    = name
         self._parameter     = param
-
+        self._result        = np.empty(shape=(param,),dtype=np.float32)
+       
     def __del__(self):
         """ Destructor for CollectionMethod Base Class """
-        pass
+        self._result = None
 
     # Getters and Setters
 
@@ -51,7 +54,8 @@ class CollectionMethod:
         if (Administrative.CollectionApplicationProtoype.AppInstance.getSettings().getVerbose() > 1):
             msg = "\t\tInvoking " + self.getMethodName()
             Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg)
-        return np.ones(shape=(self.getReturnSize(),),dtype=np.float32) * -1
+        self._result = np.zeros(shape=(self.getReturnSize(),),dtype=np.float32)
+        return self
 
     def featureNames(self):
         """ Get List of Names for Each element in Result Array """
@@ -71,6 +75,19 @@ class CollectionMethod:
             raise ValueError(errMsg)
         return True
 
+    def checkForNaNsAndInfs(self):
+        """ Check To See if Any Entries in the result contain NaN or Inf values """
+        sumOfResult = np.sum(self._result)
+        if np.isnan(sumOfResult):
+            # Result contains NaN's
+            msg = "\t\tMethod: {0} got result w/ NaN value(s)".format(self.getMethodName())
+            Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg,False)
+        if np.isinf(sumOfResult):
+            # Result contains NaN's
+            msg = "\t\tMethod: {0} got result w/ Inf value(s)".format(self.getMethodName())
+            Administrative.CollectionApplicationProtoype.AppInstance.logMessage(msg,False)        
+        return self
+
     # Magic Methods
 
     def __repr__(self):
@@ -87,22 +104,23 @@ class TimeDomainEnvelopPartitions (CollectionMethod):
 
     def __del__(self):
         """ Destructor for TimeDomainEnvelopPartitions Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)  
+        super().invoke(signalData)  
         sizeOfPartition = signalData.Waveform.shape[0] // self._parameter
         # Iterate Through Each Parition
         startIndex = 0
         for i in range(self._parameter):    
             part = signalData.Waveform[ startIndex : startIndex + sizeOfPartition]
-            result[i] = np.sum((part**2),dtype=np.float32)
+            self._result[i] = np.sum((part**2),dtype=np.float32)
             startIndex += sizeOfPartition
-        return result
+        self.checkForNaNsAndInfs()
+        return self._result
 
 
     # Protected Interface
@@ -141,19 +159,20 @@ class TimeDomainEnvelopFrames(CollectionMethod):
 
     def __del__(self):
         """ Destructor for TimeDomainEnvelopFrames Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData) 
+        super().invoke(signalData) 
         idx = 0
         for i in range(self._start,self._stop,self._step):
-            result[idx] = signalData.FrameEnergyTime[i]
+            self._result[idx] = signalData.FrameEnergyTime[i]
             idx += 1
-        return result
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -182,7 +201,7 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
 
     def __del__(self):
         """ Destructor for PercentFramesEnergyAboveThreshold Instance """
-        pass
+        super().__del__()
 
     # Getters and Setters
 
@@ -195,7 +214,7 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
 
         # Get Max Frame Energy + Find Threshold to beat
         maxEnergy = np.max(signalData.FrameEnergyTime)
@@ -210,8 +229,9 @@ class PercentFramesAboveEnergyThreshold(CollectionMethod):
                 numFrames += 1
 
         # Get Number of Frames as a percentage
-        result[0] = (numFrames / totFrames)
-        return result
+        self._result[0] = (numFrames / totFrames)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -239,14 +259,14 @@ class ZeroCrossingsPerTime(CollectionMethod):
 
     def __del__(self):
         """ Destructor for ZeroCrossingsPerTime Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)  
+        super().invoke(signalData)  
         
         numSamples = signalData.getNumSamples()
         sign = np.sign(signalData.Waveform)
@@ -255,8 +275,9 @@ class ZeroCrossingsPerTime(CollectionMethod):
         # Iterate through Sampeles
         for i in range(1,numSamples):
             ZXR += np.abs(sign[i] - sign[i-1])
-        result[0] = ZXR / 2
-        return result
+        self._result[0] = ZXR / 2
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -284,16 +305,17 @@ class ZeroCrossingsFramesMean(CollectionMethod):
 
     def __del__(self):
         """ Destructor for ZeroCrossingsFramesAverage Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)  
-        result[0] = np.mean(signalData.FrameZeroCrossings)
-        return result
+        super().invoke(signalData)  
+        self._result[0] = np.mean(signalData.FrameZeroCrossings)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -320,16 +342,17 @@ class ZeroCrossingsFramesVariance(CollectionMethod):
 
     def __del__(self):
         """ Destructor for ZeroCrossingsFramesVariance Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)
-        result[0] = np.var(signalData.FrameZeroCrossings)
-        return result
+        super().invoke(signalData)
+        self._result[0] = np.var(signalData.FrameZeroCrossings)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -357,18 +380,20 @@ class ZeroCrossingsFramesDiffMinMax(CollectionMethod):
 
     def __del__(self):
         """ Destructor for ZeroCrossingsFramesDiffMinMax Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData) 
+        super().invoke(signalData) 
         minVal = np.min(signalData.FrameZeroCrossings)
         maxVal = np.max(signalData.FrameZeroCrossings)
-        result[0] = maxVal - minVal
-        return result
+        
+        self._result[0] = maxVal - minVal
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -390,33 +415,68 @@ class TemporalCenterOfMass(CollectionMethod):
 
     def __init__(self,param):
         """ Constructor for TemporalCenterOfMass Instance """
-        super().__init__("TemportalCenterOfMassQuadratic",param)
+        super().__init__("TemporalCenterOfMass",param)
         self.validateParameter()
 
     def __del__(self):
         """ Destructor for TemporalCenterOfMass Instance """
         super().__del__()
 
+    # Getters and Setters
+
+    def getReturnSize(self) -> int:
+        """ Get the Number of Features that we expect to Return """
+        return 1
+
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
 
         # Compute Total Mass + Weights
         massTotal = np.sum(signalData.Waveform)
-        weights = np.arange(0,signalData.getNumSamples())**(self._parameter)
+        weights = self.kernelFunction(signalData.getNumSamples())
         # Compute Center of Mass (By Weights)
         massCenter = np.dot(weights,signalData.Waveform);
         massCenter /= massTotal
         massCenter /= signalData.getNumSamples()
 
         # Apply Result + Return 
-        result[0] = massCenter
-        return result
+        self._result[0] = massCenter
+        self.checkForNaNsAndInfs()
+        return self._result
+
+    def featureNames(self):
+        """ Get List of Names for Each element in Result Array """
+        return [self._methodName + self.kernelName() + str(i) for i in range(self.getReturnSize())]
 
     # Protected Interface
+
+    def kernelFunction(self,numSamples):
+        """ Set the Kernel Function based on the parameter """
+        kernel = np.arange(0,numSamples,1)
+        if (self._parameter == 1):
+            pass                    # Linear Kernel
+        elif (self._parameter == 2):
+            kernel = kernel ** 2    # Quadratic
+        elif (self._parameter == 3):
+            kernel = np.log(kernel + EPSILON[0]) # Nat log
+        else:
+            pass
+        return kernel
+
+    def kernelName(self):
+        """ Set the Kernel Function based on the parameter """
+        if (self._parameter == 1):
+            return "Linear"                    # Linear Kernel
+        elif (self._parameter == 2):
+           return "Quadratic"
+        elif (self._parameter == 3):
+            return "NaturalLog"
+        else:
+            return "Linear"
 
     def validateInputSignal(self,signalData):
         """ Validate Input Signal Everything that we need """
@@ -442,22 +502,23 @@ class AutoCorrelationCoefficients(CollectionMethod):
 
     def __del__(self):
         """ Destructor for AutoCorrelationCoefficients Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
 
         #Check is ACC's exist - make them if not
         if (signalData.AutoCorrelationCoeffs is None):
             signalData.makeAutoCorrelationCoeffs(self._parameter)
 
         # Copy the ACC's the the result + Return
-        np.copyto(result,signalData.AutoCorrelationCoeffs)
-        return result
+        np.copyto(self._result,signalData.AutoCorrelationCoeffs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -485,18 +546,19 @@ class AutoCorrelationCoefficientsMean(CollectionMethod):
 
     def __del__(self):
         """ Destructor for AutoCorrelationCoefficientsMean Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
 
         # Get the Average of the AutoCorrelation Coefficients
-        result[0] = np.mean(signalData.AutoCorrelationCoeffs)
-        return result
+        self._result[0] = np.mean(signalData.AutoCorrelationCoeffs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -524,18 +586,19 @@ class AutoCorrelationCoefficientsVariance(CollectionMethod):
 
     def __del__(self):
         """ Destructor for AutoCorrelationCoefficientsVariance Instances """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData) 
+        super().invoke(signalData) 
         
         # Compute the Variance
-        result[0] = np.var(signalData.AutoCorrelationCoeffs)
-        return result
+        self._result[0] = np.var(signalData.AutoCorrelationCoeffs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -563,19 +626,20 @@ class AutoCorrelationCoefficientsDiffMinMax(CollectionMethod):
 
     def __del__(self):
         """ Destructor for AutoCorrelationCoefficientsDiffMinMax Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData) 
+        super().invoke(signalData) 
         # Compute Difference between Min and Max
         minVal = np.min(signalData.AutoCorrelationCoeffs)
         maxVal = np.max(signalData.AutoCorrelationCoeffs)
-        result[0] = maxVal - minVal
-        return result
+        self._result[0] = maxVal - minVal
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -603,25 +667,26 @@ class FrequencyCenterOfMass(CollectionMethod):
 
     def __del__(self):
         """ Destructor for FrequencyCenterOfMassLinear Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
 
         # Compute Mass of Each Frame
         sizeOfFrame = signalData.AnalysisFramesFreq.shape[1]
-        massTotal = np.sum(signalData.AnalysisFramesFreq,axis=-1)
-        weights = np.arange(0,sizeOfFrame,1)**(self._parameter)
+        massTotal = np.sum(signalData.AnalysisFramesFreq,axis=-1) + EPSILON
+        weights = np.arange(0,sizeOfFrame,1,dtype=np.float32)**(self._parameter)
         centerOfMasses = np.matmul(signalData.AnalysisFramesFreq,weights)
         centerOfMasses /= massTotal
 
         # Add the Average of all frames, and put into result
-        result[0] = np.mean(centerOfMasses)
-        return result
+        self._result[0] = np.mean(centerOfMasses)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -649,14 +714,14 @@ class MelFilterBankEnergies(CollectionMethod):
 
     def __del__(self):
         """ Destructor for MelFrequencyCempstrumCoeffs Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
 
         # Check if We have MFCC's - Create if we don't
         if (signalData.MelFilterBankEnergies is None):
@@ -664,8 +729,9 @@ class MelFilterBankEnergies(CollectionMethod):
         avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
 
         # Copy to result + return
-        np.copyto(result,avgMFBEs)
-        return result
+        np.copyto(self._result,avgMFBEs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -735,18 +801,19 @@ class MelFilterBankEnergiesMean(CollectionMethod):
 
     def __del__(self):
         """ Destructor for MelFrequencyCempstrumCoeffsMean Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
         # Compute Mean of MFCC's
         avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
-        result[0] = np.mean(avgMFBEs)
-        return result
+        self._result[0] = np.mean(avgMFBEs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -774,18 +841,19 @@ class MelFilterBankEnergiesVariance(CollectionMethod):
 
     def __del__(self):
         """ Destructor for MelFrequencyCempstrumCoeffsVariance Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
         # Compute Variance of MFCC's
         avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
-        result[0] = np.var(avgMFBEs)
-        return result
+        self._result[0] = np.var(avgMFBEs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -813,20 +881,22 @@ class MelFilterBankEnergiesDiffMinMax(CollectionMethod):
 
     def __del__(self):
         """ Destructor for MelFrequencyCempstrumCoeffsDiffMinMax Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
         # Compute Diff of min and max of MFCC's
         avgMFBEs = np.mean(signalData.MelFilterBankEnergies,axis=0)
         minVal = np.min(avgMFBEs)
         maxVal = np.max(avgMFBEs)
-        result[0] = maxVal - minVal
-        return result
+
+        self._result[0] = maxVal - minVal
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
@@ -854,20 +924,22 @@ class MelFrequencyCepstrumCoefficients(CollectionMethod):
 
     def __del__(self):
         """ Destructor for MelFrequencyCempstrumCoeffsDiffMinMax Instance """
-        pass
+        super().__del__()
 
     # Public Interface
 
     def invoke(self, signalData, *args):
         """ Run this Collection method """
         self.validateInputSignal(signalData)
-        result = super().invoke(signalData)   
+        super().invoke(signalData)   
         # Compute Diff of min and max of MFCC's
-        logFilterBanks = np.log(signalData.MelFilterBankEnergies)
+        logFilterBanks = np.log(signalData.MelFilterBankEnergies + EPSILON[0])
         MFCCs = fftpack.idct(logFilterBanks,type=2,axis=-1)
+
         avgMFCCs = np.mean(MFCCs,axis=0)
-        np.copyto(result,avgMFCCs)
-        return result
+        np.copyto(self._result,avgMFCCs)
+        self.checkForNaNsAndInfs()
+        return self._result
 
     # Protected Interface
 
