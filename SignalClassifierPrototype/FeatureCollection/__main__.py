@@ -18,10 +18,24 @@ import Administrative
 
         #### MAIN EXECUTABLE ####
 
+def developmentSettingsInstance():
+    """ Return and Instance of FeatureCollection Settings for Development Purposes """
+    result = Administrative.AppSettings(
+        pathsInput=["..\\lib\\DemoTargetData\\Y4.csv",
+                    "..\\lib\\DemoTargetData\\Y3.csv",
+                    "..\\lib\\DemoTargetData\\Y2.csv",
+                    "..\\lib\\DemoTargetData\\Y1.csv",],
+        #pathsInput=["..\\lib\\DemoTargetData\\Y4.csv"],
+        pathOutput="..\\..\\..\\..\\audioFeatures\\devTestV1",
+        batchSize=64,
+        batchLimit=-1,
+        shuffleSeed=-1)
+    return result
+
 if __name__ == "__main__":
 
     # Build App Settings + App Instance
-    appSettings = Administrative.AppSettings.developmentSettingsInstance()
+    appSettings = developmentSettingsInstance()
     appInstance = Administrative.CollectionApplicationProtoype(appSettings)
 
     # Construct The Component Managers
