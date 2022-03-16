@@ -21,9 +21,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Managers.py" />
     <Compile Include="NeuralNetworkModels.py" />
     <Compile Include="__init__.py" />
     <Compile Include="__main__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonUtilities\CommonUtilities.pyproj">
+      <Name>CommonUtilities</Name>
+      <Project>{0b3aab92-77da-4d35-8585-318b4458c673}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

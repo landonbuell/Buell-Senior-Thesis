@@ -218,7 +218,4 @@ class HybridNeuralNetwork:
             name="ConvolutionalNetwork2D")
 
         return self
-
-
-
     
