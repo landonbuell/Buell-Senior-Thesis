@@ -13,6 +13,8 @@ Date:           January 2022
 import os
 import sys
 
+import numpy as np
+
 import Managers
 
 import NeuralNetworkModels
@@ -25,11 +27,14 @@ if __name__ == "__main__":
     modelManager = Managers.TensorflowModelManager()
     hybridNetwork = modelManager.generateModel()
     
-    # Load in the Data Set
-    batchIndex = 12
-    dataManager = Managers.DatasetManager()
-    dataManager.loadBatch(batchIndex)
+    # Load + Preprocess the Data Set 
+    batchesToLoad = np.arange(0,274,1)
+    dataManager = Managers.DatasetManager(batchesToLoad)  
+    dataManager.preprocessSamples()
 
+
+
+    # Scale the Data Set
 
 
     sys.exit(0)

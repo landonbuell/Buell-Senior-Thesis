@@ -14,6 +14,7 @@ import os
 import sys
 from typing import overload
 import numpy as np
+from numpy.lib.twodim_base import mask_indices
 
         #### CLASS DEFINITIONS ####
 
@@ -281,35 +282,42 @@ class DesignMatrix:
             self._tgts = None
         return batches
 
+    def applyMask(self,maskArray):
+        """ Apply A Mask Array to samples in the desing Matrix """
+        assert(maskArray.shape[0] == self._data.shape[0])
+        maskArray = maskArray.astype(np.bool8)
+        numSurvivingSamples = np.sum(maskArray)
+        newDesignMatrix = DesignMatrix( numSurvivingSamples,self.getSampleShape() )
+        sampleIndex = 0
 
+        # Iterate Through Data
+        for idx,item in enumerate(maskArray):
+            if (item == True):
+                newDesignMatrix._data[sampleIndex] = self._data[idx]
+                newDesignMatrix._tgts[sampleIndex] = self._tgts[idx]
+                sampleIndex += 1
 
-    def dropNaNsAndInfs(self):
+        # Switch Features around
+        self.setNumSamples(numSurvivingSamples)
+        self._data = newDesignMatrix._data;
+        self._tgts = newDesignMatrix._data;
+        newDesignMatrix = None
+        return self
+
+    def getMaskForNaNsAndInfs(self):
         """ Drop All Rows with NaNs in them """
         sumOfRows = np.sum(self._data,axis=1)
-        saveRows = []
+        mask = np.zeros(shape=(self._numSamples,),dtype=np.bool8)
         for idx,item in enumerate(sumOfRows):
             if np.isnan(item) == True:
                 continue
             if np.isinf(item) == True:
                 continue
-            saveRows.append(idx)
-        newNumSamples = len(saveRows)
-        newMatrix = DesignMatrix(newNumSamples,self.getSampleShape())
+            mask[idx] = True
+        # When applied, the returned masks will
+        # Remove samples w/ NaN or Inf Features
+        return mask
         
-        # Copy Each Row to the Output
-        sampleIndex = 0
-        for row in saveRows:
-            newMatrix._data[sampleIndex] = self._data[row]
-            newMatrix._tgts[sampleIndex] = self._tgts[row]
-            sampleIndex += 1
-        
-        # Reatattch data to self
-        self.setNumSamples(newNumSamples)
-        self.setFeatures( newMatrix.getFeatures() )
-        self.setLabels( newMatrix.getLabels() )
-        newMatrix = None
-        return self
-
     def concat(self,otherMatrix):
         """ Concatenate Another Design Matrix to the End of this One (SLOW) """
         if (otherMatrix.getSampleShape() != self.getSampleShape()):
